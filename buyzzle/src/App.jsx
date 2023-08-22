@@ -6,7 +6,7 @@ function App() {
    
 
         <h1 className="font-bold text-5xl items-center mt-56">
-          con mẹ mấy thằng frontend
+          con mẹ mấy thằng frontend ccccc
         </h1>
       
     
