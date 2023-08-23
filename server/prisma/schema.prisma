@@ -9,8 +9,24 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-model Product{
-  id Int @id @default(autoincrement())
-  name String
-  price Int
+
+model User {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  username    String   @unique
+  password    String
+  verify      Boolean?  @default(false)
+  Token       Token[]
+  name        String?
+  phonenumber Int?
+  image       String?
+  createdAt   DateTime @default(now())
+}
+
+model Token {
+  tokenid   Int      @id @default(autoincrement())
+  User      User     @relation(fields: [userid], references: [id])
+  userid    Int
+  token     String
+  createdAt DateTime @default(now())
 }
