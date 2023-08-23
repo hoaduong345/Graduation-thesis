@@ -4,7 +4,7 @@ import avatar from '../../assets/avatar-fake.jpg'
 function Header() {
   return (
     <>
-      <div className="navbar bg-slate-400">
+      <div className="navbar bg-slate-400 ">
         <div className="flex-1">
           <a className="btn btn-ghost normal-case text-3xl text-black font-bold">Buyzzle</a>
         </div>

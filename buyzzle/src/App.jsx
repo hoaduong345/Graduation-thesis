@@ -1,13 +1,28 @@
 import './App.css'
+import { ToastContainer } from "react-toastify";
+import useRouterElement from "./hooks/useRouterElement";
 
 function App() {
-
+  const routerElement = useRouterElement();
   return (
-   
-
-        <h1 className="font-bold text-5xl items-center mt-56">
-          con mẹ mấy thằng frontend
-        </h1>
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      >
+      
+      </ToastContainer>
+      <div>{routerElement}</div>
+      
+    </>
       
     
   )
