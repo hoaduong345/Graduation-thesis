@@ -4,7 +4,7 @@ const AuthController = require("../controller/AuthController");
 const router = require("express").Router();
 router.post("/register", AuthController.register);
 
-router.get("/login", AuthController.login);
+router.post("/login", AuthController.login);
 // router.get("/:id/verify/:token", AuthController.verify)
 
 
