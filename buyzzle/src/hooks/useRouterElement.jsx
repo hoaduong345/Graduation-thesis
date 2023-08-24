@@ -1,6 +1,6 @@
 import { useRoutes } from "react-router-dom";
 import MainLayout from "../layout/mainLayout";
-// import path from "../servies/path";
+import path from "../services/path";
 import Home from "../pages/home/Home"
 
 export default function useRouterElement() {
