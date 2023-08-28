@@ -80,7 +80,6 @@ const AuthController = {
       if (!user.email) {
         return res.status(404).json("wrong email");
       }
-      console.log("🚀 ~ file: AuthController.js:81 ~ login: ~ user.email:", user.email)
 
       const validPassword = await bcrypt.compare(
         reqpassword,
@@ -91,27 +90,26 @@ const AuthController = {
       if (!validPassword) {
         return res.status(404).json("wrong password");
       }
-      console.log("🚀 ~ file: AuthController.js:92 ~ login: ~ validPassword:", validPassword)
-
-      // if (!user.verify) {
-      //   let token = await prisma.token.findUnique({
-      //     where: { userid: user.id },
-      //   });
+      
+      if (user.verify == false) {
+        const token = await prisma.token.findFirst({
+          where: { userid: user.id },
+        });
         
-      //   if (!token) {
-      //     token = await prisma.token.create({
-      //       userid: user.id,
-      //       token: crypto.randomBytes(32).toString("hex"),
-      //     })
+        if (!token) {
+          token = await prisma.token.create({
+            userid: user.id,
+            token: crypto.randomBytes(32).toString("hex"),
+          })
 
-      //     const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
-      //     await SendEmail(user.email, "Verify email", url);
-      //     console.log("🚀 ~ file: AuthController.js:107 ~ login: ~ url:", url)
-      //   }
-      //   return res.status(400).send({
-      //     message: "An email has sent to your email, please check that",
-      //   });
-      // }
+          const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+
+          await SendEmail(user.email, "Verify email", url);
+        }
+        return res.status(400).send({
+          message: "An email has sent to your email, please check that",
+        });
+      }
       if (user.email && validPassword) {
         const accessToken = AuthController.genereateAccessToken(user.email);
         const refreshToken = AuthController.genereateRefreshToken(user.email);
@@ -129,6 +127,50 @@ const AuthController = {
     }
   },
 
+  // 
+
+
+   // CHANGE PASSWORD
+    changePassword : async (req, res) => {
+    const { id } = req.user;
+    const { new_password, password } = req.body;
+  
+    const user = await prisma.user.findUnique({
+      where: {
+        id : id
+      }
+    });
+    const compareOldPwd = await bcrypt.compareSync(password, user.password);
+  
+    if (!compareOldPwd) {
+      return res.status(409).send({
+        msg: "old password is incorrect!",
+      });
+    }
+  
+    const hashPassword = bcrypt.hashSync(new_password, SALT_ROUNDS);
+  
+    const update_user = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        password: hashPassword,
+      },
+    });
+    if (!update_user) {
+      return res.status(400).json({
+        status: httpStatus.getStatus(400),
+        msg: "Reset password is failed!",
+      });
+    }
+  
+    logger.debug("resetPassword - END");
+    return res.status(200).json({
+      status: httpStatus.getStatus(200),
+      msg: "Reset password is successful!",
+    });
+  },
   // VERIFY ACCOUNT WHEN REGISTER WITH EMAIL
   verify: async (req, res) => {
     try {
@@ -149,7 +191,11 @@ const AuthController = {
       await prisma.user.update({
         where: { id: user.id, verify: true },
       });
-      await token.delete();
+      await prisma.token.delete({
+        where:{
+          id: token.tokenid
+        }
+      });
       res.status(200).send({ message: "Email verified successfully" });
     } catch (error) {
       console.log(error);
