@@ -8,7 +8,7 @@ export default function SitebarFilter() {
           <h2 className="txt-filter font-bold text-[#1A1A1A] text-[20px]">
             BỘ LỌC TÌM KIẾM
           </h2>
-          {/* bo oc tim kiem/ */}
+          {/* bo ocasdsad tim kiem/ */}
         </div>
       </div>
     </body>
