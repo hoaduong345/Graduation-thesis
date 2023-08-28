@@ -32,7 +32,6 @@ const AuthController = {
   // REGISTER
   register: async (req, res) => {
     try {
-   
       const salt = await bcrypt.genSalt(10);
       if (!req.body.password || !salt) {
         throw new Error("Missing password or salt");
@@ -48,6 +47,7 @@ const AuthController = {
       const user = await prisma.user.create({
         data: newUser,
       });
+      // res.status(200).send(user)
       const token = await prisma.token.create({
         data: {
           userid: user.id,
@@ -68,11 +68,10 @@ const AuthController = {
   },
 
   // LOGIN
-  login : async (req, res) => {
+  login: async (req, res) => {
     try {
       const reqpassword = req.body.password;
       const reqemail = req.body.email;
-
 
       const user = await prisma.user.findUnique({
         where: { email: reqemail },
@@ -81,26 +80,22 @@ const AuthController = {
         return res.status(404).json("wrong email");
       }
 
-      const validPassword = await bcrypt.compare(
-        reqpassword,
-        user.password
-      );
-
+      const validPassword = await bcrypt.compare(reqpassword, user.password);
 
       if (!validPassword) {
         return res.status(404).json("wrong password");
       }
-      
+
       if (user.verify == false) {
         const token = await prisma.token.findFirst({
           where: { userid: user.id },
         });
-        
+
         if (!token) {
           token = await prisma.token.create({
             userid: user.id,
             token: crypto.randomBytes(32).toString("hex"),
-          })
+          });
 
           const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
@@ -113,6 +108,11 @@ const AuthController = {
       if (user.email && validPassword) {
         const accessToken = AuthController.genereateAccessToken(user.email);
         const refreshToken = AuthController.genereateRefreshToken(user.email);
+        // Save refresh token to the user's record in the database
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { refreshToken },
+        });
         res.cookie("refreshToken", refreshToken, {
           httpOnlyCookie: true,
           secure: false,
@@ -127,29 +127,28 @@ const AuthController = {
     }
   },
 
-  // 
+  //
 
-
-   // CHANGE PASSWORD
-    changePassword : async (req, res) => {
+  // CHANGE PASSWORD
+  changePassword: async (req, res) => {
     const { id } = req.user;
     const { new_password, password } = req.body;
-  
+
     const user = await prisma.user.findUnique({
       where: {
-        id : id
-      }
+        id: id,
+      },
     });
     const compareOldPwd = await bcrypt.compareSync(password, user.password);
-  
+
     if (!compareOldPwd) {
       return res.status(409).send({
         msg: "old password is incorrect!",
       });
     }
-  
+
     const hashPassword = bcrypt.hashSync(new_password, SALT_ROUNDS);
-  
+
     const update_user = await prisma.user.update({
       where: {
         id: user.id,
@@ -164,7 +163,7 @@ const AuthController = {
         msg: "Reset password is failed!",
       });
     }
-  
+
     logger.debug("resetPassword - END");
     return res.status(200).json({
       status: httpStatus.getStatus(200),
@@ -192,9 +191,9 @@ const AuthController = {
         where: { id: user.id, verify: true },
       });
       await prisma.token.delete({
-        where:{
-          id: token.tokenid
-        }
+        where: {
+          id: token.tokenid,
+        },
       });
       res.status(200).send({ message: "Email verified successfully" });
     } catch (error) {
