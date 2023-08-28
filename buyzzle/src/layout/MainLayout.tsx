@@ -1,4 +1,5 @@
-import Header from "../components/header/Header"
+import Footer from "../components/Footer/Footer"
+import Header from "../components/Header/Header"
 
 
 interface Props {
@@ -9,6 +10,7 @@ function MainLayout({children} : Props) {
     <div className='inline-flex flex-col h-screen w-full'>
         <Header />
         {children}
+        <Footer />
     </div>
   )
 }
