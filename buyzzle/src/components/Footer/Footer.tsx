@@ -1,13 +1,14 @@
 import React from "react";
-import BuyzzyFooterLogo from "../../Assets/BuyzzyFooterLogo";
-import { Images } from "../../Assets/TS/index";
-import IconJCB from "../../Assets/IconJCB";
-import Cham from "../../Assets/Cham";
-import Express from "../../Assets/Express";
-import FacebookSquare from "../../Assets/facebook-square";
-import SquareInstagram from "../../Assets/square-instagram";
-import SquareWhatsapp from "../../Assets/square-whatsapp";
+
 import "./Footer.css";
+import BuyzzyFooterLogo from "../../Assets/TSX/BuyzzyFooterLogo";
+import IconJCB from "../../Assets/TSX/IconJCB";
+import Cham from "../../Assets/TSX/Cham";
+import Express from "../../Assets/TSX/Express";
+import { Images } from "../../Assets/TS";
+import FacebookSquare from "../../Assets/TSX/facebook-square";
+import SquareInstagram from "../../Assets/TSX/square-instagram";
+import SquareWhatsapp from "../../Assets/TSX/square-whatsapp";
 
 
 export default function Footer() {
@@ -20,7 +21,7 @@ export default function Footer() {
         </div>
         <div className="flex justify-center mt-[35px]">
           <div>
-            <BuyzzyFooterLogo />
+            <BuyzzyFooterLogo  />
             <div className="border-b-[3px] border-black mt-2" />
           </div>
         </div>

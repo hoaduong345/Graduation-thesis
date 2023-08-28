@@ -1,14 +1,15 @@
 import React from "react";
-import Map from "../../Assets/Map";
-import Globe from "../../Assets/Globe";
-import Chevron_down from "../../Assets/Chevron-down";
-import Bell from "../../Assets/Bell";
-import Headphones from "../../Assets/headphones";
-import LogoWeb from "../../Assets/LogoWeb";
-import Search from "../../Assets/Search";
-import Shoppingcart from "../../Assets/Shopping-cart";
-import Ellips from "../../Assets/Ellips";
+
 import { Link } from "react-router-dom";
+import Map from "../../Assets/TSX/Map";
+import Globe from "../../Assets/TSX/Globe";
+import Chevron_down from "../../Assets/TSX/Chevron-down";
+import Bell from "../../Assets/TSX/Bell";
+import Headphones from "../../Assets/TSX/headphones";
+import LogoWeb from "../../Assets/TSX/LogoWeb";
+import Search from "../../Assets/TSX/Search";
+import Shoppingcart from "../../Assets/TSX/Shopping-cart";
+import Ellips from "../../Assets/TSX/Ellips";
 
 export default function Header() {
   return (
