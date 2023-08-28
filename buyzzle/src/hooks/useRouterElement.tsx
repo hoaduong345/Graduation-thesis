@@ -5,6 +5,7 @@ import ProductsPage from "../pages/home/ProductsPage";
 import FiltersPage from "../pages/home/FiltersPage";
 import Register from "../pages/register/Register";
 import RegisterLoginLayout from "../layout/RegisterLoginLayout";
+import Login from "../pages/login/Login";
 
 
 export default function useRouterEmelent() {
@@ -38,6 +39,15 @@ export default function useRouterEmelent() {
       element: (
         <RegisterLoginLayout>
           <Register />
+        </RegisterLoginLayout>
+
+      ),
+    },
+    {
+      path: "/login",
+      element: (
+        <RegisterLoginLayout>
+          <Login />
         </RegisterLoginLayout>
 
       ),
