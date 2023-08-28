@@ -7,4 +7,6 @@ export const Images = {
   DownWithAppStore: "../src/Assets/PNG/DownWithAppStore.jpg",
   DownWithCHplay: "../src/Assets/PNG/DownWithCHplay.jpg",
   bgFooter: "../Images/bgFooter.jpg",
+  bgRegisterIcon: "../src/Assets/PNG/bgRegisterIcon.png",
+  logoSlogan:"../src/Assets/PNG/logoSlogan.png",
 };
