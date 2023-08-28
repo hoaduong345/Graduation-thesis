@@ -1,6 +1,10 @@
 import Header from "../components/header/Header"
 
-function mainLayout({children}) {
+
+interface Props {
+    children?: React.ReactNode
+  }
+function MainLayout({children} : Props) {
   return (
     <div className='inline-flex flex-col h-screen w-full'>
         <Header />
@@ -9,4 +13,4 @@ function mainLayout({children}) {
   )
 }
 
-export default mainLayout
+export default MainLayout
