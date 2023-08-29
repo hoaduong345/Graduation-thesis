@@ -1,5 +1,3 @@
-import React from "react";
-
 import "./Footer.css";
 import BuyzzyFooterLogo from "../../Assets/TSX/BuyzzyFooterLogo";
 import IconJCB from "../../Assets/TSX/IconJCB";

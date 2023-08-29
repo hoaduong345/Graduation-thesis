@@ -1,9 +1,10 @@
 import React from "react";
-import Map from "../../Assets/Map";
-import Globe from "../../Assets/Globe";
-import Chevron_down from "../../Assets/Chevron-down";
-import Bell from "../../Assets/Bell";
-import Headphones from "../../Assets/headphones";
+import Map from "../../Assets/TSX/Map";
+import Globe from "../../Assets/TSX/Globe";
+import Chevron_down from "../../Assets/TSX/Chevron-down";
+import Bell from "../../Assets/TSX/Bell";
+import Headphones from "../../Assets/TSX/headphones";
+
 
 
 export default function HeaderTop() {

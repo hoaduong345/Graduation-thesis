@@ -8,12 +8,11 @@ import '../css/home.css'
 
 function HomePage() {
 
-    
+
 
     return (
         <>
-
-            <Index/>
+            <Index />
         </>
 
     )
