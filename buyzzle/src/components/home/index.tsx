@@ -367,7 +367,7 @@ function Index() {
             <img src={Images.thuongHieu1} alt="" />
         </div>
         <div className='max-w-[310px] border-2 border-solid border-[#E0E0E0] pt-[30px] px-[18px]'>
-            <img src={Images.unilever} alt="" />
+            <img src={Images.thuongHieu2} alt="" />
         </div>
         <div className='max-w-[310px] border-2 border-solid border-[#E0E0E0] pt-[33px] px-[18px]'>
             <img src={Images.puma} alt="" />
