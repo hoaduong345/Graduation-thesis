@@ -1,4 +1,4 @@
-import React from "react";
+
 import BuyzzyFooterLogo from "../../Assets/BuyzzyFooterLogo";
 import { Images } from "../../Assets/TS/index";
 import IconJCB from "../../Assets/IconJCB";
@@ -13,6 +13,7 @@ import "./Footer.css";
 export default function Footer() {
   return (
     <footer className="footer-bg h-[512px]">
+      
       <div>
         <div>
           <div className="bg-[#FFEAE9] h-[5px]"></div>

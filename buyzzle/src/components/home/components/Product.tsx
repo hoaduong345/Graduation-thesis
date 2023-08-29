@@ -1,6 +1,6 @@
 
 import { Images } from '../../../Assets/TS'
-import { Product } from '../HomePage'
+import { Product } from '../../../pages/home/HomePage'
 
 type Props = {
     product: Product
