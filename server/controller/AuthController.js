@@ -9,6 +9,16 @@ const crypto = require("crypto");
 dotenv.config();
 
 const AuthController = {
+  // GENERATE RANDOM NUMBER
+   generateRandomNumbers: (length) => {
+    let otp = '';
+    for (let i = 0; i < length; i++) {
+      const randomNumber = Math.floor(Math.random() * 10);
+      otp += randomNumber.toString();
+    }
+    return otp;
+  },
+
   // GENERATE ACCESS TOKEN
   genereateAccessToken: (email) => {
     return jwt.sign(
@@ -127,49 +137,86 @@ const AuthController = {
     }
   },
 
-  //
+  
 
   // CHANGE PASSWORD
-  changePassword: async (req, res) => {
-    const { id } = req.user;
-    const { new_password, password } = req.body;
+  // changePassword: async (req, res) => {
+  //   console.log("aaaaaaaaa")
+  //  try {
+  //   const { id } = req.user;
+  //   const { new_password, password } = req.body;
 
-    const user = await prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    const compareOldPwd = await bcrypt.compareSync(password, user.password);
+  //   const user = await prisma.user.findUnique({
+  //     where: {
+  //       id: id,
+  //     },
+  //   });
+  //   console.log("🚀 ~ file: AuthController.js:145 ~ changePassword: ~ user:", user)
 
-    if (!compareOldPwd) {
-      return res.status(409).send({
-        msg: "old password is incorrect!",
+  //   if (!user) {
+  //     return res.status(404).json({
+  //       msg: "User not found.",
+  //     });
+  //   }
+  //   const compareOldPwd = await bcrypt.compareSync(password, user.password);
+  //   console.log("🚀 ~ file: AuthController.js:153 ~ changePassword: ~ compareOldPwd:", compareOldPwd)
+
+  //   if (!compareOldPwd) {
+  //     return res.status(409).send({
+  //       msg: "old password is incorrect!",
+  //     });
+  //   }
+
+  //   const hashPassword = bcrypt.hashSync(new_password, SALT_ROUNDS);
+  //   const update_user = await prisma.user.update({
+  //     where: {
+  //       id: user.id,
+  //     },
+  //     data: {
+  //       password: hashPassword,
+  //     },
+  //   });
+  //   console.log("🚀 ~ file: AuthController.js:170 ~ changePassword: ~ update_user:", update_user)
+  //   if (!update_user) {
+  //     return res.status(400).json({
+  //       status: httpStatus.getStatus(400),
+  //       msg: "Reset password is failed!",
+  //     });
+  //   }
+
+  //   logger.debug("resetPassword - END");
+  //   return res.status(200).json({
+  //     status: httpStatus.getStatus(200),
+  //     msg: "Reset password is successful!",
+  //   });
+  //  } catch (error) {
+  //     res.status(500).json("Change password failed")
+  //  }
+  // },
+  // SEND EMAIL TO FORGOT PASSWORD
+  sendEmailToTakeOTP : async (req, res) => {
+    console.log("aaaaaaaaa")
+    try {
+      const reqemail = req.body.email;
+      const user = await prisma.user.findUnique({
+        where: {
+          email: reqemail,
+        },
       });
+      console.log("🚀 ~ file: AuthController.js:205 ~ forgotPassword: ~ reqemail:", reqemail)
+
+      if (!user) {
+        return res.status(404).send("Email is not true");
+      }
+      const otp = AuthController.generateRandomNumbers(5)
+      await SendEmail(user.email, "OTP To Change Your Password", otp);
+      res.status(200).send("OTP is sending to your email")  
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal server error");
     }
-
-    const hashPassword = bcrypt.hashSync(new_password, SALT_ROUNDS);
-
-    const update_user = await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        password: hashPassword,
-      },
-    });
-    if (!update_user) {
-      return res.status(400).json({
-        status: httpStatus.getStatus(400),
-        msg: "Reset password is failed!",
-      });
-    }
-
-    logger.debug("resetPassword - END");
-    return res.status(200).json({
-      status: httpStatus.getStatus(200),
-      msg: "Reset password is successful!",
-    });
   },
+
   // VERIFY ACCOUNT WHEN REGISTER WITH EMAIL
   verify: async (req, res) => {
     try {

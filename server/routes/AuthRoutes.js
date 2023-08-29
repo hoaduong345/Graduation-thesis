@@ -7,8 +7,9 @@ router.post("/register", AuthController.register);
 
 router.post("/login", AuthController.login);
 // router.get("/:id/verify/:token", AuthController.verify)
-router.post("/changepassword", MiddleWareController.verifyToken, AuthController.changePassword)
+// router.post("/changepassword/:id", MiddleWareController.verifyToken, AuthController.changePassword)
 
+router.post("/forgotpassword", AuthController.sendEmailToTakeOTP)
 
 
 module.exports = router;
