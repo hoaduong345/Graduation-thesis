@@ -30,7 +30,7 @@ export default function Products(props: Props) {
                     <span className='text-[12px]'>{4.2}</span>
 
                     <div className='flex gap-[7px]'>
-                        <div className='text-[7px] font-normal bg110k max-w-[51px] text-white text-center p-[3px]'>
+                        <div className='text-[7px] font-normal bg110k max-w-[56px] text-white text-center p-[3px]'>
                             Giảm {discountedPrice}k
                         </div>
                         <div className='text-[7px]  bg110k max-w-[51px] text-white text-center p-[3px]'>
@@ -38,10 +38,10 @@ export default function Products(props: Props) {
                         </div>
                     </div>
 
-                    <div className='flex justify-between items-center'>
+                    <div className='flex justify-between items-center' >
                         <p className='text-[16px] text-[#865546] font-bold'>{price} vnd</p>
                         <p className='text-[12px] text-[#4c4c4c] font-normal'>Đã bán
-                            <span> {product.soldCount}</span>
+                            <span > {product.soldCount}</span>
                         </p>
                     </div>
 
