@@ -134,7 +134,7 @@ function Index() {
     <h1 className='text-2xl font-bold mb-[15px] text-[#ffaaaf]'>FLASH SALE: </h1>
 
     <div className='flex gap-[27px]'>
-        <div className='max-w-[310px] shadow'>
+        <div className='max-w-[310px] shadow shadow-[#ffaaaf]'>
             <div className='relative'>
                 <img src={Images.flashSale1} alt="" />
                 <div className='absolute right-[0] top-[0] py-[13px] px-[8px] bgFlashSale' >

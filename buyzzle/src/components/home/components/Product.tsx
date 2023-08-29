@@ -1,6 +1,6 @@
 
 import { Images } from '../../../Assets/TS'
-import { Product } from '../../../pages/home/HomePage'
+import { Product } from '../index'
 
 type Props = {
     product: Product
@@ -12,13 +12,13 @@ export default function Products(props: Props) {
     const price = product.price - discountedPrice
     return (
         <>
-            <div className='max-w[250px] flex-col shadow mb-[10px]'>
+            <div className='max-w-[250px] flex-col mb-[10px]'>
                 <div className='relative'>
                     <img src={product.imgSrc} alt="" />
                     <p className='absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded'>Giảm {product.discount}%</p>
                 </div>
 
-                <div className='p-[10px]'>
+                <div className='p-[10px] border-[1px] border-[#ffaaaf] border-t-[0px]'>
 
                     <p className='font-bold text-[16px] max-w-[220px]'>{product.title}</p>
 
