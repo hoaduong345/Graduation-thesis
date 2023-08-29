@@ -14,6 +14,7 @@ import Ellips from "../../Assets/TSX/Ellips";
 export default function Header() {
   return (
     <>
+
       <header className="Header">
         <div className="Header-top bg-white">
           <div className="container mx-auto">

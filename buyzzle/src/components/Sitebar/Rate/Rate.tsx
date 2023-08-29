@@ -1,24 +1,25 @@
-import React from 'react'
-import { RatingStar } from '../SitebarFilter';
-type Props={
-  onChange:(rating:number,checked:boolean) =>void
-}& RatingStar
-export default function Rate(props: Props) {
+import React from "react";
+import { RatingStar } from "../SitebarFilter";
+// type Props = {
+//   onChange: (rating: number, checked: boolean) => void;
+// } & RatingStar;
+
+export default function Rate(props: RatingStar) {
   return (
-    <div className="flex items-center mb-4 justify-start gap-3">
+    <div className="flex items-center mb-4 justify-start gap-3 ">
       <input
-        onChange={(v)=>props.onChange(props.rating,v.target.checked)}
+        // onChange={(v) => props.onChange(props.rating, v.target.checked)}
         id="default-checkbox"
         type="checkbox"
         // checked={props.checked}
-        className="w-4 h-4 accent-[#EA4B48]"
+        className="w-4 h-4 accent-[#EA4B48] "
       />
-      <div className="flex items-center space-x-1">
-        {[1, 2, 3, 4, 5].map((e) => {
+      <div className="flex items-center space-x-1 ">
+        {[1, 2, 3, 4, 5].map((item) => {
           return (
             <svg
               className={`w-4 h-4 ${
-                props.rating >= e ? " text-yellow-300" : "red"
+                props.rating >= item ? `text-yellow-300` : `red`
               }`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
