@@ -40,4 +40,9 @@ export const Images = {
   chooseUs2 : '../src/Assets/PNG/chooseUs2.png',
   chooseUs3 : '../src/Assets/PNG/chooseUsCheck.png',
   chooseUs4 : '../src/Assets/PNG/chooseUsArrow.png',
+  puma : '../src/Assets/PNG/puma.png',
+  spGoiY1 : '../src/Assets/PNG/spGoiY1.png',
+  unilever : '../src/Assets/PNG/unilever.png',
+  adidas : '../src/Assets/PNG/adidas.png',
+  thuongHieu1 : '../src/Assets/PNG/thuongHieu1.png',
 };

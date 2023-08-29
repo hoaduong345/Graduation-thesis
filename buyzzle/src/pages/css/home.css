@@ -1,4 +1,8 @@
 .bgFlashSale{
-    background: url('../src/Assets/PNG/flashSaleSoild.png'), no-repeat;
-  
-  }
+  background: url('../src/Assets/PNG/flashSaleSoild.png'), no-repeat;
+
+}
+
+.bg110k {
+  background: url('../src/Assets/PNG/giam110k.png'), no-repeat;
+}

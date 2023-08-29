@@ -4,8 +4,43 @@ import Container from '../../components/container/Container';
 import Category from './components/Category';
 import Arrow from '../../Assets/arrow';
 import '../css/home.css'
+import Products from './components/Product';
+
+export type Product = {
+  id: number;
+  imgSrc: string;
+  title: string;
+  price: number;
+  discount: number;
+  soldCount: number;
+}
 
 function HomePage() {
+
+  const products: Product[] = [{
+    id: 1, imgSrc: Images.spGoiY1,
+    title: "Bộ Máy Tính Case PC Chơi Game 1", price: 1200000, discount: 50, soldCount: 33
+  }, {
+    id: 2, imgSrc: Images.spGoiY1,
+    title: "Bộ Máy Tính Case PC Chơi Game 2", price: 500000, discount: 5, soldCount: 12
+  },
+  {
+    id: 3, imgSrc: Images.spGoiY1,
+    title: "Bộ Máy Tính Case PC Chơi Game 3", price: 680000, discount: 10, soldCount: 42
+  }
+    , {
+    id: 4, imgSrc: Images.spGoiY1,
+    title: "Bộ Máy Tính Case PC Chơi Game 4", price: 900000, discount: 20, soldCount: 55
+  }
+    , {
+    id: 5, imgSrc: Images.spGoiY1,
+    title: "Bộ Máy Tính Case PC Chơi Game 5", price: 1000000, discount: 70, soldCount: 8
+  }
+    , {
+    id: 6, imgSrc: Images.spGoiY1,
+    title: "Bộ Máy Tính Case PC Chơi Game 5", price: 1000000, discount: 70, soldCount: 8
+  }]
+
   return (
     <>
 
@@ -99,7 +134,8 @@ function HomePage() {
 
         <div className='container my-[60px]'>
             <h1 className='text-2xl font-bold mb-[15px] text-[#ffaaaf]'>FLASH SALE: </h1>
-            <div>
+            
+            <div className='flex gap-[27px]'>
                 <div className='max-w-[310px] shadow'>
                     <div className='relative'>
                         <img src={Images.flashSale1} alt="" />
@@ -135,6 +171,114 @@ function HomePage() {
                     </div>
 
                 </div>
+
+                <div className='max-w-[310px] shadow'>
+                    <div className='relative'>
+                        <img src={Images.flashSale1} alt="" />
+                        <div className='absolute right-[0] top-[0] py-[13px] px-[8px] bgFlashSale' >
+                            <p className='text-[16px] text-white text-center '>Giảm</p>
+                            <span className='text-[32px] text-[#efd22b]'>60%</span>
+                        </div>
+
+                    </div>
+
+                    <div className='p-[10px]'>
+                        <p className='font-bold text-[16px] my-[3px] max-w-[268px]'>Bộ Máy Tính Case PC Chơi Game</p>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star2} alt="" /></button>
+                        <span className='text-[12px]'>{4.2}</span>
+
+
+                        <div className='flex gap-[7px]'>
+                            <div className='text-[7px] font-normal bg110k max-w-[51px] text-white text-center p-[3px]'>
+                                Giảm 1800k
+                            </div>
+                            <div className='text-[7px]  bg110k max-w-[51px] text-white text-center p-[3px]'>
+                                FREE SHIP
+                            </div>
+                        </div>
+
+                        <div className='flex justify-between items-center'>
+                            <p className='text-[16px] text-[#865546] font-bold'>1.300.299 vnd</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div className='max-w-[310px] shadow'>
+                    <div className='relative'>
+                        <img src={Images.flashSale1} alt="" />
+                        <div className='absolute right-[0] top-[0] py-[13px] px-[8px] bgFlashSale' >
+                            <p className='text-[16px] text-white text-center '>Giảm</p>
+                            <span className='text-[32px] text-[#efd22b]'>60%</span>
+                        </div>
+
+                    </div>
+
+                    <div className='p-[10px]'>
+                        <p className='font-bold text-[16px] my-[3px] max-w-[268px]'>Bộ Máy Tính Case PC Chơi Game</p>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star2} alt="" /></button>
+                        <span className='text-[12px]'>{4.2}</span>
+
+
+                        <div className='flex gap-[7px]'>
+                            <div className='text-[7px] font-normal bg110k max-w-[51px] text-white text-center p-[3px]'>
+                                Giảm 1800k
+                            </div>
+                            <div className='text-[7px]  bg110k max-w-[51px] text-white text-center p-[3px]'>
+                                FREE SHIP
+                            </div>
+                        </div>
+
+                        <div className='flex justify-between items-center'>
+                            <p className='text-[16px] text-[#865546] font-bold'>1.300.299 vnd</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div className='max-w-[310px] shadow'>
+                    <div className='relative'>
+                        <img src={Images.flashSale1} alt="" />
+                        <div className='absolute right-[0] top-[0] py-[13px] px-[8px] bgFlashSale' >
+                            <p className='text-[16px] text-white text-center '>Giảm</p>
+                            <span className='text-[32px] text-[#efd22b]'>60%</span>
+                        </div>
+
+                    </div>
+
+                    <div className='p-[10px]'>
+                        <p className='font-bold text-[16px] my-[3px] max-w-[268px]'>Bộ Máy Tính Case PC Chơi Game</p>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star1} alt="" /></button>
+                        <button><img src={Images.star2} alt="" /></button>
+                        <span className='text-[12px]'>{4.2}</span>
+
+
+                        <div className='flex gap-[7px]'>
+                            <div className='text-[7px] font-normal bg110k max-w-[51px] text-white text-center p-[3px]'>
+                                Giảm 1800k
+                            </div>
+                            <div className='text-[7px]  bg110k max-w-[51px] text-white text-center p-[3px]'>
+                                FREE SHIP
+                            </div>
+                        </div>
+
+                        <div className='flex justify-between items-center'>
+                            <p className='text-[16px] text-[#865546] font-bold'>1.300.299 vnd</p>
+                        </div>
+                    </div>
+
+                </div>
+
+
             </div>
         </div>
 
@@ -214,6 +358,42 @@ function HomePage() {
           </Container>
 
       </div>
+
+      <Container>
+          <div className='my-[60px]'>
+              <h1 className='text-2xl font-bold mb-[15px]'>Thương hiệu nổi tiếng: </h1>
+
+              <div className='flex justify-between'>
+
+                  <div className='max-w-[310px] border-2 border-solid items-center border-[#E0E0E0] pt-[45px] px-[81px]'>
+                      <img src={Images.thuongHieu1} alt="" />
+                  </div>
+                  <div className='max-w-[310px] border-2 border-solid border-[#E0E0E0] pt-[30px] px-[18px]'>
+                      <img src={Images.unilever} alt="" />
+                  </div>
+                  <div className='max-w-[310px] border-2 border-solid border-[#E0E0E0] pt-[33px] px-[18px]'>
+                      <img src={Images.puma} alt="" />
+                  </div>
+                  <div className='max-w-[310px] border-2 border-solid border-[#E0E0E0] p-[18px]'>
+                      <img src={Images.adidas} alt="" />
+                  </div>
+              </div>
+          </div>
+
+          <div className='container my-[60px]'>
+              <h1 className='text-2xl font-bold mb-[15px]'>Gợi ý sản phẩm: </h1>
+
+              <div className='flex flex-wrap justify-between'>
+
+                  {products.map((product) => {
+                      return (<Products product={product} />)
+                  })}
+
+
+              </div>
+
+          </div>
+      </Container>
     </>
 
   )
