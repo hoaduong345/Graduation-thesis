@@ -78,6 +78,23 @@ function HomePage() {
 
         </div>
 
+        <div className='container my-[60px] '>
+            <div className='flex justify-center '>
+                <img src={Images.textMom} alt="" />
+            </div>
+            <div className='flex justify-center gap-[24px]'>
+                <div className='max-w-[420px] hover:scale-90'>
+                    <img src={Images.imgMom1} alt="" />
+                </div>
+                <div className='max-w-[420px] hover:scale-90'>
+                    <img src={Images.imgMom2} alt="" />
+                </div>
+                <div className='max-w-[420px] hover:scale-90'>
+                    <img src={Images.imgMom3} alt="" />
+                </div>
+            </div>
+        </div>
+
       </Container>
     </>
 

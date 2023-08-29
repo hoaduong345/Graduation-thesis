@@ -29,4 +29,8 @@ export const Images = {
   Category10: '../src/Assets/PNG/category10.png',
   Category11: '../src/Assets/PNG/category11.png',
   Category12: '../src/Assets/PNG/category12.png',
+  textMom : '../src/Assets/PNG/Group 409.png',
+  imgMom1 : '../src/Assets/PNG/Rectangle 617.png',
+  imgMom2 : '../src/Assets/PNG/Rectangle 618.png',
+  imgMom3 : '../src/Assets/PNG/Rectangle 619.png',
 };
