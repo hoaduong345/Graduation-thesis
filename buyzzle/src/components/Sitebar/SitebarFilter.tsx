@@ -35,7 +35,7 @@ const arrCBCategory: CheckboxCategory[] = [
 export default function SitebarFilter() {
   return (
     <>
-      <div className="content-left-filter mt-[34px] h-max basis-[22%] p-4 ">
+      <div className="content-left-filter mt-[34px] h-max basis-[27%] p-4 ">
         <div className="flex items-center justify-between">
           <h2 className="txt-filter font-bold text-[#1A1A1A] text-[20px]">
             BỘ LỌC TÌM KIẾM
