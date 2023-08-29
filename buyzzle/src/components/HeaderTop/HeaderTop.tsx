@@ -1,15 +1,19 @@
 import React from "react";
-import Map from "../../Assets/Map";
-import Globe from "../../Assets/Globe";
-import Chevron_down from "../../Assets/Chevron-down";
-import Bell from "../../Assets/Bell";
-import Headphones from "../../Assets/headphones";
+import Globe from "../../Assets/TSX/Globe";
+import Chevron_down from "../../Assets/TSX/Chevron-down";
+import Bell from "../../Assets/TSX/Bell";
+import Headphones from "../../Assets/TSX/headphones";
+import Map from "../../Assets/TSX/Map";
+import Container from "../container/Container";
+
 
 
 export default function HeaderTop() {
   return (
     <>
       <header className="Header">
+        <Container >
+
         <div className="Header-top bg-white">
           <div className="container mx-auto">
             <div className="Header-top-content flex justify-between">
@@ -41,11 +45,8 @@ export default function HeaderTop() {
             </div>
           </div>
         </div>
+        </Container>
         <div className="border-2 border-[#E6E6E6]" />
-
-        
-
-        
       </header>
     </>
   );
