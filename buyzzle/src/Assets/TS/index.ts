@@ -33,4 +33,11 @@ export const Images = {
   imgMom1 : '../src/Assets/PNG/Rectangle 617.png',
   imgMom2 : '../src/Assets/PNG/Rectangle 618.png',
   imgMom3 : '../src/Assets/PNG/Rectangle 619.png',
+  star1 : '../src/Assets/PNG/Star 11.png',
+  star2 : '../src/Assets/PNG/Star 15.png',
+  flashSale1 : '../src/Assets/PNG/flashSale1.png',
+  chooseUs1 : '../src/Assets/PNG/chooseUs1.png',
+  chooseUs2 : '../src/Assets/PNG/chooseUs2.png',
+  chooseUs3 : '../src/Assets/PNG/chooseUsCheck.png',
+  chooseUs4 : '../src/Assets/PNG/chooseUsArrow.png',
 };
