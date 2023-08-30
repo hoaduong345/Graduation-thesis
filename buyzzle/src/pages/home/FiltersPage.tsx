@@ -8,6 +8,39 @@ import FoodLogoo from "../../Assets/TSX/FoodLogoo";
 import BookOff from "../../Assets/TSX/BookOff";
 import Series from "../../Assets/TSX/Series";
 import StepsLogo from "../../Assets/TSX/StepsLogo";
+import "../css/filter.css";
+import ArrowNext from "../../Assets/TSX/ArrowNext";
+import ArrowPrev from "../../Assets/TSX/ArrowPrev";
+import Filter from "./FilterPage/Filter";
+
+export interface Products {
+  id: number;
+  name: string;
+  images: string;
+  rate: number;
+  price: number;
+  discount: number;
+  soldCount: number;
+}
+
+const products: Products[] = [];
+// mang hinh anh random 1- images.length
+const images: string[] = [
+  "https://product.hstatic.net/200000722513/product/hinh-2_f829913c3f7144a3a4aa066dc78faec0_master.gif",
+  "https://product.hstatic.net/200000722513/product/thumb_pc_studio_bdeef727e7c54592a4deac435876eed2_master.png",
+  "https://product.hstatic.net/200000722513/product/phantom_i4070_20c63a05c1094b57b86f39edb98dce7b_master.png",
+];
+for (let i = 0; i < 11; i++) {
+  products.push({
+    id: i + 1,
+    name: `Bộ Máy Tính Case PC Chơi Game ${i + 1}`,
+    images: images[Math.floor(Math.random() * images.length)],
+    rate: 1,
+    price: 210.0,
+    discount: 20,
+    soldCount: 20,
+  });
+}
 
 export default function FiltersPage() {
   return (
@@ -15,9 +48,10 @@ export default function FiltersPage() {
       <body className="body-filter container mx-auto">
         <div className="flex flex-row justify-between">
           <SitebarFilter />
+
           {/* content-right-filter */}
           <div className="content-right-filter mt-[34px] h-max basis-9/12 p-4 ">
-            <h2 className="txt-filter font-bold text-[#1A1A1A] text-[20px]">
+            <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl">
               THƯƠNG HIỆU NỔI TIẾNG:
             </h2>
 
@@ -107,23 +141,81 @@ export default function FiltersPage() {
                 alt="bannerFilter"
               />
             </div>
+
+            <div className="flex flex-wrap mt-[10px] gap-4 w-max-w p-[15px] ">
+              {products.map((items) => {
+                return (
+                  <>
+                    <Filter product={items} />
+                  </>
+                );
+              })}
+            </div>
+
+            <div className="pagination">
+              <a href="#" className="prev mr-[60px]">
+                <ArrowPrev />
+              </a>
+              <a href="#" className="page">
+                1
+              </a>
+              <a href="#" className="page">
+                2
+              </a>
+              <a href="#" className="page">
+                ...
+              </a>
+              <a href="#" className="page">
+                7
+              </a>
+              <a href="#" className="page">
+                8
+              </a>
+              <a href="#" className="next ml-[60px]">
+                <ArrowNext />
+              </a>
+            </div>
+            <div
+              style={{ borderTopColor: "transparent" }}
+              className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
+            />
           </div>
           {/* content-right-filter-end */}
         </div>
-        <div className="Logo-bottom flex justify-around my-24">
-          <StepsLogo />
-          <div className="border-[1px] border-[#E6E6E6]" />
-          <MangoLogo />
-          <div className="border-[1px] border-[#E6E6E6]" />
-          <FoodLogo />
-          <div className="border-[1px] border-[#E6E6E6]" />
-          <FoodLogoo />
-          <div className="border-[1px] border-[#E6E6E6]" />
-          <BookOff />
-          <div className="border-[1px] border-[#E6E6E6]" />
-          <Series />
+
+        <div className="Logo-square-bottom border border-[#FFEAE9] flex justify-evenly my-24 w-[100%] py-[60px] ">
+          <div className="cursor-pointer">
+            <StepsLogo />
+          </div>
+          <div className="border-[1px] border-[#E6E6E6] " />
+          <div className="cursor-pointer">
+            <MangoLogo />
+          </div>
+
+          <div className="border-[1px] border-[#E6E6E6] " />
+          <div className="cursor-pointer">
+            <FoodLogo />
+          </div>
+
+          <div className="border-[1px] border-[#E6E6E6] " />
+          <div className="cursor-pointer">
+            <FoodLogoo />
+          </div>
+
+          <div className="border-[1px] border-[#E6E6E6] " />
+          <div className="cursor-pointer">
+            <BookOff />
+          </div>
+
+          <div className="border-[1px] border-[#E6E6E6] " />
+          <div className="cursor-pointer">
+            <Series />
+          </div>
         </div>
       </body>
+
+
+
     </Container>
   );
 }

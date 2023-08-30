@@ -4,7 +4,9 @@ import ArrowUp from "../../Assets/TSX/ArrowUp";
 import Rate from "./Rate/Rate";
 import { Images } from "../../Assets/TS";
 import Checkbox from "./Checkbox/Checkbox";
+import ButtonSuggestt from "./ButtonSuggest/ButtonSuggest";
 
+// rati star
 export interface RatingStar {
   checked: boolean;
   rating: number;
@@ -18,6 +20,7 @@ const arrRating: RatingStar[] = [
   { checked: false, rating: 1 },
 ];
 
+// check box
 export interface CheckboxCategory {
   checkedCB: boolean;
   title: string;
@@ -31,6 +34,27 @@ const arrCBCategory: CheckboxCategory[] = [
   { checkedCB: false, title: "Thời trang trẻ em", quantity: 32 },
   { checkedCB: false, title: "Thời Trang Nữ", quantity: 232 },
 ];
+
+export interface ButtonSuggest {
+  name: string;
+}
+const arrBtnSug: ButtonSuggest[] = [
+  {
+    name: "Áo Cổ điển",
+  },
+];
+arrBtnSug.push(
+  {
+    name: "Áo Bra",
+  },
+  {
+    name: "Áo",
+  },
+  {
+    name: "Áo Cổ điển",
+  }
+);
+console.log(arrBtnSug.length);
 
 export default function SitebarFilter() {
   return (
@@ -47,17 +71,16 @@ export default function SitebarFilter() {
         <div className="mt-[20px]">
           <h4 className="font-bold">Theo Danh Mục</h4>
           {/* default-radio-1 */}
-            {arrCBCategory.map((item,index) => {
-              return (
-                <Checkbox
-                  checkedCB={item.checkedCB}
-                  quantity={item.quantity}
-                  title={item.title}
-                  key={index}
-                />
-              );
-            })}
-          
+          {arrCBCategory.map((item, index) => {
+            return (
+              <Checkbox
+                checkedCB={item.checkedCB}
+                quantity={item.quantity}
+                title={item.title}
+                key={index}
+              />
+            );
+          })}
 
           {/* default-radio-1-endsd */}
         </div>
@@ -119,40 +142,9 @@ export default function SitebarFilter() {
           </a>
         </div>
         <div className="keyWord flex flex-wrap gap-1 mt-[20px] ">
-          <button
-            type="button"
-            className="transition duration-200 hover:ease-in bg-[#F2F2F2] hover:bg-[#EA4B48] focus:outline-none focus:ring-4  font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 hover:text-[#FFFFFF]"
-          >
-            Áo Bra
-          </button>
-
-          <button
-            type="button"
-            className=" transition duration-200 bg-[#EA4B48] text-white focus:outline-none focus:ring-4  font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 "
-          >
-            Áo Bra
-          </button>
-
-          <button
-            type="button"
-            className="transition duration-200 bg-[#F2F2F2] hover:bg-[#EA4B48] focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 hover:text-[#FFFFFF] "
-          >
-            Áo Bra
-          </button>
-
-          <button
-            type="button"
-            className="transition duration-200 bg-[#F2F2F2] hover:bg-[#EA4B48] focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 hover:text-[#FFFFFF] "
-          >
-            Áo Bra
-          </button>
-
-          <button
-            type="button"
-            className="transition duration-200 bg-[#F2F2F2] hover:bg-[#EA4B48] focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 hover:text-[#FFFFFF] "
-          >
-            Áo Bra
-          </button>
+          {arrBtnSug.map((item, index) => {
+            return <ButtonSuggestt btnSug={item} />;
+          })}
         </div>
         <div className="btn-deleteFilter font-extrabold flex items-center justify-center mt-[38px]">
           <button
