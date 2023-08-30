@@ -1,7 +1,8 @@
 .register-bg {
     background-image: url("../../Assets/Images/bgRegister.png");
-
-}
+    /* max-height: 1083px;
+    max-width: 963px;*/
+} 
 
 .registerform-bg {
     background-color: #ffffff;
@@ -26,15 +27,7 @@
   }
   
   /* Kiểu cho phần tử button */
-  .registration-form button {
-    background-color: #EA4B48;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    width: 100%;
-    border-radius: 6px;
-  }
+
   
   /* Kiểu cho tiêu đề form */
   .registration-form h2 {
@@ -69,7 +62,7 @@
   
   /* Kiểu cho checkbox khi đã được chọn */
   .custom-checkbox:checked {
-    background-color: #FFAAAF;
+    background-color: #EA4B48;
     border-color: #FFAAAF;
   }
 

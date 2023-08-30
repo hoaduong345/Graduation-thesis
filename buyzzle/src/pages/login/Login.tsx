@@ -110,7 +110,7 @@ function Login() {
                             <button className='flex items-center justify-center w-12 h-12  text-white rounded-full'>
                                 <img src={LogoApple} alt='Apple' className='w-6 h-6' />
                             </button>
-                            <button className='flex items-center justify-center w-12 h-12  text-white rounded-full'>
+                            <button className='flex items-center justify-center w-12 h-12   text-white rounded-full'>
                                 <img src={LogoFace} alt='Facebook' className='w-6 h-6' />
                             </button>
                         </div>
