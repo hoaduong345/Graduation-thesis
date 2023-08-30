@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
+import Container from '../../components/container/Container';
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
@@ -41,15 +42,18 @@ function Register() {
           alt="bgRegisterIcon"
           width={"924px"}
           height={"1083px"} />
-        <div className="absolute inset-0 flex justify-center items-center">
-          <Link to="/">
-            <img src={Images.logoSlogan}
-              alt="logo"
-              width={"90%"}
-              height={"90%"} />
-          </Link>
-        </div>
+        <Container>
+          <div className="absolute inset-0 flex justify-center items-center ">
+            <Link to="/">
+              <img src={Images.logoSlogan}
+                alt="logo"
+                width={"90%"}
+                height={"90%"} />
+            </Link>
+          </div>
+        </Container>
       </div>
+      
       <div className='w-1/2 flex justify-center items-center min-h-screen bg-white'>
         <div className='w-1/2'>
 

@@ -1,7 +1,21 @@
-import React from 'react'
+
+
+import Index from '../../components/home';
+import '../css/home.css'
+
+
+
 
 function HomePage() {
-  return <div>Trang chu</div>;
+
+
+
+    return (
+        <>
+            <Index />
+        </>
+
+    )
 }
 
 export default HomePage;
