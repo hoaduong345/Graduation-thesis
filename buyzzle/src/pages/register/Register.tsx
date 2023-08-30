@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
-import Container from '../../components/container/Container';
+
 function Register() {
+
+
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -15,6 +17,8 @@ function Register() {
     contact: '',
     termsAgreement: false,
   });
+
+
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -36,26 +40,27 @@ function Register() {
     console.log(formData);
   };
   return (
+
     <body className='register-bg flex'>
       <div className='h-1083px w-963px p-4 relative'>
         <img src={Images.bgRegisterIcon}
           alt="bgRegisterIcon"
           width={"924px"}
           height={"1083px"} />
-        <Container>
-          <div className="absolute inset-0 flex justify-center items-center ">
-            <Link to="/">
-              <img src={Images.logoSlogan}
-                alt="logo"
-                width={"90%"}
-                height={"90%"} />
-            </Link>
-          </div>
-        </Container>
+
+        <div className="absolute inset-0 flex justify-center items-center ">
+          <Link to="/">
+            <img src={Images.logoSlogan}
+              alt="logo"
+              width={"90%"}
+              height={"90%"} />
+          </Link>
+        </div>
+
       </div>
-      
+
       <div className='w-1/2 flex justify-center items-center min-h-screen bg-white'>
-        <div className='w-1/2'>
+        <div className='w-[424px]'>
 
           <form onSubmit={handleSubmit} className="registration-form">
             <h2>ĐĂNG KÝ</h2>
@@ -67,7 +72,7 @@ function Register() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className='input'
+                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
               />
             </div>
             <div>
@@ -78,18 +83,19 @@ function Register() {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className='input'
+                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
               />
             </div>
             <div>
               <label>Mật khẩu:</label>
+
               <input
                 placeholder="Mật khẩu"
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className='input'
+                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
               />
             </div>
             <div>
@@ -100,7 +106,7 @@ function Register() {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className='input'
+                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
               />
             </div>
             <div>
@@ -111,7 +117,7 @@ function Register() {
                 name="contact"
                 value={formData.contact}
                 onChange={handleChange}
-                className='input'
+                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
               />
             </div>
             <div className="checkbox-container">
@@ -124,7 +130,7 @@ function Register() {
               />
               <label htmlFor="termsAgreement">Tôi đã đọc và đồng ý với <a href='#'>Điều Khoản</a></label>
             </div>
-            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[70px]">Đăng ký</button>
+            <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[70px]">Đăng ký</button>
             <div className='flex items-center my-4'>
               <div className='grow h-px bg-slate-300'></div>
               <div className='mx-2 text-white-500'>Hoặc</div>
@@ -154,6 +160,7 @@ function Register() {
 
       </div>
     </body>
+
   );
 }
 
