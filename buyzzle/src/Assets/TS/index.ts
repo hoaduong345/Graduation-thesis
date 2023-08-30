@@ -9,4 +9,8 @@ export const Images = {
   bgFooter: "../Images/bgFooter.jpg",
   bgRegisterIcon: "../src/Assets/PNG/bgRegisterIcon.png",
   logoSlogan:"../src/Assets/PNG/logoSlogan.png",
+  logoApple:"../src/Assets/PNG/lgApple",
+  logoGoogle:"../src/Assets/PNG/lgG",
+  logoFace:"../src/Assets/PNG/lgFace",
 };
+

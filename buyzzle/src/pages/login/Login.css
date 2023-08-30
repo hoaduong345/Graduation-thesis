@@ -1,0 +1,25 @@
+.login-bg {
+    background-image: url("../../Assets/Images/bgRegister.png");
+
+}
+
+.loginform-bg {
+    background-color: #ffffff;
+
+}
+
+.login-a {
+    color: #FFAAAF;
+}
+
+.login-a2 {
+    width: 424px;
+    height: 18px;
+    top: 672px;
+    left: 1196px;
+    gap: 24px;
+}
+
+.h{
+    width: 100%;
+}
