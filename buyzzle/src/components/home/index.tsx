@@ -55,7 +55,7 @@ function Index() {
                         </div>
 
                         <div className="flex-col max-w-[421px] max-xl:mx-auto">
-                            <img className='mb-[18px] w-full' src={Images.banerPreeShip} alt="" />
+                            <img className='mb-[18px] w-full' src='https://lzd-img-global.slatic.net/g/icms/images/ims-web/8f54ec75-a209-4a10-acf8-22bf81ed64cb.jpg_2200x2200q90.jpg_.webp' alt="" />
 
                             <div className="flex justify-between max-w-[421px]">
                                 <img className='object-cover' src={Images.banner3} alt="" />
@@ -136,6 +136,7 @@ function Index() {
                     <h1 className='text-2xl font-bold mb-[15px] text-[#ffaaaf]'>FLASH SALE: </h1>
 
                     <div className='flex flex-wrap gap-[27px]'>
+
                         <div className='max-w-[310px] shadow shadow-[#ffaaaf]'>
                             <div className='relative figure'>
                                 <img src={Images.flashSale1} alt="" />
@@ -176,8 +177,8 @@ function Index() {
 
                         </div>
 
-                        <div className='max-w-[310px] shadow'>
-                            <div className='relative'>
+                        <div className='max-w-[310px] shadow shadow-[#ffaaaf]'>
+                            <div className='relative figure'>
                                 <img src={Images.flashSale1} alt="" />
                                 <div className='absolute right-[0] top-[0] py-[13px] px-[8px] bgFlashSale' >
                                     <p className='text-[16px] text-white text-center '>Giảm</p>
@@ -197,22 +198,27 @@ function Index() {
 
 
                                 <div className='flex gap-[7px]'>
-                                    <div className='text-[7px] font-normal bg110k max-w-[51px] text-white text-center p-[3px]'>
-                                        Giảm 1800k
+                                    <div className='text-[7px] font-normal max-w-[61px] coupon text-white p-[3px]'>
+                                        <p>Giảm 1800k</p>
                                     </div>
-                                    <div className='text-[7px]  bg110k max-w-[51px] text-white text-center p-[3px]'>
-                                        FREE SHIP
+                                    <div className='text-[7px] max-w-[61px] coupon text-white p-[3px]'>
+                                        <p>FREE SHIP</p>
                                     </div>
                                 </div>
 
                                 <div className='flex justify-between items-center'>
                                     <p className='text-[16px] text-[#865546] font-bold'>1.300.299 vnd</p>
+                                </div>
+                                <div className="max-w-[285px] mt-[20px] relative">
+                                    <Progess/>
+                                    <img className="absolute top-[-80%]" src={Images.hot} alt="" />
                                 </div>
                             </div>
 
                         </div>
-                        <div className='max-w-[310px] shadow'>
-                            <div className='relative'>
+
+                        <div className='max-w-[310px] shadow shadow-[#ffaaaf]'>
+                            <div className='relative figure'>
                                 <img src={Images.flashSale1} alt="" />
                                 <div className='absolute right-[0] top-[0] py-[13px] px-[8px] bgFlashSale' >
                                     <p className='text-[16px] text-white text-center '>Giảm</p>
@@ -232,22 +238,27 @@ function Index() {
 
 
                                 <div className='flex gap-[7px]'>
-                                    <div className='text-[7px] font-normal bg110k max-w-[51px] text-white text-center p-[3px]'>
-                                        Giảm 1800k
+                                    <div className='text-[7px] font-normal max-w-[61px] coupon text-white p-[3px]'>
+                                        <p>Giảm 1800k</p>
                                     </div>
-                                    <div className='text-[7px]  bg110k max-w-[51px] text-white text-center p-[3px]'>
-                                        FREE SHIP
+                                    <div className='text-[7px] max-w-[61px] coupon text-white p-[3px]'>
+                                        <p>FREE SHIP</p>
                                     </div>
                                 </div>
 
                                 <div className='flex justify-between items-center'>
                                     <p className='text-[16px] text-[#865546] font-bold'>1.300.299 vnd</p>
+                                </div>
+                                <div className="max-w-[285px] mt-[20px] relative">
+                                    <Progess/>
+                                    <img className="absolute top-[-80%]" src={Images.hot} alt="" />
                                 </div>
                             </div>
 
                         </div>
-                        <div className='max-w-[310px] shadow'>
-                            <div className='relative'>
+
+                        <div className='max-w-[310px] shadow shadow-[#ffaaaf]'>
+                            <div className='relative figure'>
                                 <img src={Images.flashSale1} alt="" />
                                 <div className='absolute right-[0] top-[0] py-[13px] px-[8px] bgFlashSale' >
                                     <p className='text-[16px] text-white text-center '>Giảm</p>
@@ -267,16 +278,20 @@ function Index() {
 
 
                                 <div className='flex gap-[7px]'>
-                                    <div className='text-[7px] font-normal bg110k max-w-[51px] text-white text-center p-[3px]'>
-                                        Giảm 1800k
+                                    <div className='text-[7px] font-normal max-w-[61px] coupon text-white p-[3px]'>
+                                        <p>Giảm 1800k</p>
                                     </div>
-                                    <div className='text-[7px]  bg110k max-w-[51px] text-white text-center p-[3px]'>
-                                        FREE SHIP
+                                    <div className='text-[7px] max-w-[61px] coupon text-white p-[3px]'>
+                                        <p>FREE SHIP</p>
                                     </div>
                                 </div>
 
                                 <div className='flex justify-between items-center'>
                                     <p className='text-[16px] text-[#865546] font-bold'>1.300.299 vnd</p>
+                                </div>
+                                <div className="max-w-[285px] mt-[20px] relative">
+                                    <Progess/>
+                                    <img className="absolute top-[-80%]" src={Images.hot} alt="" />
                                 </div>
                             </div>
 
