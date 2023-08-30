@@ -2,6 +2,7 @@
 import { Images } from '../../../Assets/TS'
 import { Product } from '../index'
 
+
 type Props = {
     product: Product
 }
@@ -13,7 +14,7 @@ export default function Products(props: Props) {
     return (
         <>
             <div className='max-w-[250px] flex-col mb-[10px]'>
-                <div className='relative'>
+                <div className='relative figure'>
                     <img src={product.imgSrc} alt="" />
                     <p className='absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded'>Giảm {product.discount}%</p>
                 </div>
@@ -30,10 +31,10 @@ export default function Products(props: Props) {
                     <span className='text-[12px]'>{4.2}</span>
 
                     <div className='flex gap-[7px]'>
-                        <div className='text-[7px] font-normal bg110k max-w-[56px] text-white text-center p-[3px]'>
+                        <div className='text-[7px] font-normal coupon max-w-[56px] text-white text-center p-[3px]'>
                             Giảm {discountedPrice}k
                         </div>
-                        <div className='text-[7px]  bg110k max-w-[51px] text-white text-center p-[3px]'>
+                        <div className='text-[7px]  coupon max-w-[51px] text-white text-center p-[3px]'>
                             FREE SHIP
                         </div>
                     </div>

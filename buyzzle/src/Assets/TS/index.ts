@@ -49,4 +49,5 @@ export const Images = {
   thuongHieu2 : '../src/Assets/PNG/thuongHieu2.png',
   adidas : '../src/Assets/PNG/adidas.png',
   thuongHieu1 : '../src/Assets/PNG/thuongHieu1.png',
+  hot : '../src/Assets/PNG/hot.png',
 };
