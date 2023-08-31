@@ -22,3 +22,21 @@
 	-webkit-transform: scale(1.1);
 	transform: scale(1.1);
 }
+
+
+/* .banner_x{
+
+} */
+
+
+@media screen and (max-width: 1024px) {
+	.banner {
+		margin: 0 auto;
+	}
+}
+
+@media screen and (max-width: 768px) {
+    .banner {
+      max-width: fit-content;
+    }
+  }

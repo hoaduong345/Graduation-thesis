@@ -28,6 +28,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 872px;
   }
   
   .swiper-slide img {
@@ -35,4 +36,5 @@
     width: 100%;
     height: 100%;
   }
+  
   

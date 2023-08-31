@@ -1,5 +1,5 @@
-import Footer from "../components/Footer/Footer"
-import Header from "../components/Header/Header"
+// import Footer from "../components/Footer/Footer"
+// import Header from "../components/Header/Header"
 
 
 interface Props {
@@ -8,9 +8,9 @@ interface Props {
 function MainLayout({children} : Props) {
   return (
     <div >
-        <Header />
+        {/* <Header /> */}
         {children}
-        <Footer />
+        {/* <Footer /> */}
     </div>
   )
 }

@@ -9,8 +9,8 @@ type Props = {
 export default function Products(props: Props) {
     const { product } = props
     const discountedPrice = product.price * (product.discount / 100)
-
     const price = product.price - discountedPrice
+    
     return (
         <>
             <div className='max-w-[250px] flex-col mb-[10px]'>
