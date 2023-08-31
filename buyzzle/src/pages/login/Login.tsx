@@ -33,25 +33,25 @@ function Login() {
                     <h1 className='font-sans text-center mb-20 font-bold text-6xl text-pink-300 login-a'>Đăng nhập</h1>
                     <form>
                         <div className='mb-4'>
-                            <label htmlFor='username' className='block text-sm font-medium mb-1'>
+                            <label htmlFor='username' className='block text-sm font-sans mb-1'>
                                 Tên tài khoản
                             </label>
                             <input
                                 type='username'
                                 id='username'
-                                className='w-full p-2 border rounded-md'
+                                className='w-full p-2 border rounded-md login-a'
                                 placeholder='Email / Số điện thoại / Tên đăng nhập'
                             />
                         </div>
                         <div className='mb-4'>
-                            <label htmlFor='password' className='block text-sm font-medium mb-1'>
+                            <label htmlFor='password' className='block text-sm font-sans mb-1'>
                                 Mật khẩu
                             </label>
                             <div className='relative'>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id='password'
-                                    className='w-full p-2 border rounded-md'
+                                    className='w-full p-2 border rounded-md login-a'
                                     placeholder='Mật khẩu'
                                 />
                                 <button
