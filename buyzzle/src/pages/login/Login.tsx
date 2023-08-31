@@ -30,28 +30,28 @@ function Login() {
             </div>
             <div className='w-1/2 flex justify-center items-center min-h-screen bg-white'>
                 <div className='w-1/2'>
-                    <h1 className='font-sans text-center mb-20 font-bold text-6xl text-pink-300 login-a'>Đăng nhập</h1>
+                    <h1 className='font-sans text-center mb-20 font-bold text-6xl text-pink-300 login-a'>ĐĂNG NHẬP</h1>
                     <form>
                         <div className='mb-4'>
-                            <label htmlFor='username' className='block text-sm font-sans mb-1'>
+                            <label htmlFor='username' className='block font-sans mb-1 login-a4'>
                                 Tên tài khoản
                             </label>
                             <input
                                 type='username'
                                 id='username'
-                                className='w-full p-2 border rounded-md login-a'
+                                className='w-full p-2 rounded-md login-input'
                                 placeholder='Email / Số điện thoại / Tên đăng nhập'
                             />
                         </div>
                         <div className='mb-4'>
-                            <label htmlFor='password' className='block text-sm font-sans mb-1'>
+                            <label htmlFor='password' className='block font-sans mb-1 login-a4'>
                                 Mật khẩu
                             </label>
                             <div className='relative'>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id='password'
-                                    className='w-full p-2 border rounded-md login-a'
+                                    className='w-full p-2 rounded-md login-input'
                                     placeholder='Mật khẩu'
                                 />
                                 <button
@@ -115,8 +115,8 @@ function Login() {
                             </button>
                         </div>
                         <div className='mt-6 text-center'>
-                            <span className='text-gray-600'>Bạn chưa sử dụng Buyzzle? </span>
-                            <a href='#' className='text-black-500 hover:underline font-bold'>
+                            <span className='login-a3'>Bạn chưa sử dụng Buyzzle? </span>
+                            <a href='#' className='hover:underline font-bold login-a2'>
                                 Đăng ký
                             </a>
                         </div>
