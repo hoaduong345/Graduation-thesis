@@ -260,6 +260,8 @@ const AuthController = {
       res.status(500).send("Internal server error");
     }
   },
+
+  
   // VERIFY OTP WHEN CHANGING PASSWORD
   verifyOTP: async (req, res) => {
     try {
