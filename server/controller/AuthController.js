@@ -15,7 +15,7 @@ const AuthController = {
       {
         id: email.id,
       },
-      process.env.SECRECT_KEY,
+      process.env.SECRECT_KEY = "secrectkey",
       { expiresIn: "1h" }
     );
   },
@@ -25,7 +25,7 @@ const AuthController = {
       {
         id: email.id,
       },
-      process.env.JWT_REFRESH_TOKEN,
+      process.env.JWT_REFRESH_TOKEN = "refreshkey",
       { expiresIn: "365d" }
     );
   },
@@ -48,14 +48,14 @@ const AuthController = {
       const user = await prisma.user.create({
         data: newUser,
       });
-      const token = await prisma.token.create({
-        data: {
-          userid: user.id,
-          token: crypto.randomBytes(32).toString("hex"),
-        },
-      });
-      const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
-      await SendEmail(user.email, "Verify email", url);
+      // const token = await prisma.token.create({
+      //   data: {
+      //     userid: user.id,
+      //     token: crypto.randomBytes(32).toString("hex"),
+      //   },
+      // });
+      // const url = `${process.env.BASE_URL = "http://localhost:5173/"}/auth/${user.id}/verify/${token.token}`;
+      // await SendEmail(user.email, "Verify email", url);
       console.log("user", user);
       res
         .status(200)
@@ -102,7 +102,7 @@ const AuthController = {
             token: crypto.randomBytes(32).toString("hex"),
           })
 
-          const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+          const url = `${process.env.BASE_URL = "http://localhost:5173/"}user/${user.id}/verify/${token.token}`;
 
           await SendEmail(user.email, "Verify email", url);
         }

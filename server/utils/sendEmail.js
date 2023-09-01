@@ -6,17 +6,18 @@ dotenv.config();
 const SendEmail = async (email, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: process.env.HOST,
-      service: process.env.SERVICE,
-      post: Number(process.env.EMAI_SUPPORT),
-      secure: Boolean(process.env.SECURE),
+      db: process.env.DATABASE_URL = "mysql://root:@localhost:3306/buyzzle",
+      host: process.env.HOST = "smtp.gmail.com",
+      service: process.env.SERVICE = "gmail",
+      post: Number(process.env.EMAIL_PORT = 587),
+      secure: Boolean(process.env.SECURE = true),
       auth: {
-        user: process.env.USER,
-        pass: process.env.PASS,
+        user: process.env.USER = "vanhoa284@gmail.com",
+        pass: process.env.PASS = "rzuylxxihnemvbzm",
       },
     });
     await transporter.sendMail({
-      from: process.env.USER,
+      from: process.env.USER = "vanhoa284@gmail.com",
       to: email,
       subject: subject,
       text: text,

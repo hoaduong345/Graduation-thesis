@@ -8,9 +8,69 @@ import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+    });
+    const [errors, setErrors] = useState({
+        username: '',
+        password: '',
+    });
+    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+
+        if (isFormSubmitted) {
+
+            setErrors({
+                ...errors,
+                [name]: '',
+            });
+        }
+    };
+
+    const validateForm = () => {
+        let valid = true;
+        const newErrors = { ...errors };
+
+        if (!/^\S+@\S+\.\S+$/.test(formData.username)) {
+            newErrors.username = 'Tên tài khoản không hợp lệ.';
+            valid = false;
+        } else {
+            newErrors.username = '';
+        }
+
+        if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/.test(formData.password)) {
+            newErrors.password = 'Mật khẩu phải bao gồm ít nhất 8 ký tự, trong đó có ít nhất một chữ cái viết hoa, chữ cái viết thường và một số.';
+            valid = false;
+        } else {
+            newErrors.password = '';
+        }
+
+        setErrors(newErrors);
+        return valid;
+    };
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsFormSubmitted(true);
+
+        if (validateForm()) {
+
+            console.log('Form data:', formData);
+        } else {
+
+            console.log('Form is invalid.');
+        }
     };
     return (
         <body className='login-bg flex'>
@@ -31,17 +91,23 @@ function Login() {
             <div className='w-1/2 flex justify-center items-center min-h-screen bg-white'>
                 <div className='w-1/2'>
                     <h1 className='font-sans text-center mb-20 font-bold text-6xl text-pink-300 login-a'>ĐĂNG NHẬP</h1>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className='mb-4'>
                             <label htmlFor='username' className='block font-sans mb-1 login-a4'>
                                 Tên tài khoản
                             </label>
                             <input
-                                type='username'
-                                id='username'
-                                className='w-full p-2 rounded-md login-input'
-                                placeholder='Email / Số điện thoại / Tên đăng nhập'
+                                type="text"
+                                id="username"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleInputChange}
+                                className="w-full p-2 rounded-md login-input"
+                                placeholder="Email / Số điện thoại / Tên đăng nhập"
                             />
+                            {isFormSubmitted && errors.username && (
+                                <p className="text-red-500">{errors.username}</p>
+                            )}
                         </div>
                         <div className='mb-4'>
                             <label htmlFor='password' className='block font-sans mb-1 login-a4'>
@@ -50,10 +116,16 @@ function Login() {
                             <div className='relative'>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
-                                    id='password'
-                                    className='w-full p-2 rounded-md login-input'
-                                    placeholder='Mật khẩu'
+                                    id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 rounded-md login-input"
+                                    placeholder="Mật khẩu"
                                 />
+                                {isFormSubmitted && errors.password && (
+                                    <p className="text-red-500">{errors.password}</p>
+                                )}
                                 <button
                                     type='button'
                                     className='absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500'
