@@ -8,10 +8,11 @@ const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 dotenv.config();
 
+let otpRequestAllowed = true;
 const AuthController = {
   // GENERATE RANDOM NUMBER
-   generateRandomNumbers: (length) => {
-    let otp = '';
+  generateRandomNumbers: (length) => {
+    let otp = "";
     for (let i = 0; i < length; i++) {
       const randomNumber = Math.floor(Math.random() * 10);
       otp += randomNumber.toString();
@@ -137,8 +138,6 @@ const AuthController = {
     }
   },
 
-  
-
   // CHANGE PASSWORD
   // changePassword: async (req, res) => {
   //   console.log("aaaaaaaaa")
@@ -194,8 +193,7 @@ const AuthController = {
   //  }
   // },
   // SEND EMAIL TO FORGOT PASSWORD
-  sendEmailToTakeOTP : async (req, res) => {
-    console.log("aaaaaaaaa")
+  sendEmailToTakeOTP: async (req, res) => {
     try {
       const reqemail = req.body.email;
       const user = await prisma.user.findUnique({
@@ -203,17 +201,78 @@ const AuthController = {
           email: reqemail,
         },
       });
-      console.log("🚀 ~ file: AuthController.js:205 ~ forgotPassword: ~ reqemail:", reqemail)
 
       if (!user) {
         return res.status(404).send("Email is not true");
       }
-      const otp = AuthController.generateRandomNumbers(5)
-      await SendEmail(user.email, "OTP To Change Your Password", otp);
-      res.status(200).send("OTP is sending to your email")  
+      const otp = AuthController.generateRandomNumbers(5);
+
+      // await SendEmail(user.email, "OTP To Change Your Password", otp);
+      res.cookie("otp", otp, {
+        maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
+      });
+      res.cookie("email", user.email, {
+        maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
+      });
+      res.status(200).send("OTP is sending to your email");
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal server error");
+    }
+  },
+  // CHANGE PASSWORD WITH OTP FROM EMAIL
+  resetPassword: async (req, res) => {
+    try {
+   
+
+      if (receivedOtp !== otpFromCookie) {
+        return res.status(401).send("Incorrect OTP");
+      }
+      const storedEmail = req.cookies.email; // Retrieve the stored email from cookies
+
+      if (!storedEmail) {
+        return res.status(400).send("Email not found in cookies");
+      }
+
+      const user = await prisma.user.findUnique({
+        where: {
+          email: storedEmail,
+        },
+      });
+
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+      // Proceed with the password reset logic since OTP is verified
+
+      // Your password reset logic here
+      await prisma.user.update({
+        where: {
+          password: reqpassword,
+        },
+      });
+      // Clear the OTP cookie after it's been used
+      res.clearCookie("otp");
+      res.clearCookie("email");
+      res.status(200).send("Password reset successful");
+    } catch (error) {
+      console.log("Error:", error);
+      res.status(500).send("Internal server error");
+    }
+  },
+  // VERIFY OTP WHEN CHANGING PASSWORD
+  verifyOTP: async (req, res) => {
+    try {
+      const receivedOtp = req.body.otp;
+      if (!receivedOtp) {
+        return res.status(400).send("OTP is required in the request body");
+      }
+      const otpFromCookie = req.cookies.otp;
+      if ( receivedOtp != otpFromCookie) {
+        return res.status(404).send("OTP is invalid");
+      }
+    } catch (error) {
+      res.status(404).json("Error",error)
     }
   },
 
