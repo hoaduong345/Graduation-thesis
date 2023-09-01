@@ -2,32 +2,30 @@ const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
 
-
 const SendEmail = async (email, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
-      db: process.env.DATABASE_URL = "mysql://root:@localhost:3306/buyzzle",
-      host: process.env.HOST = "smtp.gmail.com",
-      service: process.env.SERVICE = "gmail",
-      post: Number(process.env.EMAIL_PORT = 587),
-      secure: Boolean(process.env.SECURE = true),
+      host: process.env.HOST,
+      service: process.env.SERVICE,
+      port: Number(process.env.EMAIL_PORT),
+      secure: Boolean(process.env.SECURE),
       auth: {
-        user: process.env.USER = "vanhoa284@gmail.com",
-        pass: process.env.PASS = "rzuylxxihnemvbzm",
+        user: process.env.USER,
+        pass: process.env.PASS,
       },
     });
     await transporter.sendMail({
-      from: process.env.USER = "vanhoa284@gmail.com",
+      from: process.env.USER,
       to: email,
       subject: subject,
       text: text,
     });
 
     console.log("Email sent Successfully");
-    next();
   } catch (error) {
-    console.log("email not sent");
-    console.log(error);
+    console.log("Email not sent");
+    console.error(error);
   }
 };
+
 module.exports = SendEmail;
