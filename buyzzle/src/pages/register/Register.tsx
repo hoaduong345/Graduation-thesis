@@ -13,8 +13,8 @@ function Register() {
     name: '',
     username: '',
     password: '',
-    confirmPassword: '',
-    contact: '',
+    confirmpassword: '',
+    email: '',
     termsAgreement: false,
   });
 
@@ -34,10 +34,32 @@ function Register() {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Perform form submission or validation here
     console.log(formData);
+    try {
+      // Gửi yêu cầu POST đến API với dữ liệu từ formData
+      const response = await fetch('/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData), // Chuyển formData thành JSON
+      });
+
+      if (response.ok) {
+        // Xử lý khi yêu cầu thành công
+        const data = await response.json();
+        // Xử lý phản hồi từ API (nếu cần)
+        console.log('Phản hồi từ API:', data);
+      } else {
+        // Xử lý khi yêu cầu thất bại
+        console.error('Lỗi khi gửi yêu cầu đăng ký:', response.status);
+      }
+    } catch (error) {
+      console.error('Lỗi khi gửi yêu cầu:', error);
+    }
   };
   return (
 
@@ -101,13 +123,14 @@ function Register() {
                 required
               />
             </div>
+
             <div>
               <label>Xác nhận mật khẩu:</label>
               <input
                 placeholder="Nhập lại mật khẩu"
                 type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
+                name="confirmpassword"
+                value={formData.confirmpassword}
                 onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 required
@@ -118,8 +141,8 @@ function Register() {
               <input
                 placeholder="Số điện thoại hoặc địa chỉ Email"
                 type="text"
-                name="contact"
-                value={formData.contact}
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 required

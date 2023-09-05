@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Images } from "../../Assets/TS/index";
-import LogoWeb from "../../Assets/LogoWeb";
+
 import "./Login.css";
 import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
