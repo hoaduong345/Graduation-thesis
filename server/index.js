@@ -31,24 +31,24 @@ app.use("/buyzzle/auth", AuthRouter)
 
 
 // sản phẩm
-app.use("/buyzzle/product/add", ProductRoutes)
+app.use("/buyzzle/product", ProductRoutes)
 
-app.use("/buyzzle/product/delete", ProductRoutes); 
+app.use("/buyzzle/product", ProductRoutes); 
 
-app.use("/buyzzle/product/update", ProductRoutes); 
+app.use("/buyzzle/product", ProductRoutes); 
 
-app.use("/buyzzle/product/detail", ProductRoutes);
+app.use("/buyzzle/product", ProductRoutes);
 
-app.use('/buyzzle/product/getall', ProductRoutes);
+app.use('/buyzzle/product', ProductRoutes);
 
-app.use('/buyzzle/product/page', ProductRoutes);
+app.use('/buyzzle/product', ProductRoutes);
 
-app.use('/buyzzle/product/search', ProductRoutes);
+app.use('/buyzzle/product', ProductRoutes);
 
 // danh mục
-app.use("/buyzzle/product/addcategory", ProductRoutes);
+app.use("/buyzzle/product", ProductRoutes);
 
-app.use("/buyzzle/product/deletecategory", ProductRoutes);
+app.use("/buyzzle/product", ProductRoutes);
 
-app.use("/buyzzle/product/updatecategory", ProductRoutes);
+app.use("/buyzzle/product", ProductRoutes);
 
