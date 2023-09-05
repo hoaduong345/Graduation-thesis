@@ -6,8 +6,13 @@ type Props = {
 };
 const Filter = (props: Props) => {
     return (
-      <div className="max-w-[210px] flex-col cursor-pointer hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200">
-        <div className="relative">
+      <div
+        className="max-w-[210px] flex-col cursor-pointer
+       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
+       max-xl:max-w-[180px]
+       "
+      >
+        <div className="relative figure">
           <img className="object-fill " src={props.product.images} alt="" />
           <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
             Giảm 50%
@@ -15,9 +20,7 @@ const Filter = (props: Props) => {
         </div>
 
         <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-          <p className="font-bold text-[16px] max-w-[220px]">
-            {props.product.name}
-          </p>
+          <p className="font-bold text-[16px] max-xl:text-[15px] ">{props.product.name}</p>
 
           <button>
             <img src={Images.star1} alt="" />
@@ -55,7 +58,6 @@ const Filter = (props: Props) => {
             </p>
           </div>
         </div>
-        
       </div>
     );
 };

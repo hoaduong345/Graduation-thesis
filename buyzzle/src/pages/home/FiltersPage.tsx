@@ -1,5 +1,5 @@
-import React from "react";
-import SitebarFilter from "../../components/Sitebar/SitebarFilter";
+import React, { useEffect, useState } from "react";
+import SitebarFilter, { Props } from "../../components/Sitebar/SitebarFilter";
 import { Images } from "../../Assets/TS";
 import Container from "../../components/container/Container";
 import MangoLogo from "../../Assets/TSX/MangoLogo";
@@ -12,6 +12,8 @@ import "../css/filter.css";
 import ArrowNext from "../../Assets/TSX/ArrowNext";
 import ArrowPrev from "../../Assets/TSX/ArrowPrev";
 import Filter from "./FilterPage/Filter";
+import SlidesFilter from "../../components/home/components/slides/SlidesFilter/SlidesFilter";
+import { title } from "process";
 
 export interface Products {
   id: number;
@@ -33,7 +35,7 @@ const images: string[] = [
 for (let i = 0; i < 11; i++) {
   products.push({
     id: i + 1,
-    name: `Bộ Máy Tính Case PC Chơi Game ${i + 1}`,
+    name: `Áo khoác mùa đông  ${i + 1}`,
     images: images[Math.floor(Math.random() * images.length)],
     rate: 1,
     price: 210.0,
@@ -43,52 +45,54 @@ for (let i = 0; i < 11; i++) {
 }
 
 export default function FiltersPage() {
+
   return (
     <Container>
       <body className="body-filter container mx-auto">
-        <div className="flex flex-row justify-between">
-          <SitebarFilter />
-
+        <div className="grid grid-cols-4 max-2xl:grid-cols-1">
+          <div className="col-span-1 max-2xl:hidden">
+            <SitebarFilter onChangeFilters={(title)=>console.log(title)} />
+          </div>
           {/* content-right-filter */}
-          <div className="content-right-filter mt-[34px] h-max basis-9/12 p-4 ">
+          <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1">
             <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl">
               THƯƠNG HIỆU NỔI TIẾNG:
             </h2>
 
             {/* thuong hieu noi tieng */}
-            <div className="flex  w-[100%] justify-start gap-10 mt-[34px] ">
-              <div className="square border border-[#FFAAAF] py-[20.4px] px-[50.3px] cursor-pointer ">
+            <div className="flex  w-[100%] justify-start gap-10 mt-[34px] max-2xl:justify-around">
+              <div className="square border border-[#FFAAAF] cursor-pointer px-14 pt-[15px]">
                 <img
                   src="https://www.freepnglogos.com/uploads/starbucks-logo-png-25.png"
-                  width="150"
+                  width="90"
                   alt="starbucks logo png"
                 />
               </div>
-              <div className="square border border-[#FFAAAF] py-[20.4px] px-[50.3px] cursor-pointer">
+              <div className="square border border-[#FFAAAF] px-14 py-[10px] cursor-pointer">
                 <img
                   src={Images.unilever}
-                  width="150"
+                  width="90"
                   alt="adidas logo png white images"
                 />
               </div>
-              <div className="square border border-[#FFAAAF] py-[20.4px] px-[50.3px] cursor-pointer">
+              <div className="square border border-[#FFAAAF] px-12 pt-[14px]  cursor-pointer">
                 <img
                   src={Images.Puma}
-                  width="210"
+                  width="130"
                   alt="adidas logo png white images"
                 />
               </div>
-              <div className="square border border-[#FFAAAF] py-[20.4px] px-[50.3px] cursor-pointer">
+              <div className="square border border-[#FFAAAF] px-14 pt-[29px]  cursor-pointer">
                 <img
                   src="https://www.freepnglogos.com/uploads/adidas-logo-png-white-images-11.png"
-                  width="210"
+                  width="100"
                   alt="adidas logo png white images"
                 />
               </div>
             </div>
-            <div className="bg-[#FFEAE9] h-[60px] mt-[18px] rounded-[6px]">
+            <div className="bg-[#FFEAE9] h-[60px] mt-[18px] rounded-[6px] ">
               <div className="txt-content flex">
-                <div className="content-left w-[48.5%] flex items-center justify-start gap-5 h-[60px]">
+                <div className="content-left w-[50.5%] flex items-center justify-start gap-5 h-[60px] max-2xl:w-[52.5%]  max-xl:w-[50.5%]">
                   <p className="text-[#000000] text-sm ml-5 font-semibold">
                     Sắp xếp theo
                   </p>
@@ -134,15 +138,11 @@ export default function FiltersPage() {
               </div>
             </div>
             {/* banner filter */}
-            <div className="banner filter max-w-max mt-[20px]">
-              <img
-                className="object-cover w-[100%]"
-                src={Images.bannerFilter}
-                alt="bannerFilter"
-              />
+            <div className="banner filter max-w-[970px] my-5 max-2xl:max-w-[1150px] max-2xl:mx-auto">
+              <SlidesFilter />
             </div>
 
-            <div className="flex flex-wrap mt-[10px] gap-4 w-max-w p-[15px] ">
+            <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
               {products.map((items) => {
                 return (
                   <>
@@ -151,7 +151,10 @@ export default function FiltersPage() {
                 );
               })}
             </div>
-
+            <div
+              style={{ borderTopColor: "transparent" }}
+              className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
+            />
             <div className="pagination">
               <a href="#" className="prev mr-[60px]">
                 <ArrowPrev />
@@ -175,10 +178,6 @@ export default function FiltersPage() {
                 <ArrowNext />
               </a>
             </div>
-            <div
-              style={{ borderTopColor: "transparent" }}
-              className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
-            />
           </div>
           {/* content-right-filter-end */}
         </div>
@@ -213,9 +212,6 @@ export default function FiltersPage() {
           </div>
         </div>
       </body>
-
-
-
     </Container>
   );
 }

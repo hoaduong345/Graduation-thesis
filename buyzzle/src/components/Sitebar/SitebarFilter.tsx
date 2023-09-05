@@ -5,6 +5,9 @@ import Rate from "./Rate/Rate";
 import { Images } from "../../Assets/TS";
 import Checkbox from "./Checkbox/Checkbox";
 import ButtonSuggestt from "./ButtonSuggest/ButtonSuggest";
+import { title } from "process";
+import { useState } from "react";
+import { Products } from "../../pages/home/FiltersPage";
 
 // rati star
 export interface RatingStar {
@@ -25,10 +28,13 @@ export interface CheckboxCategory {
   checkedCB: boolean;
   title: string;
   quantity: number;
+  // b3. da xac dinh duoc can chuyen gi va nam o dau
+  // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
+  onChangeFilter?(tittle: string): void;
 }
 
 const arrCBCategory: CheckboxCategory[] = [
-  { checkedCB: false, title: "Áo khoác mù đông & Áo Choàng", quantity: 132 },
+  { checkedCB: false, title: "Áo khoác mùa đông", quantity: 132 },
   { checkedCB: false, title: "Thời Trang Nam", quantity: 12 },
   { checkedCB: false, title: "Áo Khoác Ngoài", quantity: 13 },
   { checkedCB: false, title: "Thời trang trẻ em", quantity: 32 },
@@ -56,10 +62,16 @@ arrBtnSug.push(
 );
 console.log(arrBtnSug.length);
 
-export default function SitebarFilter() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export type Props = {
+  onChangeFilters(title: string): void;
+};
+export default function SitebarFilter(props: Props) {
+  const [otherkeywords, setOtherkeywords] = useState<Products[]>();
+
   return (
     <>
-      <div className="content-left-filter mt-[34px] h-max basis-[27%] p-4 ">
+      <div className="content-left-filter mt-[34px] h-max p-4 ">
         <div className="flex items-center justify-between">
           <h2 className="txt-filter font-bold text-[#1A1A1A] text-[20px]">
             BỘ LỌC TÌM KIẾM
@@ -78,6 +90,11 @@ export default function SitebarFilter() {
                 quantity={item.quantity}
                 title={item.title}
                 key={index}
+                // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
+                onChangeFilter={(title) => {
+                  console.log("SiteFilterPages: " + title);
+                  props.onChangeFilters?.(title);
+                }}
               />
             );
           })}
@@ -143,7 +160,7 @@ export default function SitebarFilter() {
         </div>
         <div className="keyWord flex flex-wrap gap-1 mt-[20px] ">
           {arrBtnSug.map((item, index) => {
-            return <ButtonSuggestt btnSug={item} />;
+            return <ButtonSuggestt btnSug={item} key={index} />;
           })}
         </div>
         <div className="btn-deleteFilter font-extrabold flex items-center justify-center mt-[38px]">

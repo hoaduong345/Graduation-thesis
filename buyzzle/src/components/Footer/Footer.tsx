@@ -17,7 +17,7 @@ export default function Footer() {
         <div className="flex justify-center mt-[35px]">
           <div>
             <BuyzzyFooterLogo />
-            <div className="border-b-[3px] border-black mt-2" />
+            <div className="border-b-[3px] border-black my-3" />
           </div>
         </div>
         <Container>
@@ -26,7 +26,7 @@ export default function Footer() {
               <div className="txt-content flex w-[100%] mt-7 font-extrabold text-[#525252] text-base">
                 <div className="w-[20%] ">
                   <span>THANH TOÁN</span>
-                  <div className="flex flex-wrap gap-2 w-[50%] mt-4">
+                  <div className="flex flex-wrap gap-2 w-[80%] mt-4">
                     <IconJCB />
                     <Cham />
                     <img
@@ -37,9 +37,9 @@ export default function Footer() {
                     <Express />
                   </div>
                 </div>
-                <div className="w-[20%]">
+                <div className="w-[24%]">
                   <span>ĐƠN VỊ VẬN CHUYỂN</span>
-                  <div className="flex flex-wrap gap-3 w-[80%] mt-4">
+                  <div className="flex flex-wrap gap-2 w-[90%] mt-4">
                     <img
                       src={Images.Ahamove}
                       alt="Ahamove"
@@ -102,7 +102,7 @@ export default function Footer() {
                     />{" "}
                   </div>
                 </div>
-                <div className="w-[20%]">
+                <div className="w-[25%]">
                   <span>VỀ BUYZZLE</span>
                   <div className="content-Buyzzle flex flex-col font-extralight leading-7 mt-2 ">
                     <p className="hover:text-[#FFAAAF] max-w-max">
@@ -138,29 +138,8 @@ export default function Footer() {
                     </p>
                   </div>
                 </div>
-                <div className="w-[30%]">
+                <div className="w-[35%]">
                   <span className="mb-7">THEO DÕI CHÚNG TÔI TRÊN </span>
-                  {/*  <div className="followUs flex flex-col gap-5 mt-5 justify-evenly ">
-                    <div className="flex">
-                      <FacebookSquare />
-                      <p className=" ml-5 hover:text-[#FFAAAF]">
-                        <a href="#">Nguyen Viet Thang</a>
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <SquareInstagram />
-                      <p className=" ml-5 hover:text-[#FFAAAF]">
-                        <a href="#">Nguyen Viet Thang</a>
-                      </p>
-                    </div>
-
-                    <div className="flex">
-                      <SquareWhatsapp />
-                      <p className=" ml-5 hover:text-[#FFAAAF]">
-                        <a href="#">Nguyen Viet Thang</a>
-                      </p>
-                    </div>
-                  </div> */}
                   <ul
                     role="list"
                     className=" grid grid-rows-2 grid-cols-2 gap-4 mt-3"

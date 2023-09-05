@@ -60,18 +60,26 @@ export default function Header() {
                   </Link>
                 </div>
                 {/* input */}
-                <div className="items-center flex flex-1 max-w-[755px]">
-                  <div className="Search-input-headerCenter items-center flex w-[90%] py-[6px] px-[6px] border-[2px] border-[#FFAAAF] rounded-lg">
+                <div className="items-center flex flex-1 max-w-[755px] max-2xl:ml-10 max-xl:max-w-[700px] max-xl:ml-5">
+                  <div
+                    className="Search-input-headerCenter items-center flex w-[90%]
+                   py-[6px] px-[6px] border-[2px] border-[#FFAAAF] rounded-lg
+                   max-xl:py-[1px]
+                   "
+                  >
                     <div className="mb-2">
                       <Search />
                     </div>
                     <input
-                      className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3"
-                      placeholder="Tìm kiếm, tên sản phẩm, loại sản phẩm...."
+                      className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm"
+                      placeholder="Tìm kiếm..."
                     />
                     <div className="flex items-center">
-                      <button className="btn-search bg-[#FFEAE9]  p-[7px] rounded-lg font-bold text-[#1A1A1A] w-[135px] border">
-                          Tìm kiếm
+                      <button
+                        className="btn-search bg-[#FFEAE9] p-[7px] rounded-lg font-bold text-[#1A1A1A] 
+                      w-[135px] max-xl:max-w-[70px] max-xl:text-[11px] max-xl:p-[4px] border"
+                      >
+                        Tìm kiếm
                       </button>
                     </div>
                   </div>
@@ -82,7 +90,7 @@ export default function Header() {
                     <Shoppingcart />
                     <div className="absolute">
                       <Ellips />
-                      <span className="text-white font-bold absolute top-[-21px] ml-[30px] text-xs">
+                      <span className="text-white font-bold absolute top-[-21px] ml-[30px] text-xs max-xl:text-[9px] max-xl:absolute max-xl:mr-[100px]">
                         1
                       </span>
                     </div>
