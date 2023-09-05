@@ -7,6 +7,8 @@ const path = require('path')
 const bodyParser = require("body-parser");
 const AuthRouter = require("./routes/AuthRoutes")
 
+const ProductRoutes = require("./routes/ProductRoutes")
+
 dotenv.config();
 
 const app = express();
@@ -26,3 +28,27 @@ app.use(path.join(__dirname, ""), express.static(path.join(__dirname, "")))
 app.use(express.static(path.join(__dirname, "")));
 
 app.use("/buyzzle/auth", AuthRouter)
+
+
+// sản phẩm
+app.use("/buyzzle/product/add", ProductRoutes)
+
+app.use("/buyzzle/product/delete", ProductRoutes); 
+
+app.use("/buyzzle/product/update", ProductRoutes); 
+
+app.use("/buyzzle/product/detail", ProductRoutes);
+
+app.use('/buyzzle/product/getall', ProductRoutes);
+
+app.use('/buyzzle/product/page', ProductRoutes);
+
+app.use('/buyzzle/product/search', ProductRoutes);
+
+// danh mục
+app.use("/buyzzle/product/addcategory", ProductRoutes);
+
+app.use("/buyzzle/product/deletecategory", ProductRoutes);
+
+app.use("/buyzzle/product/updatecategory", ProductRoutes);
+
