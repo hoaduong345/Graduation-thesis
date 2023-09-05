@@ -54,6 +54,8 @@ const AuthController = {
         email: req.body.email,
         username: req.body.username,
         password: hashed,
+        name : req.body.name,
+        phonenumber : req.body.phonenumber
       };
       const user = await prisma.user.create({
         data: newUser,
