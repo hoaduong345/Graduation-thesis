@@ -13,11 +13,11 @@ router.put("/updateproduct/:id", ProductController.updateProduct);
 
 router.get("/chitietproduct/:id", ProductController.getProductDetail);
 
-router.get('/product/allproducts', ProductController.getAllProduct);
+router.get('/allproducts', ProductController.getAllProduct);
 
-router.get('/product/paginated', ProductController.getProductsPaginated);
+router.get('/paginated', ProductController.getProductsPaginated);
 
-router.get('/product/search', ProductController.searchProducts);
+router.get('/search', ProductController.searchProducts);
 
 // thêm danh mục
 
