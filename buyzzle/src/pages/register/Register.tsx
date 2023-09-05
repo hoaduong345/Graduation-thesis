@@ -73,6 +73,7 @@ function Register() {
                 value={formData.name}
                 onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
+                required
               />
             </div>
             <div>
@@ -84,6 +85,7 @@ function Register() {
                 value={formData.username}
                 onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
+                required
               />
             </div>
             <div>
@@ -96,6 +98,7 @@ function Register() {
                 value={formData.password}
                 onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
+                required
               />
             </div>
             <div>
@@ -107,6 +110,7 @@ function Register() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
+                required
               />
             </div>
             <div>
@@ -118,6 +122,7 @@ function Register() {
                 value={formData.contact}
                 onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
+                required
               />
             </div>
             <div className="checkbox-container">
@@ -127,6 +132,7 @@ function Register() {
                 checked={formData.termsAgreement}
                 onChange={handleCheckboxChange}
                 className="custom-checkbox"
+                required
               />
               <label htmlFor="termsAgreement">Tôi đã đọc và đồng ý với <a href='#'>Điều Khoản</a></label>
             </div>
