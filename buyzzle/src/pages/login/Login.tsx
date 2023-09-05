@@ -64,21 +64,32 @@ function Login() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsFormSubmitted(true);
-
+    
         if (validateForm()) {
             try {
-                const response = await axios.post('http://localhost:5000/buyzzle/auth/login', {
+                const response = await axios.post('your_api_endpoint_here', {
                     username: formData.username,
                     password: formData.password,
                 });
-
+    
                 if (response.status === 200) {
+                    console.log('Kết nối thành công');
+
+                    console.log('Dữ liệu phản hồi: ', response.data);
+
+                } else {
+
+                    console.log('Đăng nhập thất bại với trạng thái: ', response.status);
+
                 }
             } catch (error) {
+
                 console.error('Yêu cầu API không thành công: ', error);
+
             }
         } else {
-            console.log('Biểu mẫu không hợp lệ.');
+            console.log('Form is invalid.');
+
         }
     };
     return (
