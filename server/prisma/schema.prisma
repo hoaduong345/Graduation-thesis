@@ -21,7 +21,7 @@ model User {
   phonenumber Int?
   image       String?
   createdAt   DateTime @default(now())
-  refreshToken String
+  refreshToken String?
 }
 
 model Token {
