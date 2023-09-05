@@ -22,12 +22,12 @@ const ProductController = {
   //thêm danh mục
   addCategory: async (req, res) => {
     try {
-      const { tendanhmuc } = req.body;
+      const { name } = req.body;
   
       // Tạo danh mục mới
       const newCategory = await prisma.category.create({
         data: {
-          tendanhmuc,
+          name,
         },
       });
   
@@ -44,7 +44,7 @@ const ProductController = {
       const categoryId = parseInt(req.params.id); 
       const existingCategory = await prisma.category.findUnique({
         where: {
-          iddanhmuc: categoryId,
+          idcategory: categoryId,
         },
       });
       if (!existingCategory) {
@@ -53,7 +53,7 @@ const ProductController = {
       // Xóa sản phẩm
       await prisma.category.delete({
         where: {
-          iddanhmuc: categoryId,
+          idcategory: categoryId,
         },
       });
       res.status(200).json("Xóa danh mục thành công");
@@ -67,14 +67,12 @@ const ProductController = {
   updateCategory: async (req, res) => {
     try {
       const categoryId = parseInt(req.params.id); 
-      const tendanhmuc = req.body.tendanhmuc;
+      const name = req.body.name;
 
-      console.log("🚀 ~ file: ProductController.js:70 ~ updateCategory: ~ categoryId:", categoryId)
-      console.log("🚀 ~ file: ProductController.js:72 ~ updateCategory: ~ tendanhmuc:", tendanhmuc)
       // Kiểm tra xem danh mục tồn tại hay không
       const existingCategory = await prisma.category.findUnique({
         where: {
-          iddanhmuc: categoryId,
+          idcategory: categoryId,
         }
       });
       if (!existingCategory) {
@@ -83,14 +81,13 @@ const ProductController = {
       // Cập nhật thông tin của danh mục
       const updatedCategory = await prisma.category.update({
         where: {
-          iddanhmuc: categoryId,
+          idcategory: categoryId,
         },
         data: {
-          tendanhmuc
+          name,
         }
       });
-      console.log("🚀 ~ file: ProductController.js:90 ~ updateCategory: ~ tendanhmuc:", tendanhmuc) 
-
+      
       res.status(200).json("Cập nhật danh mục thành công");
     } catch (error) {
       console.error(error);
@@ -109,7 +106,7 @@ const ProductController = {
   // thêm sản phẩm
   addProduct: async (req, res) => {
     try {
-      upload.single("hinhanh")(req, res, async (err) => {
+      upload.single("images")(req, res, async (err) => {
         if (err instanceof multer.MulterError) {
           return res.status(500).json("Lỗi khi tải lên ảnh");
         } else if (err) {
@@ -117,34 +114,49 @@ const ProductController = {
         }
   
         const {
-          tensanpham,
-          giasanpham,
-          mota,
-          soluong,
-          trangthai,
-          ngaytao,
+          name,
+          price,
+          rate,
+          pricesale,
+          discount,
+          soldcount,
+          description,
+          count,
+          status,
+          date,
           categoryId, // Thêm categoryId vào req.body
         } = req.body;
   
         // Kiểm tra validate
-        if (tensanpham.length <= 6) {
+        if (name.length <= 6) {
           return res.status(400).json("Tên sản phẩm phải có ít nhất 6 kí tự");
         }
-        if (parseInt(giasanpham) <= 0) {
+        if (parseInt(price) <= 0) {
           return res.status(400).json("Giá sản phẩm phải lớn hơn 0");
         }
-        if (parseInt(soluong) <= 0) {
+        if (parseInt(count) <= 0) {
           return res.status(400).json("Số lượng sản phẩm phải lớn hơn 0");
         }
+        if (parseInt(pricesale) <= 0) {
+          return res.status(400).json("Sản phẩm Sale phải lớn hơn 0");
+        }
+        if (parseInt(discount) <= 0) {
+          return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
+        }
+        
   
         const newProduct = {
-          tensanpham,
-          giasanpham: parseInt(giasanpham),
-          mota,
-          soluong: parseInt(soluong),
-          trangthai,
-          ngaytao: new Date(),
-          hinhanh: req.file ? req.file.filename : null,
+          name,
+          price: parseInt(price),
+          rate: parseInt(rate),
+          pricesale: parseInt(pricesale),
+          discount: parseInt(discount),
+          soldcount: parseInt(soldcount),         
+          description,
+          count: parseInt(count),
+          status,
+          date: new Date(),
+          images: req.file ? req.file.filename : null,
           categoryId: parseInt(categoryId), // Thêm categoryId vào newProduct
         };
   
@@ -168,7 +180,7 @@ const ProductController = {
       // Kiểm tra xem sản phẩm có tồn tại không
       const existingProduct = await prisma.product.findUnique({
         where: {
-          idsanpham: productId,
+          idproduct: productId,
         },
       });
       if (!existingProduct) {
@@ -177,7 +189,7 @@ const ProductController = {
       // Xóa sản phẩm
       await prisma.product.delete({
         where: {
-          idsanpham: productId,
+          idproduct: productId,
         },
       });
       res.status(200).json("Xóa sản phẩm thành công");
@@ -193,25 +205,29 @@ const ProductController = {
     try {
       const ProductId = parseInt(req.params.id);
       const {
-        tensanpham,
-        giasanpham,
-        mota,
-        soluong,
-        trangthai,
-        ngaytao,
-        categoryId,
+        name,
+        price,
+        rate,
+        pricesale,
+        discount,
+        soldcount,
+        description,
+        count,
+        status,
+        categoryId, // Đổi thành categoryId
       } = req.body;
   
       const existingProduct = await prisma.product.findUnique({
         where: {
-          idsanpham: ProductId,
+          idproduct: ProductId,
         },
       });
+  
       if (!existingProduct) {
-        return res.status(404).json("Sản phẩm không tồn tại");
+        return res.status(404).json({ error: "Sản phẩm không tồn tại" });
       }
   
-      let updatedImagePath = existingProduct.hinhanh; // Giữ nguyên đường dẫn hình ảnh cũ
+      let updatedImagePath = existingProduct.images; // Đổi thành images
   
       if (req.file) {
         updatedImagePath = req.file.filename;
@@ -219,29 +235,28 @@ const ProductController = {
   
       const updatedProduct = await prisma.product.update({
         where: {
-          idsanpham: ProductId
+          idproduct: ProductId
         },
-        data: {     
-          tensanpham : tensanpham,
-          mota : mota,
-          soluong : soluong,
-          trangthai : trangthai,
-          ngaytao: new Date(), 
-          hinhanh: req.file, 
-          categoryId : categoryId,
-          giasanpham : giasanpham
+        data: {
+          name: name,
+          price: price,
+          rate: rate,
+          pricesale: pricesale,
+          discount: discount,
+          soldcount: soldcount,
+          description: description,
+          count: count,
+          status: status,
+          date: new Date(),
+          images: updatedImagePath, // Sử dụng updatedImagePath ở đây
+          categoryId: categoryId,
         }
       });
-    
-      console.log(
-        "🚀 ~ file: ProductController.js:219 ~ updateProduct: ~ updatedProduct:",
-        updatedProduct
-      );
   
       res.status(200).json("Cập nhật sản phẩm thành công");
     } catch (error) {
       console.error(error);
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   },
 
@@ -253,7 +268,7 @@ const ProductController = {
 
       const productDetail = await prisma.product.findUnique({
         where: {
-          idsanpham: productId,
+          idproduct: productId,
         },
       });
   
@@ -305,8 +320,8 @@ const ProductController = {
       const products = await prisma.product.findMany({
         where: {
           OR: [
-            { tensanpham: { contains: keyword.toLowerCase() } }, // Sử dụng toLowerCase để tìm kiếm không phân biệt chữ hoa chữ thường
-            { trangthai: { contains: keyword.toLowerCase() } },
+            { name: { contains: keyword.toLowerCase() } }, // Sử dụng toLowerCase để tìm kiếm không phân biệt chữ hoa chữ thường
+            
           ],
         },
       });
