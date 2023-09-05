@@ -7,6 +7,8 @@ const path = require('path')
 const bodyParser = require("body-parser");
 const AuthRouter = require("./routes/AuthRoutes")
 
+const ProductRoutes = require("./routes/ProductRoutes")
+
 dotenv.config();
 
 const app = express();
@@ -26,3 +28,9 @@ app.use(path.join(__dirname, ""), express.static(path.join(__dirname, "")))
 app.use(express.static(path.join(__dirname, "")));
 
 app.use("/buyzzle/auth", AuthRouter)
+
+
+// sản phẩm
+app.use("/buyzzle/product", ProductRoutes)
+
+
