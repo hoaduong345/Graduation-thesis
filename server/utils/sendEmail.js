@@ -8,6 +8,7 @@ const SendEmail = async (email, subject, text) => {
       host: process.env.HOST,
       service: process.env.SERVICE,
       port: Number(process.env.EMAIL_PORT),
+      port: Number(process.env.EMAI_SUPPORT),
       secure: Boolean(process.env.SECURE),
       auth: {
         user: process.env.USER,
@@ -22,6 +23,11 @@ const SendEmail = async (email, subject, text) => {
     });
 
     console.log("Email sent Successfully");
+
+    next();
+    if (next) {
+      next(); // Call next only if provided as a parameter
+    }
   } catch (error) {
     console.log("Email not sent");
     console.error(error);
