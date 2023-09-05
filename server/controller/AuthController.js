@@ -54,13 +54,13 @@ const AuthController = {
         email: req.body.email,
         username: req.body.username,
         password: hashed,
-        name : req.body.name,
-        phonenumber : req.body.phonenumber
+        name: req.body.name,
+        phonenumber: req.body.phonenumber,
       };
       const user = await prisma.user.create({
         data: newUser,
       });
-      // res.status(200).send(user)
+      // res.status(200).send(user) 
       const token = await prisma.token.create({
         data: {
           userid: user.id,
@@ -68,7 +68,7 @@ const AuthController = {
         },
       });
       const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
-      await SendEmail(user.email, "Verify email", url);
+      // await SendEmail(user.email, "Verify email", url);
       console.log("user", user);
       res
         .status(200)
@@ -225,8 +225,6 @@ const AuthController = {
   // CHANGE PASSWORD WITH OTP FROM EMAIL
   resetPassword: async (req, res) => {
     try {
-   
-
       if (receivedOtp !== otpFromCookie) {
         return res.status(401).send("Incorrect OTP");
       }
@@ -270,11 +268,11 @@ const AuthController = {
         return res.status(400).send("OTP is required in the request body");
       }
       const otpFromCookie = req.cookies.otp;
-      if ( receivedOtp != otpFromCookie) {
+      if (receivedOtp != otpFromCookie) {
         return res.status(404).send("OTP is invalid");
       }
     } catch (error) {
-      res.status(404).json("Error",error)
+      res.status(404).json("Error", error);
     }
   },
 
