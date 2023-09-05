@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+ // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -21,7 +21,7 @@ model User {
   phonenumber Int?
   image       String?
   createdAt   DateTime @default(now())
-  refreshToken String
+  refreshToken String?
 }
 
 model Token {
@@ -31,3 +31,27 @@ model Token {
   token     String
   createdAt DateTime @default(now())
 }
+
+model Product {
+  idsanpham       Int      @id @default(autoincrement())
+  tensanpham      String
+  giasanpham      Int
+  mota            String
+  soluong         Int
+  trangthai       String
+  ngaytao         DateTime @default(now())
+  hinhanh         String
+  categoryId    Int?
+  category      Category?   @relation(fields: [categoryId], references: [iddanhmuc])
+}
+
+model Category {
+  iddanhmuc    Int         @id @default(autoincrement())
+  tendanhmuc   String
+  ngaytao      DateTime    @default(now())
+  products     Product[]   
+}
+
+
+
+
