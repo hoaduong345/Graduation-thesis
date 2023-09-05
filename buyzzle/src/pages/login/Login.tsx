@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Images } from "../../Assets/TS/index";
-import LogoWeb from "../../Assets/LogoWeb";
+import LogoWeb from "../../Assets/TSX/LogoWeb";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
@@ -102,7 +102,7 @@ function Login() {
                                 name="username"
                                 value={formData.username}
                                 onChange={handleInputChange}
-                                className="w-full p-2 rounded-md login-input"
+                                className="w-full p-2 input focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input"
                                 placeholder="Email / Số điện thoại / Tên đăng nhập"
                             />
                             {isFormSubmitted && errors.username && (
@@ -120,7 +120,7 @@ function Login() {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleInputChange}
-                                    className="w-full p-2 rounded-md login-input"
+                                    className="w-full p-2 input focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input"
                                     placeholder="Mật khẩu"
                                 />
                                 {isFormSubmitted && errors.password && (
@@ -135,30 +135,27 @@ function Login() {
                                         <svg
                                             xmlns='http://www.w3.org/2000/svg'
                                             className='h-5 w-5'
-                                            viewBox='0 0 20 20'
+                                            viewBox='0 0 16 16'
                                             fill='currentColor'
                                         >
-                                            <path
-                                                fillRule='evenodd'
-                                                d='M10 4.582A9.982 9.982 0 0 0 .831 10a10 10 0 0 0 18.338 0A9.982 9.982 0 0 0 10 4.582zM2.429 10a7.569 7.569 0 0 1 3.109-6.035l1.306 1.306A5.577 5.577 0 0 0 5.68 10a5.577 5.577 0 0 0 1.164 4.729l1.306 1.306A7.568 7.568 0 0 1 2.429 10zm6.251 3.137a2.56 2.56 0 0 1-3.598-3.598l1.116-1.116a4.576 4.576 0 0 0 6.38 6.38l-1.116 1.116zm3.598-7.08a2.56 2.56 0 0 1 3.598 3.598l-1.116 1.116a4.576 4.576 0 0 0-6.38-6.38l1.116-1.116zm3.598 7.08l1.306 1.306A7.569 7.569 0 0 1 17.571 10a7.569 7.569 0 0 1-3.109 6.035l-1.306-1.306A5.577 5.577 0 0 0 14.32 10a5.577 5.577 0 0 0-1.164-4.729l-1.306-1.306A7.569 7.569 0 0 1 18.571 10z'
-                                            />
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
                                         </svg>
                                     ) : (
                                         <svg
                                             xmlns='http://www.w3.org/2000/svg'
                                             className='h-5 w-5'
-                                            viewBox='0 0 20 20'
+                                            viewBox='0 0 16 16'
                                             fill='currentColor'
                                         >
-                                            <path
-                                                fillRule='evenodd'
-                                                d='M10 3a7 7 0 0 0-7 7c0 1.733.63 3.353 1.682 4.61l-.35.352a1 1 0 1 0 1.415 1.414l.35-.352A9.002 9.002 0 0 0 18 10a9 9 0 0 0-8-9zm-.354 9.354l-.353.353A1 1 0 0 0 10 14h.1l-.646.647a1 1 0 0 0 1.415 1.414l.647-.646V14a1 1 0 0 0-1.354-.934z'
-                                            />
+                                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z" />
+                                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z" />
                                         </svg>
                                     )}
                                 </button>
                             </div>
                         </div>
+
                         <div className='mb-4 text-right'>
                             <a href='#' className='text-black-500 hover:no-underline'>
                                 Quên mật khẩu?
