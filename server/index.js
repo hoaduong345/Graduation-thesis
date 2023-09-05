@@ -33,22 +33,4 @@ app.use("/buyzzle/auth", AuthRouter)
 // sản phẩm
 app.use("/buyzzle/product", ProductRoutes)
 
-app.use("/buyzzle/product", ProductRoutes); 
-
-app.use("/buyzzle/product", ProductRoutes); 
-
-app.use("/buyzzle/product", ProductRoutes);
-
-app.use('/buyzzle/product', ProductRoutes);
-
-app.use('/buyzzle/product', ProductRoutes);
-
-app.use('/buyzzle/product', ProductRoutes);
-
-// danh mục
-app.use("/buyzzle/product", ProductRoutes);
-
-app.use("/buyzzle/product", ProductRoutes);
-
-app.use("/buyzzle/product", ProductRoutes);
 
