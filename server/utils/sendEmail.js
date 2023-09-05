@@ -2,13 +2,12 @@ const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
 
-
 const SendEmail = async (email, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
       service: process.env.SERVICE,
-      post: Number(process.env.EMAI_SUPPORT),
+      port: Number(process.env.EMAI_SUPPORT),
       secure: Boolean(process.env.SECURE),
       auth: {
         user: process.env.USER,
@@ -23,7 +22,11 @@ const SendEmail = async (email, subject, text) => {
     });
 
     console.log("Email sent Successfully");
+
     next();
+    if (next) {
+      next(); // Call next only if provided as a parameter
+    }
   } catch (error) {
     console.log("email not sent");
     console.log(error);

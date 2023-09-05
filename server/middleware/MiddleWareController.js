@@ -26,5 +26,15 @@ const MiddleWareController = {
       res.status(404).json("You are not valid");
     }
   },
+  loginvalidator : (req, res, next) => {
+    const { email, password } = req.body;
+  
+    if (!email || !password) {
+      return res.status(400).json({
+        error: "Missing Email or password",
+      });
+    }
+    next();
+  },
 };
 module.exports = MiddleWareController;
