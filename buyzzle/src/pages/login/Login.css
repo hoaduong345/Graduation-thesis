@@ -42,10 +42,6 @@
     border-radius: 6px;
 }
 
-.login-input:focus {
-    border: 2px solid #FFAAAF;
-    border-radius: 6px;
-}
 
 .login-a2 {
     width: 424px;

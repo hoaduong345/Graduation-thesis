@@ -67,7 +67,7 @@ function Login() {
     
         if (validateForm()) {
             try {
-                const response = await axios.post('your_api_endpoint_here', {
+                const response = await axios.post('http://localhost:5000/buyzzle/auth/login', {
                     username: formData.username,
                     password: formData.password,
                 });
