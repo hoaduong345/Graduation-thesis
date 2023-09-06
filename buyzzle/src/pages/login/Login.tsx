@@ -65,14 +65,14 @@ function Login() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsFormSubmitted(true);
-    
+
         if (validateForm()) {
             try {
                 const response = await axios.post('http://localhost:5000/buyzzle/auth/login', {
                     username: formData.username,
                     password: formData.password,
                 });
-    
+
                 if (response.status === 200) {
                     console.log('Kết nối thành công');
 
@@ -135,7 +135,7 @@ function Login() {
                             <label htmlFor='password' className='login-a4 font-sans'>
                                 Mật khẩu
                             </label>
-                            <div className='relative flex input focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4'>
+                            <div className='relative flex '>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id="password"
@@ -179,6 +179,7 @@ function Login() {
                                 <p className="text-red-500">{errors.password}</p>
                             )}
                         </div>
+
 
 
                         <div className='mb-4 text-right'>

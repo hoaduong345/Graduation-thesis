@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
-import { CreateUser } from "../../services/api";
+import { CreateUser } from "../../Services/api";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../utils/rules";
