@@ -29,4 +29,8 @@ export const Images = {
   Category10: '../src/Assets/PNG/category10.png',
   Category11: '../src/Assets/PNG/category11.png',
   Category12: '../src/Assets/PNG/category12.png',
+  logoApple:"../src/Assets/PNG/lgApple",
+  logoGoogle:"../src/Assets/PNG/lgG",
+  logoFace:"../src/Assets/PNG/lgFace",
 };
+
