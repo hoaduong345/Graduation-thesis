@@ -113,7 +113,7 @@ function Login() {
                 <div className='w-[424px]'>
 
                     <form onSubmit={handleSubmit} className="registration-form">
-                        <h1 className=' login-a'>ĐĂNG NHẬP</h1>
+                        <h1 className=' login-a '>ĐĂNG NHẬP</h1>
                         <div className='mb-4'>
                             <label htmlFor='username' className='login-a4 font-sans'>
                                 Tên tài khoản
