@@ -7,12 +7,15 @@ const MiddleWareController = {
   verifyToken: (req, res, next) => {
     const token = req.headers.token;
     if (token) {
-      jwt.verify(token, process.env.SECRECT_KEY, (err, user) => {
-        if (err) {
-          res.status(403).json("Token is not valid");
-        }
-        req.user = user;
-        next();
+      const accessToken = token.split("")[1];
+      jwt.verify(accessToken, process.env.SECRECT_KEY = "secrectkey", (err, user) => {
+        jwt.verify(token, process.env.SECRECT_KEY, (err, user) => {
+          if (err) {
+            res.status(403).json("Token is not valid");
+          }
+          req.user = user;
+          next();
+        });
       });
     } else {
       res.status(401).json("You are not authenticated");
@@ -20,11 +23,12 @@ const MiddleWareController = {
   },
   verifyEMailToChangePassword: (req, res, next) => {
     const email = req.headers.email;
-    const otp = req.headers.otp;
+const otp = req.headers.otp;
 
-    if (!email && !otp) {
-      res.status(404).json("You are not valid");
-    }
+if (!email && !otp) {
+  res.status(404).json("You are not valid");
+}
   },
+  
 };
 module.exports = MiddleWareController;

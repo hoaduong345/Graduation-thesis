@@ -3,6 +3,14 @@
 
 }
 
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../../Assets/Fonts/Inter.ttf') format('truetype'),
+}
+
+
+
 .loginform-bg {
     background-color: #ffffff;
 
@@ -11,6 +19,29 @@
 .login-a {
     color: #FFAAAF;
 }
+
+.login-a2 {
+    color: #425466;
+}
+
+.login-a3 {
+    color: #718096;
+}
+
+.login-a4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #4C4C4C;
+    line-height: 16.94px;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+.login-input {
+    border: 1px solid #FFAAAF;
+    border-radius: 6px;
+}
+
 
 .login-a2 {
     width: 424px;
@@ -23,3 +54,6 @@
 .h{
     width: 100%;
 }
+
+
+

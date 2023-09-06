@@ -14,7 +14,7 @@ dotenv.config();
 
 const app = express();
 
-app.listen(process.env.APP_PORT, () =>{
+app.listen(process.env.APP_PORT = 5000, () =>{
     console.log('Server up and running....');
 });
 app.use(express.json());
