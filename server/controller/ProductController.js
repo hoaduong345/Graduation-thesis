@@ -203,60 +203,79 @@ const ProductController = {
   //cập nhật sản phẩm
   updateProduct: async (req, res) => {
     try {
-      const ProductId = parseInt(req.params.id);
-      const {
-        name,
-        price,
-        rate,
-        pricesale,
-        discount,
-        soldcount,
-        description,
-        count,
-        status,
-        categoryId, // Đổi thành categoryId
-      } = req.body;
-  
-      const existingProduct = await prisma.product.findUnique({
-        where: {
-          idproduct: ProductId,
-        },
-      });
-  
-      if (!existingProduct) {
-        return res.status(404).json({ error: "Sản phẩm không tồn tại" });
-      }
-  
-      let updatedImagePath = existingProduct.images; // Đổi thành images
-  
-      if (req.file) {
-        updatedImagePath = req.file.filename;
-      }
-  
-      const updatedProduct = await prisma.product.update({
-        where: {
-          idproduct: ProductId
-        },
-        data: {
-          name: name,
-          price: price,
-          rate: rate,
-          pricesale: pricesale,
-          discount: discount,
-          soldcount: soldcount,
-          description: description,
-          count: count,
-          status: status,
-          date: new Date(),
-          images: updatedImagePath, // Sử dụng updatedImagePath ở đây
-          categoryId: categoryId,
+      upload.single("images")(req, res, async (err) => {
+        if (err instanceof multer.MulterError) {
+          return res.status(500).json("Lỗi khi tải lên ảnh");
+        } else if (err) {
+          return res.status(500).json("Đã có lỗi xảy ra");
         }
-      });
   
-      res.status(200).json("Cập nhật sản phẩm thành công");
+        const productId = parseInt(req.params.id);
+  
+        const {
+          name,
+          price,
+          rate,
+          pricesale,
+          discount,
+          soldcount,
+          description,
+          count,
+          status,
+          categoryId,
+        } = req.body;
+  
+        if (name.length <= 6) {
+          return res.status(400).json("Tên sản phẩm phải có ít nhất 6 kí tự");
+        }
+        if (parseInt(price) <= 0) {
+          return res.status(400).json("Giá sản phẩm phải lớn hơn 0");
+        }
+        if (parseInt(count) <= 0) {
+          return res.status(400).json("Số lượng sản phẩm phải lớn hơn 0");
+        }
+        if (parseInt(pricesale) <= 0) {
+          return res.status(400).json("Sản phẩm Sale phải lớn hơn 0");
+        }
+        if (parseInt(discount) <= 0) {
+          return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
+        }
+  
+        // Tạo dữ liệu mới để cập nhật
+        const updatedProductData = {
+          name,
+          price: parseInt(price),
+          rate: parseInt(rate),
+          pricesale: parseInt(pricesale),
+          discount: parseInt(discount),
+          soldcount: parseInt(soldcount),
+          description,
+          count: parseInt(count),
+          status,
+          date: new Date(),
+        };
+  
+        if (req.file) {
+          updatedProductData.images = req.file.filename;
+        }
+  
+        // Cập nhật sản phẩm
+        const updatedProduct = await prisma.product.update({
+          where: {
+            idproduct: productId,
+          },
+          data: {
+            ...updatedProductData,
+            categoryId: parseInt(categoryId),
+          },
+        });
+        console.log("🚀 ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:", updatedProduct)
+  
+        res.status(200).json("Cập nhật sản phẩm thành công");
+      });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json(error.message);
     }
   },
 
