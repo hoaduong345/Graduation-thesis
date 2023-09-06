@@ -5,62 +5,74 @@ import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
+import { CreateUser } from "../../services/api";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { schema } from "../../utils/rules";
 
 function Register() {
+  const SignInSchema = schema.omit([
+    "category",
+    "color",
+    "details",
+    "image",
+    "price",
+    "size",
+    "quantity",
+    "confirmPassword",
 
+  ]);
 
   const [formData, setFormData] = useState({
     name: '',
     username: '',
     password: '',
-    confirmpassword: '',
+    // confirmpassword: '',
     email: '',
-    termsAgreement: false,
+    // termsAgreement: false,
   });
 
 
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  const handleCheckboxChange = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      termsAgreement: !prevData.termsAgreement, // Đảo ngược giá trị trạng thái
-    }));
-  };
+  // const handleChange = (e: any) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
+  // const handleCheckboxChange = () => {
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     termsAgreement: !prevData.termsAgreement, // Đảo ngược giá trị trạng thái
+  //   }));
+  // };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    // Perform form submission or validation here
-    console.log(formData);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(SignInSchema),
+  });
+  const onSubmit = handleSubmit(async (data) => {
     try {
-      // Gửi yêu cầu POST đến API với dữ liệu từ formData
-      const response = await fetch('/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData), // Chuyển formData thành JSON
-      });
+      console.log("Huy mat lone",data);
+      const response = await CreateUser(data);
+      if (response.status === 200) {
+        console.log("Sign-in successfully");
 
-      if (response.ok) {
-        // Xử lý khi yêu cầu thành công
-        const data = await response.json();
-        // Xử lý phản hồi từ API (nếu cần)
-        console.log('Phản hồi từ API:', data);
       } else {
-        // Xử lý khi yêu cầu thất bại
-        console.error('Lỗi khi gửi yêu cầu đăng ký:', response.status);
+        console.log("Sign-in Failed!");
+
       }
+
     } catch (error) {
-      console.error('Lỗi khi gửi yêu cầu:', error);
+      console.error("Error occurred while signing in:", error);
+
     }
-  };
+  });
   return (
 
     <body className='register-bg flex'>
@@ -84,18 +96,18 @@ function Register() {
       <div className='w-1/2 flex justify-center items-center min-h-screen bg-white'>
         <div className='w-[424px]'>
 
-          <form onSubmit={handleSubmit} className="registration-form">
+          <form onSubmit={onSubmit} className="registration-form">
             <h2>ĐĂNG KÝ</h2>
             <div>
               <label>Tên:</label>
               <input
                 placeholder="Tên đầy đủ"
                 type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
+                // name="nameuser"
+                // value={formData.name}
+                // onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                required
+                {...register("username")}
               />
             </div>
             <div>
@@ -103,11 +115,11 @@ function Register() {
               <input
                 placeholder="Email/ Số điện thoại/ Tên đăng nhập"
                 type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
+                // name="name"
+                // value={formData.username}
+                // onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                required
+                {...register("name")}
               />
             </div>
             <div>
@@ -116,50 +128,53 @@ function Register() {
               <input
                 placeholder="Mật khẩu"
                 type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
+                // name="password"
+                // value={formData.password}
+                // onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                required
+                {...register("password")}
               />
             </div>
 
-            <div>
+            {/* <div>
               <label>Xác nhận mật khẩu:</label>
               <input
                 placeholder="Nhập lại mật khẩu"
                 type="password"
-                name="confirmpassword"
-                value={formData.confirmpassword}
-                onChange={handleChange}
+                // name="confirmpassword"
+                // value={formData.confirmpassword}
+                // onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                required
+                {...register("confirmPassword")}
               />
-            </div>
+            </div> */}
             <div>
               <label>Số điện thoại / Email:</label>
               <input
-                placeholder="Số điện thoại hoặc địa chỉ Email"
+                // name="email"
                 type="text"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
+                placeholder="Số điện thoại hoặc địa chỉ Email"
+                // value={formData.email}
+                // onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                required
+                {...register("email")}
+         
               />
             </div>
             <div className="checkbox-container">
               <input
                 type="checkbox"
                 name="termsAgreement"
-                checked={formData.termsAgreement}
-                onChange={handleCheckboxChange}
+                // checked={formData.termsAgreement}
+                // onChange={handleCheckboxChange}
                 className="custom-checkbox"
-                required
+                
+             
               />
               <label htmlFor="termsAgreement">Tôi đã đọc và đồng ý với <a href='#'>Điều Khoản</a></label>
             </div>
             <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[70px]">Đăng ký</button>
+
             <div className='flex items-center my-4'>
               <div className='grow h-px bg-slate-300'></div>
               <div className='mx-2 text-white-500'>Hoặc</div>

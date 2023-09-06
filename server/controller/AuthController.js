@@ -68,7 +68,7 @@ const AuthController = {
         },
       });
       const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
-      await SendEmail(user.email, "Verify email", url);
+      // await SendEmail(user.email, "Verify email", url);
       console.log("user", user);
       res
         .status(200)
