@@ -124,7 +124,7 @@ function Login() {
                                 name="username"
                                 value={formData.username}
                                 onChange={handleInputChange}
-                                className="w-full p-2 input focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4 font-sans"
+                                className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                 placeholder="Email / Số điện thoại / Tên đăng nhập"
                             />
                             {isFormSubmitted && errors.username && (
