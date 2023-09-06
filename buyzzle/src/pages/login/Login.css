@@ -3,6 +3,12 @@
 
 }
 
+.register-bg {
+    background-image: url("../../Assets/Images/bgRegister.png");
+    /* max-height: 1083px;
+      max-width: 963px;*/
+  }
+
 
 @font-face {
     font-family: 'Inter';
