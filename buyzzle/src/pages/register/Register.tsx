@@ -1,6 +1,5 @@
 import React from 'react'
 import { Images } from "../../Assets/TS/index";
-import LogoWeb from "../../Assets/LogoWeb";
 import "./Register.css";
 import { Link } from "react-router-dom";
 function Register() {

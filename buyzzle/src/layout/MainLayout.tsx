@@ -7,7 +7,7 @@ interface Props {
   }
 function MainLayout({children} : Props) {
   return (
-    <div className='inline-flex flex-col h-screen w-full'>
+    <div >
         <Header />
         {children}
         <Footer />
