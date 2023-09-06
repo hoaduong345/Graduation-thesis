@@ -19,7 +19,7 @@ function Register() {
     "price",
     "size",
     "quantity",
-    "confirmPassword",
+    
 
   ]);
 
@@ -27,7 +27,7 @@ function Register() {
     name: '',
     username: '',
     password: '',
-    // confirmpassword: '',
+    confirmpassword: '',
     email: '',
     // termsAgreement: false,
   });
@@ -59,14 +59,14 @@ function Register() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log("Huy mat lone",data);
-      const response = await CreateUser(data);
-      if (response.status === 200) {
-        console.log("Sign-in successfully");
+      // const response = await CreateUser(data);
+      // if (response.status === 200) {
+      //   console.log("Sign-in successfully");
 
-      } else {
-        console.log("Sign-in Failed!");
+      // } else {
+      //   console.log("Sign-in Failed!");
 
-      }
+      // }
 
     } catch (error) {
       console.error("Error occurred while signing in:", error);
@@ -136,7 +136,7 @@ function Register() {
               />
             </div>
 
-            {/* <div>
+            <div>
               <label>Xác nhận mật khẩu:</label>
               <input
                 placeholder="Nhập lại mật khẩu"
@@ -147,7 +147,7 @@ function Register() {
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("confirmPassword")}
               />
-            </div> */}
+            </div>
             <div>
               <label>Số điện thoại / Email:</label>
               <input
