@@ -67,7 +67,7 @@ const AuthController = {
           token: crypto.randomBytes(32).toString("hex"),
         },
       });
-      const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
+      // const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
       // await SendEmail(user.email, "Verify email", url);
       console.log("user", user);
       res
@@ -207,9 +207,9 @@ const AuthController = {
       if (!user) {
         return res.status(404).send("Email is not true");
       }
-      const otp = AuthController.generateRandomNumbers(5);
+      const url = `${process.env.BASE_URL}/auth/${user.id}/forgotpassword/${token.token}`;
 
-      // await SendEmail(user.email, "OTP To Change Your Password", otp);
+      await SendEmail(user.email, "Forgot Password", url);
       res.cookie("otp", otp, {
         maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
       });
@@ -260,6 +260,22 @@ const AuthController = {
       res.status(500).send("Internal server error");
     }
   },
+  // REQUEST REFRESH AND ACCESS TOKEN
+  requestRefreshToken: async (req, res) => {
+    // take refresh token from user
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) return res.status(401).json("You are not authenticated");
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN, (err, email) => {
+      if (err) {
+        console.log(err);
+      }
+      // create new access token, refresh token
+      const newAccesstoken = AuthController.genereateAccessToken(email);
+      const newRefrestoken = AuthController.genereateRefreshToken(email);
+    });
+    res.status(200).json({ accessToken: newAccesstoken });
+  },
+
   // VERIFY OTP WHEN CHANGING PASSWORD
   verifyOTP: async (req, res) => {
     try {
