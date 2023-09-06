@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SitebarFilter, { Props } from "../../components/Sitebar/SitebarFilter";
 import { Images } from "../../Assets/TS";
 import Container from "../../components/container/Container";
@@ -14,6 +14,7 @@ import ArrowPrev from "../../Assets/TSX/ArrowPrev";
 import Filter from "./FilterPage/Filter";
 import SlidesFilter from "../../components/home/components/slides/SlidesFilter/SlidesFilter";
 import { title } from "process";
+import { error } from "console";
 
 export interface Products {
   id: number;
@@ -44,18 +45,36 @@ for (let i = 0; i < 11; i++) {
   });
 }
 
+
 export default function FiltersPage() {
+  // const [products, setProducts] = useState([])
+
+  // useEffect(() => {
+  //   fetch("http://localhost:5000/buyzzle/product/product/allproducts")
+  //     .then((data) => {
+  //       const bien = data.json()
+  //       return bien
+
+  //     }).then((data) => {
+  //       console.log(data)
+  //       setProducts(data)
+
+  //     }).catch((error) => {
+  //       console.log(error)
+  //     })
+  // }, [])
 
   return (
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
-            <SitebarFilter onChangeFilters={(title)=>console.log(title)} />
+            <SitebarFilter onChangeFilters={(title) => {
+            }} />
           </div>
           {/* content-right-filter */}
           <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1">
-            <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl">
+            <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl" >
               THƯƠNG HIỆU NỔI TIẾNG:
             </h2>
 
@@ -144,6 +163,7 @@ export default function FiltersPage() {
 
             <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
               {products.map((items) => {
+                console.log('items', items)
                 return (
                   <>
                     <Filter product={items} />

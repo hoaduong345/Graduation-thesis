@@ -30,7 +30,6 @@ app.use(express.static(path.join(__dirname, "")));
 
 app.use("/buyzzle/auth", AuthRouter)
 
-
 // sản phẩm
 app.use("/buyzzle/product", ProductRoutes)
 
