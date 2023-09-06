@@ -124,7 +124,7 @@ const ProductController = {
           count,
           status,
           date,
-          categoryId, // Thêm categoryId vào req.body
+          categoryname, // Thêm categoryId vào req.body
         } = req.body;
   
         // Kiểm tra validate
@@ -157,7 +157,7 @@ const ProductController = {
           status,
           date: new Date(),
           images: req.file ? req.file.filename : null,
-          categoryId: parseInt(categoryId), // Thêm categoryId vào newProduct
+          categoryname, 
         };
   
         const neww = await prisma.product.create({
@@ -222,7 +222,7 @@ const ProductController = {
           description,
           count,
           status,
-          categoryId,
+          categoryname,
         } = req.body;
   
         if (name.length <= 6) {
@@ -253,6 +253,7 @@ const ProductController = {
           count: parseInt(count),
           status,
           date: new Date(),
+          categoryname,
         };
   
         if (req.file) {
@@ -266,7 +267,7 @@ const ProductController = {
           },
           data: {
             ...updatedProductData,
-            categoryId: parseInt(categoryId),
+            categoryname,
           },
         });
         console.log("🚀 ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:", updatedProduct)
