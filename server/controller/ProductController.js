@@ -98,14 +98,6 @@ const ProductController = {
     }
   },
 
-
-
- 
-  
-  
-
-
-
   // thêm sản phẩm
   addProduct: async (req, res) => {
     try {

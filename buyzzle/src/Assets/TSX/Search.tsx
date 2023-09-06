@@ -5,8 +5,9 @@ export default function Search() {
     <svg
       width="24"
       height="24"
+      className="max-xl:w-5 max-xl:ml-[2px]"
       viewBox="0 0 24 24"
-      style={{margin: "5 0 0 10"}}
+      style={{ margin: "5 0 0 10" }}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
