@@ -55,5 +55,8 @@ export const Images = {
   adidas: "../src/Assets/PNG/adidas.png",
   thuongHieu1: "../src/Assets/PNG/thuongHieu1.png",
   hot: "../src/Assets/PNG/hot.png",
+  Banner: "../src/Assets/Images/banner.jpg",
+  Banner1: "../src/Assets/Images/banner1.jpg",
+
 };
 
