@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { Images } from "../../Assets/TS/index";
 import "./Register.css";
 import { Link } from "react-router-dom";
-import LogoGoogle from "../../Assets/PNG/lgG.png";
-import LogoApple from "../../Assets/PNG/lgApple.png";
-import LogoFace from "../../Assets/PNG/lgFace.png";
-import { CreateUser } from "../../Services/api";
+// import LogoGoogle from "../../Assets/PNG/lgG.png";
+// import LogoApple from "../../Assets/PNG/lgApple.png";
+// import LogoFace from "../../Assets/PNG/lgFace.png";
+import { CreateUser } from "../../services/api";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../utils/rules";
 
 function Register() {
+ 
   const SignInSchema = schema.omit([
     "category",
     "color",
@@ -19,7 +20,7 @@ function Register() {
     "price",
     "size",
     "quantity",
-    
+
 
   ]);
 
@@ -31,7 +32,7 @@ function Register() {
     email: '',
     // termsAgreement: false,
   });
-
+//  
 
 
   // const handleChange = (e: any) => {
@@ -58,7 +59,7 @@ function Register() {
   });
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log("Huy mat lone",data);
+      console.log("Huy mat lone", data);
       // const response = await CreateUser(data);
       // if (response.status === 200) {
       //   console.log("Sign-in successfully");
@@ -134,6 +135,8 @@ function Register() {
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("password")}
               />
+
+              
             </div>
 
             <div>
@@ -158,7 +161,7 @@ function Register() {
                 // onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("email")}
-         
+
               />
             </div>
             <div className="checkbox-container">
@@ -168,12 +171,12 @@ function Register() {
                 // checked={formData.termsAgreement}
                 // onChange={handleCheckboxChange}
                 className="custom-checkbox"
-                
-             
+
+
               />
               <label htmlFor="termsAgreement">Tôi đã đọc và đồng ý với <a href='#'>Điều Khoản</a></label>
             </div>
-            <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[70px]">Đăng ký</button>
+            <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[45px]">Đăng ký</button>
 
             <div className='flex items-center my-4'>
               <div className='grow h-px bg-slate-300'></div>
@@ -182,13 +185,13 @@ function Register() {
             </div>
             <div className='flex justify-center space-x-3'>
               <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2' >
-                <img src={LogoGoogle} alt='Google' className='w-6 h-6' />
+                <img src={Images.logoGoogle} alt='Google' className='w-6 h-6' />
               </button>
               <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2'>
-                <img src={LogoApple} alt='Apple' className='w-6 h-6' />
+                <img src={Images.logoApple} alt='Apple' className='w-6 h-6' />
               </button>
               <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2'>
-                <img src={LogoFace} alt='Facebook' className='w-6 h-6' />
+                <img src={Images.logoFace} alt='Facebook' className='w-6 h-6' />
               </button>
             </div>
             <div className='mt-6 text-center'>
