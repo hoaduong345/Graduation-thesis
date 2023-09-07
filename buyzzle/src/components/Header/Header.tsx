@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 import Map from "../../Assets/TSX/Map";
 import Globe from "../../Assets/TSX/Globe";

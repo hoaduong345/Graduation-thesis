@@ -21,7 +21,8 @@ model User {
   phonenumber String?
   image       String?
   createdAt   DateTime @default(now())
-  refreshToken String?
+  refresh_token String?
+  forgotpassword_token String?
 }
 
 model Token {
@@ -33,22 +34,26 @@ model Token {
 }
 
 model Product {
-  idsanpham       Int      @id @default(autoincrement())
-  tensanpham      String
-  giasanpham      Int
-  mota            String
-  soluong         Int
-  trangthai       String
-  ngaytao         DateTime @default(now())
-  hinhanh         String
+  idproduct       Int      @id @default(autoincrement())
+  name      String
+  price      Int
+  rate       Int
+  pricesale  Int
+  discount   Int
+  soldcount  Int
+  description String
+  count        Int
+  status      String
+  date         DateTime @default(now())
+  images         String
   categoryId    Int?
-  category      Category?   @relation(fields: [categoryId], references: [iddanhmuc])
+  category      Category?   @relation(fields: [categoryId], references: [idcategory])
 }
 
 model Category {
-  iddanhmuc    Int         @id @default(autoincrement())
-  tendanhmuc   String
-  ngaytao      DateTime    @default(now())
+  idcategory    Int         @id @default(autoincrement())
+  name   String
+  date   DateTime    @default(now())
   products     Product[]   
 }
 

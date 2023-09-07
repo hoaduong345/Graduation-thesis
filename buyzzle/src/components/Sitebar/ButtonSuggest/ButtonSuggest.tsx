@@ -29,8 +29,7 @@ const ButtonSuggestt = (props: Props) => {
         hover:text-[#FFFFFF]"
         onClick={() => {
           Clicked();
-        }}
-      >
+        }} >
         {props.btnSug.name}
       </button>
     </>

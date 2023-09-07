@@ -3,6 +3,7 @@ import Container from "../container/Container";
 import Category from "./components/Category";
 import Arrow from "../../Assets/arrow";
 import Products from "./components/Product";
+
 import SlidesHome from "./components/slides/SlidesHome/SlidesHome";
 import Progess from "./components/progess";
 
@@ -14,6 +15,16 @@ export type Product = {
   discount: number;
   soldCount: number;
 };
+
+export type FlashSaleList = {
+    id: number,
+    img: string,
+    giamGia: number,
+    title: string,
+    vote: number,
+    price: number,
+    daBan: number,
+}
 
 function Index() {
   const products: Product[] = [

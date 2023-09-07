@@ -9,8 +9,8 @@ type Props = {
 export default function Products(props: Props) {
     const { product } = props
     const discountedPrice = product.price * (product.discount / 100)
-
     const price = product.price - discountedPrice
+    
     return (
       <>
         <div className="max-w-[250px] flex-col mb-[10px] cursor-pointer hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200">
