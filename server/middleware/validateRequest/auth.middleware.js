@@ -3,6 +3,7 @@
 const validator = require("validator");
 const httpStatus = require("../../config/httpStatusCode");
 const { PrismaClient } = require("@prisma/client");
+const { error } = require("console");
 
 const prisma = new PrismaClient();
 
@@ -12,26 +13,28 @@ const createVali = async (req, res, next) => {
 
   const error = {};
 
-  const user = await prisma.user.findUnique({
+  const user_name = await prisma.user.findUnique({
     where: {
       username: username,
+      email: email
     },
   });
 
-  if (user) {
-    error.username = "Username already exists!";
+  if (user_name) {
+    error.username = "Username or Email is already exists!";
   }
+
   if (!email) {
-    error.email = console.log("company_email_require");
+    error.email = "company_email_require";
   } else if (!validator.isEmail(email)) {
-    error.email = console.log("email_format");
+    error.email = "email_format";
   }
   if (!username) {
-    error.username = console.log("username_require");
+    error.username = "username_require";
   } else if (!validator.isLength(username, { min: 5, max: 20 })) {
-    error.username = getMsg("username_length");
+    error.username = "username_length";
   } else if (!validator.isAlphanumeric(username)) {
-    error.username = console.log("username_format");
+    error.username = "username_format";
   }
 
   if (!name) {
@@ -49,7 +52,7 @@ const createVali = async (req, res, next) => {
   }
 
   if (!confirmpassword) {
-    error.confirmpassword ="confirm_password_require";
+    error.confirmpassword = "confirm_password_require";
   } else if (!validator.equals(password, confirmpassword)) {
     error.confirmpassword = "confirm_password_must_match";
   }
@@ -65,7 +68,7 @@ const createVali = async (req, res, next) => {
       error.phonenumber = "Invalid phone number format";
     }
   }
-  
+
   if (Object.keys(error).length > 0) {
     return res.status(400).json({ error });
   }
@@ -77,6 +80,17 @@ const createVali = async (req, res, next) => {
 
   next();
 };
+
+// const FogotPasswordValid = async(req,res,next) => {
+//   const email = await prisma.user.findUnique({
+//     where:{
+      
+//     }
+//   })
+//   if(!email){
+//     error.email = "Email is not true"
+//   }
+// };
 
 module.exports = {
   createVali,

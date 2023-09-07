@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 dotenv.config();
 
 const MiddleWareController = {
@@ -18,22 +21,15 @@ const MiddleWareController = {
       res.status(401).json("You are not authenticated");
     }
   },
-  verifyEMailToChangePassword: (req, res, next) => {
-    const email = req.headers.email;
-    const otp = req.headers.otp;
-
-    if (!email && !otp) {
-      res.status(404).json("You are not valid");
-    }
-  },
-  loginvalidator : (req, res, next) => {
+  loginvalidator: async (req, res, next) => {
     const { email, password } = req.body;
-  
+
     if (!email || !password) {
       return res.status(400).json({
         error: "Missing Email or password",
       });
     }
+
     next();
   },
 };

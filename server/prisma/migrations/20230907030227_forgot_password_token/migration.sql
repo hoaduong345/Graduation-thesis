@@ -9,7 +9,8 @@ CREATE TABLE `User` (
     `phonenumber` VARCHAR(191) NULL,
     `image` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `refreshToken` VARCHAR(191) NULL,
+    `refresh_token` VARCHAR(191) NULL,
+    `forgotpassword_token` VARCHAR(191) NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     UNIQUE INDEX `User_username_key`(`username`),
@@ -28,30 +29,34 @@ CREATE TABLE `Token` (
 
 -- CreateTable
 CREATE TABLE `Product` (
-    `idsanpham` INTEGER NOT NULL AUTO_INCREMENT,
-    `tensanpham` VARCHAR(191) NOT NULL,
-    `giasanpham` INTEGER NOT NULL,
-    `mota` VARCHAR(191) NOT NULL,
-    `soluong` INTEGER NOT NULL,
-    `trangthai` VARCHAR(191) NOT NULL,
-    `ngaytao` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `hinhanh` VARCHAR(191) NOT NULL,
+    `idproduct` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `price` INTEGER NOT NULL,
+    `rate` INTEGER NOT NULL,
+    `pricesale` INTEGER NOT NULL,
+    `discount` INTEGER NOT NULL,
+    `soldcount` INTEGER NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
+    `count` INTEGER NOT NULL,
+    `status` VARCHAR(191) NOT NULL,
+    `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `images` VARCHAR(191) NOT NULL,
     `categoryId` INTEGER NULL,
 
-    PRIMARY KEY (`idsanpham`)
+    PRIMARY KEY (`idproduct`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Category` (
-    `iddanhmuc` INTEGER NOT NULL AUTO_INCREMENT,
-    `tendanhmuc` VARCHAR(191) NOT NULL,
-    `ngaytao` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `idcategory` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    PRIMARY KEY (`iddanhmuc`)
+    PRIMARY KEY (`idcategory`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
 ALTER TABLE `Token` ADD CONSTRAINT `Token_userid_fkey` FOREIGN KEY (`userid`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`iddanhmuc`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`idcategory`) ON DELETE SET NULL ON UPDATE CASCADE;

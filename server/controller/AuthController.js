@@ -26,7 +26,7 @@ const AuthController = {
       {
         id: email.id,
       },
-      process.env.SECRECT_KEY = "secrectkey",
+      process.env.SECRECT_KEY,
       { expiresIn: "1h" }
     );
   },
@@ -36,8 +36,17 @@ const AuthController = {
       {
         id: email.id,
       },
-      process.env.JWT_REFRESH_TOKEN = "refreshkey",
+      process.env.JWT_REFRESH_TOKEN,
       { expiresIn: "365d" }
+    );
+  },
+  generateForgotPasswordToken: (email) => {
+    return jwt.sign(
+      {
+        id: email.id,
+      },
+      process.env.JWT_FORGOT_PASSWORD_TOKEN,
+      { expiresIn: "15m" }
     );
   },
   // REGISTER
@@ -57,28 +66,19 @@ const AuthController = {
         name: req.body.name,
         phonenumber: req.body.phonenumber,
       };
+
       const user = await prisma.user.create({
         data: newUser,
       });
-      // const token = await prisma.token.create({
-      //   data: {
-      //     userid: user.id,
-      //     token: crypto.randomBytes(32).toString("hex"),
-      //   },
-      // });
-      // const url = `${process.env.BASE_URL = "http://localhost:5173/"}/auth/${user.id}/verify/${token.token}`;
-      // await SendEmail(user.email, "Verify email", url);
-      // res.status(200).send(user)
-      // res.status(200).send(user) 
       const token = await prisma.token.create({
         data: {
           userid: user.id,
           token: crypto.randomBytes(32).toString("hex"),
         },
       });
-      // const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
+
+      const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
       // await SendEmail(user.email, "Verify email", url);
-      console.log("user", user);
       res
         .status(200)
         .send(
@@ -94,14 +94,13 @@ const AuthController = {
     try {
       const reqpassword = req.body.password;
       const reqemail = req.body.email;
-
       const user = await prisma.user.findUnique({
         where: { email: reqemail },
       });
+      console.log("user email", user.email);
       if (!user.email) {
         return res.status(404).json("wrong email");
       }
-
       const validPassword = await bcrypt.compare(reqpassword, user.password);
 
       if (!validPassword) {
@@ -109,31 +108,31 @@ const AuthController = {
       }
 
       if (user.verify == false) {
-        const token = await prisma.token.findFirst({
-          where: { userid: user.id },
+        const token = await prisma.token.findUnique({
+          where: { tokenid: user.id },
         });
-
         if (!token) {
           token = await prisma.token.create({
-            userid: user.id,
+            id: user.id,
             token: crypto.randomBytes(32).toString("hex"),
           });
 
-          const url = `${process.env.BASE_URL = "http://localhost:5173/"}user/${user.id}/verify/${token.token}`;
+          const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-          await SendEmail(user.email, "Verify email", url);
+          // await SendEmail(user.email, "Verify email", url);
         }
         return res.status(400).send({
           message: "An email has sent to your email, please check that",
         });
       }
+
       if (user.email && validPassword) {
         const accessToken = AuthController.genereateAccessToken(user.email);
         const refreshToken = AuthController.genereateRefreshToken(user.email);
         // Save refresh token to the user's record in the database
         await prisma.user.update({
           where: { id: user.id },
-          data: { refreshToken },
+          data: { refresh_token: refreshToken },
         });
         res.cookie("refreshToken", refreshToken, {
           httpOnlyCookie: true,
@@ -203,6 +202,7 @@ const AuthController = {
   //     res.status(500).json("Change password failed")
   //  }
   // },
+
   // SEND EMAIL TO FORGOT PASSWORD
   sendEmailToTakeOTP: async (req, res) => {
     try {
@@ -216,12 +216,22 @@ const AuthController = {
       if (!user) {
         return res.status(404).send("Email is not true");
       }
-      const url = `${process.env.BASE_URL}/auth/${user.id}/forgotpassword/${token.token}`;
-
-      await SendEmail(user.email, "Forgot Password", url);
-      res.cookie("otp", otp, {
-        maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
+      const token = await prisma.token.create({
+        data: {
+          userid: user.id,
+          token: crypto.randomBytes(32).toString("hex"),
+        },
       });
+
+      const forgot_password_token = AuthController.generateForgotPasswordToken(
+        user.email
+      );
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { forgotpassword_token: forgot_password_token },
+      });
+      const url = `${process.env.BASE_URL}/auth/${user.id}/changepassword/${token.token}`;
+      await SendEmail(user.email, "Forgot Password", url);
       res.cookie("email", user.email, {
         maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
       });
