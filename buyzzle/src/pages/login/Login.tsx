@@ -207,7 +207,7 @@ function Login() {
                         <div className='mt-6 text-center'>
                             <span className='text-gray-600'>Bạn đã có tài khoản Buyzzle? </span>
                             <a href='#' className='text-black-500 hover:underline font-bold'>
-                                Đăng nhập
+                                Đăng ký
                             </a>
                         </div>
                     </form>
