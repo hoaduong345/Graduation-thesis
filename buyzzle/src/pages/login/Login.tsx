@@ -3,96 +3,71 @@ import { Images } from "../../Assets/TS/index";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
 
 import "./Login.css";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
+import { schema } from "../../utils/rules";
+import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-    });
-    const [errors, setErrors] = useState({
-        username: '',
-        password: '',
-    });
+    // const [formData, setFormData] = useState({
+    //     username: '',
+    //     password: '',
+    // });
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+    const SignInSchema = schema.omit([
+        "category",
+        "color",
+        "details",
+        "image",
+        "price",
+        "size",
+        "quantity",
 
-        if (isFormSubmitted) {
 
-            setErrors({
-                ...errors,
-                [name]: '',
-            });
+    ]);
+
+    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { name, value } = e.target;
+    //     setFormData({
+    //         ...formData,
+    //         [name]: value,
+    //     });
+    // };
+
+
+    const { handleSubmit, register, formState: { errors } } = useForm({
+        defaultValues: {
+            username: '',
+            password: '',
+            email: '',
+            phonenumber: '',
+            // termsAgreement: false,
+        },
+        resolver: yupResolver(SignInSchema)
+    });
+
+    const API = "http://localhost:5000/buyzzle/auth/login";
+    const onSubmit = handleSubmit(async (data) => {
+        try {
+            console.log("checker", data);
+            const response = await axios.post(API, data);
+            console.log("Them thanh cong", data);
+            window.location.href = "/login";
+        } catch (error) {
+            console.error(error);
         }
-    };
 
-    const validateForm = () => {
-        let valid = true;
-        const newErrors = { ...errors };
+    });
 
-        if (!/^\S+@\S+\.\S+$/.test(formData.username)) {
-            newErrors.username = 'Tên tài khoản không hợp lệ.';
-            valid = false;
-        } else {
-            newErrors.username = '';
-        }
-
-        if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/.test(formData.password)) {
-            newErrors.password = 'Mật khẩu phải bao gồm ít nhất 8 ký tự, trong đó có ít nhất một chữ cái viết hoa, chữ cái viết thường và một số.';
-            valid = false;
-        } else {
-            newErrors.password = '';
-        }
-
-        setErrors(newErrors);
-        return valid;
-    };
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsFormSubmitted(true);
-
-        if (validateForm()) {
-            try {
-                const response = await axios.post('http://localhost:5000/buyzzle/auth/login', {
-                    username: formData.username,
-                    password: formData.password,
-                });
-
-                if (response.status === 200) {
-                    console.log('Kết nối thành công');
-
-                    console.log('Dữ liệu phản hồi: ', response.data);
-
-                } else {
-
-                    console.log('Đăng nhập thất bại với trạng thái: ', response.status);
-
-                }
-            } catch (error) {
-
-                console.error('Yêu cầu API không thành công: ', error);
-
-            }
-        } else {
-            console.log('Form is invalid.');
-
-        }
-    };
     return (
         <body className='login-bg flex'>
             <div className='h-1083px w-963px p-4 relative'>
@@ -112,7 +87,7 @@ function Login() {
             <div className='w-1/2 flex justify-center items-center min-h-screen bg-white'>
                 <div className='w-[424px]'>
 
-                    <form onSubmit={handleSubmit} className="registration-form">
+                    <form onSubmit={onSubmit} className="registration-form">
                         <h1 className=' login-a '>ĐĂNG NHẬP</h1>
                         <div className='mb-4'>
                             <label htmlFor='username' className='login-a4 font-sans'>
@@ -121,15 +96,11 @@ function Login() {
                             <input
                                 type="text"
                                 id="username"
-                                name="username"
-                                value={formData.username}
-                                onChange={handleInputChange}
+                                // value={formData.username}
                                 className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                 placeholder="Email / Số điện thoại / Tên đăng nhập"
+                                {...register("username")}
                             />
-                            {isFormSubmitted && errors.username && (
-                                <p className="text-red-500">{errors.username}</p>
-                            )}
                         </div>
                         <div className='mb-4'>
                             <label htmlFor='password' className='login-a4 font-sans'>
@@ -139,11 +110,10 @@ function Login() {
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id="password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleInputChange}
+                                    // value={formData.password}
                                     className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                     placeholder="Mật khẩu"
+                                    {...register("password")}
                                 />
 
                                 <button
@@ -175,9 +145,6 @@ function Login() {
                                     )}
                                 </button>
                             </div>
-                            {isFormSubmitted && errors.password && (
-                                <p className="text-red-500">{errors.password}</p>
-                            )}
                         </div>
 
 
