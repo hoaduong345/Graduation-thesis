@@ -5,12 +5,16 @@ export const schema = yup.object().shape({
     .string()
     .required("Please enter your Email")
     .email("The email address is invalid."),
+  phonenumber: yup
+    .string()
+    .required("Please enter your phone number"),
+    
   password: yup
     .string()
     .required("Please enter your password.")
     .min(6, "Password must be at least 6 characters.")
     .max(20, "Password must not exceed 20 characters."),
-  confirmPassword: yup
+  confirmpassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
     .required("Please confirm your password."),

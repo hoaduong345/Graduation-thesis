@@ -12,8 +12,14 @@ interface UserData {
 }
 
 interface LoginData {
-  username: string;
-  password: string;
+    name? : string | undefined,
+    email : string,
+    password : string,
+    username : string,
+    
+    
+    
+   
 }
 
 export const CreateUser = async (data: UserData): Promise<AxiosResponse> => {
