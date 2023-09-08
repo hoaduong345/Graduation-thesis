@@ -2,10 +2,12 @@ import { CREATE_USER } from "../utils/constants";
 import axios, { AxiosResponse } from "axios";
 
 interface UserData {
+    name? : string | undefined,
     email : string,
-    username : string,
     password : string,
-    name : string ,
+    username : string,
+    
+    
     
    
 }
