@@ -43,7 +43,9 @@ model Product {
   count        Int
   status      String
   date         DateTime @default(now())
-  images         String
+  images       String
+  images1      String
+  images2      String
   categoryname    String?
   category      Category?   @relation(fields: [categoryname], references: [name])
 }
