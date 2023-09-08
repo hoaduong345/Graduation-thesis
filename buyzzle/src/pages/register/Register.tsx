@@ -4,14 +4,15 @@ import "./Register.css";
 import { Link } from "react-router-dom";
 // import LogoGoogle from "../../Assets/PNG/lgG.png";
 // import LogoApple from "../../Assets/PNG/lgApple.png";
-// import LogoFace from "../../Assets/PNG/lgFace.png";
+import bg from "../../Assets/PNG/NewProject.png";
+
 import { CreateUser } from "../../services/api";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../utils/rules";
 
 function Register() {
- 
+
   const SignInSchema = schema.omit([
     "category",
     "color",
@@ -23,31 +24,6 @@ function Register() {
 
 
   ]);
-
-  const [formData, setFormData] = useState({
-    name: '',
-    username: '',
-    password: '',
-    confirmpassword: '',
-    email: '',
-    // termsAgreement: false,
-  });
-//  
-
-
-  // const handleChange = (e: any) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  // };
-  // const handleCheckboxChange = () => {
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     termsAgreement: !prevData.termsAgreement, // Đảo ngược giá trị trạng thái
-  //   }));
-  // };
 
 
   const {
@@ -73,15 +49,45 @@ function Register() {
       console.error("Error occurred while signing in:", error);
 
     }
+
+
+
+    // const [formData, setFormData] = useState({
+    //   name: '',
+    //   username: '',
+    //   password: '',
+    //   confirmpassword: '',
+    //   email: '',
+    //   // termsAgreement: false,
+    // });
+    //  
+
+
+    // const handleChange = (e: any) => {
+    //   const { name, value } = e.target;
+    //   setFormData((prevData) => ({
+    //     ...prevData,
+    //     [name]: value,
+    //   }));
+    // };
+    // const handleCheckboxChange = () => {
+    //   setFormData((prevData) => ({
+    //     ...prevData,
+    //     termsAgreement: !prevData.termsAgreement, // Đảo ngược giá trị trạng thái
+    //   }));
+    // };
+
+
+
   });
   return (
 
-    <body className='register-bg flex'>
-      <div className='h-1083px w-963px p-4 relative'>
-        <img src={Images.bgRegisterIcon}
-          alt="bgRegisterIcon"
-          width={"924px"}
-          height={"1083px"} />
+    <body className='register-bg flex max-xl:flex-wrap'>
+      <div className='relative p-4 max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]'>
+
+        <img src={bg} className='img' 
+        alt="bgRegisterIcon"
+           />
 
         <div className="absolute inset-0 flex justify-center items-center ">
           <Link to="/">
@@ -94,14 +100,15 @@ function Register() {
 
       </div>
 
-      <div className='w-1/2 flex justify-center items-center min-h-screen bg-white'>
+      <div className='w-1/2 flex justify-center items-center min-h-screen bg-white '>
         <div className='w-[424px]'>
 
           <form onSubmit={onSubmit} className="registration-form">
             <h2>ĐĂNG KÝ</h2>
-            <div>
+            <div className ='mb-[15px]'>
               <label>Tên:</label>
-              <input
+
+              <input 
                 placeholder="Tên đầy đủ"
                 type="text"
                 // name="nameuser"
@@ -110,8 +117,13 @@ function Register() {
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("username")}
               />
+              {errors.username && (
+                <span className="text-red-500 text-xs">
+                  {errors.username.message}
+                </span>
+              )}
             </div>
-            <div>
+            <div className ='mb-[15px]'>
               <label>Tên tài khoản:</label>
               <input
                 placeholder="Email/ Số điện thoại/ Tên đăng nhập"
@@ -122,8 +134,13 @@ function Register() {
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("name")}
               />
+              {errors.name && (
+                <span className="text-red-500 text-xs">
+                  {errors.name.message}
+                </span>
+              )}
             </div>
-            <div>
+            <div className ='mb-[15px]'>
               <label>Mật khẩu:</label>
 
               <input
@@ -136,10 +153,14 @@ function Register() {
                 {...register("password")}
               />
 
-              
+              {errors.password && (
+                <span className="text-red-500 text-xs">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
 
-            <div>
+            <div className ='mb-[15px]'>
               <label>Xác nhận mật khẩu:</label>
               <input
                 placeholder="Nhập lại mật khẩu"
@@ -150,8 +171,13 @@ function Register() {
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("confirmPassword")}
               />
+              {errors.confirmPassword && (
+                <span className="text-red-500 text-xs">
+                  {errors.confirmPassword.message}
+                </span>
+              )}
             </div>
-            <div>
+            <div className ='mb-[15px]'>
               <label>Số điện thoại / Email:</label>
               <input
                 // name="email"
@@ -163,6 +189,11 @@ function Register() {
                 {...register("email")}
 
               />
+              {errors.email && (
+                <span className="text-red-500 text-xs">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
             <div className="checkbox-container">
               <input
@@ -176,7 +207,7 @@ function Register() {
               />
               <label htmlFor="termsAgreement">Tôi đã đọc và đồng ý với <a href='#'>Điều Khoản</a></label>
             </div>
-            <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[45px]">Đăng ký</button>
+            <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[75px]">Đăng ký</button>
 
             <div className='flex items-center my-4'>
               <div className='grow h-px bg-slate-300'></div>
