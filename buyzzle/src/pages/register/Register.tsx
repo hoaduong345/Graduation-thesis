@@ -7,7 +7,7 @@ import axios from "axios";
 // import LogoApple from "../../Assets/PNG/lgApple.png";
 import bg from "../../Assets/PNG/NewProject.png";
 
-import { CreateUser } from "../../services/api";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../utils/rules";
@@ -21,7 +21,7 @@ function Register() {
     "price",
     "size",
     "quantity",
-    "confirmPassword",
+    
 
   ]);
   const { handleSubmit,register, formState: { errors } } = useForm({
@@ -29,22 +29,22 @@ function Register() {
       name: '',
       username: '',
       password: '',
-      // confirmPassword: '',
+      confirmpassword: '',
       email: '',
+      phonenumber: '',
       // termsAgreement: false,
     },
     resolver: yupResolver(SignInSchema)
   });
 
-
+  
   const API = "http://localhost:5000/buyzzle/auth/register";
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log("checker", data); 
       const response = await axios.post(API, data);
-      if (response.status === 201) {
       console.log("Them thanh cong", data); 
-      }
+      window.location.href ="/login";
     } catch (error) {
       console.error(error);
     }
@@ -52,56 +52,7 @@ function Register() {
   });
 
 
-  // const {
-  //   handleSubmit,
-  //   register,
-  //   formState: { errors },
-  // } = useForm({
-  //   resolver: yupResolver(SignInSchema),
-  // });
-  // const onSubmit = handleSubmit(async (data) => {
-  //   try {
-  //     console.log("Huy mat lone",);
-  //     const response = await CreateUser(data);
-  //     if (response.status === 200) {
-  //       console.log("Sign-in successfully");
-
-  //     } else {
-  //       console.log("Sign-in Failed!");
-
-  //     }
-
-  //   } catch (error) {
-  //     console.error("Error occurred while signing in:", error);
-
-  //   }
-
-
-
-  // const [formData, setFormData] = useState({
-  //   name: '',
-  //   username: '',
-  //   password: '',
-  //   confirmpassword: '',
-  //   email: '',
-  //   termsAgreement: false,
-  // });
-  // //  
-
-
-  // const handleChange = (e: any) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  // };
-  // const handleCheckboxChange = () => {
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     termsAgreement: !prevData.termsAgreement, // Đảo ngược giá trị trạng thái
-  //   }));
-  // };
+  
 
 
 
@@ -187,7 +138,7 @@ function Register() {
               )}
             </div>
 
-            {/* <div className='mb-[15px]'>
+            <div className='mb-[15px]'>
               <label>Xác nhận mật khẩu:</label>
               <input
                 placeholder="Nhập lại mật khẩu"
@@ -196,14 +147,14 @@ function Register() {
                 // value={formData.confirmpassword}
                 // onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                // {...register("confirmPassword")}
+                {...register("confirmpassword")}
               />
-              {errors.confirmPassword && (
+              {errors.confirmpassword && (
                 <span className="text-red-500 text-xs">
-                  {errors.confirmPassword.message}
+                  {errors.confirmpassword.message}
                 </span>
               )}
-            </div> */}
+            </div>
             <div className='mb-[15px]'>
               <label>Số điện thoại / Email:</label>
               <input
@@ -214,6 +165,24 @@ function Register() {
                 // onChange={handleChange}
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("email")}
+
+              />
+              {errors.email && (
+                <span className="text-red-500 text-xs">
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
+            <div className='mb-[15px]'>
+              <label>Số điện thoại:</label>
+              <input
+                // name="email"
+                type="text"
+                placeholder="Số điện thoại hoặc địa chỉ Email"
+                // value={formData.email}
+                // onChange={handleChange}
+                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
+                {...register("phonenumber")}
 
               />
               {errors.email && (
