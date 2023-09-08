@@ -13,55 +13,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    // const [formData, setFormData] = useState({
-    //     username: '',
-    //     password: '',
-    // });
-    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
 
-    const SignInSchema = schema.omit([
-        "category",
-        "color",
-        "details",
-        "image",
-        "price",
-        "size",
-        "quantity",
-
-
-    ]);
-
-    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, value } = e.target;
-    //     setFormData({
-    //         ...formData,
-    //         [name]: value,
-    //     });
-    // };
-
-
-    const { handleSubmit, register, formState: { errors } } = useForm({
-        defaultValues: {
-            username: '',
-            password: '',
-            email: '',
-            phonenumber: '',
-            // termsAgreement: false,
-        },
-        resolver: yupResolver(SignInSchema)
-    });
+    const { handleSubmit, register } = useForm();
 
     const API = "http://localhost:5000/buyzzle/auth/login";
+
     const onSubmit = handleSubmit(async (data) => {
         try {
             console.log("checker", data);
             const response = await axios.post(API, data);
-            console.log("Them thanh cong", data);
-            window.location.href = "/login";
+            console.log("Đăng nhập thành công", data);
+            window.location.href = "/";
         } catch (error) {
             console.error(error);
         }
