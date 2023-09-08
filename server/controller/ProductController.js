@@ -69,7 +69,6 @@ const ProductController = {
       if (!existingCategory) {
         return res.status(404).json("Danh mục không tồn tại");
       } 
-      // Xóa sản phẩm
       await prisma.category.delete({
         where: {
           idcategory: categoryId,
@@ -108,6 +107,17 @@ const ProductController = {
       });
       
       res.status(200).json("Cập nhật danh mục thành công");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+  // get all data category
+  getAllCategory: async(req, res) =>{
+    try {
+      const AllCategory = await prisma.category.findMany();
+      res.status(200).json(AllCategory);
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
