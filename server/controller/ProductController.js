@@ -4,6 +4,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const multer = require("multer");
+const path = require("path"); 
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -14,7 +15,25 @@ const storage = multer.diskStorage({
     cb(null, uniqueSuffix + "-" + file.originalname);
   },
 });
-const upload = multer({ storage: storage });
+
+const fileFilter = (req, file, cb) => {
+  const allowedExtensions = ['.jpg', '.jpeg', '.png'];
+  const fileExtension = path.extname(file.originalname).toLowerCase();
+  if (allowedExtensions.includes(fileExtension)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Chỉ chấp nhận tệp ảnh có định dạng .jpg, .jpeg, hoặc .png"), false);
+  }
+};
+
+
+const upload = multer({ 
+  storage: storage, 
+  fileFilter: fileFilter, 
+  // limits: {
+  //   fileSize: 1024 * 1024 * 5, 
+  // },
+});
 
 const ProductController = {
 
@@ -98,7 +117,11 @@ const ProductController = {
   // thêm sản phẩm
   addProduct: async (req, res) => {
     try {
-      upload.single("images")(req, res, async (err) => {
+      upload.fields([
+        { name: 'images', maxCount: 1 },
+        { name: 'images1', maxCount: 1 },
+        { name: 'images2', maxCount: 1 },
+      ])(req, res, async (err) => {
         if (err instanceof multer.MulterError) {
           return res.status(500).json("Lỗi khi tải lên ảnh");
         } else if (err) {
@@ -116,7 +139,7 @@ const ProductController = {
           count,
           status,
           date,
-          categoryId, // Thêm categoryId vào req.body
+          categoryname,
         } = req.body;
   
         // Kiểm tra validate
@@ -135,7 +158,11 @@ const ProductController = {
         if (parseInt(discount) <= 0) {
           return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
         }
-        
+  
+        // Lấy tên các tệp ảnh từ req.files
+        const images = req.files['images'][0].filename;
+        const images1 = req.files['images1'][0].filename;
+        const images2 = req.files['images2'][0].filename;
   
         const newProduct = {
           name,
@@ -143,13 +170,15 @@ const ProductController = {
           rate: parseInt(rate),
           pricesale: parseInt(pricesale),
           discount: parseInt(discount),
-          soldcount: parseInt(soldcount),         
+          soldcount: parseInt(soldcount),
           description,
           count: parseInt(count),
           status,
           date: new Date(),
-          images: req.file ? req.file.filename : null,
-          categoryId: parseInt(categoryId), // Thêm categoryId vào newProduct
+          images: images || null,
+          images1: images1 || null,
+          images2: images2 || null,
+          categoryname,
         };
   
         const neww = await prisma.product.create({
@@ -195,7 +224,11 @@ const ProductController = {
   //cập nhật sản phẩm
   updateProduct: async (req, res) => {
     try {
-      upload.single("images")(req, res, async (err) => {
+      upload.fields([
+        { name: 'images', maxCount: 1 },
+        { name: 'images1', maxCount: 1 },
+        { name: 'images2', maxCount: 1 },
+      ])(req, res, async (err) => {
         if (err instanceof multer.MulterError) {
           return res.status(500).json("Lỗi khi tải lên ảnh");
         } else if (err) {
@@ -214,9 +247,10 @@ const ProductController = {
           description,
           count,
           status,
-          categoryId,
+          categoryname,
         } = req.body;
   
+        // Kiểm tra validate
         if (name.length <= 6) {
           return res.status(400).json("Tên sản phẩm phải có ít nhất 6 kí tự");
         }
@@ -233,6 +267,11 @@ const ProductController = {
           return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
         }
   
+        // Lấy tên các tệp ảnh từ req.files
+        const images = req.files['images'][0].filename;
+        const images1 = req.files['images1'][0].filename;
+        const images2 = req.files['images2'][0].filename;
+  
         // Tạo dữ liệu mới để cập nhật
         const updatedProductData = {
           name,
@@ -245,23 +284,23 @@ const ProductController = {
           count: parseInt(count),
           status,
           date: new Date(),
+          images: images || null,
+          images1: images1 || null,
+          images2: images2 || null,
+          categoryname,
         };
-  
-        if (req.file) {
-          updatedProductData.images = req.file.filename;
-        }
   
         // Cập nhật sản phẩm
         const updatedProduct = await prisma.product.update({
           where: {
             idproduct: productId,
           },
-          data: {
-            ...updatedProductData,
-            categoryId: parseInt(categoryId),
-          },
+          data: updatedProductData,
         });
-        console.log("🚀 ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:", updatedProduct)
+  
+        if (!updatedProduct) {
+          return res.status(404).json("Không tìm thấy sản phẩm");
+        }
   
         res.status(200).json("Cập nhật sản phẩm thành công");
       });
@@ -270,7 +309,6 @@ const ProductController = {
       res.status(500).json(error.message);
     }
   },
-
 
   // Xem chi tiết sản phẩm
   getProductDetail: async (req, res) => {
