@@ -10,21 +10,15 @@ export interface Cate {
 
 export default function AddCategory() {
 
-  // const [change, setChange] = useState(false)
-  // const [value, setValue] = useState(false)
-
   const [category, setCategory] = useState<Cate>({} as Cate);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    // const { name, value } = e.target;
+    
     setCategory({ ...category, name: e.target.value });
-    // setReset(e.target.value)
   };
-  console.log('hehehe', category.idcategory)
 
   const handleSubmit = () => {
     if (category.idcategory != 0 && category.idcategory != undefined) {
-      console.log("edit")
       axios.put(`http://localhost:5000/buyzzle/product/updatecategory/${category.idcategory}`, { name: category.name })
         .then(response => {
 
@@ -82,20 +76,6 @@ export default function AddCategory() {
 
   const update = (cate: Cate) => {
     setCategory(cate)
-    // axios.put(`http://localhost:5000/buyzzle/product/updatecategory/${id}`)
-    // .then(response => {
-
-    //   return response
-    // })
-    // .then(data => {
-    //   console.log(data);
-    //   getList()
-    // })
-    // .catch(error => {
-    //   console.error('Error:', error);
-    //   // Xử lý lỗi nếu có
-
-    // });
   }
 
 
