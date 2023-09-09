@@ -135,11 +135,7 @@ const ProductController = {
   // thêm sản phẩm
   addProduct: async (req, res) => {
     try {
-      upload.fields([
-        { name: 'images', maxCount: 1 },
-        { name: 'images1', maxCount: 1 },
-        { name: 'images2', maxCount: 1 },
-      ])(req, res, async (err) => {
+      upload.single("images")(req, res, async (err) => {
         if (err instanceof multer.MulterError) {
           return res.status(500).json("Lỗi khi tải lên ảnh");
         } else if (err) {
@@ -177,10 +173,7 @@ const ProductController = {
           return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
         }
   
-        // Lấy tên các tệp ảnh từ req.files
-        const images = req.files['images'][0].filename;
-        const images1 = req.files['images1'][0].filename;
-        const images2 = req.files['images2'][0].filename;
+       
   
         const newProduct = {
           name,
@@ -193,9 +186,7 @@ const ProductController = {
           count: parseInt(count),
           status,
           date: new Date(),
-          images: images || null,
-          images1: images1 || null,
-          images2: images2 || null,
+          images: req.file ? req.file.filename : null,
           categoryname,
         };
   
@@ -242,11 +233,7 @@ const ProductController = {
   //cập nhật sản phẩm
   updateProduct: async (req, res) => {
     try {
-      upload.fields([
-        { name: 'images', maxCount: 1 },
-        { name: 'images1', maxCount: 1 },
-        { name: 'images2', maxCount: 1 },
-      ])(req, res, async (err) => {
+      upload.single("images")(req, res, async (err) => {
         if (err instanceof multer.MulterError) {
           return res.status(500).json("Lỗi khi tải lên ảnh");
         } else if (err) {
@@ -285,10 +272,7 @@ const ProductController = {
           return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
         }
   
-        // Lấy tên các tệp ảnh từ req.files
-        const images = req.files['images'][0].filename;
-        const images1 = req.files['images1'][0].filename;
-        const images2 = req.files['images2'][0].filename;
+       ;
   
         // Tạo dữ liệu mới để cập nhật
         const updatedProductData = {
@@ -302,23 +286,24 @@ const ProductController = {
           count: parseInt(count),
           status,
           date: new Date(),
-          images: images || null,
-          images1: images1 || null,
-          images2: images2 || null,
           categoryname,
         };
   
-        // Cập nhật sản phẩm
+        if (req.file) {
+          updatedProductData.images = req.file.filename;
+        }
+  
+        // C?p nh?t s?n ph?m
         const updatedProduct = await prisma.product.update({
           where: {
             idproduct: productId,
           },
-          data: updatedProductData,
+          data: {
+            ...updatedProductData,
+            categoryname,
+          },
         });
-  
-        if (!updatedProduct) {
-          return res.status(404).json("Không tìm thấy sản phẩm");
-        }
+        console.log("?? ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:", updatedProduct)
   
         res.status(200).json("Cập nhật sản phẩm thành công");
       });
