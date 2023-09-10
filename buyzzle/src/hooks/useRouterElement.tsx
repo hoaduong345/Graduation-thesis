@@ -1,11 +1,15 @@
 import { useRoutes } from "react-router-dom"
 import MainLayout from "../layout/MainLayout"
-import Home from "../pages/home/HomePage"
-import ProductsPage from "../pages/home/ProductsPage";
-import FiltersPage from "../pages/home/FiltersPage";
+
 import Register from "../pages/register/Register";
 import RegisterLoginLayout from "../layout/RegisterLoginLayout";
 import Login from "../pages/login/Login";
+import AddproductsPage from "../pages/home/Admin/AddproductsPage";
+import ListproductsAdmin from "../pages/home/Admin/ListProduct/Listproducts";
+import Editproductspage from "../pages/home/Admin/Editproductspage";
+import HomePage from "../pages/home/User/HomePage";
+import ProductsPage from "../pages/home/User/ProductsPage";
+import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
 
 
 export default function useRouterEmelent() {
@@ -14,7 +18,7 @@ export default function useRouterEmelent() {
       path: "/",
       element: (
         <MainLayout>
-          <Home />
+          <HomePage />
         </MainLayout>
       ),
     },
@@ -34,6 +38,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
+   
     {
       path: "/register",
       element: (
@@ -50,6 +55,31 @@ export default function useRouterEmelent() {
           <Login />
         </RegisterLoginLayout>
 
+      ),
+    },
+    // AdminPages
+    {
+      path: "/AddProducts",
+      element: (
+        <MainLayout>
+          <AddproductsPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/Editproductspage",
+      element: (
+        <MainLayout>
+          <Editproductspage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/ListproductsAdmin",
+      element: (
+        <MainLayout>
+          <ListproductsAdmin />
+        </MainLayout>
       ),
     },
   ]);

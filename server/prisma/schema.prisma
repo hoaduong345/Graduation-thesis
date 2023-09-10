@@ -36,15 +36,15 @@ model Product {
   idproduct       Int      @id @default(autoincrement())
   name      String
   price      Int
-  rate       Int
-  pricesale  Int
-  discount   Int
-  soldcount  Int
+  rate       Int?
+  pricesale  Int?
+  discount   Int?
+  soldcount  Int?
   description String
   count        Int
-  status      String
+  status      String?
   date         DateTime @default(now())
-  images         String
+  images         String?
   categoryId    Int?
   category      Category?   @relation(fields: [categoryId], references: [idcategory])
 }
