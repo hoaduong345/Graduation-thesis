@@ -18,7 +18,9 @@ function Login() {
         setShowPassword(!showPassword);
     };
 
-    const { handleSubmit, register } = useForm();
+    const { handleSubmit, register, formState: { errors } } = useForm({
+
+    });
 
     const API = "http://localhost:5000/buyzzle/auth/login";
 
@@ -26,7 +28,7 @@ function Login() {
         try {
             console.log("checker", data);
             const response = await axios.post(API, data);
-            console.log("Đăng nhập thành công", data);
+            console.log('Đăng nhập thành công', data);
             window.location.href = "/";
         } catch (error) {
             console.error(error);
@@ -56,17 +58,22 @@ function Login() {
                     <form onSubmit={onSubmit} className="registration-form">
                         <h1 className=' login-a '>ĐĂNG NHẬP</h1>
                         <div className='mb-4'>
-                            <label htmlFor='username' className='login-a4 font-sans'>
+                            <label htmlFor='email' className='login-a4 font-sans'>
                                 Tên tài khoản
                             </label>
                             <input
                                 type="text"
-                                id="username"
-                                // value={formData.username}
+                                id="email"
+                                // value={formData.email}
                                 className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                 placeholder="Email / Số điện thoại / Tên đăng nhập"
-                                {...register("username")}
+                                {...register("email")}
                             />
+                            {/* {errors.email && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.email.message}
+                                </span>
+                            )} */}
                         </div>
                         <div className='mb-4'>
                             <label htmlFor='password' className='login-a4 font-sans'>
@@ -81,7 +88,11 @@ function Login() {
                                     placeholder="Mật khẩu"
                                     {...register("password")}
                                 />
-
+                                {/* {errors.password && (
+                                    <span className="text-red-500 text-xs">
+                                        {errors.password.message}
+                                    </span>
+                                )} */}
                                 <button
                                     type='button'
                                     className='absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500'
