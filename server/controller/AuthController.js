@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
+const { Console } = require("console");
 dotenv.config();
 
 let otpRequestAllowed = true;
@@ -78,7 +79,8 @@ const AuthController = {
       });
 
       const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
-      // await SendEmail(user.email, "Verify email", url);
+      await SendEmail(user.email, "Verify email", url);
+      console.log("🚀 ~ file: AuthController.js:83 ~ register: ~ url:", url);
       res
         .status(200)
         .send(
@@ -216,12 +218,6 @@ const AuthController = {
       if (!user) {
         return res.status(404).send("Email is not true");
       }
-      const token = await prisma.token.create({
-        data: {
-          userid: user.id,
-          token: crypto.randomBytes(32).toString("hex"),
-        },
-      });
 
       const forgot_password_token = AuthController.generateForgotPasswordToken(
         user.email
@@ -230,7 +226,7 @@ const AuthController = {
         where: { id: user.id },
         data: { forgotpassword_token: forgot_password_token },
       });
-      const url = `${process.env.BASE_URL}/auth/${user.id}/changepassword/${token.token}`;
+      const url = `${process.env.BASE_URL}/auth/forgot-password/${token.token}`;
       await SendEmail(user.email, "Forgot Password", url);
       res.cookie("email", user.email, {
         maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
@@ -314,26 +310,41 @@ const AuthController = {
   // VERIFY ACCOUNT WHEN REGISTER WITH EMAIL
   verify: async (req, res) => {
     try {
+      const userID = parseInt(req.params.id);
+      const tokenreq = req.params.token;
+
+      console.log(
+        "🚀 ~ file: AuthController.js:315 ~ verify: ~ tokenreq:",
+        tokenreq
+      );
       const user = await prisma.user.findUnique({
-        where: {
-          userId: user.id,
-          token: req.params.token,
-        },
+        where: { id: userID },
       });
+      console.log(
+        "🚀 ~ file: AuthController.js:320 ~ verify: ~ user:",
+        user.id
+      );
+
       if (!user) return res.status(400).send({ message: "invalid link" });
-      const reqtoken = req.params.token;
+
       const token = await prisma.token.findUnique({
         where: {
           userid: user.id,
-          token: reqtoken,
+          token: tokenreq,
         },
       });
+      if (!token) {
+        return res.status(400).send({ message: "Invalid token" });
+      }
       await prisma.user.update({
-        where: { id: user.id, verify: true },
+        where: { id: userID },
+        data: { verify: true },
       });
+
       await prisma.token.delete({
         where: {
-          id: token.tokenid,
+          userid: user.id,
+          token: req.params.token,
         },
       });
       res.status(200).send({ message: "Email verified successfully" });

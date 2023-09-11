@@ -16,7 +16,7 @@ router.post(
 );
 
 // VERIFY TOKEN
-router.get("/:id/verify/:token", AuthController.verify);
+router.post("/:id/verify/:token", AuthController.verify);
 // router.post("/changepassword/:id", MiddleWareController.verifyToken, AuthController.changePassword)
 
 //FORGOT-PASSWORD
