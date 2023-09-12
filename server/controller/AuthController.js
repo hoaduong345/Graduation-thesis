@@ -152,31 +152,35 @@ const AuthController = {
 
   // CHANGE PASSWORD
   changePassword: async (req, res) => {
-    console.log("aaaaaaaaa")
     try {
-      console.log("bbbbbbbbb")
       const token = req.params.token;
+
       const decoded = decode(token);
-       await prisma.user.update({
+      const salt = await bcrypt.genSalt(10);
+      if (!req.body.newPassword || !salt) {
+        throw new Error("Missing password or salt");
+      }
+      const hashed = await bcrypt.hash(req.body.newPassword, salt);
+      await prisma.user.update({
         where: {
           email: decoded.email,
         },
         data: {
-          password: req.body.newPassword,
+          password: hashed,
         },
       });
 
       await prisma.user.update({
-        where:{
-          email: decoded.email
+        where: {
+          email: decoded.email,
         },
-        data:{
-          forgotpassword_token: null
-        }
-      })
-      res.status(200).send("Change password successfully")
+        data: {
+          forgotpassword_token: null,
+        },
+      });
+      res.status(200).send("Change password successfully");
     } catch (error) {
-      res.status(500).send("Something when Wrong")
+      res.status(500).send("Something when Wrong");
     }
   },
 
@@ -220,15 +224,9 @@ const AuthController = {
   // CHANGE PASSWORD WITH OTP FROM EMAIL
   resetPassword: async (req, res) => {
     try {
-      const oldPassword = req.body.oldPassword
-      const newPassword = req.body.newPassword
-
-      
-
-    } catch (error) {
-      
-    }
-    
+      const oldPassword = req.body.oldPassword;
+      const newPassword = req.body.newPassword;
+    } catch (error) {}
   },
   // REQUEST REFRESH AND ACCESS TOKEN
   requestRefreshToken: async (req, res) => {
