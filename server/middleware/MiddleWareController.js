@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const decode = require("jwt-decode");
+
 const { PrismaClient } = require("@prisma/client");
+const { error } = require("console");
 
 const prisma = new PrismaClient();
 dotenv.config();
@@ -21,7 +24,7 @@ const MiddleWareController = {
       res.status(401).json("You are not authenticated");
     }
   },
-  loginvalidator: async (req, res, next) => {
+  loginvalidator : async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {

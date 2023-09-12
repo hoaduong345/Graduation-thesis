@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
-const { Console } = require("console");
+const decode = require("jwt-decode");
 dotenv.config();
 
 let otpRequestAllowed = true;
@@ -44,7 +44,7 @@ const AuthController = {
   generateForgotPasswordToken: (email) => {
     return jwt.sign(
       {
-        id: email.id,
+        email: email,
       },
       process.env.JWT_FORGOT_PASSWORD_TOKEN,
       { expiresIn: "15m" }
@@ -78,7 +78,7 @@ const AuthController = {
         },
       });
 
-      const url = `${process.env.BASE_URL}/auth/${user.id}/verify/${token.token}`;
+      const url = `${process.env.BASE_URL}/buyzzle/auth/${user.id}/verify/${token.token}`;
       await SendEmail(user.email, "Verify email", url);
       console.log("🚀 ~ file: AuthController.js:83 ~ register: ~ url:", url);
       res
@@ -121,7 +121,7 @@ const AuthController = {
 
           const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-          // await SendEmail(user.email, "Verify email", url);
+          await SendEmail(user.email, "Verify email", url);
         }
         return res.status(400).send({
           message: "An email has sent to your email, please check that",
@@ -151,62 +151,37 @@ const AuthController = {
   },
 
   // CHANGE PASSWORD
-  // changePassword: async (req, res) => {
-  //   console.log("aaaaaaaaa")
-  //  try {
-  //   const { id } = req.user;
-  //   const { new_password, password } = req.body;
+  changePassword: async (req, res) => {
+    console.log("aaaaaaaaa")
+    try {
+      console.log("bbbbbbbbb")
+      const token = req.params.token;
+      const decoded = decode(token);
+       await prisma.user.update({
+        where: {
+          email: decoded.email,
+        },
+        data: {
+          password: req.body.newPassword,
+        },
+      });
 
-  //   const user = await prisma.user.findUnique({
-  //     where: {
-  //       id: id,
-  //     },
-  //   });
-  //   console.log("🚀 ~ file: AuthController.js:145 ~ changePassword: ~ user:", user)
-
-  //   if (!user) {
-  //     return res.status(404).json({
-  //       msg: "User not found.",
-  //     });
-  //   }
-  //   const compareOldPwd = await bcrypt.compareSync(password, user.password);
-  //   console.log("🚀 ~ file: AuthController.js:153 ~ changePassword: ~ compareOldPwd:", compareOldPwd)
-
-  //   if (!compareOldPwd) {
-  //     return res.status(409).send({
-  //       msg: "old password is incorrect!",
-  //     });
-  //   }
-
-  //   const hashPassword = bcrypt.hashSync(new_password, SALT_ROUNDS);
-  //   const update_user = await prisma.user.update({
-  //     where: {
-  //       id: user.id,
-  //     },
-  //     data: {
-  //       password: hashPassword,
-  //     },
-  //   });
-  //   console.log("🚀 ~ file: AuthController.js:170 ~ changePassword: ~ update_user:", update_user)
-  //   if (!update_user) {
-  //     return res.status(400).json({
-  //       status: httpStatus.getStatus(400),
-  //       msg: "Reset password is failed!",
-  //     });
-  //   }
-
-  //   logger.debug("resetPassword - END");
-  //   return res.status(200).json({
-  //     status: httpStatus.getStatus(200),
-  //     msg: "Reset password is successful!",
-  //   });
-  //  } catch (error) {
-  //     res.status(500).json("Change password failed")
-  //  }
-  // },
+      await prisma.user.update({
+        where:{
+          email: decoded.email
+        },
+        data:{
+          forgotpassword_token: null
+        }
+      })
+      res.status(200).send("Change password successfully")
+    } catch (error) {
+      res.status(500).send("Something when Wrong")
+    }
+  },
 
   // SEND EMAIL TO FORGOT PASSWORD
-  sendEmailToTakeOTP: async (req, res) => {
+  fogotPassword: async (req, res) => {
     try {
       const reqemail = req.body.email;
       const user = await prisma.user.findUnique({
@@ -222,16 +197,21 @@ const AuthController = {
       const forgot_password_token = AuthController.generateForgotPasswordToken(
         user.email
       );
+      console.log(
+        "🚀 ~ file: AuthController.js:225 ~ fogotPassword: ~ forgot_password_token:",
+        forgot_password_token
+      );
       await prisma.user.update({
         where: { id: user.id },
         data: { forgotpassword_token: forgot_password_token },
       });
-      const url = `${process.env.BASE_URL}/auth/forgot-password/${token.token}`;
-      await SendEmail(user.email, "Forgot Password", url);
+      const url = `${process.env.BASE_URL}/buyzzle/auth/forgot-password/${user.forgotpassword_token}`;
+      // await SendEmail(user.email, "Forgot Password", url);
+
       res.cookie("email", user.email, {
         maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
       });
-      res.status(200).send("OTP is sending to your email");
+      res.status(200).send("A Link has sent to your email");
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal server error");
@@ -240,40 +220,15 @@ const AuthController = {
   // CHANGE PASSWORD WITH OTP FROM EMAIL
   resetPassword: async (req, res) => {
     try {
-      if (receivedOtp !== otpFromCookie) {
-        return res.status(401).send("Incorrect OTP");
-      }
-      const storedEmail = req.cookies.email; // Retrieve the stored email from cookies
+      const oldPassword = req.body.oldPassword
+      const newPassword = req.body.newPassword
 
-      if (!storedEmail) {
-        return res.status(400).send("Email not found in cookies");
-      }
+      
 
-      const user = await prisma.user.findUnique({
-        where: {
-          email: storedEmail,
-        },
-      });
-
-      if (!user) {
-        return res.status(404).send("User not found");
-      }
-      // Proceed with the password reset logic since OTP is verified
-
-      // Your password reset logic here
-      await prisma.user.update({
-        where: {
-          password: reqpassword,
-        },
-      });
-      // Clear the OTP cookie after it's been used
-      res.clearCookie("otp");
-      res.clearCookie("email");
-      res.status(200).send("Password reset successful");
     } catch (error) {
-      console.log("Error:", error);
-      res.status(500).send("Internal server error");
+      
     }
+    
   },
   // REQUEST REFRESH AND ACCESS TOKEN
   requestRefreshToken: async (req, res) => {
@@ -291,39 +246,15 @@ const AuthController = {
     res.status(200).json({ accessToken: newAccesstoken });
   },
 
-  // VERIFY OTP WHEN CHANGING PASSWORD
-  verifyOTP: async (req, res) => {
-    try {
-      const receivedOtp = req.body.otp;
-      if (!receivedOtp) {
-        return res.status(400).send("OTP is required in the request body");
-      }
-      const otpFromCookie = req.cookies.otp;
-      if (receivedOtp != otpFromCookie) {
-        return res.status(404).send("OTP is invalid");
-      }
-    } catch (error) {
-      res.status(404).json("Error", error);
-    }
-  },
-
   // VERIFY ACCOUNT WHEN REGISTER WITH EMAIL
   verify: async (req, res) => {
     try {
       const userID = parseInt(req.params.id);
       const tokenreq = req.params.token;
 
-      console.log(
-        "🚀 ~ file: AuthController.js:315 ~ verify: ~ tokenreq:",
-        tokenreq
-      );
       const user = await prisma.user.findUnique({
         where: { id: userID },
       });
-      console.log(
-        "🚀 ~ file: AuthController.js:320 ~ verify: ~ user:",
-        user.id
-      );
 
       if (!user) return res.status(400).send({ message: "invalid link" });
 
