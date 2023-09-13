@@ -8,7 +8,9 @@ import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
+import { ref, uploadBytes } from 'firebase/storage'
 import { v4 } from 'uuid'
+import { normalize } from 'path'
 
 export type FormValues = {
     productName: string;
@@ -19,8 +21,9 @@ export type FormValues = {
 }
 
 export default function Addproducts() {
-    const [img, setImg] = useState('')
-    
+    const [images, setImages] = useState('')
+    const [url, setUrl] = useState('')
+
     // Tạo fuction handle thêm sản phẩm.
     const handleAddproduct = (data: FormValues) => {
         // console.log(data)
@@ -54,23 +57,53 @@ export default function Addproducts() {
             productName: '',
             productDesc: '',
             productImage: '',
-            productPrice: 0,
-            productQuantity: 0
+            productPrice: 1,
+            productQuantity: 1
         },
 
     });
 
-    const loadImages = async (img: any, data: FormValues) => {
-        storage.ref(`/files/` + img.name).put(img)
-            .on("state_changed", () => {
-                storage.ref(`files`).child(img.name).getDownloadURL()
-                    .then((url) => {
-                        setImg(url)
-                        data.productImage = url
-                        return url
-                    })
+    // const loadImages = async (img: any, data: FormValues) => {
+    //     storage.ref(`/files/` + img.name).put(img)
+    //         .on("state_changed", () => {
+    //             storage.ref(`files`).child(img.name).getDownloadURL()
+    //                 .then((url) => {
+    //                     setImg(url)
+    //                     data.productImage = url
+    //                     return url
+    //                 })
+    //         })
+    // }
+
+
+    useEffect(() => {
+
+        loadImageFile(images)
+    
+      }, [images])
+    
+    
+      // img firebase
+      const loadImageFile = async (images: any) => {
+        for (let i = 0; i < images.length; i++) {
+          const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
+    
+          await uploadBytes(imageRef, images[i])
+            .then(() => {
+              storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
+                .then((url: any) => {
+                  setUrl((prev) => (prev.concat(url)));
+                //   data.productImage = (url)
+                  return url
+                })
             })
-    }
+            .catch(err => {
+              alert(err)
+            })
+    
+        }
+    
+      }
 
 
     const isDisabled = !(isValid && isDirty)
@@ -216,7 +249,8 @@ export default function Addproducts() {
                                                         <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
 
                                                             <input type="file"
-                                                                onChange={(e: any) => setImg(e.target.files[0])}
+                                                            // onChange={field.onChange}
+                                                                onChange={(e: any) => setImages(e.target.files)}
                                                                 id='images' multiple className='hidden ' />
                                                             <UploadIMG />
                                                             <div id="images" className='text-center mt-2'>
@@ -228,8 +262,9 @@ export default function Addproducts() {
                                                 </form>{/* end form upload img */}
                                                 <div className='justify-center flex flex-1'>
                                                     <div className='inline-grid grid-cols-3 gap-4'>
+                                                        
                                                         <div>
-                                                            <img src={Images.imageproduct6} alt="imageproduct6" width={80} height={80} className='rounded-md' />
+                                                            <img src={url} alt="imageproduct6" width={80} height={80} className='rounded-md' />
                                                         </div>
 
                                                         <div>
@@ -287,7 +322,7 @@ export default function Addproducts() {
                                                         <input
                                                             className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
                                                             placeholder="000.000"
-                                                            // value={field.value}
+                                                            value={field.value}
                                                             onChange={(e) => {
                                                                 const reg = /[^1-9]/g
                                                                 const value = e.target.value
