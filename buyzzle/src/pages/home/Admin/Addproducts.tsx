@@ -22,7 +22,7 @@ export type FormValues = {
 
 export default function Addproducts() {
     const [images, setImages] = useState('')
-    const [url, setUrl] = useState('')
+    const [url, setUrl] = useState<string[]>([])
 
     // Tạo fuction handle thêm sản phẩm.
     const handleAddproduct = (data: FormValues) => {
@@ -63,18 +63,10 @@ export default function Addproducts() {
 
     });
 
-    // const loadImages = async (img: any, data: FormValues) => {
-    //     storage.ref(`/files/` + img.name).put(img)
-    //         .on("state_changed", () => {
-    //             storage.ref(`files`).child(img.name).getDownloadURL()
-    //                 .then((url) => {
-    //                     setImg(url)
-    //                     data.productImage = url
-    //                     return url
-    //                 })
-    //         })
-    // }
 
+    useEffect( () => {
+        fetch('')
+    }, [])
 
     useEffect(() => {
 
@@ -263,29 +255,14 @@ export default function Addproducts() {
                                                 <div className='justify-center flex flex-1'>
                                                     <div className='inline-grid grid-cols-3 gap-4'>
                                                         
-                                                        <div>
-                                                            <img src={url} alt="imageproduct6" width={80} height={80} className='rounded-md' />
-                                                        </div>
+                                                    {
+                                                        url.map(e => {
+                                                            return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
+                                                        })
+                                                    }
+                                                        
 
-                                                        <div>
-                                                            <img src={Images.imageproduct5} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
-
-                                                        <div>
-                                                            <img src={Images.imageproduct4} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
-
-                                                        <div>
-                                                            <img src={Images.imageproduct3} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
-
-                                                        <div>
-                                                            <img src={Images.imageproduct2} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
-
-                                                        <div>
-                                                            <img src={Images.imageproduct1} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
+                                                
 
                                                     </div>
                                                 </div>
