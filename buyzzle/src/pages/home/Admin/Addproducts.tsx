@@ -20,6 +20,11 @@ export type FormValues = {
     productImage: string;
 }
 
+export interface Cate {
+    name: string,
+    idcategory: number
+}
+
 export default function Addproducts() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
@@ -64,38 +69,48 @@ export default function Addproducts() {
     });
 
 
-    useEffect( () => {
-        fetch('')
+    const [categoty, setCategory] = useState<Cate[]>([])
+    useEffect(() => {
+        getCategory()
     }, [])
 
-    useEffect(() => {
+    const getCategory = () => {
+        axios.get('http://localhost:5000/buyzzle/product/allcategory')
+            .then(response => response.data
+            )
+            .then(data => {
+                console.log(data)
+                setCategory(data)
+            })
+            .catch(err => console.log(err))
+    }
 
+    useEffect(() => {
         loadImageFile(images)
-    
-      }, [images])
-    
-    
-      // img firebase
-      const loadImageFile = async (images: any) => {
+    }, [images])
+
+
+    // img firebase
+    const loadImageFile = async (images: any) => {
         for (let i = 0; i < images.length; i++) {
-          const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
-    
-          await uploadBytes(imageRef, images[i])
-            .then(() => {
-              storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
-                .then((url: any) => {
-                  setUrl((prev) => (prev.concat(url)));
-                //   data.productImage = (url)
-                  return url
+            const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
+
+            await uploadBytes(imageRef, images[i])
+                .then(() => {
+                    storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
+                        .then((url: any) => {
+                            setUrl((prev) => (prev.concat(url)));
+                            //   data.productImage = (url)
+                            return url
+                        })
                 })
-            })
-            .catch(err => {
-              alert(err)
-            })
-    
+                .catch(err => {
+                    alert(err)
+                })
+
         }
-    
-      }
+
+    }
 
 
     const isDisabled = !(isValid && isDirty)
@@ -202,13 +217,19 @@ export default function Addproducts() {
                                         {/* Dropdown */}
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                             <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
-                                                <option>Thiết bị điện da dụng</option>
+
+                                                {
+                                                    categoty.map(e => {
+                                                        return <option value={e.idcategory}>{e.name}</option>
+                                                    })
+                                                }
+                                                {/* <option>Thiết bị điện da dụng</option>
                                                 <option>Giày dép da</option>
                                                 <option>Máy ảnh</option>
                                                 <option>Thời trang nam</option>
                                                 <option>Thiết bị điện tử</option>
                                                 <option>Nhà cửa đời sống</option>
-                                                <option>Sắc đẹp</option>
+                                                <option>Sắc đẹp</option> */}
                                             </select>
                                         </div>
                                         {/* end input addNameProducts */}
@@ -241,7 +262,7 @@ export default function Addproducts() {
                                                         <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
 
                                                             <input type="file"
-                                                            // onChange={field.onChange}
+                                                                // onChange={field.onChange}
                                                                 onChange={(e: any) => setImages(e.target.files)}
                                                                 id='images' multiple className='hidden ' />
                                                             <UploadIMG />
@@ -254,15 +275,15 @@ export default function Addproducts() {
                                                 </form>{/* end form upload img */}
                                                 <div className='justify-center flex flex-1'>
                                                     <div className='inline-grid grid-cols-3 gap-4'>
-                                                        
-                                                    {
-                                                        url.map(e => {
-                                                            return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
-                                                        })
-                                                    }
-                                                        
 
-                                                
+                                                        {
+                                                            url.map(e => {
+                                                                return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
+                                                            })
+                                                        }
+
+
+
 
                                                     </div>
                                                 </div>
