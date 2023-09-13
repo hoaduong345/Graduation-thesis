@@ -55,5 +55,14 @@ export const Images = {
   adidas: "../src/Assets/PNG/adidas.png",
   thuongHieu1: "../src/Assets/PNG/thuongHieu1.png",
   hot: "../src/Assets/PNG/hot.png",
+  picture: "../src/Assets/PNG/picture.png",
+  avatar_admin: "../../../src/pages/home/Admin/Assets/Images/avatar.png" ,
+  imageproduct: "../../../src/pages/home/Admin/Assets/Images/imageproduct.png" ,
+  imageproduct1: "../../../src/pages/home/Admin/Assets/Images/imageproduct1.png" ,
+  imageproduct2: "../../../src/pages/home/Admin/Assets/Images/imageproduct2.png" ,
+  imageproduct3: "../../../src/pages/home/Admin/Assets/Images/imageproduct3.png" ,
+  imageproduct4: "../../../src/pages/home/Admin/Assets/Images/imageproduct4.png" ,
+  imageproduct5: "../../../src/pages/home/Admin/Assets/Images/imageproduct5.png" ,
+  imageproduct6: "../../../src/pages/home/Admin/Assets/Images/imageproduct6.png" ,
 };
 

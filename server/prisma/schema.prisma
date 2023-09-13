@@ -36,24 +36,22 @@ model Product {
   idproduct       Int      @id @default(autoincrement())
   name      String
   price      Int
-  rate       Int
-  pricesale  Int
-  discount   Int
-  soldcount  Int
+  rate       Int?
+  pricesale  Int?
+  discount   Int?
+  soldcount  Int?
   description String
   count        Int
-  status      String
+  status      String?
   date         DateTime @default(now())
-  images       String
-  images1      String
-  images2      String
-  categoryname    String?
-  category      Category?   @relation(fields: [categoryname], references: [name])
+  images         String?
+  categoryId    Int?
+  category      Category?   @relation(fields: [categoryId], references: [idcategory])
 }
 
 model Category {
   idcategory    Int         @id @default(autoincrement())
-  name   String @unique
+  name   String
   date   DateTime    @default(now())
   products     Product[]   
 }

@@ -1,4 +1,4 @@
-import { Products } from "../../pages/home/FiltersPage";
+import { Products } from "../../pages/home/FilterPage/FiltersPage";
 
 export const getCartFromLocal = () => {
   const localProduct = localStorage.getItem("listProductsLocal");
