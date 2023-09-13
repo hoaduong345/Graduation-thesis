@@ -44,8 +44,7 @@ model Product {
   status      String
   date         DateTime @default(now())
   images       String
-  // images1      String
-  // images2      String
+  images_list  String
   categoryname    String?
   category      Category?   @relation(fields: [categoryname], references: [name])
 }

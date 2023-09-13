@@ -39,6 +39,7 @@ CREATE TABLE `Product` (
     `status` VARCHAR(191) NOT NULL,
     `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `images` VARCHAR(191) NOT NULL,
+    `images_list` VARCHAR(191) NOT NULL,
     `categoryname` VARCHAR(191) NULL,
 
     PRIMARY KEY (`idproduct`)

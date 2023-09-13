@@ -135,12 +135,12 @@ const ProductController = {
   // thêm sản phẩm
   addProduct: async (req, res) => {
     try {
-      upload.single("images")(req, res, async (err) => {
-        if (err instanceof multer.MulterError) {
-          return res.status(500).json("Lỗi khi tải lên ảnh");
-        } else if (err) {
-          return res.status(500).json("Đã có lỗi xảy ra");
-        }
+      // upload.single("images")(req, res, async (err) => {
+      //   if (err instanceof multer.MulterError) {
+      //     return res.status(500).json("Lỗi khi tải lên ảnh");
+      //   } else if (err) {
+      //     return res.status(500).json("Đã có lỗi xảy ra");
+      //   }
   
         const {
           name,
@@ -153,6 +153,7 @@ const ProductController = {
           count,
           status,
           date,
+          images,
           categoryname,
         } = req.body;
   
@@ -186,7 +187,8 @@ const ProductController = {
           count: parseInt(count),
           status,
           date: new Date(),
-          images: req.file ? req.file.filename : null,
+          // images: req.file ? req.file.filename : null,
+          images : images,
           categoryname,
         };
   
@@ -195,7 +197,7 @@ const ProductController = {
         });
   
         res.status(200).json("Thêm sản phẩm thành công");
-      });
+      // });
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
@@ -233,12 +235,12 @@ const ProductController = {
   //cập nhật sản phẩm
   updateProduct: async (req, res) => {
     try {
-      upload.single("images")(req, res, async (err) => {
-        if (err instanceof multer.MulterError) {
-          return res.status(500).json("Lỗi khi tải lên ảnh");
-        } else if (err) {
-          return res.status(500).json("Đã có lỗi xảy ra");
-        }
+      // upload.single("images")(req, res, async (err) => {
+      //   if (err instanceof multer.MulterError) {
+      //     return res.status(500).json("Lỗi khi tải lên ảnh");
+      //   } else if (err) {
+      //     return res.status(500).json("Đã có lỗi xảy ra");
+      //   }
   
         const productId = parseInt(req.params.id);
   
@@ -252,6 +254,7 @@ const ProductController = {
           description,
           count,
           status,
+          images,
           categoryname,
         } = req.body;
   
@@ -286,12 +289,13 @@ const ProductController = {
           count: parseInt(count),
           status,
           date: new Date(),
+          images : images,
           categoryname,
         };
   
-        if (req.file) {
-          updatedProductData.images = req.file.filename;
-        }
+        // if (req.file) {
+        //   updatedProductData.images = req.file.filename;
+        // }
   
         // C?p nh?t s?n ph?m
         const updatedProduct = await prisma.product.update({
@@ -306,7 +310,7 @@ const ProductController = {
         console.log("?? ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:", updatedProduct)
   
         res.status(200).json("Cập nhật sản phẩm thành công");
-      });
+      // });
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
