@@ -37,8 +37,10 @@ export default function Addproducts() {
             price: data.productPrice,
             description: data.productDesc,
             count: data.productQuantity,
-            images: data.productImage,
+            images: JSON.stringify([...url]),
+             
         }
+
         console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
 
         axios.post("http://localhost:5000/buyzzle/product/addproduct", _data)
@@ -100,7 +102,6 @@ export default function Addproducts() {
                     storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
                         .then((url: any) => {
                             setUrl((prev) => (prev.concat(url)));
-                            //   data.productImage = (url)
                             return url
                         })
                 })
