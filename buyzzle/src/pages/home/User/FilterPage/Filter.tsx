@@ -7,24 +7,22 @@ type Props = {
 };
 const Filter = (props: Props) => {
   const { product } = props
+  console.log("🚀 ~ file: Filter.tsx:10 ~ Filter ~ product:", product)
   return (
-    <Link to='/ListproductsAdmin' >
+    <Link to={`/Detailproducts/${product.idproduct}`} >
       <div
         className="max-w-[210px] flex-col cursor-pointer
        hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]
-       "
-      >
-
+       max-xl:max-w-[180px]">
         <div className="relative figure">
-          <img className="object-fill " src={product.images} alt="" />
+          <img className="h-[207px] w-[100%]" src={product.images} alt="" />
           <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
             Giảm 50%
           </p>
         </div>
 
         <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-          <p className="font-bold text-[16px] max-xl:text-[15px] ">{product.name}</p>
+          <p className="font-bold text-[16px] max-xl:text-[15px] break-words">{product.name}</p>
 
           <button>
             <img src={Images.star1} alt="" />

@@ -27,7 +27,4 @@ router.delete("/deletecategory/:id", ProductController.deleteCategory);
 
 router.put("/updatecategory/:id", ProductController.updateCategory);
 
-
-
-
 module.exports = router;

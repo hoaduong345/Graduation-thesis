@@ -151,7 +151,6 @@ export default function AddproductsPage() {
                             {/* form input addNameProducts  */}
                             <div className='cls-nameProducts w-[40%]'>
                                 <p className='text-[#4C4C4C] text-sm font-medium mb-[8px]'>Loại Sản Phẩm</p>
-
                                 {/* Dropdown */}
                                 <div className="relative w-[100%] lg:max-w-sm flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                     <select className="w-[92%] p-2.5 text-gray-500 flex items-center bg-white py-[14px]  outline-none appearance-none focus:border-indigo-600">
@@ -203,7 +202,7 @@ export default function AddproductsPage() {
                                     <input className="block w-full text-sm text-gray-900  
                                 cursor-pointer " id="multiple_files" type="file" multiple
                                         name='images'
-                                        // onChange={(e: any) => setImages(e.target.files[0])}
+                                        // onChange={(e: any) => setImages(e.target.files[0])}  
                                     />
                                 </div>
                                 {/* ẢNH SẢN PHẨM HIỆN Ở ĐÂY */}

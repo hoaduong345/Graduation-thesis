@@ -6,10 +6,12 @@ import RegisterLoginLayout from "../layout/RegisterLoginLayout";
 import Login from "../pages/login/Login";
 import AddproductsPage from "../pages/home/Admin/AddproductsPage";
 import ListproductsAdmin from "../pages/home/Admin/ListProduct/Listproducts";
-import Editproductspage from "../pages/home/Admin/Editproductspage";
 import HomePage from "../pages/home/User/HomePage";
 import ProductsPage from "../pages/home/User/ProductsPage";
 import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
+import Addproducts from "../pages/home/Admin/Addproducts";
+import Editproducts from "../pages/home/Admin/Editproducts";
+import Detailproducts from "../pages/home/Admin/Detailproducts";
 
 
 export default function useRouterEmelent() {
@@ -59,10 +61,10 @@ export default function useRouterEmelent() {
     },
     // AdminPages
     {
-      path: "/AddProducts",
+      path: "/Addproductspage",
       element: (
         <MainLayout>
-          <AddproductsPage />
+          <Addproducts />
         </MainLayout>
       ),
     },
@@ -70,7 +72,7 @@ export default function useRouterEmelent() {
       path: "/Editproductspage",
       element: (
         <MainLayout>
-          <Editproductspage />
+          <Editproducts />
         </MainLayout>
       ),
     },
@@ -79,6 +81,15 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <ListproductsAdmin />
+        </MainLayout>
+      ),
+    },
+
+    {
+      path: "/Detailproducts/:id",
+      element: (
+        <MainLayout>
+          <Detailproducts />
         </MainLayout>
       ),
     },
