@@ -36,8 +36,8 @@ model Product {
   name      String
   price      Int
   rate       Int
-  sale  Int
-  saleprice Int 
+  pricesale  Int
+  sellingPrice Int
   discount   Int
   soldcount  Int
   description String
