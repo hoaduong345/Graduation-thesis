@@ -56,10 +56,10 @@ model Product {
   quantity     Int?
   description  String?
   status       String?
-  date         DateTime       @default(now())
+  date         DateTime?      @default(now())
   images       String?
   imagesList   String?
-  productId    Int
+  productId    Int?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
   categoryID   Int
