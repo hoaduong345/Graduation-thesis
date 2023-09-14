@@ -37,7 +37,7 @@ export default function Addproducts() {
             name: data.productName,
             price: data.productPrice,
             description: data.productDesc,
-            count: data.productQuantity,
+            quantity: data.productQuantity,
             images: JSON.stringify([...url]),
             discount: data.productDiscount
         }
