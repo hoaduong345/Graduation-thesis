@@ -25,7 +25,7 @@ const AuthController = {
   genereateAccessToken: (email) => {
     return jwt.sign(
       {
-        id: email.id,
+        email: email,
       },
       process.env.SECRECT_KEY,
       { expiresIn: "1h" }
@@ -99,7 +99,7 @@ const AuthController = {
       const user = await prisma.user.findUnique({
         where: { email: reqemail },
       });
-      console.log("user email", user.email);
+
       if (!user.email) {
         return res.status(404).json("wrong email");
       }
@@ -131,18 +131,28 @@ const AuthController = {
       if (user.email && validPassword) {
         const accessToken = AuthController.genereateAccessToken(user.email);
         const refreshToken = AuthController.genereateRefreshToken(user.email);
-        // Save refresh token to the user's record in the database
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { refresh_token: refreshToken },
-        });
+        if (!user.refresh_token) {
+          // Save refresh token to the user's record in the database
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { refresh_token: refreshToken },
+          });
+        }
+
         res.cookie("refreshToken", refreshToken, {
           httpOnlyCookie: true,
           secure: false,
           path: "/",
           sameSite: "strict",
         });
+        res.cookie("accessToken", accessToken, {
+          httpOnlyCookie: true,
+          secure: false,
+          path: "/",
+          sameSite: "strict",
+        });
         const { password, ...others } = user;
+        console.log("Login successfully");
         return res.status(200).json({ ...others, accessToken });
       }
     } catch (error) {
@@ -150,8 +160,9 @@ const AuthController = {
     }
   },
 
-  // CHANGE PASSWORD
-  changePassword: async (req, res) => {
+  // RESET PASSWORD
+
+  resetPassword: async (req, res) => {
     try {
       const token = req.params.token;
 
@@ -193,18 +204,18 @@ const AuthController = {
           email: reqemail,
         },
       });
-
       if (!user) {
         return res.status(404).send("Email is not true");
       }
-
+      if (user.verify == false) {
+        return res
+          .status(400)
+          .send("You are not verify account, please check your Email");
+      }
       const forgot_password_token = AuthController.generateForgotPasswordToken(
         user.email
       );
-      console.log(
-        "🚀 ~ file: AuthController.js:225 ~ fogotPassword: ~ forgot_password_token:",
-        forgot_password_token
-      );
+
       await prisma.user.update({
         where: { id: user.id },
         data: { forgotpassword_token: forgot_password_token },
@@ -212,22 +223,13 @@ const AuthController = {
       const url = `${process.env.BASE_URL}/buyzzle/auth/forgot-password/${user.forgotpassword_token}`;
       // await SendEmail(user.email, "Forgot Password", url);
 
-      res.cookie("email", user.email, {
-        maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
-      });
       res.status(200).send("A Link has sent to your email");
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal server error");
     }
   },
-  // CHANGE PASSWORD WITH OTP FROM EMAIL
-  resetPassword: async (req, res) => {
-    try {
-      const oldPassword = req.body.oldPassword;
-      const newPassword = req.body.newPassword;
-    } catch (error) {}
-  },
+
   // REQUEST REFRESH AND ACCESS TOKEN
   requestRefreshToken: async (req, res) => {
     // take refresh token from user
@@ -280,6 +282,91 @@ const AuthController = {
     } catch (error) {
       console.log(error);
       res.status(500).send({ message: "Internal server error" });
+    }
+  },
+  //CHANGE PASSWORD
+  changePassword: async (req, res) => {
+    try {
+      const accessToken = req.cookies.accessToken;
+      const token = decode(accessToken);
+
+      const user = await prisma.user.findUnique({
+        where: {
+          email: token.email,
+        },
+      });
+      const isValidPassword = await bcrypt.compare(
+        req.body.oldPassword,
+        user.password
+      );
+
+      if (!isValidPassword) {
+        return res.status(404).send("Old Password is not valid");
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      if (!req.body.newPassword || !salt) {
+        throw new Error("Missing password or salt");
+      }
+      const hashed = await bcrypt.hash(req.body.newPassword, salt);
+
+      await prisma.user.update({
+        where: {
+          email: token.email,
+        },
+        data: {
+          password: hashed,
+        },
+      });
+      const refreshTokenPayload = {
+        email: token.email,
+      };
+      const newRefreshToken = jwt.sign(
+        refreshTokenPayload,
+        process.env.JWT_REFRESH_TOKEN,
+        {
+          expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token
+        }
+      );
+      console.log(
+        "🚀 ~ file: AuthController.js:324 ~ changePassword: ~ newRefreshToken:",
+        newRefreshToken
+      );
+      await prisma.user.update({
+        where: {
+          email: token.email,
+        },
+        data: {
+          password: hashed,
+          refreshToken: newRefreshToken,
+        },
+      });
+      res.status(200).send("Change Password Successfully");
+    } catch (error) {
+      res.status(404).send("Change Password Failed");
+    }
+  },
+  // LOG OUT
+  logout: async (req, res) => {
+    try {
+      const accessToken = req.cookies.accessToken;
+      const token = decode(accessToken);
+
+      const user = await prisma.user.update({
+        where: {
+          email: token.email,
+        },
+        data: {
+          refresh_token: null,
+        },
+      });
+      console.log("user", user);
+      res.clearCookie("refreshToken");
+      res.clearCookie("accessToken");
+      // localStorage.clear();
+      res.status(200).send("Logged out successfully");
+    } catch (error) {
+      res.status(500).send("Logout failed");
     }
   },
 };

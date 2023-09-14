@@ -83,8 +83,6 @@ const createVali = async (req, res, next) => {
 const FogotPasswordValid = async (req, res, next) => {
   const { newPassword, confirmNewPassword } = req.body;
   const error = {};
-  console.log("🚀 ~ file: auth.middleware.js:85 ~ FogotPasswordValid ~ newPassword:", newPassword)
-  console.log("🚀 ~ file: auth.middleware.js:85 ~ FogotPasswordValid ~ confirmNewPassword:", confirmNewPassword)
   if (!newPassword) {
     error.newPassword = "password_require";
   } else if (!validator.isLength(newPassword, { min: 6, max: 20 })) {
@@ -104,7 +102,37 @@ const FogotPasswordValid = async (req, res, next) => {
   next();
 };
 
+const ResetPasswordValid = async (req, res, next) => {
+  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+  const error = {};
+  if (!oldPassword) {
+    error.newPassword = "password_require";
+  } else if (!validator.isLength(oldPassword, { min: 6, max: 20 })) {
+    error.newPassword = "password_length";
+  }
+
+  if (!newPassword) {
+    error.newPassword = "password_require";
+  } else if (!validator.isLength(newPassword, { min: 6, max: 20 })) {
+    error.newPassword = "password_length";
+  }
+
+  if (!confirmNewPassword) {
+    error.confirmNewPassword = "confirm_password_require";
+  } else if (!validator.equals(newPassword, confirmNewPassword)) {
+    error.confirmNewPassword = "confirm_password_must_match";
+  }
+
+  if (Object.keys(error).length > 0) {
+    return res.status(400).json({ error });
+  }
+  req.oldPassword = oldPassword.trim();
+  req.newPassword = newPassword.trim();
+
+  next();
+};
 module.exports = {
   createVali,
-  FogotPasswordValid
+  ResetPasswordValid,
+  FogotPasswordValid,
 };
