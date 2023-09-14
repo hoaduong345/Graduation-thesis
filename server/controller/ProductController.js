@@ -152,7 +152,6 @@ const ProductController = {
           discount,
           quantity,
           description,
-          count,
           status,
           date,
           images,
@@ -169,9 +168,6 @@ const ProductController = {
         }
         if (parseInt(price) <= 0) {
           return res.status(400).json("Giá sản phẩm phải lớn hơn 0");
-        }
-        if (parseInt(count) <= 0) {
-          return res.status(400).json("Số lượng sản phẩm phải lớn hơn 0");
         }
         if (parseInt(pricesale) <= 0) {
           return res.status(400).json("Sản phẩm Sale phải lớn hơn 0");
@@ -191,7 +187,6 @@ const ProductController = {
           discount: parseInt(discount),
           quantity: parseInt(quantity),
           description,
-          count: parseInt(count),
           status,
           date: new Date(),
           createdAt: new Date(),
@@ -263,7 +258,6 @@ const ProductController = {
           discount,
           quantity,
           description,
-          count,
           status,
           date,
           images,
@@ -280,10 +274,7 @@ const ProductController = {
         }
         if (parseInt(price) <= 0) {
           return res.status(400).json("Giá sản phẩm phải lớn hơn 0");
-        }
-        if (parseInt(count) <= 0) {
-          return res.status(400).json("Số lượng sản phẩm phải lớn hơn 0");
-        }
+        }     
         if (parseInt(pricesale) <= 0) {
           return res.status(400).json("Sản phẩm Sale phải lớn hơn 0");
         }
@@ -303,7 +294,6 @@ const ProductController = {
           discount: parseInt(discount),
           quantity: parseInt(quantity),
           description,
-          count: parseInt(count),
           status,
           date: new Date(),
           createdAt: new Date(),

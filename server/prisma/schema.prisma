@@ -55,7 +55,6 @@ model Product {
   discount     Int?
   quantity     Int?
   description  String?
-  count        Int?
   status       String?
   date         DateTime       @default(now())
   images       String?
@@ -67,6 +66,7 @@ model Product {
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
   ProductImage ProductImage[]
+
 }
 
 model Category {
@@ -83,7 +83,11 @@ model ProductImage {
   url             String
   idproduct       Int
   fK_pruductImage Product? @relation(fields: [idproduct], references: [id])
+
 }
+
+
+
 
 model Order {
   id          Int           @id @default(autoincrement())
@@ -117,4 +121,6 @@ model discount {
   quatity    Int
   limit_code Int
 }
+
+
 
