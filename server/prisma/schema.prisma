@@ -59,14 +59,35 @@ model Product {
   date         DateTime       @default(now())
   images       String?
   imagesList   String?
-  //productId    Int
+  productId    Int
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
   categoryID   Int
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
   ProductImage ProductImage[]
+
 }
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  date      DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  createdAt DateTime  @default(now())
+  products  Product[]
+}
+
+model ProductImage {
+  id              Int      @id @default(autoincrement())
+  url             String
+  idproduct       Int
+  fK_pruductImage Product? @relation(fields: [idproduct], references: [id])
+
+}
+
+
+
 
 model Order {
   id          Int           @id @default(autoincrement())
@@ -101,18 +122,5 @@ model discount {
   limit_code Int
 }
 
-model Category {
-  id        Int       @id @default(autoincrement())
-  name      String
-  date      DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  createdAt DateTime  @default(now())
-  products  Product[]
-}
 
-model ProductImage {
-  id              Int      @id @default(autoincrement())
-  url             String
-  idproduct       Int
-  fK_pruductImage Product? @relation(fields: [idproduct], references: [id])
-}
+
