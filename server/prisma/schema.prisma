@@ -39,23 +39,35 @@ model Product {
   price      Int
   rate       Int
   pricesale  Int
+  sellingPrice Int
   discount   Int
   soldcount  Int
   description String
   count        Int
   status      String
   date         DateTime @default(now())
-  images         String
-  categoryId    Int?
-  category      Category?   @relation(fields: [categoryId], references: [idcategory])
+  images       String
+  images_list  String
+  idproductimage  Int?
+  productimage ProductImage?  @relation(fields: [idproductimage], references: [idproduct])
+  categoryname    String?
+  category      Category?   @relation(fields: [categoryname], references: [name])
 }
 
 model Category {
   idcategory    Int         @id @default(autoincrement())
-  name   String
+  name   String @unique
   date   DateTime    @default(now())
   products     Product[]   
 }
+
+model ProductImage {
+  id   Int         @id @default(autoincrement())
+  url   String @unique
+  idproduct Int @unique
+  products  Product[]
+}
+
 
 
 
