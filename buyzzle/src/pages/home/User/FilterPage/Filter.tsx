@@ -23,7 +23,7 @@ const Filter = (props: Props) => {
   console.log(images.map((item) => console.log(item)))
 
   return (
-    <Link to={`/Detailproducts/${product.idproduct}`} >
+    <Link to={`/Detailproducts/${product.id}`} >
       <div
         className="max-w-[210px] flex-col cursor-pointer
        hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
