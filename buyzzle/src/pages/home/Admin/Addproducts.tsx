@@ -18,6 +18,7 @@ export type FormValues = {
     productDesc: string;
     productQuantity: number;
     productImage: string;
+    productDiscount: number;
 }
 
 export interface Cate {
@@ -38,7 +39,7 @@ export default function Addproducts() {
             description: data.productDesc,
             count: data.productQuantity,
             images: JSON.stringify([...url]),
-             
+            discount: data.productDiscount
         }
 
         console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
@@ -65,7 +66,8 @@ export default function Addproducts() {
             productDesc: '',
             productImage: '',
             productPrice: 1,
-            productQuantity: 1
+            productQuantity: 1,
+            productDiscount: 1
         },
 
     });
@@ -298,42 +300,86 @@ export default function Addproducts() {
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
-                                        <Controller control={control} name='productPrice' rules={{
-                                            required: {
-                                                value: true,
-                                                message: 'Bạn phải nhập giá cho sản phẩm này!'
-                                            },
-                                            maxLength: {
-                                                value: 10,
-                                                message: 'Giá sản phẩm tối đa 10 chữ số!'
-                                            },
-                                            minLength: {
-                                                value: 3,
-                                                message: 'Giá sản phẩm tối thiểu 3 chữ số!'
-                                            }
-                                        }}
-                                            render={({ field }) => (
-                                                <>
-                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giá Sản phẩm*</p>
-                                                    <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
-                                                    ${!!errors.productPrice ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
-                                                    `}>
-                                                        <input
-                                                            className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
-                                                            placeholder="000.000"
-                                                            value={field.value}
-                                                            onChange={(e) => {
-                                                                const reg = /[^1-9]/g
-                                                                const value = e.target.value
-                                                                field.onChange(value.replace(reg, ''))
-                                                            }}
-                                                        />
-                                                        <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
-                                                    </div>
-                                                    {errors.productPrice && <p className='text-red-700 mt-2'>{errors.productPrice.message}</p>}
-                                                </>
-                                            )}
-                                        />
+                                        <div className='grid grid-cols-6 gap-5'>
+                                            <Controller control={control} name='productPrice' rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: 'Bạn phải nhập giá cho sản phẩm này!'
+                                                },
+                                                maxLength: {
+                                                    value: 10,
+                                                    message: 'Giá sản phẩm tối đa 10 chữ số!'
+                                                },
+                                                minLength: {
+                                                    value: 3,
+                                                    message: 'Giá sản phẩm tối thiểu 3 chữ số!'
+                                                }
+                                            }}
+                                                render={({ field }) => (
+                                                    <>
+                                                        <div className='col-span-4'>
+                                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giá Sản phẩm*</p>
+                                                            <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
+                                                            ${!!errors.productPrice ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
+                                                            `}>
+                                                                <input
+                                                                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
+                                                                    placeholder="000.000"
+                                                                    value={field.value}
+                                                                    onChange={(e) => {
+                                                                        const reg = /[^1-9]/g
+                                                                        const value = e.target.value
+                                                                        field.onChange(value.replace(reg, ''))
+                                                                    }}
+                                                                />
+                                                                <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
+                                                            </div>
+                                                            {errors.productPrice && <p className='text-red-700 mt-2'>{errors.productPrice.message}</p>}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            />
+                                            <Controller control={control} name='productDiscount' rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: ''
+                                                },
+                                                maxLength: {
+                                                    value: 2,
+                                                    message: 'Giảm sản phẩm tối đa 100%!'
+                                                },
+                                                minLength: {
+                                                    value: 1,
+                                                    message: 'Giá sản phẩm tối thiểu 1 chữ số!'
+                                                }
+                                            }}
+                                                render={({ field }) => (
+                                                    <>
+                                                        <div className='col-span-2'>
+                                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giảm giá Sản phẩm*</p>
+                                                            <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
+                                                            ${!!errors.productDiscount ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
+                                                            `}>
+                                                                <input
+                                                                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
+                                                                    placeholder="000.000"
+                                                                    value={field.value}
+                                                                    maxLength={3}
+                                                                    onChange={(e) => {
+                                                                        const reg = /[^1-9]/g
+                                                                        const value = e.target.value
+                                                                        field.onChange(value.replace(reg, ''))
+                                                                    }}
+                                                                />
+                                                                <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
+                                                            </div>
+                                                            {errors.productDiscount && <p className='text-red-700 mt-2'>{errors.productDiscount.message}</p>}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            />
+                                        </div>
+
                                         <Controller control={control} name='productQuantity' rules={{
                                             required: {
                                                 value: true,

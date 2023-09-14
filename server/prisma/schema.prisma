@@ -33,19 +33,19 @@ model Token {
 
 model Product {
   idproduct       Int      @id @default(autoincrement())
-  name      String
-  price      Int
-  rate       Int
-  pricesale  Int
-  sellingPrice Int
-  discount   Int
-  soldcount  Int
-  description String
-  count        Int
-  status      String
+  name      String?
+  price      Int?
+  rate       Int?
+  pricesale  Int?
+  sellingPrice Int?
+  discount   Int?
+  soldcount  Int?
+  description String?
+  count        Int?
+  status      String?
   date         DateTime @default(now())
-  images       String
-  images_list  String
+  images       String?
+  images_list  String?
   categoryname    String?
   category      Category?   @relation(fields: [categoryname], references: [name])
 }
