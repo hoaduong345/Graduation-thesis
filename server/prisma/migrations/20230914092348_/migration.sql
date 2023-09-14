@@ -45,6 +45,7 @@ CREATE TABLE `Product` (
     `pricesale` INTEGER NULL,
     `sellingPrice` INTEGER NULL,
     `discount` INTEGER NULL,
+    `soldcount` INTEGER NULL,
     `quantity` INTEGER NULL,
     `description` VARCHAR(191) NULL,
     `status` VARCHAR(191) NULL,

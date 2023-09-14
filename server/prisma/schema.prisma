@@ -53,6 +53,7 @@ model Product {
   pricesale    Int?
   sellingPrice Int?
   discount     Int?
+  soldcount    Int?
   quantity     Int?
   description  String?
   status       String?
