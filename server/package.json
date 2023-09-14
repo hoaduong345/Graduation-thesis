@@ -20,6 +20,7 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.1",
+    "jwt-decode": "^3.1.2",
     "math-js": "^1.0.1",
     "mathjs": "^11.10.0",
     "morgan": "^1.10.0",

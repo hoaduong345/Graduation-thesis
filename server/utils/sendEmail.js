@@ -25,9 +25,6 @@ const SendEmail = async (email, subject, text) => {
     console.log("Email sent Successfully");
 
     next();
-    if (next) {
-      next(); // Call next only if provided as a parameter
-    }
   } catch (error) {
     console.log("Email not sent");
     console.error(error);
