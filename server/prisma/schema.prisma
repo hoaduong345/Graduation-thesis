@@ -55,12 +55,11 @@ model Product {
   discount     Int?
   quantity     Int?
   description  String?
-  count        Int?
   status       String?
   date         DateTime       @default(now())
   images       String?
   imagesList   String?
-  productId    Int
+  //productId    Int
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
   categoryID   Int
