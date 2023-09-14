@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Images } from "../../Assets/TS/index";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
 
-import "./forgotpassword.css";
+import "./ChangePassword.css";
 import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
@@ -12,43 +12,34 @@ import { schema } from "../../utils/rules";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
 import * as yup from 'yup';
-function Forgotpassword() {
-    const history = useHistory();
+function ChangePassword() {
+
+    // const history = useHistory();
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const validationSchema = yup.object().shape({
-        email: yup
+        newpassword: yup
             .string()
-            .email('Email không hợp lệ')
-            .required('Vui lòng nhập email'),
-        // ...các trường xác thực khác nếu có
+            .required('Vui lòng nhập mật khẩu mới'),
+
+        confirmpassword: yup
+            .string()
+            .required('Vui lòng nhập lại mật khẩu'),
     });
+
+    const changePassword = () => {
+        // Đổi mật khẩu ở đây
+        // Sau khi đổi, đưa người dùng về trang đăng nhập hoặc trang chính
+        // history.push('/');
+    };
 
     const { handleSubmit, register, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
     const onSubmit = handleSubmit(async (data) => {
-        try {
-            // Gọi API để lấy đường dẫn từ server
-            const response = await fetch('/api/forgotPassword', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: data.email }),
-            });
 
-            if (response.ok) {
-                const url = await response.text();
-                // Điều hướng người dùng đến đường dẫn đã trả về từ server
-                history.push(url);
-            } else {
-                // Xử lý lỗi nếu cần
-                console.error('Lỗi khi gửi email:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Lỗi khi gửi email:', error);
-        }
     });
 
     return (
@@ -71,26 +62,37 @@ function Forgotpassword() {
                 <div className='w-[424px]'>
 
                     <form onSubmit={onSubmit} className="registration-form">
-                        <h1 className=' login-a '>QUÊN MẬT KHẨU</h1>
+                        <h1 className=' login-a '>ĐỔI MẬT KHẨU</h1>
                         <div className='mb-4'>
-                            <label htmlFor='email' className='login-a4 font-sans'>
-                                Email
-                            </label>
                             <input
-                                type="text"
-                                id="email"
-                                // value={formData.email}
+                                type="password"
+                                value={password}
                                 className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
-                                placeholder="Email"
-                                {...register("email")}
+                                placeholder="Nhập mật khẩu mới"
+                                onChange={(e) => setPassword(e.target.value)}
                             />
-                            {errors.email && (
+                            {errors.newpassword && (
                                 <span className="text-red-500 text-sm">
-                                    {errors.email.message}
+                                    {errors.newpassword.message}
                                 </span>
                             )}
                         </div>
-                        <button type="submit" className="w-[424px] h-[49.44px] bg-[#00B207] text-white py-2 rounded-md transition duration-300 mt-[25px]">GỬI</button>
+
+                        <div className='mb-4'>
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
+                                placeholder="Nhập mật khẩu mới"
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                            {errors.confirmpassword && (
+                                <span className="text-red-500 text-sm">
+                                    {errors.confirmpassword.message}
+                                </span>
+                            )}
+                        </div>
+                        <button onClick={changePassword} className="w-[424px] h-[49.44px] bg-[#00B207] text-white py-2 rounded-md transition duration-300 mt-[25px]">GỬI</button>
                         <div className='flex items-center my-4'>
                             <div className='grow h-px bg-slate-300'></div>
                             <div className='mx-2 text-white-500'>Hoặc</div>
@@ -123,4 +125,4 @@ function Forgotpassword() {
     );
 }
 
-export default Forgotpassword;
+export default ChangePassword;

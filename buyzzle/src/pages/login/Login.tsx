@@ -14,6 +14,7 @@ import axios from 'axios';
 import * as yup from 'yup';
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const [loggedInUsername, setLoggedInUsername] = useState('');
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -45,6 +46,7 @@ function Login() {
             const response = await axios.post(API, data);
             console.log('Đăng nhập thành công', data);
             window.location.href = "/";
+            setLoggedInUsername(data.email);
         } catch (error) {
             console.error(error);
         }
@@ -144,7 +146,7 @@ function Login() {
 
 
                         <div className='mb-4 text-right'>
-                            <a href='#' className='text-black-500 hover:no-underline'>
+                            <a href='/forgotpassword' className='text-black-500 hover:no-underline'>
                                 Quên mật khẩu?
                             </a>
                         </div>
@@ -165,12 +167,18 @@ function Login() {
                                 <img src={LogoFace} alt='Facebook' className='w-6 h-6' />
                             </button>
                         </div>
-                        <div className='mt-6 text-center'>
-                            <span className='text-gray-600'>Bạn chuaw có tài khoản Buyzzle? </span>
-                            <a href='#' className='text-black-500 hover:underline font-bold'>
-                                Đăng ký
-                            </a>
-                        </div>
+                        {loggedInUsername ? (
+                            <div className='mt-6 text-center'>
+                                <span className='text-gray-600'>Xin chào, {loggedInUsername}!</span>
+                            </div>
+                        ) : (
+                            <div className='mt-6 text-center'>
+                                <span className='text-gray-600'>Bạn chưa có tài khoản Buyzzle? </span>
+                                <a href='#' className='text-black-500 hover:underline font-bold'>
+                                    Đăng ký
+                                </a>
+                            </div>
+                        )}
                     </form>
                 </div>
 

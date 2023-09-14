@@ -7,6 +7,7 @@ import Register from "../pages/register/Register";
 import RegisterLoginLayout from "../layout/RegisterLoginLayout";
 import Login from "../pages/login/Login";
 import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
+import ChangePassword from "../pages/forgotpassword/ChangePassword";
 
 
 export default function useRouterEmelent() {
@@ -59,6 +60,16 @@ export default function useRouterEmelent() {
       element: (
         <RegisterLoginLayout>
           <Forgotpassword />
+        </RegisterLoginLayout>
+
+      ),
+    },
+
+    {
+      path: "/changepassword",
+      element: (
+        <RegisterLoginLayout>
+          <ChangePassword />
         </RegisterLoginLayout>
 
       ),

@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const decode = require("jwt-decode");
+const { Console } = require("console");
 dotenv.config();
 
 let otpRequestAllowed = true;
@@ -222,7 +223,7 @@ const AuthController = {
       });
       const url = `${process.env.BASE_URL}/buyzzle/auth/forgot-password/${user.forgotpassword_token}`;
       // await SendEmail(user.email, "Forgot Password", url);
-
+      Console.log("", url);
       res.status(200).send("A Link has sent to your email");
     } catch (error) {
       console.error(error);
