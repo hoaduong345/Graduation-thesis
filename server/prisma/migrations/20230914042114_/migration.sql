@@ -28,21 +28,19 @@ CREATE TABLE `Token` (
 -- CreateTable
 CREATE TABLE `Product` (
     `idproduct` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
-    `price` INTEGER NOT NULL,
-    `rate` INTEGER NOT NULL,
-    `pricesale` INTEGER NOT NULL,
-    `sellingPrice` INTEGER NOT NULL,
-    `discount` INTEGER NOT NULL,
-    `soldcount` INTEGER NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
-    `count` INTEGER NOT NULL,
-    `status` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NULL,
+    `price` INTEGER NULL,
+    `rate` INTEGER NULL,
+    `pricesale` INTEGER NULL,
+    `sellingPrice` INTEGER NULL,
+    `discount` INTEGER NULL,
+    `soldcount` INTEGER NULL,
+    `description` VARCHAR(191) NULL,
+    `count` INTEGER NULL,
+    `status` VARCHAR(191) NULL,
     `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `images` VARCHAR(191) NOT NULL,
-    `images_list` VARCHAR(191) NOT NULL,
-    `idproductimage` INTEGER NULL,
-    `categoryname` VARCHAR(191) NULL,
+    `images` VARCHAR(191) NULL,
+    `categoryId` INTEGER NULL,
 
     PRIMARY KEY (`idproduct`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -50,29 +48,15 @@ CREATE TABLE `Product` (
 -- CreateTable
 CREATE TABLE `Category` (
     `idcategory` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
-    `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `name` VARCHAR(191) NULL,
+    `date` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `Category_name_key`(`name`),
     PRIMARY KEY (`idcategory`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `ProductImage` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `url` VARCHAR(191) NOT NULL,
-    `idproduct` INTEGER NOT NULL,
-
-    UNIQUE INDEX `ProductImage_url_key`(`url`),
-    UNIQUE INDEX `ProductImage_idproduct_key`(`idproduct`),
-    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
 ALTER TABLE `Token` ADD CONSTRAINT `Token_userid_fkey` FOREIGN KEY (`userid`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Product` ADD CONSTRAINT `Product_idproductimage_fkey` FOREIGN KEY (`idproductimage`) REFERENCES `ProductImage`(`idproduct`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryname_fkey` FOREIGN KEY (`categoryname`) REFERENCES `Category`(`name`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`idcategory`) ON DELETE SET NULL ON UPDATE CASCADE;

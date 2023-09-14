@@ -147,6 +147,7 @@ const ProductController = {
           price,
           rate,
           pricesale,
+          sellingPrice,
           discount,
           soldcount,
           description,
@@ -154,6 +155,7 @@ const ProductController = {
           status,
           date,
           images,
+         
           categoryname,
         } = req.body;
   
@@ -181,6 +183,7 @@ const ProductController = {
           price: parseInt(price),
           rate: parseInt(rate),
           pricesale: parseInt(pricesale),
+          sellingPrice : parseInt(sellingPrice),
           discount: parseInt(discount),
           soldcount: parseInt(soldcount),
           description,
@@ -189,6 +192,7 @@ const ProductController = {
           date: new Date(),
           // images: req.file ? req.file.filename : null,
           images : images,
+         
           categoryname,
         };
   
@@ -249,12 +253,14 @@ const ProductController = {
           price,
           rate,
           pricesale,
+          sellingPrice,
           discount,
           soldcount,
           description,
           count,
           status,
           images,
+          
           categoryname,
         } = req.body;
   
@@ -283,6 +289,7 @@ const ProductController = {
           price: parseInt(price),
           rate: parseInt(rate),
           pricesale: parseInt(pricesale),
+          sellingPrice : parseInt(sellingPrice),
           discount: parseInt(discount),
           soldcount: parseInt(soldcount),
           description,
@@ -290,6 +297,7 @@ const ProductController = {
           status,
           date: new Date(),
           images : images,
+          
           categoryname,
         };
   
