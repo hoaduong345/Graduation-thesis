@@ -21,12 +21,12 @@ export interface Products {
   name: string;
   price: number;
   rate: number; // đánh giá
-  pricesale:number; // giảm được bao nhiêu đó ( thẻ tag )
+  pricesale: number; // giảm được bao nhiêu đó ( thẻ tag )
   discount: number; // giảm giá
   soldCount: number; // đã bán
-  description:string;
-  count:number; // số lượng
-  status:string;
+  description: string;
+  count: number; // số lượng
+  status: string;
   date: string;
   images: string;
 }
@@ -61,7 +61,7 @@ export default function FiltersPage() {
         return bien
 
       }).then((data) => {
-        console.log('data',data)
+
         setProducts(data)
 
       }).catch((error) => {
@@ -167,8 +167,9 @@ export default function FiltersPage() {
             </div>
 
             <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
+              
               {products.map((items) => {
-                console.log('items', items)
+                // console.log('items', items)
                 return (
                   <>
                     <Filter product={items} />

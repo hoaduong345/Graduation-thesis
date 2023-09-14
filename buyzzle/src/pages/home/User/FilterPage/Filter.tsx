@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import { Products } from './FiltersPage';
 import { Images } from '../../../../Assets/TS';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,21 @@ type Props = {
 };
 const Filter = (props: Props) => {
   const { product } = props
-  console.log("🚀 ~ file: Filter.tsx:10 ~ Filter ~ product:", product)
+  // console.log(JSON.parse(product.images));
+
+  // console.log("🚀 ~ file: Filter.tsx:10 ~ Filter ~ product:", product.images)
+  const [images, setImages] = useState<string[]>([])
+  useEffect(() => {
+    if (product.images[0]) {
+      // const daataImage = JSON.parse(product.images[0])
+      const ar = JSON.parse((product.images)) as string[]
+      setImages(ar)
+
+    }
+
+  }, [])
+  console.log(images.map((item) => console.log(item)))
+
   return (
     <Link to={`/Detailproducts/${product.idproduct}`} >
       <div
@@ -15,7 +29,10 @@ const Filter = (props: Props) => {
        hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
        max-xl:max-w-[180px]">
         <div className="relative figure">
-          <img className="h-[207px] w-[100%]" src={product.images} alt="" />
+
+          <img className="h-[207px] w-[100%]" alt="" src={images[0]} />
+
+
           <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
             Giảm 50%
           </p>
@@ -36,6 +53,8 @@ const Filter = (props: Props) => {
           <button>
             <img src={Images.star1} alt="" />
           </button>
+
+
           <button>
             <img src={Images.star2} alt="" />
           </button>
