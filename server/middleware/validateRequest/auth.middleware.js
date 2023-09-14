@@ -1,7 +1,6 @@
 "use strict";
 
 const validator = require("validator");
-const httpStatus = require("../../config/httpStatusCode");
 const { PrismaClient } = require("@prisma/client");
 const { error } = require("console");
 
@@ -16,7 +15,7 @@ const createVali = async (req, res, next) => {
   const user_name = await prisma.user.findUnique({
     where: {
       username: username,
-      email: email
+      email: email,
     },
   });
 
@@ -81,17 +80,59 @@ const createVali = async (req, res, next) => {
   next();
 };
 
-// const FogotPasswordValid = async(req,res,next) => {
-//   const email = await prisma.user.findUnique({
-//     where:{
-      
-//     }
-//   })
-//   if(!email){
-//     error.email = "Email is not true"
-//   }
-// };
+const FogotPasswordValid = async (req, res, next) => {
+  const { newPassword, confirmNewPassword } = req.body;
+  const error = {};
+  if (!newPassword) {
+    error.newPassword = "password_require";
+  } else if (!validator.isLength(newPassword, { min: 6, max: 20 })) {
+    error.newPassword = "password_length";
+  }
 
+  if (!confirmNewPassword) {
+    error.confirmNewPassword = "confirm_password_require";
+  } else if (!validator.equals(newPassword, confirmNewPassword)) {
+    error.confirmNewPassword = "confirm_password_must_match";
+  }
+
+  if (Object.keys(error).length > 0) {
+    return res.status(400).json({ error });
+  }
+  req.newPassword = newPassword.trim();
+  next();
+};
+
+const ResetPasswordValid = async (req, res, next) => {
+  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+  const error = {};
+  if (!oldPassword) {
+    error.newPassword = "password_require";
+  } else if (!validator.isLength(oldPassword, { min: 6, max: 20 })) {
+    error.newPassword = "password_length";
+  }
+
+  if (!newPassword) {
+    error.newPassword = "password_require";
+  } else if (!validator.isLength(newPassword, { min: 6, max: 20 })) {
+    error.newPassword = "password_length";
+  }
+
+  if (!confirmNewPassword) {
+    error.confirmNewPassword = "confirm_password_require";
+  } else if (!validator.equals(newPassword, confirmNewPassword)) {
+    error.confirmNewPassword = "confirm_password_must_match";
+  }
+
+  if (Object.keys(error).length > 0) {
+    return res.status(400).json({ error });
+  }
+  req.oldPassword = oldPassword.trim();
+  req.newPassword = newPassword.trim();
+
+  next();
+};
 module.exports = {
   createVali,
+  ResetPasswordValid,
+  FogotPasswordValid,
 };

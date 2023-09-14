@@ -28,7 +28,7 @@ model User {
 model Token {
   tokenid   Int      @id @default(autoincrement())
   User      User     @relation(fields: [userid], references: [id])
-  userid    Int
+  userid    Int       @unique
   token     String
   createdAt DateTime @default(now())
 }
@@ -39,6 +39,7 @@ model Product {
   price      Int
   rate       Int
   pricesale  Int
+  sellingPrice Int
   discount   Int
   soldcount  Int
   description String
@@ -46,8 +47,9 @@ model Product {
   status      String
   date         DateTime @default(now())
   images       String
-  images1      String
-  images2      String
+  images_list  String
+  idproductimage  Int?
+  productimage ProductImage?  @relation(fields: [idproductimage], references: [idproduct])
   categoryname    String?
   category      Category?   @relation(fields: [categoryname], references: [name])
 }
@@ -58,6 +60,14 @@ model Category {
   date   DateTime    @default(now())
   products     Product[]   
 }
+
+model ProductImage {
+  id   Int         @id @default(autoincrement())
+  url   String @unique
+  idproduct Int @unique
+  products  Product[]
+}
+
 
 
 
