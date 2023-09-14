@@ -11,6 +11,7 @@ import LogoFace from "../../Assets/PNG/lgFace.png";
 import { schema } from "../../utils/rules";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
+import * as yup from 'yup';
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -18,9 +19,23 @@ function Login() {
         setShowPassword(!showPassword);
     };
 
-    const { handleSubmit, register, formState: { errors } } = useForm({
+    const validationSchema = yup.object().shape({
+        email: yup
+            .string()
+            .email('Email không hợp lệ')
+            .required('Vui lòng nhập email'),
+
+        password: yup
+            .string()
+            .required('Vui lòng nhập mật khẩu'),
 
     });
+
+    const { handleSubmit, register, formState: { errors } } = useForm({
+        resolver: yupResolver(validationSchema),
+    });
+
+
 
     const API = "http://localhost:5000/buyzzle/auth/login";
 
@@ -65,15 +80,15 @@ function Login() {
                                 type="text"
                                 id="email"
                                 // value={formData.email}
-                                className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
-                                placeholder="Email / Số điện thoại / Tên đăng nhập"
+                                className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
+                                placeholder="Email"
                                 {...register("email")}
                             />
-                            {/* {errors.email && (
-                                <span className="text-red-500 text-xs">
+                            {errors.email && (
+                                <span className="text-red-500 text-sm">
                                     {errors.email.message}
                                 </span>
-                            )} */}
+                            )}
                         </div>
                         <div className='mb-4'>
                             <label htmlFor='password' className='login-a4 font-sans'>
@@ -84,15 +99,11 @@ function Login() {
                                     type={showPassword ? 'text' : 'password'}
                                     id="password"
                                     // value={formData.password}
-                                    className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
+                                    className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                     placeholder="Mật khẩu"
                                     {...register("password")}
                                 />
-                                {/* {errors.password && (
-                                    <span className="text-red-500 text-xs">
-                                        {errors.password.message}
-                                    </span>
-                                )} */}
+
                                 <button
                                     type='button'
                                     className='absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500'
@@ -121,7 +132,13 @@ function Login() {
                                         </svg>
                                     )}
                                 </button>
+
                             </div>
+                            {errors.password && (
+                                <span className="text-red-500 text-sm">
+                                    {errors.password.message}
+                                </span>
+                            )}
                         </div>
 
 
@@ -131,7 +148,7 @@ function Login() {
                                 Quên mật khẩu?
                             </a>
                         </div>
-                        <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[25px]">Đăng Nhập</button>
+                        <button type="submit" className="w-[424px] h-[49.44px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[25px]">Đăng Nhập</button>
                         <div className='flex items-center my-4'>
                             <div className='grow h-px bg-slate-300'></div>
                             <div className='mx-2 text-white-500'>Hoặc</div>
@@ -149,7 +166,7 @@ function Login() {
                             </button>
                         </div>
                         <div className='mt-6 text-center'>
-                            <span className='text-gray-600'>Bạn đã có tài khoản Buyzzle? </span>
+                            <span className='text-gray-600'>Bạn chuaw có tài khoản Buyzzle? </span>
                             <a href='#' className='text-black-500 hover:underline font-bold'>
                                 Đăng ký
                             </a>
