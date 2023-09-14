@@ -4,7 +4,7 @@ import LogoWeb from "../../Assets/TSX/LogoWeb";
 
 import "./forgotpassword.css";
 import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
@@ -13,7 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
 import * as yup from 'yup';
 function Forgotpassword() {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const validationSchema = yup.object().shape({
         email: yup
@@ -41,7 +41,7 @@ function Forgotpassword() {
             if (response.ok) {
                 const url = await response.text();
                 // Điều hướng người dùng đến đường dẫn đã trả về từ server
-                history.push(url);
+                navigate(url); // Sử dụng navigate thay vì history.push
             } else {
                 // Xử lý lỗi nếu cần
                 console.error('Lỗi khi gửi email:', response.statusText);

@@ -223,8 +223,7 @@ const AuthController = {
       });
       const url = `${process.env.BASE_URL}/buyzzle/auth/forgot-password/${user.forgotpassword_token}`;
       // await SendEmail(user.email, "Forgot Password", url);
-      Console.log("", url);
-      res.status(200).send("A Link has sent to your email");
+      res.status(200).send(url);
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal server error");
