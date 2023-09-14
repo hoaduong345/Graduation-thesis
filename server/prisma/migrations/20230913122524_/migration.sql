@@ -41,6 +41,7 @@ CREATE TABLE `Product` (
     `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `images` VARCHAR(191) NOT NULL,
     `images_list` VARCHAR(191) NOT NULL,
+    `idproductimage` INTEGER NULL,
     `categoryname` VARCHAR(191) NULL,
 
     PRIMARY KEY (`idproduct`)
@@ -56,8 +57,22 @@ CREATE TABLE `Category` (
     PRIMARY KEY (`idcategory`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `ProductImage` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `url` VARCHAR(191) NOT NULL,
+    `idproduct` INTEGER NOT NULL,
+
+    UNIQUE INDEX `ProductImage_url_key`(`url`),
+    UNIQUE INDEX `ProductImage_idproduct_key`(`idproduct`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `Token` ADD CONSTRAINT `Token_userid_fkey` FOREIGN KEY (`userid`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Product` ADD CONSTRAINT `Product_idproductimage_fkey` FOREIGN KEY (`idproductimage`) REFERENCES `ProductImage`(`idproduct`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryname_fkey` FOREIGN KEY (`categoryname`) REFERENCES `Category`(`name`) ON DELETE SET NULL ON UPDATE CASCADE;

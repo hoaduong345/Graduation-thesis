@@ -46,6 +46,8 @@ model Product {
   date         DateTime @default(now())
   images       String
   images_list  String
+  idproductimage  Int?
+  productimage ProductImage?  @relation(fields: [idproductimage], references: [idproduct])
   categoryname    String?
   category      Category?   @relation(fields: [categoryname], references: [name])
 }
@@ -56,6 +58,14 @@ model Category {
   date   DateTime    @default(now())
   products     Product[]   
 }
+
+model ProductImage {
+  id   Int         @id @default(autoincrement())
+  url   String @unique
+  idproduct Int @unique
+  products  Product[]
+}
+
 
 
 
