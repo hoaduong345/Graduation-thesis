@@ -47,6 +47,7 @@ const ProductController = {
       const newCategory = await prisma.category.create({
         data: {
           name,
+         
         },
       });
   
@@ -63,7 +64,7 @@ const ProductController = {
       const categoryId = parseInt(req.params.id); 
       const existingCategory = await prisma.category.findUnique({
         where: {
-          idcategory: categoryId,
+          id: categoryId,
         },
       });
       if (!existingCategory) {
@@ -71,7 +72,7 @@ const ProductController = {
       } 
       await prisma.category.delete({
         where: {
-          idcategory: categoryId,
+          id: categoryId,
         },
       });
       res.status(200).json("Xóa danh mục thành công");
@@ -90,7 +91,7 @@ const ProductController = {
       // Kiểm tra xem danh mục tồn tại hay không
       const existingCategory = await prisma.category.findUnique({
         where: {
-          idcategory: categoryId,
+          id: categoryId,
         }
       });
       if (!existingCategory) {
@@ -99,7 +100,7 @@ const ProductController = {
       // Cập nhật thông tin của danh mục
       const updatedCategory = await prisma.category.update({
         where: {
-          idcategory: categoryId,
+          id: categoryId,
         },
         data: {
           name,
@@ -149,14 +150,17 @@ const ProductController = {
           pricesale,
           sellingPrice,
           discount,
-          soldcount,
+          quantity,
           description,
           count,
           status,
           date,
           images,
-         
-          categoryname,
+          imagesList,
+          productId,
+          createdAt,
+          updatedAt,
+          categoryID,
         } = req.body;
   
         // Kiểm tra validate
@@ -185,15 +189,17 @@ const ProductController = {
           pricesale: parseInt(pricesale),
           sellingPrice : parseInt(sellingPrice),
           discount: parseInt(discount),
-          soldcount: parseInt(soldcount),
+          quantity: parseInt(quantity),
           description,
           count: parseInt(count),
           status,
           date: new Date(),
-          // images: req.file ? req.file.filename : null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
           images : images,
-         
-          categoryname,
+          imagesList : imagesList,
+          productId : parseInt(productId),
+          categoryID : parseInt(categoryID),
         };
   
         const neww = await prisma.product.create({
@@ -246,7 +252,7 @@ const ProductController = {
       //     return res.status(500).json("Đã có lỗi xảy ra");
       //   }
   
-        const productId = parseInt(req.params.id);
+        const productid = parseInt(req.params.id);
   
         const {
           name,
@@ -255,13 +261,17 @@ const ProductController = {
           pricesale,
           sellingPrice,
           discount,
-          soldcount,
+          quantity,
           description,
           count,
           status,
+          date,
           images,
-          
-          categoryname,
+          imagesList,
+          productId,
+          createdAt,
+          updatedAt,
+          categoryID,
         } = req.body;
   
         // Kiểm tra validate
@@ -291,28 +301,31 @@ const ProductController = {
           pricesale: parseInt(pricesale),
           sellingPrice : parseInt(sellingPrice),
           discount: parseInt(discount),
-          soldcount: parseInt(soldcount),
+          quantity: parseInt(quantity),
           description,
           count: parseInt(count),
           status,
           date: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
           images : images,
-          
-          categoryname,
+          imagesList : imagesList,
+          productId : parseInt(productId),
+          categoryID : parseInt(categoryID),
         };
   
         // if (req.file) {
         //   updatedProductData.images = req.file.filename;
         // }
   
-        // C?p nh?t s?n ph?m
+        
         const updatedProduct = await prisma.product.update({
           where: {
-            idproduct: productId,
+            id: productid,
           },
           data: {
             ...updatedProductData,
-            categoryname,
+            categoryID : parseInt(categoryID)
           },
         });
         console.log("?? ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:", updatedProduct)
@@ -332,7 +345,7 @@ const ProductController = {
 
       const productDetail = await prisma.product.findUnique({
         where: {
-          idproduct: productId,
+          id: productId,
         },
       });
   
