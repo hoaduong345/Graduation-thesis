@@ -38,7 +38,8 @@ export default function Addproducts() {
             price: data.productPrice,
             description: data.productDesc,
             quantity: data.productQuantity,
-            images: JSON.stringify([...url]),
+            images: JSON.stringify(url),
+            imagesList: JSON.stringify([...url]),
             discount: data.productDiscount
         }
 
@@ -326,11 +327,12 @@ export default function Addproducts() {
                                                                     className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
                                                                     placeholder="000.000"
                                                                     value={field.value}
-                                                                    onChange={(e) => {
-                                                                        const reg = /[^1-9]/g
-                                                                        const value = e.target.value
-                                                                        field.onChange(value.replace(reg, ''))
-                                                                    }}
+                                                                    // onChange={(e) => {
+                                                                    //     const reg = /[^1-9]/g
+                                                                    //     const value = e.target.value
+                                                                    //     field.onChange(value.replace(reg, ''))
+                                                                    // }}
+                                                                    onChange={field.onChange}
                                                                 />
                                                                 <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
                                                             </div>
@@ -365,11 +367,13 @@ export default function Addproducts() {
                                                                     placeholder="000.000"
                                                                     value={field.value}
                                                                     maxLength={3}
-                                                                    onChange={(e) => {
-                                                                        const reg = /[^1-9]/g
-                                                                        const value = e.target.value
-                                                                        field.onChange(value.replace(reg, ''))
-                                                                    }}
+                                                                    // onChange={(e) => {
+                                                                    //     const reg = /[^1-9]/g
+                                                                    //     const value = e.target.value
+                                                                    //     field.onChange(value.replace(reg, ''))
+                                                                    // }}
+                                                                    onChange={field.onChange}
+
                                                                 />
                                                                 <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
                                                             </div>
