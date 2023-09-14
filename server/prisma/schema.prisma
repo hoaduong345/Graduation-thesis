@@ -46,7 +46,7 @@ model Token {
 }
 
 model Product {
-  id           Int           @id @default(autoincrement())
+  id           Int            @id @default(autoincrement())
   name         String?
   price        Int?
   rate         Int?
@@ -57,15 +57,16 @@ model Product {
   description  String?
   count        Int?
   status       String?
-  date         DateTime      @default(now())
+  date         DateTime       @default(now())
   images       String?
   imagesList   String?
   productId    Int
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @default(now())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now())
   categoryID   Int
-  fK_category  Category?     @relation(fields: [categoryID], references: [id])
+  fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
+  ProductImage ProductImage[]
 }
 
 model Order {
@@ -111,7 +112,8 @@ model Category {
 }
 
 model ProductImage {
-  id        Int    @id @default(autoincrement())
-  url       String @unique
-  idproduct Int    @unique
+  id              Int      @id @default(autoincrement())
+  url             String
+  idproduct       Int
+  fK_pruductImage Product? @relation(fields: [idproduct], references: [id])
 }
