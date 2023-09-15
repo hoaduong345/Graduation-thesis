@@ -15,21 +15,21 @@ import * as yup from 'yup';
 function ChangePassword() {
 
     // const history = useHistory();
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [newPassword, setPassword] = useState('');
+    const [confirmNewPassword, setConfirmPassword] = useState('');
     const params = useParams();
     const validationSchema = yup.object().shape({
-        newpassword: yup
+        newPassword: yup
             .string()
             .required('Vui lòng nhập mật khẩu mới'),
 
-        confirmpassword: yup
+        confirmNewPassword: yup
             .string()
             .required('Vui lòng nhập lại mật khẩu'),
     });
 
 
-    
+
 
     const { handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema),
@@ -73,14 +73,14 @@ function ChangePassword() {
                         <div className='mb-4'>
                             <input
                                 type="password"
-                                value={password}
+                                value={newPassword}
                                 className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                 placeholder="Nhập mật khẩu mới"
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            {errors.newpassword && (
+                            {errors.newPassword && (
                                 <span className="text-red-500 text-sm">
-                                    {errors.newpassword.message}
+                                    {errors.newPassword.message}
                                 </span>
                             )}
                         </div>
@@ -88,14 +88,14 @@ function ChangePassword() {
                         <div className='mb-4'>
                             <input
                                 type="password"
-                                value={confirmPassword}
+                                value={confirmNewPassword}
                                 className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                 placeholder="Nhập lại mật khẩu mới"
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                             />
-                            {errors.confirmpassword && (
+                            {errors.confirmNewPassword && (
                                 <span className="text-red-500 text-sm">
-                                    {errors.confirmpassword.message}
+                                    {errors.confirmNewPassword.message}
                                 </span>
                             )}
                         </div>
