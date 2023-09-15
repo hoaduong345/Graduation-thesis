@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Container from '../../../components/container/Container'
 import Back from './Assets/TSX/Back'
-import ArrowDown from '../../../Assets/TSX/ArrowDown'
+// import ArrowDown from '../../../Assets/TSX/ArrowDown'
 import UploadIMG from './Assets/TSX/UploadIMG'
-import { Images } from '../../../Assets/TS'
+// import { Images } from '../../../Assets/TS'
 import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
-import { v4 } from 'uuid'
-import { normalize } from 'path'
+// import { v4 } from 'uuid'
+// import { normalize } from 'path'
 
 export type FormValues = {
     productName: string;
@@ -38,7 +38,7 @@ export default function Addproducts() {
             price: data.productPrice,
             description: data.productDesc,
             quantity: data.productQuantity,
-            images: JSON.stringify(url),
+            images: JSON.stringify(url[0]),
             imagesList: JSON.stringify([...url]),
             discount: data.productDiscount
         }
