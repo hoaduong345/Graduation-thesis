@@ -50,8 +50,6 @@ CREATE TABLE `Product` (
     `description` VARCHAR(191) NULL,
     `status` VARCHAR(191) NULL,
     `date` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `images` VARCHAR(191) NULL,
-    `imagesList` VARCHAR(191) NULL,
     `productId` INTEGER NULL,
     `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
