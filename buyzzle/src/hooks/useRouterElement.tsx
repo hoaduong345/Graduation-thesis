@@ -12,8 +12,12 @@ import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
 import Addproducts from "../pages/home/Admin/Addproducts";
 import Editproducts from "../pages/home/Admin/Editproducts";
 import Detailproducts from "../pages/home/Admin/Detailproducts";
-
-
+import UserProfile from "../pages/home/User/UserProfile/UserProfile";
+const location = {
+  address: '1600 Amphitheatre Parkway, Mountain View, california.',
+  lat: 37.42216,
+  lng: -122.08427,
+} // our location object from earlier
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -40,7 +44,16 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-   
+    
+    {
+      path: "/UserProfilePage",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+
     {
       path: "/register",
       element: (
@@ -84,7 +97,6 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-
     {
       path: "/Detailproducts/:id",
       element: (
@@ -93,6 +105,8 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
+
+
   ]);
   return routes;
 }

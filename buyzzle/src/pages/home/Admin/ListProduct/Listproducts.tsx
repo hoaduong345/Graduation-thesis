@@ -12,7 +12,6 @@ export default function ListproductsAdmin() {
   return (
     <>
       <Container>
-
         <div className='grid grid-cols-5'>
           <div className="col-span-1 max-2xl:hidden">
             <SitebarAdmin />
@@ -106,7 +105,7 @@ export default function ListproductsAdmin() {
               <div className='w-[100%] flex items-center'>
 
                 {/* checkbox */}
-                <div className='checkbox w-[10%] text-center'>
+                <div className=' w-[10%] text-center'>
 
                   <input
                     id="default-checkbox"
@@ -217,7 +216,7 @@ export default function ListproductsAdmin() {
               <div className='w-[100%] flex items-center'>
 
                 {/* checkbox */}
-                <div className='checkbox w-[10%] text-center'>
+                <div className=' w-[10%] text-center'>
 
                   <input
                     id="default-checkbox"
@@ -327,7 +326,7 @@ export default function ListproductsAdmin() {
               <div className='w-[100%] flex items-center'>
 
                 {/* checkbox */}
-                <div className='checkbox w-[10%] text-center'>
+                <div className=' w-[10%] text-center'>
 
                   <input
                     id="default-checkbox"
@@ -437,7 +436,7 @@ export default function ListproductsAdmin() {
               <div className='w-[100%] flex items-center'>
 
                 {/* checkbox */}
-                <div className='checkbox w-[10%] text-center'>
+                <div className=' w-[10%] text-center'>
 
                   <input
                     id="default-checkbox"
@@ -547,7 +546,7 @@ export default function ListproductsAdmin() {
               <div className='w-[100%] flex items-center'>
 
                 {/* checkbox */}
-                <div className='checkbox w-[10%] text-center'>
+                <div className=' w-[10%] text-center'>
 
                   <input
                     id="default-checkbox"

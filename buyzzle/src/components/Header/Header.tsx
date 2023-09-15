@@ -128,7 +128,7 @@ export default function Header() {
                   <Link to="/ListproductsAdmin">ListproductsAdmin</Link>
                 </li>
                 <li>
-                  <Link to="/">Sữa Bab</Link>
+                  <Link to="/UserProfilePage">UserProfilePage</Link>
                 </li>
                 <li>
                   <Link to="/Detailproducts">Detailproducts</Link>

@@ -71,8 +71,6 @@ export default function Addproducts() {
                     })
             })
     }
-
-
     const isDisabled = !(isValid && isDirty)
     return (
         <Container>
@@ -98,7 +96,7 @@ export default function Addproducts() {
                                 <div>
                                     <span className='text-[#000] text-2xl font-normal '>Mô Tả Sản Phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-6 px-6 mt-2
+                                    <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <Controller control={control} name='productName' rules={{
                                             required: {
@@ -171,7 +169,7 @@ export default function Addproducts() {
                                 <div className='mt-7'>
                                     <span className='text-[#000] text-2xl font-normal '>Danh Mục Sản Phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-6 px-6 mt-2
+                                    <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Danh Mục Sản Phẩm*</p>
                                         {/* Dropdown */}
@@ -205,7 +203,7 @@ export default function Addproducts() {
                                 <div>
                                     <span className='text-[#000] text-2xl font-normal'>Ảnh Sản Phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-4 px-9 mt-2 flex items-center
+                                    <div className='card w-[100%] py-4 px-9 mt-2 flex items-center rounded-md
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
                                         <Controller control={control} name='productImage' render={({ field }) => (
@@ -214,7 +212,6 @@ export default function Addproducts() {
                                                 <form className='max-w-max items-center'>
                                                     <label htmlFor="images">
                                                         <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
-
                                                             <input type="file"
                                                                 onChange={(e: any) => setImg(e.target.files[0])}
                                                                 id='images' multiple className='hidden ' />
@@ -229,7 +226,7 @@ export default function Addproducts() {
                                                 <div className='justify-center flex flex-1'>
                                                     <div className='inline-grid grid-cols-3 gap-4'>
                                                         <div>
-                                                            <img src={Images.imageproduct6} alt="imageproduct6" width={80} height={80} className='rounded-md' />
+                                                            <img src={Images.imageproduct6} alt="imageproduct6" width={80} height={80} />
                                                         </div>
 
                                                         <div>
@@ -262,7 +259,7 @@ export default function Addproducts() {
                                 <div className='mt-7'>
                                     <span className='text-[#000] text-2xl font-normal '>Giá & Số Lượng</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-6 px-6 mt-2
+                                    <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <Controller control={control} name='productPrice' rules={{
                                             required: {
@@ -337,7 +334,7 @@ export default function Addproducts() {
                                 <div className='mt-7'>
                                     <span className='text-[#000] text-2xl font-normal'>Tình trạng sản phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-4 px-9 mt-2
+                                    <div className='card w-[100%] py-4 px-9 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <p className='text-[#4C4C4C] text-sm font-semibold mb-[18px]'>Tình trạng sản phẩm*</p>
                                         <div className='flex text-center'>

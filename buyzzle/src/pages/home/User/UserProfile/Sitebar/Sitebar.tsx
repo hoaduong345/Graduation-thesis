@@ -1,81 +1,71 @@
 import React from 'react'
+import ProductManager from '../../../../../Assets/TSX/ProductManager'
+import User from '../../../../../Assets/TSX/User'
+import HistoryBought from '../../../../../Assets/TSX/HistoryBought'
+import Cart from '../../../../../Assets/TSX/Cart'
+import HomeSitebar from '../../../Admin/Assets/Icon/homeSitebar'
+import Heart from '../../../../../Assets/TSX/Heart'
+import Setting from '../../../../../Assets/TSX/Setting'
+import Logout from '../../../../../Assets/TSX/Logout'
 
 export default function Sitebar() {
     return (
-        <div className='mt-28 py-8 px-5 w-56 h-[587px] rounded-[6px] mb-5
-    shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
-    '>
+        <div className='mt-9 py-5 px-5 h-auto rounded-[6px]
+    shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
-            {/* homeIconSitebar */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-
-                <span className='text-sm font-normal '><a href="#">Trang Chủ</a></span>
+            <div className='text'>
+                <h1 className='text-xl font-bold leading-7 mb-2'>
+                    Navigation
+                </h1>
             </div>
 
-            {/* StatisticalIconSitebar ( thống kê ) */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-normal '><a href="#">Thống Kê</a></span>
+            {/* ProductManager */}
+            <div className=' w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
+     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4'>
+                <ProductManager />
+                <span className='text-base font-normal '><a href="#">Quản lý sản phẩm</a></span>
             </div>
 
-            {/* dot */}
-            <p className='border-dashed border-t-2 solid #E8E8EA w-[100%]'></p>
-
-            {/* ProductIconIconSitebar */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-normal '><a href="#">Sản Phẩm</a></span>
+            {/* User */}
+            <div className=' w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
+     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9]  text-[#7A828A] hover:text-[#EA4B48] pl-4'>
+                <User />
+                <span className='text-base font-normal '><a href="#">Tài khoản</a></span>
             </div>
 
-            {/* EventIconIconSitebar */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-normal '><a href="#">Sự Kiện</a></span>
+            {/* HistoryBought */}
+            <div className=' w-[100%] flex justify-start items-center py-4 gap-4 transition duration-200
+     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-[18px]'>
+                <HistoryBought />
+                <span className='text-base font-normal '><a href="#">Lịch sử mua hàng</a></span>
             </div>
 
-            {/* MembersIconSitebar */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-normal '><a href="#">Thành viên</a></span>
+            {/* Cart */}
+            <div className=' w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
+     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4'>
+                <Cart />
+                <span className='text-base font-normal '><a href="#">Giỏ hàng</a></span>
             </div>
 
-            {/* dot */}
-            <p className='border-dashed border-t-2 solid #E8E8EA w-[100%]'></p>
-
-            {/* SalesIconSitebar */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-normal '><a href="#">Khuyến Mãi</a></span>
+            {/* Heart */}
+            <div className=' w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
+     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4'>
+                <Heart />
+                <span className='text-base font-normal '><a href="#">Sản phẩm yêu thích</a></span>
             </div>
 
-            {/* VouchersIconIconSitebar */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-normal '><a href="#">Mã Giảm Giá</a></span>
+            {/* Setting */}
+            <div className=' w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
+     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4'>
+                <Setting />
+                <span className='text-base font-normal '><a href="#">Cài đặt</a></span>
             </div>
 
-            {/* dot */}
-            <p className='border-dashed border-t-2 solid #E8E8EA w-[100%]'></p>
-
-            {/* OderIconSitebar */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-normal '><a href="#">Đơn Hàng</a></span>
-            </div>
-
-            {/* MessagesIconSitebar */}
-            <div className=' w-[100%] flex items-center py-2 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-bold text-[#1A1A1A] mx-[23px]'><a href="#">Tin Nhắn</a></span>
-                <div className=" inline-flex items-center justify-center w-7 h-6 px-2 py-1 text-xs font-bold text-white
-       bg-[#FF6E01] rounded-full">20</div>
-            </div>
-
-            {/* SettingsIconSitebar */}
-            <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
-                <span className='text-sm font-normal '><a href="#">Cài đặt</a></span>
+            {/* Logout */}
+            <div className=' w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
+     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4'>
+                <Logout />
+                <span className='text-base font-normal '><a href="#">Đăng xuất</a></span>
             </div>
 
         </div>
