@@ -21,6 +21,7 @@ model User {
   phonenumber String?
   image       String?
   createdAt   DateTime @default(now())
+  updateAt    DateTime @default(now())
   refresh_token String?
   forgotpassword_token String?
 }
