@@ -11,16 +11,18 @@ datasource db {
 }
 
 model User {
-  id                   Int      @id @default(autoincrement())
-  email                String
-  username             String?
-  password             String
-  verify               Boolean  @default(false)
-  Token                Token[]
-  name                 String?
-  phonenumber          String?
-  createdAt            DateTime @default(now())
-  refresh_token        String?
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  username    String?   @unique
+  password    String
+  verify      Boolean  @default(false)
+  Token       Token[]
+  name        String?
+  phonenumber String?
+  image       String?
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @default(now())
+  refresh_token String?
   forgotpassword_token String?
   role                 Int
   fK_Role              Role?    @relation(fields: [role], references: [id])
