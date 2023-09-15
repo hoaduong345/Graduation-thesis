@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom"
+import { Navigate, useRoutes } from "react-router-dom"
 import MainLayout from "../layout/MainLayout"
 
 import Register from "../pages/register/Register";
@@ -13,6 +13,7 @@ import Addproducts from "../pages/home/Admin/Addproducts";
 import Editproducts from "../pages/home/Admin/Editproducts";
 import Detailproducts from "../pages/home/Admin/Detailproducts";
 import UserProfile from "../pages/home/User/UserProfile/UserProfile";
+import AdminLayout from "../layout/AdminLayout";
 const location = {
   address: '1600 Amphitheatre Parkway, Mountain View, california.',
   lat: 37.42216,
@@ -29,7 +30,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/ProductsPage",
+      path: "/products",
       element: (
         <MainLayout>
           <ProductsPage />
@@ -72,9 +73,8 @@ export default function useRouterEmelent() {
 
       ),
     },
-    // AdminPages
     {
-      path: "/Addproductspage",
+      path: "Detailproducts/:id",
       element: (
         <MainLayout>
           <Addproducts />
@@ -106,6 +106,35 @@ export default function useRouterEmelent() {
       ),
     },
 
+
+    // AdminPages
+    {
+      path: "/admin",
+      element: <AdminLayout />,
+      children: [{
+        index: true,
+        element: <Navigate to={'Addproductspage'} />
+      }, {
+        path: "Addproductspage",
+        element: (
+          <Addproducts />
+        ),
+      },
+      {
+        path: "Editproductspage",
+        element: (
+          <Editproducts />
+        ),
+      },
+      {
+        path: "ListproductsAdmin",
+        element: (
+          <ListproductsAdmin />
+        ),
+      },
+
+      ]
+    }
 
   ]);
   return routes;

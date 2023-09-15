@@ -9,8 +9,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
+import { appConfig } from '../../../configsEnv'
 // import { v4 } from 'uuid'
-// import { normalize } from 'path'
 
 export type FormValues = {
     productName: string;
@@ -27,6 +27,7 @@ export interface Cate {
 }
 
 export default function Addproducts() {
+
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
 
@@ -38,21 +39,35 @@ export default function Addproducts() {
             price: data.productPrice,
             description: data.productDesc,
             quantity: data.productQuantity,
-            images: JSON.stringify(url[0]),
-            imagesList: JSON.stringify([...url]),
-            discount: data.productDiscount
+            discount: data.productDiscount,
         }
 
-        console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
+        // console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
 
-        axios.post("http://localhost:5000/buyzzle/product/addproduct", _data)
+        axios.post(`${appConfig.apiUrl}/addproduct`, _data)
             .then(response => {
+                console.log(response.config.data)
                 return response
-            }).then(responseData => {
+            }).then(async (responseData) => {
+                alert('success')
+                for (let i = 0; i < url.length; i++) {
+                    await addImages(responseData?.data.id, url[i])
+                }
                 console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
             }).catch(error => {
                 console.log("🚀 ~ file: Addproducts.tsx:40 ~ handleAddproduct ~ error:", error)
             })
+
+    }
+
+    const addImages = async (id: number, url: string) => {
+
+        const urlImages = {
+            idproduct: id,
+            url: url
+        }
+        await axios.post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
+            .then(response => response.data)
     }
 
     const {
@@ -84,7 +99,7 @@ export default function Addproducts() {
             .then(response => response.data
             )
             .then(data => {
-                console.log(data)
+                // console.log(data)
                 setCategory(data)
             })
             .catch(err => console.log(err))
@@ -97,6 +112,7 @@ export default function Addproducts() {
 
     // img firebase
     const loadImageFile = async (images: any) => {
+
         for (let i = 0; i < images.length; i++) {
             const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
 
@@ -256,7 +272,7 @@ export default function Addproducts() {
                                     <div className='card w-[100%] py-4 px-9 mt-2 flex items-center rounded-md
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
-                                        <Controller control={control} name='productImage' render={({ field }) => (
+                                        <Controller control={control} name='productImage' render={({ }) => (
                                             <>
                                                 {/* form upload img */}
                                                 <form className='max-w-max items-center'>
@@ -282,6 +298,11 @@ export default function Addproducts() {
                                                                 return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
                                                             })
                                                         }
+
+                                                        {/* <div
+                                                            style={{ borderTopColor: "transparent" }}
+                                                            className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
+                                                        /> */}
 
 
 

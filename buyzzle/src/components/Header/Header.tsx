@@ -119,13 +119,13 @@ export default function Header() {
                   <Link to="/FiltersPage">Áo Nam</Link>
                 </li>
                 <li>
-                  <Link to="/Addproductspage">Thêm sản phẩm</Link>
+                  <Link to="/admin/Addproductspage">Thêm sản phẩm</Link>
                 </li>
                 <li>
-                  <Link to="/Editproductspage">Editproductspage</Link>
+                  <Link to="/admin/Editproductspage">Editproductspage</Link>
                 </li>
                 <li>
-                  <Link to="/ListproductsAdmin">ListproductsAdmin</Link>
+                  <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
                 </li>
                 <li>
                   <Link to="/UserProfilePage">UserProfilePage</Link>
