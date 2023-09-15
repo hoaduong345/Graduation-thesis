@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
   },
 });
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <CookiesProvider>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
@@ -24,5 +24,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </QueryClientProvider>
       </BrowserRouter>
     </CookiesProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

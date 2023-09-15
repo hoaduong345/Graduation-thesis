@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Container from '../../../components/container/Container'
 import Back from './Assets/TSX/Back'
-import ArrowDown from '../../../Assets/TSX/ArrowDown'
+// import ArrowDown from '../../../Assets/TSX/ArrowDown'
 import UploadIMG from './Assets/TSX/UploadIMG'
-import { Images } from '../../../Assets/TS'
+// import { Images } from '../../../Assets/TS'
 import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
-import { v4 } from 'uuid'
+import { ref, uploadBytes } from 'firebase/storage'
+// import { v4 } from 'uuid'
+// import { normalize } from 'path'
 
 export type FormValues = {
     productName: string;
@@ -16,11 +18,18 @@ export type FormValues = {
     productDesc: string;
     productQuantity: number;
     productImage: string;
+    productDiscount: number;
+}
+
+export interface Cate {
+    name: string,
+    idcategory: number
 }
 
 export default function Addproducts() {
-    const [img, setImg] = useState('')
-    
+    const [images, setImages] = useState('')
+    const [url, setUrl] = useState<string[]>([])
+
     // Tạo fuction handle thêm sản phẩm.
     const handleAddproduct = (data: FormValues) => {
         // console.log(data)
@@ -28,9 +37,12 @@ export default function Addproducts() {
             name: data.productName,
             price: data.productPrice,
             description: data.productDesc,
-            count: data.productQuantity,
-            images: data.productImage,
+            quantity: data.productQuantity,
+            images: JSON.stringify(url[0]),
+            imagesList: JSON.stringify([...url]),
+            discount: data.productDiscount
         }
+
         console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
 
         axios.post("http://localhost:5000/buyzzle/product/addproduct", _data)
@@ -54,22 +66,54 @@ export default function Addproducts() {
             productName: '',
             productDesc: '',
             productImage: '',
-            productPrice: 0,
-            productQuantity: 0
+            productPrice: 1,
+            productQuantity: 1,
+            productDiscount: 1
         },
 
     });
 
-    const loadImages = async (img: any, data: FormValues) => {
-        storage.ref(`/files/` + img.name).put(img)
-            .on("state_changed", () => {
-                storage.ref(`files`).child(img.name).getDownloadURL()
-                    .then((url) => {
-                        setImg(url)
-                        data.productImage = url
-                        return url
-                    })
+
+    const [categoty, setCategory] = useState<Cate[]>([])
+    useEffect(() => {
+        getCategory()
+    }, [])
+
+    const getCategory = () => {
+        axios.get('http://localhost:5000/buyzzle/product/allcategory')
+            .then(response => response.data
+            )
+            .then(data => {
+                console.log(data)
+                setCategory(data)
             })
+            .catch(err => console.log(err))
+    }
+
+    useEffect(() => {
+        loadImageFile(images)
+    }, [images])
+
+
+    // img firebase
+    const loadImageFile = async (images: any) => {
+        for (let i = 0; i < images.length; i++) {
+            const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
+
+            await uploadBytes(imageRef, images[i])
+                .then(() => {
+                    storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
+                        .then((url: any) => {
+                            setUrl((prev) => (prev.concat(url)));
+                            return url
+                        })
+                })
+                .catch(err => {
+                    alert(err)
+                })
+
+        }
+
     }
     const isDisabled = !(isValid && isDirty)
     return (
@@ -175,13 +219,19 @@ export default function Addproducts() {
                                         {/* Dropdown */}
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                             <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
-                                                <option>Thiết bị điện da dụng</option>
+
+                                                {
+                                                    categoty.map(e => {
+                                                        return <option value={e.idcategory}>{e.name}</option>
+                                                    })
+                                                }
+                                                {/* <option>Thiết bị điện da dụng</option>
                                                 <option>Giày dép da</option>
                                                 <option>Máy ảnh</option>
                                                 <option>Thời trang nam</option>
                                                 <option>Thiết bị điện tử</option>
                                                 <option>Nhà cửa đời sống</option>
-                                                <option>Sắc đẹp</option>
+                                                <option>Sắc đẹp</option> */}
                                             </select>
                                         </div>
                                         {/* end input addNameProducts */}
@@ -213,7 +263,8 @@ export default function Addproducts() {
                                                     <label htmlFor="images">
                                                         <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
                                                             <input type="file"
-                                                                onChange={(e: any) => setImg(e.target.files[0])}
+                                                                // onChange={field.onChange}
+                                                                onChange={(e: any) => setImages(e.target.files)}
                                                                 id='images' multiple className='hidden ' />
                                                             <UploadIMG />
                                                             <div id="images" className='text-center mt-2'>
@@ -225,29 +276,15 @@ export default function Addproducts() {
                                                 </form>{/* end form upload img */}
                                                 <div className='justify-center flex flex-1'>
                                                     <div className='inline-grid grid-cols-3 gap-4'>
-                                                        <div>
-                                                            <img src={Images.imageproduct6} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
 
-                                                        <div>
-                                                            <img src={Images.imageproduct5} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
+                                                        {
+                                                            url.map(e => {
+                                                                return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
+                                                            })
+                                                        }
 
-                                                        <div>
-                                                            <img src={Images.imageproduct4} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
 
-                                                        <div>
-                                                            <img src={Images.imageproduct3} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
 
-                                                        <div>
-                                                            <img src={Images.imageproduct2} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
-
-                                                        <div>
-                                                            <img src={Images.imageproduct1} alt="imageproduct6" width={80} height={80} />
-                                                        </div>
 
                                                     </div>
                                                 </div>
@@ -261,42 +298,89 @@ export default function Addproducts() {
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
-                                        <Controller control={control} name='productPrice' rules={{
-                                            required: {
-                                                value: true,
-                                                message: 'Bạn phải nhập giá cho sản phẩm này!'
-                                            },
-                                            maxLength: {
-                                                value: 10,
-                                                message: 'Giá sản phẩm tối đa 10 chữ số!'
-                                            },
-                                            minLength: {
-                                                value: 3,
-                                                message: 'Giá sản phẩm tối thiểu 3 chữ số!'
-                                            }
-                                        }}
-                                            render={({ field }) => (
-                                                <>
-                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giá Sản phẩm*</p>
-                                                    <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
-                                                    ${!!errors.productPrice ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
-                                                    `}>
-                                                        <input
-                                                            className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
-                                                            placeholder="000.000"
-                                                            // value={field.value}
-                                                            onChange={(e) => {
-                                                                const reg = /[^1-9]/g
-                                                                const value = e.target.value
-                                                                field.onChange(value.replace(reg, ''))
-                                                            }}
-                                                        />
-                                                        <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
-                                                    </div>
-                                                    {errors.productPrice && <p className='text-red-700 mt-2'>{errors.productPrice.message}</p>}
-                                                </>
-                                            )}
-                                        />
+                                        <div className='grid grid-cols-6 gap-5'>
+                                            <Controller control={control} name='productPrice' rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: 'Bạn phải nhập giá cho sản phẩm này!'
+                                                },
+                                                maxLength: {
+                                                    value: 10,
+                                                    message: 'Giá sản phẩm tối đa 10 chữ số!'
+                                                },
+                                                minLength: {
+                                                    value: 3,
+                                                    message: 'Giá sản phẩm tối thiểu 3 chữ số!'
+                                                }
+                                            }}
+                                                render={({ field }) => (
+                                                    <>
+                                                        <div className='col-span-4'>
+                                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giá Sản phẩm*</p>
+                                                            <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
+                                                            ${!!errors.productPrice ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
+                                                            `}>
+                                                                <input
+                                                                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
+                                                                    placeholder="000.000"
+                                                                    value={field.value}
+                                                                    // onChange={(e) => {
+                                                                    //     const reg = /[^1-9]/g
+                                                                    //     const value = e.target.value
+                                                                    //     field.onChange(value.replace(reg, ''))
+                                                                    // }}
+                                                                    onChange={field.onChange}
+                                                                />
+                                                                <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
+                                                            </div>
+                                                            {errors.productPrice && <p className='text-red-700 mt-2'>{errors.productPrice.message}</p>}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            />
+                                            <Controller control={control} name='productDiscount' rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: ''
+                                                },
+                                                maxLength: {
+                                                    value: 2,
+                                                    message: 'Giảm sản phẩm tối đa 100%!'
+                                                },
+                                                minLength: {
+                                                    value: 1,
+                                                    message: 'Giá sản phẩm tối thiểu 1 chữ số!'
+                                                }
+                                            }}
+                                                render={({ field }) => (
+                                                    <>
+                                                        <div className='col-span-2'>
+                                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giảm giá Sản phẩm*</p>
+                                                            <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
+                                                            ${!!errors.productDiscount ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
+                                                            `}>
+                                                                <input
+                                                                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
+                                                                    placeholder="000.000"
+                                                                    value={field.value}
+                                                                    maxLength={3}
+                                                                    // onChange={(e) => {
+                                                                    //     const reg = /[^1-9]/g
+                                                                    //     const value = e.target.value
+                                                                    //     field.onChange(value.replace(reg, ''))
+                                                                    // }}
+                                                                    onChange={field.onChange}
+
+                                                                />
+                                                                <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
+                                                            </div>
+                                                            {errors.productDiscount && <p className='text-red-700 mt-2'>{errors.productDiscount.message}</p>}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            />
+                                        </div>
+
                                         <Controller control={control} name='productQuantity' rules={{
                                             required: {
                                                 value: true,
