@@ -4,7 +4,7 @@ import LogoWeb from "../../Assets/TSX/LogoWeb";
 
 import "./ChangePassword.css";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
@@ -17,7 +17,7 @@ function ChangePassword() {
     // const history = useHistory();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
+    const params = useParams();
     const validationSchema = yup.object().shape({
         newpassword: yup
             .string()
@@ -28,17 +28,24 @@ function ChangePassword() {
             .required('Vui lòng nhập lại mật khẩu'),
     });
 
-    const changePassword = () => {
-        // Đổi mật khẩu ở đây
-        // Sau khi đổi, đưa người dùng về trang đăng nhập hoặc trang chính
-        // history.push('/');
-    };
 
-    const { handleSubmit, register, formState: { errors } } = useForm({
+    
+
+    const { handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
     const onSubmit = handleSubmit(async (data) => {
+        const API = `http://localhost:5000/buyzzle/auth/resetpassword/${params.token}`;
+        try {
+            console.log("checker", data);
+            await axios.post(API, data);
+            console.log('Đổi mật khẩu thành công', data);
+            window.location.href = "/login";
+            // setLoggedInUsername(data.email);
+        } catch (error) {
+            console.error(error);
+        }
 
     });
 
@@ -83,7 +90,7 @@ function ChangePassword() {
                                 type="password"
                                 value={confirmPassword}
                                 className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
-                                placeholder="Nhập mật khẩu mới"
+                                placeholder="Nhập lại mật khẩu mới"
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                             />
                             {errors.confirmpassword && (
@@ -92,7 +99,7 @@ function ChangePassword() {
                                 </span>
                             )}
                         </div>
-                        <button onClick={changePassword} className="w-[424px] h-[49.44px] bg-[#00B207] text-white py-2 rounded-md transition duration-300 mt-[25px]">GỬI</button>
+                        <button type="submit" className="w-[424px] h-[49.44px] bg-[#00B207] text-white py-2 rounded-md transition duration-300 mt-[25px]">GỬI</button>
                         <div className='flex items-center my-4'>
                             <div className='grow h-px bg-slate-300'></div>
                             <div className='mx-2 text-white-500'>Hoặc</div>

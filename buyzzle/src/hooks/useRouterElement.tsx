@@ -8,7 +8,7 @@ import RegisterLoginLayout from "../layout/RegisterLoginLayout";
 import Login from "../pages/login/Login";
 import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../pages/forgotpassword/ChangePassword";
-
+import path from "../contants/path";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -66,7 +66,7 @@ export default function useRouterEmelent() {
     },
 
     {
-      path: "/changepassword",
+      path: path.changepassword,
       element: (
         <RegisterLoginLayout>
           <ChangePassword />
@@ -74,6 +74,7 @@ export default function useRouterEmelent() {
 
       ),
     },
+    
   ]);
   return routes;
 }
