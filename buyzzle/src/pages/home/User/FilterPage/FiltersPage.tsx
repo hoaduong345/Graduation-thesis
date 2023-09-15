@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../../css/filter.css";
 import Filter from "./Filter";
-import { title } from "process";
-import { error } from "console";
 import Container from "../../../../components/container/Container";
 import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
 import { Images } from "../../../../Assets/TS";
@@ -17,18 +15,20 @@ import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 
 export interface Products {
-  idproduct: number;
+  id: number;
   name: string;
   price: number;
   rate: number; // đánh giá
   pricesale: number; // giảm được bao nhiêu đó ( thẻ tag )
+  sellingPrice: number; // giá bán
   discount: number; // giảm giá
   soldCount: number; // đã bán
+  quantity: number;
   description: string;
-  count: number; // số lượng
   status: string;
   date: string;
   images: string;
+  imagesList: string;
 }
 
 // const products: Products[] = [];
@@ -74,7 +74,7 @@ export default function FiltersPage() {
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
-            <SitebarFilter onChangeFilters={(title) => {
+            <SitebarFilter onChangeFilters={() => {
             }} />
           </div>
           {/* content-right-filter */}

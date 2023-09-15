@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Container from '../../../components/container/Container'
 import Back from './Assets/TSX/Back'
-import ArrowDown from '../../../Assets/TSX/ArrowDown'
+// import ArrowDown from '../../../Assets/TSX/ArrowDown'
 import UploadIMG from './Assets/TSX/UploadIMG'
-import { Images } from '../../../Assets/TS'
+// import { Images } from '../../../Assets/TS'
 import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
-import { v4 } from 'uuid'
-import { normalize } from 'path'
+// import { v4 } from 'uuid'
+// import { normalize } from 'path'
 
 export type FormValues = {
     productName: string;
@@ -37,8 +37,9 @@ export default function Addproducts() {
             name: data.productName,
             price: data.productPrice,
             description: data.productDesc,
-            count: data.productQuantity,
-            images: JSON.stringify([...url]),
+            quantity: data.productQuantity,
+            images: JSON.stringify(url[0]),
+            imagesList: JSON.stringify([...url]),
             discount: data.productDiscount
         }
 
@@ -326,11 +327,12 @@ export default function Addproducts() {
                                                                     className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
                                                                     placeholder="000.000"
                                                                     value={field.value}
-                                                                    onChange={(e) => {
-                                                                        const reg = /[^1-9]/g
-                                                                        const value = e.target.value
-                                                                        field.onChange(value.replace(reg, ''))
-                                                                    }}
+                                                                    // onChange={(e) => {
+                                                                    //     const reg = /[^1-9]/g
+                                                                    //     const value = e.target.value
+                                                                    //     field.onChange(value.replace(reg, ''))
+                                                                    // }}
+                                                                    onChange={field.onChange}
                                                                 />
                                                                 <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
                                                             </div>
@@ -365,11 +367,13 @@ export default function Addproducts() {
                                                                     placeholder="000.000"
                                                                     value={field.value}
                                                                     maxLength={3}
-                                                                    onChange={(e) => {
-                                                                        const reg = /[^1-9]/g
-                                                                        const value = e.target.value
-                                                                        field.onChange(value.replace(reg, ''))
-                                                                    }}
+                                                                    // onChange={(e) => {
+                                                                    //     const reg = /[^1-9]/g
+                                                                    //     const value = e.target.value
+                                                                    //     field.onChange(value.replace(reg, ''))
+                                                                    // }}
+                                                                    onChange={field.onChange}
+
                                                                 />
                                                                 <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
                                                             </div>
