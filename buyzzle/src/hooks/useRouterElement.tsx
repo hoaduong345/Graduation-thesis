@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom"
+import { Navigate, useRoutes } from "react-router-dom"
 import MainLayout from "../layout/MainLayout"
 
 import Register from "../pages/register/Register";
@@ -12,6 +12,7 @@ import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
 import Addproducts from "../pages/home/Admin/Addproducts";
 import Editproducts from "../pages/home/Admin/Editproducts";
 import Detailproducts from "../pages/home/Admin/Detailproducts";
+import AdminLayout from "../layout/AdminLayout";
 
 
 export default function useRouterEmelent() {
@@ -25,7 +26,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/ProductsPage",
+      path: "/products",
       element: (
         <MainLayout>
           <ProductsPage />
@@ -40,7 +41,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-   
+
     {
       path: "/register",
       element: (
@@ -61,38 +62,38 @@ export default function useRouterEmelent() {
     },
     // AdminPages
     {
-      path: "/Addproductspage",
-      element: (
-        <MainLayout>
+      path: "/admin",
+      element: <AdminLayout />,
+      children: [{
+        index: true,
+        element: <Navigate to={'Addproductspage'} />
+      }, {
+        path: "Addproductspage",
+        element: (
           <Addproducts />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "/Editproductspage",
-      element: (
-        <MainLayout>
+        ),
+      },
+      {
+        path: "Editproductspage",
+        element: (
           <Editproducts />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "/ListproductsAdmin",
-      element: (
-        <MainLayout>
+        ),
+      },
+      {
+        path: "ListproductsAdmin",
+        element: (
           <ListproductsAdmin />
-        </MainLayout>
-      ),
-    },
+        ),
+      },
 
-    {
-      path: "/Detailproducts/:id",
-      element: (
-        <MainLayout>
+      {
+        path: "Detailproducts/:id",
+        element: (
           <Detailproducts />
-        </MainLayout>
-      ),
-    },
+        ),
+      },]
+    }
+
   ]);
   return routes;
 }

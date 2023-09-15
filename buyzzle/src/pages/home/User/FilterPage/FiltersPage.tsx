@@ -13,6 +13,7 @@ import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
+import axios from "axios";
 
 export interface Products {
   id: number;
@@ -55,16 +56,11 @@ export default function FiltersPage() {
   const [products, setProducts] = useState([])
 
   useEffect(() => {
-    fetch("http://localhost:5000/buyzzle/product/allproducts")
-      .then((data) => {
-        const bien = data.json()
-        return bien
-
-      }).then((data) => {
-
-        setProducts(data)
-
-      }).catch((error) => {
+    axios.get("http://localhost:5000/buyzzle/product/allproducts")
+      .then((reposonse) => {
+        setProducts(reposonse.data)
+      })
+      .catch((error) => {
         console.log(error)
       })
   }, [])
