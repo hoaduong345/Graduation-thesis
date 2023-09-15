@@ -9,6 +9,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
+import { appConfig } from '../../../configsEnv'
 // import { v4 } from 'uuid'
 // import { normalize } from 'path'
 
@@ -27,6 +28,10 @@ export interface Cate {
 }
 
 export default function Addproducts() {
+    console.log(`appConfig.url`, appConfig.apiUrl)
+    // const api = `${process.env.URL}/addproduct`
+    // console.log(api)
+
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
 
@@ -49,6 +54,7 @@ export default function Addproducts() {
             .then(response => {
                 return response
             }).then(responseData => {
+                alert('success')
                 console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
             }).catch(error => {
                 console.log("🚀 ~ file: Addproducts.tsx:40 ~ handleAddproduct ~ error:", error)
@@ -84,7 +90,7 @@ export default function Addproducts() {
             .then(response => response.data
             )
             .then(data => {
-                console.log(data)
+                // console.log(data)
                 setCategory(data)
             })
             .catch(err => console.log(err))
@@ -258,7 +264,7 @@ export default function Addproducts() {
                                     <div className='card w-[100%] py-4 px-9 mt-2 flex items-center
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
-                                        <Controller control={control} name='productImage' render={({ field }) => (
+                                        <Controller control={control} name='productImage' render={({ }) => (
                                             <>
                                                 {/* form upload img */}
                                                 <form className='max-w-max items-center'>
