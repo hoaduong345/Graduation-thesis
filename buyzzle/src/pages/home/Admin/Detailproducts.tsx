@@ -1,10 +1,8 @@
-import { type } from 'os'
-import { useEffect, useState } from 'react'
 
+import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { error } from 'console'
-import { Products } from '../User/FilterPage/FiltersPage'
 import { useParams } from 'react-router-dom'
+import { appConfig } from '../../../configsEnv'
 
 export type FormValues = {
     idproduct: number
@@ -15,14 +13,14 @@ export type FormValues = {
     images: string;
 }
 
-export default function Detailproducts() {    
+export default function Detailproducts() {
     const [first, setfirst] = useState<FormValues>()
-    const {id} = useParams()
-     console.log(id);
-     
+    const { id } = useParams()
+    console.log(id);
+
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/buyzzle/product/chitietproduct/${id}`)
+        axios.get(`${appConfig.apiUrl}/chitietproduct/${id}`)
             .then((detail) => {
                 return detail
             })

@@ -211,7 +211,9 @@ const ProductController = {
             data: newProduct,
          });
 
-         res.status(200).json("Thêm sản phẩm thành công");
+         console.log(neww);
+         // res.status(200).json("Thêm sản phẩm thành công");
+         res.status(200).json(neww);
          // });
       } catch (error) {
          console.error(error);
@@ -343,12 +345,19 @@ const ProductController = {
       try {
          const productId = parseInt(req.params.id);
 
-         const productDetail = await prisma.product.findUnique({
+         // const productDetail = await prisma.product.findUnique({
+         //    where: {
+         //       id: productId,
+         //    },
+         // });
+         const productDetail = await prisma.product.findFirst({
+            include: {
+               ProductImage: true,
+            },
             where: {
                id: productId,
             },
          });
-
          if (!productDetail) {
             return res.status(404).json("Không tìm thấy sản phẩm");
          }
@@ -362,8 +371,13 @@ const ProductController = {
    // Hiện tất cả sản phẩm
    getAllProduct: async (req, res) => {
       try {
-         const allProducts = await prisma.product.findMany();
-         res.status(200).json(allProducts);
+         // const allProducts = await prisma.product.findMany();
+         const result = await prisma.product.findMany({
+            include: {
+               ProductImage: true,
+            },
+         });
+         res.status(200).json(result);
       } catch (error) {
          console.error(error);
          res.status(500).json(error.message);

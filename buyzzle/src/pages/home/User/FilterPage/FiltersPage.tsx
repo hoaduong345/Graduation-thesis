@@ -30,6 +30,9 @@ export interface Products {
   date: string;
   images: string;
   imagesList: string;
+  ProductImage: {
+    url: string
+  }[]
 }
 
 // const products: Products[] = [];
@@ -53,7 +56,7 @@ export interface Products {
 
 
 export default function FiltersPage() {
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState<Products[]>([])
 
   useEffect(() => {
     axios.get("http://localhost:5000/buyzzle/product/allproducts")
@@ -163,7 +166,7 @@ export default function FiltersPage() {
             </div>
 
             <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
-              
+
               {products.map((items) => {
                 // console.log('items', items)
                 return (

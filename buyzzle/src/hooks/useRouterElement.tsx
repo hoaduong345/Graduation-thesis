@@ -60,6 +60,12 @@ export default function useRouterEmelent() {
 
       ),
     },
+    {
+      path: "Detailproducts/:id",
+      element: (
+        <Detailproducts />
+      ),
+    },
 
 
     // AdminPages

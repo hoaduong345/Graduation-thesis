@@ -10,8 +10,9 @@ import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
 import { appConfig } from '../../../configsEnv'
+import { Product } from '../../../components/home'
+import { Products } from '../User/FilterPage/FiltersPage'
 // import { v4 } from 'uuid'
-// import { normalize } from 'path'
 
 export type FormValues = {
     productName: string;
@@ -28,9 +29,6 @@ export interface Cate {
 }
 
 export default function Addproducts() {
-    console.log(`appConfig.url`, appConfig.apiUrl)
-    // const api = `${process.env.URL}/addproduct`
-    // console.log(api)
 
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
@@ -43,22 +41,37 @@ export default function Addproducts() {
             price: data.productPrice,
             description: data.productDesc,
             quantity: data.productQuantity,
-            images: JSON.stringify(url[0]),
-            imagesList: JSON.stringify([...url]),
-            discount: data.productDiscount
+            // images: JSON.stringify(url[0]),
+            // imagesList: JSON.stringify([...url]),
+            discount: data.productDiscount,
         }
 
-        console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
+        // console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
 
-        axios.post("http://localhost:5000/buyzzle/product/addproduct", _data)
+        axios.post(`${appConfig.apiUrl}/addproduct`, _data)
             .then(response => {
+                console.log(response.config.data)
                 return response
-            }).then(responseData => {
+            }).then(async (responseData) => {
                 alert('success')
+                for (let i = 0; i < url.length; i++) {
+                    await addImages(responseData?.data.id, url[i])
+                }
                 console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
             }).catch(error => {
                 console.log("🚀 ~ file: Addproducts.tsx:40 ~ handleAddproduct ~ error:", error)
             })
+
+    }
+
+    const addImages = async (id: number, url: string) => {
+
+        const urlImages = {
+            idproduct: id,
+            url: url
+        }
+        await axios.post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
+            .then(response => response.data)
     }
 
     const {
