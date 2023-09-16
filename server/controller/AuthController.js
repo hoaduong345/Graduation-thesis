@@ -213,16 +213,15 @@ const AuthController = {
           .status(400)
           .send("You are not verify account, please check your Email");
       }
-      const forgot_password_token = AuthController.generateForgotPasswordToken(
-        user.email
-      );
-      if (user.forgotpassword_token == null) {
+
+      if (!user.forgotpassword_token) {
+      
         await prisma.user.update({
           where: {
             email: user.email,
           },
           data: {
-            refresh_token: forgot_password_token,
+            refresh_token: AuthController.generateForgotPasswordToken(user.email),
           },
         });
       }
