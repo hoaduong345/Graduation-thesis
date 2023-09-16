@@ -5,6 +5,8 @@ const ProductController = require("../controller/ProductController");
 const router = require("express").Router();
 
 // thêm sản phẩm
+router.post("/addImagesByProductsID", ProductController.addImagesByProductsID);
+
 router.post("/addproduct", ProductController.addProduct);
 
 router.delete("/deleteproduct/:id", ProductController.deleteProduct);
@@ -13,11 +15,11 @@ router.put("/updateproduct/:id", ProductController.updateProduct);
 
 router.get("/chitietproduct/:id", ProductController.getProductDetail);
 
-router.get('/allproducts', ProductController.getAllProduct);
+router.get("/allproducts", ProductController.getAllProduct);
 
-router.get('/paginated', ProductController.getProductsPaginated);
+router.get("/paginated", ProductController.getProductsPaginated);
 
-router.get('/search', ProductController.searchProducts);
+router.get("/search", ProductController.searchProducts);
 
 // thêm danh mục
 
@@ -27,6 +29,6 @@ router.delete("/deletecategory/:id", ProductController.deleteCategory);
 
 router.put("/updatecategory/:id", ProductController.updateCategory);
 
-router.get('/allcategory', ProductController.getAllCategory);
+router.get("/allcategory", ProductController.getAllCategory);
 
 module.exports = router;

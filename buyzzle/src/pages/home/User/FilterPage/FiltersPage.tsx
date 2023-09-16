@@ -13,6 +13,7 @@ import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
+import axios from "axios";
 
 export interface Products {
   id: number;
@@ -27,44 +28,20 @@ export interface Products {
   description: string;
   status: string;
   date: string;
-  images: string;
-  imagesList: string;
+  ProductImage: {
+    url: string
+  }[]
 }
 
-// const products: Products[] = [];
-// // mang hinh anh random 1- images.length
-// const images: string[] = [
-//   "https://product.hstatic.net/200000722513/product/hinh-2_f829913c3f7144a3a4aa066dc78faec0_master.gif",
-//   "https://product.hstatic.net/200000722513/product/thumb_pc_studio_bdeef727e7c54592a4deac435876eed2_master.png",
-//   "https://product.hstatic.net/200000722513/product/phantom_i4070_20c63a05c1094b57b86f39edb98dce7b_master.png",
-// ];
-// for (let i = 0; i < 11; i++) {
-//   products.push({
-//     id: i + 1,
-//     name: `Áo khoác mùa đông  ${i + 1}`,
-//     images: images[Math.floor(Math.random() * images.length)],
-//     rate: 1,
-//     price: 210.0,
-//     discount: 20,
-//     soldCount: 20,
-//   });
-// }
-
-
 export default function FiltersPage() {
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState<Products[]>([])
 
   useEffect(() => {
-    fetch("http://localhost:5000/buyzzle/product/allproducts")
-      .then((data) => {
-        const bien = data.json()
-        return bien
-
-      }).then((data) => {
-
-        setProducts(data)
-
-      }).catch((error) => {
+    axios.get("http://localhost:5000/buyzzle/product/allproducts")
+      .then((reposonse) => {
+        setProducts(reposonse.data)
+      })
+      .catch((error) => {
         console.log(error)
       })
   }, [])
@@ -167,7 +144,7 @@ export default function FiltersPage() {
             </div>
 
             <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
-              
+
               {products.map((items) => {
                 // console.log('items', items)
                 return (

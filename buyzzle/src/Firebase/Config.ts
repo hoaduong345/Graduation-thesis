@@ -13,6 +13,16 @@ const firebaseConfig = {
   storageBucket: "uploadimgtofirebase-8d5c9.appspot.com",
   messagingSenderId: "939682945824",
   appId: "1:939682945824:web:319cfb0102d58890b95545"
+  
+
+  // apiKey: "AIzaSyDUTTDrCAT24dmHuHK0OvOpI7-lhEMJiJ4",
+  // authDomain: "buyzzle-f8313.firebaseapp.com",
+  // databaseURL: "https://buyzzle-f8313-default-rtdb.firebaseio.com",
+  // projectId: "buyzzle-f8313",
+  // storageBucket: "buyzzle-f8313.appspot.com",
+  // messagingSenderId: "1041627352430",
+  // appId: "1:1041627352430:web:dcfa9e53c29d3a88cb857f",
+  // measurementId: "G-FJ8LP13MNT"
 };
 
 // Initialize Firebase

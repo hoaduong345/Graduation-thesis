@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom"
+import { Navigate, useRoutes } from "react-router-dom"
 import MainLayout from "../layout/MainLayout"
 
 import Register from "../pages/register/Register";
@@ -12,6 +12,7 @@ import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
 import Addproducts from "../pages/home/Admin/Addproducts";
 import Editproducts from "../pages/home/Admin/Editproducts";
 import Detailproducts from "../pages/home/Admin/Detailproducts";
+import AdminLayout from "../layout/AdminLayout";
 
 
 export default function useRouterEmelent() {
@@ -25,7 +26,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/ProductsPage",
+      path: "/products",
       element: (
         <MainLayout>
           <ProductsPage />
@@ -40,7 +41,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-   
+
     {
       path: "/register",
       element: (
@@ -59,40 +60,46 @@ export default function useRouterEmelent() {
 
       ),
     },
-    // AdminPages
     {
-      path: "/Addproductspage",
+      path: "Detailproducts/:id",
       element: (
         <MainLayout>
-          <Addproducts />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "/Editproductspage",
-      element: (
-        <MainLayout>
-          <Editproducts />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "/ListproductsAdmin",
-      element: (
-        <MainLayout>
-          <ListproductsAdmin />
-        </MainLayout>
-      ),
-    },
 
-    {
-      path: "/Detailproducts/:id",
-      element: (
-        <MainLayout>
           <Detailproducts />
         </MainLayout>
       ),
     },
+
+
+    // AdminPages
+    {
+      path: "/admin",
+      element: <AdminLayout />,
+      children: [{
+        index: true,
+        element: <Navigate to={'Addproductspage'} />
+      }, {
+        path: "Addproductspage",
+        element: (
+          <Addproducts />
+        ),
+      },
+      {
+        path: "Editproductspage",
+        element: (
+          <Editproducts />
+        ),
+      },
+      {
+        path: "ListproductsAdmin",
+        element: (
+          <ListproductsAdmin />
+        ),
+      },
+
+      ]
+    }
+
   ]);
   return routes;
 }

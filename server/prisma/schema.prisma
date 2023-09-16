@@ -58,24 +58,21 @@ model Product {
   description  String?
   status       String?
   date         DateTime?      @default(now())
-  images       String?
-  imagesList   String?
   productId    Int?
-  createdAt    DateTime?       @default(now())
-  updatedAt    DateTime?       @default(now())
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
   categoryID   Int?
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
   ProductImage ProductImage[]
-
 }
 
 model Category {
   id        Int       @id @default(autoincrement())
   name      String?
-  date      DateTime?  @default(now())
-  updatedAt DateTime?  @default(now())
-  createdAt DateTime?  @default(now())
+  date      DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  createdAt DateTime? @default(now())
   products  Product[]
 }
 
@@ -84,11 +81,7 @@ model ProductImage {
   url             String?
   idproduct       Int?
   fK_pruductImage Product? @relation(fields: [idproduct], references: [id])
-
 }
-
-
-
 
 model Order {
   id          Int           @id @default(autoincrement())
@@ -99,29 +92,26 @@ model Order {
   status      String?
   totalPrice  Int?
   coupon      String?
-  createdAt   DateTime?      @default(now())
-  updatedAt   DateTime?      @default(now())
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @default(now())
   OrderDetail OrderDetail[]
 }
 
 model OrderDetail {
-  id              Int      @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   productId       Int?
   orderId         Int?
   price           Int?
   quantity        Int?
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @default(now())
-  fK_order        Order?   @relation(fields: [orderId], references: [id])
-  fK_pruductOrder Product? @relation(fields: [productId], references: [id])
+  fK_order        Order?    @relation(fields: [orderId], references: [id])
+  fK_pruductOrder Product?  @relation(fields: [productId], references: [id])
 }
 
 model discount {
-  id         Int    @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   code       String?
   quatity    Int?
   limit_code Int?
 }
-
-
-
