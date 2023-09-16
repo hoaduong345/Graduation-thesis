@@ -75,7 +75,7 @@ function ChangePassword() {
                         <h1 className=' login-a '>ĐỔI MẬT KHẨU</h1>
                         <div className='mb-4'>
                             <label htmlFor='password' className='login-a4 font-sans'>
-                                Mật khẩu
+                                Nhập mật khẩu mới
                             </label>
                             <div className='relative flex '>
                                 <input
