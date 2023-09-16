@@ -22,8 +22,8 @@ export type FormValues = {
 }
 
 export interface Cate {
-    name: string,
     id: number
+    name: string,
 }
 
 export default function Addproducts() {
@@ -31,6 +31,7 @@ export default function Addproducts() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const [categoty, setCategory] = useState<Cate[]>([])
+    const [i, setI] = useState<number>(0)
 
     useEffect(() => {
         getCategory()
@@ -84,7 +85,7 @@ export default function Addproducts() {
             description: data.productDesc,
             quantity: data.productQuantity,
             discount: data.productDiscount,
-            categoryID: categoty[0].id,
+            categoryID: i,
         }
 
         // console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
@@ -239,7 +240,11 @@ export default function Addproducts() {
                                         {/* Dropdown */}
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                             <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none "
-                                            // onChange={field.onChange}
+                                                onChange={(na) => {
+                                                    const Id = na.target.value
+                                                    setI(Number(Id))
+                                                }}
+
                                             >
                                                 {
                                                     categoty.map(e => {
