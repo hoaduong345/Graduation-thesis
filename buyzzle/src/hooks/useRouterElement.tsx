@@ -63,7 +63,10 @@ export default function useRouterEmelent() {
     {
       path: "Detailproducts/:id",
       element: (
-        <Detailproducts />
+        <MainLayout>
+
+          <Detailproducts />
+        </MainLayout>
       ),
     },
 
@@ -94,12 +97,7 @@ export default function useRouterEmelent() {
         ),
       },
 
-      {
-        path: "Detailproducts/:id",
-        element: (
-          <Detailproducts />
-        ),
-      },]
+      ]
     }
 
   ]);

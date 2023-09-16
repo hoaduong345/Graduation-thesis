@@ -131,7 +131,7 @@ export default function Header() {
                   <Link to="/">Sữa Bab</Link>
                 </li>
                 <li>
-                  <Link to="/admin/Detailproducts">Detailproducts</Link>
+                  <Link to="/Detailproducts">Detailproducts</Link>
                 </li>
                 <li>
                   <a href="#">Sữa Baby</a>

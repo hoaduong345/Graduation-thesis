@@ -10,8 +10,6 @@ import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
 import { appConfig } from '../../../configsEnv'
-import { Product } from '../../../components/home'
-import { Products } from '../User/FilterPage/FiltersPage'
 // import { v4 } from 'uuid'
 
 export type FormValues = {
@@ -41,8 +39,6 @@ export default function Addproducts() {
             price: data.productPrice,
             description: data.productDesc,
             quantity: data.productQuantity,
-            // images: JSON.stringify(url[0]),
-            // imagesList: JSON.stringify([...url]),
             discount: data.productDiscount,
         }
 
@@ -116,6 +112,7 @@ export default function Addproducts() {
 
     // img firebase
     const loadImageFile = async (images: any) => {
+
         for (let i = 0; i < images.length; i++) {
             const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
 
@@ -304,6 +301,11 @@ export default function Addproducts() {
                                                                 return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
                                                             })
                                                         }
+
+                                                        {/* <div
+                                                            style={{ borderTopColor: "transparent" }}
+                                                            className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
+                                                        /> */}
 
 
 

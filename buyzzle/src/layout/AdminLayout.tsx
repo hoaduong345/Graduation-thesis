@@ -9,7 +9,7 @@ function AdminLayout(props: Props) {
   return (
     <div >
       <Header />
-      <Outlet />
+        <Outlet />
       <Footer />
     </div>
   )
