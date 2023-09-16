@@ -3,7 +3,7 @@ const path = {
   register: "/register",
   login: "/login",
   forgotpassword: "/forgotpassword",
-  changepassword: "/forgotpassword/:token",
+  changepassword: "/resetpassword/:token",
 
 } as const;
 export default path;

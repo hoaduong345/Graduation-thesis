@@ -20,36 +20,11 @@ function Forgotpassword() {
             .string()
             .email('Email không hợp lệ')
             .required('Vui lòng nhập email'),
-        // ...các trường xác thực khác nếu có
     });
 
     const { handleSubmit, register, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema),
     });
-
-    // const onSubmit = handleSubmit(async (data) => {
-    //     try {
-    //         // Gọi API để lấy đường dẫn từ server
-    //         const response = await fetch('http://localhost:5000/buyzzle/auth/forgotpassword', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ email: data.email }),
-    //         });
-
-    //         if (response.ok) {
-    //             const url = await response.text();
-    //             // Điều hướng người dùng đến đường dẫn đã trả về từ server
-    //             navigate(url); // Sử dụng navigate thay vì history.push
-    //         } else {
-    //             // Xử lý lỗi nếu cần
-    //             console.error('Lỗi khi gửi email:', response.statusText);
-    //         }
-    //     } catch (error) {
-    //         console.error('Lỗi khi gửi email:', error);
-    //     }
-    // });
 
     const API = "http://localhost:5000/buyzzle/auth/forgotpassword";
 
