@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { appConfig } from '../../../../configsEnv';
 import UploadIMG from '../Assets/TSX/UploadIMG';
+import { useQuery } from '@tanstack/react-query';
 
 export type FormValues = {
     name: string;
@@ -29,7 +30,10 @@ export default function EditProductMap() {
     const {
         control,
         handleSubmit,
+        watch,
         formState: { errors, isDirty, isValid },
+        register
+
     } = useForm<FormValues>({
         mode: 'all',
         defaultValues:
@@ -39,8 +43,8 @@ export default function EditProductMap() {
             description: "",
             discount: 1
         },
-    });
 
+    });
 
     const [categoty, setCategory] = useState<Cate[]>([])
     useEffect(() => {
@@ -66,7 +70,6 @@ export default function EditProductMap() {
             .then((editData) => editData)
             .then((editData) => {
                 alert('success')
-                console.log("🚀 ~ file: Editproducts.tsx:23 ~ useEffect ~ editData:", editData)
                 return setEditProduct(editData.data)
             })
             .catch((error) => {
@@ -81,9 +84,10 @@ export default function EditProductMap() {
             .then((detailForm) => {
                 setEditProduct(detailForm.data)
             }).catch(error => {
-                console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
-            })
+                    console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
+                })
     }, [])
+
     const onChangeInput = (e: any) => {
         setEditProduct(e.target.value)
     }
@@ -117,12 +121,13 @@ export default function EditProductMap() {
                                             ${!!errors.name ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                             placeholder="Nhập tiêu đề sản phẩm"
                                             value={editProduct?.name}
-                                            // onChange={(e) => {
-                                            //     const reg = /[0-9]/;
-                                            //     const value = e.target.value
-                                            //     field.onChange(value.replace(reg, ''));
-                                            // }}
+                                            {...register("name")}
                                             onChange={onChangeInput}
+                                        // onChange={(e) => {
+                                        //     const reg = /[0-9]/;
+                                        //     const value = e.target.value
+                                        //     field.onChange(value.replace(reg, ''));
+                                        // }}
                                         />
                                         {!!errors.name && <p className='text-red-700 mt-2'>{errors.name.message}</p>}</>
                                 )} />
@@ -155,6 +160,7 @@ export default function EditProductMap() {
                                                 maxLength={1000}
                                                 rows={4} cols={50}
                                                 value={editProduct?.description}
+                                                {...register('description')}
                                                 onChange={onChangeInput}
                                             >
                                             </textarea>
@@ -285,12 +291,13 @@ export default function EditProductMap() {
                                                             className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
                                                             placeholder="000.000"
                                                             value={editProduct?.price}
-                                                            // onChange={(e) => {
-                                                            //     const reg = /[^1-9]/g
-                                                            //     const value = e.target.value
-                                                            //     field.onChange(value.replace(reg, ''))
-                                                            // }}
+                                                            {...register('price')}
                                                             onChange={onChangeInput}
+                                                        // onChange={(e) => {
+                                                        //     const reg = /[^1-9]/g
+                                                        //     const value = e.target.value
+                                                        //     field.onChange(value.replace(reg, ''))
+                                                        // }}
                                                         />
                                                         <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
                                                     </div>
@@ -323,13 +330,14 @@ export default function EditProductMap() {
                                                         <input
                                                             className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
                                                             placeholder="000.000"
-                                                            value={editProduct?.discount}
                                                             maxLength={3}
                                                             // onChange={(e) => {
                                                             //     const reg = /[^1-9]/g
                                                             //     const value = e.target.value
                                                             //     field.onChange(value.replace(reg, ''))
                                                             // }}
+                                                            value={editProduct?.discount}
+                                                            {...register('discount')}
                                                             onChange={onChangeInput}
                                                         />
                                                         <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
@@ -358,12 +366,13 @@ export default function EditProductMap() {
                                                 className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
                                                     ${!!errors.quantity ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'} `}
                                                 placeholder="000.000"
-                                                value={editProduct?.quantity}
                                                 // onChange={(e) => {
                                                 //     const reg = /[^1-9]/g
                                                 //     const value = e.target.value
                                                 //     field.onChange(value.replace(reg, ''))
                                                 // }}
+                                                value={editProduct?.quantity}
+                                                {...register('quantity')}
                                                 onChange={onChangeInput}
 
                                             />
@@ -407,7 +416,7 @@ export default function EditProductMap() {
                             <div className={`flex items-center w-[150px] rounded-md h-[46px] transition 
                                     duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer
                                     `}>
-                                <button  className={`text-center text-base font-bold text-[#FFFFFF] 
+                                <button className={`text-center text-base font-bold text-[#FFFFFF] 
                                         `}>
                                     Sửa sản phẩm
                                 </button>
