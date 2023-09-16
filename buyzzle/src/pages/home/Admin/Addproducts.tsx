@@ -23,13 +23,57 @@ export type FormValues = {
 
 export interface Cate {
     name: string,
-    idcategory: number
+    id: number
 }
 
 export default function Addproducts() {
 
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
+    const [categoty, setCategory] = useState<Cate[]>([])
+
+    useEffect(() => {
+        getCategory()
+    }, [])
+
+    const getCategory = () => {
+        axios.get('http://localhost:5000/buyzzle/product/allcategory')
+            .then(response => response.data
+            )
+            .then(data => {
+                // console.log(data)
+                setCategory(data)
+            })
+            .catch(err => console.log(err))
+    }
+
+    useEffect(() => {
+        loadImageFile(images)
+    }, [images])
+
+
+    // img firebase
+    const loadImageFile = async (images: any) => {
+
+        for (let i = 0; i < images.length; i++) {
+            const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
+
+            await uploadBytes(imageRef, images[i])
+                .then(() => {
+                    storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
+                        .then((url: any) => {
+                            setUrl((prev) => (prev.concat(url)));
+                            return url
+                        })
+                })
+                .catch(err => {
+                    alert(err)
+                })
+
+        }
+
+    }
+
 
     // Tạo fuction handle thêm sản phẩm.
     const handleAddproduct = (data: FormValues) => {
@@ -40,6 +84,7 @@ export default function Addproducts() {
             description: data.productDesc,
             quantity: data.productQuantity,
             discount: data.productDiscount,
+            categoryID: categoty[0].id,
         }
 
         // console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
@@ -83,55 +128,10 @@ export default function Addproducts() {
             productImage: '',
             productPrice: 1,
             productQuantity: 1,
-            productDiscount: 1
+            productDiscount: 1,
         },
 
     });
-
-
-    const [categoty, setCategory] = useState<Cate[]>([])
-    useEffect(() => {
-        getCategory()
-    }, [])
-
-    const getCategory = () => {
-        axios.get('http://localhost:5000/buyzzle/product/allcategory')
-            .then(response => response.data
-            )
-            .then(data => {
-                // console.log(data)
-                setCategory(data)
-            })
-            .catch(err => console.log(err))
-    }
-
-    useEffect(() => {
-        loadImageFile(images)
-    }, [images])
-
-
-    // img firebase
-    const loadImageFile = async (images: any) => {
-
-        for (let i = 0; i < images.length; i++) {
-            const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
-
-            await uploadBytes(imageRef, images[i])
-                .then(() => {
-                    storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
-                        .then((url: any) => {
-                            setUrl((prev) => (prev.concat(url)));
-                            return url
-                        })
-                })
-                .catch(err => {
-                    alert(err)
-                })
-
-        }
-
-    }
-
 
     const isDisabled = !(isValid && isDirty)
     return (
@@ -233,26 +233,25 @@ export default function Addproducts() {
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
+                                        {/* <Controller name='productIdCategory' control={control} render={({ field }) => (
+                                            <> */}
                                         <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Danh Mục Sản Phẩm*</p>
                                         {/* Dropdown */}
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
-
+                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none "
+                                            // onChange={field.onChange}
+                                            >
                                                 {
                                                     categoty.map(e => {
-                                                        return <option value={e.idcategory}>{e.name}</option>
+                                                        return <option value={e.id}>{e.name}</option>
                                                     })
                                                 }
-                                                {/* <option>Thiết bị điện da dụng</option>
-                                                <option>Giày dép da</option>
-                                                <option>Máy ảnh</option>
-                                                <option>Thời trang nam</option>
-                                                <option>Thiết bị điện tử</option>
-                                                <option>Nhà cửa đời sống</option>
-                                                <option>Sắc đẹp</option> */}
                                             </select>
                                         </div>
                                         {/* end input addNameProducts */}
+                                        {/* </>
+                                        )}
+                                        /> */}
 
                                         <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Tag*</p>
                                         {/* Dropdown */}
