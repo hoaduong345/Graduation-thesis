@@ -169,7 +169,7 @@ function ChangePassword() {
                                 </span>
                             )}
                         </div>
-                        <button type="submit" className="w-[424px] h-[49.44px] bg-[#00B207] text-white py-2 rounded-md transition duration-300 mt-[25px]">GỬI</button>
+                        <button type="submit" className="w-[424px] h-[49.44px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[25px]">GỬI</button>
                         <div className='flex items-center my-4'>
                             <div className='grow h-px bg-slate-300'></div>
                             <div className='mx-2 text-white-500'>Hoặc</div>
