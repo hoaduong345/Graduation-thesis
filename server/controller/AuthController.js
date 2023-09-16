@@ -214,15 +214,15 @@ const AuthController = {
           .status(400)
           .send("You are not verify account, please check your Email");
       }
+      const forgot_password_token = AuthController.generateForgotPasswordToken(user.email);
 
       if (!user.forgotpassword_token) {
-      
         await prisma.user.update({
           where: {
             email: user.email,
           },
           data: {
-            refresh_token: AuthController.generateForgotPasswordToken(user.email),
+            forgotpassword_token: forgot_password_token,
           },
         });
       }
@@ -230,7 +230,7 @@ const AuthController = {
         where: { id: user.id },
         data: { forgotpassword_token: forgot_password_token },
       });
-      const url = `${process.env.BASE_URL}/buyzzle/auth/forgotpassword/${user.forgotpassword_token}`;
+      const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
       // await SendEmail(user.email, "Forgot Password", url);
       console.log("áddd", url);
       res.status(200).send("A Link has sent to your email");
