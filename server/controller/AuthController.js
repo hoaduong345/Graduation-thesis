@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const decode = require("jwt-decode");
+const e = require("express");
 dotenv.config();
 
 let otpRequestAllowed = true;
@@ -213,10 +214,12 @@ const AuthController = {
           .status(400)
           .send("You are not verify account, please check your Email");
       }
-      const forgot_password_token = AuthController.generateForgotPasswordToken(user.email);
+      const forgot_password_token = AuthController.generateForgotPasswordToken(
+        user.email
+      );
 
       if (!user.forgotpassword_token) {
-        await prisma.user.update({
+        return await prisma.user.update({
           where: {
             email: user.email,
           },
@@ -225,13 +228,10 @@ const AuthController = {
           },
         });
       }
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { forgotpassword_token: forgot_password_token },
-      });
       const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
-      // await SendEmail(user.email, "Forgot Password", url);
       console.log("áddd", url);
+
+      // await SendEmail(user.email, "Forgot Password", url);
       res.status(200).send("A Link has sent to your email");
     } catch (error) {
       console.error(error);
