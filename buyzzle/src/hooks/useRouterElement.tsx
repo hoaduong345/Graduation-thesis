@@ -12,6 +12,8 @@ import Editproducts from "../pages/home/Admin/EditProduct/Editproducts";
 import Detailproducts from "../pages/home/Admin/Detailproducts";
 import UserProfile from "../pages/home/User/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
+import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
+
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -112,8 +114,16 @@ export default function useRouterEmelent() {
           <Detailproducts />
         ),
       },]
-    }
+    },
+    {
+      path: "/confirm",
+      element: (
+        <RegisterLoginLayout>
+          <ConfirmAccount/>
+        </RegisterLoginLayout>
 
+      ),
+    },
   ]);
   return routes;
 }

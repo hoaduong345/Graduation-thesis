@@ -15,9 +15,9 @@ export const Images = {
   banner1: "../src/Assets/Images/banner1.jpg",
   bgRegisterIcon: "../src/Assets/PNG/bgRegisterIcon.png",
   logoSlogan:"../src/Assets/PNG/logoSlogan.png",
-  logoApple:"../src/Assets/PNG/lgApple",
-  logoGoogle:"../src/Assets/PNG/lgG",
-  logoFace:"../src/Assets/PNG/lgFace",
+  logoApple:"../src/Assets/PNG/lgApple.png",
+  logoGoogle:"../src/Assets/PNG/lgG.png",
+  logoFace:"../src/Assets/PNG/lgFace.png",
   bannerHome: "../src/Assets/PNG/Rectangle65.png",
   banerPreeShip: "../src/Assets/PNG/banner2.png",
   banner3: "../src/Assets/PNG/Rectangle 66.png",
@@ -66,5 +66,8 @@ export const Images = {
   imageproduct6: "../../../src/pages/home/Admin/Assets/Images/imageproduct6.png" ,
   chevron: "../../../src/pages/home/Admin/Assets/Images/chevron-right.png" ,
   chevron1: "../../../src/pages/home/Admin/Assets/Images/chevron-right1.png" ,
+  Banner: "../src/Assets/Images/banner.jpg",
+  Banner1: "../src/Assets/Images/banner1.jpg",
+
 };
 

@@ -14,6 +14,8 @@ export type FormValues = {
     description: string;
     count: number;
     images: string;
+    ProductImage: string;
+    discount: number;
 }
 
 export default function Detailproducts() {
@@ -38,8 +40,7 @@ export default function Detailproducts() {
                 {/* <h1>Tên sản phẩm: {first?.name}  </h1>
                 <h1>Giá:{first?.price}  </h1>
                 <h1>Số lượng:{first?.count}  </h1>
-                <h1>Mô tả:{first?.description}  </h1>
-                <img src={first?.ProductImage[0].url} alt="" /> */}
+                <h1>Mô tả:{first?.description}  </h1> */}
 
                 <div className='flex gap-[24px]'>
                     <div>
@@ -48,10 +49,12 @@ export default function Detailproducts() {
                             <img className='bg-red-50' src={Images.chevron} alt="" />
                         </button>
                         <div className='flex flex-col gap-[10px]'>
-                            <img className='h-[88px] w-[88px]' src={first?.ProductImage[1].url} alt="" />
-                            <img className='h-[88px] w-[88px]' src={first?.ProductImage[2].url} alt="" />
-                            <img className='h-[88px] w-[88px]' src={first?.ProductImage[3].url} alt="" />
-                            <img className='h-[88px] w-[88px]' src={first?.ProductImage[4].url} alt="" />
+                            {
+                                // first?.ProductImage.filter( e)
+                                first?.ProductImage.slice(1, 5).map(e => {
+                                    return <img className='h-[88px] w-[88px]' src={e.url} alt="" />
+                                })
+                            }
                         </div>
                         <img src="" alt="" />
                     </div>
