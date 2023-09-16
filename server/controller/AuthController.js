@@ -221,8 +221,8 @@ const AuthController = {
         where: { id: user.id },
         data: { forgotpassword_token: forgot_password_token },
       });
-      const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
-      await SendEmail(user.email, "Forgot Password", url);
+      const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/forgotpassword/${user.forgotpassword_token}`;
+      // await SendEmail(user.email, "Forgot Password", url);
       console.log(url);
       res.status(200).send(url);
     } catch (error) {
