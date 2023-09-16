@@ -7,11 +7,15 @@ CREATE TABLE `User` (
     `verify` BOOLEAN NOT NULL DEFAULT false,
     `name` VARCHAR(191) NULL,
     `phonenumber` VARCHAR(191) NULL,
+    `image` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updateAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `refresh_token` VARCHAR(191) NULL,
     `forgotpassword_token` VARCHAR(191) NULL,
     `role` INTEGER NOT NULL,
 
+    UNIQUE INDEX `User_email_key`(`email`),
+    UNIQUE INDEX `User_username_key`(`username`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

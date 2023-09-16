@@ -1,4 +1,3 @@
-
 import { Products } from './FiltersPage';
 import { Images } from '../../../../Assets/TS';
 import { Link } from 'react-router-dom';
@@ -7,6 +6,7 @@ type Props = {
   product: Products;
 };
 const Filter = (props: Props) => {
+  
   const { product } = props
 
   return (

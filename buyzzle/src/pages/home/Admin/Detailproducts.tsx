@@ -21,7 +21,6 @@ export default function Detailproducts() {
     const { id } = useParams()
     console.log(id);
 
-
     useEffect(() => {
         axios.get(`${appConfig.apiUrl}/chitietproduct/${id}`)
             .then((detail) => {
@@ -33,7 +32,6 @@ export default function Detailproducts() {
                 console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
             })
     }, [])
-
     return (
         <>
             <Container>

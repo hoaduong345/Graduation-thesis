@@ -1308,15 +1308,15 @@
   dependencies:
     "esutils" "^2.0.2"
 
-dotenv@^16.3.1:
-  version "16.3.1"
-  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.3.1.tgz"
-  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
+"dotenv@^16.3.1":
+  "integrity" "sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ=="
+  "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-16.3.1.tgz"
+  "version" "16.3.1"
 
-electron-to-chromium@^1.4.477:
-  version "1.4.503"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.503.tgz"
-  integrity sha512-LF2IQit4B0VrUHFeQkWhZm97KuJSGF2WJqq1InpY+ECpFRkXd8yTIaTtJxsO0OKDmiBYwWqcrNaXOurn2T2wiA==
+"electron-to-chromium@^1.4.477":
+  "integrity" "sha512-LF2IQit4B0VrUHFeQkWhZm97KuJSGF2WJqq1InpY+ECpFRkXd8yTIaTtJxsO0OKDmiBYwWqcrNaXOurn2T2wiA=="
+  "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.503.tgz"
+  "version" "1.4.503"
 
 "emoji-regex@^8.0.0":
   "integrity" "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A=="

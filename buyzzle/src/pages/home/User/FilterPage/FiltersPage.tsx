@@ -39,6 +39,7 @@ export default function FiltersPage() {
   useEffect(() => {
     axios.get("http://localhost:5000/buyzzle/product/allproducts")
       .then((reposonse) => {
+        console.log("🚀 ~ file: FiltersPage.tsx:42 ~ .then ~ reposonse:", reposonse.data)
         setProducts(reposonse.data)
       })
       .catch((error) => {
@@ -146,7 +147,6 @@ export default function FiltersPage() {
             <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
 
               {products.map((items) => {
-                // console.log('items', items)
                 return (
                   <>
                     <Filter product={items} />
