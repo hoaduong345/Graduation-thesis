@@ -1,6 +1,5 @@
 import { Navigate, useRoutes } from "react-router-dom"
 import MainLayout from "../layout/MainLayout"
-
 import Register from "../pages/register/Register";
 import RegisterLoginLayout from "../layout/RegisterLoginLayout";
 import Login from "../pages/login/Login";
@@ -116,7 +115,7 @@ export default function useRouterEmelent() {
         ),
       },]
     },
-
+    {
       path: "/confirm",
       element: (
         <RegisterLoginLayout>
