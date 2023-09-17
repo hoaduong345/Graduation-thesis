@@ -64,5 +64,7 @@ export const Images = {
   imageproduct4: "../../../src/pages/home/Admin/Assets/Images/imageproduct4.png" ,
   imageproduct5: "../../../src/pages/home/Admin/Assets/Images/imageproduct5.png" ,
   imageproduct6: "../../../src/pages/home/Admin/Assets/Images/imageproduct6.png" ,
+  chevron: "../../../src/pages/home/Admin/Assets/Images/chevron-right.png" ,
+  chevron1: "../../../src/pages/home/Admin/Assets/Images/chevron-right1.png" ,
 };
 
