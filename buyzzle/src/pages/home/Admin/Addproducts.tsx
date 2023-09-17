@@ -10,8 +10,6 @@ import { Link } from 'react-router-dom'
 import { storage } from '../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
 import { appConfig } from '../../../configsEnv'
-import { Product } from '../../../components/home'
-import { Products } from '../User/FilterPage/FiltersPage'
 // import { v4 } from 'uuid'
 
 export type FormValues = {
@@ -72,6 +70,7 @@ export default function Addproducts() {
                 .catch(err => {
                     alert(err)
                 })
+
         }
 
     }
@@ -84,14 +83,10 @@ export default function Addproducts() {
             price: data.productPrice,
             description: data.productDesc,
             quantity: data.productQuantity,
-            // images: JSON.stringify(url[0]),
-            // imagesList: JSON.stringify([...url]),
             discount: data.productDiscount,
             categoryID: i,
         }
-
         // console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
-
         axios.post(`${appConfig.apiUrl}/addproduct`, _data)
             .then(response => {
                 console.log(response.config.data)
@@ -101,11 +96,15 @@ export default function Addproducts() {
                 for (let i = 0; i < url.length; i++) {
                     await addImages(responseData?.data.id, url[i])
                 }
-                console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
+                resetField("productName"),
+                    resetField("productDesc"),
+                    resetField("productPrice"),
+                    resetField("productQuantity"),
+                    resetField("productDiscount"),
+                    console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
             }).catch(error => {
                 console.log("🚀 ~ file: Addproducts.tsx:40 ~ handleAddproduct ~ error:", error)
             })
-
     }
 
     const addImages = async (id: number, url: string) => {
@@ -116,11 +115,13 @@ export default function Addproducts() {
         }
         await axios.post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
             .then(response => response.data)
+
     }
 
     const {
         control,
         handleSubmit,
+        resetField,
         formState: { errors, isDirty, isValid },
     } = useForm<FormValues>({
         mode: 'all',
@@ -136,53 +137,6 @@ export default function Addproducts() {
 
     });
 
-<<<<<<< HEAD
-
-    const [categoty, setCategory] = useState<Cate[]>([])
-    useEffect(() => {
-        getCategory()
-    }, [])
-
-    const getCategory = () => {
-        axios.get('http://localhost:5000/buyzzle/product/allcategory')
-            .then(response => response.data
-            )
-            .then(data => {
-                // console.log(data)
-                setCategory(data)
-            })
-            .catch(err => console.log(err))
-    }
-
-    useEffect(() => {
-        loadImageFile(images)
-    }, [images])
-
-
-    // img firebase
-    const loadImageFile = async (images: any) => {
-        for (let i = 0; i < images.length; i++) {
-            const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
-
-            await uploadBytes(imageRef, images[i])
-                .then(() => {
-                    storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
-                        .then((url: any) => {
-                            setUrl((prev) => (prev.concat(url)));
-                            return url
-                        })
-                })
-                .catch(err => {
-                    alert(err)
-                })
-
-        }
-
-    }
-
-
-=======
->>>>>>> origin/ThangCode9
     const isDisabled = !(isValid && isDirty)
     return (
         <Container>
@@ -208,7 +162,7 @@ export default function Addproducts() {
                                 <div>
                                     <span className='text-[#000] text-2xl font-normal '>Mô Tả Sản Phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-6 px-6 mt-2
+                                    <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <Controller control={control} name='productName' rules={{
                                             required: {
@@ -281,7 +235,7 @@ export default function Addproducts() {
                                 <div className='mt-7'>
                                     <span className='text-[#000] text-2xl font-normal '>Danh Mục Sản Phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-6 px-6 mt-2
+                                    <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         {/* <Controller name='productIdCategory' control={control} render={({ field }) => (
                                             <> */}
@@ -355,20 +309,23 @@ export default function Addproducts() {
                                                             })
                                                         }
 
-
-
-
+                                                        {/* <div
+                                                            style={{ borderTopColor: "transparent" }}
+                                                            className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
+                                                        /> */}
                                                     </div>
                                                 </div>
                                             </>
                                         )} />
                                     </div>
                                 </div>
+
+
                                 {/* Giá và số lượng sản phẩm */}
                                 <div className='mt-7'>
                                     <span className='text-[#000] text-2xl font-normal '>Giá & Số Lượng</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-6 px-6 mt-2
+                                    <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <div className='grid grid-cols-6 gap-5'>
                                             <Controller control={control} name='productPrice' rules={{
@@ -490,18 +447,14 @@ export default function Addproducts() {
                                 <div className='mt-7'>
                                     <span className='text-[#000] text-2xl font-normal'>Tình trạng sản phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-4 px-9 mt-2
+                                    <div className='card w-[100%] py-4 px-9 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <p className='text-[#4C4C4C] text-sm font-semibold mb-[18px]'>Tình trạng sản phẩm*</p>
-                                        <div className='flex text-center'>
+                                        <div className='flex text-center  w-16 justify-start gap-5'>
                                             <h3 className='text-[#4C4C4C] font-semibold'>Ẩn</h3>
                                             {/* Swich */}
-                                            <div className='Switch'>
-                                                <input
-                                                    className="mx-3 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-[#EA4B48] after:shadow-[0_0px_3px_0_rgb(0_0_0_/_7%),_0_2px_2px_0_rgb(0_0_0_/_4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px_-2px_rgba(0,0,0,0.2),_0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px_-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-primary dark:checked:after:bg-primary dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]"
-                                                    type="checkbox"
-                                                    role="switch"
-                                                    id="flexSwitchCheckDefault" />
+                                            <div className="form-control">
+                                                <input type="checkbox" className="toggle toggle-error" />
                                             </div>{/* end  Swich */}
                                             <h3 className='text-[#5D5FEF] font-semibold'>Đăng</h3>
                                         </div>
@@ -525,12 +478,9 @@ export default function Addproducts() {
                                         <button disabled={isDisabled} onClick={handleSubmit((data: any) => {
                                             handleAddproduct(data)
                                         })} className={`text-center text-base font-bold text-[#FFFFFF] 
-<<<<<<< HEAD
                                         ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}
+                                        
                                         `}>
-=======
-                                        ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} `}>
->>>>>>> origin/ThangCode9
                                             Thêm sản phẩm
                                         </button>
                                     </div>
