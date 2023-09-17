@@ -1,75 +1,80 @@
 import { useEffect, useState } from "react";
-import SitebarFilter, { Props } from "../../components/Sitebar/SitebarFilter";
-import { Images } from "../../Assets/TS";
-import Container from "../../components/container/Container";
-import MangoLogo from "../../Assets/TSX/MangoLogo";
-import FoodLogo from "../../Assets/TSX/FoodLogo";
-import FoodLogoo from "../../Assets/TSX/FoodLogoo";
-import BookOff from "../../Assets/TSX/BookOff";
-import Series from "../../Assets/TSX/Series";
-import StepsLogo from "../../Assets/TSX/StepsLogo";
-import "../css/filter.css";
-import ArrowNext from "../../Assets/TSX/ArrowNext";
-import ArrowPrev from "../../Assets/TSX/ArrowPrev";
-import Filter from "./FilterPage/Filter";
-import SlidesFilter from "../../components/home/components/slides/SlidesFilter/SlidesFilter";
-import { title } from "process";
-import { error } from "console";
+import "../../../css/filter.css";
+import Filter from "./Filter";
+import Container from "../../../../components/container/Container";
+import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
+import { Images } from "../../../../Assets/TS";
+import SlidesFilter from "../../../../components/home/components/slides/SlidesFilter/SlidesFilter";
+import ArrowPrev from "../../../../Assets/TSX/ArrowPrev";
+import ArrowNext from "../../../../Assets/TSX/ArrowNext";
+import StepsLogo from "../../../../Assets/TSX/StepsLogo";
+import Series from "../../../../Assets/TSX/Series";
+import BookOff from "../../../../Assets/TSX/BookOff";
+import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
+import FoodLogo from "../../../../Assets/TSX/FoodLogo";
+import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 
 export interface Products {
   id: number;
   name: string;
-  images: string;
-  rate: number;
   price: number;
-  discount: number;
-  soldCount: number;
+  rate: number; // đánh giá
+  pricesale: number; // giảm được bao nhiêu đó ( thẻ tag )
+  sellingPrice: number; // giá bán
+  discount: number; // giảm giá
+  soldCount: number; // đã bán
+  quantity: number;
+  description: string;
+  status: string;
+  date: string;
+  images: string;
+  imagesList: string;
 }
 
-const products: Products[] = [];
-// mang hinh anh random 1- images.length
-const images: string[] = [
-  "https://product.hstatic.net/200000722513/product/hinh-2_f829913c3f7144a3a4aa066dc78faec0_master.gif",
-  "https://product.hstatic.net/200000722513/product/thumb_pc_studio_bdeef727e7c54592a4deac435876eed2_master.png",
-  "https://product.hstatic.net/200000722513/product/phantom_i4070_20c63a05c1094b57b86f39edb98dce7b_master.png",
-];
-for (let i = 0; i < 11; i++) {
-  products.push({
-    id: i + 1,
-    name: `Áo khoác mùa đông  ${i + 1}`,
-    images: images[Math.floor(Math.random() * images.length)],
-    rate: 1,
-    price: 210.0,
-    discount: 20,
-    soldCount: 20,
-  });
-}
+// const products: Products[] = [];
+// // mang hinh anh random 1- images.length
+// const images: string[] = [
+//   "https://product.hstatic.net/200000722513/product/hinh-2_f829913c3f7144a3a4aa066dc78faec0_master.gif",
+//   "https://product.hstatic.net/200000722513/product/thumb_pc_studio_bdeef727e7c54592a4deac435876eed2_master.png",
+//   "https://product.hstatic.net/200000722513/product/phantom_i4070_20c63a05c1094b57b86f39edb98dce7b_master.png",
+// ];
+// for (let i = 0; i < 11; i++) {
+//   products.push({
+//     id: i + 1,
+//     name: `Áo khoác mùa đông  ${i + 1}`,
+//     images: images[Math.floor(Math.random() * images.length)],
+//     rate: 1,
+//     price: 210.0,
+//     discount: 20,
+//     soldCount: 20,
+//   });
+// }
 
 
 export default function FiltersPage() {
-  // const [products, setProducts] = useState([])
+  const [products, setProducts] = useState([])
 
-  // useEffect(() => {
-  //   fetch("http://localhost:5000/buyzzle/product/product/allproducts")
-  //     .then((data) => {
-  //       const bien = data.json()
-  //       return bien
+  useEffect(() => {
+    fetch("http://localhost:5000/buyzzle/product/allproducts")
+      .then((data) => {
+        const bien = data.json()
+        return bien
 
-  //     }).then((data) => {
-  //       console.log(data)
-  //       setProducts(data)
+      }).then((data) => {
 
-  //     }).catch((error) => {
-  //       console.log(error)
-  //     })
-  // }, [])
+        setProducts(data)
+
+      }).catch((error) => {
+        console.log(error)
+      })
+  }, [])
 
   return (
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
-            <SitebarFilter onChangeFilters={(title) => {
+            <SitebarFilter onChangeFilters={() => {
             }} />
           </div>
           {/* content-right-filter */}
@@ -157,13 +162,14 @@ export default function FiltersPage() {
               </div>
             </div>
             {/* banner filter */}
-            <div className="banner filter max-w-[970px] my-5 max-2xl:max-w-[1150px] max-2xl:mx-auto">
+            <div className="banner-filter max-w-[970px] my-5 max-2xl:max-w-[1150px] max-2xl:mx-auto">
               <SlidesFilter />
             </div>
 
             <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
+              
               {products.map((items) => {
-                console.log('items', items)
+                // console.log('items', items)
                 return (
                   <>
                     <Filter product={items} />

@@ -1,7 +1,7 @@
 import { Images } from "../../Assets/TS";
 import Container from "../container/Container";
 import Category from "./components/Category";
-import Arrow from "../../Assets/arrow";
+import Arrow from "../../Assets/TSX/arrow";
 import Products from "./components/Product";
 
 import SlidesHome from "./components/slides/SlidesHome/SlidesHome";

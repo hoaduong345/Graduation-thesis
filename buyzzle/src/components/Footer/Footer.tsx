@@ -8,7 +8,7 @@ import Container from "../container/Container";
 
 export default function Footer() {
   return (
-    <footer className="footer-bg h-[512px]">
+    <footer className="footer-bg h-[512px] mt-10">
       <div>
         <div>
           <div className="bg-[#FFEAE9] h-[5px]"></div>

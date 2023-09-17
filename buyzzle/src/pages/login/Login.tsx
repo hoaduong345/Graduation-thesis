@@ -137,10 +137,10 @@ function Login() {
                             <div className='relative flex input focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4'>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
-                                    id="password"
-                                    name="password"
                                     value={formData.password}
                                     onChange={handleInputChange}
+                                    id="password"
+                                    name="password"
                                     className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                     placeholder="Mật khẩu"
                                 />
