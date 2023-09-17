@@ -480,28 +480,32 @@ const ProductController = {
 
   deleteToCart: async (req, res) => {
     try {
+
       const CartId = parseInt(req.params.id); // Lấy id sản phẩm từ params
-      // Kiểm tra xem sản phẩm có tồn tại không
-      const existingCart = await prisma.cartItem.findUnique({
+
+      const categoryId = parseInt(req.params.id);
+      const existingCategory = await prisma.category.findUnique({
         where: {
-          id: CartId,
+          id: categoryId,
         },
       });
-      if (!existingCart) {
-        return res.status(404).json("Sản phẩm không tồn tại");
-      } 
-      // Xóa sản phẩm
-      await prisma.cartItem.delete({
+      if (!existingCategory) {
+        return res.status(404).json("Danh mục không tồn tại");
+      }
+      await prisma.category.delete({
         where: {
-          id: CartId,
+          id: categoryId,
         },
       });
-      res.status(200).json("Xóa sản phẩm thành công");
+      res.status(200).json("Xóa danh mục thành công");
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
     }
   },
+
+ 
+ 
 };
 
 module.exports = ProductController;

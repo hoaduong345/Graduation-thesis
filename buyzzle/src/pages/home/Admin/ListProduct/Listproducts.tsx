@@ -9,6 +9,51 @@ import Download from '../Assets/TSX/Download'
 import { Images } from '../../../../Assets/TS'
 import Edit from '../Assets/TSX/Edit'
 export default function ListproductsAdmin() {
+<<<<<<< HEAD
+=======
+
+  const [products, setProducts] = useState<Products[]>([])
+  console.log("🚀 ~ file: Listproducts.tsx:16 ~ ListproductsAdmin ~ products:", products)
+  const [remove, setRemove] = useState('')
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  const getData = () => {
+    axios.get(`${appConfig.apiUrl}/allproducts`)
+      .then((data) => {
+        return data
+      })
+      .then((data: any) => {
+        console.log("🚀 ~ file: Listproducts.tsx:29 ~ .then ~ data.data:", data.data)
+        setProducts(data.data)
+      })
+      .catch((error) => {
+        console.log("🚀 ~ file: Listproducts.tsx:20 ~ uesEffect ~ error:", error)
+      })
+  }
+
+  function xulyDele(id: number) {
+    console.log('sdjjsd', id);
+    if (confirm("Xoa san pham?")) {
+      axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`)
+        .then((deleteItems) => deleteItems)
+        .then((deleteItems) => {
+          getData()
+        }).catch((error) => {
+          console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
+
+        }
+        )
+    }
+
+  }
+  console.log(products);
+
+  // xoa
+
+>>>>>>> origin/ThangCode9
   return (
     <>
       <Container>
@@ -97,6 +142,7 @@ export default function ListproductsAdmin() {
                 <h3 className='text-[#1A1A1A] text-sm font-semibold leading-4'>ĐÁNH GIÁ</h3>
               </div>
             </div>
+<<<<<<< HEAD
 
             {/* cardItems */}
             <div className='card-items py-2 rounded-md mt-6
@@ -649,6 +695,20 @@ export default function ListproductsAdmin() {
 
             </div>{/* end cardItems */}
 
+=======
+            <div>
+              {
+                products.length > 0 ?
+                  products?.map((items) => {
+                    return (
+                      <>
+                        <ListproductMap HandleXoa={xulyDele} products={items} />
+                      </>
+                    );
+                  }) : <p>khong co san pham</p>
+              }
+            </div>
+>>>>>>> origin/ThangCode9
 
           </div>
         </div>

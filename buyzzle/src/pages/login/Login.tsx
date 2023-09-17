@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Images } from "../../Assets/TS/index";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
+
 import "./Login.css";
 import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
@@ -64,14 +65,14 @@ function Login() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsFormSubmitted(true);
-    
+
         if (validateForm()) {
             try {
                 const response = await axios.post('http://localhost:5000/buyzzle/auth/login', {
                     username: formData.username,
                     password: formData.password,
                 });
-    
+
                 if (response.status === 200) {
                     console.log('Kết nối thành công');
 
@@ -112,7 +113,7 @@ function Login() {
                 <div className='w-[424px]'>
 
                     <form onSubmit={handleSubmit} className="registration-form">
-                        <h1 className='font-sans text-center mb-20 font-bold text-6xl text-pink-300 login-a'>ĐĂNG NHẬP</h1>
+                        <h1 className=' login-a '>ĐĂNG NHẬP</h1>
                         <div className='mb-4'>
                             <label htmlFor='username' className='login-a4 font-sans'>
                                 Tên tài khoản
@@ -123,7 +124,7 @@ function Login() {
                                 name="username"
                                 value={formData.username}
                                 onChange={handleInputChange}
-                                className="w-full p-2 input focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4 font-sans"
+                                className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                 placeholder="Email / Số điện thoại / Tên đăng nhập"
                             />
                             {isFormSubmitted && errors.username && (
@@ -134,7 +135,7 @@ function Login() {
                             <label htmlFor='password' className='login-a4 font-sans'>
                                 Mật khẩu
                             </label>
-                            <div className='relative flex input focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4'>
+                            <div className='relative flex '>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id="password"
@@ -178,6 +179,7 @@ function Login() {
                                 <p className="text-red-500">{errors.password}</p>
                             )}
                         </div>
+
 
 
                         <div className='mb-4 text-right'>
