@@ -144,6 +144,38 @@ const ProductController = {
       }
    },
 
+   updateImageByProductID: async (req, res) => {
+      try {
+        const { id } = req.params; 
+        const { url, idproduct } = req.body; 
+      
+        const existingImage = await prisma.productImage.findUnique({
+          where: {
+            id: parseInt(id),
+          },
+        });
+  
+        if (!existingImage) {
+          return res.status(404).json('Hình ảnh không tồn tại');
+        }
+  
+        const updatedImage = await prisma.productImage.update({
+          where: {
+            id: parseInt(id),
+          },
+          data: {
+            url,
+            idproduct: parseInt(idproduct), 
+          },
+        });
+  
+        res.status(200).json('Cập nhật hình ảnh thành công');
+      } catch (error) {
+        console.error(error);
+        res.status(500).json(error.message);
+      }
+    },
+
    addProduct: async (req, res) => {
       try {
          // upload.single("images")(req, res, async (err) => {
@@ -419,7 +451,7 @@ const ProductController = {
   addToCart: async (req, res) => {
     try {
       const productId = parseInt(req.params.id);
-      const quantity = parseInt(req.body.quantity); // Lấy số lượng từ yêu cầu POST
+      const quantity = parseInt(req.body.quantity); 
   
       // Kiểm tra sản phẩm có tồn tại không
       const product = await prisma.product.findUnique({
@@ -435,7 +467,7 @@ const ProductController = {
       const newCartItem = await prisma.cartItem.create({
         data: {
           productId: productId,
-          quantity: quantity, // Sử dụng số lượng từ yêu cầu
+          quantity: quantity, 
         },
       });
   

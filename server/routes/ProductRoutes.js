@@ -25,6 +25,11 @@ router.post("/addtocart/:id", ProductController.addToCart);
 
 router.delete("/deletetocart/:id", ProductController.deleteToCart);
 
+router.post('/addimagesbyproductid', ProductController.addImagesByProductsID);
+
+router.put('/updateimagesbyproductid/:id', ProductController.updateImageByProductID);
+
+
 // thêm danh mục
 
 router.post("/addcategory", ProductController.addCategory);
