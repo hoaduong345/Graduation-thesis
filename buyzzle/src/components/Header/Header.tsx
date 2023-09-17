@@ -122,7 +122,7 @@ export default function Header() {
                   <Link to="/admin/Addproductspage">Thêm sản phẩm</Link>
                 </li>
                 <li>
-                  <Link to="/admin/Editproductspage">Editproductspage</Link>
+                  <Link to="/admin/chitietproduct">Editproductspage</Link>
                 </li>
                 <li>
                   <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>

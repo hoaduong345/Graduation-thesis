@@ -60,7 +60,6 @@ arrBtnSug.push(
     name: "Áo Cổ điển",
   }
 );
-console.log(arrBtnSug.length);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type Props = {
