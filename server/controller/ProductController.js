@@ -414,6 +414,62 @@ const ProductController = {
          res.status(500).json(error.message);
       }
    },
+
+   // Thêm sản phẩm vào giỏ hàng
+  addToCart: async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+      const quantity = parseInt(req.body.quantity); // Lấy số lượng từ yêu cầu POST
+  
+      // Kiểm tra sản phẩm có tồn tại không
+      const product = await prisma.product.findUnique({
+        where: {
+          id: productId,
+        },
+      });
+  
+      if (!product) {
+        return res.status(404).json("Không tìm thấy sản phẩm");
+      }
+
+      const newCartItem = await prisma.cartItem.create({
+        data: {
+          productId: productId,
+          quantity: quantity, // Sử dụng số lượng từ yêu cầu
+        },
+      });
+  
+      res.status(201).json("Sản phẩm đã được thêm vào giỏ hàng thành công");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+  deleteToCart: async (req, res) => {
+    try {
+      const CartId = parseInt(req.params.id); // Lấy id sản phẩm từ params
+      // Kiểm tra xem sản phẩm có tồn tại không
+      const existingCart = await prisma.cartItem.findUnique({
+        where: {
+          id: CartId,
+        },
+      });
+      if (!existingCart) {
+        return res.status(404).json("Sản phẩm không tồn tại");
+      } 
+      // Xóa sản phẩm
+      await prisma.cartItem.delete({
+        where: {
+          id: CartId,
+        },
+      });
+      res.status(200).json("Xóa sản phẩm thành công");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
 };
 
 module.exports = ProductController;

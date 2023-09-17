@@ -59,6 +59,17 @@ CREATE TABLE `Product` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `CartItem` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `quantity` INTEGER NULL,
+    `productId` INTEGER NULL,
+    `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Category` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NULL,
@@ -125,6 +136,9 @@ ALTER TABLE `Token` ADD CONSTRAINT `Token_userid_fkey` FOREIGN KEY (`userid`) RE
 
 -- AddForeignKey
 ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryID_fkey` FOREIGN KEY (`categoryID`) REFERENCES `Category`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `CartItem` ADD CONSTRAINT `CartItem_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ProductImage` ADD CONSTRAINT `ProductImage_idproduct_fkey` FOREIGN KEY (`idproduct`) REFERENCES `Product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

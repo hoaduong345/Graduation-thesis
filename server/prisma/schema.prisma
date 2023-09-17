@@ -65,6 +65,16 @@ model Product {
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
   ProductImage ProductImage[]
+   CartItem     CartItem[]
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  quantity  Int?
+  productId Int?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) 
+  fk_productCartItem Product?  @relation(fields: [productId], references: [id])
 }
 
 model Category {

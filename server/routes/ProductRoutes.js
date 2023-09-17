@@ -21,6 +21,10 @@ router.get("/paginated", ProductController.getProductsPaginated);
 
 router.get("/search", ProductController.searchProducts);
 
+router.post("/addtocart/:id", ProductController.addToCart);
+
+router.delete("/deletetocart/:id", ProductController.deleteToCart);
+
 // thêm danh mục
 
 router.post("/addcategory", ProductController.addCategory);
