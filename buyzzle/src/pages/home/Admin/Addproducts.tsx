@@ -31,7 +31,7 @@ export default function Addproducts() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const [categoty, setCategory] = useState<Cate[]>([])
-    const [i, setI] = useState<number>(0)
+    const [i, setI] = useState<number>(1)
 
     useEffect(() => {
         getCategory()
@@ -97,11 +97,11 @@ export default function Addproducts() {
                     await addImages(responseData?.data.id, url[i])
                 }
                 resetField("productName"),
-                resetField("productDesc"),
-                resetField("productPrice"),
-                resetField("productQuantity"),
-                resetField("productDiscount"),
-                console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
+                    resetField("productDesc"),
+                    resetField("productPrice"),
+                    resetField("productQuantity"),
+                    resetField("productDiscount"),
+                    console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
             }).catch(error => {
                 console.log("🚀 ~ file: Addproducts.tsx:40 ~ handleAddproduct ~ error:", error)
             })
