@@ -26,19 +26,17 @@ function Forgotpassword() {
         resolver: yupResolver(validationSchema),
     });
 
-    const originalAPI = "http://localhost:5000/buyzzle/auth/forgotpassword";
-    const sanitizedAPI = originalAPI.replace(/[.,-]/g, '_');
-
     const onSubmit = handleSubmit(async (data) => {
-            try {
-                console.log("checker", data);
-                await axios.post(sanitizedAPI, data);
-                console.log('Gửi thành công', data);
-                // setLoggedInUsername(data.email);
-            } catch (error) {
-                console.error(error);
-            }
-    });
+        try {
+          console.log('checker', data);
+          await axios.post('http://localhost:5000/buyzzle/auth/forgotpassword', data);
+          console.log('Gửi thành công', data);
+          // setLoggedInUsername(data.email);
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    
 
     return (
         <body className='login-bg flex'>
