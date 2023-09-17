@@ -31,7 +31,7 @@ export default function Addproducts() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const [categoty, setCategory] = useState<Cate[]>([])
-    const [i, setI] = useState<number>(0)
+    const [i, setI] = useState<number>(1)
 
     useEffect(() => {
         getCategory()
@@ -70,7 +70,6 @@ export default function Addproducts() {
                 .catch(err => {
                     alert(err)
                 })
-
         }
 
     }
@@ -476,9 +475,7 @@ export default function Addproducts() {
                                         <button disabled={isDisabled} onClick={handleSubmit((data: any) => {
                                             handleAddproduct(data)
                                         })} className={`text-center text-base font-bold text-[#FFFFFF] 
-                                        ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}
-                                        
-                                        `}>
+                                        ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} `}>
                                             Thêm sản phẩm
                                         </button>
                                     </div>

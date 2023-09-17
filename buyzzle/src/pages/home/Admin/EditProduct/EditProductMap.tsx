@@ -84,13 +84,15 @@ export default function EditProductMap() {
             .then((detailForm) => {
                 setEditProduct(detailForm.data)
             }).catch(error => {
-                    console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
-                })
+                console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
+            })
     }, [])
 
     const onChangeInput = (e: any) => {
-        setEditProduct(e.target.value)
+        const reg = /[0-9]/;
+        setEditProduct((e.target.value).replace(reg, ''))
     }
+    
     return (
         <>
             <form onSubmit={handleSubmit(submitData)}>
@@ -123,11 +125,6 @@ export default function EditProductMap() {
                                             value={editProduct?.name}
                                             {...register("name")}
                                             onChange={onChangeInput}
-                                        // onChange={(e) => {
-                                        //     const reg = /[0-9]/;
-                                        //     const value = e.target.value
-                                        //     field.onChange(value.replace(reg, ''));
-                                        // }}
                                         />
                                         {!!errors.name && <p className='text-red-700 mt-2'>{errors.name.message}</p>}</>
                                 )} />
