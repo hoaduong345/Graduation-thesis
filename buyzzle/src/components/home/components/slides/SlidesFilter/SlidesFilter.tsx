@@ -28,15 +28,19 @@ export default function SlidesFilter() {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
-        <SwiperSlide>
+
+        <SwiperSlide >
           <img src={Images.banner} alt="" />
         </SwiperSlide>
-        <SwiperSlide className="w-full">
+
+        <SwiperSlide>
           <img src={Images.banner1} alt="" />
         </SwiperSlide>
+
         <SwiperSlide>
           <img src={Images.bannerFilter} alt="" />
         </SwiperSlide>
+
       </Swiper>
     </>
   );

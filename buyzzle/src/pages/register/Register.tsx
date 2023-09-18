@@ -21,6 +21,8 @@ function Register() {
     "price",
     "size",
     "quantity",
+    
+
   ]);
   const { handleSubmit,register, formState: { errors } } = useForm({
     defaultValues: {

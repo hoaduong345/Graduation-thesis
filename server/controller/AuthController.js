@@ -7,7 +7,6 @@ const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const decode = require("jwt-decode");
-const e = require("express");
 dotenv.config();
 
 let otpRequestAllowed = true;
@@ -80,8 +79,10 @@ const AuthController = {
       });
 
       const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/${user.id}/verify/${token.token}`;
-      await SendEmail(user.email, "Verify email", url);
+      // await SendEmail(user.email, "Verify email", url);
       console.log("🚀 ~ file: AuthController.js:83 ~ register: ~ url:", url);
+    
+      console.log("Email URL: "+url);
       res
         .status(200)
         .send(
@@ -217,21 +218,23 @@ const AuthController = {
       const forgot_password_token = AuthController.generateForgotPasswordToken(
         user.email
       );
-
-      if (!user.forgotpassword_token) {
-        return await prisma.user.update({
+      if (user.forgotpassword_token == null) {
+        await prisma.user.update({
           where: {
             email: user.email,
           },
           data: {
-            forgotpassword_token: forgot_password_token,
+            refresh_token: forgot_password_token,
           },
         });
       }
-      const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { forgotpassword_token: forgot_password_token },
+      });
+      const url = `${process.env.BASE_URL}/buyzzle/auth/forgotpassword/${user.forgotpassword_token}`;
+      await SendEmail(user.email, "Forgot Password", url);
       console.log("áddd", url);
-
-      // await SendEmail(user.email, "Forgot Password", url);
       res.status(200).send("A Link has sent to your email");
     } catch (error) {
       console.error(error);

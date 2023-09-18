@@ -7,7 +7,7 @@ import Checkbox from "./Checkbox/Checkbox";
 import ButtonSuggestt from "./ButtonSuggest/ButtonSuggest";
 import { title } from "process";
 import { useState } from "react";
-import { Products } from "../../pages/home/FiltersPage";
+import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 
 // rati star
 export interface RatingStar {
@@ -60,7 +60,6 @@ arrBtnSug.push(
     name: "Áo Cổ điển",
   }
 );
-console.log(arrBtnSug.length);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type Props = {
