@@ -9,18 +9,7 @@ const crypto = require("crypto");
 const decode = require("jwt-decode");
 dotenv.config();
 
-let otpRequestAllowed = true;
 const AuthController = {
-  // GENERATE RANDOM NUMBER
-  generateRandomNumbers: (length) => {
-    let otp = "";
-    for (let i = 0; i < length; i++) {
-      const randomNumber = Math.floor(Math.random() * 10);
-      otp += randomNumber.toString();
-    }
-    return otp;
-  },
-
   // GENERATE ACCESS TOKEN
   genereateAccessToken: (email) => {
     return jwt.sign(
@@ -38,6 +27,7 @@ const AuthController = {
         id: email.id,
       },
       process.env.JWT_REFRESH_TOKEN,
+      { algorithm: "HS256" },
       { expiresIn: "365d" }
     );
   },
@@ -47,6 +37,7 @@ const AuthController = {
         email: email,
       },
       process.env.JWT_FORGOT_PASSWORD_TOKEN,
+      { algorithm: "HS256" },
       { expiresIn: "15m" }
     );
   },
@@ -81,8 +72,8 @@ const AuthController = {
       const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/${user.id}/verify/${token.token}`;
       // await SendEmail(user.email, "Verify email", url);
       console.log("🚀 ~ file: AuthController.js:83 ~ register: ~ url:", url);
-    
-      console.log("Email URL: "+url);
+
+      console.log("Email URL: " + url);
       res
         .status(200)
         .send(
@@ -207,34 +198,40 @@ const AuthController = {
           email: reqemail,
         },
       });
+
       if (!user) {
-        return res.status(404).send("Email is not true");
+        return res.status(404).send("Email is not found");
       }
-      if (user.verify == false) {
+
+      if (!user.verify) {
         return res
           .status(400)
-          .send("You are not verify account, please check your Email");
+          .send("Your account is not verified. Please check your Email");
       }
-      const forgot_password_token = AuthController.generateForgotPasswordToken(
-        user.email
-      );
-      if (user.forgotpassword_token == null) {
+
+      let forgot_password_token = user.forgotpassword_token;
+
+      if (forgot_password_token == null) {
+        // Generate a new token
+        forgot_password_token = AuthController.generateForgotPasswordToken(
+          user.email
+        );
+
+        // Update the user's forgotpassword_token in the database
         await prisma.user.update({
           where: {
             email: user.email,
           },
           data: {
-            refresh_token: forgot_password_token,
+            forgotpassword_token: forgot_password_token,
           },
         });
       }
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { forgotpassword_token: forgot_password_token },
-      });
-      const url = `${process.env.BASE_URL}/buyzzle/auth/forgotpassword/${user.forgotpassword_token}`;
-      await SendEmail(user.email, "Forgot Password", url);
-      console.log("áddd", url);
+
+      const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${forgot_password_token}`;
+      console.log("Generated URL:", url);
+      // await SendEmail(user.email, "Forgot Password", url);
+
       res.status(200).send("A Link has sent to your email");
     } catch (error) {
       console.error(error);
