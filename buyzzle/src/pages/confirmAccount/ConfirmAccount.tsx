@@ -1,65 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, Fragment, useState } from 'react';
 import { Images } from "../../Assets/TS/index";
+
 import "./ConfirmAccount.css";
-import { Link } from "react-router-dom";
+
 import axios from "axios";
 // import LogoGoogle from "../../Assets/PNG/lgG.png";
 // import LogoApple from "../../Assets/PNG/lgApple.png";
 import bg from "../../Assets/PNG/NewProject.png";
 
+import { Link, useParams } from "react-router-dom";
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../utils/rules";
 
 function ConfirmAccount() {
-  const SignInSchema = schema.omit([
-    "category",
-    "color",
-    "details",
-    "image",
-    "price",
-    "size",
-    "quantity",
 
 
-  ]);
-  const { handleSubmit, register, formState: { errors } } = useForm({
-    defaultValues: {
-      name: '',
-      username: '',
-      password: '',
-      confirmpassword: '',
-      email: '',
-      phonenumber: '',
-      // termsAgreement: false,
-    },
-    resolver: yupResolver(SignInSchema)
-  });
+  const param = useParams();
+  const [validUrl, setValidUrl] = useState(false);
 
-
-  const API = "http://localhost:5000/buyzzle/auth/register";
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      console.log("checker", data);
-      const response = await axios.post(API, data);
-      console.log("Them thanh cong", data);
-      window.location.href = "/login";
-    } catch (error) {
-      console.error(error);
-    }
-
-  });
-
-
-
-
-
-
+  useEffect(() => {
+    const verifyEmailUrl = async () => {
+      const url = `http://localhost:5000/buyzzle/auth/${param.id}/verify/${param.token}`;
+      try {
+       
+        await axios.post(url);
+        setValidUrl(true);
+        // console.log("data", data)
+      } catch (error) {
+        console.log(error);
+        setValidUrl(false);
+      }
+    };
+    verifyEmailUrl()
+  }, [param]);
 
   return (
-
-    <body className='register-bg flex max-xl:flex-wrap'>
+    <Fragment>
+      {validUrl?(<body className='register-bg flex max-xl:flex-wrap'>
       <div className='relative p-4 max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]'>
 
         <img src={bg} className='img'
@@ -84,9 +60,9 @@ function ConfirmAccount() {
           <h2>Email Verified successfully</h2>
           <div className='mt-6 text-center'>
             <span className='text-gray-600'>Bạn đã có tài khoản Buyzzle? </span>
-            <a href='#' className='text-black-500 hover:underline font-bold'>
-              Đăng nhập
-            </a>
+            <Link to="/login">
+              <button className="green_btn">Login</button>
+            </Link>
           </div>
 
         </div>
@@ -94,8 +70,9 @@ function ConfirmAccount() {
 
 
       </div>
-    </body>
-
+    </body>):(<h1>404 Not Found</h1>)}
+    
+    </Fragment>
   );
 };
 

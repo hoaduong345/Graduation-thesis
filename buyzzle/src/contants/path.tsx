@@ -2,6 +2,6 @@ const path = {
   home: "/",
   register: "/register",
   login: "/login",
-  confirmAccount: "/confirm",
+  confirmAccount: "buyzzle/auth/:id/verify/:token",
 } as const;
 export default path;

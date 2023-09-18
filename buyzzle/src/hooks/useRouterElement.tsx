@@ -7,7 +7,7 @@ import Register from "../pages/register/Register";
 import RegisterLoginLayout from "../layout/RegisterLoginLayout";
 import Login from "../pages/login/Login";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
-
+import path from "../contants/path";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -54,7 +54,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/confirm",
+      path: path.confirmAccount,
       element: (
         <RegisterLoginLayout>
           <ConfirmAccount/>
