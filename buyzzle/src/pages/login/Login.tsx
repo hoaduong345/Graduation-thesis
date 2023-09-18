@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Images } from "../../Assets/TS/index";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
-
+// import { localStorage } from 'localStorage';
 import "./Login.css";
 import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
@@ -40,33 +40,33 @@ function Login() {
         }
     };
 
-    const validateForm = () => {
-        let valid = true;
-        const newErrors = { ...errors };
+    // const validateForm = () => {
+    //     let valid = true;
+    //     const newErrors = { ...errors };
 
-        if (!/^\S+@\S+\.\S+$/.test(formData.username)) {
-            newErrors.username = 'Tên tài khoản không hợp lệ.';
-            valid = false;
-        } else {
-            newErrors.username = '';
-        }
+    //     if (!/^\S+@\S+\.\S+$/.test(formData.username)) {
+    //         newErrors.username = 'Tên tài khoản không hợp lệ.';
+    //         valid = false;
+    //     } else {
+    //         newErrors.username = '';
+    //     }
 
-        if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/.test(formData.password)) {
-            newErrors.password = 'Mật khẩu phải bao gồm ít nhất 8 ký tự, trong đó có ít nhất một chữ cái viết hoa, chữ cái viết thường và một số.';
-            valid = false;
-        } else {
-            newErrors.password = '';
-        }
+    //     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/.test(formData.password)) {
+    //         newErrors.password = 'Mật khẩu phải bao gồm ít nhất 8 ký tự, trong đó có ít nhất một chữ cái viết hoa, chữ cái viết thường và một số.';
+    //         valid = false;
+    //     } else {
+    //         newErrors.password = '';
+    //     }
 
-        setErrors(newErrors);
-        return valid;
-    };
+    //     setErrors(newErrors);
+    //     return valid;
+    // };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsFormSubmitted(true);
 
-        if (validateForm()) {
+        // if (validateForm()) {
             try {
                 const response = await axios.post('http://localhost:5000/buyzzle/auth/login', {
                     username: formData.username,
@@ -75,7 +75,9 @@ function Login() {
 
                 if (response.status === 200) {
                     console.log('Kết nối thành công');
-
+                    localStorage.setItem('name', response.data.name);
+                    localStorage.setItem('email', formData.username);
+    
                     console.log('Dữ liệu phản hồi: ', response.data);
 
                 } else {
@@ -88,10 +90,10 @@ function Login() {
                 console.error('Yêu cầu API không thành công: ', error);
 
             }
-        } else {
-            console.log('Form is invalid.');
+        // } else {
+        //     console.log('Form is invalid.');
 
-        }
+        // }
     };
     return (
         <body className='login-bg flex'>

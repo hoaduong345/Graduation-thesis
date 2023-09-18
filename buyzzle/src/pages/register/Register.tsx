@@ -193,10 +193,10 @@ function Register() {
               )}
             </div>
             <div className='mb-[15px]'>
-              <label>Số điện thoại / Email:</label>
+              <label>Email:</label>
               <input
                 type="text"
-                placeholder="Số điện thoại hoặc địa chỉ Email"
+                placeholder="Địa chỉ Email"
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("email")}
 
@@ -211,7 +211,7 @@ function Register() {
               <label>Số điện thoại:</label>
               <input
                 type="text"
-                placeholder="Số điện thoại hoặc địa chỉ Email"
+                placeholder="Số điện thoại"
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("phonenumber")}
 
