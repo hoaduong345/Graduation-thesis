@@ -256,7 +256,7 @@ const ProductController = {
          // Kiểm tra xem sản phẩm có tồn tại không
          const existingProduct = await prisma.product.findUnique({
             where: {
-               idproduct: productId,
+               id: productId,
             },
          });
          if (!existingProduct) {
@@ -265,7 +265,7 @@ const ProductController = {
          // Xóa sản phẩm
          await prisma.product.delete({
             where: {
-               idproduct: productId,
+               id: productId,
             },
          });
          res.status(200).json("Xóa sản phẩm thành công");
@@ -490,14 +490,14 @@ const ProductController = {
         },
       });
       if (!existingCategory) {
-        return res.status(404).json("Danh mục không tồn tại");
+        return res.status(404).json("sản phẩm không tồn tại");
       }
       await prisma.category.delete({
         where: {
           id: categoryId,
         },
       });
-      res.status(200).json("Xóa danh mục thành công");
+      res.status(200).json("Xóa sản phẩm thành công");
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);

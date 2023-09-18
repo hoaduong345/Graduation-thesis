@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer/>
       <div>{routeElements}</div>
     </>
   );

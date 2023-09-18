@@ -16,6 +16,7 @@ const createVali = async (req, res, next) => {
     where: {
       username: username,
       email: email,
+      
     },
   });
 
@@ -103,7 +104,7 @@ const FogotPasswordValid = async (req, res, next) => {
 };
 
 const ResetPasswordValid = async (req, res, next) => {
-  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+const { oldPassword, newPassword, confirmNewPassword } = req.body;
   const error = {};
   if (!oldPassword) {
     error.newPassword = "password_require";

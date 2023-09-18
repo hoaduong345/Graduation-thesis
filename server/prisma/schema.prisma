@@ -19,10 +19,10 @@ model User {
   Token                Token[]
   name                 String?
   phonenumber          String?
-  createdAt            DateTime @default(now())
+  createdAt            DateTime? @default(now())
   refresh_token        String?
   forgotpassword_token String?
-  role                 Int
+  role                 Int?
   fK_Role              Role?    @relation(fields: [role], references: [id])
 
   // roleId               Role? @relation(fields: [id], references: [id])
