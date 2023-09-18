@@ -93,6 +93,69 @@ const AuthController = {
     }
   },
 
+  deleteregister: async (req, res) => {
+    try {
+      const registerId = parseInt(req.params.id);
+   
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          id: registerId,
+        },
+        include: {
+          Token: true, 
+        },
+      });
+  
+      if (!existingUser) {
+        return res.status(404).json("User không tồn tại");
+      }
+  
+      if (existingUser.Token.length > 0) {
+        await prisma.token.deleteMany({
+          where: {
+            userid: registerId,
+          },
+        });
+      } 
+      await prisma.user.delete({
+        where: {
+          id: registerId,
+        },
+      });
+  
+      res.status(200).json("Xóa User thành công");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+  UserProfile: async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+
+      const updatedUser = {
+        email: req.body.email,
+        username: req.body.username ,
+        name: req.body.name ,
+        phonenumber: req.body.phonenumber,
+      };
+  
+      const updatedUserResponse = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: updatedUser,
+      });
+  
+      res.status(200).json("Lưu hồ sơ thành công");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+  
+  
   // LOGIN
   login: async (req, res) => {
     try {

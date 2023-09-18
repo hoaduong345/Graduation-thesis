@@ -176,6 +176,33 @@ const ProductController = {
       }
     },
 
+    deleteImageByProductID: async (req, res) => {
+      try {
+        const imageId = parseInt(req.params.id);
+        const existingImage = await prisma.productImage.findUnique({
+          where: {
+            id: imageId, 
+          },
+        });
+    
+        if (!existingImage) {
+          return res.status(404).json("Hình ảnh không tồn tại");
+        }
+    
+        await prisma.productImage.delete({
+          where: {
+            id: imageId,
+          },
+        });
+    
+        res.status(200).json("Xóa hình ảnh thành công");
+      } catch (error) {
+        console.error(error);
+        res.status(500).json(error.message);
+      }
+    },
+    
+
    addProduct: async (req, res) => {
       try {
          // upload.single("images")(req, res, async (err) => {
