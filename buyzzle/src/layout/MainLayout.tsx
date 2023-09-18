@@ -3,14 +3,14 @@ import Header from "../components/Header/Header"
 
 
 interface Props {
-    children?: React.ReactNode
-  }
-function MainLayout({children} : Props) {
+  children?: React.ReactNode
+}
+function MainLayout({ children }: Props) {
   return (
     <div >
-        <Header />
-        {children}
-        <Footer />
+      <Header />
+      {children}
+      <Footer />
     </div>
   )
 }

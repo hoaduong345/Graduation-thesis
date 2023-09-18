@@ -7,20 +7,17 @@ import { RatingStar } from "../SitebarFilter";
 export default function Rate(props: RatingStar) {
   return (
     <div className="flex items-center mb-4 justify-start gap-3 ">
-      <input
-        // onChange={(v) => props.onChange(props.rating, v.target.checked)}
-        id="default-checkbox"
-        type="checkbox"
-        // checked={props.checked}
-        className="w-4 h-4 accent-[#EA4B48] "
-      />
+      <div className="form-control">
+        <label className="label cursor-pointer">
+          <input type="checkbox" className="checkbox checkbox-sm" />
+        </label>
+      </div>
       <div className="flex items-center space-x-1 ">
         {[1, 2, 3, 4, 5].map((item) => {
           return (
             <svg
-              className={`w-4 h-4 ${
-                props.rating >= item ? `text-yellow-300` : `red`
-              }`}
+              className={`w-4 h-4 ${props.rating >= item ? `text-yellow-300` : `red`
+                }`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"

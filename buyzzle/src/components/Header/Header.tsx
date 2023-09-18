@@ -119,19 +119,19 @@ export default function Header() {
                   <Link to="/FiltersPage">Áo Nam</Link>
                 </li>
                 <li>
-                  <a href="#">Sữa Baby</a>
+                  <Link to="/admin/Addproductspage">Thêm sản phẩm</Link>
                 </li>
                 <li>
-                  <a href="#">Sữa Baby</a>
+                  <Link to="/admin/chitietproduct">Editproductspage</Link>
                 </li>
                 <li>
-                  <a href="#">Sữa Baby</a>
+                  <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
                 </li>
                 <li>
-                  <a href="#">Sữa Baby</a>
+                  <Link to="/UserProfilePage">UserProfilePage</Link>
                 </li>
                 <li>
-                  <a href="#">Sữa Baby</a>
+                  <Link to="/Detailproducts">Detailproducts</Link>
                 </li>
                 <li>
                   <a href="#">Sữa Baby</a>

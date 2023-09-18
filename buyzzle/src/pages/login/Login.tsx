@@ -3,98 +3,56 @@ import { Images } from "../../Assets/TS/index";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
 // import { localStorage } from 'localStorage';
 import "./Login.css";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
 import LogoFace from "../../Assets/PNG/lgFace.png";
+import { schema } from "../../utils/rules";
+import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
+import * as yup from 'yup';
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-    });
-    const [errors, setErrors] = useState({
-        username: '',
-        password: '',
-    });
-    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+    const [loggedInUsername, setLoggedInUsername] = useState('');
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+    const validationSchema = yup.object().shape({
+        email: yup
+            .string()
+            .email('Email không hợp lệ')
+            .required('Vui lòng nhập email'),
 
-        if (isFormSubmitted) {
+        password: yup
+            .string()
+            .required('Vui lòng nhập mật khẩu'),
 
-            setErrors({
-                ...errors,
-                [name]: '',
-            });
+    });
+
+    const { handleSubmit, register, formState: { errors } } = useForm({
+        resolver: yupResolver(validationSchema),
+    });
+
+
+
+    const API = "http://localhost:5000/buyzzle/auth/login";
+
+    const onSubmit = handleSubmit(async (data) => {
+        try {
+            console.log("checker", data);
+            const response = await axios.post(API, data);
+            console.log('Đăng nhập thành công', data);
+            window.location.href = "/";
+            setLoggedInUsername(data.email);
+        } catch (error) {
+            console.error(error);
         }
-    };
 
-    // const validateForm = () => {
-    //     let valid = true;
-    //     const newErrors = { ...errors };
+    });
 
-    //     if (!/^\S+@\S+\.\S+$/.test(formData.username)) {
-    //         newErrors.username = 'Tên tài khoản không hợp lệ.';
-    //         valid = false;
-    //     } else {
-    //         newErrors.username = '';
-    //     }
-
-    //     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/.test(formData.password)) {
-    //         newErrors.password = 'Mật khẩu phải bao gồm ít nhất 8 ký tự, trong đó có ít nhất một chữ cái viết hoa, chữ cái viết thường và một số.';
-    //         valid = false;
-    //     } else {
-    //         newErrors.password = '';
-    //     }
-
-    //     setErrors(newErrors);
-    //     return valid;
-    // };
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsFormSubmitted(true);
-
-        // if (validateForm()) {
-            try {
-                const response = await axios.post('http://localhost:5000/buyzzle/auth/login', {
-                    username: formData.username,
-                    password: formData.password,
-                });
-
-                if (response.status === 200) {
-                    console.log('Kết nối thành công');
-                    localStorage.setItem('name', response.data.name);
-                    localStorage.setItem('email', formData.username);
-    
-                    console.log('Dữ liệu phản hồi: ', response.data);
-
-                } else {
-
-                    console.log('Đăng nhập thất bại với trạng thái: ', response.status);
-
-                }
-            } catch (error) {
-
-                console.error('Yêu cầu API không thành công: ', error);
-
-            }
-        // } else {
-        //     console.log('Form is invalid.');
-
-        // }
-    };
     return (
         <body className='login-bg flex'>
             <div className='h-1083px w-963px p-4 relative'>
@@ -114,23 +72,24 @@ function Login() {
             <div className='w-1/2 flex justify-center items-center min-h-screen bg-white'>
                 <div className='w-[424px]'>
 
-                    <form onSubmit={handleSubmit} className="registration-form">
+                    <form onSubmit={onSubmit} className="registration-form">
                         <h1 className=' login-a '>ĐĂNG NHẬP</h1>
                         <div className='mb-4'>
-                            <label htmlFor='username' className='login-a4 font-sans'>
+                            <label htmlFor='email' className='login-a4 font-sans'>
                                 Tên tài khoản
                             </label>
                             <input
                                 type="text"
-                                id="username"
-                                name="username"
-                                value={formData.username}
-                                onChange={handleInputChange}
-                                className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
-                                placeholder="Email / Số điện thoại / Tên đăng nhập"
+                                id="email"
+                                // value={formData.email}
+                                className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
+                                placeholder="Email"
+                                {...register("email")}
                             />
-                            {isFormSubmitted && errors.username && (
-                                <p className="text-red-500">{errors.username}</p>
+                            {errors.email && (
+                                <span className="text-red-500 text-sm">
+                                    {errors.email.message}
+                                </span>
                             )}
                         </div>
                         <div className='mb-4'>
@@ -141,11 +100,10 @@ function Login() {
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id="password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
+                                    // value={formData.password}
+                                    className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                     placeholder="Mật khẩu"
+                                    {...register("password")}
                                 />
 
                                 <button
@@ -176,20 +134,23 @@ function Login() {
                                         </svg>
                                     )}
                                 </button>
+
                             </div>
-                            {isFormSubmitted && errors.password && (
-                                <p className="text-red-500">{errors.password}</p>
+                            {errors.password && (
+                                <span className="text-red-500 text-sm">
+                                    {errors.password.message}
+                                </span>
                             )}
                         </div>
 
 
 
                         <div className='mb-4 text-right'>
-                            <a href='#' className='text-black-500 hover:no-underline'>
+                            <a href='/forgotpassword' className='text-black-500 hover:no-underline'>
                                 Quên mật khẩu?
                             </a>
                         </div>
-                        <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[25px]">Đăng Nhập</button>
+                        <button type="submit" className="w-[424px] h-[49.44px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[25px]">Đăng Nhập</button>
                         <div className='flex items-center my-4'>
                             <div className='grow h-px bg-slate-300'></div>
                             <div className='mx-2 text-white-500'>Hoặc</div>
@@ -207,11 +168,23 @@ function Login() {
                             </button>
                         </div>
                         <div className='mt-6 text-center'>
-                            <span className='text-gray-600'>Bạn đã có tài khoản Buyzzle? </span>
+                            <span className='text-gray-600'>Bạn chuaw có tài khoản Buyzzle? </span>
                             <a href='#' className='text-black-500 hover:underline font-bold'>
-                                Đăng nhập
+                                Đăng ký
                             </a>
                         </div>
+                        {loggedInUsername ? (
+                            <div className='mt-6 text-center'>
+                                <span className='text-gray-600'>Xin chào, {loggedInUsername}!</span>
+                            </div>
+                        ) : (
+                            <div className='mt-6 text-center'>
+                                <span className='text-gray-600'>Bạn chưa có tài khoản Buyzzle? </span>
+                                <a href='#' className='text-black-500 hover:underline font-bold'>
+                                    Đăng ký
+                                </a>
+                            </div>
+                        )}
                     </form>
                 </div>
 

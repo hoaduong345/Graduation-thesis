@@ -1,12 +1,20 @@
-import { useRoutes } from "react-router-dom"
+import { Navigate, useRoutes } from "react-router-dom"
 import MainLayout from "../layout/MainLayout"
-import Home from "../pages/home/HomePage"
-import ProductsPage from "../pages/home/ProductsPage";
-import FiltersPage from "../pages/home/FiltersPage";
 import Register from "../pages/register/Register";
 import RegisterLoginLayout from "../layout/RegisterLoginLayout";
 import Login from "../pages/login/Login";
+import ListproductsAdmin from "../pages/home/Admin/ListProduct/Listproducts";
+import HomePage from "../pages/home/User/HomePage";
+import ProductsPage from "../pages/home/User/ProductsPage";
+import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
+import Addproducts from "../pages/home/Admin/Addproducts";
+import Editproducts from "../pages/home/Admin/EditProduct/Editproducts";
+import Detailproducts from "../pages/home/Admin/Detailproducts";
+import UserProfile from "../pages/home/User/UserProfile/UserProfile";
+import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
+import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
+import ChangePassword from "../pages/forgotpassword/ChangePassword";
 import path from "../contants/path";
 
 export default function useRouterEmelent() {
@@ -15,12 +23,12 @@ export default function useRouterEmelent() {
       path: "/",
       element: (
         <MainLayout>
-          <Home />
+          <HomePage />
         </MainLayout>
       ),
     },
     {
-      path: "/ProductsPage",
+      path: "/products",
       element: (
         <MainLayout>
           <ProductsPage />
@@ -35,6 +43,16 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
+
+    {
+      path: "/UserProfilePage",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+
     {
       path: "/register",
       element: (
@@ -53,11 +71,76 @@ export default function useRouterEmelent() {
 
       ),
     },
+
+    {
+      path: "/forgotpassword",
+      element: (
+        <RegisterLoginLayout>
+          <Forgotpassword />
+        </RegisterLoginLayout>
+
+      ),
+    },
+    {
+      path: "detailproducts/:id",
+      element: (
+        <MainLayout>
+          <Detailproducts />
+
+        </MainLayout>
+
+      ),
+    },
+
+
+    // AdminPages
+    {
+      path: "/admin",
+      element: <AdminLayout />,
+      children: [{
+        index: true,
+        element: <Navigate to={'Addproductspage'} />
+      },
+      {
+        path: "Addproductspage",
+        element: (
+          <Addproducts />
+        ),
+      },
+      {
+        path: "updateproduct/:id",
+        element: (
+          <Editproducts />
+        ),
+      },
+      {
+        path: "ListproductsAdmin",
+        element: (
+          <ListproductsAdmin />
+        ),
+      },
+
+      {
+        path: "Detailproducts/:id",
+        element: (
+          <Detailproducts />
+        ),
+      },]
+    },
     {
       path: path.confirmAccount,
       element: (
         <RegisterLoginLayout>
           <ConfirmAccount/>
+        </RegisterLoginLayout>
+
+      ),
+    },
+    {
+      path: path.changepassword,
+      element: (
+        <RegisterLoginLayout>
+          <ChangePassword />
         </RegisterLoginLayout>
 
       ),

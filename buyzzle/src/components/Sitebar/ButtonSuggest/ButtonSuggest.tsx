@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ButtonSuggest } from "../SitebarFilter";
-import { Products } from "../../../pages/home/FiltersPage";
+import { Products } from "../../../pages/home/FilterPage/FiltersPage";
 
 type Props = {
   btnSug: ButtonSuggest;
