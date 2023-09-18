@@ -228,7 +228,7 @@ const AuthController = {
         });
       }
 
-      const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${forgot_password_token}`;
+      const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${forgot_password_token}`;
       console.log("Generated URL:", url);
       // await SendEmail(user.email, "Forgot Password", url);
 
