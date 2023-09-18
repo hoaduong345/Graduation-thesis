@@ -15,6 +15,7 @@ import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
 import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../pages/forgotpassword/ChangePassword";
+import path from "../contants/path";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -136,10 +137,10 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/changepassword",
+      path: path.changepassword,
       element: (
         <RegisterLoginLayout>
-          <ChangePassword/>
+          <ChangePassword />
         </RegisterLoginLayout>
 
       ),
