@@ -13,7 +13,8 @@ import Detailproducts from "../pages/home/Admin/Detailproducts";
 import UserProfile from "../pages/home/User/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
-
+import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
+import ChangePassword from "../pages/forgotpassword/ChangePassword";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -69,6 +70,16 @@ export default function useRouterEmelent() {
 
       ),
     },
+
+    {
+      path: "/forgotpassword",
+      element: (
+        <RegisterLoginLayout>
+          <Forgotpassword />
+        </RegisterLoginLayout>
+
+      ),
+    },
     {
       path: "detailproducts/:id",
       element: (
@@ -120,6 +131,15 @@ export default function useRouterEmelent() {
       element: (
         <RegisterLoginLayout>
           <ConfirmAccount/>
+        </RegisterLoginLayout>
+
+      ),
+    },
+    {
+      path: "/changepassword",
+      element: (
+        <RegisterLoginLayout>
+          <ChangePassword/>
         </RegisterLoginLayout>
 
       ),

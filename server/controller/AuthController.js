@@ -218,23 +218,19 @@ const AuthController = {
       const forgot_password_token = AuthController.generateForgotPasswordToken(
         user.email
       );
-      if (user.forgotpassword_token == null) {
-        await prisma.user.update({
+      if (!user.forgotpassword_token) {
+        return await prisma.user.update({
           where: {
             email: user.email,
           },
           data: {
-            refresh_token: forgot_password_token,
+            forgotpassword_token: forgot_password_token,
           },
         });
       }
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { forgotpassword_token: forgot_password_token },
-      });
-      const url = `${process.env.BASE_URL}/buyzzle/auth/forgotpassword/${user.forgotpassword_token}`;
-      await SendEmail(user.email, "Forgot Password", url);
+      const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
       console.log("áddd", url);
+      // await SendEmail(user.email, "Forgot Password", url);
       res.status(200).send("A Link has sent to your email");
     } catch (error) {
       console.error(error);
