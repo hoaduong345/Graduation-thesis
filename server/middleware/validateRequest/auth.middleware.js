@@ -12,18 +12,22 @@ const createVali = async (req, res, next) => {
 
   const error = {};
 
-  const user_name = await prisma.user.findUnique({
+  const user_name = await prisma.user.findFirst({
     where: {
       username: username,
+    },
+  });
+  const user_email = await prisma.user.findFirst({
+    where: {
       email: email,
     },
   });
 
-  if (user_name.username) {
-    error.username  = "Username is already exists!";
+  if (user_name) {
+    error.username = "Username is already exists!";
   }
-  if (user_name.email) {
-    error.email  = "Email is already exists!";
+  if (user_email) {
+    error.email = "Email is already exists!";
   }
   if (!email) {
     error.email = "company_email_require";
