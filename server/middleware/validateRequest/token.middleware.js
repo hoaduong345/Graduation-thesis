@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
 const decode = require("jwt-decode");
 
 const { PrismaClient } = require("@prisma/client");
@@ -11,7 +9,10 @@ const { error } = require("console");
 const checkTokenForgotPassword = async (req, res, next) => {
   try {
     const token = req.params.token;
-    const decoded = decode(token);
+
+    const decodedBase64 = Buffer.from(token, "base64").toString("utf-8");
+
+    const decoded = decode(decodedBase64);
     const error = {};
     const user = await prisma.user.findUnique({
       where: {

@@ -158,8 +158,8 @@ const AuthController = {
   resetPassword: async (req, res) => {
     try {
       const token = req.params.token;
-
-      const decoded = decode(token);
+      const decodedBase64 = Buffer.from(token, "base64").toString("utf-8");
+      const decoded = decode(decodedBase64);
       const salt = await bcrypt.genSalt(10);
       if (!req.body.newPassword || !salt) {
         throw new Error("Missing password or salt");
@@ -213,8 +213,12 @@ const AuthController = {
 
       if (forgot_password_token == null) {
         // Generate a new token
+
         forgot_password_token = AuthController.generateForgotPasswordToken(
           user.email
+        );
+        forgot_password_token = Buffer.from(forgot_password_token).toString(
+          "base64"
         );
 
         // Update the user's forgotpassword_token in the database
