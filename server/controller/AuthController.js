@@ -259,7 +259,7 @@ const AuthController = {
   verify: async (req, res) => {
     try {
       const userID = parseInt(req.params.id);
-      const tokenreq = req.params.token;
+      const reqToken = req.params.token;
 
       const user = await prisma.user.findUnique({
         where: { id: userID },
@@ -267,10 +267,10 @@ const AuthController = {
 
       if (!user) return res.status(400).send({ message: "invalid link" });
 
-      const token = await prisma.token.findUnique({
+      const token = await prisma.token.findFirst({
         where: {
           userid: user.id,
-          token: tokenreq,
+          token: reqToken,
         },
       });
       if (!token) {
@@ -280,11 +280,12 @@ const AuthController = {
         where: { id: userID },
         data: { verify: true },
       });
+      const tokenId = parseInt(token.id);
 
       await prisma.token.delete({
         where: {
-          userid: user.id,
-          token: req.params.token,
+          userid: userID,
+          id: tokenId,
         },
       });
       res.status(200).send({ message: "Email verified successfully" });
@@ -337,10 +338,7 @@ const AuthController = {
           expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token
         }
       );
-      console.log(
-        "🚀 ~ file: AuthController.js:324 ~ changePassword: ~ newRefreshToken:",
-        newRefreshToken
-      );
+
       await prisma.user.update({
         where: {
           email: token.email,
