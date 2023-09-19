@@ -19,10 +19,12 @@ const createVali = async (req, res, next) => {
     },
   });
 
-  if (user_name) {
-    error.username = "Username or Email is already exists!";
+  if (user_name.username) {
+    error.username  = "Username is already exists!";
   }
-
+  if (user_name.email) {
+    error.email  = "Email is already exists!";
+  }
   if (!email) {
     error.email = "company_email_require";
   } else if (!validator.isEmail(email)) {
