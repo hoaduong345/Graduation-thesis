@@ -12,6 +12,12 @@ import Ellips from "../../Assets/TSX/Ellips";
 import Container from "../container/Container";
 
 export default function Header() {
+
+
+  const email = localStorage.getItem('email');
+
+
+
   return (
     <>
       <header className="Header">
@@ -96,17 +102,22 @@ export default function Header() {
                     </div>
                   </div>
                   <div className="items-center">
-                    <div className="flex text-[#1A1A1A] ml-[10px]">
-                      <a href="#">ĐĂNG NHẬP</a>
-                      <div className="border-[1px] border-[#000000] mx-[20px] " />
-                      <a href="#">ĐĂNG KÍ</a>
-                    </div>
+                    {email ? (
+                      <a className="font-bold" href={`mailto:${email}`}>{email}</a>
+                    ) : (
+                      <div className="flex text-[#1A1A1A] ml-[10px]">
+                        <a href="#">ĐĂNG NHẬP</a>
+                        <div className="border-[1px] border-[#000000] mx-[20px] " />
+                        <a href="#">ĐĂNG KÍ</a>
+                      </div>
+                      )}
+
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </Container>
+        </Container >
 
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
@@ -146,7 +157,7 @@ export default function Header() {
             </div>
           </Container>
         </div>
-      </header>
+      </header >
     </>
   );
 }

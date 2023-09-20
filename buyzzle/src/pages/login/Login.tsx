@@ -45,6 +45,7 @@ function Login() {
             console.log("checker", data);
             const response = await axios.post(API, data);
             console.log('Đăng nhập thành công', data);
+            localStorage.setItem('email', data.email);
             window.location.href = "/";
             setLoggedInUsername(data.email);
         } catch (error) {
