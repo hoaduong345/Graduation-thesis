@@ -129,7 +129,7 @@ export default function ListproductsAdmin() {
                   products?.map((items) => {
                     return (
                       <>
-                        <ListproductMap products={items} />
+                        <ListproductMap key={items.id} products={items} />
                       </>
                     );
                   }) : <p>khong co san pham</p>
