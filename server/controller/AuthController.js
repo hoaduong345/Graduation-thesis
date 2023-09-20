@@ -160,13 +160,11 @@ const AuthController = {
       const oldPassword = req.body.oldPassword; 
       const newPassword = req.body.newPassword; 
       const newPasswordConfirmation = req.body.newPasswordConfirmation; 
-  
-     
+
       if (newPassword !== newPasswordConfirmation) {
         return res.status(400).json("Mật khẩu mới và xác nhận mật khẩu không khớp");
       }
   
-   
       const user = await prisma.user.findUnique({
         where: {
           id: userId,
