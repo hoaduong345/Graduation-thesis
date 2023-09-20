@@ -12,14 +12,13 @@ import { schema } from "../../utils/rules";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
 import * as yup from 'yup';
+import { ToastContainer, toast } from "react-toastify";
 function ChangePassword() {
     const [showPassword, setShowPassword] = useState(false);
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
-    // const history = useHistory();
-    const [newPassword, setPassword] = useState('');
-    const [confirmNewPassword, setConfirmPassword] = useState('');
+    
     const params = useParams();
     const validationSchema = yup.object().shape({
         newPassword: yup
@@ -34,19 +33,43 @@ function ChangePassword() {
 
 
 
-    const { handleSubmit, formState: { errors } } = useForm({
+    const { handleSubmit, register, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
     const onSubmit = handleSubmit(async (data) => {
+        console.log("checker", data);
         const token = params.token ?? ''; // Sử dụng chuỗi rỗng làm giá trị mặc định nếu params.token là undefined
         const API = `http://localhost:5000/buyzzle/auth/resetpassword/${encodeURIComponent(token)}`;
+        console.log("checker", API);
         try {
-            console.log("checker", data);
-            await axios.post(API, data);
-            console.log('Đổi mật khẩu thành công', data);
-            window.location.href = "/login";
-            // setLoggedInUsername(data.email);
+           
+            const response = await axios.post(API, data);
+            if (response.status === 200) {
+                console.log("Reset password successfully");
+                toast.success(
+                  "Reset password successfully-check your email to verify account",
+                  {
+                    position: "top-right",
+                    autoClose: 5000,
+        
+                  }
+                );
+                setTimeout(() => {
+                    window.location.href = "/login";
+                },
+                    5000);
+              } else {
+                console.log("Reset password Failed!");
+                toast.warning(
+                  "Reset password failed",
+                  {
+                    position: "top-right",
+                    autoClose: 5000,
+        
+                  }
+                );
+              }
         } catch (error) {
             console.error(error);
         }
@@ -79,11 +102,9 @@ function ChangePassword() {
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id="password"
-                                    value={newPassword}
-                                    name="newPassword"
                                     className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                     placeholder="Nhập mật khẩu mới"
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    {...register("newPassword")}
                                 />
 
                                 <button
@@ -116,11 +137,11 @@ function ChangePassword() {
                                 </button>
 
                             </div>
-                            {errors.newPassword && (
+                            {/* {errors.newPassword && (
                                 <span className="text-red-500 text-sm">
                                     {errors.newPassword.message}
                                 </span>
-                            )}
+                            )} */}
                         </div>
 
                         <div className='mb-4'>
@@ -128,10 +149,9 @@ function ChangePassword() {
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id="confirmPassword"
-                                    value={confirmNewPassword}
                                     className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                     placeholder="Xác nhận mật khẩu"
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    {...register("confirmNewPassword")}
                                 />
 
                                 <button
@@ -164,11 +184,11 @@ function ChangePassword() {
                                 </button>
 
                             </div>
-                            {errors.confirmNewPassword && (
+                            {/* {errors.confirmNewPassword && (
                                 <span className="text-red-500 text-sm">
                                     {errors.confirmNewPassword.message}
                                 </span>
-                            )}
+                            )} */}
                         </div>
                         <button type="submit" className="w-[424px] h-[49.44px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[25px]">GỬI</button>
                         <div className='flex items-center my-4'>

@@ -22,9 +22,9 @@ function ConfirmAccount() {
     const verifyEmailUrl = async () => {
       const url = `http://localhost:5000/buyzzle/auth/${param.id}/verify/${param.token}`;
       try {
-
-        await axios.post(url);
         setValidUrl(true);
+        await axios.post(url);
+    
         // console.log("data", data)
       } catch (error) {
         console.log(error);

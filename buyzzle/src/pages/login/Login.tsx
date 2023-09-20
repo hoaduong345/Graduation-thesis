@@ -3,6 +3,7 @@ import { Images } from "../../Assets/TS/index";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
 // import { localStorage } from 'localStorage';
 import "./Login.css";
+import { ToastContainer, toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
@@ -14,7 +15,6 @@ import axios from 'axios';
 import * as yup from 'yup';
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    const [loggedInUsername, setLoggedInUsername] = useState('');
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -44,10 +44,32 @@ function Login() {
         try {
             console.log("checker", data);
             const response = await axios.post(API, data);
-            console.log('Đăng nhập thành công', data);
             localStorage.setItem('email', data.email);
-            window.location.href = "/";
-            setLoggedInUsername(data.email);
+            if (response.status === 200) {
+                console.log("Login successfully");
+                toast.success(
+                    "Login successfully",
+                    {
+                        position: "top-right",
+                        autoClose: 5000,
+
+                    }
+                );
+                setTimeout(() => {
+                    window.location.href = "/";
+                },
+                    5000);
+            } else {
+                console.log("Login Failed!");
+                toast.warning(
+                    "Login failed",
+                    {
+                        position: "top-right",
+                        autoClose: 5000,
+
+                    }
+                );
+            }
         } catch (error) {
             console.error(error);
         }
@@ -169,23 +191,11 @@ function Login() {
                             </button>
                         </div>
                         <div className='mt-6 text-center'>
-                            <span className='text-gray-600'>Bạn chuaw có tài khoản Buyzzle? </span>
+                            <span className='text-gray-600'>Bạn chưa có tài khoản Buyzzle? </span>
                             <a href='#' className='text-black-500 hover:underline font-bold'>
                                 Đăng ký
                             </a>
                         </div>
-                        {loggedInUsername ? (
-                            <div className='mt-6 text-center'>
-                                <span className='text-gray-600'>Xin chào, {loggedInUsername}!</span>
-                            </div>
-                        ) : (
-                            <div className='mt-6 text-center'>
-                                <span className='text-gray-600'>Bạn chưa có tài khoản Buyzzle? </span>
-                                <a href='#' className='text-black-500 hover:underline font-bold'>
-                                    Đăng ký
-                                </a>
-                            </div>
-                        )}
                     </form>
                 </div>
 

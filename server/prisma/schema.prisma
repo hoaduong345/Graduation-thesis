@@ -1,4 +1,4 @@
- // This is your Prisma schema file,
+// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -102,7 +102,7 @@ model CartSchema {
 }
 
 model ProductImage {
-  id               Int      @id @default(autoincrement())
+id               Int      @id @default(autoincrement())
   url              String?
   idproduct        Int?
   fK_propductImage Product? @relation(fields: [idproduct], references: [id])
