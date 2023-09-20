@@ -91,6 +91,15 @@ export default function useRouterEmelent() {
 
       ),
     },
+    {
+      path: path.confirmAccount,
+      element: (
+        <RegisterLoginLayout>
+          <ConfirmAccount/>
+        </RegisterLoginLayout>
+
+      ),
+    },
 
 
     // AdminPages
@@ -127,15 +136,7 @@ export default function useRouterEmelent() {
         ),
       },]
     },
-    {
-      path: "/confirm",
-      element: (
-        <RegisterLoginLayout>
-          <ConfirmAccount/>
-        </RegisterLoginLayout>
-
-      ),
-    },
+ 
     {
       path: path.changepassword,
       element: (
@@ -145,6 +146,7 @@ export default function useRouterEmelent() {
 
       ),
     },
+   
   ]);
   return routes;
 }

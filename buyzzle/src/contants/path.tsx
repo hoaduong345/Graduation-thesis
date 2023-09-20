@@ -4,6 +4,7 @@ const path = {
   login: "/login",
   forgotpassword: "/forgotpassword",
   changepassword: "/buyzzle/auth/resetpassword/:token",
-  confirmAccount: "/confirm",
+  confirmAccount: "buyzzle/auth/:id/verify/:token",
+  
 } as const;
 export default path;

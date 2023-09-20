@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Images } from "../../Assets/TS/index";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
-
+// import { localStorage } from 'localStorage';
 import "./Login.css";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -45,6 +45,7 @@ function Login() {
             console.log("checker", data);
             const response = await axios.post(API, data);
             console.log('Đăng nhập thành công', data);
+            localStorage.setItem('email', data.email);
             window.location.href = "/";
             setLoggedInUsername(data.email);
         } catch (error) {
