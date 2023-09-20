@@ -167,12 +167,6 @@ function Login() {
                                 <img src={LogoFace} alt='Facebook' className='w-6 h-6' />
                             </button>
                         </div>
-                        <div className='mt-6 text-center'>
-                            <span className='text-gray-600'>Bạn chuaw có tài khoản Buyzzle? </span>
-                            <a href='#' className='text-black-500 hover:underline font-bold'>
-                                Đăng ký
-                            </a>
-                        </div>
                         {loggedInUsername ? (
                             <div className='mt-6 text-center'>
                                 <span className='text-gray-600'>Xin chào, {loggedInUsername}!</span>
