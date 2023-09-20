@@ -227,10 +227,10 @@ const AuthController = {
             forgotpassword_token: forgot_password_token_base64,
           },
         });
-        const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${forgot_password_token_base64}`;
+        const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${forgot_password_token_base64}`;
         console.log("Generated URL:", url);
       } else {
-        const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
+        const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
         console.log("Generated URL:", url);
       }
 
