@@ -144,7 +144,7 @@ export default function Addproducts() {
     const isDisabled = !(isValid && isDirty);
     return (
         <Container>
-            <body className="body-filter container mx-auto">
+            <div className="body-filter container mx-auto">
                 {/* back */}
                 <div className="back h-[57px] mt-[46px] ">
                     <div className="flex gap-3 items-center">
@@ -351,7 +351,7 @@ export default function Addproducts() {
                                             render={({ }) => (
                                                 <>
                                                     {/* form upload img */}
-                                                    <form className="max-w-max items-center">
+                                                    <div className="max-w-max items-center">
                                                         <label htmlFor="images">
                                                             <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer">
                                                                 <input
@@ -378,7 +378,7 @@ export default function Addproducts() {
                                                                 </div>
                                                             </div>
                                                         </label>
-                                                    </form>
+                                                    </div>
                                                     {/* end form upload img */}
                                                     <div className="justify-center flex flex-1">
                                                         <div className="inline-grid grid-cols-3 gap-4">
@@ -656,7 +656,7 @@ export default function Addproducts() {
                         </div>
                     </form>
                 </div>
-            </body>
+            </div>
         </Container>
     );
 }
