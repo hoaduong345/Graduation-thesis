@@ -98,7 +98,6 @@ export default function ListproductMap(props: Props) {
         </div>
       </div>{/* end infor in card */}
 
-    </div > {/* end cardItems */ }
     </>
-  )
+  );
 }
