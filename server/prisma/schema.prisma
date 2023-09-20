@@ -71,12 +71,13 @@ model Product {
   ProductImage ProductImage[]
   itemCarts    ItemCart[]
 }
-
 model Category {
-  idcategory    Int         @id @default(autoincrement())
-  name   String @unique
-  date   DateTime    @default(now())
-  products     Product[]   
+  id        Int       @id @default(autoincrement())
+  name      String?
+  date      DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  createdAt DateTime? @default(now())
+  products  Product[]
 }
 
 model ItemCart {
