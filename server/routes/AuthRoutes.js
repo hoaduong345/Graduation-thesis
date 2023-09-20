@@ -29,7 +29,7 @@ router.post(
   AuthController.resetPassword
 );
 //FORGOT-PASSWORD
-router.post("/forgotpassword", AuthController.fogotPassword);
+router.post("/forgotpassword", AuthController.forgotPassword);
 // LOG OUT
 router.post("/logout",MiddleWareController.verifyAuthenticate, AuthController.logout)
 module.exports = router;
