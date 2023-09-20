@@ -12,29 +12,52 @@ import { Products } from '../../User/FilterPage/FiltersPage'
 import axios from 'axios'
 import ListproductMap from "./ListproductMap"
 import { appConfig } from "../../../../configsEnv"
+import { toast } from 'react-toastify'
 
 export default function ListproductsAdmin() {
 
   const [products, setProducts] = useState<Products[]>([])
   console.log("🚀 ~ file: Listproducts.tsx:16 ~ ListproductsAdmin ~ products:", products)
+  const [remove, setRemove] = useState('')
 
   useEffect(() => {
+    getData()
+  }, [])
+
+  const getData = () => {
     axios.get(`${appConfig.apiUrl}/allproducts`)
       .then((data) => {
         return data
       })
       .then((data: any) => {
         console.log("🚀 ~ file: Listproducts.tsx:29 ~ .then ~ data.data:", data.data)
-        if (data.data.length > 0) {
-          setProducts(data.data)
-        }
+        setProducts(data.data)
       })
       .catch((error) => {
         console.log("🚀 ~ file: Listproducts.tsx:20 ~ uesEffect ~ error:", error)
       })
-  }, [])
+  }
 
+  function xulyDele(id: number) {
+    console.log('sdjjsd', id);
+    if (confirm("Xoa san pham?")) {
+      axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`)
+        .then((deleteItems) => deleteItems)
+        .then((deleteItems) => {
+          toast.success("Xóa thành công !")
+          getData()
+        }).catch((error) => {
+          console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
+          toast.error("Xóa thất bại !")
+
+        }
+        )
+    }
+
+  }
   console.log(products);
+
+  // xoa
 
   return (
     <>
@@ -129,7 +152,7 @@ export default function ListproductsAdmin() {
                   products?.map((items) => {
                     return (
                       <>
-                        <ListproductMap key={items.id} products={items} />
+                        <ListproductMap HandleXoa={xulyDele} products={items} />
                       </>
                     );
                   }) : <p>khong co san pham</p>

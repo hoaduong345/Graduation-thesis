@@ -219,21 +219,22 @@ const ProductController = {
 
   // xóa sản phẩm
   deleteProduct: async (req, res) => {
+     console.log(req.params.id);
+     const productId = parseInt(req.params.id); // Lấy id sản phẩm từ params
     try {
-      const productId = parseInt(req.params.id); // Lấy id sản phẩm từ params
       // Kiểm tra xem sản phẩm có tồn tại không
       const existingProduct = await prisma.product.findUnique({
         where: {
-          idproduct: productId,
+          id: productId,
         },
       });
       if (!existingProduct) {
         return res.status(404).json("Sản phẩm không tồn tại");
       }
       // Xóa sản phẩm
-      await prisma.product.delete({
+      const destroy = await prisma.product.delete({
         where: {
-          idproduct: productId,
+          id: productId,
         },
       });
       res.status(200).json("Xóa sản phẩm thành công");
