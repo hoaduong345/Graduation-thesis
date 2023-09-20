@@ -58,7 +58,6 @@ export default function Addproducts() {
 
     // img firebase
     const loadImageFile = async (images: any) => {
-
         for (let i = 0; i < images.length; i++) {
             const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
 
@@ -343,42 +342,40 @@ export default function Addproducts() {
                                 <div>
                                     <span className='text-[#000] text-2xl font-normal'>Ảnh Sản Phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-4 px-9 mt-2 flex items-center
+                                    <div className='card w-[100%] py-4 px-9 mt-2 
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
                                         <Controller control={control} name='productImage' render={({ }) => (
                                             <>
-                                                {/* form upload img */}
-                                                <form className='max-w-max items-center'>
-                                                    <label htmlFor="images">
-                                                        <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
+                                                <div className='flex'>
+                                                    {/* form upload img */}
+                                                    <div className='max-w-max items-center'>
+                                                        <label htmlFor="images">
+                                                            <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
 
-                                                            <input type="file"
-                                                                // onChange={field.onChange}
-                                                                onChange={(e: any) => setImages(e.target.files)}
-                                                                id='images' multiple className='hidden ' />
-                                                            <UploadIMG />
-                                                            <div id="images" className='text-center mt-2'>
-                                                                <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold'>Click to upload
-                                                                    <p className='text-[#1A1A1A] font-normal text-sm tracking-widest'>or drag and drop</p></p>
+                                                                <input type="file"
+                                                                    // onChange={field.onChange}
+                                                                    onChange={(e: any) => setImages(e.target.files)}
+                                                                    id='images' multiple className='hidden ' />
+                                                                <UploadIMG />
+                                                                <div id="images" className='text-center mt-2'>
+                                                                    <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold'>Click to upload
+                                                                        <p className='text-[#1A1A1A] font-normal text-sm tracking-widest'>or drag and drop</p></p>
+                                                                </div>
                                                             </div>
+                                                        </label>
+                                                    </div>{/* end form upload img */}
+
+                                                    <div className='justify-center flex flex-1'>
+                                                        <div className='inline-grid grid-cols-3 gap-4'>
+                                                            {
+                                                                url.map(e => {
+                                                                    return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
+                                                                })
+                                                            }
                                                         </div>
-                                                    </label>
-                                                </form>{/* end form upload img */}
-                                                <div className='justify-center flex flex-1'>
-                                                    <div className='inline-grid grid-cols-3 gap-4'>
-
-                                                        {
-                                                            url.map(e => {
-                                                                return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
-                                                            })
-                                                        }
-
-                                                        {/* <div
-                                                            style={{ borderTopColor: "transparent" }}
-                                                            className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
-                                                        /> */}
                                                     </div>
+
                                                 </div>
                                             </>
                                         )} />
