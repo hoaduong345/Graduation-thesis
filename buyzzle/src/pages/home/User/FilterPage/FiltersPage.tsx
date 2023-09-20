@@ -146,10 +146,10 @@ export default function FiltersPage() {
 
             <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
 
-              {products.map((items) => {
+              {products.map((items, i) => {
                 return (
                   <>
-                    <Filter product={items} />
+                    <Filter key={i} product={items} />
                   </>
                 );
               })}

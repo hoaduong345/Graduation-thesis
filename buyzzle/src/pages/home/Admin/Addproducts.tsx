@@ -304,9 +304,9 @@ export default function Addproducts() {
                                                     setI(Number(Id));
                                                 }}
                                             >
-                                                {categoty.map((e) => {
+                                                {categoty.map((e, i) => {
                                                     return (
-                                                        <option value={e.id}>{e.name}</option>
+                                                        <option key={i} value={e.id}>{e.name}</option>
                                                     );
                                                 })}
                                             </select>
