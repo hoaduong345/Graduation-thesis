@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react'
-import Container from '../../../components/container/Container'
-import Back from './Assets/TSX/Back'
+import { useEffect, useRef, useState } from 'react'
+import Container from '../../../../components/container/Container'
+import Back from '../Assets/TSX/Back'
 // import ArrowDown from '../../../Assets/TSX/ArrowDown'
-import UploadIMG from './Assets/TSX/UploadIMG'
+import UploadIMG from '../Assets/TSX/UploadIMG'
 // import { Images } from '../../../Assets/TS'
 import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom'
-import { storage } from '../../../Firebase/Config'
+import { storage } from '../../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
-import { appConfig } from '../../../configsEnv'
+import { appConfig } from '../../../../configsEnv'
+import { Editor } from '@tinymce/tinymce-react';
+import { toast } from 'react-toastify'
 // import { v4 } from 'uuid'
 
 export type FormValues = {
@@ -32,6 +34,7 @@ export default function Addproducts() {
     const [url, setUrl] = useState<string[]>([])
     const [categoty, setCategory] = useState<Cate[]>([])
     const [i, setI] = useState<number>(1)
+    const editorRef = useRef<any>(null);
 
     useEffect(() => {
         getCategory()
@@ -92,7 +95,7 @@ export default function Addproducts() {
                 console.log(response.config.data)
                 return response
             }).then(async (responseData) => {
-                alert('success')
+                toast.success("Thêm thành công !")
                 for (let i = 0; i < url.length; i++) {
                     await addImages(responseData?.data.id, url[i])
                 }
@@ -104,6 +107,7 @@ export default function Addproducts() {
                     console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
             }).catch(error => {
                 console.log("🚀 ~ file: Addproducts.tsx:40 ~ handleAddproduct ~ error:", error)
+                toast.error("Thêm thất bại !")
             })
     }
 
@@ -115,13 +119,15 @@ export default function Addproducts() {
         }
         await axios.post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
             .then(response => response.data)
-
     }
+
+    // const [desc, setDesc] = useState<FormValues[]>([])
 
     const {
         control,
         handleSubmit,
         resetField,
+        watch,
         formState: { errors, isDirty, isValid },
     } = useForm<FormValues>({
         mode: 'all',
@@ -137,10 +143,14 @@ export default function Addproducts() {
 
     });
 
+    console.log(watch().productDesc)
+
     const isDisabled = !(isValid && isDirty)
+
+    console.log(watch().productDesc)
     return (
         <Container>
-            <body className="body-filter container mx-auto">
+            <body className="body-addproduct container mx-auto">
                 {/* back */}
                 <div className='back h-[57px] mt-[46px] '>
                     <div className='flex gap-3 items-center'>
@@ -191,9 +201,9 @@ export default function Addproducts() {
                                                 />
                                                 {!!errors.productName && <p className='text-red-700 mt-2'>{errors.productName.message}</p>}</>
                                         )} />
-                                        {/* end input addNameProducts */}
 
-                                        <Controller control={control} name='productDesc' rules={{
+
+                                        {/* <Controller control={control} name='productDesc' rules={{
                                             required: {
                                                 value: true,
                                                 message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
@@ -212,7 +222,7 @@ export default function Addproducts() {
                                                 <>
                                                     <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
                                                     {/* input addNameProducts */}
-                                                    <textarea className={`focus:outline-none text-[#333333] text-base font-medium 
+                                        {/*    <textarea className={`focus:outline-none text-[#333333] text-base font-medium 
                                                 border-[1px] border-[#FFAAAF] rounded-[6px] px-[10px] py-[7px] w-[100%] h-[251px] 
                                                 ${!!errors.productDesc ? 'border-[2px] border-red-900' : ' border-[1px] border-[#FFAAAF]'}
                                                 `}
@@ -224,11 +234,67 @@ export default function Addproducts() {
                                                     >
                                                     </textarea>
                                                     {/* end input addNameProducts */}
-                                                </>
+                                        {/*      </>
                                             )}
                                         />
-                                        {!!errors.productDesc && <p className='text-red-700 mt-2'>{errors.productDesc.message}</p>}
+                                        {!!errors.productDesc && <p className='text-red-700 mt-2'>{errors.productDesc.message}</p>} */}
+                                        <Controller control={control} name='productDesc' rules={{
+                                            required: {
+                                                value: true,
+                                                message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
+                                            }
 
+                                        }} render={({ field, }) => (
+                                            <>
+                                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
+                                                <Editor
+                                                    apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
+                                                    onInit={(evt, editor) => (editorRef.current = editor)}
+                                                    onEditorChange={(e) => field.onChange(e)}
+                                                    value={field.value}
+                                                    init={{
+                                                        block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3',
+                                                        height: 500,
+                                                        menubar: false,
+                                                        plugins: [
+                                                            'advlist',
+                                                            'autolink',
+                                                            'link',
+                                                            'image',
+                                                            'lists',
+                                                            'charmap',
+                                                            'preview',
+                                                            'anchor',
+                                                            'pagebreak',
+                                                            'searchreplace',
+                                                            'wordcount',
+                                                            'visualblocks',
+                                                            'visualchars',
+                                                            'code',
+                                                            'fullscreen',
+                                                            'insertdatetime',
+                                                            'media',
+                                                            'p',
+                                                            'h1, h2, h3, h4, h5, h6',
+                                                            'div',
+                                                            'address',
+                                                            'pre',
+                                                            'div',
+                                                            'code',
+                                                            'dt, dd',
+                                                            'samp',
+                                                            'table',
+                                                            'emoticons',
+                                                            'template',
+                                                            'help',
+                                                        ],
+                                                        toolbar:
+                                                            'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons',
+                                                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                                                    }}
+                                                />
+                                            </>
+                                        )} />
                                     </div>
                                 </div>
                                 {/* Danh Mục Sản Phẩm */}

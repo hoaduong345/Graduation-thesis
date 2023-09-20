@@ -13,7 +13,7 @@ const firebaseConfig = {
   // storageBucket: "uploadimgtofirebase-8d5c9.appspot.com",
   // messagingSenderId: "939682945824",
   // appId: "1:939682945824:web:319cfb0102d58890b95545"
-  
+
 
   apiKey: "AIzaSyDUTTDrCAT24dmHuHK0OvOpI7-lhEMJiJ4",
   authDomain: "buyzzle-f8313.firebaseapp.com",

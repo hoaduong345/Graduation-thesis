@@ -7,12 +7,12 @@ import ListproductsAdmin from "../pages/home/Admin/ListProduct/Listproducts";
 import HomePage from "../pages/home/User/HomePage";
 import ProductsPage from "../pages/home/User/ProductsPage";
 import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
-import Addproducts from "../pages/home/Admin/Addproducts";
-import Editproducts from "../pages/home/Admin/Editproducts";
-import Detailproducts from "../pages/home/Admin/Detailproducts";
+import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
+import Detailproducts from "../pages/home/Admin/DetailProduct/Detailproducts";
 import UserProfile from "../pages/home/User/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount.css";
+import Editproducts from "../pages/home/Admin/Editproducts";
 
 
 export default function useRouterEmelent() {
