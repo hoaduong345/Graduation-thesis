@@ -4,6 +4,7 @@ import LogoWeb from "../../Assets/TSX/LogoWeb";
 
 import "./forgotpassword.css";
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
 import LogoApple from "../../Assets/PNG/lgApple.png";
@@ -29,9 +30,28 @@ function Forgotpassword() {
     const onSubmit = handleSubmit(async (data) => {
         try {
           console.log('checker', data);
-          await axios.post('http://localhost:5000/buyzzle/auth/forgotpassword', data);
-          console.log('Gửi thành công', data);
-          // setLoggedInUsername(data.email);
+          const response =  await axios.post('http://localhost:5000/buyzzle/auth/forgotpassword', data);
+          if (response.status === 200) {
+            console.log("Send email successfully");
+            toast.success(
+                "Send email successfully",
+                {
+                    position: "top-right",
+                    autoClose: 5000,
+
+                }
+            );
+        } else {
+            console.log("Send email Failed!");
+            toast.warning(
+                "Send email failed",
+                {
+                    position: "top-right",
+                    autoClose: 5000,
+
+                }
+            );
+        }
         } catch (error) {
           console.error(error);
         }

@@ -12,6 +12,7 @@ import { schema } from "../../utils/rules";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
 import * as yup from 'yup';
+import { ToastContainer, toast } from "react-toastify";
 function ChangePassword() {
     const [showPassword, setShowPassword] = useState(false);
     const toggleShowPassword = () => {
@@ -43,10 +44,32 @@ function ChangePassword() {
         console.log("checker", API);
         try {
            
-            await axios.post(API, data);
-            console.log('Đổi mật khẩu thành công', data);
-            window.location.href = "/login";
-            // setLoggedInUsername(data.email);
+            const response = await axios.post(API, data);
+            if (response.status === 200) {
+                console.log("Reset password successfully");
+                toast.success(
+                  "Reset password successfully-check your email to verify account",
+                  {
+                    position: "top-right",
+                    autoClose: 5000,
+        
+                  }
+                );
+                setTimeout(() => {
+                    window.location.href = "/login";
+                },
+                    5000);
+              } else {
+                console.log("Reset password Failed!");
+                toast.warning(
+                  "Reset password failed",
+                  {
+                    position: "top-right",
+                    autoClose: 5000,
+        
+                  }
+                );
+              }
         } catch (error) {
             console.error(error);
         }
