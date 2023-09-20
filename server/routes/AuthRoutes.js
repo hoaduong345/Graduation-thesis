@@ -32,7 +32,6 @@ router.post(
   FogotPasswordValid,
   AuthController.resetPassword
 );
-
 //FORGOT-PASSWORD
 router.post("/forgotpassword", AuthController.fogotPassword);
 // LOG OUT

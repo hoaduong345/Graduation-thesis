@@ -37,6 +37,7 @@ datasource db {
 // }
 
 model User {
+<<<<<<< HEAD
   id          Int      @id @default(autoincrement())
   email       String   @unique
   username    String?   @unique
@@ -49,11 +50,40 @@ model User {
   createdAt   DateTime @default(now())
   refresh_token String?
   forgotpassword_token String?
+=======
+  id                   Int          @id @default(autoincrement())
+  email                String       @unique
+  username             String?      @unique
+  password             String
+  verify               Boolean      @default(false)
+  Token                Token[]
+  name                 String?
+  phonenumber          String?
+  image                String?
+  createdAt            DateTime     @default(now())
+  updateAt             DateTime     @default(now())
+  dateOfBirth          DateTime?
+  sex                  Boolean?
+  refresh_token        String?
+  forgotpassword_token String?
+  role                 Int?
+  fK_Role              Role?        @relation(fields: [role], references: [id])
+  cart                 CartSchema[]
+  // roleId               Role? @relation(fields: [id], references: [id])
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  createdAt DateTime
+  updatedAt DateTime
+  User      User[]
+>>>>>>> origin/nham_dev
 }
 
 model Token {
   id           Int      @id @default(autoincrement())
-  userid       Int
+  userid       Int      
   fk_userTOken User     @relation(fields: [userid], references: [id])
   token        String
   createdAt    DateTime @default(now())
@@ -80,6 +110,7 @@ model Product {
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
   ProductImage ProductImage[]
+<<<<<<< HEAD
    CartItem     CartItem[]
 }
 
@@ -90,6 +121,9 @@ model CartItem {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) 
   fk_productCartItem Product?  @relation(fields: [productId], references: [id])
+=======
+  itemCarts    ItemCart[]
+>>>>>>> origin/nham_dev
 }
 
 model Category {
@@ -101,11 +135,32 @@ model Category {
   products  Product[]
 }
 
+model ItemCart {
+  id         Int        @id @default(autoincrement())
+  product    Product    @relation(fields: [productid], references: [id])
+  productid  Int
+  cartschema CartSchema @relation(fields: [cartid], references: [id])
+  cartid     Int
+  quantity   Int?       @default(1)
+  price      Int?
+  total      Int?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime?  @default(now())
+}
+
+model CartSchema {
+  id       Int        @id @default(autoincrement())
+  user     User       @relation(fields: [userId], references: [id])
+  userId   Int
+  item     ItemCart[]
+  subtotal Int
+}
+
 model ProductImage {
-  id              Int      @id @default(autoincrement())
-  url             String?
-  idproduct       Int?
-  fK_pruductImage Product? @relation(fields: [idproduct], references: [id])
+  id               Int      @id @default(autoincrement())
+  url              String?
+  idproduct        Int?
+  fK_propductImage Product? @relation(fields: [idproduct], references: [id])
 }
 
 model Order {
@@ -131,7 +186,7 @@ model OrderDetail {
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @default(now())
   fK_order        Order?    @relation(fields: [orderId], references: [id])
-  fK_pruductOrder Product?  @relation(fields: [productId], references: [id])
+  fK_productOrder Product?  @relation(fields: [productId], references: [id])
 }
 
 model discount {
