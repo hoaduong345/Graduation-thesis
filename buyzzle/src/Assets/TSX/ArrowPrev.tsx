@@ -12,9 +12,9 @@ export default function ArrowPrev() {
       <path
         d="M14 16L10 12L14 8"
         stroke="#454545"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

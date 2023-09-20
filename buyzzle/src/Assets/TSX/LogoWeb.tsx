@@ -17,44 +17,44 @@ export default function LogoWeb() {
       <path
         d="M61.25 46.6667V23.3334C61.249 22.3104 60.9789 21.3057 60.467 20.4201C59.9551 19.5345 59.2192 18.799 58.3333 18.2875L37.9167 6.62087C37.0299 6.10889 36.024 5.83936 35 5.83936C33.976 5.83936 32.9701 6.10889 32.0833 6.62087L11.6667 18.2875C10.7808 18.799 10.0449 19.5345 9.53301 20.4201C9.02108 21.3057 8.75105 22.3104 8.75 23.3334V46.6667C8.75105 47.6897 9.02108 48.6943 9.53301 49.58C10.0449 50.4656 10.7808 51.2011 11.6667 51.7125L32.0833 63.3792C32.9701 63.8912 33.976 64.1607 35 64.1607C36.024 64.1607 37.0299 63.8912 37.9167 63.3792L58.3333 51.7125C59.2192 51.2011 59.9551 50.4656 60.467 49.58C60.9789 48.6943 61.249 47.6897 61.25 46.6667Z"
         stroke="#1A1A1A"
-        stroke-width="5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M21.875 12.2793L35 19.8626L48.125 12.2793"
         stroke="#1A1A1A"
-        stroke-width="5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M21.875 57.7208V42.5833L8.75 35"
         stroke="#1A1A1A"
-        stroke-width="5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M61.25 35L48.125 42.5833V57.7208"
         stroke="#1A1A1A"
-        stroke-width="5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M9.53748 20.2998L35 35.029L60.4625 20.2998"
         stroke="#1A1A1A"
-        stroke-width="5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M35 64.4V35"
         stroke="#1A1A1A"
-        stroke-width="5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
