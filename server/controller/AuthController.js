@@ -95,8 +95,7 @@ const AuthController = {
 
   deleteregister: async (req, res) => {
     try {
-      const registerId = parseInt(req.params.id);
-   
+      const registerId = parseInt(req.params.id); 
       const existingUser = await prisma.user.findUnique({
         where: {
           id: registerId,
@@ -153,7 +152,54 @@ const AuthController = {
       console.error(error);
       res.status(500).json(error.message);
     }
+  }, 
+
+  UpdatePassword: async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const oldPassword = req.body.oldPassword; 
+      const newPassword = req.body.newPassword; 
+      const newPasswordConfirmation = req.body.newPasswordConfirmation; 
+  
+     
+      if (newPassword !== newPasswordConfirmation) {
+        return res.status(400).json("Mật khẩu mới và xác nhận mật khẩu không khớp");
+      }
+  
+   
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+  
+      // Xác thực mật khẩu cũ
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+  
+      if (!isPasswordValid) {
+        return res.status(401).json("Mật khẩu cũ không chính xác");
+      }
+  
+      // Mật khẩu cũ hợp lệ, tiến hành cập nhật mật khẩu mới
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+  
+      const updatePassword = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          password: hashedNewPassword, // Lưu mật khẩu mới đã mã hóa
+        },
+      });
+  
+      res.status(200).json("Cập nhật mật khẩu thành công");
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
   },
+  
+
+
   
   
   // LOGIN

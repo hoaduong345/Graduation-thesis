@@ -105,6 +105,8 @@ const ProductController = {
             },
          });
 
+         
+
          res.status(200).json("Cập nhật danh mục thành công");
       } catch (error) {
          console.error(error);
@@ -530,6 +532,8 @@ const ProductController = {
       res.status(500).json(error.message);
     }
   },
+
+  
 
  
  
