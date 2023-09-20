@@ -13,6 +13,7 @@ import Detailproducts from "../pages/home/Admin/DetailProduct/Detailproducts";
 import UserProfile from "../pages/home/User/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
+import Category from "../pages/home/Admin/Category/Category";
 
 
 export default function useRouterEmelent() {
@@ -113,13 +114,19 @@ export default function useRouterEmelent() {
         element: (
           <Detailproducts />
         ),
+      },
+      {
+        path: "category",
+        element: (
+          <Category />
+        ),
       },]
     },
     {
       path: "/confirm",
       element: (
         <RegisterLoginLayout>
-          <ConfirmAccount/>
+          <ConfirmAccount />
         </RegisterLoginLayout>
 
       ),
