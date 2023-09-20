@@ -158,8 +158,8 @@ const AuthController = {
   resetPassword: async (req, res) => {
     try {
       const token = req.params.token;
-
-      const decoded = decode(token);
+      const decodedBase64 = Buffer.from(token, "base64").toString("utf-8");
+      const decoded = decode(decodedBase64);
       const salt = await bcrypt.genSalt(10);
       if (!req.body.newPassword || !salt) {
         throw new Error("Missing password or salt");
@@ -213,8 +213,12 @@ const AuthController = {
 
       if (forgot_password_token == null) {
         // Generate a new token
+
         forgot_password_token = AuthController.generateForgotPasswordToken(
           user.email
+        );
+        forgot_password_token = Buffer.from(forgot_password_token).toString(
+          "base64"
         );
 
         // Update the user's forgotpassword_token in the database
@@ -259,7 +263,7 @@ const AuthController = {
   verify: async (req, res) => {
     try {
       const userID = parseInt(req.params.id);
-      const tokenreq = req.params.token;
+      const reqToken = req.params.token;
 
       const user = await prisma.user.findUnique({
         where: { id: userID },
@@ -267,10 +271,10 @@ const AuthController = {
 
       if (!user) return res.status(400).send({ message: "invalid link" });
 
-      const token = await prisma.token.findUnique({
+      const token = await prisma.token.findFirst({
         where: {
           userid: user.id,
-          token: tokenreq,
+          token: reqToken,
         },
       });
       if (!token) {
@@ -280,11 +284,12 @@ const AuthController = {
         where: { id: userID },
         data: { verify: true },
       });
+      const tokenId = parseInt(token.id);
 
       await prisma.token.delete({
         where: {
-          userid: user.id,
-          token: req.params.token,
+          userid: userID,
+          id: tokenId,
         },
       });
       res.status(200).send({ message: "Email verified successfully" });
@@ -337,10 +342,7 @@ const AuthController = {
           expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token
         }
       );
-      console.log(
-        "🚀 ~ file: AuthController.js:324 ~ changePassword: ~ newRefreshToken:",
-        newRefreshToken
-      );
+
       await prisma.user.update({
         where: {
           email: token.email,
