@@ -25,7 +25,7 @@ model User {
   dateOfBirth          DateTime?
   sex                  Boolean?
   refresh_token        String?
-  forgotpassword_token String?
+  forgotpassword_token String? @db.VarChar(300)
   role                 Int?
   fK_Role              Role?        @relation(fields: [role], references: [id])
   cart                 CartSchema[]

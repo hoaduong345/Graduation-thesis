@@ -189,7 +189,7 @@ const AuthController = {
   },
 
   // SEND EMAIL TO FORGOT PASSWORD
-  fogotPassword: async (req, res) => {
+  forgotPassword: async (req, res) => {
     try {
       const reqemail = req.body.email;
 
@@ -209,31 +209,31 @@ const AuthController = {
           .send("Your account is not verified. Please check your Email");
       }
 
-      let forgot_password_token = user.forgotpassword_token;
+      
 
-      if (forgot_password_token == null) {
-        // Generate a new token
-
-        forgot_password_token = AuthController.generateForgotPasswordToken(
+      if (user.forgotpassword_token == null) {
+        const forgot_pasword_token_JWT = AuthController.generateForgotPasswordToken(
           user.email
         );
-        forgot_password_token = Buffer.from(forgot_password_token).toString(
-          "base64"
-        );
-
-        // Update the user's forgotpassword_token in the database
+          console.log("jwt",forgot_pasword_token_JWT)
+        const forgot_password_token_base64 =
+          Buffer.from(forgot_pasword_token_JWT).toString("base64");
+          console.log("Base64",forgot_password_token_base64)
         await prisma.user.update({
           where: {
             email: user.email,
           },
           data: {
-            forgotpassword_token: forgot_password_token,
+            forgotpassword_token: forgot_password_token_base64,
           },
         });
+        const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${forgot_password_token_base64}`;
+        console.log("Generated URL:", url);
+      } else {
+        const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
+        console.log("Generated URL:", url);
       }
 
-      const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${forgot_password_token}`;
-      console.log("Generated URL:", url);
       // await SendEmail(user.email, "Forgot Password", url);
 
       res.status(200).send("A Link has sent to your email");
