@@ -12,6 +12,7 @@ import { Products } from '../../User/FilterPage/FiltersPage'
 import axios from 'axios'
 import ListproductMap from "./ListproductMap"
 import { appConfig } from "../../../../configsEnv"
+import { toast } from 'react-toastify'
 
 export default function ListproductsAdmin() {
 
@@ -34,7 +35,26 @@ export default function ListproductsAdmin() {
       })
   }, [])
 
+  function xulyDele(id: number) {
+    console.log('sdjjsd', id);
+    if (confirm("Xoa san pham?")) {
+      axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`)
+        .then((deleteItems) => deleteItems)
+        .then((deleteItems) => {
+          toast.success("Xóa thành công !")
+          getData()
+        }).catch((error) => {
+          console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
+          toast.error("Xóa thất bại !")
+
+        }
+        )
+    }
+
+  }
   console.log(products);
+
+  // xoa
 
   return (
     <>

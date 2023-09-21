@@ -21,6 +21,17 @@ router.get("/paginated", ProductController.getProductsPaginated);
 
 router.get("/search", ProductController.searchProducts);
 
+// router.post("/addtocart/:id", ProductController.addToCart);
+
+// router.delete("/deletetocart/:id", ProductController.deleteToCart);
+
+router.post('/addimagesbyproductid', ProductController.addImagesByProductsID);
+
+router.put('/updateimagesbyproductid/:id', ProductController.updateImageByProductID);
+
+router.delete("/deleteimagesbyproductid/:id", ProductController.deleteImageByProductID);
+
+
 // thêm danh mục
 
 router.post("/addcategory", ProductController.addCategory);
