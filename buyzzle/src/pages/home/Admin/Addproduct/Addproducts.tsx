@@ -73,7 +73,6 @@ export default function Addproducts() {
                     alert(err)
                 })
         }
-
     }
 
     // Tạo fuction handle thêm sản phẩm.

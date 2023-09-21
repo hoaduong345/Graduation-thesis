@@ -14,6 +14,7 @@ import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 import axios from "axios";
+import { productController } from "../../../../Controllers/ProductsController";
 
 export interface Products {
   id: number;
@@ -37,15 +38,14 @@ export default function FiltersPage() {
   const [products, setProducts] = useState<Products[]>([])
 
   useEffect(() => {
-    axios.get("http://localhost:5000/buyzzle/product/allproducts")
-      .then((reposonse) => {
-        console.log("🚀 ~ file: FiltersPage.tsx:42 ~ .then ~ reposonse:", reposonse.data)
-        setProducts(reposonse.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    getData()
   }, [])
+
+  const getData = () => {
+    productController.getList().then((res) => {
+      setProducts(res)
+    })
+  }
 
   return (
     <Container>

@@ -7,6 +7,12 @@ import { appConfig } from '../../../../configsEnv';
 import UploadIMG from '../Assets/TSX/UploadIMG';
 import { useQuery } from '@tanstack/react-query';
 import { Editor } from '@tinymce/tinymce-react';
+import { productController } from '../../../../Controllers/ProductsController';
+import { toast } from 'react-toastify'
+import { imagesController } from '../../../../Controllers/ImagesController';
+import { storage } from '../../../../Firebase/Config';
+import { ref, uploadBytes } from 'firebase/storage';
+
 export type FormValues = {
     name: string;
     price: number;
@@ -63,18 +69,29 @@ export default function EditProductMap() {
     const isDisabled = !(isValid && isDirty)
 
 
-    const { id } = useParams()
-    const submitData = (data: any) => {
+    const idProduct = useParams()
+    console.log("🚀 ~ file: EditProductMap.tsx:70 ~ idProduct:", idProduct)
+    const id = Number(idProduct.id)
+
+    const submitData = async (data: any) => {
+        console.log("🚀 ~ file: EditProductMap.tsx:74 ~ submitData ~ data:", data)
         console.log(data);
-        axios.put(`${appConfig.apiUrl}/updateproduct/${id}`, data)
-            .then((editData) => editData)
-            .then((editData) => {
-                alert('success')
-                return setEditProduct(editData.data)
+        await productController.update(id, data).then(() => {
+
+            toast.success('Sua sanr phaarm thanhf coong !', {
+                position: "bottom-right"
             })
-            .catch((error) => {
-                console.log("🚀 ~ file: Editproducts.tsx:24 ~ useEffect ~ error:", error)
+        }).catch(() => {
+            toast.error('Theem sanr phaarm that bai !')
+        })
+
+        await imagesController.update(id, data).then(() => {
+            toast.success('Sua hinh thanhf coong !', {
+                position: "bottom-right"
             })
+        }).catch(() => {
+            toast.error('Sua hinh that bai !')
+        })
     }
     useEffect(() => {
         axios.get(`${appConfig.apiUrl}/chitietproduct/${id}`)
@@ -87,6 +104,30 @@ export default function EditProductMap() {
                 console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
             })
     }, [])
+
+    useEffect(() => {
+        loadImageFile(images)
+    }, [images])
+
+
+    // img firebase
+    const loadImageFile = async (images: any) => {
+        for (let i = 0; i < images.length; i++) {
+            const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
+
+            await uploadBytes(imageRef, images[i])
+                .then(() => {
+                    storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
+                        .then((url: any) => {
+                            setUrl((prev) => (prev.concat(url)));
+                            return url
+                        })
+                })
+                .catch(err => {
+                    alert(err)
+                })
+        }
+    }
 
     const onChangeInput = (e: any) => {
         const reg = /[0-9]/;
