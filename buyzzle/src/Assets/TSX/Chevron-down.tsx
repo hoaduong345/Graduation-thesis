@@ -12,9 +12,9 @@ export default function Chevron_down() {
       <path
         d="M4.5 6.75L9 11.25L13.5 6.75"
         stroke="#4C4C4C"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </svg>
   );

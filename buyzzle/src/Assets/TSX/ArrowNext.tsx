@@ -12,9 +12,9 @@ export default function ArrowNext() {
       <path
         d="M10 8L14 12L10 16"
         stroke="#454545"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </svg>
   );

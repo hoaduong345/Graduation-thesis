@@ -12,9 +12,9 @@ export default function ArrowUp() {
       <path
         d="M13 7L7 1L1 7"
         stroke="#1A1A1A"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </svg>
   );

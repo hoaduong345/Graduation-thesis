@@ -13,9 +13,9 @@ export default function Rate(props: RatingStar) {
         </label>
       </div>
       <div className="flex items-center space-x-1 ">
-        {[1, 2, 3, 4, 5].map((item, i) => {
+        {[1, 2, 3, 4, 5].map((item) => {
           return (
-            <svg key={i}
+            <svg
               className={`w-4 h-4 ${props.rating >= item ? `text-yellow-300` : `red`
                 }`}
               aria-hidden="true"

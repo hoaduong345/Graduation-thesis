@@ -17,13 +17,13 @@ export type Product = {
 };
 
 export type FlashSaleList = {
-  id: number,
-  img: string,
-  giamGia: number,
-  title: string,
-  vote: number,
-  price: number,
-  daBan: number,
+    id: number,
+    img: string,
+    giamGia: number,
+    title: string,
+    vote: number,
+    price: number,
+    daBan: number,
 }
 
 function Index() {
@@ -489,7 +489,7 @@ function Index() {
 
           <div className="flex flex-wrap justify-between">
             {products.map((product) => {
-              return <Products key={product.id} product={product} />;
+              return <Products product={product} />;
             })}
           </div>
         </div>

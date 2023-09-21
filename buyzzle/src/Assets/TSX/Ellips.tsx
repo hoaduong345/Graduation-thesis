@@ -17,7 +17,7 @@ export default function Ellips() {
         r="9"
         fill="#EA4B48"
         stroke="#1A1A1A"
-        strokeWidth="2"
+        stroke-width="2"
       />
     </svg>
   );

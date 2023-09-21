@@ -49,7 +49,7 @@ export default function FiltersPage() {
 
   return (
     <Container>
-      <div className="body-filter container mx-auto">
+      <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
             <SitebarFilter onChangeFilters={() => {
@@ -146,10 +146,10 @@ export default function FiltersPage() {
 
             <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
 
-              {products.map((items, i) => {
+              {products.map((items) => {
                 return (
                   <>
-                    <Filter key={i} product={items} />
+                    <Filter product={items} />
                   </>
                 );
               })}
@@ -214,7 +214,7 @@ export default function FiltersPage() {
             <Series />
           </div>
         </div>
-      </div>
+      </body>
     </Container>
   );
 }
