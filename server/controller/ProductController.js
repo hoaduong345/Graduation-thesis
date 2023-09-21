@@ -105,8 +105,6 @@ const ProductController = {
             },
          });
 
-         
-
          res.status(200).json("Cập nhật danh mục thành công");
       } catch (error) {
          console.error(error);
@@ -178,31 +176,7 @@ const ProductController = {
       }
     },
 
-    deleteImageByProductID: async (req, res) => {
-      try {
-        const imageId = parseInt(req.params.id);
-        const existingImage = await prisma.productImage.findUnique({
-          where: {
-            id: imageId, 
-          },
-        });
     
-        if (!existingImage) {
-          return res.status(404).json("Hình ảnh không tồn tại");
-        }
-    
-        await prisma.productImage.delete({
-          where: {
-            id: imageId,
-          },
-        });
-    
-        res.status(200).json("Xóa hình ảnh thành công");
-      } catch (error) {
-        console.error(error);
-        res.status(500).json(error.message);
-      }
-    },
     
 
    addProduct: async (req, res) => {
@@ -281,28 +255,28 @@ const ProductController = {
    // xóa sản phẩm
    deleteProduct: async (req, res) => {
       try {
-         const productId = parseInt(req.params.id); // Lấy id sản phẩm từ params
-         // Kiểm tra xem sản phẩm có tồn tại không
-         const existingProduct = await prisma.product.findUnique({
-            where: {
-               id: productId,
-            },
-         });
-         if (!existingProduct) {
-            return res.status(404).json("Sản phẩm không tồn tại");
-         }
-         // Xóa sản phẩm
-         await prisma.product.delete({
-            where: {
-               id: productId,
-            },
-         });
-         res.status(200).json("Xóa sản phẩm thành công");
+        const productId = parseInt(req.params.id); 
+    
+        // Xóa sản phẩm
+        await prisma.product.delete({
+          where: {
+            id: productId,
+          },
+        });
+    
+        await prisma.productImage.deleteMany({
+          where: {
+            idproduct: productId,
+          },
+        });
+    
+        res.status(200).json("Xóa sản phẩm và hình ảnh  thành công");
       } catch (error) {
-         console.error(error);
-         res.status(500).json(error.message);
+        console.error(error);
+        res.status(500).json(error.message);
       }
-   },
+    },
+    
 
    //cập nhật sản phẩm
    updateProduct: async (req, res) => {

@@ -94,7 +94,7 @@ model Product {
   categoryID   Int?
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
-  ProductImage ProductImage[]
+   ProductImage ProductImage[]   
   itemCarts    ItemCart[]
 }
 
@@ -134,7 +134,7 @@ model ProductImage {
   id               Int      @id @default(autoincrement())
   url              String?
   idproduct        Int?
-  fK_propductImage Product? @relation(fields: [idproduct], references: [id])
+  fK_propductImage Product? @relation(fields: [idproduct],  references: [id], onDelete: Cascade)
 }
 
 model Order {
