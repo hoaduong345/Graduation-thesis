@@ -37,20 +37,6 @@ datasource db {
 // }
 
 model User {
-<<<<<<< HEAD
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  username    String?   @unique
-  password    String
-  verify      Boolean  @default(false)
-  Token       Token[]
-  name        String?
-  phonenumber String?
-  image       String?
-  createdAt   DateTime @default(now())
-  refresh_token String?
-  forgotpassword_token String?
-=======
   id                   Int          @id @default(autoincrement())
   email                String       @unique
   username             String?      @unique
@@ -65,7 +51,7 @@ model User {
   dateOfBirth          DateTime?
   sex                  Boolean?
   refresh_token        String?
-  forgotpassword_token String?
+  forgotpassword_token String? @db.VarChar(300)
   role                 Int?
   fK_Role              Role?        @relation(fields: [role], references: [id])
   cart                 CartSchema[]
@@ -78,7 +64,6 @@ model Role {
   createdAt DateTime
   updatedAt DateTime
   User      User[]
->>>>>>> origin/nham_dev
 }
 
 model Token {
@@ -110,21 +95,10 @@ model Product {
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
   ProductImage ProductImage[]
-<<<<<<< HEAD
-   CartItem     CartItem[]
+  itemCarts    ItemCart[]
 }
 
-model CartItem {
-  id        Int      @id @default(autoincrement())
-  quantity  Int?
-  productId Int?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now()) 
-  fk_productCartItem Product?  @relation(fields: [productId], references: [id])
-=======
-  itemCarts    ItemCart[]
->>>>>>> origin/nham_dev
-}
+
 
 model Category {
   id        Int       @id @default(autoincrement())

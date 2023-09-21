@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const decode = require("jwt-decode");
+const { re } = require("mathjs");
 dotenv.config();
 
 const AuthController = {
@@ -129,6 +130,8 @@ const AuthController = {
         username: req.body.username ,
         name: req.body.name ,
         phonenumber: req.body.phonenumber,
+        sex : req.body.sex,
+        dateOfBirth : new Date(req.body.dateOfBirth)
       };
   
       const updatedUserResponse = await prisma.user.update({

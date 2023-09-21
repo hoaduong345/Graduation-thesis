@@ -21,9 +21,9 @@ router.get("/paginated", ProductController.getProductsPaginated);
 
 router.get("/search", ProductController.searchProducts);
 
-router.post("/addtocart/:id", ProductController.addToCart);
+// router.post("/addtocart/:id", ProductController.addToCart);
 
-router.delete("/deletetocart/:id", ProductController.deleteToCart);
+// router.delete("/deletetocart/:id", ProductController.deleteToCart);
 
 router.post('/addimagesbyproductid', ProductController.addImagesByProductsID);
 
