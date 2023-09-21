@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Products } from '../../User/FilterPage/FiltersPage';
 import { Link, useParams } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { appConfig } from '../../../../configsEnv';
 import UploadIMG from '../Assets/TSX/UploadIMG';
-
+import { useQuery } from '@tanstack/react-query';
+import { Editor } from '@tinymce/tinymce-react';
 export type FormValues = {
     name: string;
     price: number;
@@ -25,11 +26,14 @@ export default function EditProductMap() {
     const [editProduct, setEditProduct] = useState<FormValues>()
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
+    const editorRef = useRef<any>(null);
 
     const {
         control,
         handleSubmit,
+        watch,
         formState: { errors, isDirty, isValid },
+        register
     } = useForm<FormValues>({
         mode: 'all',
         defaultValues:
@@ -39,8 +43,8 @@ export default function EditProductMap() {
             description: "",
             discount: 1
         },
-    });
 
+    });
 
     const [categoty, setCategory] = useState<Cate[]>([])
     useEffect(() => {
@@ -66,7 +70,6 @@ export default function EditProductMap() {
             .then((editData) => editData)
             .then((editData) => {
                 alert('success')
-                console.log("🚀 ~ file: Editproducts.tsx:23 ~ useEffect ~ editData:", editData)
                 return setEditProduct(editData.data)
             })
             .catch((error) => {
@@ -84,9 +87,12 @@ export default function EditProductMap() {
                 console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
             })
     }, [])
+
     const onChangeInput = (e: any) => {
-        setEditProduct(e.target.value)
+        const reg = /[0-9]/;
+        setEditProduct((e.target.value).replace(reg, ''))
     }
+
     return (
         <>
             <form onSubmit={handleSubmit(submitData)}>
@@ -117,18 +123,14 @@ export default function EditProductMap() {
                                             ${!!errors.name ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                             placeholder="Nhập tiêu đề sản phẩm"
                                             value={editProduct?.name}
-                                            // onChange={(e) => {
-                                            //     const reg = /[0-9]/;
-                                            //     const value = e.target.value
-                                            //     field.onChange(value.replace(reg, ''));
-                                            // }}
+                                            {...register("name")}
                                             onChange={onChangeInput}
                                         />
                                         {!!errors.name && <p className='text-red-700 mt-2'>{errors.name.message}</p>}</>
                                 )} />
                                 {/* end input addNameProducts */}
 
-                                <Controller control={control} name='description' rules={{
+                                {/* <Controller control={control} name='description' rules={{
                                     required: {
                                         value: true,
                                         message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
@@ -147,7 +149,7 @@ export default function EditProductMap() {
                                         <>
                                             <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
                                             {/* input addNameProducts */}
-                                            <textarea className={`focus:outline-none text-[#333333] text-base font-medium 
+                                {/* <textarea className={`focus:outline-none text-[#333333] text-base font-medium 
                                                 border-[1px] border-[#FFAAAF] rounded-[6px] px-[10px] py-[7px] w-[100%] h-[251px] 
                                                 ${!!errors.description ? 'border-[2px] border-red-900' : ' border-[1px] border-[#FFAAAF]'}
                                                 `}
@@ -155,14 +157,59 @@ export default function EditProductMap() {
                                                 maxLength={1000}
                                                 rows={4} cols={50}
                                                 value={editProduct?.description}
+                                                {...register('description')}
                                                 onChange={onChangeInput}
                                             >
                                             </textarea>
-                                            {/* end input addNameProducts */}
+                                            {/* end input addNameProducts 
                                         </>
                                     )}
                                 />
-                                {!!errors.description && <p className='text-red-700 mt-2'>{errors.description.message}</p>}
+                                {!!errors.description && <p className='text-red-700 mt-2'>{errors.description.message}</p>} */}
+
+                                <Controller control={control} name='description' render={({ field }) => (
+                                    <>
+                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
+                                        <Editor
+                                            apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
+                                            onInit={(evt, editor) => (editorRef.current = editor)}
+                                            onEditorChange={(e) => field.onChange(e)}
+                                            value={field.value}
+                                            {...register('description')}
+                                            init={{
+                                                height: 500,
+                                                menubar: false,
+                                                font_size_formats: '18pt 24pt 36pt 48pt',
+                                                plugins: [
+                                                    'advlist',
+                                                    'autolink',
+                                                    'link',
+                                                    'image',
+                                                    'lists',
+                                                    'charmap',
+                                                    'preview',
+                                                    'anchor',
+                                                    'pagebreak',
+                                                    'searchreplace',
+                                                    'wordcount',
+                                                    'visualblocks',
+                                                    'visualchars',
+                                                    'code',
+                                                    'fullscreen',
+                                                    'insertdatetime',
+                                                    'media',
+                                                    'table',
+                                                    'emoticons',
+                                                    'template',
+                                                    'help',
+                                                ],
+                                                toolbar:
+                                                    'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons',
+                                                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:22px;fontsize }',
+                                            }}
+                                        />
+                                    </>
+                                )} />
 
                             </div>
                         </div>
@@ -285,12 +332,13 @@ export default function EditProductMap() {
                                                             className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
                                                             placeholder="000.000"
                                                             value={editProduct?.price}
-                                                            // onChange={(e) => {
-                                                            //     const reg = /[^1-9]/g
-                                                            //     const value = e.target.value
-                                                            //     field.onChange(value.replace(reg, ''))
-                                                            // }}
+                                                            {...register('price')}
                                                             onChange={onChangeInput}
+                                                        // onChange={(e) => {
+                                                        //     const reg = /[^1-9]/g
+                                                        //     const value = e.target.value
+                                                        //     field.onChange(value.replace(reg, ''))
+                                                        // }}
                                                         />
                                                         <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
                                                     </div>
@@ -323,13 +371,14 @@ export default function EditProductMap() {
                                                         <input
                                                             className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
                                                             placeholder="000.000"
-                                                            value={editProduct?.discount}
                                                             maxLength={3}
                                                             // onChange={(e) => {
                                                             //     const reg = /[^1-9]/g
                                                             //     const value = e.target.value
                                                             //     field.onChange(value.replace(reg, ''))
                                                             // }}
+                                                            value={editProduct?.discount}
+                                                            {...register('discount')}
                                                             onChange={onChangeInput}
                                                         />
                                                         <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
@@ -358,12 +407,13 @@ export default function EditProductMap() {
                                                 className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
                                                     ${!!errors.quantity ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'} `}
                                                 placeholder="000.000"
-                                                value={editProduct?.quantity}
                                                 // onChange={(e) => {
                                                 //     const reg = /[^1-9]/g
                                                 //     const value = e.target.value
                                                 //     field.onChange(value.replace(reg, ''))
                                                 // }}
+                                                value={editProduct?.quantity}
+                                                {...register('quantity')}
                                                 onChange={onChangeInput}
 
                                             />
@@ -407,7 +457,7 @@ export default function EditProductMap() {
                             <div className={`flex items-center w-[150px] rounded-md h-[46px] transition 
                                     duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer
                                     `}>
-                                <button  className={`text-center text-base font-bold text-[#FFFFFF] 
+                                <button className={`text-center text-base font-bold text-[#FFFFFF] 
                                         `}>
                                     Sửa sản phẩm
                                 </button>

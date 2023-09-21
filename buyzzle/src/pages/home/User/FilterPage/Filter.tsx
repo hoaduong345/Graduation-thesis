@@ -6,7 +6,7 @@ type Props = {
   product: Products;
 };
 const Filter = (props: Props) => {
-  
+
   const { product } = props
 
   return (

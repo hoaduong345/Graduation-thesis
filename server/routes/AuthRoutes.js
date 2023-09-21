@@ -7,6 +7,10 @@ const router = require("express").Router();
 
 // REGISTER
 router.post("/register",createVali, AuthController.register);
+router.delete("/deleteregister/:id", AuthController.deleteregister);
+router.put("/userprofile/:id", AuthController.UserProfile);
+router.put("/updatepassword/:id", AuthController.UpdatePassword);
+
 // LOGIN
 router.post("/", AuthController.requestRefreshToken);
 router.post(

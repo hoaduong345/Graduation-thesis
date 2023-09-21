@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react'
-import Container from '../../../components/container/Container'
-import Back from './Assets/TSX/Back'
+import { useEffect, useRef, useState } from 'react'
+import Container from '../../../../components/container/Container'
+import Back from '../Assets/TSX/Back'
 // import ArrowDown from '../../../Assets/TSX/ArrowDown'
-import UploadIMG from './Assets/TSX/UploadIMG'
+import UploadIMG from '../Assets/TSX/UploadIMG'
 // import { Images } from '../../../Assets/TS'
 import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom'
-import { storage } from '../../../Firebase/Config'
+import { storage } from '../../../../Firebase/Config'
 import { ref, uploadBytes } from 'firebase/storage'
-import { appConfig } from '../../../configsEnv'
+import { appConfig } from '../../../../configsEnv'
+import { Editor } from '@tinymce/tinymce-react';
+import { toast } from 'react-toastify'
 // import { v4 } from 'uuid'
 
 export type FormValues = {
@@ -31,7 +33,8 @@ export default function Addproducts() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const [categoty, setCategory] = useState<Cate[]>([])
-    const [i, setI] = useState<number>(0)
+    const [i, setI] = useState<number>(1)
+    const editorRef = useRef<any>(null);
 
     useEffect(() => {
         getCategory()
@@ -55,7 +58,6 @@ export default function Addproducts() {
 
     // img firebase
     const loadImageFile = async (images: any) => {
-
         for (let i = 0; i < images.length; i++) {
             const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
 
@@ -70,7 +72,6 @@ export default function Addproducts() {
                 .catch(err => {
                     alert(err)
                 })
-
         }
 
     }
@@ -92,18 +93,19 @@ export default function Addproducts() {
                 console.log(response.config.data)
                 return response
             }).then(async (responseData) => {
-                alert('success')
+                toast.success("Thêm thành công !")
                 for (let i = 0; i < url.length; i++) {
                     await addImages(responseData?.data.id, url[i])
                 }
                 resetField("productName"),
-                resetField("productDesc"),
-                resetField("productPrice"),
-                resetField("productQuantity"),
-                resetField("productDiscount"),
-                console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
+                    resetField("productDesc"),
+                    resetField("productPrice"),
+                    resetField("productQuantity"),
+                    resetField("productDiscount"),
+                    console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
             }).catch(error => {
                 console.log("🚀 ~ file: Addproducts.tsx:40 ~ handleAddproduct ~ error:", error)
+                toast.error("Thêm thất bại !")
             })
     }
 
@@ -115,13 +117,15 @@ export default function Addproducts() {
         }
         await axios.post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
             .then(response => response.data)
-
     }
+
+    // const [desc, setDesc] = useState<FormValues[]>([])
 
     const {
         control,
         handleSubmit,
         resetField,
+        watch,
         formState: { errors, isDirty, isValid },
     } = useForm<FormValues>({
         mode: 'all',
@@ -137,10 +141,14 @@ export default function Addproducts() {
 
     });
 
+    console.log(watch().productDesc)
+
     const isDisabled = !(isValid && isDirty)
+
+    console.log(watch().productDesc)
     return (
         <Container>
-            <body className="body-filter container mx-auto">
+            <body className="body-addproduct container mx-auto">
                 {/* back */}
                 <div className='back h-[57px] mt-[46px] '>
                     <div className='flex gap-3 items-center'>
@@ -191,9 +199,9 @@ export default function Addproducts() {
                                                 />
                                                 {!!errors.productName && <p className='text-red-700 mt-2'>{errors.productName.message}</p>}</>
                                         )} />
-                                        {/* end input addNameProducts */}
 
-                                        <Controller control={control} name='productDesc' rules={{
+
+                                        {/* <Controller control={control} name='productDesc' rules={{
                                             required: {
                                                 value: true,
                                                 message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
@@ -212,7 +220,7 @@ export default function Addproducts() {
                                                 <>
                                                     <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
                                                     {/* input addNameProducts */}
-                                                    <textarea className={`focus:outline-none text-[#333333] text-base font-medium 
+                                        {/*    <textarea className={`focus:outline-none text-[#333333] text-base font-medium 
                                                 border-[1px] border-[#FFAAAF] rounded-[6px] px-[10px] py-[7px] w-[100%] h-[251px] 
                                                 ${!!errors.productDesc ? 'border-[2px] border-red-900' : ' border-[1px] border-[#FFAAAF]'}
                                                 `}
@@ -224,11 +232,67 @@ export default function Addproducts() {
                                                     >
                                                     </textarea>
                                                     {/* end input addNameProducts */}
-                                                </>
+                                        {/*      </>
                                             )}
                                         />
-                                        {!!errors.productDesc && <p className='text-red-700 mt-2'>{errors.productDesc.message}</p>}
+                                        {!!errors.productDesc && <p className='text-red-700 mt-2'>{errors.productDesc.message}</p>} */}
+                                        <Controller control={control} name='productDesc' rules={{
+                                            required: {
+                                                value: true,
+                                                message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
+                                            }
 
+                                        }} render={({ field, }) => (
+                                            <>
+                                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
+                                                <Editor
+                                                    apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
+                                                    onInit={(evt, editor) => (editorRef.current = editor)}
+                                                    onEditorChange={(e) => field.onChange(e)}
+                                                    value={field.value}
+                                                    init={{
+                                                        block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3',
+                                                        height: 500,
+                                                        menubar: false,
+                                                        plugins: [
+                                                            'advlist',
+                                                            'autolink',
+                                                            'link',
+                                                            'image',
+                                                            'lists',
+                                                            'charmap',
+                                                            'preview',
+                                                            'anchor',
+                                                            'pagebreak',
+                                                            'searchreplace',
+                                                            'wordcount',
+                                                            'visualblocks',
+                                                            'visualchars',
+                                                            'code',
+                                                            'fullscreen',
+                                                            'insertdatetime',
+                                                            'media',
+                                                            'p',
+                                                            'h1, h2, h3, h4, h5, h6',
+                                                            'div',
+                                                            'address',
+                                                            'pre',
+                                                            'div',
+                                                            'code',
+                                                            'dt, dd',
+                                                            'samp',
+                                                            'table',
+                                                            'emoticons',
+                                                            'template',
+                                                            'help',
+                                                        ],
+                                                        toolbar:
+                                                            'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons',
+                                                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                                                    }}
+                                                />
+                                            </>
+                                        )} />
                                     </div>
                                 </div>
                                 {/* Danh Mục Sản Phẩm */}
@@ -278,42 +342,40 @@ export default function Addproducts() {
                                 <div>
                                     <span className='text-[#000] text-2xl font-normal'>Ảnh Sản Phẩm</span>
                                     {/* card */}
-                                    <div className='card w-[100%] py-4 px-9 mt-2 flex items-center
+                                    <div className='card w-[100%] py-4 px-9 mt-2 
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
                                         <Controller control={control} name='productImage' render={({ }) => (
                                             <>
-                                                {/* form upload img */}
-                                                <form className='max-w-max items-center'>
-                                                    <label htmlFor="images">
-                                                        <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
+                                                <div className='flex'>
+                                                    {/* form upload img */}
+                                                    <div className='max-w-max items-center'>
+                                                        <label htmlFor="images">
+                                                            <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
 
-                                                            <input type="file"
-                                                                // onChange={field.onChange}
-                                                                onChange={(e: any) => setImages(e.target.files)}
-                                                                id='images' multiple className='hidden ' />
-                                                            <UploadIMG />
-                                                            <div id="images" className='text-center mt-2'>
-                                                                <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold'>Click to upload
-                                                                    <p className='text-[#1A1A1A] font-normal text-sm tracking-widest'>or drag and drop</p></p>
+                                                                <input type="file"
+                                                                    // onChange={field.onChange}
+                                                                    onChange={(e: any) => setImages(e.target.files)}
+                                                                    id='images' multiple className='hidden ' />
+                                                                <UploadIMG />
+                                                                <div id="images" className='text-center mt-2'>
+                                                                    <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold'>Click to upload
+                                                                        <p className='text-[#1A1A1A] font-normal text-sm tracking-widest'>or drag and drop</p></p>
+                                                                </div>
                                                             </div>
+                                                        </label>
+                                                    </div>{/* end form upload img */}
+
+                                                    <div className='justify-center flex flex-1'>
+                                                        <div className='inline-grid grid-cols-3 gap-4'>
+                                                            {
+                                                                url.map(e => {
+                                                                    return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
+                                                                })
+                                                            }
                                                         </div>
-                                                    </label>
-                                                </form>{/* end form upload img */}
-                                                <div className='justify-center flex flex-1'>
-                                                    <div className='inline-grid grid-cols-3 gap-4'>
-
-                                                        {
-                                                            url.map(e => {
-                                                                return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
-                                                            })
-                                                        }
-
-                                                        {/* <div
-                                                            style={{ borderTopColor: "transparent" }}
-                                                            className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
-                                                        /> */}
                                                     </div>
+
                                                 </div>
                                             </>
                                         )} />
@@ -353,12 +415,11 @@ export default function Addproducts() {
                                                                     className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
                                                                     placeholder="000.000"
                                                                     value={field.value}
-                                                                    // onChange={(e) => {
-                                                                    //     const reg = /[^1-9]/g
-                                                                    //     const value = e.target.value
-                                                                    //     field.onChange(value.replace(reg, ''))
-                                                                    // }}
-                                                                    onChange={field.onChange}
+                                                                    onChange={(e) => {
+                                                                        const reg = /[^1-9]/g
+                                                                        const value = e.target.value
+                                                                        field.onChange(value.replace(reg, ''))
+                                                                    }}
                                                                 />
                                                                 <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
                                                             </div>
@@ -393,12 +454,11 @@ export default function Addproducts() {
                                                                     placeholder="000.000"
                                                                     value={field.value}
                                                                     maxLength={3}
-                                                                    // onChange={(e) => {
-                                                                    //     const reg = /[^1-9]/g
-                                                                    //     const value = e.target.value
-                                                                    //     field.onChange(value.replace(reg, ''))
-                                                                    // }}
-                                                                    onChange={field.onChange}
+                                                                    onChange={(e) => {
+                                                                        const reg = /[^1-9]/g
+                                                                        const value = e.target.value
+                                                                        field.onChange(value.replace(reg, ''))
+                                                                    }}
 
                                                                 />
                                                                 <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
@@ -478,9 +538,7 @@ export default function Addproducts() {
                                         <button disabled={isDisabled} onClick={handleSubmit((data: any) => {
                                             handleAddproduct(data)
                                         })} className={`text-center text-base font-bold text-[#FFFFFF] 
-                                        ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}
-                                        
-                                        `}>
+                                        ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} `}>
                                             Thêm sản phẩm
                                         </button>
                                     </div>

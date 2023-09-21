@@ -68,6 +68,8 @@ export const Images = {
   chevron1: "../../../src/pages/home/Admin/Assets/Images/chevron-right1.png" ,
   Banner: "../src/Assets/Images/banner.jpg",
   Banner1: "../src/Assets/Images/banner1.jpg",
+  BannerQC: "../../../src/pages/home/Admin/Assets/Images/bannerQC.png",
+  imgProduct: "../../../src/pages/home/Admin/Assets/Images/imgProduct.jpg",
 
 };
 
