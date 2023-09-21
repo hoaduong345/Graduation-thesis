@@ -402,6 +402,7 @@ const ProductController = {
          const result = await prisma.product.findMany({
             include: {
                ProductImage: true,
+               fK_category : true,
             },
          });
          res.status(200).json(result);
