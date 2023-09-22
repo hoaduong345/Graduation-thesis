@@ -7,6 +7,8 @@ const path = require('path')
 const bodyParser = require("body-parser");
 const AuthRouter = require("./routes/AuthRoutes")
 
+const UserRouter = require("./routes/UserRoutes")
+
 const ProductRoutes = require("./routes/ProductRoutes")
 
 const cookieParser = require("cookie-parser");
@@ -29,6 +31,8 @@ app.use(path.join(__dirname, ""), express.static(path.join(__dirname, "")))
 app.use(express.static(path.join(__dirname, "")));
 
 app.use("/buyzzle/auth", AuthRouter)
+
+app.use("/buyzzle/user", UserRouter)
 
 // sản phẩm
 app.use("/buyzzle/product", ProductRoutes)

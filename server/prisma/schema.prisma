@@ -55,8 +55,19 @@ model User {
   role                 Int?
   fK_Role              Role?        @relation(fields: [role], references: [id])
   cart                 CartSchema[]
-  // roleId               Role? @relation(fields: [id], references: [id])
+  // userprofile          UserProfile[]
 }
+
+// model UserProfile {
+//   id            Int      @id @default(autoincrement())
+//   email                String    
+//   username             String?      @unique
+//   password             String
+//    name                 String?
+//   // userId        Int      @unique
+//   // user          User     @relation(fields: [userId], references: [id])
+// }
+
 
 model Role {
   id        Int      @id @default(autoincrement())
