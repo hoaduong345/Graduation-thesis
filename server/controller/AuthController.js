@@ -123,7 +123,7 @@ const AuthController = {
 
   UserProfile: async (req, res) => {
     try {
-      const userId = parseInt(req.params.id);
+      const userId = parseInt(req.params.username);
 
       const updatedUser = {
         email: req.body.email,
@@ -136,7 +136,7 @@ const AuthController = {
   
       const updatedUserResponse = await prisma.user.update({
         where: {
-          id: userId,
+          username: userId,
         },
         data: updatedUser,
       });

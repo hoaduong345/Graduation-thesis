@@ -181,13 +181,7 @@ const ProductController = {
 
    addProduct: async (req, res) => {
       try {
-         // upload.single("images")(req, res, async (err) => {
-         //   if (err instanceof multer.MulterError) {
-         //     return res.status(500).json("Lỗi khi tải lên ảnh");
-         //   } else if (err) {
-         //     return res.status(500).json("Đã có lỗi xảy ra");
-         //   }
-
+       
          const {
             name,
             price,
@@ -270,7 +264,7 @@ const ProductController = {
           },
         });
     
-        res.status(200).json("Xóa sản phẩm và hình ảnh  thành công");
+        res.status(200).json("Xóa sản phẩm và hình ảnh thành công");
       } catch (error) {
         console.error(error);
         res.status(500).json(error.message);
@@ -281,13 +275,7 @@ const ProductController = {
    //cập nhật sản phẩm
    updateProduct: async (req, res) => {
       try {
-         // upload.single("images")(req, res, async (err) => {
-         //   if (err instanceof multer.MulterError) {
-         //     return res.status(500).json("Lỗi khi tải lên ảnh");
-         //   } else if (err) {
-         //     return res.status(500).json("Đã có lỗi xảy ra");
-         //   }
-
+      
          const productid = parseInt(req.params.id);
 
          const {
@@ -340,10 +328,7 @@ const ProductController = {
             productId: parseInt(productId),
             categoryID: parseInt(categoryID),
          };
-
-         // if (req.file) {
-         //   updatedProductData.images = req.file.filename;
-         // }
+      
 
          const updatedProduct = await prisma.product.update({
             where: {
@@ -451,232 +436,8 @@ const ProductController = {
       }
    },
 
-   // Thêm sản phẩm vào giỏ hàng
-//   addToCart: async (req, res) => {
-//     try {
-//       const productId = parseInt(req.params.id);
-//       const quantity = parseInt(req.body.quantity); 
-  
-//       // Kiểm tra sản phẩm có tồn tại không
-//       const product = await prisma.product.findUnique({
-//         where: {
-//           id: productId,
-//         },
-//       });
-  
-//       if (!product) {
-//         return res.status(404).json("Không tìm thấy sản phẩm");
-//       }
 
-//       const newCartItem = await prisma.cartItem.create({
-//         data: {
-//           productId: productId,
-//           quantity: quantity, 
-//         },
-//       });
-  
-//       res.status(201).json("Sản phẩm đã được thêm vào giỏ hàng thành công");
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json(error.message);
-//     }
-//   },
-
-//   deleteToCart: async (req, res) => {
-//     try {
-
-//       const CartId = parseInt(req.params.id); // Lấy id sản phẩm từ params
-
-//       const categoryId = parseInt(req.params.id);
-//       const existingCategory = await prisma.category.findUnique({
-//         where: {
-//           id: categoryId,
-//         },
-//       });
-//       if (!existingCategory) {
-//         return res.status(404).json("sản phẩm không tồn tại");
-//       }
-//       await prisma.category.delete({
-//         where: {
-//           id: categoryId,
-//         },
-//       });
-//       res.status(200).json("Xóa sản phẩm thành công");
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json(error.message);
-//     }
-//   },
-
-  
-
-  //cập nhật sản phẩm
-  updateProduct: async (req, res) => {
-    try {
-      // upload.single("images")(req, res, async (err) => {
-      //   if (err instanceof multer.MulterError) {
-      //     return res.status(500).json("Lỗi khi tải lên ảnh");
-      //   } else if (err) {
-      //     return res.status(500).json("Đã có lỗi xảy ra");
-      //   }
-
-      const productid = parseInt(req.params.id);
-
-      const {
-        name,
-        price,
-        rate,
-        pricesale,
-        sellingPrice,
-        discount,
-        soldcount,
-        quantity,
-        description,
-        status,
-        date,
-        productId,
-        createdAt,
-        updatedAt,
-        categoryID,
-      } = req.body;
-      console.log(req.body);
-      // Kiểm tra validate
-      if (name.length <= 6) {
-         return res.status(400).json("Tên sản phẩm phải có ít nhất 6 kí tự");
-      }
-      if (parseInt(price) <= 0) {
-         return res.status(400).json("Giá sản phẩm phải lớn hơn 0");
-      }
-      if (parseInt(pricesale) <= 0) {
-         return res.status(400).json("Sản phẩm Sale phải lớn hơn 0");
-      }
-      if (parseInt(discount) <= 0) {
-         return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
-      }
-
-      // Tạo dữ liệu mới để cập nhật
-      const updatedProductData = {
-        name,
-        price: parseInt(price),
-        rate: parseInt(rate),
-        pricesale: parseInt(pricesale),
-        sellingPrice: parseInt(sellingPrice),
-        discount: parseInt(discount),
-        soldcount: parseInt(soldcount),
-        quantity: parseInt(quantity),
-        description,
-        status,
-        date: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        productId: parseInt(productId),
-        categoryID: parseInt(categoryID),
-      };
-
-      // if (req.file) {
-      //   updatedProductData.images = req.file.filename;
-      // }
-
-      const updatedProduct = await prisma.product.update({
-        where: {
-          id: productid,
-        },
-        data: {
-          ...updatedProductData,
-          categoryID: parseInt(categoryID),
-        },
-      });
-
-      res.status(200).json("Cập nhật sản phẩm thành công");
-      // });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error.message);
-    }
-  },
-
-  // Xem chi tiết sản phẩm
-  getProductDetail: async (req, res) => {
-    try {
-      const productId = parseInt(req.params.id);
-
-      // const productDetail = await prisma.product.findUnique({
-      //    where: {
-      //       id: productId,
-      //    },
-      // });
-      const productDetail = await prisma.product.findFirst({
-        include: {
-          ProductImage: true,
-        },
-        where: {
-          id: productId,
-        },
-      });
-      if (!productDetail) {
-        return res.status(404).json("Không tìm thấy sản phẩm");
-      }
-      res.status(200).json(productDetail);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error.message);
-    }
-  },
-
-  // Hiện tất cả sản phẩm
-  getAllProduct: async (req, res) => {
-    try {
-      // const allProducts = await prisma.product.findMany();
-      const result = await prisma.product.findMany({
-        include: {
-          ProductImage: true,
-        },
-      });
-      res.status(200).json(result);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error.message);
-    }
-  },
-
-  // Phân trang
-  getProductsPaginated: async (req, res) => {
-    try {
-      const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 10;
-
-      const skip = (page - 1) * pageSize;
-      const products = await prisma.product.findMany({
-        skip,
-        take: pageSize,
-      });
-
-      res.status(200).json(products);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error.message);
-    }
-  },
-
-  // tìm kiếm sp
-  searchProducts: async (req, res) => {
-    try {
-      const keyword = req.query.keyword || "";
-
-      const products = await prisma.product.findMany({
-        where: {
-          OR: [
-            { name: { contains: keyword.toLowerCase() } }, // Sử dụng toLowerCase để tìm kiếm không phân biệt chữ hoa chữ thường
-          ],
-        },
-      });
-
-      res.status(200).json(products);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error.message);
-    }
-  },
+ 
 };
 
 module.exports = ProductController;
