@@ -391,14 +391,14 @@ function Index() {
 
       <div className="w-full mx-auto my-60px] bg-[#ffeae9] ">
         <Container>
-          <div className="py-[40px] backGroundImg flex justify-between">
-            <div className="max-w-[276px]">
+          <div className="py-[40px] backGroundImg flex justify-between max-[769px]:flex-col">
+            <div className="max-w-[276px] max-[1025px]:hidden">
               <img src={Images.chooseUs1} alt="" />
             </div>
             <div className="max-w[444px]">
               <img src={Images.chooseUs2} alt="" />
             </div>
-            <div className="flex-col max-w-[536px]">
+            <div className="flex-col max-w-[536px] max-[769px]:max-w-[700px]">
               <div className="max-w-[317px] pb-[26px]">
                 <span className="text-[40px] font-bold">
                   100% sản phẩm <span className="text-[#00b207]">xanh</span>{" "}
@@ -487,7 +487,7 @@ function Index() {
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
 
-          <div className="flex flex-wrap justify-between">
+          <div className="flex flex-wrap justify-between max-[769px]:justify-center max-[769px]:gap-[30px]">
             {products.map((product) => {
               return <Products product={product} />;
             })}
