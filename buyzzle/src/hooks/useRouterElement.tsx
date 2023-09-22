@@ -9,10 +9,11 @@ import ProductsPage from "../pages/home/User/ProductsPage";
 import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
 import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
 import Editproducts from "../pages/home/Admin/EditProduct/Editproducts";
-import Detailproducts from "../pages/home/Admin/DetailProduct/Detailproducts";
 import UserProfile from "../pages/home/User/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
+import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
+import Cart from "../pages/home/User/Cart/Cart";
 
 
 export default function useRouterEmelent() {
@@ -74,9 +75,15 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <Detailproducts />
-
         </MainLayout>
-
+      ),
+    },
+    {
+      path: "Cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
       ),
     },
 
@@ -119,7 +126,7 @@ export default function useRouterEmelent() {
       path: "/confirm",
       element: (
         <RegisterLoginLayout>
-          <ConfirmAccount/>
+          <ConfirmAccount />
         </RegisterLoginLayout>
 
       ),

@@ -15,7 +15,13 @@ import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 import axios from "axios";
 import { productController } from "../../../../Controllers/ProductsController";
-
+export interface Cate {
+  id: number
+  name: string
+}
+export interface ImgOfProduct {
+  url: string
+}[]
 export interface Products {
   id: number;
   name: string;
@@ -29,9 +35,8 @@ export interface Products {
   description: string;
   status: string;
   date: string;
-  ProductImage: {
-    url: string
-  }[]
+  fK_category: Cate,
+  ProductImage: ImgOfProduct[]
 }
 
 export default function FiltersPage() {
