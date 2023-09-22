@@ -70,7 +70,7 @@ model Product {
   discount     Int?
   soldcount    Int?
   quantity     Int?
-  description  String?
+  description  String? @db.VarChar(15000)
   status       String?
   date         DateTime?      @default(now())
   productId    Int?
