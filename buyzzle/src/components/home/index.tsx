@@ -17,13 +17,13 @@ export type Product = {
 };
 
 export type FlashSaleList = {
-    id: number,
-    img: string,
-    giamGia: number,
-    title: string,
-    vote: number,
-    price: number,
-    daBan: number,
+  id: number,
+  img: string,
+  giamGia: number,
+  title: string,
+  vote: number,
+  price: number,
+  daBan: number,
 }
 
 function Index() {
@@ -83,7 +83,7 @@ function Index() {
       <Container>
         <div className="container mt-[50px]">
           <div className="flex justify-between max-xl:flex-wrap">
-            <div className="max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]">
+            <div className="max-w-[872px] max-xl:mx-auto max-xl:mb-[20px] max-[1023px]:hidden">
               <SlidesHome />
             </div>
 
@@ -94,7 +94,7 @@ function Index() {
                 alt=""
               />
 
-              <div className="flex justify-between max-w-[421px]">
+              <div className="flex justify-between max-w-[421px] max-[556px]:hidden">
                 <img className="object-cover" src={Images.banner3} alt="" />
                 <img className="object-cover" src={Images.banner4} alt="" />
               </div>
@@ -103,7 +103,7 @@ function Index() {
         </div>
 
         <div className="container mt-[60px] ">
-          <div className="flex justify-between p-[40px] max-lg:flex-wrap shadow">
+          <div className="flex justify-between p-[40px] max-lg:flex-wrap shadow max-[426px]:hidden">
             <div className="flex gap-[16px] items-center justify-center max-lg:mb-[20px] max-lg:w-1/2">
               <img src={Images.car} alt="" />
               <span>Giao hàng miễn phí</span>
@@ -165,7 +165,7 @@ function Index() {
             FLASH SALE:{" "}
           </h1>
 
-          <div className="flex flex-wrap gap-[27px]">
+          <div className="flex flex-wrap gap-[27px] justify-between max-[1025px]:gap-[15px] max-[1025px]:justify-center">
             <div className="max-w-[310px] shadow shadow-[#ffaaaf]">
               <div className="relative figure">
                 <img src={Images.flashSale1} alt="" />
@@ -463,7 +463,7 @@ function Index() {
       </div>
 
       <Container>
-        <div className="my-[60px]">
+        <div className="my-[60px] max-[769px]:hidden">
           <h1 className="text-2xl font-bold mb-[15px]">
             Thương hiệu nổi tiếng:{" "}
           </h1>

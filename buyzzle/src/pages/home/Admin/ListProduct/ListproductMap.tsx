@@ -49,7 +49,7 @@ export default function ListproductMap(props: Props) {
                 <p className='category text-[#4C4C4C] text-sm font-medium leading-4'>
                   Danh mục: </p>
                 <p className='category text-[#4C4C4C] text-sm font-medium leading-4 ml-[2px]'>
-                  Đồ Gia Dụng , Áo Mưa </p>
+                  {products.fK_category.name} </p>
               </div>
             </div>
           </div>{/* end InforProduct */}
