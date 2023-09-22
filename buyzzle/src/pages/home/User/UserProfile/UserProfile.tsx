@@ -4,6 +4,9 @@ import Sitebar from './Sitebar/Sitebar'
 import { ChangeHandler, Controller, useForm } from 'react-hook-form';
 import HidePass from '../../../../Assets/TSX/HidePass';
 import ShowPass from '../../../../Assets/TSX/ShowPass';
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 type FormValues = {
     userName: string,
@@ -15,6 +18,7 @@ type FormValues = {
     fullName: string,
     Address: string
 }
+const param = useParams();
 export default function UserProfile() {
     const {
         control,
@@ -87,6 +91,88 @@ export default function UserProfile() {
         }
     };
 
+    const API = `http://localhost:5000/buyzzle/auth/userprofile/${param.username}`;
+    const onSubmit = handleSubmit(async (formData) => {
+      // const response = await axios.post(API, data);
+      //   console.log("server: ", response); 
+  
+      try {
+        console.log("checker", formData);
+        const response = await axios.put(API, formData);
+        console.log("edit thanh cong", response);
+  
+        if (response.status === 200) {
+          console.log("Sign-in successfully");
+          toast.success(
+            "Sign-in successfully-check your email to verify account",
+            {
+              position: "top-right",
+              autoClose: 5000,
+  
+            }
+          );
+        } else {
+          console.log("Sign-in Failed!");
+          toast.warning(
+            "Sign-in failed",
+            {
+              position: "top-right",
+              autoClose: 5000,
+  
+            }
+          );
+        }
+      } catch (error) {
+        // console.log("Them that bai", error);
+        console.error(error);
+        if (axios.isAxiosError(error) && error.response) {
+          const responseData = error.response.data;
+          // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
+          if (responseData.error) {
+            console.log(`Lỗi2: ${responseData.error}`);
+            const errorMessageUsername = responseData.error.username;
+            const errorMessageEmail = responseData.error.email;
+            const errorMessagePhoneNumber= responseData.error.phonenumber;
+            if (errorMessageUsername) {
+              toast.warning(
+                errorMessageUsername,
+                {
+                  position: "top-right",
+                  autoClose: 5000,
+  
+                }
+              );
+            } else if (errorMessageEmail) {
+              toast.warning(
+                errorMessageEmail,
+                {
+                  position: "top-right",
+                  autoClose: 5000,
+  
+                }
+              );
+            }else if(errorMessagePhoneNumber){
+              toast.warning(
+                errorMessagePhoneNumber,
+                {
+                  position: "top-right",
+                  autoClose: 5000,
+  
+                }
+              );
+            }
+  
+          } else {
+            console.log('Lỗi không xác định từ server');
+          }
+        } else {
+          console.error('Lỗi gửi yêu cầu không thành công', error);
+  
+        }
+      }
+  
+    });
+
     return (
         <Container>
             <body className="body-filter container mx-auto">
@@ -98,8 +184,9 @@ export default function UserProfile() {
                             </div>
                         </div>
                         <div className='mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4'>
+
                             <div className='card py-4 px-5 col-span-3  rounded-[6px]
-                            shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
+                                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]' onSubmit={onSubmit}>
                                 <span className='text-[#000] text-2xl font-normal '>Hồ sơ của tôi</span>
                                 <p className='text-[#393939] text-sm font-normal'>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
                                 <div className='flex w-[100%] mt-4 justify-between'>
@@ -321,11 +408,15 @@ export default function UserProfile() {
                                 {/* button */}
                                 <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
                                 bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
-                                    <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
+                                    <button type='submit' className={`text-center text-base font-bold text-[#FFFFFF]`}>
                                         Lưu
                                     </button>
                                 </div>
                             </div>
+    
+    
+    {/* Form */}
+
                             <div className='card py-4 px-5 col-span-2 rounded-[6px]
                         shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]' >
                                 <div className=' flex flex-col items-center my-auto'>
