@@ -44,7 +44,7 @@ function Login() {
         try {
             console.log("checker", data);
             const response = await axios.post(API, data);
-            localStorage.setItem('email', data.email);
+
             if (response.status === 200) {
                 console.log("Login successfully");
                 toast.success(
@@ -55,10 +55,35 @@ function Login() {
 
                     }
                 );
-                setTimeout(() => {
-                    window.location.href = "/";
-                },
-                    5000);
+
+
+                if (response.headers['content-type'] === 'application/json; charset=utf-8') {
+                    const jsonString: string = JSON.stringify(response.data);
+                    const jsonObject = JSON.parse(jsonString);
+
+                    // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
+                    console.log(jsonObject);
+                    // Truy cập các giá trị trong jsonObject
+                   
+                    const username = jsonObject.username;
+                    const img = jsonObject.img;
+               
+                   
+                    
+                    // console.log(id); // In ra giá trị tên từ jsonObject
+                    // console.log(email);
+                    // console.log(username);
+                    const UserData = { username, img};
+                    localStorage.setItem('user', JSON.stringify(UserData));
+
+                    setTimeout(() => {
+                        window.location.href = "/";
+                    },
+                        2000);
+
+                } else {
+                    console.error('Response không phải là JSON.');
+                }
             } else {
                 console.log("Login Failed!");
                 toast.warning(
