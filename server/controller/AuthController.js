@@ -94,12 +94,12 @@ const AuthController = {
       });
 
       if (!user.email) {
-        return res.status(404).json("wrong email");
+        return res.status(404).json("Wrong email");
       }
       const validPassword = await bcrypt.compare(reqpassword, user.password);
 
       if (!validPassword) {
-        return res.status(404).json("wrong password");
+        return res.status(404).json("Wrong password");
       }
 
       if (user.verify == false) {

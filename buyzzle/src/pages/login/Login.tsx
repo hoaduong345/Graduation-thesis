@@ -71,7 +71,29 @@ function Login() {
                 );
             }
         } catch (error) {
-            console.error(error);
+            // console.log(error);
+            if (axios.isAxiosError(error) && error.response) {
+                const responseData = error.response.data;
+                console.log(responseData);
+                // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
+                if (responseData) {
+                //   const errorMessage = responseData.error.password;
+                  console.log(`Lỗi1:1 ${responseData}`);
+                  toast.warning(
+                    responseData,
+                    {
+                      position: "top-right",
+                      autoClose: 5000,
+            
+                    }
+                  );
+                } else {
+                  console.log('Lỗi không xác định từ server');
+                }
+              } else {
+                console.error('Lỗi gửi yêu cầu không thành công', error);
+               
+              }
         }
 
     });
