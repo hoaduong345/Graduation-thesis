@@ -6,15 +6,7 @@ import { appConfig } from '../../../../configsEnv'
 import Container from '../../../../components/container/Container'
 import { Images } from '../../../../Assets/TS'
 import { numberFormat } from '../../../../Helper'
-import ArrowUp from '../Assets/TSX/ArrowUp'
-import ArrowDown from '../Assets/TSX/ArrowDown'
-import FB from '../Assets/TSX/FB'
-import TW from '../Assets/TSX/TW'
-import Insta from '../Assets/TSX/Insta'
-import SaveLink from '../Assets/TSX/SaveLink'
-import Share from '../Assets/TSX/Share'
-import LoveProduct from '../Assets/TSX/LoveProduct'
-import Cart from '../Assets/TSX/Cart'
+
 import Detail from './Detail'
 import Rating from './Rating'
 import Products from '../../../../components/home/components/Product'
@@ -22,7 +14,19 @@ import ArrowPrev from '../../../../Assets/TSX/ArrowPrev'
 import ArrowNext from '../../../../Assets/TSX/ArrowNext'
 import Minus from '../../../../Assets/TSX/Minus'
 import Plus from '../../../../Assets/TSX/Plus'
+import ArrowUp from '../../../../Assets/TSX/ArrowUp'
+import ArrowDown from '../../../../Assets/TSX/ArrowDown'
+import FB from '../../Admin/Assets/TSX/FB'
+import TW from '../../Admin/Assets/TSX/TW'
+import Insta from '../../Admin/Assets/TSX/Insta'
+import SaveLink from '../../Admin/Assets/TSX/SaveLink'
+import Share from '../../Admin/Assets/TSX/Share'
+import LoveProduct from '../../Admin/Assets/TSX/LoveProduct'
+import Cart from '../../Admin/Assets/TSX/Cart'
 
+export interface ImgOfProduct {
+    url: string
+}[]
 export type FormValues = {
     idproduct: number
     name: string;
@@ -30,7 +34,7 @@ export type FormValues = {
     description: string;
     count: number;
     images: string;
-    ProductImage: string;
+    ProductImage: ImgOfProduct[];
     discount: number;
 }
 export type Product = {
@@ -56,8 +60,6 @@ export default function Detailproducts() {
             }).catch(error => {
             })
     }, [])
-
-
 
     const products: Product[] = [
         {

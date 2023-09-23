@@ -42,8 +42,7 @@ export default function ListproductMap(props: Props) {
             <div className='inforProducts ml-4'>
               <p className='nameProducts  text-[#1A1A1A] text-xs font-semibold leading-4 max-w-[250px] uppercase'>
                 {products.name.length > 100 ?
-                  `${products.name.substring(0, 100)}...` : products.name
-                }
+                  `${products.name.substring(0, 100)}...` : products.name}
               </p>
               <div className='flex mt-1'>
                 <p className='category text-[#4C4C4C] text-sm font-medium leading-4'>
