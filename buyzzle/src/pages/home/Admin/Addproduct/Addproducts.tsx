@@ -12,6 +12,8 @@ import { ref, uploadBytes } from 'firebase/storage'
 import { appConfig } from '../../../../configsEnv'
 import { Editor } from '@tinymce/tinymce-react';
 import { toast } from 'react-toastify'
+import { Images } from '../../../../Assets/TS'
+import RemoveIMG from '../../../../Assets/TSX/RemoveIMG'
 // import { v4 } from 'uuid'
 
 export type FormValues = {
@@ -73,7 +75,6 @@ export default function Addproducts() {
                     alert(err)
                 })
         }
-
     }
 
     // Tạo fuction handle thêm sản phẩm.
@@ -97,11 +98,7 @@ export default function Addproducts() {
                 for (let i = 0; i < url.length; i++) {
                     await addImages(responseData?.data.id, url[i])
                 }
-                resetField("productName"),
-                resetField("productDesc"),
-                resetField("productPrice"),
-                resetField("productQuantity"),
-                resetField("productDiscount"),
+                reset({})
                 console.log("🚀 ~ file: Addproducts.tsx:38 ~ handleAddproduct ~ responseData:", responseData)
             }).catch(error => {
                 console.log("🚀 ~ file: Addproducts.tsx:40 ~ handleAddproduct ~ error:", error)
@@ -126,6 +123,7 @@ export default function Addproducts() {
         handleSubmit,
         resetField,
         watch,
+        reset,
         formState: { errors, isDirty, isValid },
     } = useForm<FormValues>({
         mode: 'all',
@@ -144,7 +142,6 @@ export default function Addproducts() {
     console.log(watch().productDesc)
 
     const isDisabled = !(isValid && isDirty)
-
     console.log(watch().productDesc)
     return (
         <Container>
@@ -352,7 +349,6 @@ export default function Addproducts() {
                                                     <div className='max-w-max items-center'>
                                                         <label htmlFor="images">
                                                             <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
-
                                                                 <input type="file"
                                                                     // onChange={field.onChange}
                                                                     onChange={(e: any) => setImages(e.target.files)}
@@ -370,7 +366,22 @@ export default function Addproducts() {
                                                         <div className='inline-grid grid-cols-3 gap-4'>
                                                             {
                                                                 url.map(e => {
-                                                                    return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
+                                                                    return (
+                                                                        <>
+                                                                            <div className='relative'>
+                                                                                <div className='group relative'>
+                                                                                    <img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' />
+                                                                                    <div className='absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+                                                                    opacity-0 transition duration-300 ease-in-out group-hover:opacity-20'>
+                                                                                    </div>
+                                                                                    <div className='transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute'
+                                                                                        onClick={() => console.log('an không ?')}>
+                                                                                        <RemoveIMG />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </>
+                                                                    );
                                                                 })
                                                             }
                                                         </div>

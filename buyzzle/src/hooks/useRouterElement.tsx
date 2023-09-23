@@ -17,7 +17,9 @@ import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../pages/forgotpassword/ChangePassword";
 import path from "../contants/path";
 import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
-import Detailproducts from "../pages/home/Admin/DetailProduct/Detailproducts";
+import Cart from "../pages/home/User/Cart/Cart";
+import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
+
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -88,9 +90,15 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <Detailproducts />
-
         </MainLayout>
-
+      ),
+    },
+    {
+      path: "Cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
       ),
     },
     {
@@ -144,6 +152,7 @@ export default function useRouterEmelent() {
       element: (
         <RegisterLoginLayout>
           <ChangePassword />
+          <ConfirmAccount />
         </RegisterLoginLayout>
 
       ),
