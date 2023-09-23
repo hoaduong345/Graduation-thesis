@@ -6,34 +6,34 @@ const multer = require("multer");
 const path = require("path");
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "image"); // Thư mục lưu trữ ảnh
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
+   destination: (req, file, cb) => {
+      cb(null, "image"); // Thư mục lưu trữ ảnh
+   },
+   filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(null, uniqueSuffix + "-" + file.originalname);
+   },
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = [".jpg", ".jpeg", ".png"];
-  const fileExtension = path.extname(file.originalname).toLowerCase();
-  if (allowedExtensions.includes(fileExtension)) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error("Chỉ chấp nhận tệp ảnh có định dạng .jpg, .jpeg, hoặc .png"),
-      false
-    );
-  }
+   const allowedExtensions = [".jpg", ".jpeg", ".png"];
+   const fileExtension = path.extname(file.originalname).toLowerCase();
+   if (allowedExtensions.includes(fileExtension)) {
+      cb(null, true);
+   } else {
+      cb(
+         new Error("Chỉ chấp nhận tệp ảnh có định dạng .jpg, .jpeg, hoặc .png"),
+         false
+      );
+   }
 };
 
 const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
-  // limits: {
-  //   fileSize: 1024 * 1024 * 5,
-  // },
+   storage: storage,
+   fileFilter: fileFilter,
+   // limits: {
+   //   fileSize: 1024 * 1024 * 5,
+   // },
 });
 
 const ProductController = {
@@ -146,42 +146,70 @@ const ProductController = {
 
    updateImageByProductID: async (req, res) => {
       try {
-        const { id } = req.params; 
-        const { url, idproduct } = req.body; 
-      
-        const existingImage = await prisma.productImage.findUnique({
-          where: {
-            id: parseInt(id),
-          },
-        });
-  
-        if (!existingImage) {
-          return res.status(404).json('Hình ảnh không tồn tại');
-        }
-  
-        const updatedImage = await prisma.productImage.update({
-          where: {
-            id: parseInt(id),
-          },
-          data: {
-            url,
-            idproduct: parseInt(idproduct), 
-          },
-        });
-  
-        res.status(200).json('Cập nhật hình ảnh thành công');
-      } catch (error) {
-        console.error(error);
-        res.status(500).json(error.message);
-      }
-    },
+         const { id } = req.params;
+         const { url, idproduct } = req.body;
 
-    
-    
+         const existingImage = await prisma.productImage.findUnique({
+            where: {
+               id: parseInt(id),
+            },
+         });
+
+         if (!existingImage) {
+            return res.status(404).json('Hình ảnh không tồn tại');
+         }
+
+         const updatedImage = await prisma.productImage.update({
+            where: {
+               id: parseInt(id),
+            },
+            data: {
+               url,
+               idproduct: parseInt(idproduct),
+            },
+         });
+
+         res.status(200).json('Cập nhật hình ảnh thành công');
+      } catch (error) {
+         console.error(error);
+         res.status(500).json(error.message);
+      }
+   },
+
+   deleteImageByProductID: async (req, res) => {
+      const productID = parseInt(req.params.id);
+      try {
+         const imagesToDelete = await prisma.productImage.findMany({
+            where: {
+               id: productID,
+            },
+         });
+
+         if (!imagesToDelete || imagesToDelete.length === 0) {
+            return res.status(404).json("Không có hình ảnh nào để xóa");
+         }
+
+         for (const image of imagesToDelete) {
+            await prisma.productImage.delete({
+               where: {
+                  id: image.id,
+               },
+            });
+         }
+         res.status(200).json("Xóa hình ảnh thành công");
+      } catch (error) {
+         console.error(error);
+         res.status(500).json(error.message);
+      }
+   },
+
+
+
+
 
    addProduct: async (req, res) => {
       try {
-       
+
          const {
             name,
             price,
@@ -200,7 +228,7 @@ const ProductController = {
             categoryID,
          } = req.body;
 
-         // Kiểm tra validate
+         
          if (name.length <= 6) {
             return res.status(400).json("Tên sản phẩm phải có ít nhất 6 kí tự");
          }
@@ -249,33 +277,33 @@ const ProductController = {
    // xóa sản phẩm
    deleteProduct: async (req, res) => {
       try {
-        const productId = parseInt(req.params.id); 
-    
-        // Xóa sản phẩm
-        await prisma.product.delete({
-          where: {
-            id: productId,
-          },
-        });
-    
-        await prisma.productImage.deleteMany({
-          where: {
-            idproduct: productId,
-          },
-        });
-    
-        res.status(200).json("Xóa sản phẩm và hình ảnh thành công");
+         const productId = parseInt(req.params.id);
+
+         // Xóa sản phẩm
+         await prisma.product.delete({
+            where: {
+               id: productId,
+            },
+         });
+
+         await prisma.productImage.deleteMany({
+            where: {
+               idproduct: productId,
+            },
+         });
+
+         res.status(200).json("Xóa sản phẩm và hình ảnh thành công");
       } catch (error) {
-        console.error(error);
-        res.status(500).json(error.message);
+         console.error(error);
+         res.status(500).json(error.message);
       }
-    },
-    
+   },
+
 
    //cập nhật sản phẩm
    updateProduct: async (req, res) => {
       try {
-      
+
          const productid = parseInt(req.params.id);
 
          const {
@@ -328,7 +356,7 @@ const ProductController = {
             productId: parseInt(productId),
             categoryID: parseInt(categoryID),
          };
-      
+
 
          const updatedProduct = await prisma.product.update({
             where: {
@@ -387,7 +415,7 @@ const ProductController = {
          const result = await prisma.product.findMany({
             include: {
                ProductImage: true,
-               fK_category : true,
+               fK_category: true,
             },
          });
          res.status(200).json(result);
@@ -437,7 +465,7 @@ const ProductController = {
    },
 
 
- 
+
 };
 
 module.exports = ProductController;

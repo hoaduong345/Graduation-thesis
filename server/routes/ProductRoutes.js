@@ -29,6 +29,8 @@ router.post('/addimagesbyproductid', ProductController.addImagesByProductsID);
 
 router.put('/updateimagesbyproductid/:id', ProductController.updateImageByProductID);
 
+router.delete('/deleteimagesbyproductid/:id', ProductController.deleteImageByProductID);
+
 
 
 
