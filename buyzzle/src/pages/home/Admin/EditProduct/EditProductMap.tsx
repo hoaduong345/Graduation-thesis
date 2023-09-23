@@ -37,6 +37,8 @@ export default function EditProductMap() {
     const [url, setUrl] = useState<string[]>([])
     const editorRef = useRef<any>(null);
 
+    const [editImages, setEditImages] = useState<string[]>([])
+
     const {
         control,
         handleSubmit,
@@ -93,6 +95,7 @@ export default function EditProductMap() {
             })
             .then((detailForm) => {
                 setEditProduct(detailForm.data)
+                setEditImages(detailForm.data.ProductImage)
             }).catch(error => {
                 console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
             })
@@ -327,6 +330,28 @@ export default function EditProductMap() {
                                             </div>{/* end form upload img */}
                                             <div className='justify-center flex flex-1'>
                                                 <div className='inline-grid grid-cols-3 gap-4'>
+
+                                                    {
+                                                        editImages.map(e => {
+                                                            return (
+                                                                <>
+                                                                    <div className='relative'>
+                                                                        <div className='group relative'>
+                                                                            <img src={e.url} alt="imageproduct6" width={80} height={80} className='rounded-md' />
+                                                                            <div className='absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+                                                            opacity-0 transition duration-300 ease-in-out group-hover:opacity-20'>
+                                                                            </div>
+                                                                            <div className='transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute'
+                                                                                onClick={() => console.log('an không ?')}>
+                                                                                <RemoveIMG />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            );
+                                                        })
+                                                    }
+
                                                     {
                                                         url.map(e => {
                                                             return (
