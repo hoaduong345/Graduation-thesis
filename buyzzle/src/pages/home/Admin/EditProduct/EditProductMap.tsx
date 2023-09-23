@@ -7,6 +7,14 @@ import { appConfig } from '../../../../configsEnv';
 import UploadIMG from '../Assets/TSX/UploadIMG';
 import { useQuery } from '@tanstack/react-query';
 import { Editor } from '@tinymce/tinymce-react';
+import { productController } from '../../../../Controllers/ProductsController';
+import { toast } from 'react-toastify'
+import { imagesController } from '../../../../Controllers/ImagesController';
+import { storage } from '../../../../Firebase/Config';
+import { ref, uploadBytes } from 'firebase/storage';
+import { categoryController } from '../../../../Controllers/CategoryController';
+import RemoveIMG from '../../../../Assets/TSX/RemoveIMG';
+
 export type FormValues = {
     name: string;
     price: number;
@@ -14,11 +22,12 @@ export type FormValues = {
     quantity: number;
     productImage: string;
     discount: number;
+    categoryID: number
 }
 
 export interface Cate {
     name: string,
-    idcategory: number
+    id: number
 }
 
 export default function EditProductMap() {
@@ -41,7 +50,7 @@ export default function EditProductMap() {
             name: '',
             price: 1,
             description: "",
-            discount: 1
+            discount: 1,
         },
 
     });
@@ -52,30 +61,31 @@ export default function EditProductMap() {
     }, [])
 
     const getCategory = () => {
-        axios.get('http://localhost:5000/buyzzle/product/allcategory')
-            .then(response => response.data
-            )
-            .then(data => {
-                setCategory(data)
-            })
-            .catch(err => console.log(err))
+        categoryController.getAll().then((res) => {
+            setCategory(res.data)
+        }).catch(err => console.log(err))
     }
+    console.log("🚀 ~ file: EditProductMap.tsx:57 ~ categoty:", categoty)
+
     const isDisabled = !(isValid && isDirty)
 
 
-    const { id } = useParams()
+    const idProduct = useParams()
+    console.log("🚀 ~ file: EditProductMap.tsx:70 ~ idProduct:", idProduct)
+    const id = Number(idProduct.id)
+
     const submitData = (data: any) => {
         console.log(data);
-        axios.put(`${appConfig.apiUrl}/updateproduct/${id}`, data)
-            .then((editData) => editData)
-            .then((editData) => {
-                alert('success')
-                return setEditProduct(editData.data)
+
+        productController.update(id, data).then(() => {
+            toast.success('Sua sanr phaarm thanhf coong !', {
+                position: "bottom-right"
             })
-            .catch((error) => {
-                console.log("🚀 ~ file: Editproducts.tsx:24 ~ useEffect ~ error:", error)
-            })
+        }).catch(() => {
+            toast.error('Sua sanr phaarm that bai !')
+        })
     }
+
     useEffect(() => {
         axios.get(`${appConfig.apiUrl}/chitietproduct/${id}`)
             .then((detailForm) => {
@@ -88,9 +98,33 @@ export default function EditProductMap() {
             })
     }, [])
 
+
+    useEffect(() => {
+        loadImageFile(images)
+    }, [images])
+
+
+    // img firebase
+    const loadImageFile = async (images: any) => {
+        for (let i = 0; i < images.length; i++) {
+            const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
+
+            await uploadBytes(imageRef, images[i])
+                .then(() => {
+                    storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
+                        .then((url: any) => {
+                            setUrl((prev) => (prev.concat(url)));
+                            return url
+                        })
+                })
+                .catch(err => {
+                    alert(err)
+                })
+        }
+    }
+
     const onChangeInput = (e: any) => {
-        const reg = /[0-9]/;
-        setEditProduct((e.target.value).replace(reg, ''))
+        setEditProduct(e.target.value)
     }
 
     return (
@@ -175,8 +209,10 @@ export default function EditProductMap() {
                                             onInit={(evt, editor) => (editorRef.current = editor)}
                                             onEditorChange={(e) => field.onChange(e)}
                                             value={field.value}
+
                                             {...register('description')}
                                             init={{
+
                                                 height: 500,
                                                 menubar: false,
                                                 font_size_formats: '18pt 24pt 36pt 48pt',
@@ -219,26 +255,35 @@ export default function EditProductMap() {
                             {/* card */}
                             <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
-                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Danh Mục Sản Phẩm*</p>
-                                {/* Dropdown */}
-                                <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                    <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
+                                <Controller control={control} name='categoryID' render={({ }) => (
+                                    <>
+                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Danh Mục Sản Phẩm*</p>
+                                        {/* Dropdown */}
+                                        <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none "
+                                                {...register('categoryID')}
+                                            >
 
-                                        {
-                                            categoty.map(e => {
-                                                return <option value={e.idcategory}>{e.name}</option>
-                                            })
-                                        }
-                                        {/* <option>Thiết bị điện da dụng</option>
+                                                {
+                                                    categoty.map(e => {
+                                                        return <option value={e.id}>{e.name}</option>
+                                                    })
+                                                }
+                                                {/* <option>Thiết bị điện da dụng</option>
                                                 <option>Giày dép da</option>
                                                 <option>Máy ảnh</option>
                                                 <option>Thời trang nam</option>
                                                 <option>Thiết bị điện tử</option>
                                                 <option>Nhà cửa đời sống</option>
                                                 <option>Sắc đẹp</option> */}
-                                    </select>
-                                </div>
-                                {/* end input addNameProducts */}
+                                            </select>
+                                        </div>
+                                        {/* end input addNameProducts */}
+                                    </>
+                                )}
+
+
+                                />
 
                                 <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Tag*</p>
                                 {/* Dropdown */}
@@ -257,41 +302,52 @@ export default function EditProductMap() {
                         <div>
                             <span className='text-[#000] text-2xl font-normal'>Ảnh Sản Phẩm</span>
                             {/* card */}
-                            <div className='card w-[100%] py-4 px-9 mt-2 flex items-center
+                            <div className='card w-[100%] py-4 px-9 mt-2 flex 
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
                                 <Controller control={control} name='productImage' render={({ }) => (
                                     <>
                                         {/* form upload img */}
-                                        <form className='max-w-max items-center'>
-                                            <label htmlFor="images">
-                                                <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
+                                        <div className='flex'>
+                                            <div className='max-w-max items-center'>
+                                                <label htmlFor="images">
+                                                    <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
 
-                                                    <input type="file"
-                                                        // onChange={field.onChange}
-                                                        onChange={(e: any) => setImages(e.target.files)}
-                                                        id='images' multiple className='hidden ' />
-                                                    <UploadIMG />
-                                                    <div id="images" className='text-center mt-2'>
-                                                        <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold'>Click to upload
-                                                            <p className='text-[#1A1A1A] font-normal text-sm tracking-widest'>or drag and drop</p></p>
+                                                        <input type="file"
+                                                            // onChange={field.onChange}
+                                                            onChange={(e: any) => setImages(e.target.files)}
+                                                            id='images' multiple className='hidden ' />
+                                                        <UploadIMG />
+                                                        <div id="images" className='text-center mt-2'>
+                                                            <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold'>Click to upload
+                                                                <p className='text-[#1A1A1A] font-normal text-sm tracking-widest'>or drag and drop</p></p>
+                                                        </div>
                                                     </div>
+                                                </label>
+                                            </div>{/* end form upload img */}
+                                            <div className='justify-center flex flex-1'>
+                                                <div className='inline-grid grid-cols-3 gap-4'>
+                                                    {
+                                                        url.map(e => {
+                                                            return (
+                                                                <>
+                                                                    <div className='relative'>
+                                                                        <div className='group relative'>
+                                                                            <img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' />
+                                                                            <div className='absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+                                                                    opacity-0 transition duration-300 ease-in-out group-hover:opacity-20'>
+                                                                            </div>
+                                                                            <div className='transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute'
+                                                                                onClick={() => console.log('an không ?')}>
+                                                                                <RemoveIMG />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            );
+                                                        })
+                                                    }
                                                 </div>
-                                            </label>
-                                        </form>{/* end form upload img */}
-                                        <div className='justify-center flex flex-1'>
-                                            <div className='inline-grid grid-cols-3 gap-4'>
-
-                                                {
-                                                    url.map(e => {
-                                                        return <div><img src={e} alt="imageproduct6" width={80} height={80} className='rounded-md' /></div>
-                                                    })
-                                                }
-
-                                                {/* <div
-                                                            style={{ borderTopColor: "transparent" }}
-                                                            className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
-                                                        /> */}
                                             </div>
                                         </div>
                                     </>

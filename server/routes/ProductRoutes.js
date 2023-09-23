@@ -32,7 +32,15 @@ router.put('/updateimagesbyproductid/:id', ProductController.updateImageByProduc
 router.delete('/deleteimagesbyproductid/:id', ProductController.deleteImageByProductID);
 
 
+router.put(
+  "/updateimagesbyproductid/:id",
+  ProductController.updateImageByProductID
+);
 
+// router.delete(
+//   "/deleteimagesbyproductid/:id",
+//   ProductController.deleteImageByProductID
+// );
 
 // thêm danh mục
 

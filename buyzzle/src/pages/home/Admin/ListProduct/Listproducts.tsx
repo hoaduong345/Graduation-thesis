@@ -13,6 +13,9 @@ import axios from 'axios'
 import ListproductMap from "./ListproductMap"
 import { appConfig } from "../../../../configsEnv"
 import { toast } from 'react-toastify'
+import { productController } from "../../../../Controllers/ProductsController"
+import { async } from "@firebase/util"
+import { imagesController } from "../../../../Controllers/ImagesController"
 
 export default function ListproductsAdmin() {
 
@@ -20,41 +23,34 @@ export default function ListproductsAdmin() {
   console.log("🚀 ~ file: Listproducts.tsx:16 ~ ListproductsAdmin ~ products:", products)
 
   useEffect(() => {
-    axios.get(`${appConfig.apiUrl}/allproducts`)
-      .then((data) => {
-        return data
-      })
-      .then((data: any) => {
-        console.log("🚀 ~ file: Listproducts.tsx:29 ~ .then ~ data.data:", data.data)
-        if (data.data.length > 0) {
-          setProducts(data.data)
-        }
-      })
-      .catch((error) => {
-        console.log("🚀 ~ file: Listproducts.tsx:20 ~ uesEffect ~ error:", error)
-      })
+    getData()
   }, [])
 
-  function xulyDele(id: number) {
-    console.log('sdjjsd', id);
-    if (confirm("Xoa san pham?")) {
-      axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`)
-        .then((deleteItems) => deleteItems)
-        .then((deleteItems) => {
-          toast.success("Xóa thành công !")
-          getData()
-        }).catch((error) => {
-          console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
-          toast.error("Xóa thất bại !")
 
-        }
-        )
-    }
-
+  const getData = () => {
+    productController.getList().then((res) => {
+      setProducts(res)
+    })
   }
-  console.log(products);
 
-  // xoa
+
+  const handleRemove = async (id: number) => {
+    await productController.remove(id).then((_) => {
+      toast.success("Xóa thành công !")
+      getData()
+    }).catch((error) => {
+      console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
+      toast.error("Xóa thất bại !")
+    })
+
+    // await imagesController.remove(id).then((_) => {
+    //   toast.success("Xóa thành công !")
+    //   getData()
+    // }).catch((error) => {
+    //   console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
+    //   toast.error("Xóa thất bại !")
+    // })
+  }
 
   return (
     <>
@@ -149,7 +145,7 @@ export default function ListproductsAdmin() {
                   products?.map((items) => {
                     return (
                       <>
-                        <ListproductMap products={items} />
+                        <ListproductMap HandleXoa={handleRemove} products={items} />
                       </>
                     );
                   }) : <p>khong co san pham</p>
