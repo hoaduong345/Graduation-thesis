@@ -69,7 +69,7 @@ export default function ListproductsAdmin() {
             </div>
             {/* end h2 */}
             <div className='grid gap-4 grid-cols-9 mt-12'>
-              <div className='col-span-2'>
+              <div className='col-span-2 ml-20'>
                 <div className='flex items-center w-[196px] rounded-md h-[46px] bg-[#EA4B48] justify-evenly cursor-pointer'>
                   <PlusSquare />
                   <button className='text-center text-base font-bold text-white '>
