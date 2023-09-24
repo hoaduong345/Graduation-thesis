@@ -9,6 +9,12 @@ import Line from "../Assets/TSX/Line";
 import { Images } from "../../../../Assets/TS";
 import Plus from "../../../../Assets/TSX/Plus";
 import Handle from "../Assets/TSX/bacham";
+import RemoveCate from "../Assets/TSX/RemoveCate";
+import Edit from "../Assets/TSX/Edit";
+import UploadIMG from "../Assets/TSX/UploadIMG";
+import { toast } from "react-toastify";
+import LogoCate from "../Assets/TSX/logoCateAdmin";
+import AddCateBtn from "../Assets/TSX/AddCateAdmin";
 
 
 export interface Cate {
@@ -18,95 +24,105 @@ export interface Cate {
 
 function Category() {
 
-    // const [category, setCategory] = useState<Cate>({} as Cate);
+    const [category, setCategory] = useState<Cate>({} as Cate);
 
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 
-    //     setCategory({ ...category, name: e.target.value });
-    // };
+        setCategory({ ...category, name: e.target.value });
+    };
 
-    // const handleSubmit = () => {
-    //     if (category.id != 0 && category.id != undefined) {
-    //         axios.put(`http://localhost:5000/buyzzle/product/updatecategory/${category.id}`, { name: category.name })
-    //             .then(response => {
+    const handleSubmit = () => {
+        closeModal()
+        if (category.id != 0 && category.id != undefined) {
+            axios.put(`http://localhost:5000/buyzzle/product/updatecategory/${category.id}`, { name: category.name })
+                .then(response => {
+                    return response
+                })
+                .then(data => {
+                    toast.success('Update Complete!!')
+                    console.log(data);
+                    getList()
+                    setCategory({ name: '', id: 0 })
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Xử lý lỗi nếu có
 
-    //                 return response
-    //             })
-    //             .then(data => {
-    //                 console.log(data);
-    //                 getList()
-    //                 setCategory({ name: '', id: 0 })
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error:', error);
-    //                 // Xử lý lỗi nếu có
+                });
+        } else {
+            axios.post('http://localhost:5000/buyzzle/product/addcategory', { name: category.name })
+                .then(response => {
+                    return response
+                })
+                .then(data => {
+                    toast.success('New Category Complete!!')
+                    console.log(data);
+                    getList()
+                    setCategory({ name: '', id: 0 })
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Xử lý lỗi nếu có
 
-    //             });
-    //     } else {
-    //         axios.post('http://localhost:5000/buyzzle/product/addcategory', { name: category.name })
-    //             .then(response => {
-    //                 return response
-    //             })
-    //             .then(data => {
-    //                 console.log(data);
-    //                 getList()
-    //                 setCategory({ name: '', id: 0 })
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error:', error);
-    //                 // Xử lý lỗi nếu có
+                });
+        }
 
-    //             });
-    //     }
+    };
 
-    // };
-
-    // const remove = (id: number) => {
-    //     if (confirm('  you remove item sure!')) {
-    //         axios.delete(`http://localhost:5000/buyzzle/product/deletecategory/${id}`)
-    //             .then(response => {
-
-    //                 return response
-    //             })
-    //             .then(data => {
-    //                 console.log(data);
-    //                 getList()
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error:', error);
-    //                 alert(error)
-    //             });
-
-    //     }
-
-    // };
+    const remove = (id: number) => {
+        axios.delete(`http://localhost:5000/buyzzle/product/deletecategory/${id}`)
+            .then(response => {
+                return response
+            })
+            .then(() => {
+                toast.error('Successfully')
+                getList()
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error)
+            });
+    };
 
     // const update = (cate: Cate) => {
     //     setCategory(cate)
     // }
 
 
-    // const [categorys, setCategorys] = useState<Cate[]>([])
+    const [categorys, setCategorys] = useState<Cate[]>([])
 
-    // useEffect(() => {
-    //     getList()
-    // }, [])
+    useEffect(() => {
+        getList()
+    }, [])
 
-    // const getList = () => {
-    //     fetch("http://localhost:5000/buyzzle/product/allcategory")
-    //         .then((data) => {
-    //             const bien = data.json()
-    //             return bien
+    const getList = () => {
+        fetch("http://localhost:5000/buyzzle/product/allcategory")
+            .then((data) => {
+                const bien = data.json()
+                return bien
+            }).then((data) => {
+                closeModal()
+                setCategorys(data)
+            }).catch((error) => {
+                console.log(error)
+            })
+    }
 
-    //         }).then((data) => {
-    //             console.log(data)
-    //             setCategorys(data)
+    //showdialog demo
+    const openModal = (cate: Cate) => {
+        const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
+        if (modal) {
+            setCategory(cate)
+            modal.showModal();
+        }
+    };
 
-    //         }).catch((error) => {
-    //             console.log(error)
-    //         })
-    // }
-
+    const closeModal = () => {
+        const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
+        if (modal) {
+            modal.close();
+        }
+    };
     return (
         <>
             <Container>
@@ -162,17 +178,26 @@ function Category() {
 
                         <div className="flex flex-col gap-[27px]">
                             <div className="flex gap-[24px]">
-                                <div className="flex gap-[10px] w-[312px] border-[#FFAAAF] border-[1px] rounded-md p-[13px]">
-                                    <Search />
-                                    <input className="outline-none border-none w-[80%]" type="text" placeholder="Tìm kiếm thông tin sản phẩm..." />
+                                <div
+                                    className="Search-input-headerCenter items-center flex
+                   py-[3px] px-[6px] border-[1px] border-[#FFAAAF] rounded-md">
+                                    <div className="mb-2">
+                                        <Search />
+                                    </div>
+                                    <input
+                                        className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm"
+                                        placeholder="Tìm kiếm..."
+                                    />
                                 </div>
-                                <div className="flex gap-[10px] p-[10px] border-[#EA4B48] border-[1px] rounded-md">
+                                <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer'>
                                     <Download />
-                                    <button className="outline-none border-none text-[#EA4B48] font-bold text-[16px]">Xuất Excel</button>
+                                    <button className='text-center text-base font-bold text-[#EA4B48] '>
+                                        Xuất excel
+                                    </button>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-10">
+                            <div className="grid grid-cols-10 items-center">
                                 <div className="col-span-1 py-[15px] pl-[35px]">
                                     <Delete />
                                 </div>
@@ -191,58 +216,167 @@ function Category() {
 
                             </div>
 
-                            <div className="grid grid-cols-10">
-                                <div className="col-span-3 border-[#e0e0e0] border-y-[1px] px-[20px] flex justify-between">
-                                    <div className="py-[30px] flex gap-[20px]">
-                                        <button>
-                                            <Plus />
-                                        </button>
-                                        <button>
-                                            <Handle />
-                                            <button id="dropdownLeftButton" data-dropdown-toggle="dropdownLeft" data-dropdown-placement="left" className="mb-3 md:mb-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"><svg className="w-2.5 h-2.5 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
-                                            </svg>Dropdown left</button>
+                            <div className="items-center flex gap-3 px-6">
+                                <button className="" onClick={() => openModal(category)}>
+                                    <Plus />
+                                </button>
+                                <p className="cursor-default text-[#7A828A] text-base font-bold">THÊM DANH MỤC</p>
+                                <div>
+                                    <dialog id="my_modal_3" className="modal">
+                                        <div className="bg-white relative flex flex-col p-[60px]">
+                                            <form method="dialog">
+                                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={closeModal}>✕</button>
+                                            </form>
+                                            <div className="flex flex-col gap-10">
+                                                <div className="flex items-center">
+                                                    <LogoCate />
+                                                    <h3 className="font-bold text-2xl">DANH MỤC SẢN PHẨM</h3>
+                                                </div>
 
-                                            {/* <!-- Dropdown menu --> */}
-                                            <div id="dropdownLeft" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownLeftButton">
-                                                    <li>
-                                                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-                                                    </li>
-                                                </ul>
+                                                <div className="grid grid-cols-5 gap-8">
+                                                    <div className="col-span-3">
+                                                        <div className="flex gap-3 ">
+                                                            <div className="flex flex-col gap-5">
+                                                                <div>
+                                                                    <label htmlFor="" className="text-sm">Tiêu Đề Danh Mục*</label>
+                                                                    <input
+                                                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                            `}
+                                                                        placeholder="Nhập tiêu đề danh mục"
+                                                                        onChange={handleChange}
+                                                                        name="name"
+                                                                        value={category.name}
+
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <label htmlFor="" className="text-sm">Chuỗi Cho Đường Dẫn Tĩnh*</label>
+                                                                    <input
+                                                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                            `}
+                                                                        placeholder="Nhập chuỗi cho đường dẫn tĩnh"
+
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <label htmlFor="" className="text-sm">Mô tả Danh Mục</label>
+                                                                    <input
+                                                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                            `}
+                                                                        placeholder="Nhập mô tả danh mục"
+
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-span-2 flex flex-col gap-12">
+                                                        <div className='max-w-max items-center'>
+                                                            <label htmlFor="images">
+                                                                <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
+                                                                    <input type="file"
+                                                                        // onChange={(e: any) => setImages(e.target.files)}
+                                                                        id='images' multiple className='hidden ' />
+                                                                    <UploadIMG />
+                                                                    <div id="images" className='text-center mt-2'>
+                                                                        <p className='text-[#5D5FEF] text-center text-base -tracking-tighter font-bold'>Click to upload
+                                                                            <p className='text-[#1A1A1A] font-normal text-base tracking-widest'>or drag and drop</p></p>
+                                                                    </div>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                        <div className="flex gap-2 items-center ">
+                                                            <button onClick={handleSubmit} className="text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] rounded-md border-[1px]">
+                                                                <AddCateBtn />
+                                                                Xác Nhận
+                                                            </button>
+                                                            <button className="p-3 text-white text-base bg-[#EA4B48] rounded-md"
+                                                                onClick={closeModal}
+                                                            >Hủy</button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+
+
                                             </div>
 
-                                        </button>
-                                        <input type="checkbox" />
-                                    </div>
-                                    <div className="py-[15px]">
-                                        <img src={Images.cateAD} alt="" />
-                                    </div>
 
-                                </div>
-                                <div className="col-span-5 border-[#e0e0e0] p-[25px] border-[1px]">
-
-                                    <p className="text-[16px] font-bold">Thiết bị điện tử</p>
-                                </div>
-                                <div className="col-span-2 border-[#e0e0e0] border-y-[1px] py-[25px] px-[40px]">
-                                    <div className='flex text-center w-[37%] justify-start gap-5'>
-                                        <h3 className='font-semibold'>Ẩn</h3>
-
-                                        <div className="form-control">
-                                            <input type="checkbox" className="toggle toggle-error" />
                                         </div>
-                                        <h3 className='font-semibold'>Hiện</h3>
-                                    </div>
+                                    </dialog>
                                 </div>
+                            </div>
+
+                            <div className="grid grid-cols-10" h-20>
+                                {
+                                    categorys.map((e) => {
+                                        return (
+
+                                            <>
+                                                <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between px-6">
+                                                    <div className=" flex gap-[20px]">
+                                                        <button>
+                                                            <Plus />
+                                                        </button>
+                                                        <div className="dropdown dropdown-left ">
+                                                            <label tabIndex={0}>
+                                                                <Handle />
+                                                            </label>
+                                                            <ul tabIndex={0} className="dropdown-content menu bg-white rounded-box w-52
+                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]">
+                                                                <li>
+                                                                    <button onClick={() => openModal(e)} className="flex items-center gap-4">
+                                                                        <Edit />
+                                                                        <p className="text-[#EA4B48] text-sm font-medium">Sửa</p>
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+
+                                                                    <button onClick={() => remove(e.id)} className="flex items-center gap-4">
+                                                                        <RemoveCate />
+                                                                        <p className="text-[#EA4B48] text-sm font-medium">Xóa</p>
+                                                                    </button>
+
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <input type="checkbox" />
+                                                    </div>
+                                                    <div>
+                                                        <img src={Images.cateAD} alt="" />
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-5 border-[#e0e0e0] h-20 border-[1px] items-center gap-5">
+                                                    <div className="mx-auto justify-center">
+
+                                                        <p className="text-[16px] font-bold h-20 py-auto">{e.name}</p>
+                                                    </div>
+
+                                                </div>
+                                                <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
+                                                    <div className='flex text-center w-[37%] justify-start gap-5'>
+                                                        <h3 className='font-semibold'>Ẩn</h3>
+
+                                                        <div className="form-control">
+                                                            <input type="checkbox" className="toggle toggle-error" />
+                                                        </div>
+                                                        <h3 className='font-semibold'>Hiện</h3>
+                                                    </div>
+                                                </div>
+
+                                            </>
+
+                                        )
+                                    })
+                                }
 
                             </div>
 
@@ -252,7 +386,10 @@ function Category() {
                 </div>
 
             </Container>
+
+
         </>
+
     )
 }
 

@@ -114,7 +114,7 @@ export default function Header() {
           <Container>
             <div className="container mx-auto">
               {/* <ul className="flex justify-between h-[60px] font-bold text-[#1A1A1A]leading-15 items-center leading-[100%]"> */}
-              <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A]leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
+              <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
                 <li>
                   <Link to="/ProductsPage">Gấu Bông Bobbicraft</Link>
                 </li>
