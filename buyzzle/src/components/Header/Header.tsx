@@ -32,7 +32,7 @@ export default function Header() {
     console.log(username.substring(0, 1));
     console.log("USER: " + username, img);
   } else {
-    console.log("Loi");
+    console.log("Chua dang nhap");
   }
   const href = `/userprofilepage/${username}`;
 
