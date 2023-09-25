@@ -8,6 +8,7 @@ type Props = {
 const Filter = (props: Props) => {
 
   const { product } = props
+  console.log("🚀 ~ file: Filter.tsx:21 ~ Filter ~ product.ProductImage:", product.ProductImage)
 
   return (
     <Link to={`/Detailproducts/${product.id}`} >
@@ -16,13 +17,24 @@ const Filter = (props: Props) => {
        hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
        max-xl:max-w-[180px]">
         <div className="relative figure">
-
-          <img className="h-[207px] w-[100%]" alt="" src={product.ProductImage[0].url} />
-
-
-          <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-            Giảm {product.discount}%
-          </p>
+          {
+            product.ProductImage.length == 0
+              ? (
+                <>
+                  <p>No Images</p>
+                  <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] hidden text-white bg-[#ea4b48] rounded">
+                    Giảm {product.discount}%
+                  </p>
+                </>
+              ) : (
+                <>
+                  <img className="h-[207px] w-[100%]" alt="" src={product.ProductImage[0].url} />
+                  <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
+                    Giảm {product.discount}%
+                  </p>
+                </>
+              )
+          }
         </div>
 
         <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
