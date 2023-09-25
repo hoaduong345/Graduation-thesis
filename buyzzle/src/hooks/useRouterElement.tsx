@@ -17,6 +17,7 @@ import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../pages/forgotpassword/ChangePassword";
 import path from "../contants/path";
 import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
+import Category from "../pages/home/Admin/Category/Category";
 import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
 import Cart from "../pages/home/User/Cart/Cart";
 
@@ -105,7 +106,7 @@ export default function useRouterEmelent() {
       path: path.confirmAccount,
       element: (
         <RegisterLoginLayout>
-          <ConfirmAccount/>
+          <ConfirmAccount />
         </RegisterLoginLayout>
 
       ),
@@ -144,9 +145,15 @@ export default function useRouterEmelent() {
         element: (
           <Detailproducts />
         ),
+      },
+      {
+        path: "category",
+        element: (
+          <Category />
+        ),
       },]
     },
- 
+
     {
       path: path.changepassword,
       element: (
@@ -157,7 +164,7 @@ export default function useRouterEmelent() {
 
       ),
     },
-   
+
   ]);
   return routes;
 }

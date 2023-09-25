@@ -5,7 +5,7 @@ export default function Shoppingcart() {
     <svg
       width={36}
       height={37}
-      className="max-xl:w-[30px]"
+      className="max-xl:w-[30px]  max-[426px]:w-[20px]"
       viewBox="0 0 36 37"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
