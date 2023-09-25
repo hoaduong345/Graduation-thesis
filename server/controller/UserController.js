@@ -57,7 +57,7 @@ const UserController = {
 
       const updatedUser = {
         email: req.body.email,
-        username: req.body.username,
+        username:req.body.username,
         name: req.body.name,
         phonenumber: req.body.phonenumber,
         sex: req.body.sex,
