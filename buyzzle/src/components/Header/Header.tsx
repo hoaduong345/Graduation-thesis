@@ -141,9 +141,9 @@ export default function Header() {
 
                     ) : (
                       <div className="flex text-[#1A1A1A] ml-[10px]">
-                        <a href="#">ĐĂNG NHẬP</a>
+                        <a href="/login">ĐĂNG NHẬP</a>
                         <div className="border-[1px] border-[#000000] mx-[20px] " />
-                        <a href="#">ĐĂNG KÍ</a>
+                        <a href="/register">ĐĂNG KÍ</a>
                       </div>
                     )}
 

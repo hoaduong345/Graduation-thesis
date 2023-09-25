@@ -9,37 +9,37 @@ import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 type FormValues = {
-    userName: string,
-    yourName: string,
+    username: string,
+    name: string,
     email: string,
     sex: boolean,
-    phoneNumber: number,
-    DateofBirth: string,
-    fullName: string,
-    Address: string
+    phonenumber: number,
+    dateOfBirth: string,
+    // fullName: string,
+    // Address: string
 }
-const param = useParams();
+
 export default function UserProfile() {
     const {
         control,
         handleSubmit,
         formState: { errors, isDirty, isValid },
     } = useForm<FormValues>({
-        mode: 'all',
+        // mode: 'all',
         defaultValues:
         {
-            userName: '',
-            yourName: '',
+            username: '',
+            name: '',
             email: '',
             sex: true,
-            DateofBirth: '',
-            phoneNumber: undefined,
-            fullName: '',
-            Address: ''
+            dateOfBirth: '',
+            phonenumber: undefined,
+            // fullName: '',
+            // Address: ''
         },
 
     });
-
+    const param = useParams();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [imageURL, setImageURL] = useState<string | null>(null);
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,88 +90,110 @@ export default function UserProfile() {
             });
         }
     };
+    const [date, setDate] = useState('');
 
-    const API = `http://localhost:5000/buyzzle/auth/userprofile/${param.username}`;
-    const onSubmit = handleSubmit(async (formData) => {
-      // const response = await axios.post(API, data);
-      //   console.log("server: ", response); 
-  
-      try {
-        console.log("checker", formData);
-        const response = await axios.put(API, formData);
-        console.log("edit thanh cong", response);
-  
-        if (response.status === 200) {
-          console.log("Sign-in successfully");
-          toast.success(
-            "Sign-in successfully-check your email to verify account",
-            {
-              position: "top-right",
-              autoClose: 5000,
-  
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setDate(event.target.value);
+    };
+
+    // const [day, setDay] = useState('');
+    // const [month, setMonth] = useState('');
+    // const [year, setYear] = useState('');
+    // const handleDayChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //     setDay(event.target.value);
+    // };
+
+    // const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //     setMonth(event.target.value);
+    // };
+
+    // const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //     setYear(event.target.value);
+    // };
+
+    const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
+    const onSubmit = async (formData: FormValues) => {
+        // const response = await axios.post(API, data);
+        //   console.log("server: ", response); 
+
+        try {
+            // formData.dateOfBirth = `${day}/${month}/${year}`;
+            formData.dateOfBirth = date;
+            console.log("checker", formData);
+            const response = await axios.put(API, formData);
+            console.log("edit thanh cong", response);
+
+            if (response.status === 200) {
+                console.log("Sign-in successfully");
+                toast.success(
+                    "Edit thành công",
+                    {
+                        position: "top-right",
+                        autoClose: 5000,
+
+                    }
+                );
+            } else {
+                console.log("Sign-in Failed!");
+                toast.warning(
+                    "Sign-in failed",
+                    {
+                        position: "top-right",
+                        autoClose: 5000,
+
+                    }
+                );
             }
-          );
-        } else {
-          console.log("Sign-in Failed!");
-          toast.warning(
-            "Sign-in failed",
-            {
-              position: "top-right",
-              autoClose: 5000,
-  
+        } catch (error) {
+            // console.log("Them that bai", error);
+            console.error(error);
+            if (axios.isAxiosError(error) && error.response) {
+                const responseData = error.response.data;
+                // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
+                if (responseData.error) {
+                    console.log(`Lỗi2: ${responseData.error}`);
+                    const errorMessageUsername = responseData.error.username;
+                    const errorMessageEmail = responseData.error.email;
+                    const errorMessagePhoneNumber = responseData.error.phonenumber;
+                    if (errorMessageUsername) {
+                        toast.warning(
+                            errorMessageUsername,
+                            {
+                                position: "top-right",
+                                autoClose: 5000,
+
+                            }
+                        );
+                    } else if (errorMessageEmail) {
+                        toast.warning(
+                            errorMessageEmail,
+                            {
+                                position: "top-right",
+                                autoClose: 5000,
+
+                            }
+                        );
+                    } else if (errorMessagePhoneNumber) {
+                        toast.warning(
+                            errorMessagePhoneNumber,
+                            {
+                                position: "top-right",
+                                autoClose: 5000,
+
+                            }
+                        );
+                    }
+
+                } else {
+                    console.log('Lỗi không xác định từ server');
+                }
+            } else {
+                console.error('Lỗi gửi yêu cầu không thành công', error);
+
             }
-          );
         }
-      } catch (error) {
-        // console.log("Them that bai", error);
-        console.error(error);
-        if (axios.isAxiosError(error) && error.response) {
-          const responseData = error.response.data;
-          // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
-          if (responseData.error) {
-            console.log(`Lỗi2: ${responseData.error}`);
-            const errorMessageUsername = responseData.error.username;
-            const errorMessageEmail = responseData.error.email;
-            const errorMessagePhoneNumber= responseData.error.phonenumber;
-            if (errorMessageUsername) {
-              toast.warning(
-                errorMessageUsername,
-                {
-                  position: "top-right",
-                  autoClose: 5000,
-  
-                }
-              );
-            } else if (errorMessageEmail) {
-              toast.warning(
-                errorMessageEmail,
-                {
-                  position: "top-right",
-                  autoClose: 5000,
-  
-                }
-              );
-            }else if(errorMessagePhoneNumber){
-              toast.warning(
-                errorMessagePhoneNumber,
-                {
-                  position: "top-right",
-                  autoClose: 5000,
-  
-                }
-              );
-            }
-  
-          } else {
-            console.log('Lỗi không xác định từ server');
-          }
-        } else {
-          console.error('Lỗi gửi yêu cầu không thành công', error);
-  
-        }
-      }
-  
-    });
+
+    };
 
     return (
         <Container>
@@ -185,13 +207,15 @@ export default function UserProfile() {
                         </div>
                         <div className='mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4'>
 
-                            <div className='card py-4 px-5 col-span-3  rounded-[6px]
-                                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]' onSubmit={onSubmit}>
+                            <form onSubmit={handleSubmit(onSubmit)} className='card py-4 px-5 col-span-3  rounded-[6px]
+                                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'
+
+                            >
                                 <span className='text-[#000] text-2xl font-normal '>Hồ sơ của tôi</span>
                                 <p className='text-[#393939] text-sm font-normal'>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
                                 <div className='flex w-[100%] mt-4 justify-between'>
                                     <div className='w-[48%]'>
-                                        <Controller control={control} name='userName' rules={{
+                                        <Controller control={control} name='username' rules={{
                                             required: {
                                                 value: true,
                                                 message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
@@ -207,17 +231,17 @@ export default function UserProfile() {
                                                 <input
                                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${!!errors.userName ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
+                                            ${!!errors.username ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                     placeholder="Tên đăng nhập"
                                                     value={field.value}
                                                     onChange={field.onChange}
                                                 />
-                                                {!!errors.userName && <p className='text-red-700 mt-2'>{errors.userName.message}</p>}</>
+                                                {!!errors.username && <p className='text-red-700 mt-2'>{errors.username.message}</p>}</>
                                         )} />
                                         {/* end input addNameProducts */}
                                     </div>
                                     <div className='w-[48%]'>
-                                        <Controller control={control} name='yourName' rules={{
+                                        <Controller control={control} name='name' rules={{
                                             required: {
                                                 value: true,
                                                 message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
@@ -233,12 +257,12 @@ export default function UserProfile() {
                                                 <input
                                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${!!errors.yourName ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
+                                            ${!!errors.name ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                     placeholder="Tên người dùng"
                                                     value={field.value}
                                                     onChange={field.onChange}
                                                 />
-                                                {!!errors.yourName && <p className='text-red-700 mt-2'>{errors.yourName.message}</p>}</>
+                                                {!!errors.name && <p className='text-red-700 mt-2'>{errors.name.message}</p>}</>
                                         )} />
                                         {/* end input addNameProducts */}
                                     </div>
@@ -326,7 +350,7 @@ export default function UserProfile() {
                                         </div>
                                     </div>
                                     <div className='w-[48%]'>
-                                        <Controller control={control} name='phoneNumber' rules={{
+                                        <Controller control={control} name='phonenumber' rules={{
                                             required: {
                                                 value: true,
                                                 message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
@@ -338,16 +362,16 @@ export default function UserProfile() {
                                                 <input
                                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${!!errors.phoneNumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
+                                            ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                     placeholder="Số điện thoại"
                                                     value={field.value}
                                                     onChange={field.onChange}
                                                 />
-                                                {!!errors.phoneNumber && <p className='text-red-700 mt-2'>{errors.phoneNumber.message}</p>}</>
+                                                {!!errors.phonenumber && <p className='text-red-700 mt-2'>{errors.phonenumber.message}</p>}</>
                                         )} />
                                     </div>
                                 </div>
-                                <div className='w-[100%] flex h-auto items-center'>
+                                {/* <div className='w-[100%] flex h-auto items-center'>
                                     <div className='w-[15%] mt-[33px]'>
                                         <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Ngày sinh</label>
                                     </div>
@@ -355,7 +379,7 @@ export default function UserProfile() {
                                         <div className="w-[32%] ">
                                             <div className="mt-3">
                                                 <p>Ngày*</p>
-                                                <select className="h-11 mt-1 px-4 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
+                                                <select onChange={handleDayChange} className="h-11 mt-1 px-4 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
                                                     <option className=" hidden">Chọn ngày</option>
                                                     {
                                                         Array.from({ length: 31 }).map((e, i) => {
@@ -372,7 +396,7 @@ export default function UserProfile() {
                                         <div className="w-[32%]  ">
                                             <div className="mt-3">
                                                 <p>Tháng*</p>
-                                                <select className="h-11 px-4 mt-1 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
+                                                <select onChange={handleMonthChange} className="h-11 px-4 mt-1 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
                                                     <option className=" hidden">Chọn Tháng</option>
                                                     {
                                                         Array.from({ length: 12 }).map((e, i) => {
@@ -389,7 +413,7 @@ export default function UserProfile() {
                                         <div className="w-[32%] ">
                                             <div className="mt-3">
                                                 <p>Năm*</p>
-                                                <select className="h-11 px-4 border-[1px] border-[#FFAAAF] mt-1 text-[#393939] text-sm w-full rounded-[6px] cursor-pointer outline-none ">
+                                                <select onChange={handleYearChange} className="h-11 px-4 border-[1px] border-[#FFAAAF] mt-1 text-[#393939] text-sm w-full rounded-[6px] cursor-pointer outline-none ">
                                                     <option className=" hidden">Chọn năm</option>
                                                     {
                                                         Array.from({ length: 100 }).map((e, i) => {
@@ -404,18 +428,20 @@ export default function UserProfile() {
                                             </div>
                                         </div>
                                     </div>
+                                </div> */}
+                                <div>
+                                    <input type="date" onChange={handleDateChange} />
                                 </div>
                                 {/* button */}
                                 <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
                                 bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
-                                    <button type='submit' className={`text-center text-base font-bold text-[#FFFFFF]`}>
+                                    <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
                                         Lưu
                                     </button>
                                 </div>
-                            </div>
-    
-    
-    {/* Form */}
+                            </form>
+
+                            {/* Form */}
 
                             <div className='card py-4 px-5 col-span-2 rounded-[6px]
                         shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]' >
@@ -459,7 +485,7 @@ export default function UserProfile() {
                                 </div>
                             </div>
 
-                            <div className='card py-4 px-5 rounded-[6px] col-span-5
+                            {/* <div className='card py-4 px-5 rounded-[6px] col-span-5
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                 <span className='text-[#000] text-2xl font-normal '>Địa chỉ thanh toán</span>
                                 <p className='text-[#393939] text-sm font-normal'>Thêm địa chỉ để dễ dàng giao hàng</p>
@@ -475,9 +501,9 @@ export default function UserProfile() {
                                                     }
                                                 }} render={({ field }) => (
                                                     <>
-                                                        <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Họ và tên</label>
-                                                        {/* input addNameProducts */}
-                                                        <input
+                                                        <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Họ và tên</label> */}
+                            {/* input addNameProducts */}
+                            {/* <input
                                                             className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.fullName ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
@@ -488,11 +514,11 @@ export default function UserProfile() {
                                                         {!!errors.fullName && <p className='text-red-700 mt-2'>{errors.fullName.message}</p>}</>
                                                 )} />
                                                 {/* end input addNameProducts */}
-                                            </div>
+                            {/* </div>
                                             <div className='w-[43%]'>
-                                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Loại đỉa chỉ*</p>
-                                                {/* Dropdown */}
-                                                <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Loại đỉa chỉ*</p> */}
+                            {/* Dropdown */}
+                            {/* <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                                     <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
                                                         <option>Địa chỉ văn phòng</option>
                                                         <option>Địa chỉ công ty</option>
@@ -502,9 +528,9 @@ export default function UserProfile() {
                                             </div>
                                         </div>
                                         <div className='w-[100%] mt-4'>
-                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Địa chỉ*</p>
-                                            {/* Dropdown */}
-                                            <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Địa chỉ*</p> */}
+                            {/* Dropdown */}
+                            {/* <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                                 <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
                                                     <option className='hidden'>Tỉnh/Thành phố, Quận/Huyện, Phường/Xã</option>
                                                     <option>Thiết bị điện da dụng</option>
@@ -525,9 +551,9 @@ export default function UserProfile() {
                                                 }
                                             }} render={({ field }) => (
                                                 <>
-                                                    <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Địa chỉ cụ thể</label>
-                                                    {/* input addNameProducts */}
-                                                    <input
+                                                    <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Địa chỉ cụ thể</label> */}
+                            {/* input addNameProducts */}
+                            {/* <input
                                                         className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.Address ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
@@ -536,19 +562,19 @@ export default function UserProfile() {
                                                         onChange={field.onChange}
                                                     />
                                                     {!!errors.Address && <p className='text-red-700 mt-2'>{errors.Address.message}</p>}</>
-                                            )} />
-                                            {/* end input addNameProducts */}
-                                        </div>
+                                            )} /> */}
+                            {/* end input addNameProducts */}
+                            {/* </div>
                                     </div>
                                     <div className='rightAdressMap w-[46%]'>
                                         <iframe width="100%" height="118%"
                                             title="map"
                                             src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" />
                                     </div>
-                                </div>
+                                </div> */}
 
-                                {/* button */}
-                                <div className='w-[50%]'>
+                            {/* button */}
+                            {/* <div className='w-[50%]'>
                                     <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
                                 bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
                                         <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
@@ -556,7 +582,7 @@ export default function UserProfile() {
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className='card py-4 px-5 rounded-[6px] col-span-5
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
