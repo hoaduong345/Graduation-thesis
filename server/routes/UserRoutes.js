@@ -1,8 +1,8 @@
 // const sendEmail = require("../utils/sendEmail"
 const UserController = require("../controller/UserController");
 const MiddleWareController = require("../middleware/MiddleWareController");
-const {checkTokenForgotPassword} = require("../middleware/validateRequest/token.middleware")
-const {createVali,FogotPasswordValid,ResetPasswordValid} = require("../middleware/validateRequest/auth.middleware");
+const { checkTokenForgotPassword } = require("../middleware/validateRequest/token.middleware")
+const { createVali, FogotPasswordValid, ResetPasswordValid } = require("../middleware/validateRequest/auth.middleware");
 const router = require("express").Router();
 
 // REGISTER
