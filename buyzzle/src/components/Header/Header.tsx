@@ -11,7 +11,32 @@ import Shoppingcart from "../../Assets/TSX/Shopping-cart";
 import Ellips from "../../Assets/TSX/Ellips";
 import Container from "../container/Container";
 
+
+
 export default function Header() {
+
+
+  const user = localStorage.getItem('user');
+ 
+  var username;
+  var img;
+
+  
+
+  if (user != null) {
+   
+    username = JSON.parse(user).username;
+    img = JSON.parse(user).img;
+
+
+    console.log(username.substring(0, 1));
+    console.log("USER: " + username, img);
+  } else {
+    console.log("Loi");
+  }
+  const href = `/userprofilepage/${username}`;
+
+
   return (
     <>
       <header className="Header">
@@ -96,17 +121,38 @@ export default function Header() {
                     </div>
                   </div>
                   <div className="items-center">
-                    <div className="flex text-[#1A1A1A] ml-[10px]">
-                      <a href="#">ĐĂNG NHẬP</a>
-                      <div className="border-[1px] border-[#000000] mx-[20px] " />
-                      <a href="#">ĐĂNG KÍ</a>
-                    </div>
+                    {user ? (
+                      <a className=" flex gap-2" href={href}>
+                        <div className="font-medium flex items-center justify-center">
+                          {username}
+                        </div>
+                        {img ? (
+                          <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
+                            <p className="text-1xl text-stone-50">{img}</p>
+                          </div>
+                        ) : (
+                          <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
+                            <p className="text-1xl text-stone-50">{username.substring(0, 1).toUpperCase()}</p>
+                          </div>
+
+                        )}
+
+                      </a>
+
+                    ) : (
+                      <div className="flex text-[#1A1A1A] ml-[10px]">
+                        <a href="#">ĐĂNG NHẬP</a>
+                        <div className="border-[1px] border-[#000000] mx-[20px] " />
+                        <a href="#">ĐĂNG KÍ</a>
+                      </div>
+                    )}
+
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </Container>
+        </Container >
 
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
@@ -146,7 +192,7 @@ export default function Header() {
             </div>
           </Container>
         </div>
-      </header>
+      </header >
     </>
   );
 }

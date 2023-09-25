@@ -6,7 +6,6 @@ type Props = {
   product: Products;
 };
 const Filter = (props: Props) => {
-
   const { product } = props
   console.log("🚀 ~ file: Filter.tsx:21 ~ Filter ~ product.ProductImage:", product.ProductImage)
 

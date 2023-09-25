@@ -21,7 +21,6 @@ export default function ListproductsAdmin() {
 
   const [products, setProducts] = useState<Products[]>([])
   console.log("🚀 ~ file: Listproducts.tsx:16 ~ ListproductsAdmin ~ products:", products)
-  const [remove, setRemove] = useState('')
 
   useEffect(() => {
     getData()
