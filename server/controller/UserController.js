@@ -9,7 +9,7 @@ const crypto = require("crypto");
 const decode = require("jwt-decode");
 const { re } = require("mathjs");
 dotenv.config();
-const bcrypt = require("bcrypt");
+
 
 const UserController = {
   // GENERATE ACCESS TOKEN
@@ -57,7 +57,7 @@ const UserController = {
 
       const updatedUser = {
         email: req.body.email,
-        username: await bcrypt.hash(req.body.username, 10),
+        username:req.body.username,
         name: req.body.name,
         phonenumber: req.body.phonenumber,
         sex: req.body.sex,
