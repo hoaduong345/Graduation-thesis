@@ -48,7 +48,7 @@ export default function UserProfile() {
         function CheckLink() {
             const user = localStorage.getItem('user');
             if (user != null) {
-                
+
                 setValidUrl(true);
 
 
@@ -132,7 +132,7 @@ export default function UserProfile() {
     // };
 
     const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
-    
+
     const onSubmit = async (formData: FormValues) => {
         // const response = await axios.post(API, data);
         //   console.log("server: ", response); 
@@ -216,7 +216,7 @@ export default function UserProfile() {
 
     };
 
-    const API2 = "http://localhost:5000/buyzzle/changepassword";
+    const API2 = "http://localhost:5000/buyzzle/changepassword/";
     const onSubmit2 = async (formData: FormValues) => {
         // const response = await axios.post(API, data);
         //   console.log("server: ", response); 
@@ -256,30 +256,30 @@ export default function UserProfile() {
                 // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
                 if (responseData.error) {
                     console.log(`Lỗi2: ${responseData.error}`);
-                    const errorMessageCurrentpassword = responseData.error.username;
-                    const errorMessageNewpassword = responseData.error.email;
-                    const errorMessageConfirmpassword = responseData.error.phonenumber;
-                    if (errorMessageCurrentpassword) {
+                    const errorMessageoldPassword = responseData.error.username;
+                    const errorMessagenewPassword = responseData.error.email;
+                    const errorMessageconfirmNewPassword = responseData.error.phonenumber;
+                    if (errorMessageoldPassword) {
                         toast.warning(
-                            errorMessageCurrentpassword,
+                            errorMessageoldPassword,
                             {
                                 position: "top-right",
                                 autoClose: 5000,
 
                             }
                         );
-                    } else if (errorMessageNewpassword) {
+                    } else if (errorMessagenewPassword) {
                         toast.warning(
-                            errorMessageNewpassword,
+                            errorMessagenewPassword,
                             {
                                 position: "top-right",
                                 autoClose: 5000,
 
                             }
                         );
-                    } else if (errorMessageConfirmpassword) {
+                    } else if (errorMessageconfirmNewPassword) {
                         toast.warning(
-                            errorMessageConfirmpassword,
+                            errorMessageconfirmNewPassword,
                             {
                                 position: "top-right",
                                 autoClose: 5000,
@@ -690,8 +690,7 @@ export default function UserProfile() {
                                 </div>
                             </div> */}
 
-                                    <div className='card py-4 px-5 rounded-[6px] col-span-5
-                            shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
+                                    <form onSubmit={handleSubmit(onSubmit2)} className='card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <span className='text-[#000] text-2xl font-normal '>Thay đổi mật khẩu</span>
                                         <div className='border-[1px] border-[#E0E0E0] w-full my-4 '></div>
                                         <div className='w-[100%]'>
@@ -774,13 +773,13 @@ export default function UserProfile() {
                                             </div>
                                             {/* button */}
                                             <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
-                                bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
+                                            bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
                                                 <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
                                                     Lưu
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
 
