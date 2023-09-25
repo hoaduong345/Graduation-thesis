@@ -3,8 +3,8 @@ const path = {
   register: "/register",
   login: "/login",
   forgotpassword: "/forgotpassword",
-  changepassword: "/buyzzle/auth/resetpassword/:token",
+  resetpassword: "/buyzzle/auth/resetpassword/:token",
   confirmAccount: "buyzzle/auth/:id/verify/:token",
-  
+  changepassword: "/changepassword",
 } as const;
 export default path;

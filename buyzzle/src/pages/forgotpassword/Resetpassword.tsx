@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Images } from "../../Assets/TS/index";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
 
-import "./ChangePassword.css";
+import "./Resetpassword.css";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import LogoGoogle from "../../Assets/PNG/lgG.png";
@@ -15,7 +15,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
 import * as yup from 'yup';
 import { ToastContainer, toast } from "react-toastify";
-function ChangePassword() {
+function Resetpassword() {
     const [showPassword, setShowPassword] = useState(false);
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -249,4 +249,4 @@ function ChangePassword() {
     );
 }
 
-export default ChangePassword;
+export default Resetpassword;

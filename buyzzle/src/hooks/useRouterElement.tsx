@@ -14,11 +14,12 @@ import UserProfile from "../pages/home/User/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
 import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
-import ChangePassword from "../pages/forgotpassword/ChangePassword";
+import Resetpassword from "../pages/forgotpassword/Resetpassword";
 import path from "../contants/path";
 import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
 import Cart from "../pages/home/User/Cart/Cart";
 import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
+import Changepassword from "../pages/home/User/UserProfile/UserProfile";
 
 
 export default function useRouterEmelent() {
@@ -151,7 +152,7 @@ export default function useRouterEmelent() {
       path: path.changepassword,
       element: (
         <RegisterLoginLayout>
-          <ChangePassword />
+          <Resetpassword />
           <ConfirmAccount />
         </RegisterLoginLayout>
 

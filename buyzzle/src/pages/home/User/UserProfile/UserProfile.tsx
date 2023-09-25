@@ -112,6 +112,7 @@ export default function UserProfile() {
     // };
 
     const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
+    
     const onSubmit = async (formData: FormValues) => {
         // const response = await axios.post(API, data);
         //   console.log("server: ", response); 
@@ -176,6 +177,89 @@ export default function UserProfile() {
                     } else if (errorMessagePhoneNumber) {
                         toast.warning(
                             errorMessagePhoneNumber,
+                            {
+                                position: "top-right",
+                                autoClose: 5000,
+
+                            }
+                        );
+                    }
+
+                } else {
+                    console.log('Lỗi không xác định từ server');
+                }
+            } else {
+                console.error('Lỗi gửi yêu cầu không thành công', error);
+
+            }
+        }
+
+    };
+
+    const API2 = "http://localhost:5000/buyzzle/changepassword";
+    const onSubmit2 = async (formData: FormValues) => {
+        // const response = await axios.post(API, data);
+        //   console.log("server: ", response); 
+
+        try {
+            // formData.dateOfBirth = `${day}/${month}/${year}`;
+            console.log("checker", formData);
+            const response = await axios.put(API2, formData);
+            console.log("Change successfully", response);
+
+            if (response.status === 200) {
+                console.log("Change successfully");
+                toast.success(
+                    "Change successfully",
+                    {
+                        position: "top-right",
+                        autoClose: 5000,
+
+                    }
+                );
+            } else {
+                console.log("Change Failed!");
+                toast.warning(
+                    "Change failed",
+                    {
+                        position: "top-right",
+                        autoClose: 5000,
+
+                    }
+                );
+            }
+        } catch (error) {
+            // console.log("Them that bai", error);
+            console.error(error);
+            if (axios.isAxiosError(error) && error.response) {
+                const responseData = error.response.data;
+                // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
+                if (responseData.error) {
+                    console.log(`Lỗi2: ${responseData.error}`);
+                    const errorMessageCurrentpassword = responseData.error.username;
+                    const errorMessageNewpassword = responseData.error.email;
+                    const errorMessageConfirmpassword = responseData.error.phonenumber;
+                    if (errorMessageCurrentpassword) {
+                        toast.warning(
+                            errorMessageCurrentpassword,
+                            {
+                                position: "top-right",
+                                autoClose: 5000,
+
+                            }
+                        );
+                    } else if (errorMessageNewpassword) {
+                        toast.warning(
+                            errorMessageNewpassword,
+                            {
+                                position: "top-right",
+                                autoClose: 5000,
+
+                            }
+                        );
+                    } else if (errorMessageConfirmpassword) {
+                        toast.warning(
+                            errorMessageConfirmpassword,
                             {
                                 position: "top-right",
                                 autoClose: 5000,
