@@ -7,15 +7,19 @@ import ListproductsAdmin from "../pages/home/Admin/ListProduct/Listproducts";
 import HomePage from "../pages/home/User/HomePage";
 import ProductsPage from "../pages/home/User/ProductsPage";
 import FiltersPage from "../pages/home/User/FilterPage/FiltersPage";
-import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
+// import Addproducts from "../pages/home/Admin/Addproducts";
 import Editproducts from "../pages/home/Admin/EditProduct/Editproducts";
-import Detailproducts from "../pages/home/Admin/DetailProduct/Detailproducts";
+// import Detailproducts from "../pages/home/Admin/Detailproducts";
 import UserProfile from "../pages/home/User/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
 import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../pages/forgotpassword/ChangePassword";
 import path from "../contants/path";
+import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
+import Cart from "../pages/home/User/Cart/Cart";
+import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
+
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -45,7 +49,7 @@ export default function useRouterEmelent() {
     },
 
     {
-      path: "/UserProfilePage",
+      path: "/userprofilepage/:username",
       element: (
         <MainLayout>
           <UserProfile />
@@ -86,9 +90,15 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <Detailproducts />
-
         </MainLayout>
-
+      ),
+    },
+    {
+      path: "Cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
       ),
     },
     {
@@ -142,6 +152,7 @@ export default function useRouterEmelent() {
       element: (
         <RegisterLoginLayout>
           <ChangePassword />
+          <ConfirmAccount />
         </RegisterLoginLayout>
 
       ),
