@@ -315,7 +315,7 @@ function Category() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-10" h-20>
+                            <div className="grid grid-cols-10 h-20">
                                 {
                                     categorys.map((e) => {
                                         return (
@@ -354,15 +354,11 @@ function Category() {
                                                         <img src={Images.cateAD} alt="" />
                                                     </div>
                                                 </div>
-                                                <div className="col-span-5 border-[#e0e0e0] h-20 border-[1px] items-center gap-5">
-                                                    <div className="mx-auto justify-center">
-
-                                                        <p className="text-[16px] font-bold h-20 py-auto">{e.name}</p>
-                                                    </div>
-
+                                                <div className="col-span-5 border-[#e0e0e0] h-20 border-[1px] items-center gap-5 py-[5%] pl-[5%]">
+                                                    <p className="text-[16px] font-bold my-auto">{e.name}</p>
                                                 </div>
                                                 <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
-                                                    <div className='flex text-center w-[37%] justify-start gap-5'>
+                                                    <div className='flex text-center w-[37%] justify-start items-center gap-5 py-[25px] pl-[25px]'>
                                                         <h3 className='font-semibold'>Ẩn</h3>
 
                                                         <div className="form-control">
