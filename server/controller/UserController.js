@@ -53,12 +53,12 @@ const UserController = {
 
   UserProfile: async (req, res) => {
     try {
-      const userId = encodeURIComponent(req.body.username);
+      const userId = req.body.username;
 
       const updatedUser = {
         email: req.body.email,
         username:req.body.username,
-        name: userId,
+        name: req.body.name,
         phonenumber: req.body.phonenumber,
         sex: req.body.sex,
         dateOfBirth: new Date(req.body.dateOfBirth)
