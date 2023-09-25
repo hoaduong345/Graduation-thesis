@@ -9,7 +9,6 @@ const MiddleWareController = {
   // VERIFY TOKEN
   verifyAuthenticate: (req, res, next) => {
     const token = req.cookies.accessToken;
-    console.log("🚀 ~ file: MiddleWareController.js:15 ~ token:", token);
 
     if (token) {
       jwt.verify(token, process.env.SECRECT_KEY, (err, user) => {
@@ -30,9 +29,8 @@ const MiddleWareController = {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return console.log("Missing Email or password");
+      return res.status(200).send("missing Email or Password");
     }
-
     next();
   },
 };
