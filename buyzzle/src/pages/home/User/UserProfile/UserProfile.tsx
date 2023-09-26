@@ -15,6 +15,9 @@ type FormValues = {
     sex: boolean,
     phonenumber: number,
     dateOfBirth: string,
+    oldPassword: string,
+    newPassword: string,
+    confirmNewPassword: string
     // fullName: string,
     // Address: string
 }
@@ -34,6 +37,9 @@ export default function UserProfile() {
             sex: true,
             dateOfBirth: '',
             phonenumber: undefined,
+            oldPassword: '',
+            newPassword: '',
+            confirmNewPassword: ''
             // fullName: '',
             // Address: ''
         },
@@ -216,7 +222,7 @@ export default function UserProfile() {
 
     };
 
-    const API2 = "http://localhost:5000/buyzzle/changepassword";
+    const API2 = "http://localhost:5000/buyzzle/auth/changepassword";
     const onSubmit2 = async (formData: FormValues) => {
         // const response = await axios.post(API, data);
         //   console.log("server: ", response); 
@@ -256,9 +262,9 @@ export default function UserProfile() {
                 // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
                 if (responseData.error) {
                     console.log(`Lỗi2: ${responseData.error}`);
-                    const errorMessageoldPassword = responseData.error.username;
-                    const errorMessagenewPassword = responseData.error.email;
-                    const errorMessageconfirmNewPassword = responseData.error.phonenumber;
+                    const errorMessageoldPassword = responseData.error.oldPassword;
+                    const errorMessagenewPassword = responseData.error.newPassword;
+                    const errorMessageconfirmNewPassword = responseData.error.confirmNewPassword;
                     if (errorMessageoldPassword) {
                         toast.warning(
                             errorMessageoldPassword,
@@ -773,7 +779,7 @@ export default function UserProfile() {
                                             </div>
                                             {/* button */}
                                             <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
-                                            bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
+                                bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
                                                 <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
                                                     Lưu
                                                 </button>
