@@ -19,7 +19,6 @@ import path from "../contants/path";
 import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
 import Cart from "../pages/home/User/Cart/Cart";
 import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
-import Changepassword from "../pages/home/User/UserProfile/UserProfile";
 
 
 export default function useRouterEmelent() {
@@ -149,7 +148,7 @@ export default function useRouterEmelent() {
     },
  
     {
-      path: path.changepassword,
+      path: path.resetpassword,
       element: (
         <RegisterLoginLayout>
           <Resetpassword />
