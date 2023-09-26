@@ -216,7 +216,7 @@ export default function UserProfile() {
 
     };
 
-    const API2 = "http://localhost:5000/buyzzle/changepassword/";
+    const API2 = "http://localhost:5000/buyzzle/changepassword";
     const onSubmit2 = async (formData: FormValues) => {
         // const response = await axios.post(API, data);
         //   console.log("server: ", response); 

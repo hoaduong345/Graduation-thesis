@@ -6,6 +6,9 @@ const morgan = require("morgan")
 const path = require('path')
 const bodyParser = require("body-parser");
 const AuthRouter = require("./routes/AuthRoutes")
+
+const UserRouter = require("./routes/UserRoutes")
+
 const CartRouter = require("./routes/CartRoutes")
 const ProductRoutes = require("./routes/ProductRoutes")
 
