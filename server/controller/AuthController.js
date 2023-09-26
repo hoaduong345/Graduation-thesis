@@ -25,11 +25,10 @@ const AuthController = {
   genereateRefreshToken: (email) => {
     return jwt.sign(
       {
-        id: email.id,
+        email: email,
       },
       process.env.JWT_REFRESH_TOKEN,
-      { algorithm: "HS256" },
-      { expiresIn: "365d" }
+      { expiresIn: "30m" }
     );
   },
   generateForgotPasswordToken: (email) => {
@@ -413,18 +412,20 @@ const AuthController = {
   //CHANGE PASSWORD
   changePassword: async (req, res) => {
     try {
-      const accessToken = req.cookies.accessToken;
-      const token = decode(accessToken);
-
+      const idUser = parseInt(req.cookies.id)
+      const refresh_token = req.cookies.refreshToken
+      const token = decode(refresh_token)
+      console.log("🚀 ~ file: AuthController.js:418 ~ changePassword: ~ token exp:", token.exp)
       const user = await prisma.user.findUnique({
         where: {
-          email: token.email,
+          id: idUser,
         },
       });
       const isValidPassword = await bcrypt.compare(
         req.body.oldPassword,
         user.password
       );
+      console.log("🚀 ~ file: AuthController.js:430 ~ changePassword: ~ isValidPassword:", isValidPassword)
 
       if (!isValidPassword) {
         return res.status(404).send("Old Password is not valid");
@@ -438,15 +439,16 @@ const AuthController = {
 
       await prisma.user.update({
         where: {
-          email: token.email,
+          id: idUser,
         },
         data: {
           password: hashed,
         },
       });
       const refreshTokenPayload = {
-        email: token.email,
+        email: user.email,
       };
+  
       const newRefreshToken = jwt.sign(
         refreshTokenPayload,
         process.env.JWT_REFRESH_TOKEN,
@@ -454,18 +456,20 @@ const AuthController = {
           expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token
         }
       );
+      console.log("🚀 ~ file: AuthController.js:459 ~ changePassword: ~ newRefreshToken:", newRefreshToken)
 
       await prisma.user.update({
         where: {
-          email: token.email,
+          id: user.id,
         },
         data: {
           password: hashed,
-          refreshToken: newRefreshToken,
+          refresh_token: newRefreshToken,
         },
       });
       res.status(200).send("Change Password Successfully");
     } catch (error) {
+      console.log("asddddd", error)
       res.status(404).send("Change Password Failed");
     }
   },
@@ -486,6 +490,7 @@ const AuthController = {
       console.log("user", user);
       res.clearCookie("refreshToken");
       res.clearCookie("accessToken");
+      res.clearCookie("id");
       // localStorage.clear();
       res.status(200).send("Logged out successfully");
     } catch (error) {

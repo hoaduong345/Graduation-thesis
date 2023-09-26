@@ -79,7 +79,7 @@ model Product {
   categoryID   Int?
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
-   ProductImage ProductImage[]   
+  ProductImage ProductImage[]   
   itemCarts    ItemCart[]
 }
 
