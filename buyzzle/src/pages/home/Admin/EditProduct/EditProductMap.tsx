@@ -36,6 +36,7 @@ export default function EditProductMap() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const editorRef = useRef<any>(null);
+    const [i, setI] = useState<number>()
 
     const [editImages, setEditImages] = useState<string[]>([])
 
@@ -53,6 +54,7 @@ export default function EditProductMap() {
             price: 1,
             description: "",
             discount: 1,
+            categoryID: 2
         },
 
     });
@@ -266,7 +268,10 @@ export default function EditProductMap() {
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                             <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
                                                 {...register('categoryID')}
-                                            >
+                                                onChange={(na) => {
+                                                    const Id = na.target.value
+                                                    setI(Number(Id))
+                                                }}>
 
                                                 {
                                                     categoty.map(e => {
