@@ -272,7 +272,7 @@ export default function EditProductMap() {
                                                     const Id = na.target.value
                                                     setI(Number(Id))
                                                 }}>
-
+                                                {/* fsdfds */}
                                                 {
                                                     categoty.map(e => {
                                                         return <option value={e.id}>{e.name}</option>
