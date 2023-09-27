@@ -239,19 +239,19 @@ const AuthController = {
         }
 
         res.cookie("refreshToken", refreshToken, {
-          httpOnlyCookie: true,
+          httpOnlyCookie: false,
           secure: false,
           path: "/",
           sameSite: "strict",
         });
         res.cookie("accessToken", accessToken, {
-          httpOnlyCookie: true,
+          httpOnlyCookie: false,
           secure: false,
           path: "/",
           sameSite: "strict",
         });
         res.cookie("id", user.id, {
-          httpOnlyCookie: true,
+          httpOnlyCookie: false,
           secure: false,
           path: "/",
           sameSite: "strict",

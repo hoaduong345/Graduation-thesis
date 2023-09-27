@@ -670,6 +670,8 @@ function Form2() {
     }, [param]);
 
     const [showPassword, setShowPassword] = useState(false);
+    const [showPassword2, setShowPassword2] = useState(false);
+    const [showPassword3, setShowPassword3] = useState(false);
     const [formData2, setFormData2] = useState({
         username: '',
         password: '',
@@ -682,6 +684,14 @@ function Form2() {
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
+    };
+
+    const toggleShowPassword2 = () => {
+        setShowPassword2(!showPassword2);
+    };
+
+    const toggleShowPassword3 = () => {
+        setShowPassword3(!showPassword3);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -855,16 +865,16 @@ function Form2() {
                                                                 <button
                                                                     type='button'
                                                                     className='absolute right-4 top-8 transform -translate-y-1/2 text-gray-500'
-                                                                    onClick={toggleShowPassword}
+                                                                    onClick={toggleShowPassword2}
                                                                 >
-                                                                    {showPassword ? (
+                                                                    {showPassword2 ? (
                                                                         <ShowPass />
                                                                     ) : (
                                                                         <HidePass />
                                                                     )}
                                                                 </button>
                                                                 <input className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 border-[1px] border-[#FFAAAF]" id="password"
-                                                                    type={showPassword ? 'text' : 'password'}
+                                                                    type={showPassword2 ? 'text' : 'password'}
                                                                     onChange={field.onChange}
                                                                     value={field.value}
                                                                     placeholder='Mật khẩu mới'
@@ -893,16 +903,16 @@ function Form2() {
                                                                 <button
                                                                     type='button'
                                                                     className='absolute right-4 top-8 transform -translate-y-1/2 text-gray-500'
-                                                                    onClick={toggleShowPassword}
+                                                                    onClick={toggleShowPassword3}
                                                                 >
-                                                                    {showPassword ? (
+                                                                    {showPassword3 ? (
                                                                         <ShowPass />
                                                                     ) : (
                                                                         <HidePass />
                                                                     )}
                                                                 </button>
                                                                 <input className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 border-[1px] border-[#FFAAAF]" id="password"
-                                                                    type={showPassword ? 'text' : 'password'}
+                                                                    type={showPassword3 ? 'text' : 'password'}
                                                                     onChange={field.onChange}
                                                                     value={field.value}
                                                                     placeholder='Xác nhận mật khẩu mới'

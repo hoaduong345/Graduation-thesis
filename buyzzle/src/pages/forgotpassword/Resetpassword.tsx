@@ -17,8 +17,14 @@ import * as yup from 'yup';
 import { ToastContainer, toast } from "react-toastify";
 function Resetpassword() {
     const [showPassword, setShowPassword] = useState(false);
+    const [showPassword2, setShowPassword2] = useState(false);
+
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
+    };
+
+    const toggleShowPassword2 = () => {
+        setShowPassword2(!showPassword2);
     };
 
     const params = useParams();
@@ -156,7 +162,7 @@ function Resetpassword() {
                                 <div className='mb-4'>
                                     <div className='relative flex '>
                                         <input
-                                            type={showPassword ? 'text' : 'password'}
+                                            type={showPassword2 ? 'text' : 'password'}
                                             id="confirmPassword"
                                             className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                             placeholder="Xác nhận mật khẩu"
@@ -166,9 +172,9 @@ function Resetpassword() {
                                         <button
                                             type='button'
                                             className='absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500'
-                                            onClick={toggleShowPassword}
+                                            onClick={toggleShowPassword2}
                                         >
-                                            {showPassword ? (
+                                            {showPassword2 ? (
                                                 <svg
                                                     xmlns='http://www.w3.org/2000/svg'
                                                     className='h-5 w-5 cursor-pointer'
