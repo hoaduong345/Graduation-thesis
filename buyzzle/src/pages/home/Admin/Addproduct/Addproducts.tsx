@@ -365,7 +365,7 @@ export default function Addproducts() {
 
                                         <Controller control={control} name='productImage' render={({ }) => (
                                             <>
-                                                <div className='flex'>
+                                                <div className='flex max-[1300px]:gap-3'>
                                                     {/* form upload img */}
                                                     <div className='max-w-max items-center'>
                                                         <label htmlFor="images">
