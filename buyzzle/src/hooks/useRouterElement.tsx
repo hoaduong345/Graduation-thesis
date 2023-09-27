@@ -21,6 +21,7 @@ import Category from "../pages/home/Admin/Category/Category";
 import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
 import Cart from "../pages/home/User/CartPage/Cart";
 import OrderHistory from "../pages/home/User/OrderHistoryPage/OrderHistory";
+import CheckOut from "../pages/home/User/CheckoutPage/CheckOut";
 
 
 export default function useRouterEmelent() {
@@ -108,6 +109,14 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <OrderHistory />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "checkout",
+      element: (
+        <MainLayout>
+          <CheckOut />
         </MainLayout>
       ),
     },

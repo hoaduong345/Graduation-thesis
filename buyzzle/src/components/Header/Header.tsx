@@ -182,10 +182,10 @@ export default function Header() {
                 <li>
                   <Link to="/orderhistory">orderhistory</Link>
                 </li>
-                {/*  <li>
-                  <a href="#">Sữa Baby</a>
-                </li>
                 <li>
+                  <a href="/checkout">check out</a>
+                </li>
+                {/*  <li>
                   <a href="#">Sữa Baby</a>
                 </li>
                 <li>
