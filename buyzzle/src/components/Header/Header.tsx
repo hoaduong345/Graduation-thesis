@@ -179,10 +179,10 @@ export default function Header() {
                 <li>
                   <Link to="/UserProfilePage">UserProfilePage</Link>
                 </li>
-                {/* <li>
-                  <Link to="/Detailproducts">Detailproducts</Link>
-                </li>
                 <li>
+                  <Link to="/orderhistory">orderhistory</Link>
+                </li>
+                {/*  <li>
                   <a href="#">Sữa Baby</a>
                 </li>
                 <li>

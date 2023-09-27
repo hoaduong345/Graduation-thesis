@@ -19,7 +19,8 @@ import path from "../contants/path";
 import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
 import Category from "../pages/home/Admin/Category/Category";
 import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
-import Cart from "../pages/home/User/Cart/Cart";
+import Cart from "../pages/home/User/CartPage/Cart";
+import OrderHistory from "../pages/home/User/OrderHistoryPage/OrderHistory";
 
 
 export default function useRouterEmelent() {
@@ -99,6 +100,14 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <Cart />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderhistory",
+      element: (
+        <MainLayout>
+          <OrderHistory />
         </MainLayout>
       ),
     },
