@@ -72,6 +72,7 @@ export const Images = {
   BannerQC: "../../../src/pages/home/Admin/Assets/Images/bannerQC.png",
   imgProduct: "../../../src/pages/home/Admin/Assets/Images/imgProduct.jpg",
   cateAD: "../src/Assets/PNG/cate.png",
+  Avtcmt: "../src/Assets/Images/Avtcmt.png",
 
 };
 

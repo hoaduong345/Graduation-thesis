@@ -36,13 +36,14 @@ export default function EditProductMap() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const editorRef = useRef<any>(null);
-
+    const [categoty, setCategory] = useState<Cate[]>([])
     const [editImages, setEditImages] = useState<string[]>([])
 
     const {
         control,
         handleSubmit,
         watch,
+        reset,
         formState: { errors, isDirty, isValid },
         register
     } = useForm<FormValues>({
@@ -54,10 +55,17 @@ export default function EditProductMap() {
             description: "",
             discount: 1,
         },
-
     });
 
-    const [categoty, setCategory] = useState<Cate[]>([])
+    const handleRemoveOnlyIMG = (id: number) => {
+        imagesController.remove(id).then((_) => {
+            getListIMG()
+            console.log(id)
+        }).catch((err) => {
+            console.log("🚀 ~ file: EditProductMap.tsx:62 ~ imagesController.remove ~ err:", err)
+        })
+    }
+
     useEffect(() => {
         getCategory()
     }, [])
@@ -78,17 +86,30 @@ export default function EditProductMap() {
 
     const submitData = (data: any) => {
         console.log(data);
-
-        productController.update(id, data).then(() => {
+        productController.update(id, data).then(async (responseData) => {
+            console.log("🚀 ~ file: EditProductMap.tsx:90 ~ productController.update ~ responseData:", responseData)
             toast.success('Sua sanr phaarm thanhf coong !', {
                 position: "bottom-right"
             })
+            for (let i = 0; i < url.length; i++) {
+                await updateImages(responseData?.data.id, url[i])
+            }
+            reset({})
         }).catch(() => {
             toast.error('Sua sanr phaarm that bai !')
         })
     }
 
-    useEffect(() => {
+    const updateImages = async (id: number, url: string) => {
+        const urlImages = {
+            idproduct: id,
+            url: url
+        }
+        await axios.post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
+            .then(response => response.data)
+
+    }
+    const getListIMG = () => {
         axios.get(`${appConfig.apiUrl}/chitietproduct/${id}`)
             .then((detailForm) => {
                 return detailForm
@@ -99,6 +120,9 @@ export default function EditProductMap() {
             }).catch(error => {
                 console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
             })
+    }
+    useEffect(() => {
+        getListIMG();
     }, [])
 
 
@@ -342,8 +366,10 @@ export default function EditProductMap() {
                                                             opacity-0 transition duration-300 ease-in-out group-hover:opacity-20'>
                                                                             </div>
                                                                             <div className='transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute'
-                                                                                onClick={() => console.log('an không ?')}>
-                                                                                <RemoveIMG />
+                                                                            >
+                                                                                <button onClick={() => handleRemoveOnlyIMG(e.id)}>
+                                                                                    <RemoveIMG />
+                                                                                </button>
                                                                             </div>
                                                                         </div>
                                                                     </div>

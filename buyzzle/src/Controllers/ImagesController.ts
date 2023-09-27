@@ -26,8 +26,12 @@ class ImagesController {
     remove = async (id: number) => {
         return await axios.delete(`${appConfig.apiUrl}/deleteimagesbyproductid/${id}`)
     }
-    update = async (id: number, data: FormValues) => {
-        return await axios.put(`${appConfig.apiUrl}/updateimagesbyproductid/${id}`, data)
+    update = async (id: number, url: string) => {
+        const urlImages = {
+            idproduct: id,
+            url: url
+        }
+        return await axios.put(`${appConfig.apiUrl}/updateimagesbyproductid/${id}`, urlImages)
     }
 }
 

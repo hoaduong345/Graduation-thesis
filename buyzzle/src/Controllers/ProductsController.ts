@@ -34,7 +34,6 @@ class ProductController {
     update = async (id: number, data: FormValues) => {
         return await axios.put(`${appConfig.apiUrl}/updateproduct/${id}`, data)
     }
-
 }
 
 export const productController = new ProductController()

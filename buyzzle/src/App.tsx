@@ -1,7 +1,6 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRouteElements from "./hooks/useRouterElement";
-
 import "./App.css";
 
 function App() {
@@ -9,7 +8,7 @@ function App() {
 
   return (
     <>
-      <ToastContainer/>
+      <ToastContainer />
       <div>{routeElements}</div>
     </>
   );

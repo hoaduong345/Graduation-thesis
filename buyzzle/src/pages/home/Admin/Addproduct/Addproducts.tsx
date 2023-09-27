@@ -24,7 +24,6 @@ export type FormValues = {
     productImage: string;
     productDiscount: number;
 }
-
 export interface Cate {
     id: number
     name: string,
@@ -107,7 +106,6 @@ export default function Addproducts() {
     }
 
     const addImages = async (id: number, url: string) => {
-
         const urlImages = {
             idproduct: id,
             url: url

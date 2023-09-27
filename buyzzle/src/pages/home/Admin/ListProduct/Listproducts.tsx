@@ -16,7 +16,8 @@ import { toast } from 'react-toastify'
 import { productController } from "../../../../Controllers/ProductsController"
 import { async } from "@firebase/util"
 import { imagesController } from "../../../../Controllers/ImagesController"
-
+import MenuShare from "../../../../Assets/TSX/Menu-Share"
+import { IonIcon } from '@ionic/react';
 export default function ListproductsAdmin() {
 
   const [products, setProducts] = useState<Products[]>([])
@@ -52,31 +53,58 @@ export default function ListproductsAdmin() {
     // })
   }
 
+  const [open, setOpen] = useState(false)
+  const openModal = () => {
+    const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+      setOpen(!open)
+    }
+  };
+
+
   return (
     <>
       <Container>
+        <div className="float-right cursor-pointer max-[1920px]:invisible max-2xl:visible"
+          onClick={() => openModal()}>
+          <IonIcon className="text-[2rem]" name='menu'></IonIcon>
+        </div>
         <div className='grid grid-cols-5'>
-          <div className="col-span-1 max-2xl:hidden">
-            <SitebarAdmin />
+          <div className={`col-span-1 max-2xl:z-[-1] max-2xl:right-28
+          transition-all duration-500 ease-in ${open ? 'top-20' : 'top-[-800px]'}`}>
+            {/* You can open the modal using document.getElementById('ID').showModal() method */}
+            <dialog id="my_modal_3" className="max-2xl:modal ">
+              <SitebarAdmin />
+            </dialog>
+            <div className="max-2xl:hidden">
+              <SitebarAdmin />
+            </div>
+
           </div>
-          <div className='content-right-filter mt-[34px] col-span-4 max-2xl:col-span-1 '>
+          <div className='content-right-filter mt-[34px] col-span-4 max-2xl:col-span-5 '>
             {/* h2 */}
             <div>
-              <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl" >
+              <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl" >
                 DANH SÁCH SẢN PHẨM
               </h2>
             </div>
             {/* end h2 */}
             <div className='grid gap-4 grid-cols-9 mt-12'>
-              <div className='col-span-2 ml-20'>
-                <div className='flex items-center w-[196px] rounded-md h-[46px] bg-[#EA4B48] justify-evenly cursor-pointer'>
+              <div className='col-span-2'>
+                <div className='flex items-center w-[196px] rounded-md h-[46px] bg-[#EA4B48] justify-evenly cursor-pointer
+                max-2xl:w-[166px]
+                max-2xl:h-[46px]
+                '>
                   <PlusSquare />
-                  <button className='text-center text-base font-bold text-white '>
+                  <button className='text-center text-base font-bold text-white 
+                  max-2xl:text-sm 
+                  '>
                     Thêm sản phẩm
                   </button>
                 </div>
               </div>
-              <div className='flex col-span-7 justify-around ml-20'>
+              <div className='flex col-span-7 justify-around ml-20 max-2xl:col-span-7 max-2xl:pl-32'>
                 {/* input */}
                 <div className="items-center ">
                   <div
@@ -91,7 +119,6 @@ export default function ListproductsAdmin() {
                     />
                   </div>
                 </div>
-
                 <div>
                   <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer'>
                     <StatisticalAdmin />
@@ -139,7 +166,7 @@ export default function ListproductsAdmin() {
                 <h3 className='text-[#1A1A1A] text-sm font-semibold leading-4'>ĐÁNH GIÁ</h3>
               </div>
             </div>
-            <div>
+            <div >
               {
                 products.length > 0 ?
                   products?.map((items) => {

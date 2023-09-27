@@ -13,11 +13,22 @@ import { Images } from '../../../../Assets/TS'
 import { Link } from 'react-router-dom'
 
 export default function SitebarAdmin() {
+  const closeModal = () => {
+    const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+  };
   return (
-    <div className='mt-28 py-8 px-5 w-56 h-[587px] rounded-[6px] mb-5
+    <div className='mt-28 py-8 px-5 w-56 h-[587px] rounded-[6px] mb-5 bg-white relative
       shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
       '>
-
+      <button
+        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        onClick={closeModal}
+      >
+        ✕
+      </button>
       {/* homeIconSitebar */}
       <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
        hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
