@@ -91,7 +91,7 @@ export default function CheckOut() {
                                                         {/* if there is a button in form, it will close the modal */}
                                                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                                     </form>
-                                                    <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4 max-[870px]:text-xs">Thay Đổi Địa Chỉ</h1>
+                                                    <h1 className="text-[#EA4B48] text-sm font-lg font-bold tracking-normal leading-tight border-b-[1px] pb-4 mb-4 max-[870px]:text-xs">Địa Chỉ Của Tôi</h1>
                                                     <input id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Nhập địa chỉ của bạn" />
                                                     <button className="max-[870px]:text-xs focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-[#7879F1] rounded text-white px-8 py-2 text-sm">Xác Nhận</button>
                                                     <button className="max-[870px]:text-xs focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm">Hủy</button>
