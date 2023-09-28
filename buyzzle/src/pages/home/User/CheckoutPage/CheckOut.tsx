@@ -208,21 +208,21 @@ export default function CheckOut() {
                                             <h4 className="text-base text-[#4C4C4C] font-bold max-[870px]:text-[13px]">Phương Thức Thanh Toán</h4>
                                             <div className="flex flex-col gap-[10px]">
                                                 <div className="flex gap-3 items-center">
-                                                    <input className="max-lg:w-[10px]" type="checkbox" onChange={() => setChooseMoMo(!chooseMomo)} checked={chooseMomo} />
+                                                    <input className="max-lg:w-[10px]" name="choose" type="radio" onChange={() => setChooseMoMo(!chooseMomo)} checked={chooseMomo} />
                                                     <div className="w-6">
                                                         <img className="w-full h-full object-contain" src={Images.momo} alt="" />
                                                     </div>
                                                     <p className={`max-lg:text-[10px] ${chooseMomo ? 'text-[#393939]' : 'text-[#9c9c9c]'}`}>Thanh toán bằng ví Momo</p>
                                                 </div>
                                                 <div className="flex gap-3 items-center">
-                                                    <input className="max-lg:w-[10px]" type="checkbox" onChange={() => setChooseZalo(!chooseZalo)} checked={chooseZalo} />
+                                                    <input className="max-lg:w-[10px]" name="choose" type="radio" onChange={() => setChooseZalo(!chooseZalo)} checked={chooseZalo} />
                                                     <div className="w-6">
                                                         <img className="w-full h-full object-contain" src={Images.zalo} alt="" />
                                                     </div>
                                                     <p className={`max-lg:text-[10px] ${chooseZalo ? 'text-[#393939]' : 'text-[#9c9c9c]'}`}>Thanh toán bằng ví ZaloPay</p>
                                                 </div>
                                                 <div className="flex gap-3 items-center">
-                                                    <input className="max-lg:w-[10px]" type="checkbox" onChange={() => setChooseCOD(!chooseCOD)} checked={chooseCOD} />
+                                                    <input className="max-lg:w-[10px]" name="choose" type="radio" onChange={() => setChooseCOD(!chooseCOD)} checked={chooseCOD} />
                                                     <div className="w-6">
                                                         <img className="w-full h-full object-contain" src={Images.nhanHang} alt="" />
                                                     </div>
