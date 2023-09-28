@@ -19,9 +19,12 @@ import { imagesController } from "../../../../Controllers/ImagesController"
 import MenuShare from "../../../../Assets/TSX/Menu-Share"
 import { IonIcon } from '@ionic/react';
 import useDebounce from "../../../../useDebounceHook/useDebounce"
+import { Cate } from "../Addproduct/Addproducts"
 export default function ListproductsAdmin() {
 
   const [products, setProducts] = useState<Products[]>([])
+  const [idCate, setidCate] = useState<Cate>()
+  console.log("🚀 ~ file: Listproducts.tsx:27 ~ ListproductsAdmin ~ idCate:", idCate)
   const [search, setSearch] = useState('')
   const debouncedInputValue = useDebounce(search, 400); // Debounce for 300 milliseconds
 
@@ -30,7 +33,7 @@ export default function ListproductsAdmin() {
   useEffect(() => {
     getData(debouncedInputValue)
     if (search.toString()) {
-      productController.getList(debouncedInputValue.toString()).then((res) => {
+      productController.getSearchProduct(debouncedInputValue.toString()).then((res) => {
         setProducts(res)
       })
     } else {
@@ -46,7 +49,7 @@ export default function ListproductsAdmin() {
   }, [debouncedInputValue])
 
   const getData = (value: any) => {
-    productController.getList(value.toString()).then((res) => {
+    productController.getSearchProduct(value.toString()).then((res) => {
       setProducts(res)
     })
   }

@@ -15,6 +15,7 @@ import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 import axios from "axios";
 import { productController } from "../../../../Controllers/ProductsController";
+import { useParams } from "react-router-dom";
 export interface Cate {
   id: number
   name: string
@@ -42,12 +43,16 @@ export interface Products {
 export default function FiltersPage() {
   const [products, setProducts] = useState<Products[]>([])
 
+  const { id } = useParams()
+  const idCate = Number(id)
+  console.log("🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:", idCate)
+
   useEffect(() => {
     getData()
   }, [])
 
   const getData = () => {
-    productController.getList("").then((res) => {
+    productController.getList("", idCate).then((res) => {
       setProducts(res)
     })
   }

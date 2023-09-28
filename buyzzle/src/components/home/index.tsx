@@ -9,6 +9,7 @@ import Progess from "./components/progess";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Cate } from "../../pages/home/Admin/Category/Category";
+import { Link } from "react-router-dom";
 
 export type Product = {
   id: number;
@@ -95,6 +96,8 @@ function Index() {
       .catch(err => console.log(err))
   }
 
+
+
   useEffect(() => {
     getCategory()
   }, [])
@@ -146,13 +149,13 @@ function Index() {
 
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Danh mục:</h1>
-
           <div className="flex flex-wrap gap-[35px] justify-center">
             {
               categoty.map(e => {
-                return <Category img={e.image} title={e.name} />
+                return <Category id={e.id} img={e.image} title={e.name} />
               })
             }
+
             {/* <Category img={Images.Category1} title="Thiết bị điện gia dụng" />
             <Category img={Images.Category2} title="Giày dép da" />
             <Category img={Images.Category3} title="Đồng hồ" />
@@ -167,6 +170,7 @@ function Index() {
             <Category img={Images.Category11} title="Sắc đẹp" />
             <Category img={Images.Category12} title="Nhà cửa đời sống" /> */}
           </div>
+
         </div>
 
         <div className="container my-[60px] ">
