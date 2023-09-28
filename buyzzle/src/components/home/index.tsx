@@ -6,6 +6,9 @@ import Products from "./components/Product";
 
 import SlidesHome from "./components/slides/SlidesHome/SlidesHome";
 import Progess from "./components/progess";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Cate } from "../../pages/home/Admin/Category/Category";
 
 export type Product = {
   id: number;
@@ -27,6 +30,10 @@ export type FlashSaleList = {
 }
 
 function Index() {
+
+
+  const [categoty, setCategory] = useState<Cate[]>([])
+
   const products: Product[] = [
     {
       id: 1,
@@ -78,6 +85,20 @@ function Index() {
     },
   ];
 
+  const getCategory = () => {
+    axios.get('http://localhost:5000/buyzzle/product/allcategory')
+      .then(response => response.data
+      )
+      .then(data => {
+        setCategory(data)
+      })
+      .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    getCategory()
+  }, [])
+
   return (
     <>
       <Container>
@@ -127,7 +148,12 @@ function Index() {
           <h1 className="text-2xl font-bold mb-[15px]">Danh mục:</h1>
 
           <div className="flex flex-wrap gap-[35px] justify-center">
-            <Category img={Images.Category1} title="Thiết bị điện gia dụng" />
+            {
+              categoty.map(e => {
+                return <Category img={e.image} title={e.name} />
+              })
+            }
+            {/* <Category img={Images.Category1} title="Thiết bị điện gia dụng" />
             <Category img={Images.Category2} title="Giày dép da" />
             <Category img={Images.Category3} title="Đồng hồ" />
             <Category img={Images.Category4} title="Máy ảnh" />
@@ -139,7 +165,7 @@ function Index() {
             <Category img={Images.Category9} title="Giày dép nữ" />
             <Category img={Images.Category10} title="Sức khỏe" />
             <Category img={Images.Category11} title="Sắc đẹp" />
-            <Category img={Images.Category12} title="Nhà cửa đời sống" />
+            <Category img={Images.Category12} title="Nhà cửa đời sống" /> */}
           </div>
         </div>
 
