@@ -6,7 +6,6 @@ import Search from "../../../../Assets/TSX/Search";
 import Download from "../Assets/TSX/Download";
 import Delete from "../Assets/TSX/Delete";
 import Line from "../Assets/TSX/Line";
-import { Images } from "../../../../Assets/TS";
 import Plus from "../../../../Assets/TSX/Plus";
 import Handle from "../Assets/TSX/bacham";
 import RemoveCate from "../Assets/TSX/RemoveCate";
@@ -15,12 +14,16 @@ import UploadIMG from "../Assets/TSX/UploadIMG";
 import { toast } from "react-toastify";
 import LogoCate from "../Assets/TSX/logoCateAdmin";
 import AddCateBtn from "../Assets/TSX/AddCateAdmin";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../../../Firebase/Config";
+import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 
 
 export interface Cate {
     id: number,
     name: string,
+    image: string
 }
 
 type FormValues = {
@@ -32,6 +35,9 @@ type FormValues = {
 function Category() {
 
     const [category, setCategory] = useState<Cate>({} as Cate);
+
+    const [images, setImages] = useState('')
+    const [url, setUrl] = useState<string>()
     // const [editProduct, setEditProduct] = useState<FormValues>()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -39,14 +45,67 @@ function Category() {
         setCategory({ ...category, name: e.target.value });
     };
 
+    useEffect(() => {
+        loadImageFile(images)
+    }, [images])
+
+
+    // img firebase
+    const loadImageFile = async (images: any) => {
+        for (let i = 0; i < images.length; i++) {
+            const imageRef = ref(storage, `multipleFiles/${images[i].name}`)
+
+            await uploadBytes(imageRef, images[i])
+                .then(() => {
+                    storage.ref('multipleFiles').child(images[i].name).getDownloadURL()
+                        .then((url: any) => {
+                            setUrl(url);
+                            return url
+                        })
+                })
+                .catch(err => {
+                    alert(err)
+                })
+        }
+    }
+
+    const renderImg = () => {
+        if (url) {
+            return (
+                <div className='group relative'>
+                    <img src={url} alt="imageproduct6" width={80} height={80} className='rounded-md' />
+                    <div className='absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+                                                                    opacity-0 transition duration-300 ease-in-out group-hover:opacity-20'>
+                    </div>
+                    <div className='transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute'
+                        onClick={() => console.log('an không ?')}>
+                        <RemoveIMG />
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <>
+                    <UploadIMG />
+                    <div id="images" className='text-center mt-2'>
+                        <p className='text-[#5D5FEF] text-center text-base -tracking-tighter font-bold max-xl:text-xs max-lg:text-[8px]'>Click to upload
+                            <p className='text-[#1A1A1A] font-normal text-base tracking-widest max-xl:text-xs max-lg:text-[8px]'>or drag and drop</p></p>
+                    </div>
+
+                </>
+
+            )
+        }
+    }
+
 
     const {
-        control,
+        // control,
         // handleSubmit,
         // resetField,
         // watch,
         // reset,
-        formState: { errors, isValid, isDirty },
+        // formState: { errors, isValid, isDirty },
     } = useForm<FormValues>({
         mode: 'all',
         defaultValues:
@@ -57,12 +116,12 @@ function Category() {
         },
 
     });
-    const isDisabled = !(isValid && isDirty)
+    // const isDisabled = !(isValid && isDirty)
 
     const handleSubmit = () => {
         closeModal()
         if (category.id != 0 && category.id != undefined) {
-            axios.put(`http://localhost:5000/buyzzle/product/updatecategory/${category.id}`, { name: category.name })
+            axios.put(`http://localhost:5000/buyzzle/product/updatecategory/${category.id}`, { name: category.name, image: url })
                 .then(response => {
                     return response
                 })
@@ -70,7 +129,7 @@ function Category() {
                     toast.success('Update Complete!!')
                     console.log(data);
                     getList()
-                    setCategory({ name: '', id: 0 })
+                    setCategory({ name: '', id: 0, image: '' })
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -78,7 +137,7 @@ function Category() {
 
                 });
         } else {
-            axios.post('http://localhost:5000/buyzzle/product/addcategory', { name: category.name })
+            axios.post('http://localhost:5000/buyzzle/product/addcategory', { name: category.name, image: url })
                 .then(response => {
                     return response
                 })
@@ -86,7 +145,7 @@ function Category() {
                     toast.success('New Category Complete!!')
                     console.log(data);
                     getList()
-                    setCategory({ name: '', id: 0 })
+                    setCategory({ name: '', id: 0, image: '' })
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -96,43 +155,7 @@ function Category() {
         }
 
     };
-    // const handleCreate = () => {
-    //     closeModal()
-    //     if (category.id != 0 && category.id != undefined) {
-    //         axios.put(`http://localhost:5000/buyzzle/product/updatecategory/${category.id}`, { name: category.name })
-    //             .then(response => {
-    //                 return response
-    //             })
-    //             .then(data => {
-    //                 toast.success('Update Complete!!')
-    //                 console.log(data);
-    //                 getList()
-    //                 setCategory({ name: '', id: 0 })
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error:', error);
-    //                 // Xử lý lỗi nếu có
 
-    //             });
-    //     } else {
-    //         axios.post('http://localhost:5000/buyzzle/product/addcategory', { name: category.name })
-    //             .then(response => {
-    //                 return response
-    //             })
-    //             .then(data => {
-    //                 toast.success('New Category Complete!!')
-    //                 console.log(data);
-    //                 getList()
-    //                 setCategory({ name: '', id: 0 })
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error:', error);
-    //                 // Xử lý lỗi nếu có
-
-    //             });
-    //     }
-
-    // };
 
     const remove = (id: number) => {
         axios.delete(`http://localhost:5000/buyzzle/product/deletecategory/${id}`)
@@ -148,10 +171,6 @@ function Category() {
                 alert(error)
             });
     };
-
-    // const update = (cate: Cate) => {
-    //     setCategory(cate)
-    // }
 
 
     const [categorys, setCategorys] = useState<Cate[]>([])
@@ -339,16 +358,17 @@ function Category() {
                                                             <label htmlFor="images">
                                                                 <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2'>
                                                                     <input type="file"
-                                                                        // onChange={(e: any) => setImages(e.target.files)}
+                                                                        onChange={(e: any) => setImages(e.target.files)}
                                                                         id='images' multiple className='hidden ' />
-                                                                    <UploadIMG />
-                                                                    <div id="images" className='text-center mt-2'>
-                                                                        <p className='text-[#5D5FEF] text-center text-base -tracking-tighter font-bold max-xl:text-xs max-lg:text-[8px]'>Click to upload
-                                                                            <p className='text-[#1A1A1A] font-normal text-base tracking-widest max-xl:text-xs max-lg:text-[8px]'>or drag and drop</p></p>
-                                                                    </div>
+                                                                    {
+                                                                        renderImg()
+                                                                    }
+
                                                                 </div>
                                                             </label>
+
                                                         </div>
+
                                                         {/* <div className={`flex gap-2 items-center 
                                                          ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} `}>
                                                             <button disabled={isDisabled} onClick={handleCreate} className={`text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] rounded-md border-[1px]
@@ -423,7 +443,7 @@ function Category() {
                                                         <input type="checkbox" />
                                                     </div>
                                                     <div>
-                                                        <img src={Images.cateAD} alt="" />
+                                                        <img className="w-[50px]" src={e.image} alt="" />
                                                     </div>
                                                 </div>
                                                 <div className="col-span-5 border-[#e0e0e0] h-20 border-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]">
