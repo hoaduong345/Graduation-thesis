@@ -41,11 +41,13 @@ const ProductController = {
   addCategory: async (req, res) => {
     try {
       const { name } = req.body;
+      const { image } = req.body;
 
       // Tạo danh mục mới
       const newCategory = await prisma.category.create({
         data: {
           name,
+          image,
         },
       });
 
@@ -85,6 +87,7 @@ const ProductController = {
     try {
       const categoryId = parseInt(req.params.id);
       const name = req.body.name;
+      const image = req.body.image;
 
       // Kiểm tra xem danh mục tồn tại hay không
       const existingCategory = await prisma.category.findUnique({
@@ -102,6 +105,7 @@ const ProductController = {
         },
         data: {
           name,
+          image,
         },
       });
 
