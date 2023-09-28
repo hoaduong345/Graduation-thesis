@@ -79,7 +79,7 @@ model Product {
   categoryID   Int?
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
-   ProductImage ProductImage[]   
+  ProductImage ProductImage[]   
   itemCarts    ItemCart[]
 }
 
@@ -91,8 +91,11 @@ model Category {
   date      DateTime? @default(now())
   updatedAt DateTime? @default(now())
   createdAt DateTime? @default(now())
+  image String?
   products  Product[]
 }
+
+
 
 model ItemCart {
   id         Int        @id @default(autoincrement())
@@ -116,7 +119,7 @@ model CartSchema {
 }
 
 model ProductImage {
-id               Int      @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   url              String?
   idproduct        Int?
   fK_propductImage Product? @relation(fields: [idproduct],  references: [id], onDelete: Cascade)

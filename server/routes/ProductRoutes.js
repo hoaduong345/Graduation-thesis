@@ -17,7 +17,7 @@ router.get("/chitietproduct/:id", ProductController.getProductDetail);
 
 router.get("/allproducts", ProductController.getAllProduct);
 
-router.get("/paginated", ProductController.getProductsPaginated);
+// router.get("/paginated", ProductController.getProductsPaginated);
 
 // router.get("/search", ProductController.searchProducts);
 

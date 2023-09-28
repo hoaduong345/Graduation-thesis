@@ -377,12 +377,6 @@ const ProductController = {
   getProductDetail: async (req, res) => {
     try {
       const productId = parseInt(req.params.id);
-
-      // const productDetail = await prisma.product.findUnique({
-      //    where: {
-      //       id: productId,
-      //    },
-      // });
       const productDetail = await prisma.product.findFirst({
         include: {
           ProductImage: true,
@@ -406,70 +400,35 @@ const ProductController = {
     try {
       // tìm kiếm = keyword
       const keyword = req.query.keyword;
-      console.log(
-        "🚀 ~ file: ProductController.js:407 ~ getAllProduct: ~ name:",
-        keyword
-      );
-      // tìm kiếm sản phẩm = keyword nằm trong danh mục
-      const { findProductWithCate } = req.query;
-      console.log(
-        "🚀 ~ file: ProductController.js:415 ~ getAllProduct: ~ findProductWithCate:",
-        findProductWithCate
-      );
+      const page = parseInt(req.query.page) || 1;
+      const pageSize = parseInt(req.query.pageSize) || 5;
+      const categoryId = req.query.categoryId;
+
+      const skip = (page - 1) * pageSize;
+
+      const whereClause = {
+        name: {
+          contains: keyword,
+        },
+      };
+
+      if (categoryId) {
+        whereClause.fK_category = {
+          id: parseInt(categoryId),
+        };
+      }
+
       const result = await prisma.product.findMany({
         include: {
           ProductImage: true,
           fK_category: true,
         },
-        where: {
-          name: {
-            contains: keyword,
-          },
-          fK_category: {
-            name: findProductWithCate,
-          },
-        },
-      });
-      res.status(200).json(result);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error.message);
-    }
-  },
-
-  // Phân trang
-  getProductsPaginated: async (req, res) => {
-    try {
-      const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 10;
-
-      const skip = (page - 1) * pageSize;
-      const products = await prisma.product.findMany({
+        where: whereClause,
         skip,
         take: pageSize,
       });
 
-      res.status(200).json(products);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error.message);
-    }
-  },
-
-  // tìm kiếm sp
-  searchProducts: async (req, res) => {
-    try {
-      const keyword = req.query.keyword || "";
-
-      const products = await prisma.product.findMany({
-        where: {
-          OR: [
-            { name: { contains: keyword.toLowerCase() } }, // Sử dụng toLowerCase để tìm kiếm không phân biệt chữ hoa chữ thường
-          ],
-        },
-      });
-
-      res.status(200).json(products);
+      res.status(200).json(result);
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
