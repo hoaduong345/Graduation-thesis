@@ -61,83 +61,113 @@ export default function FiltersPage() {
             }} />
           </div>
           {/* content-right-filter */}
-          <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1">
-            <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl" >
-              THƯƠNG HIỆU NỔI TIẾNG:
-            </h2>
+          <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">
+            <div className="max-lg:hidden">
+              <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-xl:text-2xl max-lg:text-xl" >
+                THƯƠNG HIỆU NỔI TIẾNG:
+              </h2>
 
-            {/* thuong hieu noi tieng */}
-            <div className="flex  w-[100%] justify-start gap-10 mt-[34px] max-2xl:justify-around">
-              <div className="square border border-[#FFAAAF] cursor-pointer px-14 pt-[15px]">
-                <img
-                  src="https://www.freepnglogos.com/uploads/starbucks-logo-png-25.png"
-                  width="90"
-                  alt="starbucks logo png"
-                />
-              </div>
-              <div className="square border border-[#FFAAAF] px-14 py-[10px] cursor-pointer">
-                <img
-                  src={Images.unilever}
-                  width="90"
-                  alt="adidas logo png white images"
-                />
-              </div>
-              <div className="square border border-[#FFAAAF] px-12 pt-[14px]  cursor-pointer">
-                <img
-                  src={Images.Puma}
-                  width="130"
-                  alt="adidas logo png white images"
-                />
-              </div>
-              <div className="square border border-[#FFAAAF] px-14 pt-[29px]  cursor-pointer">
-                <img
-                  src="https://www.freepnglogos.com/uploads/adidas-logo-png-white-images-11.png"
-                  width="100"
-                  alt="adidas logo png white images"
-                />
+              {/* thuong hieu noi tieng */}
+              <div className="flex  w-[100%] justify-start gap-10 mt-[34px] max-2xl:justify-around max-lg:hidden">
+                <div className="square border border-[#FFAAAF] cursor-pointer px-14 pt-[15px] max-2xl:px-[66px] max-2xl:py-[25px]
+              max-xl:px-14 max-xl:my-auto">
+                  <img
+                    className="max-2xl:w-[150px] max-xl:w-[180px]"
+                    src="https://www.freepnglogos.com/uploads/starbucks-logo-png-25.png"
+                    width="90"
+                    alt="starbucks logo png"
+                  />
+                </div>
+                <div className="square border border-[#FFAAAF] px-14 py-[10px] cursor-pointer max-2xl:px-[70px] max-2xl:py-[25px]
+              max-xl:px-16 max-xl:my-auto">
+                  <img
+                    className="max-2xl:w-[130px] max-xl:w-[160px]"
+                    src={Images.unilever}
+                    width="90"
+                    alt="adidas logo png white images"
+                  />
+                </div>
+                <div className="square border border-[#FFAAAF] px-12 pt-[14px]  cursor-pointer max-2xl:px-2 max-2xl:py-[19px]
+               max-xl:px-3 max-xl:my-auto">
+                  <img
+                    className="max-2xl:w-[250px] max-xl:w-[310px]"
+                    src={Images.Puma}
+                    width="130"
+                    alt="adidas logo png white images"
+                  />
+                </div>
+                <div className="square border border-[#FFAAAF] px-14 pt-[29px]  cursor-pointer ">
+                  <img
+                    className="max-2xl:w-[180px] max-xl:w-[210px]"
+                    src="https://www.freepnglogos.com/uploads/adidas-logo-png-white-images-11.png"
+                    width="100"
+                    alt="adidas logo png white images"
+                  />
+                </div>
               </div>
             </div>
             <div className="bg-[#FFEAE9] h-[60px] mt-[18px] rounded-[6px] ">
               <div className="txt-content flex">
-                <div className="content-left w-[50.5%] flex items-center justify-start gap-5 h-[60px] max-2xl:w-[52.5%]  max-xl:w-[50.5%]">
-                  <p className="text-[#000000] text-sm ml-5 font-semibold">
+                <div className="content-left w-[50.5%] flex items-center justify-start gap-5 h-[60px]
+                 max-2xl:w-[51.5%] 
+                 max-2xl:gap-7
+                 max-xl:w-[52%]
+                 max-xl:gap-4
+                 max-lg:w-[65%]
+                ">
+                  <p className="text-[#000000] text-sm ml-5 font-semibold max-2xl:text-lg max-lg:">
                     Sắp xếp theo
                   </p>
                   <button
                     type="button"
                     className="transition duration-150 outline outline-2 outline-[#EA4B48]  font-medium
-                   rounded-[6px] text-xs py-[6px] px-[13px] text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#FFAAAF]  "
+                   rounded-[6px] text-xs py-[6px] px-[13px] text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#FFAAAF] 
+                   max-2xl:py-[5px] max-2xl:text-base 
+                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm 
+                   "
                   >
                     Liên Quan
                   </button>
                   <button
                     type="button"
                     className="transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]"
+                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                   max-2xl:py-[5px] max-2xl:text-base 
+                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
                   >
                     Mới Nhất
                   </button>
                   <button
                     type="button"
                     className="transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]"
+                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                   max-2xl:py-[5px] max-2xl:text-base 
+                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
                   >
                     Bán Chạy
                   </button>
                 </div>
-                <div className="content-left flex items-center justify-start gap-5 h-[60px]">
-                  <p className="text-[#000000] font-semibold text-sm">Giá</p>
+
+                <div className="content-left flex items-center justify-start gap-5 h-[60px] 
+                max-2xl:gap-7
+                max-xl:gap-4
+                ">
+                  <p className="text-[#000000] font-semibold text-sm max-2xl:text-lg">Giá</p>
                   <button
                     type="button"
                     className="transition duration-150 outline outline-2 outline-[#EA4B48] hover:bg-[#FFAAAF] font-medium
-                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] bg-white"
+                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] bg-white
+                   max-2xl:py-[5px] max-2xl:text-base 
+                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
                   >
                     Thấp Nhất
                   </button>
                   <button
                     type="button"
                     className="transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]"
+                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                   max-2xl:py-[5px] max-2xl:text-base
+                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
                   >
                     Cao Nhất
                   </button>
@@ -149,8 +179,7 @@ export default function FiltersPage() {
               <SlidesFilter />
             </div>
 
-            <div className="flex flex-wrap mt-[10px] gap-4 w-max-w max-2xl:justify-start max-2xl:mx-[47px]">
-
+            <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
               {products.map((items) => {
                 return (
                   <>

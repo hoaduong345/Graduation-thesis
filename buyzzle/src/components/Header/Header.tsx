@@ -17,14 +17,14 @@ export default function Header() {
 
 
   const user = localStorage.getItem('user');
- 
+
   var username;
   var img;
 
-  
+
 
   if (user != null) {
-   
+
     username = JSON.parse(user).username;
     img = JSON.parse(user).img;
 
@@ -32,7 +32,7 @@ export default function Header() {
     console.log(username.substring(0, 1));
     console.log("USER: " + username, img);
   } else {
-    console.log("Loi");
+    console.log("Chua dang nhap");
   }
   const href = `/userprofilepage/${username}`;
 
@@ -43,13 +43,13 @@ export default function Header() {
         <Container>
           <div className="Header-top bg-white">
             <div className="container mx-auto">
-              <div className="Header-top-content flex justify-between">
+              <div className="Header-top-content flex justify-between max-[426px]:text-[8px]">
                 <div className="content-left flex py-2">
                   <Map />
                   <span className="text-[#4C4C4C] pl-2">Buon Ma Thuot</span>
                 </div>
 
-                <div className="content-right flex items-center gap-2 ">
+                <div className="content-right flex items-center gap-2  ">
                   <div className="content-left flex items-center">
                     <Globe />
                     <span className="text-[#4C4C4C] pl-2">EN</span>
@@ -79,7 +79,7 @@ export default function Header() {
           <div className="Header-center bg-white h-[91px]">
             <div className="container mx-auto">
               <div className="flex items-center justify-between">
-                <div className="p-[10px] ">
+                <div className="p-[10px]  max-[426px]:p-[1px]">
                   <Link to="/">
                     <LogoWeb />
                   </Link>
@@ -96,13 +96,15 @@ export default function Header() {
                       <Search />
                     </div>
                     <input
-                      className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm"
+                      className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm
+                      max-[426px]:text-[6px]  max-[426px]:p-[0]"
                       placeholder="Tìm kiếm..."
                     />
                     <div className="flex items-center">
                       <button
                         className="btn-search bg-[#FFEAE9] p-[7px] rounded-lg font-bold text-[#1A1A1A] 
-                      w-[135px] max-xl:max-w-[70px] max-xl:text-[11px] max-xl:p-[4px] border"
+                      w-[135px] max-xl:max-w-[70px] max-xl:text-[11px] max-xl:p-[4px] border
+                      max-[426px]:text-[6px] max-[426px]:max-w-[40px]  max-[426px]:hidden"
                       >
                         Tìm kiếm
                       </button>
@@ -111,7 +113,7 @@ export default function Header() {
                 </div>
 
                 <div className="items-center flex relative gap-2">
-                  <div className="items-center flex pr-11">
+                  <div className="items-center flex pr-11 max-[769px]:pr-[10px]">
                     <Shoppingcart />
                     <div className="absolute">
                       <Ellips />
@@ -141,9 +143,9 @@ export default function Header() {
 
                     ) : (
                       <div className="flex text-[#1A1A1A] ml-[10px]">
-                        <a href="#">ĐĂNG NHẬP</a>
+                        <a href="/login">ĐĂNG NHẬP</a>
                         <div className="border-[1px] border-[#000000] mx-[20px] " />
-                        <a href="#">ĐĂNG KÍ</a>
+                        <a href="/register">ĐĂNG KÍ</a>
                       </div>
                     )}
 
@@ -157,7 +159,8 @@ export default function Header() {
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
             <div className="container mx-auto">
-              <ul className="flex justify-between h-[60px] font-bold text-[#1A1A1A]leading-15 items-center leading-[100%]">
+              {/* <ul className="flex justify-between h-[60px] font-bold text-[#1A1A1A]leading-15 items-center leading-[100%]"> */}
+              <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
                 <li>
                   <Link to="/ProductsPage">Gấu Bông Bobbicraft</Link>
                 </li>
@@ -177,17 +180,17 @@ export default function Header() {
                   <Link to="/UserProfilePage">UserProfilePage</Link>
                 </li>
                 <li>
-                  <Link to="/Detailproducts">Detailproducts</Link>
+                  <Link to="/orderhistory">orderhistory</Link>
                 </li>
                 <li>
+                  <a href="/checkout">check out</a>
+                </li>
+                {/*  <li>
                   <a href="#">Sữa Baby</a>
                 </li>
                 <li>
                   <a href="#">Sữa Baby</a>
-                </li>
-                <li>
-                  <a href="#">Sữa Baby</a>
-                </li>
+                </li> */}
               </ul>
             </div>
           </Container>

@@ -10,10 +10,12 @@ import SettingsIcon from '../Assets/Icon/SettingsIcon'
 import Oder from '../Assets/Icon/Oder'
 import MessagesIcon from '../Assets/Icon/MessagesIcon'
 import { Images } from '../../../../Assets/TS'
+import { Link } from 'react-router-dom'
 
 export default function SitebarAdmin() {
+
   return (
-    <div className='mt-28 py-8 px-5 w-56 h-[587px] rounded-[6px] mb-5
+    <div className='mt-28 py-8 px-5 w-56 h-[587px] rounded-[6px] mb-5 bg-white 
       shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
       '>
 
@@ -62,6 +64,13 @@ export default function SitebarAdmin() {
       <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
        hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
         <SalesIcon />
+        <span className='text-sm font-normal '><Link to="/admin/category">Danh mục</Link></span>
+      </div>
+
+      {/* SalesIconSitebar */}
+      <div className=' w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
+       hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7'>
+        <SalesIcon />
         <span className='text-sm font-normal '><a href="#">Khuyến Mãi</a></span>
       </div>
 
@@ -102,8 +111,8 @@ export default function SitebarAdmin() {
         <img src={Images.avatar_admin} alt="avatar_admin" />
         <div className='flex justify-between items-center w-[80%]'>
           <div className='data ml-4 '>
-              <p className='text-[#000000] font-semibold'>Admin</p>
-              <p className='text-[#4C4C4C] mr-1'>Admin@gmail.com</p>
+            <p className='text-[#000000] font-semibold'>Admin</p>
+            <p className='text-[#4C4C4C] mr-1'>Admin@gmail.com</p>
           </div>
         </div>
       </div>
