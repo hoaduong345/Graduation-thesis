@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, ChangeEvent } from "react"
 import Container from '../../../../components/container/Container'
 import SitebarAdmin from '../Sitebar/Sitebar'
 import PlusSquare from '../Assets/TSX/PlusSquare'
@@ -18,39 +18,55 @@ import { async } from "@firebase/util"
 import { imagesController } from "../../../../Controllers/ImagesController"
 import MenuShare from "../../../../Assets/TSX/Menu-Share"
 import { IonIcon } from '@ionic/react';
+import useDebounce from "../../../../useDebounceHook/useDebounce"
 export default function ListproductsAdmin() {
 
   const [products, setProducts] = useState<Products[]>([])
+  const [search, setSearch] = useState('')
+  const debouncedInputValue = useDebounce(search, 400); // Debounce for 300 milliseconds
+
   console.log("🚀 ~ file: Listproducts.tsx:16 ~ ListproductsAdmin ~ products:", products)
 
   useEffect(() => {
-    getData()
-  }, [])
+    getData(debouncedInputValue)
+    if (search.toString()) {
+      productController.getList(debouncedInputValue.toString()).then((res) => {
+        setProducts(res)
+      })
+    } else {
+      getData("")
+    }
+  }, [search])
 
+  useEffect(() => {
+    if (debouncedInputValue) {
+      getData(debouncedInputValue)
 
-  const getData = () => {
-    productController.getList().then((res) => {
+    }
+  }, [debouncedInputValue])
+
+  const getData = (value: any) => {
+    productController.getList(value.toString()).then((res) => {
       setProducts(res)
     })
   }
 
-
   const handleRemove = async (id: number) => {
     await productController.remove(id).then((_) => {
       toast.success("Xóa thành công !")
-      getData()
+      getData(debouncedInputValue)
     }).catch((error) => {
       console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
       toast.error("Xóa thất bại !")
     })
 
-    // await imagesController.remove(id).then((_) => {
-    //   toast.success("Xóa thành công !")
-    //   getData()
-    // }).catch((error) => {
-    //   console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
-    //   toast.error("Xóa thất bại !")
-    // })
+    await imagesController.remove(id).then((_) => {
+      toast.success("Xóa thành công !")
+      getData(debouncedInputValue)
+    }).catch((error) => {
+      console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
+      toast.error("Xóa thất bại !")
+    })
   }
 
   const [open, setOpen] = useState(false)
@@ -67,6 +83,11 @@ export default function ListproductsAdmin() {
       modal.close();
     }
   };
+
+  const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value)
+    console.log("🚀 ~ file: Listproducts.tsx:74 ~ onChangeSearchInput ~ setSearch(e.target.value):", e.target.value)
+  }
 
   return (
     <>
@@ -142,6 +163,7 @@ export default function ListproductsAdmin() {
                    max-2xl:pr-3
                    max-xl:text-sm"
                       placeholder="Tìm kiếm..."
+                      onChange={onChangeSearchInput}
                     />
                   </div>
                 </div>

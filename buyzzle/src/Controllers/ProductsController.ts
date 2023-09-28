@@ -23,8 +23,13 @@ export interface ModelProducts {
 };
 
 class ProductController {
-    getList = async (): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts`).then((res) => {
+    getList = async (name: string | undefined): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getCateID = async (id: number | undefined): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?categoryId=${id}`).then((res) => {
             return res.data as Products[]
         })
     }

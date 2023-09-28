@@ -127,8 +127,6 @@ const ProductController = {
     }
   },
 
-  
-
   // thêm sản phẩm
 
   addImagesByProductsID: async (req, res) => {
@@ -404,26 +402,26 @@ const ProductController = {
   // Hiện tất cả sản phẩm
   getAllProduct: async (req, res) => {
     try {
+      // tìm kiếm = keyword
       const keyword = req.query.keyword;
       const page = parseInt(req.query.page) || 1;
       const pageSize = parseInt(req.query.pageSize) || 5;
       const categoryId = req.query.categoryId;
- 
+
       const skip = (page - 1) * pageSize;
- 
+
       const whereClause = {
         name: {
           contains: keyword,
         },
       };
- 
-      
+
       if (categoryId) {
         whereClause.fK_category = {
-          id: parseInt(categoryId)
+          id: parseInt(categoryId),
         };
       }
- 
+
       const result = await prisma.product.findMany({
         include: {
           ProductImage: true,
@@ -433,20 +431,13 @@ const ProductController = {
         skip,
         take: pageSize,
       });
- 
+
       res.status(200).json(result);
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
     }
   },
- 
- 
-
-
- 
-
-
 };
 
 module.exports = ProductController;
