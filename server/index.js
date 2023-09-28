@@ -11,7 +11,6 @@ const UserRouter = require("./routes/UserRoutes")
 
 const CartRouter = require("./routes/CartRoutes")
 const ProductRoutes = require("./routes/ProductRoutes")
-
 const cookieParser = require("cookie-parser");
 dotenv.config();
 

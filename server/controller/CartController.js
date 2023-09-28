@@ -2,128 +2,100 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const CartController = {
-
-  addToCart : async(req, res) =>{
+  // ADD ITEM TO CART
+  addToCart: async (req, res) => {
     try {
-      // Get user ID from the request (you may have to implement user authentication)
-      const userId = parseInt(req.cookies.id); 
-      console.log("🚀 ~ file: CartController.js:11 ~ addToCart:async ~ userId:", userId)
-  
-      // Get product ID and quantity from the request body
-      const  productId  = parseInt(req.body.productId);
-      const quantity = parseInt(req.body.quantity)
-      console.log("🚀 ~ file: CartController.js:16 ~ addToCart:async ~ productId:", productId)
-  
-      // Find the user's cart
-      const cart = await prisma.cartSchema.findFirst({
-        where: {
-          userId: userId,
-        },
-        include: {
-          item: {
-            where: {
-              productid: productId,
-            },
-          },
-        },
-      });
-      console.log("🚀 ~ file: CartController.js:29 ~ addToCart:async ~ cart:", cart)
-  
-      if (!cart) {
-        // Create a new cart for the user if it doesn't exist
+      const userId = parseInt(req.cookies.id || 1)
+      const { productId: prodId, quantity: qty } = req.body
 
-        const newCart = await prisma.cartSchema.create({
-          data: {
-            userId: userId,
-            subtotal: 0, // Initialize subtotal as needed
-            item: {
-              create: {
-                productid: productId,
-                quantity: quantity || 1,
-                
-                total: 0, // Calculate total based on product price and quantity
-              },
-            },
-          },
-          include: {
-            item: true,
-          },
-        });
-  
-        res.status(201).json(newCart);
-      } else {
-        // Check if the product already exists in the cart
-        const existingCartItem = cart.item.find(
-          (item) => item.productid === productId
-        );
-  
-        if (existingCartItem) {
-          // If the product already exists, update its quantity and total
-          await prisma.itemCart.update({
-            where: {
-              id: existingCartItem.id,
-            },
-            data: {
-              productid: productId,
-              quantity: existingCartItem.quantity + (quantity || 1),
-              // Update total based on product price and updated quantity
-            },
-          });
-        } else {
-          // If the product doesn't exist, create a new item in the cart
-          await prisma.itemCart.create({
-            data: {
-              productid: productId,
-              quantity: quantity || 1,
-              total: 0, // Calculate total based on product price and quantity
-              cartschema: {
-                connect: {
-                  id: cart.id,
-                },
-              },
-            },
-          });
-        }
-  
-        // Calculate the updated subtotal of the cart
-        const updatedCart = await prisma.cartSchema.update({
-          where: {
-            id: cart.id,
-          },
-          data: {
-            // Update subtotal based on the sum of item totals in the cart
-          },
-          include: {
-            item: true,
-          },
-        });
-  
-        res.status(200).json(updatedCart);
+      const productId = parseInt(prodId)
+      const quantity = parseInt(qty || 1) // default to 1 if not provided
+
+      let cart = await CartController.findCart(userId, productId)
+
+      if (!cart) {
+        cart = await CartController.createCart(userId, productId, quantity)
+        return res.status(201).json(cart)
       }
+
+      const updatedCart = await CartController.updateCart(cart, productId, quantity)
+      res.status(200).json(updatedCart)
     } catch (error) {
-      console.error(error);
-      res
-        .status(500)
-        .json({
-          error: "An error occurred while adding the product to the cart.",
-        });
+      console.error(error)
+      res.status(500).json({ error: "An error occurred while adding the product to the cart." })
     }
   },
-  getCart : async(req,res) =>{
+
+  findCart: (userId, productId) => {
+    return prisma.cart.findFirst({
+      where: { userId },
+      include: {
+        item: { where: { productid: productId } }
+      }
+    })
+  },
+  
+  createCart: async (userId, productId, quantity) => {
+    const product = await prisma.product.findFirst({ where: { id: productId } })
+    return prisma.cart.create({
+      data: {
+        userId,
+        subtotal: product.price * quantity,
+        item: {
+          create: {
+            productid: productId,
+            quantity,
+            price: product.price,
+            total: product.price * quantity
+          }
+        }
+      },
+      include: { item: true }
+    })
+  },
+
+  updateCart: async (cart, productId, quantity) => {
+    const existingCartItem = cart.item.find((item) => item.productid === productId)
+
+    if (existingCartItem) {
+      await prisma.itemCart.update({
+        where: { id: existingCartItem.id },
+        data: { quantity: existingCartItem.quantity + quantity }
+      })
+    } else {
+      await prisma.itemCart.create({
+        data: {
+          productid: productId,
+          quantity,
+          total: 0,
+          cartschema: { connect: { id: cart.id } }
+        }
+      })
+    }
+    const updatedCartItems = await prisma.itemCart.findMany({
+      where: { cartschema: cart.id },
+    });
+    
+    // Calculate the updated subtotal of the cart
+    const updatedSubtotal = updatedCartItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
+    return prisma.cartSchema.update({
+      where: { id: cart.id },
+      data: { subtotal: updatedSubtotal }, 
+      include: { item: true }
+    })
+  },
+  getCart: async (req, res) => {
     try {
       const idCart = req.body.id
 
-      const Cart = await prisma.cartSchema.findFirst({
-        where:{
-          id : idCart
+      const Cart = await prisma.cart.findFirst({
+        where: {
+          id: idCart
         }
       })
-      console.log("aaaaa",Cart)
-    } catch (error) {
-      
-    }
-  },
-}
+      console.log("aaaaa", Cart)
+    } catch (error) {}
+  }
+};
 
- module.exports = CartController;
-
+module.exports = CartController;
