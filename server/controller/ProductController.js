@@ -372,7 +372,9 @@ const ProductController = {
             updatedProduct
          );
 
-         res.status(200).json("Cập nhật sản phẩm thành công");
+         // res.status(200).json("Cập nhật sản phẩm thành công");
+         console.log(updatedProduct);
+         res.status(200).json(updatedProduct);
          // });
       } catch (error) {
          console.error(error);
