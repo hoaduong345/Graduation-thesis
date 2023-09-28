@@ -19,18 +19,23 @@ router.get("/allproducts", ProductController.getAllProduct);
 
 router.get("/paginated", ProductController.getProductsPaginated);
 
-router.get("/search", ProductController.searchProducts);
+// router.get("/search", ProductController.searchProducts);
 
 // router.post("/addtocart/:id", ProductController.addToCart);
 
 // router.delete("/deletetocart/:id", ProductController.deleteToCart);
 
-router.post('/addimagesbyproductid', ProductController.addImagesByProductsID);
+router.post("/addimagesbyproductid", ProductController.addImagesByProductsID);
 
-router.put('/updateimagesbyproductid/:id', ProductController.updateImageByProductID);
+router.put(
+  "/updateimagesbyproductid/:id",
+  ProductController.updateImageByProductID
+);
 
-router.delete('/deleteimagesbyproductid/:id', ProductController.deleteImageByProductID);
-
+router.delete(
+  "/deleteimagesbyproductid/:id",
+  ProductController.deleteImageByProductID
+);
 
 router.put(
   "/updateimagesbyproductid/:id",
