@@ -8,7 +8,6 @@ const bodyParser = require("body-parser");
 const AuthRouter = require("./routes/AuthRoutes")
 const CartRouter = require("./routes/CartRoutes")
 const ProductRoutes = require("./routes/ProductRoutes")
-
 const cookieParser = require("cookie-parser");
 dotenv.config();
 
