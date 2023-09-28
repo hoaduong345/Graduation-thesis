@@ -10,12 +10,14 @@ import Search from "../../Assets/TSX/Search";
 import Shoppingcart from "../../Assets/TSX/Shopping-cart";
 import Ellips from "../../Assets/TSX/Ellips";
 import Container from "../container/Container";
+import { useState } from "react";
+import { Cate } from "../../pages/product/AddCategory";
 
 
 
 export default function Header() {
 
-
+  const [idCate, setidCate] = useState<Cate>()
   const user = localStorage.getItem('user');
 
   var username;
@@ -165,7 +167,7 @@ export default function Header() {
                   <Link to="/ProductsPage">Gấu Bông Bobbicraft</Link>
                 </li> */}
                 <li>
-                  <Link to="/FiltersPage">Áo Nam</Link>
+                  <Link to={`/FiltersPage/${idCate}`}>Áo Nam</Link>
                 </li>
                 <li>
                   <Link to="/admin/Addproductspage">Thêm sản phẩm</Link>

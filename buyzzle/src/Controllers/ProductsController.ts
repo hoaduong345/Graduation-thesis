@@ -23,13 +23,13 @@ export interface ModelProducts {
 };
 
 class ProductController {
-    getList = async (name: string | undefined): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
+    getList = async (name: string | undefined, id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&categoryId=${id}`).then((res) => {
             return res.data as Products[]
         })
     }
-    getCateID = async (id: number | undefined): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?categoryId=${id}`).then((res) => {
+    getSearchProduct = async (name: string | undefined): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
             return res.data as Products[]
         })
     }
