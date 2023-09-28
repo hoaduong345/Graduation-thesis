@@ -22,10 +22,10 @@ function Register() {
     "price",
     "size",
     "quantity",
-    
+
 
   ]);
-  const { handleSubmit,register, formState: { errors } } = useForm({
+  const { handleSubmit, register, formState: { errors } } = useForm({
     defaultValues: {
       name: '',
       username: '',
@@ -38,16 +38,16 @@ function Register() {
     resolver: yupResolver(SignInSchema)
   });
 
-  
+
   const API = "http://localhost:5000/buyzzle/auth/register";
   const onSubmit = handleSubmit(async (data) => {
     // const response = await axios.post(API, data);
     //   console.log("server: ", response); 
 
     try {
-      console.log("checker", data); 
+      console.log("checker", data);
       const response = await axios.post(API, data);
-      console.log("Them thanh cong", response); 
+      console.log("Them thanh cong", response);
 
       if (response.status === 200) {
         console.log("Sign-in successfully");
@@ -72,36 +72,57 @@ function Register() {
       }
     } catch (error) {
       // console.log("Them that bai", error);
-      // console.error(error);
-    
+      console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-        
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData.error) {
-          const errorMessage = responseData.error.username;
-          // console.log(`Lỗi: ${errorMessage}`);
-          toast.warning(
-            errorMessage,
-            {
-              position: "top-right",
-              autoClose: 5000,
-    
-            }
-          );
+          console.log(`Lỗi2: ${responseData.error}`);
+          const errorMessageUsername = responseData.error.username;
+          const errorMessageEmail = responseData.error.email;
+          const errorMessagePhoneNumber= responseData.error.phonenumber;
+          if (errorMessageUsername) {
+            toast.warning(
+              errorMessageUsername,
+              {
+                position: "top-right",
+                autoClose: 5000,
+
+              }
+            );
+          } else if (errorMessageEmail) {
+            toast.warning(
+              errorMessageEmail,
+              {
+                position: "top-right",
+                autoClose: 5000,
+
+              }
+            );
+          }else if(errorMessagePhoneNumber){
+            toast.warning(
+              errorMessagePhoneNumber,
+              {
+                position: "top-right",
+                autoClose: 5000,
+
+              }
+            );
+          }
+
         } else {
           console.log('Lỗi không xác định từ server');
         }
       } else {
         console.error('Lỗi gửi yêu cầu không thành công', error);
-       
+
       }
     }
-    
+
   });
 
 
-  
+
 
 
 
@@ -139,7 +160,7 @@ function Register() {
                 type="text"
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("name")}
-               
+
               />
               {errors.username && (
                 <span className="text-red-500 text-xs">
@@ -232,7 +253,7 @@ function Register() {
               />
               <label htmlFor="termsAgreement">Tôi đã đọc và đồng ý với <a href='#'>Điều Khoản</a></label>
             </div>
-            <button type="submit"  className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[75px]">Đăng ký</button>
+            <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[75px]">Đăng ký</button>
             {/* <ToastContainer
               position="top-right"
               // Custom theme for the toast container
@@ -257,8 +278,8 @@ function Register() {
             <div className='mt-6 text-center'>
               <span className='text-gray-600'>Bạn đã có tài khoản Buyzzle? </span>
               <Link to={`/login`} className="text-black font-semibold items-start">
-            Back to login{" "}
-          </Link>
+                Back to login{" "}
+              </Link>
             </div>
           </form>
         </div>
