@@ -91,16 +91,11 @@ model Category {
   date      DateTime? @default(now())
   updatedAt DateTime? @default(now())
   createdAt DateTime? @default(now())
-  CategoryImage CategoryImage[]
+  image String?
   products  Product[]
 }
 
-model CategoryImage{
-  id               Int      @id @default(autoincrement())
-  url              String?
-  idcategory        Int?
-  fK_categoryImage Category? @relation(fields: [idcategory],  references: [id], onDelete: Cascade)
-}
+
 
 model ItemCart {
   id         Int        @id @default(autoincrement())
