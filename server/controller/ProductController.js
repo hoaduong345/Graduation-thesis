@@ -404,12 +404,18 @@ const ProductController = {
   // Hiện tất cả sản phẩm
   getAllProduct: async (req, res) => {
     try {
+      // tìm kiếm = keyword
       const keyword = req.query.keyword;
       console.log(
         "🚀 ~ file: ProductController.js:407 ~ getAllProduct: ~ name:",
         keyword
       );
-      // const allProducts = await prisma.product.findMany();
+      // tìm kiếm sản phẩm = keyword nằm trong danh mục
+      const { findProductWithCate } = req.query;
+      console.log(
+        "🚀 ~ file: ProductController.js:415 ~ getAllProduct: ~ findProductWithCate:",
+        findProductWithCate
+      );
       const result = await prisma.product.findMany({
         include: {
           ProductImage: true,
@@ -418,6 +424,9 @@ const ProductController = {
         where: {
           name: {
             contains: keyword,
+          },
+          fK_category: {
+            name: findProductWithCate,
           },
         },
       });

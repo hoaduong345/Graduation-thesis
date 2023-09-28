@@ -47,7 +47,7 @@ export default function FiltersPage() {
   }, [])
 
   const getData = () => {
-    productController.getList().then((res) => {
+    productController.getList("").then((res) => {
       setProducts(res)
     })
   }
