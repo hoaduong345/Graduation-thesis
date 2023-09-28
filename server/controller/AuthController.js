@@ -7,7 +7,8 @@ const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const decode = require("jwt-decode");
-const { re } = require("mathjs");
+var cookieParser = require('cookie-parser');
+
 dotenv.config();
 
 const AuthController = {
@@ -237,7 +238,6 @@ const AuthController = {
             data: { refresh_token: refreshToken },
           });
         }
-
         res.cookie("refreshToken", refreshToken, {
           httpOnlyCookie: true,
           secure: false,
@@ -261,7 +261,7 @@ const AuthController = {
         return res.status(200).json({ ...others, accessToken });
       }
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       return res.status(500).json(error.message);
     }
   },
@@ -412,10 +412,9 @@ const AuthController = {
   //CHANGE PASSWORD
   changePassword: async (req, res) => {
     try {
-      const idUser = parseInt(req.cookies.id)
-      const refresh_token = req.cookies.refreshToken
-      const token = decode(refresh_token)
-      console.log("🚀 ~ file: AuthController.js:418 ~ changePassword: ~ token exp:", token.exp)
+      const idUser = parseInt(req.cookies.id);
+      const refresh_token = req.cookies.refreshToken;
+      const token = decode(refresh_token);
       const user = await prisma.user.findUnique({
         where: {
           id: idUser,
@@ -425,7 +424,6 @@ const AuthController = {
         req.body.oldPassword,
         user.password
       );
-      console.log("🚀 ~ file: AuthController.js:430 ~ changePassword: ~ isValidPassword:", isValidPassword)
 
       if (!isValidPassword) {
         return res.status(404).send("Old Password is not valid");
@@ -448,7 +446,7 @@ const AuthController = {
       const refreshTokenPayload = {
         email: user.email,
       };
-  
+
       const newRefreshToken = jwt.sign(
         refreshTokenPayload,
         process.env.JWT_REFRESH_TOKEN,
@@ -456,7 +454,6 @@ const AuthController = {
           expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token
         }
       );
-      console.log("🚀 ~ file: AuthController.js:459 ~ changePassword: ~ newRefreshToken:", newRefreshToken)
 
       await prisma.user.update({
         where: {
@@ -469,7 +466,6 @@ const AuthController = {
       });
       res.status(200).send("Change Password Successfully");
     } catch (error) {
-      console.log("asddddd", error)
       res.status(404).send("Change Password Failed");
     }
   },
