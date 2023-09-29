@@ -1,7 +1,6 @@
 import axios from "axios"
-import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 import { FormValues } from "../pages/home/Admin/Addproduct/Addproducts"
-import { async } from "@firebase/util"
+import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 
 export const appConfig = {
     apiUrl: import.meta.env.VITE_BACKEND_URL || ''
@@ -30,6 +29,11 @@ class ProductController {
     }
     getSearchProduct = async (name: string | undefined): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getSearchAndPaginationProduct = async (name: string | undefined, page: number, pageSize: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&page=${page}&pageSize=${pageSize}`).then((res) => {
             return res.data as Products[]
         })
     }

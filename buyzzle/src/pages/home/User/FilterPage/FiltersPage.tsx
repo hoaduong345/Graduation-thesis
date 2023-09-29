@@ -37,7 +37,11 @@ export interface Products {
   status: string;
   date: string;
   fK_category: Cate,
-  ProductImage: ImgOfProduct[]
+  ProductImage: ImgOfProduct[],
+}
+
+export interface rows {
+  product: Products
 }
 
 export default function FiltersPage() {

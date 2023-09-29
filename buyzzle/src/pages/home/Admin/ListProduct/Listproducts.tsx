@@ -1,55 +1,55 @@
-import { useState, useEffect, ChangeEvent } from "react"
-import Container from '../../../../components/container/Container'
-import SitebarAdmin from '../Sitebar/Sitebar'
-import PlusSquare from '../Assets/TSX/PlusSquare'
-import Search from '../../../../Assets/TSX/Search'
-import StatisticalAdmin from '../Assets/TSX/statistical'
-import Filter from '../Assets/TSX/Filter'
-import Download from '../Assets/TSX/Download'
-import { Images } from '../../../../Assets/TS'
-import Edit from '../Assets/TSX/Edit'
-import { Products } from '../../User/FilterPage/FiltersPage'
-import axios from 'axios'
-import ListproductMap from "./ListproductMap"
-import { appConfig } from "../../../../configsEnv"
+import { IonIcon } from '@ionic/react'
+import { IconButton } from '@material-tailwind/react'
+import { ChangeEvent, useEffect, useState } from "react"
 import { toast } from 'react-toastify'
-import { productController } from "../../../../Controllers/ProductsController"
-import { async } from "@firebase/util"
+import Search from '../../../../Assets/TSX/Search'
 import { imagesController } from "../../../../Controllers/ImagesController"
-import MenuShare from "../../../../Assets/TSX/Menu-Share"
-import { IonIcon } from '@ionic/react';
+import { productController } from "../../../../Controllers/ProductsController"
+import Container from '../../../../components/container/Container'
 import useDebounce from "../../../../useDebounceHook/useDebounce"
+import { Products } from '../../User/FilterPage/FiltersPage'
 import { Cate } from "../Addproduct/Addproducts"
+import Download from '../Assets/TSX/Download'
+import Filter from '../Assets/TSX/Filter'
+import PlusSquare from '../Assets/TSX/PlusSquare'
+import StatisticalAdmin from '../Assets/TSX/statistical'
+import SitebarAdmin from '../Sitebar/Sitebar'
+import ListproductMap from "./ListproductMap"
+interface TProductResponse {
+  currentPage: number,
+  totalpage: number,
+  rows: Products[]
+  allProduct: Products[]
+}
 export default function ListproductsAdmin() {
 
-  const [products, setProducts] = useState<Products[]>([])
+  const [products, setProducts] = useState<any>({})
   const [idCate, setidCate] = useState<Cate>()
-  console.log("🚀 ~ file: Listproducts.tsx:27 ~ ListproductsAdmin ~ idCate:", idCate)
   const [search, setSearch] = useState('')
   const debouncedInputValue = useDebounce(search, 400); // Debounce for 300 milliseconds
-
-  console.log("🚀 ~ file: Listproducts.tsx:16 ~ ListproductsAdmin ~ products:", products)
-
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  type Pagination = {
+    totalPages: number;
+    pageSize: number;
+    page: number;
+    rows: []
+  }
   useEffect(() => {
-    getData(debouncedInputValue)
-    if (search.toString()) {
-      productController.getSearchProduct(debouncedInputValue.toString()).then((res) => {
-        setProducts(res)
-      })
-    } else {
-      getData("")
-    }
-  }, [search])
+    productController.getSearchAndPaginationProduct(search, currentPage, 4).then((res) => {
+      setProducts(res)
+    })
+  }, [search, currentPage])
 
   useEffect(() => {
     if (debouncedInputValue) {
       getData(debouncedInputValue)
-
     }
   }, [debouncedInputValue])
 
   const getData = (value: any) => {
-    productController.getSearchProduct(value.toString()).then((res) => {
+    productController.getSearchAndPaginationProduct(value.toString(), 1, 4).then((res: any) => {
+      console.log(res);
       setProducts(res)
     })
   }
@@ -59,7 +59,6 @@ export default function ListproductsAdmin() {
       toast.success("Xóa thành công !")
       getData(debouncedInputValue)
     }).catch((error) => {
-      console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
       toast.error("Xóa thất bại !")
     })
 
@@ -67,7 +66,6 @@ export default function ListproductsAdmin() {
       toast.success("Xóa thành công !")
       getData(debouncedInputValue)
     }).catch((error) => {
-      console.log("🚀 ~ file: ListproductMap.tsx:24 ~ useEffect ~ error:", error)
       toast.error("Xóa thất bại !")
     })
   }
@@ -89,8 +87,12 @@ export default function ListproductsAdmin() {
 
   const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
-    console.log("🚀 ~ file: Listproducts.tsx:74 ~ onChangeSearchInput ~ setSearch(e.target.value):", e.target.value)
   }
+  const getItemProps = (index: number) => ({
+    variant: currentPage === index ? "filled" : "text",
+    color: "gray",
+    onClick: () => setCurrentPage(index),
+  } as any);
 
   return (
     <>
@@ -256,8 +258,8 @@ export default function ListproductsAdmin() {
             </div>
             <div >
               {
-                products.length > 0 ?
-                  products?.map((items) => {
+                products?.rows?.length > 0 ?
+                  products?.rows?.map((items: any) => {
                     return (
                       <>
                         <ListproductMap HandleXoa={handleRemove} products={items} />
@@ -266,10 +268,22 @@ export default function ListproductsAdmin() {
                   }) : <p>khong co san pham</p>
               }
             </div>
+            {/* <Pagination postPer={postPerPage} totalPosts={products.length} /> */}
+            <div className="flex items-center gap-2">
+              {[...new Array(products.totalPage)].map((item, index) => {
+                const page = index + 1
+                return (
+                  <>
+                    <div className='justify-center'>
+                      <IconButton {...getItemProps(page)}>{page}</IconButton>
+                    </div>
+                  </>
+                )
+              })}
+            </div>
 
             <div className="flex gap-3 max-lg:visible
-            max-[4000px]:invisible
-            ">
+            max-[4000px]:invisible">
               <div>
                 <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9]
                    transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer
