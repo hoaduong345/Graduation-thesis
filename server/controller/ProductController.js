@@ -405,12 +405,16 @@ const ProductController = {
       // tìm kiếm = keyword
       const keyword = req.query.keyword;
       const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 2;
+      const pageSize = parseInt(req.query.pageSize) || 10;
       console.log(
         "🚀 ~ file: ProductController.js:409 ~ getAllProduct: ~ pageSize:",
         pageSize
       );
       const categoryId = req.query.categoryId;
+      console.log(
+        "🚀 ~ file: ProductController.js:414 ~ getAllProduct: ~ categoryId:",
+        categoryId
+      );
 
       const skip = (page - 1) * pageSize;
       const whereClause = {
@@ -431,7 +435,6 @@ const ProductController = {
           id: parseInt(categoryId),
         };
       }
-
       const result = await prisma.product.findMany({
         include: {
           ProductImage: true,

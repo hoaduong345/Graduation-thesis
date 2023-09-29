@@ -15,12 +15,8 @@ import PlusSquare from '../Assets/TSX/PlusSquare'
 import StatisticalAdmin from '../Assets/TSX/statistical'
 import SitebarAdmin from '../Sitebar/Sitebar'
 import ListproductMap from "./ListproductMap"
-interface TProductResponse {
-  currentPage: number,
-  totalpage: number,
-  rows: Products[]
-  allProduct: Products[]
-}
+import { Button } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 export default function ListproductsAdmin() {
 
   const [products, setProducts] = useState<any>({})
@@ -36,7 +32,7 @@ export default function ListproductsAdmin() {
     rows: []
   }
   useEffect(() => {
-    productController.getSearchAndPaginationProduct(search, currentPage, 4).then((res) => {
+    productController.getSearchAndPaginationProduct(search, currentPage, 2).then((res) => {
       setProducts(res)
     })
   }, [search, currentPage])
@@ -48,7 +44,7 @@ export default function ListproductsAdmin() {
   }, [debouncedInputValue])
 
   const getData = (value: any) => {
-    productController.getSearchAndPaginationProduct(value.toString(), 1, 4).then((res: any) => {
+    productController.getSearchAndPaginationProduct(value.toString(), 1, 2).then((res: any) => {
       console.log(res);
       setProducts(res)
     })
@@ -93,7 +89,17 @@ export default function ListproductsAdmin() {
     color: "gray",
     onClick: () => setCurrentPage(index),
   } as any);
+  const next = () => {
+    if (currentPage === 5) return;
 
+    setCurrentPage(currentPage + 1);
+  };
+
+  const prev = () => {
+    if (currentPage === 1) return;
+
+    setCurrentPage(currentPage - 1);
+  };
   return (
     <>
       <Container>
@@ -269,17 +275,36 @@ export default function ListproductsAdmin() {
               }
             </div>
             {/* <Pagination postPer={postPerPage} totalPosts={products.length} /> */}
-            <div className="flex items-center gap-2">
-              {[...new Array(products.totalPage)].map((item, index) => {
-                const page = index + 1
-                return (
-                  <>
-                    <div className='justify-center'>
-                      <IconButton {...getItemProps(page)}>{page}</IconButton>
-                    </div>
-                  </>
-                )
-              })}
+            <div className="pagination">
+              <div className='flex'>
+                <Button
+                  variant="text"
+                  className="flex items-center gap-2"
+                  onClick={prev}
+                  disabled={currentPage === 1}
+                >
+                  <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
+                </Button>
+                {[...new Array(products.totalPage)].map((item, index) => {
+                  const page = index + 1
+                  return (
+                    <>
+                      <IconButton className='bg-none' {...getItemProps(page)}>
+                        <p className='ml-[-2px] text-sm'>{page}</p>
+                      </IconButton>
+                    </>
+                  )
+                })}
+                <Button
+                  variant="text"
+                  className="flex items-center gap-2"
+                  onClick={next}
+                  disabled={currentPage === 5}
+                >
+                  Next
+                  <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             <div className="flex gap-3 max-lg:visible
