@@ -88,11 +88,36 @@ export default function CheckOut() {
                                             <dialog id="my_modal_3" className="modal">
                                                 <div className="modal-box">
                                                     <form method="dialog">
-                                                        {/* if there is a button in form, it will close the modal */}
                                                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                                     </form>
-                                                    <h1 className="text-[#EA4B48] text-sm font-lg font-bold tracking-normal leading-tight border-b-[1px] pb-4 mb-4 max-[870px]:text-xs">Địa Chỉ Của Tôi</h1>
-                                                    <input id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Nhập địa chỉ của bạn" />
+                                                    <div className="border-b-[1px] pb-4 mb-4">
+                                                        <h1 className="text-[#EA4B48] text-sm font-lg font-bold tracking-normal leading-tight max-[870px]:text-xs">Địa Chỉ Của Tôi</h1>
+
+                                                    </div>
+                                                    {/* <input id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Nhập địa chỉ của bạn" /> */}
+                                                    <div className="border-b-[1px] pb-4 mb-4 flex gap-2">
+                                                        <input
+                                                            type="radio"
+                                                            name="colored-radio"
+                                                            id="orange-radio"
+                                                            className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
+          checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
+                                                        />
+                                                        <div>
+                                                            <div className="flex justify-between w-full">
+                                                                <div className="flex items-center gap-3">
+                                                                    <p className="text-sm font-normal text-[#1A1A1A]">Trần Văn Bình</p>
+                                                                    <p className="text-[10px]">(+84) 933234442</p>
+                                                                </div>
+                                                                <div className="">
+                                                                    <p className=" ">Cập nhật</p>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p>407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <button className="max-[870px]:text-xs focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-[#7879F1] rounded text-white px-8 py-2 text-sm">Xác Nhận</button>
                                                     <button className="max-[870px]:text-xs focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm">Hủy</button>
 
@@ -243,8 +268,8 @@ export default function CheckOut() {
 
                     </div>
 
-                </body>
-            </Container>
+                </body >
+            </Container >
         </>
     )
 }

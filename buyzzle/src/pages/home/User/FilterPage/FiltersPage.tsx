@@ -37,6 +37,7 @@ export interface Products {
   status: string;
   date: string;
   fK_category: Cate,
+  createdAt: string,
   ProductImage: ImgOfProduct[]
 }
 
