@@ -205,6 +205,8 @@ function Category() {
     const closeModal = () => {
         const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
         if (modal) {
+            // setCategory({})
+            setUrl('')
             modal.close();
         }
     };
@@ -326,7 +328,7 @@ function Category() {
                                                                     />
 
                                                                 </div>
-                                                                <div>
+                                                                {/* <div>
                                                                     <label htmlFor="" className="text-sm max-xl:text-xs max-lg:text-[10px]">Chuỗi Cho Đường Dẫn Tĩnh*</label>
                                                                     <input
                                                                         className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
@@ -347,7 +349,7 @@ function Category() {
                                                                         placeholder="Nhập mô tả danh mục"
 
                                                                     />
-                                                                </div>
+                                                                </div> */}
                                                             </div>
 
 
