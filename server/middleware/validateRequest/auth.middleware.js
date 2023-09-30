@@ -111,6 +111,7 @@ const FogotPasswordValid = async (req, res, next) => {
 
 const ResetPasswordValid = async (req, res, next) => {
 const { oldPassword, newPassword, confirmNewPassword } = req.body;
+  console.log("🚀 ~ file: auth.middleware.js:114 ~ ResetPasswordValid ~ confirmNewPassword:", confirmNewPassword)
   const error = {};
   if (!oldPassword) {
     error.newPassword = "password_require";

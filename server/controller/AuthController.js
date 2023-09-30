@@ -7,7 +7,6 @@ const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const decode = require("jwt-decode");
-var cookieParser = require('cookie-parser');
 
 dotenv.config();
 
@@ -239,19 +238,21 @@ const AuthController = {
           });
         }
         res.cookie("refreshToken", refreshToken, {
-          httpOnlyCookie: true,
+          httpOnly: true,
           secure: false,
           path: "/",
           sameSite: "strict",
         });
+
         res.cookie("accessToken", accessToken, {
-          httpOnlyCookie: true,
+          httpOnly: true,
           secure: false,
           path: "/",
           sameSite: "strict",
         });
+
         res.cookie("id", user.id, {
-          httpOnlyCookie: true,
+          httpOnly: true,
           secure: false,
           path: "/",
           sameSite: "strict",
