@@ -1,7 +1,6 @@
 import axios from "axios"
-import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 import { FormValues } from "../pages/home/Admin/Addproduct/Addproducts"
-import { async } from "@firebase/util"
+import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 
 export const appConfig = {
     apiUrl: import.meta.env.VITE_BACKEND_URL || ''
@@ -23,8 +22,18 @@ export interface ModelProducts {
 };
 
 class ProductController {
-    getList = async (): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts`).then((res) => {
+    getList = async (name: string | undefined, id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&categoryId=${id}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getSearchProduct = async (name: string | undefined): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getSearchAndPaginationProduct = async (name: string | undefined, page: number, pageSize: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&page=${page}&pageSize=${pageSize}`).then((res) => {
             return res.data as Products[]
         })
     }
@@ -34,7 +43,6 @@ class ProductController {
     update = async (id: number, data: FormValues) => {
         return await axios.put(`${appConfig.apiUrl}/updateproduct/${id}`, data)
     }
-
 }
 
 export const productController = new ProductController()

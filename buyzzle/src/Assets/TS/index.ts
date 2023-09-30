@@ -71,6 +71,11 @@ export const Images = {
   Banner1: "../src/Assets/Images/banner1.jpg",
   BannerQC: "../../../src/pages/home/Admin/Assets/Images/bannerQC.png",
   imgProduct: "../../../src/pages/home/Admin/Assets/Images/imgProduct.jpg",
+  cateAD: "../src/Assets/PNG/cate.png",
+  Avtcmt: "../src/Assets/Images/Avtcmt.png",
+  momo: "../src/Assets/PNG/momo.png",
+  zalo: "../src/Assets/PNG/Logo-ZaloPay.png",
+  nhanHang: "../src/Assets/PNG/nhanhang.png",
 
 };
 

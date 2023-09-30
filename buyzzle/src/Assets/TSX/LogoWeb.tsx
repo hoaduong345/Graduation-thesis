@@ -5,7 +5,7 @@ export default function LogoWeb() {
     <svg
       width="243"
       height="70"
-      className='max-xl:w-44'
+      className='max-xl:w-44 max-[769px]:w-[100px] max-[426px]:w-[50px]'
       viewBox="0 0 243 70"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
