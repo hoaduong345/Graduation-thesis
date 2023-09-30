@@ -34,8 +34,6 @@ export default function Addproducts() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const [categoty, setCategory] = useState<Cate[]>([])
-
-    const [i, setI] = useState<number>(1)
     const editorRef = useRef<any>(null);
 
     useEffect(() => {
