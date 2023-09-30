@@ -146,47 +146,69 @@ const ProductController = {
 
    updateImageByProductID: async (req, res) => {
       try {
-        const { id } = req.params; 
-        const { url, idproduct } = req.body; 
-      
-        const existingImage = await prisma.productImage.findUnique({
-          where: {
-            id: parseInt(id),
-          },
-        });
-  
-        if (!existingImage) {
-          return res.status(404).json('Hình ảnh không tồn tại');
-        }
-  
-        const updatedImage = await prisma.productImage.update({
-          where: {
-            id: parseInt(id),
-          },
-          data: {
-            url,
-            idproduct: parseInt(idproduct), 
-          },
-        });
-  
-        res.status(200).json('Cập nhật hình ảnh thành công');
-      } catch (error) {
-        console.error(error);
-        res.status(500).json(error.message);
-      }
-    },
+         const { id } = req.params;
+         const { url, idproduct } = req.body;
 
-    
-    
+         const existingImage = await prisma.productImage.findUnique({
+            where: {
+               id: parseInt(id),
+            },
+         });
+
+         if (!existingImage) {
+            return res.status(404).json('Hình ảnh không tồn tại');
+         }
+
+         const updatedImage = await prisma.productImage.update({
+            where: {
+               id: parseInt(id),
+            },
+            data: {
+               url,
+               idproduct: parseInt(idproduct),
+            },
+         });
+
+         res.status(200).json('Cập nhật hình ảnh thành công');
+      } catch (error) {
+         console.error(error);
+         res.status(500).json(error.message);
+      }
+   },
+
+   deleteImageByProductID: async (req, res) => {
+      const productID = parseInt(req.params.id);
+      try {
+         const imagesToDelete = await prisma.productImage.findMany({
+            where: {
+               id: productID,
+            },
+         });
+
+         if (!imagesToDelete || imagesToDelete.length === 0) {
+            return res.status(404).json("Không có hình ảnh nào để xóa");
+         }
+
+         for (const image of imagesToDelete) {
+            await prisma.productImage.delete({
+               where: {
+                  id: image.id,
+               },
+            });
+         }
+         res.status(200).json("Xóa hình ảnh thành công");
+      } catch (error) {
+         console.error(error);
+         res.status(500).json(error.message);
+      }
+   },
+
+
+
+
 
    addProduct: async (req, res) => {
       try {
-         // upload.single("images")(req, res, async (err) => {
-         //   if (err instanceof multer.MulterError) {
-         //     return res.status(500).json("Lỗi khi tải lên ảnh");
-         //   } else if (err) {
-         //     return res.status(500).json("Đã có lỗi xảy ra");
-         //   }
 
          const {
             name,
@@ -206,7 +228,7 @@ const ProductController = {
             categoryID,
          } = req.body;
 
-         // Kiểm tra validate
+         
          if (name.length <= 6) {
             return res.status(400).json("Tên sản phẩm phải có ít nhất 6 kí tự");
          }
@@ -255,38 +277,32 @@ const ProductController = {
    // xóa sản phẩm
    deleteProduct: async (req, res) => {
       try {
-        const productId = parseInt(req.params.id); 
-    
-        // Xóa sản phẩm
-        await prisma.product.delete({
-          where: {
-            id: productId,
-          },
-        });
-    
-        await prisma.productImage.deleteMany({
-          where: {
-            idproduct: productId,
-          },
-        });
-    
-        res.status(200).json("Xóa sản phẩm và hình ảnh  thành công");
+         const productId = parseInt(req.params.id);
+
+         // Xóa sản phẩm
+         await prisma.product.delete({
+            where: {
+               id: productId,
+            },
+         });
+
+         await prisma.productImage.deleteMany({
+            where: {
+               idproduct: productId,
+            },
+         });
+
+         res.status(200).json("Xóa sản phẩm và hình ảnh thành công");
       } catch (error) {
-        console.error(error);
-        res.status(500).json(error.message);
+         console.error(error);
+         res.status(500).json(error.message);
       }
-    },
-    
+   },
+
 
    //cập nhật sản phẩm
    updateProduct: async (req, res) => {
       try {
-         // upload.single("images")(req, res, async (err) => {
-         //   if (err instanceof multer.MulterError) {
-         //     return res.status(500).json("Lỗi khi tải lên ảnh");
-         //   } else if (err) {
-         //     return res.status(500).json("Đã có lỗi xảy ra");
-         //   }
 
          const productid = parseInt(req.params.id);
 
@@ -341,9 +357,6 @@ const ProductController = {
             categoryID: parseInt(categoryID),
          };
 
-         // if (req.file) {
-         //   updatedProductData.images = req.file.filename;
-         // }
 
          const updatedProduct = await prisma.product.update({
             where: {
@@ -402,7 +415,7 @@ const ProductController = {
          const result = await prisma.product.findMany({
             include: {
                ProductImage: true,
-               fK_category : true,
+               fK_category: true,
             },
          });
          res.status(200).json(result);
@@ -451,67 +464,8 @@ const ProductController = {
       }
    },
 
-   // Thêm sản phẩm vào giỏ hàng
-//   addToCart: async (req, res) => {
-//     try {
-//       const productId = parseInt(req.params.id);
-//       const quantity = parseInt(req.body.quantity); 
-  
-//       // Kiểm tra sản phẩm có tồn tại không
-//       const product = await prisma.product.findUnique({
-//         where: {
-//           id: productId,
-//         },
-//       });
-  
-//       if (!product) {
-//         return res.status(404).json("Không tìm thấy sản phẩm");
-//       }
 
-//       const newCartItem = await prisma.cartItem.create({
-//         data: {
-//           productId: productId,
-//           quantity: quantity, 
-//         },
-//       });
-  
-//       res.status(201).json("Sản phẩm đã được thêm vào giỏ hàng thành công");
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json(error.message);
-//     }
-//   },
 
-//   deleteToCart: async (req, res) => {
-//     try {
-
-//       const CartId = parseInt(req.params.id); // Lấy id sản phẩm từ params
-
-//       const categoryId = parseInt(req.params.id);
-//       const existingCategory = await prisma.category.findUnique({
-//         where: {
-//           id: categoryId,
-//         },
-//       });
-//       if (!existingCategory) {
-//         return res.status(404).json("sản phẩm không tồn tại");
-//       }
-//       await prisma.category.delete({
-//         where: {
-//           id: categoryId,
-//         },
-//       });
-//       res.status(200).json("Xóa sản phẩm thành công");
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json(error.message);
-//     }
-//   },
-
-  
-
- 
- 
 };
 
 module.exports = ProductController;

@@ -1,13 +1,28 @@
 .register-bg {
-  background-image: url("../../Assets/PNG/NewProject.png");
+  /* background-image: url("../../Assets/PNG/NewProject.png"); */
   /* max-height: 1083px;
     max-width: 963px;*/
-   height: 1083px;
+  height: 1083px;
+}
+
+.logoSlogan {
+  background-image: url("../../Assets/PNG/LogoSlogan.png");
 }
 
 .registerform-bg {
   background-color: #ffffff;
 
+}
+
+.font-xacnhan {
+  color: var(--Color-card-2, #00B207);
+  font-family: Arial;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 38px;
+  text-align: center;
+  /* 105.556% */
 }
 
 .registration-form {

@@ -122,7 +122,7 @@ const AuthController = {
 
   UserProfile: async (req, res) => {
     try {
-      const userId = parseInt(req.params.id);
+      const userId = parseInt(req.params.username);
 
       const updatedUser = {
         email: req.body.email,
@@ -135,7 +135,7 @@ const AuthController = {
 
       const updatedUserResponse = await prisma.user.update({
         where: {
-          id: userId,
+          username: userId,
         },
         data: updatedUser,
       });
@@ -346,6 +346,8 @@ const AuthController = {
         console.log("Generated URL:", url);
       }
 
+      const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${forgot_password_token}`;
+      console.log("Generated URL:", url);
       // await SendEmail(user.email, "Forgot Password", url);
 
       res.status(200).send("A Link has sent to your email");

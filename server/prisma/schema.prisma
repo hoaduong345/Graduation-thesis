@@ -10,32 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model User {
-//   id                   Int      @id @default(autoincrement())
-//   email                String
-//   username             String?
-//   password             String
-//   verify               Boolean  @default(false)
-//   Token                Token[]
-//   name                 String?
-//   phonenumber          String?
-//   createdAt            DateTime? @default(now())
-//   refresh_token        String?
-//   forgotpassword_token String?
-//   role                 Int?
-//   fK_Role              Role?    @relation(fields: [role], references: [id])
-
-//   // roleId               Role? @relation(fields: [id], references: [id])
-// }
-
-// model Role {
-//   id        Int      @id @default(autoincrement())
-//   name      String?
-//   createdAt DateTime
-//   updatedAt DateTime
-//   User      User[]
-// }
-
 model User {
   id                   Int       @id @default(autoincrement())
   email                String    @unique
@@ -57,6 +31,17 @@ model User {
   cart                 Cart[]
   // roleId               Role? @relation(fields: [id], references: [id])
 }
+
+// model UserProfile {
+//   id            Int      @id @default(autoincrement())
+//   email                String    
+//   username             String?      @unique
+//   password             String
+//    name                 String?
+//   // userId        Int      @unique
+//   // user          User     @relation(fields: [userId], references: [id])
+// }
+
 
 model Role {
   id        Int      @id @default(autoincrement())
@@ -85,7 +70,7 @@ model Product {
   discount     Int?
   soldcount    Int?
   quantity     Int?
-  description  String?
+  description  String? @db.VarChar(15000)
   status       String?
   date         DateTime?      @default(now())
   productId    Int?
@@ -130,7 +115,7 @@ model ItemCart {
 
 
 model ProductImage {
-  id               Int      @id @default(autoincrement())
+id               Int      @id @default(autoincrement())
   url              String?
   idproduct        Int?
   fK_propductImage Product? @relation(fields: [idproduct], references: [id], onDelete: Cascade)

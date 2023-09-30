@@ -20,7 +20,6 @@ const createVali = async (req, res, next) => {
   const user_email = await prisma.user.findFirst({
     where: {
       email: email,
-      
     },
   });
 
@@ -110,8 +109,7 @@ const FogotPasswordValid = async (req, res, next) => {
 };
 
 const ResetPasswordValid = async (req, res, next) => {
-const { oldPassword, newPassword, confirmNewPassword } = req.body;
-  console.log("🚀 ~ file: auth.middleware.js:114 ~ ResetPasswordValid ~ confirmNewPassword:", confirmNewPassword)
+  const { oldPassword, newPassword, confirmNewPassword } = req.body;
   const error = {};
   if (!oldPassword) {
     error.newPassword = "password_require";

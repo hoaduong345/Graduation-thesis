@@ -53,7 +53,7 @@ CREATE TABLE `Product` (
     `discount` INTEGER NULL,
     `soldcount` INTEGER NULL,
     `quantity` INTEGER NULL,
-    `description` VARCHAR(191) NULL,
+    `description` VARCHAR(15000) NULL,
     `status` VARCHAR(191) NULL,
     `date` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `productId` INTEGER NULL,
