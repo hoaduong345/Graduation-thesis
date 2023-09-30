@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 
 import { Link } from "react-router-dom";
 import Map from "../../Assets/TSX/Map";
@@ -20,8 +21,11 @@ export default function Header() {
   const [idCate, setidCate] = useState<Cate>()
   const user = localStorage.getItem('user');
 
+
   var username;
   var img;
+  var name;
+  
 
 
 
@@ -29,10 +33,10 @@ export default function Header() {
 
     username = JSON.parse(user).username;
     img = JSON.parse(user).img;
+    name = JSON.parse(user).name;
 
-
-    console.log(username.substring(0, 1));
-    console.log("USER: " + username, img);
+    console.log(name.substring(0, 1));
+    console.log("USER: " + name, img);
   } else {
     console.log("Chua dang nhap");
   }
@@ -136,7 +140,7 @@ export default function Header() {
                           </div>
                         ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
-                            <p className="text-1xl text-stone-50">{username.substring(0, 1).toUpperCase()}</p>
+                            <p className="text-1xl text-stone-50">{name.substring(0, 1).toUpperCase()}</p>
                           </div>
 
                         )}

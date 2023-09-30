@@ -37,12 +37,18 @@ export interface Products {
   status: string;
   date: string;
   fK_category: Cate,
+  ProductImage: ImgOfProduct[],
+}
+interface TProductResponse {
+  currentPage: number,
+  totalpage: number,
+  rows: Products[]
   createdAt: string,
   ProductImage: ImgOfProduct[]
 }
 
 export default function FiltersPage() {
-  const [products, setProducts] = useState<Products[]>([])
+  const [products, setProducts] = useState<TProductResponse[]>([])
 
   const { id } = useParams()
   const idCate = Number(id)
@@ -186,7 +192,7 @@ export default function FiltersPage() {
             </div>
 
             <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
-              {products.map((items) => {
+              {products?.rows?.map((items) => {
                 return (
                   <>
                     <Filter product={items} />

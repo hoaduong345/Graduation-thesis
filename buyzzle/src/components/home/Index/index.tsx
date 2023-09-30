@@ -1,14 +1,15 @@
-import { Images } from "../../Assets/TS";
-import Container from "../container/Container";
-import Category from "./components/Category";
-import Arrow from "../../Assets/TSX/arrow";
-import Products from "./components/Product";
+import { Images } from "../../../Assets/TS";
+import Container from "../../container/Container";
+import Category from "../components/Category";
+import Arrow from "../../../Assets/TSX/arrow";
+import Products from "../components/Product";
 
-import SlidesHome from "./components/slides/SlidesHome/SlidesHome";
-import Progess from "./components/progess";
+import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
+import Progess from "../components/progess";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Cate } from "../../pages/home/Admin/Category/Category";
+import { Cate } from "../../../pages/home/Admin/Category/Category";
+import { Link } from "react-router-dom";
 
 export type Product = {
   id: number;

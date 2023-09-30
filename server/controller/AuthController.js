@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 const SendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const decode = require("jwt-decode");
-const { re } = require("mathjs");
+
 dotenv.config();
 
 const AuthController = {
@@ -25,11 +25,10 @@ const AuthController = {
   genereateRefreshToken: (email) => {
     return jwt.sign(
       {
-        id: email.id,
+        email: email,
       },
       process.env.JWT_REFRESH_TOKEN,
-      { algorithm: "HS256" },
-      { expiresIn: "365d" }
+      { expiresIn: "30m" }
     );
   },
   generateForgotPasswordToken: (email) => {
@@ -87,33 +86,33 @@ const AuthController = {
 
   deleteregister: async (req, res) => {
     try {
-      const registerId = parseInt(req.params.id); 
+      const registerId = parseInt(req.params.id);
       const existingUser = await prisma.user.findUnique({
         where: {
           id: registerId,
         },
         include: {
-          Token: true, 
+          Token: true,
         },
       });
-  
+
       if (!existingUser) {
         return res.status(404).json("User không tồn tại");
       }
-  
+
       if (existingUser.Token.length > 0) {
         await prisma.token.deleteMany({
           where: {
             userid: registerId,
           },
         });
-      } 
+      }
       await prisma.user.delete({
         where: {
           id: registerId,
         },
       });
-  
+
       res.status(200).json("Xóa User thành công");
     } catch (error) {
       console.error(error);
@@ -127,54 +126,56 @@ const AuthController = {
 
       const updatedUser = {
         email: req.body.email,
-        username: req.body.username ,
-        name: req.body.name ,
+        username: req.body.username,
+        name: req.body.name,
         phonenumber: req.body.phonenumber,
-        sex : req.body.sex,
-        dateOfBirth : new Date(req.body.dateOfBirth)
+        sex: req.body.sex,
+        dateOfBirth: new Date(req.body.dateOfBirth),
       };
-  
+
       const updatedUserResponse = await prisma.user.update({
         where: {
           username: userId,
         },
         data: updatedUser,
       });
-  
+
       res.status(200).json("Lưu hồ sơ thành công");
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
     }
-  }, 
+  },
 
   UpdatePassword: async (req, res) => {
     try {
       const userId = parseInt(req.params.id);
-      const oldPassword = req.body.oldPassword; 
-      const newPassword = req.body.newPassword; 
-      const newPasswordConfirmation = req.body.newPasswordConfirmation; 
+      const oldPassword = req.body.oldPassword;
+      const newPassword = req.body.newPassword;
+      const newPasswordConfirmation = req.body.newPasswordConfirmation;
 
       if (newPassword !== newPasswordConfirmation) {
-        return res.status(400).json("Mật khẩu mới và xác nhận mật khẩu không khớp");
+        return res
+          .status(400)
+          .json("Mật khẩu mới và xác nhận mật khẩu không khớp");
       }
-  
+
       const user = await prisma.user.findUnique({
         where: {
           id: userId,
         },
       });
-  
+
       // Xác thực mật khẩu cũ
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-  
+
       if (!isPasswordValid) {
         return res.status(401).json("Mật khẩu cũ không chính xác");
       }
-  
+
       // Mật khẩu cũ hợp lệ, tiến hành cập nhật mật khẩu mới
       const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-  
+
       const updatePassword = await prisma.user.update({
         where: {
           id: userId,
@@ -183,27 +184,22 @@ const AuthController = {
           password: hashedNewPassword, // Lưu mật khẩu mới đã mã hóa
         },
       });
-  
+
       res.status(200).json("Cập nhật mật khẩu thành công");
     } catch (error) {
       res.status(500).json(error.message);
     }
   },
-  
 
-
-  
-  
   // LOGIN
   login: async (req, res) => {
     try {
       const reqpassword = req.body.password;
-      const reqemail = req.body.email;
-      const user = await prisma.user.findUnique({
-        where: { email: reqemail },
-      });
 
-      if (!user.email) {
+      const user = await prisma.user.findFirst({
+        where: { email: req.body.email },
+      });
+      if (!user) {
         return res.status(404).json("wrong email");
       }
       const validPassword = await bcrypt.compare(reqpassword, user.password);
@@ -241,15 +237,22 @@ const AuthController = {
             data: { refresh_token: refreshToken },
           });
         }
-
         res.cookie("refreshToken", refreshToken, {
-          httpOnlyCookie: true,
+          httpOnly: true,
           secure: false,
           path: "/",
           sameSite: "strict",
         });
+
         res.cookie("accessToken", accessToken, {
-          httpOnlyCookie: true,
+          httpOnly: true,
+          secure: false,
+          path: "/",
+          sameSite: "strict",
+        });
+
+        res.cookie("id", user.id, {
+          httpOnly: true,
           secure: false,
           path: "/",
           sameSite: "strict",
@@ -259,6 +262,7 @@ const AuthController = {
         return res.status(200).json({ ...others, accessToken });
       }
     } catch (error) {
+      console.log(error.message);
       return res.status(500).json(error.message);
     }
   },
@@ -299,7 +303,7 @@ const AuthController = {
   },
 
   // SEND EMAIL TO FORGOT PASSWORD
-  fogotPassword: async (req, res) => {
+  forgotPassword: async (req, res) => {
     try {
       const reqemail = req.body.email;
 
@@ -319,27 +323,27 @@ const AuthController = {
           .send("Your account is not verified. Please check your Email");
       }
 
-      let forgot_password_token = user.forgotpassword_token;
-
-      if (forgot_password_token == null) {
-        // Generate a new token
-
-        forgot_password_token = AuthController.generateForgotPasswordToken(
-          user.email
-        );
-        forgot_password_token = Buffer.from(forgot_password_token).toString(
-          "base64"
-        );
-
-        // Update the user's forgotpassword_token in the database
+      if (user.forgotpassword_token == null) {
+        const forgot_pasword_token_JWT =
+          AuthController.generateForgotPasswordToken(user.email);
+        console.log("jwt", forgot_pasword_token_JWT);
+        const forgot_password_token_base64 = Buffer.from(
+          forgot_pasword_token_JWT
+        ).toString("base64");
+        console.log("Base64", forgot_password_token_base64);
         await prisma.user.update({
           where: {
             email: user.email,
           },
           data: {
-            forgotpassword_token: forgot_password_token,
+            forgotpassword_token: forgot_password_token_base64,
           },
         });
+        const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${forgot_password_token_base64}`;
+        console.log("Generated URL:", url);
+      } else {
+        const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
+        console.log("Generated URL:", url);
       }
 
       const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${forgot_password_token}`;
@@ -411,12 +415,12 @@ const AuthController = {
   //CHANGE PASSWORD
   changePassword: async (req, res) => {
     try {
-      const accessToken = req.cookies.accessToken;
-      const token = decode(accessToken);
-
+      const idUser = parseInt(req.cookies.id);
+      const refresh_token = req.cookies.refreshToken;
+      const token = decode(refresh_token);
       const user = await prisma.user.findUnique({
         where: {
-          email: token.email,
+          id: idUser,
         },
       });
       const isValidPassword = await bcrypt.compare(
@@ -436,15 +440,16 @@ const AuthController = {
 
       await prisma.user.update({
         where: {
-          email: token.email,
+          id: idUser,
         },
         data: {
           password: hashed,
         },
       });
       const refreshTokenPayload = {
-        email: token.email,
+        email: user.email,
       };
+
       const newRefreshToken = jwt.sign(
         refreshTokenPayload,
         process.env.JWT_REFRESH_TOKEN,
@@ -455,11 +460,11 @@ const AuthController = {
 
       await prisma.user.update({
         where: {
-          email: token.email,
+          id: user.id,
         },
         data: {
           password: hashed,
-          refreshToken: newRefreshToken,
+          refresh_token: newRefreshToken,
         },
       });
       res.status(200).send("Change Password Successfully");
@@ -484,6 +489,7 @@ const AuthController = {
       console.log("user", user);
       res.clearCookie("refreshToken");
       res.clearCookie("accessToken");
+      res.clearCookie("id");
       // localStorage.clear();
       res.status(200).send("Logged out successfully");
     } catch (error) {

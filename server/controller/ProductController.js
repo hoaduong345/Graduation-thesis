@@ -405,23 +405,36 @@ const ProductController = {
       // tìm kiếm = keyword
       const keyword = req.query.keyword;
       const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 5;
+      const pageSize = parseInt(req.query.pageSize) || 10;
+      console.log(
+        "🚀 ~ file: ProductController.js:409 ~ getAllProduct: ~ pageSize:",
+        pageSize
+      );
       const categoryId = req.query.categoryId;
+      console.log(
+        "🚀 ~ file: ProductController.js:414 ~ getAllProduct: ~ categoryId:",
+        categoryId
+      );
 
       const skip = (page - 1) * pageSize;
-
       const whereClause = {
         name: {
           contains: keyword,
         },
       };
+      const totalProduct = await prisma.product.findMany({
+        where: whereClause,
+      });
+      console.log(
+        "🚀 ~ file: ProductController.js:420 ~ getAllProduct: ~ totalProduct:",
+        totalProduct.length
+      );
 
       if (categoryId) {
         whereClause.fK_category = {
           id: parseInt(categoryId),
         };
       }
-
       const result = await prisma.product.findMany({
         include: {
           ProductImage: true,
@@ -431,8 +444,13 @@ const ProductController = {
         skip,
         take: pageSize,
       });
-
-      res.status(200).json(result);
+      const resultProduct = {
+        allProduct: totalProduct,
+        currentPage: page,
+        totalPage: Math.ceil(totalProduct.length / pageSize),
+        rows: result,
+      };
+      res.status(200).json(resultProduct);
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
