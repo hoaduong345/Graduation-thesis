@@ -149,7 +149,8 @@ function Index() {
 
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Danh mục:</h1>
-          <div className="flex flex-wrap gap-[35px] justify-center">
+          {/* <div className="flex flex-wrap gap-[35px] justify-center"> */}
+          <div className="grid grid-cols-6 gap-[35px] justify-center">
             {
               categoty.map(e => {
                 return <Category id={e.id} img={e.image} title={e.name} />

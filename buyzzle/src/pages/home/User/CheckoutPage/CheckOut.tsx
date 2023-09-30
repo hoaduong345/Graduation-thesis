@@ -11,6 +11,7 @@ import PinkMedium from "../../../../Assets/SVG/LetterPayment/PinkMedium";
 import BlueMedium from "../../../../Assets/SVG/LetterPayment/BlueMedium";
 import PinkMediumSmall from "../../../../Assets/SVG/LetterPayment/PinkMediumSmall";
 import BlueMediumSmall from "../../../../Assets/SVG/LetterPayment/BlueMediumSmall";
+import Address from "../../../../Assets/SVG/LetterPayment/Address";
 
 
 export default function CheckOut() {
@@ -21,6 +22,12 @@ export default function CheckOut() {
 
     const openModal = () => {
         const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
+        if (modal) {
+            modal.showModal();
+        }
+    };
+    const openUpadate = () => {
+        const modal = document.getElementById('my_modal_update') as HTMLDialogElement | null;
         if (modal) {
             modal.showModal();
         }
@@ -88,13 +95,128 @@ export default function CheckOut() {
                                             <dialog id="my_modal_3" className="modal">
                                                 <div className="modal-box">
                                                     <form method="dialog">
-                                                        {/* if there is a button in form, it will close the modal */}
                                                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                                     </form>
-                                                    <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4 max-[870px]:text-xs">Thay Đổi Địa Chỉ</h1>
-                                                    <input id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Nhập địa chỉ của bạn" />
-                                                    <button className="max-[870px]:text-xs focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-[#7879F1] rounded text-white px-8 py-2 text-sm">Xác Nhận</button>
-                                                    <button className="max-[870px]:text-xs focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm">Hủy</button>
+                                                    <div className="border-b-[1px] pb-4 mb-4">
+                                                        <h1 className="text-[#EA4B48] text-sm font-lg font-bold tracking-normal leading-tight max-[870px]:text-xs">Địa Chỉ Của Tôi</h1>
+
+                                                    </div>
+
+                                                    {/* <input id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Nhập địa chỉ của bạn" /> */}
+
+                                                    <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
+                                                        <div className="flex items-center mr-4 justify-start ">
+                                                            <input
+                                                                type="radio"
+                                                                name="colored-radio"
+                                                                id="orange-radio"
+                                                                className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
+                                                                checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "/>
+                                                            <div
+                                                                className="h-5 w-5 absolute rounded-full pointer-events-none
+                                                                peer-checked:border-[#EA4B48] peer-checked:border-2"/>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <div className="flex justify-between w-full">
+                                                                <div className="flex items-center gap-3">
+                                                                    <p className="text-sm font-medium text-[#1A1A1A]">Trần Văn Bình</p>
+                                                                    <p className="text-[10px] text-[#4C4C4C]">(+84) 933234442</p>
+                                                                </div>
+                                                                <div className="">
+                                                                    <button onClick={openUpadate} className="text-[#5D5FEF] text-[10px]">Cập nhật</button>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[13px] font-normal text-[#4C4C4C]">407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
+                                                        <div className="flex items-center mr-4 justify-start ">
+                                                            <input
+                                                                type="radio"
+                                                                name="colored-radio"
+                                                                id="orange-radio"
+                                                                className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
+                                                                checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "/>
+                                                            <div
+                                                                className="h-5 w-5 absolute rounded-full pointer-events-none
+                                                                peer-checked:border-[#EA4B48] peer-checked:border-2"/>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <div className="flex justify-between w-full">
+                                                                <div className="flex items-center gap-3">
+                                                                    <p className="text-sm font-medium text-[#1A1A1A]">Trần Văn Bình</p>
+                                                                    <p className="text-[10px] text-[#4C4C4C]">(+84) 933234442</p>
+                                                                </div>
+                                                                <div className="">
+                                                                    <button className="text-[#5D5FEF] text-[10px]">Cập nhật</button>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[13px] font-normal text-[#4C4C4C]">407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="border-b-[1px] pb-4 mb-4 flex gap-1 items-center justify-center">
+                                                        <button className="flex gap-1">
+                                                            <Address />
+                                                            <p className="text-sm text-[#4C4C4C]">Thêm địa chỉ mới</p>
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex justify-end gap-2">
+                                                        <button className="py-2 px-11 border-[1px] border-[#EA4B48] text-sm text-[#1A1A1A] rounded">Hủy</button>
+                                                        <button className="py-2 px-11 border-[1px] text-sm text-[#FCFCFD] rounded bg-[#EA4B48]">Xác Nhận</button>
+                                                    </div>
+
+                                                </div>
+                                            </dialog>
+                                        </div>
+
+                                        <div>
+                                            <dialog id="my_modal_update" className="modal">
+                                                <div className="w-[512px] bg-white p-4 relative rounded-md">
+                                                    <form method="dialog">
+                                                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                    </form>
+                                                    <div className="border-b-[1px] pb-4 mb-4">
+                                                        <h1 className="text-[#EA4B48] text-sm font-lg font-bold tracking-normal leading-tight max-[870px]:text-xs">Cập Nhật Địa Chỉ</h1>
+
+                                                    </div>
+
+                                                    <div className="flex justify-around gap-5">
+                                                        <div className=" w-full">
+                                                            <label className="text-sm text-[#4C4C4C]">Họ và tên:</label>
+                                                            <input id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border" placeholder="Nhập Họ Tên" />
+
+                                                        </div>
+                                                        <div className=" w-full">
+                                                            <label className="text-sm text-[#4C4C4C]">Loại địa chỉ</label>
+                                                            <select id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border">
+                                                                <option value="">Nhà riêng</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="text-sm text-[#4C4C4C]">Địa chỉ:</label>
+                                                        <select id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border">
+                                                            <option value="">Tỉnh/Thành phố, Quận/Huyện, Phường/Xã</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div className="flex flex-col border-b-[1px] pb-4 mb-4 gap-2">
+                                                        <label className="text-sm text-[#4C4C4C]">Địa chỉ cụ thể:</label>
+                                                        <textarea className="text-xs p-3 border-[#FFAAAF] rounded border" cols={30} rows={4} defaultValue={"407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk "} />
+
+                                                    </div>
+
+                                                    <div className="flex justify-end gap-2">
+                                                        <button className="py-2 px-11 border-[1px] border-[#EA4B48] text-sm text-[#1A1A1A] rounded">Hủy</button>
+                                                        <button className="py-2 px-11 border-[1px] text-sm text-[#FCFCFD] rounded bg-[#EA4B48]">Xác Nhận</button>
+                                                    </div>
 
                                                 </div>
                                             </dialog>
@@ -180,7 +302,7 @@ export default function CheckOut() {
                                         <div className="flex gap-3 items-center">
                                             <Voucher />
                                             <div className="flex w-full items-center border-[#FFAAAF] border-[1px] py-[8px] rounded-md max-lg:py-[4px]">
-                                                <input className="outline-none w-full pl-3" type="text" />
+                                                <input className="outline-none w-full pl-3" type="text" placeholder="Nhập mã giảm giá" />
                                                 <div className="mx-3">
                                                     <CheckoutSeacrch />
                                                 </div>
@@ -243,8 +365,8 @@ export default function CheckOut() {
 
                     </div>
 
-                </body>
-            </Container>
+                </body >
+            </Container >
         </>
     )
 }

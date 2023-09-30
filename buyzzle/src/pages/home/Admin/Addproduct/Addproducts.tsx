@@ -137,10 +137,10 @@ export default function Addproducts() {
 
     });
 
-    console.log(watch().productDesc)
+    // console.log(watch().productDesc)
 
     const isDisabled = !(isValid && isDirty)
-    console.log(watch().productDesc)
+    // console.log(watch().productDesc)
     return (
         <Container>
             <body className="body-addproduct container mx-auto">
@@ -326,7 +326,9 @@ export default function Addproducts() {
                                                 onChange={(na) => {
                                                     const Id = na.target.value
                                                     setI(Number(Id))
+                                                    console.log(Id)
                                                 }}
+
 
                                             >
                                                 {

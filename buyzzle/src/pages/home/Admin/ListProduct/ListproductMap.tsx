@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Products } from '../../User/FilterPage/FiltersPage'
 import Edit from '../Assets/TSX/Edit'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Delete from '../Assets/TSX/Delete'
-import axios from 'axios'
-import { appConfig } from '../../../../configsEnv'
-import { error } from 'console'
-import Handle from 'rc-slider/lib/Handles/Handle'
 type Props = {
   products: Products
   HandleXoa: (id: number) => void
@@ -16,10 +12,23 @@ export default function ListproductMap(props: Props) {
   const handleRemove = (id: number) => {
     props.HandleXoa(id)
   }
+
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+
   return (
     <>
       {/* cardItems */}
-      <div className='card-items py-2 rounded-md mt-6 max-xl:pr-2
+      <div
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut} className='card-items py-2 rounded-md mt-6 max-xl:pr-2 relative
             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
         {/* infor in card */}
@@ -48,7 +57,7 @@ export default function ListproductMap(props: Props) {
                     `${products.name.substring(0, 100)}...` : products.name
                 }
               </p>
-              <div className='flex mt-1'>
+              <div className='flex gap-1 mt-1'>
                 <p className='category text-[#4C4C4C] text-sm font-medium leading-4'>
                   Danh mục: </p>
                 <p className='category text-[#4C4C4C] text-sm font-medium leading-4 ml-[2px]'>
@@ -101,6 +110,77 @@ export default function ListproductMap(props: Props) {
 
           </div>
         </div>{/* end infor in card */}
+
+        {isHovering && (
+          <div className='absolute z-10 bottom-0 left-[30%] transition-all duration-700 bg-white
+          shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] w-[584px] rounded-md'>
+            <div className='p-7 grid grid-cols-3 gap-4'>
+              <div className='col-span-2 flex flex-col gap-2'>
+
+
+                <div className='flex gap-10'>
+                  <div className='flex flex-col gap-2'>
+                    <div>
+                      <p className='text-xs'>Id Sản phẩm:</p>
+                      <p className='text-xs text-[#4C4C4C]'>{props.products.id}</p>
+                    </div>
+                    <div>
+                      <p className='text-xs'>Tag:</p>
+                      <p className='text-xs text-[#4C4C4C]'>!!!!!!!!!</p>
+                    </div>
+                    <div>
+                      <p className='text-xs'>Danh mục sản phẩm:</p>
+                      <p className='text-xs text-[#4C4C4C]'>{products.fK_category.name}</p>
+                    </div>
+
+                  </div>
+
+                  <div className='flex flex-col gap-2'>
+                    <div>
+                      <p className='text-xs'>Ngày thêm:</p>
+                      <p className='text-xs text-[#4C4C4C]'>{props.products.createdAt}</p>
+                    </div>
+                    <div>
+                      <p className='text-xs'>Mã giảm giá:</p>
+                      <p className='text-xs text-[#4C4C4C]'>!!!!</p>
+                    </div>
+                    <div>
+                      <p className='text-xs'>Tình trạng:</p>
+                      <p className='text-xs text-[#00B207]'>Còn hàng</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <p className='text-xs'>Mô tả sản phẩm:</p>
+                  <p className='text-xs text-[#4C4C4C]'><h1> {props.products.description} </h1></p>
+                </div>
+
+
+              </div>
+
+              <div className='col-span-1 flex flex-col gap-3'>
+                {
+                  products.ProductImage.map(e => {
+                    return (
+                      <>
+                        <div className='flex gap-3 items-center'>
+                          <img className='w-12' src={e.url} alt="" />
+                          <div>
+                            <p className='text-xs text-[#4C4C4C]'>Phân loại: <span className='text-[#000000] text-xs font-medium'>!!!!</span></p>
+                            <p className='text-xs text-[#4C4C4C]'>Giá: <span className='text-[#000000] text-xs font-medium'>{products.price}đ</span></p>
+                            <p className='text-xs text-[#4C4C4C]'>Giá: <span className='text-[#000000] text-xs font-medium'>{products.quantity}</span></p>
+                          </div>
+                        </div>
+
+                      </>
+                    )
+                  })
+                }
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

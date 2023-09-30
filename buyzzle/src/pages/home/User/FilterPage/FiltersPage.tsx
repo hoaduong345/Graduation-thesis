@@ -43,6 +43,8 @@ interface TProductResponse {
   currentPage: number,
   totalpage: number,
   rows: Products[]
+  createdAt: string,
+  ProductImage: ImgOfProduct[]
 }
 
 export default function FiltersPage() {
@@ -198,11 +200,11 @@ export default function FiltersPage() {
                 );
               })}
             </div>
-            <div
+            {/* <div
               style={{ borderTopColor: "transparent" }}
               className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
-            />
-            <div className="pagination">
+            /> */}
+            {/* <div className="pagination">
               <a href="#" className="prev mr-[60px]">
                 <ArrowPrev />
               </a>
@@ -224,7 +226,7 @@ export default function FiltersPage() {
               <a href="#" className="next ml-[60px]">
                 <ArrowNext />
               </a>
-            </div>
+            </div> */}
           </div>
           {/* content-right-filter-end */}
         </div>

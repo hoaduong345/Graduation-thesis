@@ -126,7 +126,7 @@ function Category() {
                     return response
                 })
                 .then(data => {
-                    toast.success('Update Complete!!')
+                    toast.success('Cập nhật thành công!!')
                     console.log(data);
                     getList()
                     setCategory({ name: '', id: 0, image: '' })
@@ -142,7 +142,7 @@ function Category() {
                     return response
                 })
                 .then(data => {
-                    toast.success('New Category Complete!!')
+                    toast.success('Thêm thành công!!')
                     console.log(data);
                     getList()
                     setCategory({ name: '', id: 0, image: '' })
@@ -197,6 +197,7 @@ function Category() {
         const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
         if (modal) {
             setCategory(cate)
+            setUrl(cate.image)
             modal.showModal();
         }
     };
