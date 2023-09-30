@@ -7,31 +7,47 @@ import ShowPass from '../../../../Assets/TSX/ShowPass';
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import { bool, boolean } from 'yup';
 
 type FormValues = {
     username: string,
     name: string,
     email: string,
-    sex: boolean,
+    sex: string,
     phonenumber: number,
     dateOfBirth: string,
     // fullName: string,
     // Address: string
 }
 
+function getSexFromSomeOtherFunction(): string | null {
+    const user = localStorage.getItem('user');
+    if (user !== null) {
+        const userData = JSON.parse(user);
+        // console.log("userData.sex"+userData.sex)
+        return userData.sex;
+
+    } else {
+        console.log("Chua Dang Nhap Dung");
+        return null;
+    }
+
+}
+
 export default function UserProfile() {
     const {
         control,
         handleSubmit,
+        register,
         formState: { errors, isDirty, isValid },
     } = useForm<FormValues>({
-        // mode: 'all',
+        mode: 'all',
         defaultValues:
         {
             username: '',
             name: '',
             email: '',
-            sex: true,
+            sex: "",
             dateOfBirth: '',
             phonenumber: undefined,
             // fullName: '',
@@ -39,16 +55,19 @@ export default function UserProfile() {
         },
 
     });
+
     const [validUrl, setValidUrl] = useState(false);
     const param = useParams();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [imageURL, setImageURL] = useState<string | null>(null);
 
+
+
     useEffect(() => {
         function CheckLink() {
             const user = localStorage.getItem('user');
             if (user != null) {
-                
+
                 setValidUrl(true);
 
 
@@ -116,20 +135,61 @@ export default function UserProfile() {
         setDate(event.target.value);
     };
 
-    // const [day, setDay] = useState('');
-    // const [month, setMonth] = useState('');
-    // const [year, setYear] = useState('');
-    // const handleDayChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    //     setDay(event.target.value);
-    // };
 
-    // const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    //     setMonth(event.target.value);
-    // };
 
-    // const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    //     setYear(event.target.value);
-    // };
+
+
+
+    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phonenumber, setPhonenumber] = useState('');
+
+
+
+    useEffect(() => {
+        const initialSexValue = getSexFromSomeOtherFunction();
+        if (initialSexValue !== null) {
+            setSex(JSON.parse(initialSexValue));
+
+
+        } else {
+            console.log("initialSexValue = null");
+        }
+    }, []);
+    const [sex, setSex] = useState<boolean>();
+
+
+    const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSex(JSON.parse(event.target.value));
+    };
+
+
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user != null) {
+
+            const userData = JSON.parse(user);
+            setUsername(userData.username);
+            setName(userData.name);
+            setEmail(userData.email);
+            setPhonenumber(userData.phonenumber);
+            // setSex(userData.sex);
+            setDate(userData.dateOfBirth);
+
+
+        } else {
+            console.log("Chua Dang Nhap Dung");
+        }
+    }, []);
+
+
+    // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+
+    //     setSex(event.target.value);
+
+    // }
 
     const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
     const onSubmit = async (formData: FormValues) => {
@@ -139,7 +199,15 @@ export default function UserProfile() {
         try {
             // formData.dateOfBirth = `${day}/${month}/${year}`;
             formData.dateOfBirth = date;
-            console.log("checker", formData);
+            // const booleanValue = JSON.parse(formData.sex);
+
+            formData.sex = JSON.parse(formData.sex);
+            // console.log("checker", booleanValue);
+
+            // const StringValue = "true"
+
+
+
             const response = await axios.put(API, formData);
             console.log("edit thanh cong", response);
 
@@ -213,7 +281,10 @@ export default function UserProfile() {
             }
         }
 
+
     };
+
+
 
     return (
         <Container>
@@ -255,8 +326,10 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.username ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                             placeholder="Tên đăng nhập"
-                                                            value={field.value}
-                                                            onChange={field.onChange}
+                                                            value={param.username}
+                                                            {...register('username')}
+                                                            onChange={e => setUsername(e.target.value)}
+                                                        // disabled
                                                         />
                                                         {!!errors.username && <p className='text-red-700 mt-2'>{errors.username.message}</p>}</>
                                                 )} />
@@ -281,8 +354,10 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.name ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                             placeholder="Tên người dùng"
-                                                            value={field.value}
-                                                            onChange={field.onChange}
+                                                            value={name}
+                                                            {...register('name')}
+                                                            onChange={e => setName(e.target.value)}
+
                                                         />
                                                         {!!errors.name && <p className='text-red-700 mt-2'>{errors.name.message}</p>}</>
                                                 )} />
@@ -304,8 +379,9 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.email ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                         placeholder="Email"
-                                                        value={field.value}
-                                                        onChange={field.onChange}
+                                                        value={email}
+                                                        {...register('email')}
+                                                        onChange={e => setEmail(e.target.value)}
                                                     />
                                                     {!!errors.email && <p className='text-red-700 mt-2'>{errors.email.message}</p>}</>
                                             )} />
@@ -322,8 +398,12 @@ export default function UserProfile() {
                                                         <div className="flex items-center justify-start ">
                                                             <input
                                                                 type="radio"
-                                                                name="colored-radio"
-                                                                id="orange-radio"
+                                                                // name="colored-radio"
+                                                                id="orange-radio1"
+                                                                value='true'
+                                                                {...register('sex')}
+                                                                checked={sex === true}
+                                                                onChange={handleSexChange}
                                                                 className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
                                             checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                                             />
@@ -340,8 +420,12 @@ export default function UserProfile() {
                                                         <div className="flex items-center justify-start ">
                                                             <input
                                                                 type="radio"
-                                                                name="colored-radio"
-                                                                id="orange-radio"
+                                                                // name="colored-radio"
+                                                                id="orange-radio2"
+                                                                value='false'
+                                                                {...register('sex')}
+                                                                checked={sex === false}
+                                                                onChange={handleSexChange}
                                                                 className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
                                             checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                                             />
@@ -351,26 +435,19 @@ export default function UserProfile() {
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className='flex items-center w-[33%] gap-1'>
-                                                        <div>
-                                                            <h3>Khác</h3>
-                                                        </div>
-                                                        <div className="flex items-center justify-start ">
-                                                            <input
-                                                                type="radio"
-                                                                name="colored-radio"
-                                                                id="orange-radio"
-                                                                className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
-                                            checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                                            />
-                                                            <div
-                                                                className="h-6 w-6 absolute rounded-full pointer-events-none
-                                            peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                                            />
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                             </div>
+                                            {/* <div className='w-[48%]'>
+                                                <label htmlFor='gender' className='text-[#4C4C4C] text-sm font-medium'>Giới tính</label>
+                                                <div className='flex w-[100%] mt-6'>
+                                                    <select id="gender" name="gender">
+                                                        <option value="Nam">Nam</option>
+                                                        <option value="Nữ">Nữ</option>
+                                                        <option value="Khác">Khác</option>
+                                                    </select>
+                                                </div>
+                                            </div> */}
                                             <div className='w-[48%]'>
                                                 <Controller control={control} name='phonenumber' rules={{
                                                     required: {
@@ -386,8 +463,9 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                             placeholder="Số điện thoại"
-                                                            value={field.value}
-                                                            onChange={field.onChange}
+                                                            value={phonenumber}
+                                                            {...register('phonenumber')}
+                                                            onChange={e => setPhonenumber(e.target.value)}
                                                         />
                                                         {!!errors.phonenumber && <p className='text-red-700 mt-2'>{errors.phonenumber.message}</p>}</>
                                                 )} />
@@ -451,8 +529,23 @@ export default function UserProfile() {
                                         </div>
                                     </div>
                                 </div> */}
-                                        <div>
-                                            <input type="date" onChange={handleDateChange} />
+                                        <div className='w-[100%] mt-4'>
+                                            <Controller control={control} name='dateOfBirth' rules={{
+                                                // required: {
+                                                //     value: true,
+                                                //     message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
+                                                // }
+                                            }} render={({ field }) => (
+                                                <>
+                                                    <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Ngày sinh</label>
+                                                    <input className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
+                                                        type="date"
+                                                        value={date.substring(0, 10)}
+                                                        onChange={handleDateChange} />
+                                                    {!!errors.dateOfBirth && <p className='text-red-700 mt-2'>{errors.dateOfBirth.message}</p>}</>
+                                            )} />
                                         </div>
                                         {/* button */}
                                         <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
@@ -461,6 +554,7 @@ export default function UserProfile() {
                                                 Lưu
                                             </button>
                                         </div>
+
                                     </form>
 
                                     {/* Form */}

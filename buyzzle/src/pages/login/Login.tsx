@@ -67,13 +67,17 @@ function Login() {
                    
                     const username = jsonObject.username;
                     const img = jsonObject.img;
-               
-                   
+                    const name = jsonObject.name;
+                    const email = jsonObject.email;
+                    const sex = jsonObject.sex;
+                    const phonenumber = jsonObject.phonenumber;
+                    const dateOfBirth = jsonObject.dateOfBirth;
+                    
                     
                     // console.log(id); // In ra giá trị tên từ jsonObject
                     // console.log(email);
                     // console.log(username);
-                    const UserData = { username, img};
+                    const UserData = { username, img, name, email, sex, phonenumber, dateOfBirth};
                     localStorage.setItem('user', JSON.stringify(UserData));
 
                     setTimeout(() => {
