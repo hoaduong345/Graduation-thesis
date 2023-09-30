@@ -129,7 +129,7 @@ function Category() {
                     toast.success('Cập nhật thành công!!')
                     console.log(data);
                     getList()
-                    setCategory({ name: '', id: 0, image: '' })
+                    setnull()
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -145,7 +145,7 @@ function Category() {
                     toast.success('Thêm thành công!!')
                     console.log(data);
                     getList()
-                    setCategory({ name: '', id: 0, image: '' })
+                    setnull()
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -202,14 +202,16 @@ function Category() {
         }
     };
 
-    const closeModal = () => {
+    const closeModal = async () => {
         const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
         if (modal) {
-            // setCategory({})
-            setUrl('')
+            await setnull()
             modal.close();
         }
     };
+    const setnull = async () => {
+        setCategory({ name: '', id: 0, image: '' })
+    }
     return (
         <>
             <Container>

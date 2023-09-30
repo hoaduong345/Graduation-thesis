@@ -160,23 +160,21 @@ export default function ListproductMap(props: Props) {
               </div>
 
               <div className='col-span-1 flex flex-col gap-3'>
-                {
-                  products.ProductImage.map(e => {
-                    return (
-                      <>
-                        <div className='flex gap-3 items-center'>
-                          <img className='w-12' src={e.url} alt="" />
-                          <div>
-                            <p className='text-xs text-[#4C4C4C]'>Phân loại: <span className='text-[#000000] text-xs font-medium'>!!!!</span></p>
-                            <p className='text-xs text-[#4C4C4C]'>Giá: <span className='text-[#000000] text-xs font-medium'>{products.price}đ</span></p>
-                            <p className='text-xs text-[#4C4C4C]'>Giá: <span className='text-[#000000] text-xs font-medium'>{products.quantity}</span></p>
-                          </div>
-                        </div>
+                <img className='max-w-32 max-h-20' src={products.ProductImage[0].url} alt="" />
+                <div className='grid grid-cols-2 gap-3 items-center'>
 
-                      </>
-                    )
-                  })
-                }
+                  {
+                    products.ProductImage.slice(1, 5).map(e => {
+
+                      return (
+                        <>
+                          <img className='w-[60px] h-[60px]' src={e.url} alt="" />
+
+                        </>
+                      )
+                    })
+                  }
+                </div>
               </div>
             </div>
           </div>

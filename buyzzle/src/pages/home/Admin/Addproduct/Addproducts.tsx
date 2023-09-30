@@ -12,7 +12,6 @@ import { ref, uploadBytes } from 'firebase/storage'
 import { appConfig } from '../../../../configsEnv'
 import { Editor } from '@tinymce/tinymce-react';
 import { toast } from 'react-toastify'
-import { Images } from '../../../../Assets/TS'
 import RemoveIMG from '../../../../Assets/TSX/RemoveIMG'
 // import { v4 } from 'uuid'
 
@@ -23,6 +22,7 @@ export type FormValues = {
     productQuantity: number;
     productImage: string;
     productDiscount: number;
+    categoryID: number
 }
 export interface Cate {
     id: number
@@ -34,6 +34,7 @@ export default function Addproducts() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const [categoty, setCategory] = useState<Cate[]>([])
+
     const [i, setI] = useState<number>(1)
     const editorRef = useRef<any>(null);
 
@@ -85,7 +86,7 @@ export default function Addproducts() {
             description: data.productDesc,
             quantity: data.productQuantity,
             discount: data.productDiscount,
-            categoryID: i,
+            categoryID: data.categoryID,
         }
         // console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
         axios.post(`${appConfig.apiUrl}/addproduct`, _data)
@@ -119,21 +120,22 @@ export default function Addproducts() {
     const {
         control,
         handleSubmit,
-        resetField,
-        watch,
+        // resetField,
+        // watch,
         reset,
         formState: { errors, isDirty, isValid },
     } = useForm<FormValues>({
         mode: 'all',
-        defaultValues:
-        {
-            productName: '',
-            productDesc: '',
-            productImage: '',
-            productPrice: 1,
-            productQuantity: 1,
-            productDiscount: 1,
-        },
+        // defaultValues:
+        // {
+        //     productName: '',
+        //     productDesc: '',
+        //     productImage: '',
+        //     productPrice: 1,
+        //     productQuantity: 1,
+        //     productDiscount: 1,
+
+        // },
 
     });
 
@@ -243,7 +245,7 @@ export default function Addproducts() {
                                                 <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Mô Tả Chi Tiết Sản Phẩm<span className='text-[#FF0000]'>*</span></p>
                                                 <Editor
                                                     apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
-                                                    onInit={(evt, editor) => (editorRef.current = editor)}
+                                                    onInit={(editor) => (editorRef.current = editor)}
                                                     onEditorChange={(e) => field.onChange(e)}
                                                     value={field.value}
                                                     init={{
@@ -317,31 +319,50 @@ export default function Addproducts() {
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
-                                        {/* <Controller name='productIdCategory' control={control} render={({ field }) => (
-                                            <> */}
-                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Danh Mục Sản Phẩm<span className='text-[#FF0000]'>*</span></p>
-                                        {/* Dropdown */}
-                                        <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
-                                                onChange={(na) => {
-                                                    const Id = na.target.value
-                                                    setI(Number(Id))
-                                                    console.log(Id)
-                                                }}
-
-
-                                            >
-                                                {
-                                                    categoty.map(e => {
-                                                        return <option value={e.id}>{e.name}</option>
-                                                    })
+                                        <Controller name='categoryID' control={control}
+                                            rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
                                                 }
-                                            </select>
-                                        </div>
-                                        {/* end input addNameProducts */}
-                                        {/* </>
-                                        )}
-                                        /> */}
+                                            }}
+
+                                            render={({ field }) => (
+                                                <>
+
+                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Danh Mục Sản Phẩm<span className='text-[#FF0000]'>*</span></p>
+                                                    {/* Dropdown */}
+                                                    <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                                        <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
+                                                            // onChange={(na) => {
+                                                            //     const Id = na.target.value
+                                                            //     setI(Number(Id))
+
+                                                            //     console.log(Id)
+                                                            // }}
+                                                            value={field.value}
+                                                            onChange={(e) => {
+                                                                const value = e.target.value
+                                                                field.onChange(value)
+                                                            }}
+
+
+                                                        >
+                                                            <option>-- Chọn Danh Mục --</option>
+                                                            {
+                                                                categoty.map(e => {
+                                                                    return <option value={e.id}>{e.name}</option>
+                                                                })
+                                                            }
+                                                        </select>
+                                                        <div>
+
+                                                            {!!errors.categoryID && <p className='text-red-700 mt-2'>{errors.categoryID.message}</p>}
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+                                        />
 
                                         <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Tag<span className='text-[#FF0000]'>*</span></p>
                                         {/* Dropdown */}
