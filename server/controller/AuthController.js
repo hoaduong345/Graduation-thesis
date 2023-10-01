@@ -205,7 +205,7 @@ const AuthController = {
       const validPassword = await bcrypt.compare(reqpassword, user.password);
 
       if (!validPassword) {
-        return res.status(404).json("wrong password");
+        return res.status(404).json("Wrong password");
       }
 
       if (user.verify == false) {
@@ -239,6 +239,7 @@ const AuthController = {
         }
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
+          httpOnlyCookie: false,
           secure: false,
           path: "/",
           sameSite: "strict",
@@ -246,6 +247,7 @@ const AuthController = {
 
         res.cookie("accessToken", accessToken, {
           httpOnly: true,
+          httpOnlyCookie: false,
           secure: false,
           path: "/",
           sameSite: "strict",
@@ -253,6 +255,7 @@ const AuthController = {
 
         res.cookie("id", user.id, {
           httpOnly: true,
+          httpOnlyCookie: false,
           secure: false,
           path: "/",
           sameSite: "strict",
@@ -339,10 +342,10 @@ const AuthController = {
             forgotpassword_token: forgot_password_token_base64,
           },
         });
-        const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${forgot_password_token_base64}`;
+        const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${forgot_password_token_base64}`;
         console.log("Generated URL:", url);
       } else {
-        const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
+        const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
         console.log("Generated URL:", url);
       }
 

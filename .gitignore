@@ -1,8 +1,6 @@
 
 server/prisma/migrations/20230920085930_/migration.sql
-server/prisma/migrations/20231001042651_/migration.sql
-server/prisma/migrations/20230928072432_/migration.sql
-server/prisma/migrations/20230927030521_/migration.sql
+server/prisma/migrations/20230918092413_/migration.sql
+server/prisma/schema.prisma
 buyzzle/yarn.lock
-buyzzle/package.json
 buyzzle/package-lock.json
