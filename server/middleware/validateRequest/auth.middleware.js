@@ -46,8 +46,6 @@ const createVali = async (req, res, next) => {
     error.name = "name_require";
   } else if (!validator.isLength(name, { min: 5, max: 30 })) {
     error.name = "name_length";
-  } else if (!validator.isAlphanumeric(name)) {
-    error.name = "name_format";
   }
 
   if (!password) {
