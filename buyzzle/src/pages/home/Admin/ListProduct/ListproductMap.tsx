@@ -121,7 +121,7 @@ export default function ListproductMap(props: Props) {
                 <div className='flex gap-10'>
                   <div className='flex flex-col gap-2'>
                     <div>
-                      <p className='text-xs'>Id Sản phẩm:</p>
+                      <p className='text-xs font-medium'>Id Sản phẩm:</p>
                       <p className='text-xs text-[#4C4C4C]'>{props.products.id}</p>
                     </div>
                     <div>
@@ -129,7 +129,7 @@ export default function ListproductMap(props: Props) {
                       <p className='text-xs text-[#4C4C4C]'>!!!!!!!!!</p>
                     </div>
                     <div>
-                      <p className='text-xs'>Danh mục sản phẩm:</p>
+                      <p className='text-xs font-medium'>Danh mục sản phẩm:</p>
                       <p className='text-xs text-[#4C4C4C]'>{products.fK_category.name}</p>
                     </div>
 
@@ -137,45 +137,54 @@ export default function ListproductMap(props: Props) {
 
                   <div className='flex flex-col gap-2'>
                     <div>
-                      <p className='text-xs'>Ngày thêm:</p>
+                      <p className='text-xs font-medium'>Ngày thêm:</p>
                       <p className='text-xs text-[#4C4C4C]'>{props.products.createdAt}</p>
                     </div>
                     <div>
-                      <p className='text-xs'>Mã giảm giá:</p>
+                      <p className='text-xs font-medium'>Mã giảm giá:</p>
                       <p className='text-xs text-[#4C4C4C]'>!!!!</p>
                     </div>
                     <div>
-                      <p className='text-xs'>Tình trạng:</p>
+                      <p className='text-xs font-medium'>Tình trạng:</p>
                       <p className='text-xs text-[#00B207]'>Còn hàng</p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <p className='text-xs'>Mô tả sản phẩm:</p>
-                  <p className='text-xs text-[#4C4C4C]'><h1> {props.products.description} </h1></p>
+                  <p className='text-xs font-medium'>Mô tả sản phẩm:</p>
+                  <p className='text-xs text-[#4C4C4C] '>
+                    {
+                      props.products.description.length > 100 ?
+                        `${props.products.description.substring(0, 100)}...` : props.products.description
+                    }
+                  </p>
                 </div>
 
 
               </div>
 
-              <div className='col-span-1 flex flex-col gap-3'>
-                <img className='max-w-32 max-h-20' src={products.ProductImage[0].url} alt="" />
-                <div className='grid grid-cols-2 gap-3 items-center'>
+              <div className='overscroll-auto md:overscroll-contain lg:overscroll-none h-[170px] overflow-x-hidden'>
+                <div className='col-span-1 flex flex-col gap-3'>
 
-                  {
-                    products.ProductImage.slice(1, 5).map(e => {
+                  <img src={products.ProductImage[0].url} alt="" />
+                  <div className='grid grid-cols-2 gap-3 items-center'>
 
-                      return (
-                        <>
-                          <img className='w-[60px] h-[60px]' src={e.url} alt="" />
+                    {
+                      products.ProductImage.slice(1, 5).map(e => {
 
-                        </>
-                      )
-                    })
-                  }
+                        return (
+                          <>
+                            <img className='w-[60px] h-[60px]' src={e.url} alt="" />
+
+                          </>
+                        )
+                      })
+                    }
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
         )}
