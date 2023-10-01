@@ -35,7 +35,7 @@ export default function Header() {
     img = JSON.parse(user).img;
     name = JSON.parse(user).name;
 
-    console.log(name.substring(0, 1));
+    // console.log(name.substring(0, 1));
     console.log("USER: " + name, img);
   } else {
     console.log("Chua dang nhap");

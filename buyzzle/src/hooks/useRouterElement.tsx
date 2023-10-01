@@ -52,7 +52,7 @@ export default function useRouterEmelent() {
     },
 
     {
-      path: "/userprofilepage",
+      path: "/userprofilepage/:username",
       element: (
         <MainLayout>
           <UserProfile />
