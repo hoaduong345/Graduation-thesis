@@ -25,7 +25,7 @@ export default function Header() {
   var username;
   var img;
   var name;
-  
+
 
 
 

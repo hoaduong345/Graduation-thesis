@@ -27,6 +27,11 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getAllProducts = async (): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts`).then((res) => {
+            return res.data as Products[]
+        })
+    }
     getSearchProduct = async (name: string | undefined): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
             return res.data as Products[]
@@ -42,6 +47,11 @@ class ProductController {
     }
     update = async (id: number, data: FormValues) => {
         return await axios.put(`${appConfig.apiUrl}/updateproduct/${id}`, data)
+    }
+    getProductSuggest = async (id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/recommendedproducts/${id}`).then((res) => {
+            return res.data as Products[]
+        })
     }
 }
 

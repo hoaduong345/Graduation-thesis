@@ -2,7 +2,6 @@ import { Images } from "../../../Assets/TS";
 import Container from "../../container/Container";
 import Category from "../components/Category";
 import Arrow from "../../../Assets/TSX/arrow";
-import Products from "../components/Product";
 
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
 import Progess from "../components/progess";
@@ -10,6 +9,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Cate } from "../../../pages/home/Admin/Category/Category";
 import { Link } from "react-router-dom";
+import { productController } from "../../../Controllers/ProductsController";
+import Productss from "../components/Product";
+import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
 
 export type Product = {
   id: number;
@@ -34,7 +36,7 @@ function Index() {
 
 
   const [categoty, setCategory] = useState<Cate[]>([])
-
+  const [product, setProducts] = useState<Products[]>([])
   const products: Product[] = [
     {
       id: 1,
@@ -85,7 +87,6 @@ function Index() {
       soldCount: 8,
     },
   ];
-
   const getCategory = () => {
     axios.get('http://localhost:5000/buyzzle/product/allcategory')
       .then(response => response.data
@@ -96,7 +97,14 @@ function Index() {
       .catch(err => console.log(err))
   }
 
-
+  const getAllProduct = () => {
+    productController.getAllProducts().then((res: any) => {
+      setProducts(res.rows)
+    })
+  }
+  useEffect(() => {
+    getAllProduct()
+  }, [])
 
   useEffect(() => {
     getCategory()
@@ -518,9 +526,9 @@ function Index() {
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
 
-          <div className="flex flex-wrap justify-between max-[769px]:justify-center max-[769px]:gap-[30px]">
-            {products.map((product) => {
-              return <Products product={product} />;
+          <div className="flex flex-wrap gap-3 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
+            {product.map((product) => {
+              return <Productss product={product} />;
             })}
           </div>
         </div>
