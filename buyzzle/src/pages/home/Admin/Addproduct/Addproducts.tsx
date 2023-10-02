@@ -24,7 +24,6 @@ export type FormValues = {
     productImage: string;
     productDiscount: number;
 }
-
 export interface Cate {
     id: number
     name: string,
@@ -107,7 +106,6 @@ export default function Addproducts() {
     }
 
     const addImages = async (id: number, url: string) => {
-
         const urlImages = {
             idproduct: id,
             url: url
@@ -139,22 +137,22 @@ export default function Addproducts() {
 
     });
 
-    console.log(watch().productDesc)
+    // console.log(watch().productDesc)
 
     const isDisabled = !(isValid && isDirty)
-    console.log(watch().productDesc)
+    // console.log(watch().productDesc)
     return (
         <Container>
             <body className="body-addproduct container mx-auto">
                 {/* back */}
                 <div className='back h-[57px] mt-[46px] '>
                     <div className='flex gap-3 items-center'>
-                        <div className='border-[1px] border-[#EA4B48] rounded-md py-4 px-4'>
+                        <div className='border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2'>
                             <Back />
                         </div>
                         <div >
-                            <p className='font-normal text-sm'>Quay lại danh sách sản phẩm</p>
-                            <h2 className='uppercase text-[32px] font-bold'>Thêm Sản Phẩm</h2>
+                            <p className='font-normal text-sm max-xl:text-xs max-lg:text-[10px]' >Quay lại danh sách sản phẩm</p>
+                            <h2 className='uppercase text-[32px] font-bold max-xl:text-[28px] max-lg:text-2xl'>Thêm Sản Phẩm</h2>
                         </div>
                     </div>
                 </div>{/* end back */}
@@ -165,7 +163,7 @@ export default function Addproducts() {
                             <div>
                                 {/* Mô Tả Sản Phẩm */}
                                 <div>
-                                    <span className='text-[#000] text-2xl font-normal '>Mô Tả Sản Phẩm</span>
+                                    <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Mô Tả Sản Phẩm</span>
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
@@ -180,11 +178,12 @@ export default function Addproducts() {
                                             }
                                         }} render={({ field }) => (
                                             <>
-                                                <label htmlFor='name' className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Tên Sản Phẩm*</label>
+                                                <label htmlFor='name' className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Tên Sản Phẩm<span className='text-[#FF0000]'>*</span></label>
                                                 {/* input addNameProducts */}
                                                 <input
                                                     className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%]
+                                                        rounded-[6px] px-[10px] py-[12px] w-[100%]
+                                                        max-xl:text-sm max-lg:text-[13px]
                                             ${!!errors.productName ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                     placeholder="Nhập tiêu đề sản phẩm"
                                                     value={field.value}
@@ -241,7 +240,7 @@ export default function Addproducts() {
 
                                         }} render={({ field, }) => (
                                             <>
-                                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
+                                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Mô Tả Chi Tiết Sản Phẩm<span className='text-[#FF0000]'>*</span></p>
                                                 <Editor
                                                     apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
                                                     onInit={(evt, editor) => (editorRef.current = editor)}
@@ -251,6 +250,26 @@ export default function Addproducts() {
                                                         block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3',
                                                         height: 500,
                                                         menubar: false,
+                                                        tiny_pageembed_classes: [
+                                                            {
+                                                                text: 'Responsive - 21x9',
+                                                                value: 'tiny-pageembed--21by9',
+
+                                                            },
+                                                            {
+                                                                text: 'Responsive - 16x9',
+                                                                value: 'tiny-pageembed--16by9'
+                                                            },
+                                                            {
+                                                                text: 'Responsive - 4x3',
+                                                                value: 'tiny-pageembed--4by3'
+                                                            },
+                                                            {
+                                                                text: 'Responsive - 1x1',
+                                                                value: 'tiny-pageembed--1by1'
+                                                            }
+                                                        ],
+
                                                         plugins: [
                                                             'advlist',
                                                             'autolink',
@@ -294,20 +313,22 @@ export default function Addproducts() {
                                 </div>
                                 {/* Danh Mục Sản Phẩm */}
                                 <div className='mt-7'>
-                                    <span className='text-[#000] text-2xl font-normal '>Danh Mục Sản Phẩm</span>
+                                    <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Danh Mục Sản Phẩm</span>
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         {/* <Controller name='productIdCategory' control={control} render={({ field }) => (
                                             <> */}
-                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Danh Mục Sản Phẩm*</p>
+                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Danh Mục Sản Phẩm<span className='text-[#FF0000]'>*</span></p>
                                         {/* Dropdown */}
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none "
+                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
                                                 onChange={(na) => {
                                                     const Id = na.target.value
                                                     setI(Number(Id))
+                                                    console.log(Id)
                                                 }}
+
 
                                             >
                                                 {
@@ -322,10 +343,10 @@ export default function Addproducts() {
                                         )}
                                         /> */}
 
-                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Tag*</p>
+                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Tag<span className='text-[#FF0000]'>*</span></p>
                                         {/* Dropdown */}
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
+                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md">
                                                 <option>key-word tìm kiếm / key-word tìm kiếm 1</option>
                                                 <option>key-word tìm kiếm 2 / key-word tìm kiếm 3</option>
                                             </select>
@@ -337,26 +358,27 @@ export default function Addproducts() {
                             <div>
                                 {/* Ảnh sản phẩm */}
                                 <div>
-                                    <span className='text-[#000] text-2xl font-normal'>Ảnh Sản Phẩm</span>
+                                    <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Ảnh Sản Phẩm</span>
                                     {/* card */}
                                     <div className='card w-[100%] py-4 px-9 mt-2 
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
 
                                         <Controller control={control} name='productImage' render={({ }) => (
                                             <>
-                                                <div className='flex'>
+                                                <div className='flex max-[1300px]:gap-3'>
                                                     {/* form upload img */}
                                                     <div className='max-w-max items-center'>
                                                         <label htmlFor="images">
-                                                            <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
+                                                            <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer
+                                                                 max-xl:px-4 max-[1100px]:py-4 max-[1024px]:p-2 max-[768px]:p-1'>
                                                                 <input type="file"
                                                                     // onChange={field.onChange}
                                                                     onChange={(e: any) => setImages(e.target.files)}
                                                                     id='images' multiple className='hidden ' />
                                                                 <UploadIMG />
                                                                 <div id="images" className='text-center mt-2'>
-                                                                    <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold'>Click to upload
-                                                                        <p className='text-[#1A1A1A] font-normal text-sm tracking-widest'>or drag and drop</p></p>
+                                                                    <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold max-[1024px]:text-xs max-[768px]:text-[10px]'>Click to upload
+                                                                        <p className='text-[#1A1A1A] font-normal text-sm tracking-widest max-[1024px]:text-[11px] max-[768px]:text-[10px]'>or drag and drop</p></p>
                                                                 </div>
                                                             </div>
                                                         </label>
@@ -396,7 +418,7 @@ export default function Addproducts() {
 
                                 {/* Giá và số lượng sản phẩm */}
                                 <div className='mt-7'>
-                                    <span className='text-[#000] text-2xl font-normal '>Giá & Số Lượng</span>
+                                    <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Giá & Số Lượng</span>
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
@@ -417,13 +439,14 @@ export default function Addproducts() {
                                             }}
                                                 render={({ field }) => (
                                                     <>
-                                                        <div className='col-span-4'>
-                                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giá Sản phẩm*</p>
+                                                        <div className='col-span-4 max-lg:col-span-3'>
+                                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Giá Sản phẩm<span className='text-[#FF0000]'>*</span></p>
                                                             <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                                             ${!!errors.productPrice ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
                                                             `}>
                                                                 <input
-                                                                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
+                                                                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
+                                                                            max-xl:text-sm  max-lg:text-[13px]"
                                                                     placeholder="000.000"
                                                                     value={field.value}
                                                                     onChange={(e) => {
@@ -432,7 +455,7 @@ export default function Addproducts() {
                                                                         field.onChange(value.replace(reg, ''))
                                                                     }}
                                                                 />
-                                                                <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
+                                                                <p className='text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px]  max-lg:text-[13px]'>VNĐ</p>
                                                             </div>
                                                             {errors.productPrice && <p className='text-red-700 mt-2'>{errors.productPrice.message}</p>}
                                                         </div>
@@ -455,13 +478,14 @@ export default function Addproducts() {
                                             }}
                                                 render={({ field }) => (
                                                     <>
-                                                        <div className='col-span-2'>
-                                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giảm giá Sản phẩm*</p>
+                                                        <div className='col-span-2 max-lg:col-span-3'>
+                                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Giảm giá<span className='text-[#FF0000]'>*</span></p>
                                                             <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                                             ${!!errors.productDiscount ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
                                                             `}>
                                                                 <input
-                                                                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
+                                                                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
+                                                                            max-xl:text-sm max-lg:text-[13px]"
                                                                     placeholder="000.000"
                                                                     value={field.value}
                                                                     maxLength={3}
@@ -472,7 +496,7 @@ export default function Addproducts() {
                                                                     }}
 
                                                                 />
-                                                                <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
+                                                                <p className='text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px] max-lg:text-[13px]'>%</p>
                                                             </div>
                                                             {errors.productDiscount && <p className='text-red-700 mt-2'>{errors.productDiscount.message}</p>}
                                                         </div>
@@ -493,9 +517,10 @@ export default function Addproducts() {
                                         }}
                                             render={({ field }) => (
                                                 <>
-                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Số Lượng Sản Phẩm*</p>
+                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Số Lượng Sản Phẩm<span className='text-[#FF0000]'>*</span></p>
                                                     <input
                                                         className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
+                                                            max-xl:text-sm max-lg:text-[13px]
                                                     ${!!errors.productQuantity ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'} `}
                                                         placeholder="000.000"
                                                         value={field.value}
@@ -516,39 +541,40 @@ export default function Addproducts() {
                                 </div>
                                 {/* tình trạng sản phẩm */}
                                 <div className='mt-7'>
-                                    <span className='text-[#000] text-2xl font-normal'>Tình trạng sản phẩm</span>
+                                    <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Tình trạng sản phẩm</span>
                                     {/* card */}
                                     <div className='card w-[100%] py-4 px-9 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
-                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[18px]'>Tình trạng sản phẩm*</p>
+                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[18px] max-xl:text-[13px] max-lg:text-xs'>Tình trạng sản phẩm<span className='text-[#FF0000]'>*</span></p>
                                         <div className='flex text-center  w-16 justify-start gap-5'>
-                                            <h3 className='text-[#4C4C4C] font-semibold'>Ẩn</h3>
+                                            <h3 className='text-[#4C4C4C] font-semibold max-xl:text-[13px] max-lg:text-xs'>Ẩn</h3>
                                             {/* Swich */}
                                             <div className="form-control">
-                                                <input type="checkbox" className="toggle toggle-error" />
+                                                <input type="checkbox" className="toggle toggle-error max-xl:h-[20px] max-lg:h-[18px]" />
                                             </div>{/* end  Swich */}
-                                            <h3 className='text-[#5D5FEF] font-semibold'>Đăng</h3>
+                                            <h3 className='text-[#5D5FEF] font-semibold max-xl:text-[13px] max-lg:text-xs'>Đăng</h3>
                                         </div>
 
                                     </div>
                                 </div>
                                 {/* button */}
-                                <div className='flex w-[50%] justify-between mt-6'>
-                                    <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer'>
+                                <div className='flex w-[50%] justify-between mt-6 max-[1330px]:gap-5 max-[1330px]:w-[55%] max-[1024px]:w-[75%]'>
+                                    <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer
+                                            max-[1330px]:w-[160px] max-[1024px]:w-[190px]'>
                                         <Link to='/' >
-                                            <button className='text-center text-base font-bold text-[#1A1A1A] '>
+                                            <button className='text-center text-base font-bold text-[#1A1A1A] max-xl:text-sm max-lg:text-[13px]'>
                                                 Hủy bỏ
                                             </button>
                                         </Link>
                                     </div>
 
                                     <div className={`flex items-center w-[150px] rounded-md h-[46px] transition 
-                                    duration-150 justify-evenly 
+                                    duration-150 justify-evenly  max-[1330px]:w-[280px] max-[1024px]:w-[320px]
                                 ${isDisabled ? 'bg-[#aeaeae] cursor-not-allowed' : 'bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer'}
                                     `}>
                                         <button disabled={isDisabled} onClick={handleSubmit((data: any) => {
                                             handleAddproduct(data)
-                                        })} className={`text-center text-base font-bold text-[#FFFFFF] 
+                                        })} className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
                                         ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} `}>
                                             Thêm sản phẩm
                                         </button>

@@ -17,8 +17,11 @@ import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../pages/forgotpassword/ChangePassword";
 import path from "../contants/path";
 import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
-import Cart from "../pages/home/User/Cart/Cart";
+import Category from "../pages/home/Admin/Category/Category";
 import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
+import Cart from "../pages/home/User/CartPage/Cart";
+import OrderHistory from "../pages/home/User/OrderHistoryPage/OrderHistory";
+import CheckOut from "../pages/home/User/CheckoutPage/CheckOut";
 
 
 export default function useRouterEmelent() {
@@ -40,7 +43,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/FiltersPage",
+      path: "/FiltersPage/:id",
       element: (
         <MainLayout>
           <FiltersPage />
@@ -49,7 +52,7 @@ export default function useRouterEmelent() {
     },
 
     {
-      path: "/userprofilepage/:username",
+      path: "/userprofilepage",
       element: (
         <MainLayout>
           <UserProfile />
@@ -102,10 +105,26 @@ export default function useRouterEmelent() {
       ),
     },
     {
+      path: "orderhistory",
+      element: (
+        <MainLayout>
+          <OrderHistory />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "checkout",
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      ),
+    },
+    {
       path: path.confirmAccount,
       element: (
         <RegisterLoginLayout>
-          <ConfirmAccount/>
+          <ConfirmAccount />
         </RegisterLoginLayout>
 
       ),
@@ -144,9 +163,15 @@ export default function useRouterEmelent() {
         element: (
           <Detailproducts />
         ),
+      },
+      {
+        path: "category",
+        element: (
+          <Category />
+        ),
       },]
     },
- 
+
     {
       path: path.changepassword,
       element: (
@@ -157,7 +182,7 @@ export default function useRouterEmelent() {
 
       ),
     },
-   
+
   ]);
   return routes;
 }

@@ -34,6 +34,7 @@ export type FormValues = {
     description: string;
     count: number;
     images: string;
+    quantity: number,
     ProductImage: ImgOfProduct[];
     discount: number;
 }
@@ -47,6 +48,8 @@ export type Product = {
 };
 export default function Detailproducts() {
     const [first, setfirst] = useState<FormValues>()
+    const [quantity, setQuantity] = useState(1)
+    const [actionLike, setActionLike] = useState()
     const { id } = useParams()
     console.log(id);
 
@@ -111,6 +114,15 @@ export default function Detailproducts() {
             soldCount: 8,
         },
     ];
+
+    const plusQuantity = () => {
+        setQuantity(quantity + 1)
+    }
+    const minusQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1)
+        }
+    }
 
     return (
         <>
@@ -207,15 +219,17 @@ export default function Detailproducts() {
                                     {/* Tăng giảm số lượng */}
                                     <div className=' flex items-center '>
                                         {/* Giảm số lượng */}
-                                        <div className='border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]'>
+                                        <div className='border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]'
+                                            onClick={minusQuantity}>
                                             <Minus />
                                         </div>{/* end Giảm số lượng */}
                                         {/* Số lượng */}
                                         <div>
-                                            <p className='text-base mx-2 font-medium'>5</p>
+                                            <p className='text-base mx-2 font-medium'>{quantity}</p>
                                         </div>{/* end Số lượng */}
                                         {/* Tăng số lượng */}
-                                        <div className='border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]'>
+                                        <div className='border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]'
+                                            onClick={plusQuantity}>
                                             <Plus />
                                         </div>
                                         {/* end Tăng số lượng */}
@@ -236,7 +250,9 @@ export default function Detailproducts() {
                             </div>{/* end icon */}
                             {/* Mua ngay */}
                             <div className='w-[100%] flex mt-9 px-5 items-center gap-6'>
-                                <LoveProduct />
+                                <div >
+                                    <LoveProduct />
+                                </div>
                                 <div className=' flex items-center w-[312px] rounded-md h-[58px] hover:bg-[#ff6d65]
                                 transition duration-150 bg-[#EA4B48] justify-evenly cursor-pointer'>
                                     <button className='text-center text-base font-bold text-white '>
@@ -785,20 +801,17 @@ export default function Detailproducts() {
                     </div>{/* end Sản phẩm của shop */}
 
                     {/* Chi tiết và đánh giá */}
-                    <div className='mt-[70px]'>
-                        <div className='flex w-[100%] justify-center'>
-                            <p className='text-[#1A1A1A] text-base font-medium mr-9 uppercase'><a href="#">Chi tiết sản phẩm</a></p>
-                            <p className='text-[#1A1A1A] text-base font-medium uppercase'><a href="#">Đánh giá</a></p>
-                        </div>
-                    </div>{/* end Chi tiết và đánh giá */}
+                    <div className="tabs justify-center">
+                        <a className="tab tab-bordered text-[#1A1A1A] uppercase text-base">Chi tiết sản phẩm</a>
+                        <a className="tab tab-bordered text-[#1A1A1A] font-medium tab-active uppercase text-base">Đánh giá</a>
+                    </div>
                 </body >
             </Container>
             <div className='border-[1px] border-[#E0E0E0]'></div>
             <Container>
                 <div
-                    className='px-[113px] py-[78px] text-[20px] break-all'
-                    dangerouslySetInnerHTML={{ __html: first?.description }}
-                >
+                    className='px-[113px] py-[78px] text-sm break-all'
+                    dangerouslySetInnerHTML={{ __html: first?.description }}>
                 </div>
 
                 {/* <Detail /> */}

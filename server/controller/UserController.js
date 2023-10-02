@@ -78,6 +78,8 @@ const UserController = {
     }
   },
 
+  
+
   UpdatePassword: async (req, res) => {
     try {
       const userId = parseInt(req.params.id);

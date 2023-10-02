@@ -6,11 +6,11 @@ const morgan = require("morgan")
 const path = require('path')
 const bodyParser = require("body-parser");
 const AuthRouter = require("./routes/AuthRoutes")
+const CartRouter = require("./routes/CartRoutes")
 
 const UserRouter = require("./routes/UserRoutes")
 
 const ProductRoutes = require("./routes/ProductRoutes")
-
 const cookieParser = require("cookie-parser");
 dotenv.config();
 
@@ -36,5 +36,7 @@ app.use("/buyzzle/user", UserRouter)
 
 // sản phẩm
 app.use("/buyzzle/product", ProductRoutes)
+// CART
+app.use("/buyzzle/cart", CartRouter)
 
 

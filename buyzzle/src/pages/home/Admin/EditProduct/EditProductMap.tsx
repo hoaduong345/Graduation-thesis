@@ -36,11 +36,16 @@ export default function EditProductMap() {
     const [images, setImages] = useState('')
     const [url, setUrl] = useState<string[]>([])
     const editorRef = useRef<any>(null);
+    const [categoty, setCategory] = useState<Cate[]>([])
+    const [i, setI] = useState<number>()
+
+    const [editImages, setEditImages] = useState<string[]>([])
 
     const {
         control,
         handleSubmit,
         watch,
+        reset,
         formState: { errors, isDirty, isValid },
         register
     } = useForm<FormValues>({
@@ -51,11 +56,19 @@ export default function EditProductMap() {
             price: 1,
             description: "",
             discount: 1,
+            categoryID: 2
         },
-
     });
 
-    const [categoty, setCategory] = useState<Cate[]>([])
+    const handleRemoveOnlyIMG = (id: number) => {
+        imagesController.remove(id).then((_) => {
+            getListIMG()
+            console.log(id)
+        }).catch((err) => {
+            console.log("🚀 ~ file: EditProductMap.tsx:62 ~ imagesController.remove ~ err:", err)
+        })
+    }
+
     useEffect(() => {
         getCategory()
     }, [])
@@ -76,26 +89,43 @@ export default function EditProductMap() {
 
     const submitData = (data: any) => {
         console.log(data);
-
-        productController.update(id, data).then(() => {
+        productController.update(id, data).then(async (responseData) => {
+            console.log("🚀 ~ file: EditProductMap.tsx:90 ~ productController.update ~ responseData:", responseData)
             toast.success('Sua sanr phaarm thanhf coong !', {
                 position: "bottom-right"
             })
+            for (let i = 0; i < url.length; i++) {
+                await updateImages(responseData?.data.id, url[i])
+            }
+            reset({})
         }).catch(() => {
             toast.error('Sua sanr phaarm that bai !')
         })
     }
 
-    useEffect(() => {
+    const updateImages = async (id: number, url: string) => {
+        const urlImages = {
+            idproduct: id,
+            url: url
+        }
+        await axios.post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
+            .then(response => response.data)
+
+    }
+    const getListIMG = () => {
         axios.get(`${appConfig.apiUrl}/chitietproduct/${id}`)
             .then((detailForm) => {
                 return detailForm
             })
             .then((detailForm) => {
                 setEditProduct(detailForm.data)
+                setEditImages(detailForm.data.ProductImage)
             }).catch(error => {
                 console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error)
             })
+    }
+    useEffect(() => {
+        getListIMG();
     }, [])
 
 
@@ -134,7 +164,7 @@ export default function EditProductMap() {
                     <div>
                         {/* Mô Tả Sản Phẩm */}
                         <div>
-                            <span className='text-[#000] text-2xl font-normal '>Mô Tả Sản Phẩm</span>
+                            <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Mô Tả Sản Phẩm</span>
                             {/* card */}
                             <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
@@ -149,11 +179,12 @@ export default function EditProductMap() {
                                     }
                                 }} render={({ field }) => (
                                     <>
-                                        <label htmlFor='name' className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Tên Sản Phẩm*</label>
+                                        <label htmlFor='name' className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Tên Sản Phẩm*</label>
                                         {/* input addNameProducts */}
                                         <input
                                             className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%]
+                                             max-xl:text-sm max-lg:text-[13px]
                                             ${!!errors.name ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                             placeholder="Nhập tiêu đề sản phẩm"
                                             value={editProduct?.name}
@@ -203,7 +234,7 @@ export default function EditProductMap() {
 
                                 <Controller control={control} name='description' render={({ field }) => (
                                     <>
-                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
+                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Mô Tả Chi Tiết Sản Phẩm*</p>
                                         <Editor
                                             apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
                                             onInit={(evt, editor) => (editorRef.current = editor)}
@@ -251,19 +282,22 @@ export default function EditProductMap() {
                         </div>
                         {/* Danh Mục Sản Phẩm */}
                         <div className='mt-7'>
-                            <span className='text-[#000] text-2xl font-normal '>Danh Mục Sản Phẩm</span>
+                            <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Danh Mục Sản Phẩm</span>
                             {/* card */}
                             <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                 <Controller control={control} name='categoryID' render={({ }) => (
                                     <>
-                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Danh Mục Sản Phẩm*</p>
+                                        <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Danh Mục Sản Phẩm*</p>
                                         {/* Dropdown */}
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none "
+                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
                                                 {...register('categoryID')}
-                                            >
-
+                                                onChange={(na) => {
+                                                    const Id = na.target.value
+                                                    setI(Number(Id))
+                                                }}>
+                                                {/* fsdfds */}
                                                 {
                                                     categoty.map(e => {
                                                         return <option value={e.id}>{e.name}</option>
@@ -285,10 +319,10 @@ export default function EditProductMap() {
 
                                 />
 
-                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Tag*</p>
+                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Tag*</p>
                                 {/* Dropdown */}
                                 <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                    <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
+                                    <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md">
                                         <option>key-word tìm kiếm / key-word tìm kiếm 1</option>
                                         <option>key-word tìm kiếm 2 / key-word tìm kiếm 3</option>
                                     </select>
@@ -300,7 +334,7 @@ export default function EditProductMap() {
                     <div>
                         {/* Ảnh sản phẩm */}
                         <div>
-                            <span className='text-[#000] text-2xl font-normal'>Ảnh Sản Phẩm</span>
+                            <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Ảnh Sản Phẩm</span>
                             {/* card */}
                             <div className='card w-[100%] py-4 px-9 mt-2 flex 
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
@@ -308,10 +342,11 @@ export default function EditProductMap() {
                                 <Controller control={control} name='productImage' render={({ }) => (
                                     <>
                                         {/* form upload img */}
-                                        <div className='flex'>
+                                        <div className='flex max-[1300px]:gap-3'>
                                             <div className='max-w-max items-center'>
                                                 <label htmlFor="images">
-                                                    <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer'>
+                                                    <div className='outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer
+                                                            max-xl:px-4 max-[1100px]:py-4 max-[1024px]:p-2 max-[768px]:p-1'>
 
                                                         <input type="file"
                                                             // onChange={field.onChange}
@@ -319,14 +354,38 @@ export default function EditProductMap() {
                                                             id='images' multiple className='hidden ' />
                                                         <UploadIMG />
                                                         <div id="images" className='text-center mt-2'>
-                                                            <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold'>Click to upload
-                                                                <p className='text-[#1A1A1A] font-normal text-sm tracking-widest'>or drag and drop</p></p>
+                                                            <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold max-[1024px]:text-xs max-[768px]:text-[10px]'>Click to upload
+                                                                <p className='text-[#1A1A1A] font-normal text-sm tracking-widest max-[1024px]:text-[11px] max-[768px]:text-[10px]'>or drag and drop</p></p>
                                                         </div>
                                                     </div>
                                                 </label>
                                             </div>{/* end form upload img */}
                                             <div className='justify-center flex flex-1'>
                                                 <div className='inline-grid grid-cols-3 gap-4'>
+
+                                                    {
+                                                        editImages.map(e => {
+                                                            return (
+                                                                <>
+                                                                    <div className='relative'>
+                                                                        <div className='group relative'>
+                                                                            <img src={e.url} alt="imageproduct6" width={80} height={80} className='rounded-md' />
+                                                                            <div className='absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+                                                            opacity-0 transition duration-300 ease-in-out group-hover:opacity-20'>
+                                                                            </div>
+                                                                            <div className='transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute'
+                                                                            >
+                                                                                <button onClick={() => handleRemoveOnlyIMG(e.id)}>
+                                                                                    <RemoveIMG />
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            );
+                                                        })
+                                                    }
+
                                                     {
                                                         url.map(e => {
                                                             return (
@@ -358,7 +417,7 @@ export default function EditProductMap() {
 
                         {/* Giá và số lượng sản phẩm */}
                         <div className='mt-7'>
-                            <span className='text-[#000] text-2xl font-normal '>Giá & Số Lượng</span>
+                            <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Giá & Số Lượng</span>
                             {/* card */}
                             <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
@@ -380,12 +439,13 @@ export default function EditProductMap() {
                                         render={({ field }) => (
                                             <>
                                                 <div className='col-span-4'>
-                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giá Sản phẩm*</p>
+                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Giá Sản phẩm*</p>
                                                     <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                                             ${!!errors.price ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
                                                             `}>
                                                         <input
-                                                            className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
+                                                            className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
+                                                            max-xl:text-sm  max-lg:text-[13px]"
                                                             placeholder="000.000"
                                                             value={editProduct?.price}
                                                             {...register('price')}
@@ -396,7 +456,7 @@ export default function EditProductMap() {
                                                         //     field.onChange(value.replace(reg, ''))
                                                         // }}
                                                         />
-                                                        <p className='text-[#7A828A] font-bold ml-4 cursor-default'>VNĐ</p>
+                                                        <p className='text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px]  max-lg:text-[13px]'>VNĐ</p>
                                                     </div>
                                                     {errors.price && <p className='text-red-700 mt-2'>{errors.price.message}</p>}
                                                 </div>
@@ -420,12 +480,13 @@ export default function EditProductMap() {
                                         render={({ field }) => (
                                             <>
                                                 <div className='col-span-2'>
-                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Giảm giá Sản phẩm*</p>
+                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Giảm giá*</p>
                                                     <div className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                                             ${!!errors.discount ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}
                                                             `}>
                                                         <input
-                                                            className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]"
+                                                            className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
+                                                            max-xl:text-sm max-lg:text-[13px]"
                                                             placeholder="000.000"
                                                             maxLength={3}
                                                             // onChange={(e) => {
@@ -437,7 +498,7 @@ export default function EditProductMap() {
                                                             {...register('discount')}
                                                             onChange={onChangeInput}
                                                         />
-                                                        <p className='text-[#7A828A] font-bold ml-4 cursor-default'>%</p>
+                                                        <p className='text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px] max-lg:text-[13px]'>%</p>
                                                     </div>
                                                     {errors.discount && <p className='text-red-700 mt-2'>{errors.discount.message}</p>}
                                                 </div>
@@ -458,9 +519,10 @@ export default function EditProductMap() {
                                 }}
                                     render={({ field }) => (
                                         <>
-                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Số Lượng Sản Phẩm*</p>
+                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Số Lượng Sản Phẩm*</p>
                                             <input
                                                 className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
+                                                max-xl:text-sm max-lg:text-[13px]
                                                     ${!!errors.quantity ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'} `}
                                                 placeholder="000.000"
                                                 // onChange={(e) => {
@@ -484,27 +546,28 @@ export default function EditProductMap() {
                         </div>
                         {/* tình trạng sản phẩm */}
                         <div className='mt-7'>
-                            <span className='text-[#000] text-2xl font-normal'>Tình trạng sản phẩm</span>
+                            <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Tình trạng sản phẩm</span>
                             {/* card */}
                             <div className='card w-[100%] py-4 px-9 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
-                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[18px]'>Tình trạng sản phẩm*</p>
+                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[18px] max-xl:text-[13px] max-lg:text-xs'>Tình trạng sản phẩm*</p>
                                 <div className='flex text-center  w-16 justify-start gap-5'>
-                                    <h3 className='text-[#4C4C4C] font-semibold'>Ẩn</h3>
+                                    <h3 className='text-[#4C4C4C] font-semibold max-xl:text-[13px] max-lg:text-xs'>Ẩn</h3>
                                     {/* Swich */}
                                     <div className="form-control">
-                                        <input type="checkbox" className="toggle toggle-error" />
+                                        <input type="checkbox" className="toggle toggle-error max-xl:h-[20px] max-lg:h-[18px]" />
                                     </div>{/* end  Swich */}
-                                    <h3 className='text-[#5D5FEF] font-semibold'>Đăng</h3>
+                                    <h3 className='text-[#5D5FEF] font-semibold max-xl:text-[13px] max-lg:text-xs'>Đăng</h3>
                                 </div>
 
                             </div>
                         </div>
                         {/* button */}
-                        <div className='flex w-[50%] justify-between mt-6'>
-                            <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer'>
+                        <div className='flex w-[50%] justify-between mt-6 max-[1330px]:gap-5 max-[1330px]:w-[55%] max-[1024px]:w-[75%]'>
+                            <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer
+                                    max-[1330px]:w-[160px] max-[1024px]:w-[190px]'>
                                 <Link to='/' >
-                                    <button className='text-center text-base font-bold text-[#1A1A1A] '>
+                                    <button className='text-center text-base font-bold text-[#1A1A1A] max-xl:text-sm max-lg:text-[13px]'>
                                         Hủy bỏ
                                     </button>
                                 </Link>
@@ -512,8 +575,9 @@ export default function EditProductMap() {
 
                             <div className={`flex items-center w-[150px] rounded-md h-[46px] transition 
                                     duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer
+                                    max-[1330px]:w-[280px] max-[1024px]:w-[320px]
                                     `}>
-                                <button className={`text-center text-base font-bold text-[#FFFFFF] 
+                                <button className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
                                         `}>
                                     Sửa sản phẩm
                                 </button>

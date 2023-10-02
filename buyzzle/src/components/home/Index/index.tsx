@@ -1,11 +1,15 @@
-import { Images } from "../../Assets/TS";
-import Container from "../container/Container";
-import Category from "./components/Category";
-import Arrow from "../../Assets/TSX/arrow";
-import Products from "./components/Product";
+import { Images } from "../../../Assets/TS";
+import Container from "../../container/Container";
+import Category from "../components/Category";
+import Arrow from "../../../Assets/TSX/arrow";
+import Products from "../components/Product";
 
-import SlidesHome from "./components/slides/SlidesHome/SlidesHome";
-import Progess from "./components/progess";
+import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
+import Progess from "../components/progess";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Cate } from "../../../pages/home/Admin/Category/Category";
+import { Link } from "react-router-dom";
 
 export type Product = {
   id: number;
@@ -17,16 +21,20 @@ export type Product = {
 };
 
 export type FlashSaleList = {
-    id: number,
-    img: string,
-    giamGia: number,
-    title: string,
-    vote: number,
-    price: number,
-    daBan: number,
+  id: number,
+  img: string,
+  giamGia: number,
+  title: string,
+  vote: number,
+  price: number,
+  daBan: number,
 }
 
 function Index() {
+
+
+  const [categoty, setCategory] = useState<Cate[]>([])
+
   const products: Product[] = [
     {
       id: 1,
@@ -78,12 +86,28 @@ function Index() {
     },
   ];
 
+  const getCategory = () => {
+    axios.get('http://localhost:5000/buyzzle/product/allcategory')
+      .then(response => response.data
+      )
+      .then(data => {
+        setCategory(data)
+      })
+      .catch(err => console.log(err))
+  }
+
+
+
+  useEffect(() => {
+    getCategory()
+  }, [])
+
   return (
     <>
       <Container>
         <div className="container mt-[50px]">
           <div className="flex justify-between max-xl:flex-wrap">
-            <div className="max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]">
+            <div className="max-w-[872px] max-xl:mx-auto max-xl:mb-[20px] max-[1023px]:hidden">
               <SlidesHome />
             </div>
 
@@ -94,7 +118,7 @@ function Index() {
                 alt=""
               />
 
-              <div className="flex justify-between max-w-[421px]">
+              <div className="flex justify-between max-w-[421px] max-[556px]:hidden">
                 <img className="object-cover" src={Images.banner3} alt="" />
                 <img className="object-cover" src={Images.banner4} alt="" />
               </div>
@@ -103,7 +127,7 @@ function Index() {
         </div>
 
         <div className="container mt-[60px] ">
-          <div className="flex justify-between p-[40px] max-lg:flex-wrap shadow">
+          <div className="flex justify-between p-[40px] max-lg:flex-wrap shadow max-[426px]:hidden">
             <div className="flex gap-[16px] items-center justify-center max-lg:mb-[20px] max-lg:w-1/2">
               <img src={Images.car} alt="" />
               <span>Giao hàng miễn phí</span>
@@ -125,9 +149,15 @@ function Index() {
 
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Danh mục:</h1>
+          {/* <div className="flex flex-wrap gap-[35px] justify-center"> */}
+          <div className="grid grid-cols-6 gap-[35px] justify-center">
+            {
+              categoty.map(e => {
+                return <Category id={e.id} img={e.image} title={e.name} />
+              })
+            }
 
-          <div className="flex flex-wrap gap-[35px] justify-center">
-            <Category img={Images.Category1} title="Thiết bị điện gia dụng" />
+            {/* <Category img={Images.Category1} title="Thiết bị điện gia dụng" />
             <Category img={Images.Category2} title="Giày dép da" />
             <Category img={Images.Category3} title="Đồng hồ" />
             <Category img={Images.Category4} title="Máy ảnh" />
@@ -139,8 +169,9 @@ function Index() {
             <Category img={Images.Category9} title="Giày dép nữ" />
             <Category img={Images.Category10} title="Sức khỏe" />
             <Category img={Images.Category11} title="Sắc đẹp" />
-            <Category img={Images.Category12} title="Nhà cửa đời sống" />
+            <Category img={Images.Category12} title="Nhà cửa đời sống" /> */}
           </div>
+
         </div>
 
         <div className="container my-[60px] ">
@@ -165,7 +196,7 @@ function Index() {
             FLASH SALE:{" "}
           </h1>
 
-          <div className="flex flex-wrap gap-[27px]">
+          <div className="flex flex-wrap gap-[27px] justify-between max-[1025px]:gap-[15px] max-[1025px]:justify-center">
             <div className="max-w-[310px] shadow shadow-[#ffaaaf]">
               <div className="relative figure">
                 <img src={Images.flashSale1} alt="" />
@@ -391,14 +422,14 @@ function Index() {
 
       <div className="w-full mx-auto my-60px] bg-[#ffeae9] ">
         <Container>
-          <div className="py-[40px] backGroundImg flex justify-between">
-            <div className="max-w-[276px]">
+          <div className="py-[40px] backGroundImg flex justify-between max-[769px]:flex-col">
+            <div className="max-w-[276px] max-[1025px]:hidden">
               <img src={Images.chooseUs1} alt="" />
             </div>
             <div className="max-w[444px]">
               <img src={Images.chooseUs2} alt="" />
             </div>
-            <div className="flex-col max-w-[536px]">
+            <div className="flex-col max-w-[536px] max-[769px]:max-w-[700px]">
               <div className="max-w-[317px] pb-[26px]">
                 <span className="text-[40px] font-bold">
                   100% sản phẩm <span className="text-[#00b207]">xanh</span>{" "}
@@ -463,7 +494,7 @@ function Index() {
       </div>
 
       <Container>
-        <div className="my-[60px]">
+        <div className="my-[60px] max-[769px]:hidden">
           <h1 className="text-2xl font-bold mb-[15px]">
             Thương hiệu nổi tiếng:{" "}
           </h1>
@@ -487,7 +518,7 @@ function Index() {
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
 
-          <div className="flex flex-wrap justify-between">
+          <div className="flex flex-wrap justify-between max-[769px]:justify-center max-[769px]:gap-[30px]">
             {products.map((product) => {
               return <Products product={product} />;
             })}

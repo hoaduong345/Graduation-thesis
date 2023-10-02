@@ -11,25 +11,25 @@ datasource db {
 }
 
 model User {
-  id                   Int          @id @default(autoincrement())
-  email                String       @unique
-  username             String?      @unique
+  id                   Int       @id @default(autoincrement())
+  email                String    @unique
+  username             String?   @unique
   password             String
-  verify               Boolean      @default(false)
+  verify               Boolean   @default(false)
   Token                Token[]
   name                 String?
   phonenumber          String?
   image                String?
-  createdAt            DateTime     @default(now())
-  updateAt             DateTime     @default(now())
+  createdAt            DateTime  @default(now())
+  updateAt             DateTime  @default(now())
   dateOfBirth          DateTime?
   sex                  Boolean?
   refresh_token        String?
-  forgotpassword_token String? @db.VarChar(300)
+  forgotpassword_token String?   @db.VarChar(300)
   role                 Int?
-  fK_Role              Role?        @relation(fields: [role], references: [id])
-  cart                 CartSchema[]
-  // userprofile          UserProfile[]
+  fK_Role              Role?     @relation(fields: [role], references: [id])
+  cart                 Cart[]
+  // roleId               Role? @relation(fields: [id], references: [id])
 }
 
 // model UserProfile {
@@ -53,7 +53,7 @@ model Role {
 
 model Token {
   id           Int      @id @default(autoincrement())
-  userid       Int      
+  userid       Int
   fk_userTOken User     @relation(fields: [userid], references: [id])
   token        String
   createdAt    DateTime @default(now())
@@ -79,11 +79,9 @@ model Product {
   categoryID   Int?
   fK_category  Category?      @relation(fields: [categoryID], references: [id])
   OrderDetail  OrderDetail[]
-   ProductImage ProductImage[]   
-  itemCarts    ItemCart[]
+  ProductImage ProductImage[]
+  cart        ItemCart[]
 }
-
-
 
 model Category {
   id        Int       @id @default(autoincrement())
@@ -91,14 +89,22 @@ model Category {
   date      DateTime? @default(now())
   updatedAt DateTime? @default(now())
   createdAt DateTime? @default(now())
+  image String?
   products  Product[]
 }
 
+model Cart {
+  id       Int        @id @default(autoincrement())
+  user     User       @relation(fields: [userId], references: [id])
+  userId   Int
+  item     ItemCart[]
+  subtotal Int
+}
 model ItemCart {
   id         Int        @id @default(autoincrement())
   product    Product    @relation(fields: [productid], references: [id])
   productid  Int
-  cartschema CartSchema @relation(fields: [cartid], references: [id])
+  cartschema Cart @relation(fields: [cartid], references: [id])
   cartid     Int
   quantity   Int?       @default(1)
   price      Int?
@@ -107,19 +113,13 @@ model ItemCart {
   updatedAt  DateTime?  @default(now())
 }
 
-model CartSchema {
-  id       Int        @id @default(autoincrement())
-  user     User       @relation(fields: [userId], references: [id])
-  userId   Int
-  item     ItemCart[]
-  subtotal Int
-}
+
 
 model ProductImage {
-id               Int      @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   url              String?
   idproduct        Int?
-  fK_propductImage Product? @relation(fields: [idproduct],  references: [id], onDelete: Cascade)
+  fK_propductImage Product? @relation(fields: [idproduct], references: [id], onDelete: Cascade)
 }
 
 model Order {

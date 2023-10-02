@@ -115,19 +115,18 @@ export default function UserProfile() {
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+        // const { name, value } = e.target;
+        // setFormData({
+        //     ...formData,
+        //     [name]: value,
+        // });
 
-        if (isFormSubmitted) {
-
-            setErrors({
-                ...errorss,
-                [name]: '',
-            });
-        }
+        // if (isFormSubmitted) {
+        //     setErrors({
+        //         ...errorss,
+        //         [name]: '',
+        //     });
+        // }
     };
     const [date, setDate] = useState('');
 
