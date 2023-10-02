@@ -70,7 +70,7 @@ const AuthController = {
       });
 
       const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/${user.id}/verify/${token.token}`;
-      await SendEmail(user.email, "Verify email", url);
+      // await SendEmail(user.email, "Verify email", url);
       console.log("🚀 ~ file: AuthController.js:83 ~ register: ~ url:", url);
 
       console.log("Email URL: " + url);

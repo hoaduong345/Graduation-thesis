@@ -475,8 +475,7 @@ const ProductController = {
       const categoryId = newProduct.categoryID; 
   
       const recommendedProducts = await prisma.product.findMany({
-        where: {
-          // dk de loc cac sp lien quan
+        where: {    
           id: {
             not: productId,
           },
@@ -484,13 +483,32 @@ const ProductController = {
         },
         take: 5, 
       });
-  
       res.json(recommendedProducts);
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
     }
   },
+
+  getNewProducts: async (req, res) => {
+    try {
+      // Lấy số lượng sản phẩm mới bạn muốn gợi ý (ví dụ: 5 sản phẩm)
+      const numberOfProducts = 5;
+  
+      const newProducts = await prisma.product.findMany({
+        orderBy: {
+          createdAt: 'desc', // Sắp xếp theo thời gian tạo giảm dần để lấy sản phẩm mới nhất
+        },
+        take: numberOfProducts, // Lấy số lượng sản phẩm mới
+      });
+  
+      res.json(newProducts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+  
   
   
 

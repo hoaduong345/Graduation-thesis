@@ -78,6 +78,36 @@ const UserController = {
     }
   },
 
+  getUser: async (req, res) => {
+    try {
+      const userID = req.params.username;
+  
+      const user = await prisma.user.findUnique({
+        where: {
+          username: userID,
+        },
+        select: {
+          image: true, 
+          name: true, 
+          email: true, 
+          phonenumber: true, 
+          sex: true, 
+          dateOfBirth: true,
+        },
+      });
+  
+      if (!user) {
+        return res.status(404).json("Không tìm thấy User");
+      }
+  
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+  
+
   
 
   UpdatePassword: async (req, res) => {
