@@ -143,7 +143,7 @@ export default function Addproducts() {
     // console.log(watch().productDesc)
     return (
         <Container>
-            <body className="body-addproduct container mx-auto">
+            <div className="body-addproduct container mx-auto">
                 {/* back */}
                 <div className='back h-[57px] mt-[46px] '>
                     <div className='flex gap-3 items-center'>
@@ -603,7 +603,7 @@ export default function Addproducts() {
                         </div>
                     </form>
                 </div>
-            </body >
+            </div >
         </Container >
     )
 }
