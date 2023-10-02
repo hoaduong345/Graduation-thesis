@@ -541,7 +541,7 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                         type="date"
-                                                        value={date.substring(0, 10)}
+                                                        value={date}
                                                         onChange={handleDateChange} />
                                                     {!!errors.dateOfBirth && <p className='text-red-700 mt-2'>{errors.dateOfBirth.message}</p>}</>
                                             )} />

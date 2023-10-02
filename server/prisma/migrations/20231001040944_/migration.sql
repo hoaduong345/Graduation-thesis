@@ -53,7 +53,7 @@ CREATE TABLE `Product` (
     `discount` INTEGER NULL,
     `soldcount` INTEGER NULL,
     `quantity` INTEGER NULL,
-    `description` VARCHAR(191) NULL,
+    `description` VARCHAR(15000) NULL,
     `status` VARCHAR(191) NULL,
     `date` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `productId` INTEGER NULL,
@@ -71,6 +71,7 @@ CREATE TABLE `Category` (
     `date` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `image` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -79,10 +80,21 @@ CREATE TABLE `Category` (
 CREATE TABLE `Cart` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
-    `quantity` INTEGER NOT NULL DEFAULT 1,
-    `productId` INTEGER NOT NULL,
+    `subtotal` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ItemCart` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `productid` INTEGER NOT NULL,
+    `cartid` INTEGER NOT NULL,
+    `quantity` INTEGER NULL DEFAULT 1,
     `price` INTEGER NULL,
     `total` INTEGER NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -148,7 +160,10 @@ ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryID_fkey` FOREIGN KEY (`cat
 ALTER TABLE `Cart` ADD CONSTRAINT `Cart_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Cart` ADD CONSTRAINT `Cart_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ItemCart` ADD CONSTRAINT `ItemCart_productid_fkey` FOREIGN KEY (`productid`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ItemCart` ADD CONSTRAINT `ItemCart_cartid_fkey` FOREIGN KEY (`cartid`) REFERENCES `Cart`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ProductImage` ADD CONSTRAINT `ProductImage_idproduct_fkey` FOREIGN KEY (`idproduct`) REFERENCES `Product`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
