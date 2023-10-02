@@ -26,12 +26,12 @@ export default function OrderDetailPage() {
                                 </div>
                                 <div >
                                     <p className='font-normal text-sm max-xl:text-xs max-lg:text-[10px]' >Quay lại danh sách đơn hàng</p>
-                                    <h2 className='uppercase text-[32px] font-bold max-xl:text-[28px] max-lg:text-2xl'>Chi tiết đơn hàng</h2>
+                                    <h2 className='uppercase text-[32px] font-bold max-xl:text-[28px] max-lg:text-xl'>Chi tiết đơn hàng</h2>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="p-12 shadow border-[#6C6C6C40] rounded-md flex flex-col gap-10">
+                        <div className="p-12 shadow border-[#6C6C6C40] rounded-md flex flex-col gap-10 max-lg:p-6">
                             <div className="flex gap-5">
                                 <div className="w-[60%] max-lg:w-[55%] border-[#6C6C6C40] border-[1px] rounded-md p-[26px] flex flex-col gap-9">
                                     <div className="flex flex-col gap-3">
