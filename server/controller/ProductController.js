@@ -490,9 +490,15 @@ const ProductController = {
     }
   },
 
+
+
+
+
+
+  
   getNewProducts: async (req, res) => {
     try {
-      // Lấy số lượng sản phẩm mới bạn muốn gợi ý (ví dụ: 5 sản phẩm)
+      // Lấy số lượng sản phẩm mới bạn muốn gợi ý
       const numberOfProducts = 5;
   
       const newProducts = await prisma.product.findMany({
@@ -502,7 +508,7 @@ const ProductController = {
         take: numberOfProducts, // Lấy số lượng sản phẩm mới
       });
   
-      res.json(newProducts);
+      res.json(newProducts); 
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
