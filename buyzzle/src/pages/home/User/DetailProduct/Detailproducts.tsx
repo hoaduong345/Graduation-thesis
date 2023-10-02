@@ -1,28 +1,29 @@
 
-import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { appConfig } from '../../../../configsEnv'
-import Container from '../../../../components/container/Container'
 import { Images } from '../../../../Assets/TS'
 import { numberFormat } from '../../../../Helper'
+import Container from '../../../../components/container/Container'
+import { appConfig } from '../../../../configsEnv'
 
-import Detail from './Detail'
-import Rating from './Rating'
-import Products from '../../../../components/home/components/Product'
-import ArrowPrev from '../../../../Assets/TSX/ArrowPrev'
+import ArrowDown from '../../../../Assets/TSX/ArrowDown'
 import ArrowNext from '../../../../Assets/TSX/ArrowNext'
+import ArrowPrev from '../../../../Assets/TSX/ArrowPrev'
+import ArrowUp from '../../../../Assets/TSX/ArrowUp'
 import Minus from '../../../../Assets/TSX/Minus'
 import Plus from '../../../../Assets/TSX/Plus'
-import ArrowUp from '../../../../Assets/TSX/ArrowUp'
-import ArrowDown from '../../../../Assets/TSX/ArrowDown'
+import Cart from '../../Admin/Assets/TSX/Cart'
 import FB from '../../Admin/Assets/TSX/FB'
-import TW from '../../Admin/Assets/TSX/TW'
 import Insta from '../../Admin/Assets/TSX/Insta'
+import LoveProduct from '../../Admin/Assets/TSX/LoveProduct'
 import SaveLink from '../../Admin/Assets/TSX/SaveLink'
 import Share from '../../Admin/Assets/TSX/Share'
-import LoveProduct from '../../Admin/Assets/TSX/LoveProduct'
-import Cart from '../../Admin/Assets/TSX/Cart'
+import TW from '../../Admin/Assets/TSX/TW'
+import Rating from './Rating'
+import { productController } from '../../../../Controllers/ProductsController'
+import DetailRecommandProduct from './DetailRecommandProduct'
+import { Products, TProductResponse } from '../FilterPage/FiltersPage'
 
 export interface ImgOfProduct {
     url: string
@@ -49,7 +50,7 @@ export type Product = {
 export default function Detailproducts() {
     const [first, setfirst] = useState<FormValues>()
     const [quantity, setQuantity] = useState(1)
-    const [actionLike, setActionLike] = useState()
+    const [recommandProduct, setRecommandProduct] = useState<Products[]>([])
     const { id } = useParams()
     console.log(id);
 
@@ -61,59 +62,13 @@ export default function Detailproducts() {
             .then((detail) => {
                 setfirst(detail.data)
             }).catch(error => {
+                console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error)
             })
     }, [])
 
-    const products: Product[] = [
-        {
-            id: 1,
-            imgSrc: Images.spGoiY1,
-            title: "Bộ Máy Tính Case PC Chơi Game 1",
-            price: 1200000,
-            discount: 50,
-            soldCount: 33,
-        },
-        {
-            id: 2,
-            imgSrc: Images.spGoiY1,
-            title: "Bộ Máy Tính Case PC Chơi Game 2",
-            price: 500000,
-            discount: 5,
-            soldCount: 12,
-        },
-        {
-            id: 3,
-            imgSrc: Images.spGoiY1,
-            title: "Bộ Máy Tính Case PC Chơi Game 3",
-            price: 680000,
-            discount: 10,
-            soldCount: 42,
-        },
-        {
-            id: 4,
-            imgSrc: Images.spGoiY1,
-            title: "Bộ Máy Tính Case PC Chơi Game 4",
-            price: 900000,
-            discount: 20,
-            soldCount: 55,
-        },
-        {
-            id: 5,
-            imgSrc: Images.spGoiY1,
-            title: "Bộ Máy Tính Case PC Chơi Game 5",
-            price: 1000000,
-            discount: 70,
-            soldCount: 8,
-        },
-        {
-            id: 6,
-            imgSrc: Images.spGoiY1,
-            title: "Bộ Máy Tính Case PC Chơi Games 5",
-            price: 1000000,
-            discount: 70,
-            soldCount: 8,
-        },
-    ];
+    useEffect(() => {
+        RecommandProductDetailPage(id)
+    }, [])
 
     const plusQuantity = () => {
         setQuantity(quantity + 1)
@@ -122,6 +77,16 @@ export default function Detailproducts() {
         if (quantity > 1) {
             setQuantity(quantity - 1)
         }
+    }
+
+    const RecommandProductDetailPage = (id: number) => {
+        console.log("🚀 ~ file: Detailproducts.tsx:76 ~ RecommandProductDetailPage ~ id:", id)
+        productController.getProductSuggest(id).then((res) => {
+            console.log("🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:", res)
+            setRecommandProduct(res)
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
     return (
@@ -276,527 +241,18 @@ export default function Detailproducts() {
                         </div>
                         <div className='mt-11 col-span-2 '>
                             <div className="flex flex-wrap gap-3 ">
-                                <div
-                                    className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]">
-                                    <div className="relative figure">
-
-                                        <img className="h-[207px] w-[100%]" alt="" src={Images.imgProduct} />
-
-
-                                        <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                                            Giảm 10%
-                                        </p>
-                                    </div>
-
-                                    <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-
-                                        <p className="font-bold text-[16px] max-xl:text-[15px] break-words truncate">COMBO HỘP 18 GIẤY THƯỢNG HẠNG HOT TREND 2023 </p>
-
-                                        <div className="flex gap-[7px]">
-                                            <div className="text-[7px] font-normal bg110k bg-red-500 max-w-[151px] text-white text-center p-[3px]">
-                                                Giảm 1999k
-                                            </div>
-                                            <div className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]">
-                                                FREE SHIP
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 items-center gap-3">
-                                            <p className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through">
-                                                29999999đ
-                                            </p>
-                                            <p className="text-[16px] text-[#865546] col-span-2 font-bold ">
-                                                1231231232
-                                            </p>
-                                        </div>
-                                        <div className='flex'>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star2} alt="" />
-                                            </button>
-
-
-                                            <span className="text-[12px] mr-[30px] ml-[4px]">{4.2}</span>
-
-
-                                            <p className="text-[12px] items-center text-[#4c4c4c] truncate font-medium">
-                                                Đã bán
-                                                <span> 300</span>
-                                            </p>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <div
-                                    className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]">
-                                    <div className="relative figure">
-
-                                        <img className="h-[207px] w-[100%]" alt="" src={Images.imgProduct} />
-
-
-                                        <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                                            Giảm 10%
-                                        </p>
-                                    </div>
-
-                                    <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-
-                                        <p className="font-bold text-[16px] max-xl:text-[15px] break-words truncate">COMBO HỘP 18 GIẤY THƯỢNG HẠNG HOT TREND 2023 </p>
-
-                                        <div className="flex gap-[7px]">
-                                            <div className="text-[7px] font-normal bg110k bg-red-500 max-w-[151px] text-white text-center p-[3px]">
-                                                Giảm 1999k
-                                            </div>
-                                            <div className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]">
-                                                FREE SHIP
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 items-center gap-3">
-                                            <p className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through">
-                                                29999999đ
-                                            </p>
-                                            <p className="text-[16px] text-[#865546] col-span-2 font-bold ">
-                                                1231231232
-                                            </p>
-                                        </div>
-                                        <div className='flex'>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star2} alt="" />
-                                            </button>
-
-
-                                            <span className="text-[12px] mr-[30px] ml-[4px]">{4.2}</span>
-
-
-                                            <p className="text-[12px] items-center text-[#4c4c4c] truncate font-medium">
-                                                Đã bán
-                                                <span> 300</span>
-                                            </p>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <div
-                                    className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]">
-                                    <div className="relative figure">
-
-                                        <img className="h-[207px] w-[100%]" alt="" src={Images.imgProduct} />
-
-
-                                        <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                                            Giảm 10%
-                                        </p>
-                                    </div>
-
-                                    <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-
-                                        <p className="font-bold text-[16px] max-xl:text-[15px] break-words truncate">COMBO HỘP 18 GIẤY THƯỢNG HẠNG HOT TREND 2023 </p>
-
-                                        <div className="flex gap-[7px]">
-                                            <div className="text-[7px] font-normal bg110k bg-red-500 max-w-[151px] text-white text-center p-[3px]">
-                                                Giảm 1999k
-                                            </div>
-                                            <div className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]">
-                                                FREE SHIP
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 items-center gap-3">
-                                            <p className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through">
-                                                29999999đ
-                                            </p>
-                                            <p className="text-[16px] text-[#865546] col-span-2 font-bold ">
-                                                1231231232
-                                            </p>
-                                        </div>
-                                        <div className='flex'>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star2} alt="" />
-                                            </button>
-
-
-                                            <span className="text-[12px] mr-[30px] ml-[4px]">{4.2}</span>
-
-
-                                            <p className="text-[12px] items-center text-[#4c4c4c] truncate font-medium">
-                                                Đã bán
-                                                <span> 300</span>
-                                            </p>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <div
-                                    className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]">
-                                    <div className="relative figure">
-
-                                        <img className="h-[207px] w-[100%]" alt="" src={Images.imgProduct} />
-
-
-                                        <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                                            Giảm 10%
-                                        </p>
-                                    </div>
-
-                                    <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-
-                                        <p className="font-bold text-[16px] max-xl:text-[15px] break-words truncate">COMBO HỘP 18 GIẤY THƯỢNG HẠNG HOT TREND 2023 </p>
-
-                                        <div className="flex gap-[7px]">
-                                            <div className="text-[7px] font-normal bg110k bg-red-500 max-w-[151px] text-white text-center p-[3px]">
-                                                Giảm 1999k
-                                            </div>
-                                            <div className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]">
-                                                FREE SHIP
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 items-center gap-3">
-                                            <p className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through">
-                                                29999999đ
-                                            </p>
-                                            <p className="text-[16px] text-[#865546] col-span-2 font-bold ">
-                                                1231231232
-                                            </p>
-                                        </div>
-                                        <div className='flex'>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star2} alt="" />
-                                            </button>
-
-
-                                            <span className="text-[12px] mr-[30px] ml-[4px]">{4.2}</span>
-
-
-                                            <p className="text-[12px] items-center text-[#4c4c4c] truncate font-medium">
-                                                Đã bán
-                                                <span> 300</span>
-                                            </p>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <div
-                                    className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]">
-                                    <div className="relative figure">
-
-                                        <img className="h-[207px] w-[100%]" alt="" src={Images.imgProduct} />
-
-
-                                        <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                                            Giảm 10%
-                                        </p>
-                                    </div>
-
-                                    <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-
-                                        <p className="font-bold text-[16px] max-xl:text-[15px] break-words truncate">COMBO HỘP 18 GIẤY THƯỢNG HẠNG HOT TREND 2023 </p>
-
-                                        <div className="flex gap-[7px]">
-                                            <div className="text-[7px] font-normal bg110k bg-red-500 max-w-[151px] text-white text-center p-[3px]">
-                                                Giảm 1999k
-                                            </div>
-                                            <div className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]">
-                                                FREE SHIP
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 items-center gap-3">
-                                            <p className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through">
-                                                29999999đ
-                                            </p>
-                                            <p className="text-[16px] text-[#865546] col-span-2 font-bold ">
-                                                1231231232
-                                            </p>
-                                        </div>
-                                        <div className='flex'>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star2} alt="" />
-                                            </button>
-
-
-                                            <span className="text-[12px] mr-[30px] ml-[4px]">{4.2}</span>
-
-
-                                            <p className="text-[12px] items-center text-[#4c4c4c] truncate font-medium">
-                                                Đã bán
-                                                <span> 300</span>
-                                            </p>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <div
-                                    className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]">
-                                    <div className="relative figure">
-
-                                        <img className="h-[207px] w-[100%]" alt="" src={Images.imgProduct} />
-
-
-                                        <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                                            Giảm 10%
-                                        </p>
-                                    </div>
-
-                                    <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-
-                                        <p className="font-bold text-[16px] max-xl:text-[15px] break-words truncate">COMBO HỘP 18 GIẤY THƯỢNG HẠNG HOT TREND 2023 </p>
-
-                                        <div className="flex gap-[7px]">
-                                            <div className="text-[7px] font-normal bg110k bg-red-500 max-w-[151px] text-white text-center p-[3px]">
-                                                Giảm 1999k
-                                            </div>
-                                            <div className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]">
-                                                FREE SHIP
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 items-center gap-3">
-                                            <p className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through">
-                                                29999999đ
-                                            </p>
-                                            <p className="text-[16px] text-[#865546] col-span-2 font-bold ">
-                                                1231231232
-                                            </p>
-                                        </div>
-                                        <div className='flex'>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star2} alt="" />
-                                            </button>
-
-
-                                            <span className="text-[12px] mr-[30px] ml-[4px]">{4.2}</span>
-
-
-                                            <p className="text-[12px] items-center text-[#4c4c4c] truncate font-medium">
-                                                Đã bán
-                                                <span> 300</span>
-                                            </p>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <div
-                                    className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]">
-                                    <div className="relative figure">
-
-                                        <img className="h-[207px] w-[100%]" alt="" src={Images.imgProduct} />
-
-
-                                        <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                                            Giảm 10%
-                                        </p>
-                                    </div>
-
-                                    <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-
-                                        <p className="font-bold text-[16px] max-xl:text-[15px] break-words truncate">COMBO HỘP 18 GIẤY THƯỢNG HẠNG HOT TREND 2023 </p>
-
-                                        <div className="flex gap-[7px]">
-                                            <div className="text-[7px] font-normal bg110k bg-red-500 max-w-[151px] text-white text-center p-[3px]">
-                                                Giảm 1999k
-                                            </div>
-                                            <div className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]">
-                                                FREE SHIP
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 items-center gap-3">
-                                            <p className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through">
-                                                29999999đ
-                                            </p>
-                                            <p className="text-[16px] text-[#865546] col-span-2 font-bold ">
-                                                1231231232
-                                            </p>
-                                        </div>
-                                        <div className='flex'>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star2} alt="" />
-                                            </button>
-
-
-                                            <span className="text-[12px] mr-[30px] ml-[4px]">{4.2}</span>
-
-
-                                            <p className="text-[12px] items-center text-[#4c4c4c] truncate font-medium">
-                                                Đã bán
-                                                <span> 300</span>
-                                            </p>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <div
-                                    className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-xl:max-w-[180px]">
-                                    <div className="relative figure">
-
-                                        <img className="h-[207px] w-[100%]" alt="" src={Images.imgProduct} />
-
-
-                                        <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                                            Giảm 10%
-                                        </p>
-                                    </div>
-
-                                    <div className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] ">
-
-                                        <p className="font-bold text-[16px] max-xl:text-[15px] break-words truncate">COMBO HỘP 18 GIẤY THƯỢNG HẠNG HOT TREND 2023 </p>
-
-                                        <div className="flex gap-[7px]">
-                                            <div className="text-[7px] font-normal bg110k bg-red-500 max-w-[151px] text-white text-center p-[3px]">
-                                                Giảm 1999k
-                                            </div>
-                                            <div className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]">
-                                                FREE SHIP
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 items-center gap-3">
-                                            <p className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through">
-                                                29999999đ
-                                            </p>
-                                            <p className="text-[16px] text-[#865546] col-span-2 font-bold ">
-                                                1231231232
-                                            </p>
-                                        </div>
-                                        <div className='flex'>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star1} alt="" />
-                                            </button>
-                                            <button>
-                                                <img src={Images.star2} alt="" />
-                                            </button>
-
-
-                                            <span className="text-[12px] mr-[30px] ml-[4px]">{4.2}</span>
-
-
-                                            <p className="text-[12px] items-center text-[#4c4c4c] truncate font-medium">
-                                                Đã bán
-                                                <span> 300</span>
-                                            </p>
-                                        </div>
-
-
-                                    </div>
-                                </div>
+                                {
+                                    recommandProduct.map((items) => {
+                                        console.log("🚀 ~ file: Detailproducts.tsx:247 ~ recommandProduct?.rows?.map ~ itemsssss:", items)
+                                        return (
+                                            <>
+                                                <DetailRecommandProduct productRecommand={items} />
+                                            </>
+                                        );
+                                    })
+                                }
                             </div>
+
                         </div>
                     </div>{/* end Sản phẩm của shop */}
 

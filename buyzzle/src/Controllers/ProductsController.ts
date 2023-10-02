@@ -48,6 +48,11 @@ class ProductController {
     update = async (id: number, data: FormValues) => {
         return await axios.put(`${appConfig.apiUrl}/updateproduct/${id}`, data)
     }
+    getProductSuggest = async (id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/recommendedproducts/${id}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
 }
 
 export const productController = new ProductController()

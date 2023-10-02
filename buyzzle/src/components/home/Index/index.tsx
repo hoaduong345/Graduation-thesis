@@ -2,7 +2,6 @@ import { Images } from "../../../Assets/TS";
 import Container from "../../container/Container";
 import Category from "../components/Category";
 import Arrow from "../../../Assets/TSX/arrow";
-import Products from "../components/Product";
 
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
 import Progess from "../components/progess";
@@ -12,6 +11,7 @@ import { Cate } from "../../../pages/home/Admin/Category/Category";
 import { Link } from "react-router-dom";
 import { productController } from "../../../Controllers/ProductsController";
 import Productss from "../components/Product";
+import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
 
 export type Product = {
   id: number;
@@ -36,7 +36,7 @@ function Index() {
 
 
   const [categoty, setCategory] = useState<Cate[]>([])
-  const [product, setProducts] = useState<Product[]>([])
+  const [product, setProducts] = useState<Products[]>([])
   const products: Product[] = [
     {
       id: 1,

@@ -460,28 +460,31 @@ const ProductController = {
     }
   },
 
-  getRecommendedProducts: async (req, res) => {
+  getSugggestProduct: async (req, res) => {
     try {
       const productId = parseInt(req.params.id);
-  
+
       const newProduct = await prisma.product.findUnique({
         where: {
           id: productId,
         },
       });
       if (!newProduct) {
-        return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
+        return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
       }
-      const categoryId = newProduct.categoryID; 
-  
+      const categoryId = newProduct.categoryID;
+
       const recommendedProducts = await prisma.product.findMany({
-        where: {    
+        include: {
+          ProductImage: true,
+        },
+        where: {
           id: {
             not: productId,
           },
           categoryID: categoryId,
         },
-        take: 5, 
+        take: 8,
       });
       res.json(recommendedProducts);
     } catch (error) {
@@ -494,27 +497,20 @@ const ProductController = {
     try {
       // Lấy số lượng sản phẩm mới bạn muốn gợi ý (ví dụ: 5 sản phẩm)
       const numberOfProducts = 5;
-  
+
       const newProducts = await prisma.product.findMany({
         orderBy: {
-          createdAt: 'desc', // Sắp xếp theo thời gian tạo giảm dần để lấy sản phẩm mới nhất
+          createdAt: "desc", // Sắp xếp theo thời gian tạo giảm dần để lấy sản phẩm mới nhất
         },
         take: numberOfProducts, // Lấy số lượng sản phẩm mới
       });
-  
+
       res.json(newProducts);
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
     }
   },
-  
-  
-  
-
-
-
-
 };
 
 module.exports = ProductController;

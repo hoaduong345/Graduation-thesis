@@ -47,7 +47,7 @@ router.put(
 //   ProductController.deleteImageByProductID
 // );
 
-router.get("/recommendedproducts/:id", ProductController.getRecommendedProducts);
+router.get("/recommendedproducts/:id", ProductController.getSugggestProduct);
 
 router.get("/getnewproducts", ProductController.getNewProducts);
 
