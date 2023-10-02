@@ -822,11 +822,7 @@ export default function Detailproducts() {
                 <div className="container my-[60px]">
                     <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
 
-                    <div className="flex flex-wrap justify-between">
-                        {products.map((product) => {
-                            return <Products product={product} />;
-                        })}
-                    </div>
+
                 </div>
                 <div className="pagination">
                     <a href="#" className="prev mr-[60px]">

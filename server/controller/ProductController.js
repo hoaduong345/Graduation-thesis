@@ -405,7 +405,7 @@ const ProductController = {
       // tìm kiếm = keyword
       const keyword = req.query.keyword;
       const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 10;
+      const pageSize = parseInt(req.query.pageSize) || 40;
       console.log(
         "🚀 ~ file: ProductController.js:409 ~ getAllProduct: ~ pageSize:",
         pageSize
