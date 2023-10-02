@@ -51,14 +51,7 @@ export default function useRouterEmelent() {
       ),
     },
 
-    {
-      path: "/userprofilepage",
-      element: (
-        <MainLayout>
-          <UserProfile />
-        </MainLayout>
-      ),
-    },
+  
 
     {
       path: "/register",
@@ -129,7 +122,14 @@ export default function useRouterEmelent() {
 
       ),
     },
-
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
 
     // AdminPages
     {
@@ -145,6 +145,7 @@ export default function useRouterEmelent() {
           <Addproducts />
         ),
       },
+   
       {
         path: "updateproduct/:id",
         element: (
