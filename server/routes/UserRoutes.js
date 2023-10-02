@@ -13,5 +13,6 @@ router.put("/userprofile/:username", UserController.UserProfile);
 
 router.put("/updatepassword/:id", UserController.UpdatePassword);
 
+router.get("/chitietuser/:username", UserController.getUser);
 
 module.exports = router;
