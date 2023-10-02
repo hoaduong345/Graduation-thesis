@@ -434,6 +434,9 @@ const ProductController = {
         whereClause.fK_category = {
           id: parseInt(categoryId),
         };
+        // whereClause.price = {
+        //   gte: 11707,  // lớn hơn hoặc bằng
+        // };
       }
       const result = await prisma.product.findMany({
         include: {
@@ -456,6 +459,62 @@ const ProductController = {
       res.status(500).json(error.message);
     }
   },
+
+  getRecommendedProducts: async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+  
+      const newProduct = await prisma.product.findUnique({
+        where: {
+          id: productId,
+        },
+      });
+      if (!newProduct) {
+        return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
+      }
+      const categoryId = newProduct.categoryID; 
+  
+      const recommendedProducts = await prisma.product.findMany({
+        where: {    
+          id: {
+            not: productId,
+          },
+          categoryID: categoryId,
+        },
+        take: 5, 
+      });
+      res.json(recommendedProducts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+  getNewProducts: async (req, res) => {
+    try {
+      // Lấy số lượng sản phẩm mới bạn muốn gợi ý (ví dụ: 5 sản phẩm)
+      const numberOfProducts = 5;
+  
+      const newProducts = await prisma.product.findMany({
+        orderBy: {
+          createdAt: 'desc', // Sắp xếp theo thời gian tạo giảm dần để lấy sản phẩm mới nhất
+        },
+        take: numberOfProducts, // Lấy số lượng sản phẩm mới
+      });
+  
+      res.json(newProducts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+  
+  
+  
+
+
+
+
 };
 
 module.exports = ProductController;

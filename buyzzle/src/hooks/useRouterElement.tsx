@@ -34,6 +34,17 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
+
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+
+    
     {
       path: "/products",
       element: (
