@@ -22,6 +22,7 @@ import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
 import Cart from "../pages/home/User/CartPage/Cart";
 import OrderHistory from "../pages/home/User/OrderHistoryPage/OrderHistory";
 import CheckOut from "../pages/home/User/CheckoutPage/CheckOut";
+import OrderDetailPage from "../pages/home/User/OrderDetail/OrderDetailPage";
 
 
 export default function useRouterEmelent() {
@@ -121,6 +122,14 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <CheckOut />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderdetail",
+      element: (
+        <MainLayout>
+          <OrderDetailPage />
         </MainLayout>
       ),
     },
