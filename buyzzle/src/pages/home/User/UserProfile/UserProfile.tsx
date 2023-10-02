@@ -176,13 +176,17 @@ export default function UserProfile() {
             // setSex(userData.sex);
             setDate(userData.dateOfBirth);
 
-
+           
         } else {
             console.log("Chua Dang Nhap Dung");
         }
     }, []);
-
-
+    var date1: any
+    if(date != null){
+       date1 = date.substring(0, 10);
+    }else{
+        date1 = date;
+    }
     // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
 
 
@@ -541,7 +545,7 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                         type="date"
-                                                        value={date}
+                                                        value={date1}
                                                         onChange={handleDateChange} />
                                                     {!!errors.dateOfBirth && <p className='text-red-700 mt-2'>{errors.dateOfBirth.message}</p>}</>
                                             )} />
