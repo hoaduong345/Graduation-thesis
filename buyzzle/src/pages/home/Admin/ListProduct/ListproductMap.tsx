@@ -112,7 +112,7 @@ export default function ListproductMap(props: Props) {
         </div>{/* end infor in card */}
 
         {isHovering && (
-          <div className='absolute z-10 bottom-0 left-[30%] transition-all duration-700 bg-white
+          <div className='absolute z-10 top-[100%] left-[30%] transition-all duration-700 bg-white
           shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] w-[584px] rounded-md'>
             <div className='p-7 grid grid-cols-3 gap-4'>
               <div className='col-span-2 flex flex-col gap-2'>
