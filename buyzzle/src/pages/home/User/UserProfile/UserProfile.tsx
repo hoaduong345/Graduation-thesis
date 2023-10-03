@@ -22,19 +22,6 @@ type FormValues = {
     // Address: string
 }
 
-// function getSexFromSomeOtherFunction(): string | null {
-//     const user = localStorage.getItem('user');
-//     if (user !== null) {
-//         const userData = JSON.parse(user);
-//         // console.log("userData.sex"+userData.sex)
-//         return userData.sex;
-
-//     } else {
-//         console.log("Chua Dang Nhap Dung");
-//         return null;
-//     }
-
-// }
 
 export default function UserProfile() {
     const {
