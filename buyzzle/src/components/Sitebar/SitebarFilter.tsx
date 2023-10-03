@@ -67,6 +67,10 @@ export type Props = {
 };
 export default function SitebarFilter(props: Props) {
   const [otherkeywords, setOtherkeywords] = useState<Products[]>();
+  const [rangeValue, setRangeValue] = useState([20, 40]);
+  const handleSliderChange = (newValue: [number, number]) => {
+    setRangeValue(newValue);
+  };
 
   return (
     <>
@@ -114,17 +118,19 @@ export default function SitebarFilter(props: Props) {
           <Slider
             min={0}
             max={100}
+            step={1}
+            value={rangeValue}
             trackStyle={{
               backgroundColor: "#EA4B48",
             }}
             handleStyle={{ border: "1px solid red" }}
             // dotStyle={{ backgroundColor: "#EA4B48", outlineColor: "#EA4B48",color:'red',border:'1px solid #EA4B48'}}
-            onChange={(e) => console.log(e)}
+            onChange={(e: any) => handleSliderChange(e)}
             range
           />
           <div className="flex mt-[16px] justify-start gap-2">
             <p className="max-w-max">Giá: </p>
-            <p className="font-extrabold max-w-max">50đ - 1,500đ</p>
+            <p className="font-extrabold max-w-max">{`${rangeValue[0]} - ${rangeValue[1]}`}</p>
           </div>
         </div>
 
