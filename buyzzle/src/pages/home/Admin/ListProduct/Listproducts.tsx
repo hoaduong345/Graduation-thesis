@@ -17,6 +17,7 @@ import SitebarAdmin from '../Sitebar/Sitebar'
 import ListproductMap from "./ListproductMap"
 import { Button } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import SalesIcon from '../Assets/Icon/SalesIcon'
 export default function ListproductsAdmin() {
 
   const [products, setProducts] = useState<any>({})
@@ -271,7 +272,13 @@ export default function ListproductsAdmin() {
                         <ListproductMap HandleXoa={handleRemove} products={items} />
                       </>
                     );
-                  }) : <p>khong co san pham</p>
+                  }) : <div className='p-32 items-center flex flex-col gap-6'>
+                    <div className='max-w-max mx-auto'>
+                      <SalesIcon />
+                    </div>
+                    <p className='text-[#b39393] text-xl'>Danh sách sản phẩm trống</p>
+                    <button className='bg-[#EA4B48] w-[20%] cursor-pointer py-2 text-white rounded'>Thêm Ngay</button>
+                  </div>
               }
             </div>
             {/* <Pagination postPer={postPerPage} totalPosts={products.length} /> */}

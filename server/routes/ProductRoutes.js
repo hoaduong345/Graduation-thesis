@@ -47,6 +47,10 @@ router.put(
 //   ProductController.deleteImageByProductID
 // );
 
+router.get("/recommendedproducts/:id", ProductController.getRecommendedProducts);
+
+router.get("/getnewproducts", ProductController.getNewProducts);
+
 // thêm danh mục
 
 router.post("/addcategory", ProductController.addCategory);

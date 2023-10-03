@@ -1629,7 +1629,7 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@heroicons/react@^2.0.18":
+"@heroicons/react@2.0.18":
   version "2.0.18"
   resolved "https://registry.npmjs.org/@heroicons/react/-/react-2.0.18.tgz"
   integrity sha512-7TyMjRrZZMBPa+/5Y8lN0iyvUU/01PeMGX2+RE7cQWpEUIcb4QotzUObFkJDejj/HUH4qjP/eQ0gzzKs2f+6Yw==
@@ -1945,7 +1945,7 @@
   dependencies:
     "@lexical/offset" "0.8.1"
 
-"@material-tailwind/react@^2.1.2":
+"@material-tailwind/react@2.1.2":
   version "2.1.2"
   resolved "https://registry.npmjs.org/@material-tailwind/react/-/react-2.1.2.tgz"
   integrity sha512-/R5aurer27jB4eFyw4YBgLHBRE5XZxWCLPuI8rz2VMaDdaTxgrFBBH0ZUW5YFJLE+71t+Bm9HY5KUtU3mZldMg==

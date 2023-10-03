@@ -22,6 +22,7 @@ import Detailproducts from "../pages/home/User/DetailProduct/Detailproducts";
 import Cart from "../pages/home/User/CartPage/Cart";
 import OrderHistory from "../pages/home/User/OrderHistoryPage/OrderHistory";
 import CheckOut from "../pages/home/User/CheckoutPage/CheckOut";
+import OrderDetailPage from "../pages/home/User/OrderDetail/OrderDetailPage";
 
 
 export default function useRouterEmelent() {
@@ -34,6 +35,17 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
+
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+
+    
     {
       path: "/products",
       element: (
@@ -51,14 +63,7 @@ export default function useRouterEmelent() {
       ),
     },
 
-    {
-      path: "/userprofilepage/:username",
-      element: (
-        <MainLayout>
-          <UserProfile />
-        </MainLayout>
-      ),
-    },
+  
 
     {
       path: "/register",
@@ -121,6 +126,14 @@ export default function useRouterEmelent() {
       ),
     },
     {
+      path: "orderdetail",
+      element: (
+        <MainLayout>
+          <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
+    {
       path: path.confirmAccount,
       element: (
         <RegisterLoginLayout>
@@ -129,7 +142,14 @@ export default function useRouterEmelent() {
 
       ),
     },
-
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
 
     // AdminPages
     {
@@ -145,6 +165,7 @@ export default function useRouterEmelent() {
           <Addproducts />
         ),
       },
+   
       {
         path: "updateproduct/:id",
         element: (

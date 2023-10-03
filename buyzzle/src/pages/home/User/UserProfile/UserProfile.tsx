@@ -132,7 +132,7 @@ function Form1() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phonenumber, setPhonenumber] = useState('');
-
+    const [editUser, setEditUser] = useState<FormValues>()
 
 
     useEffect(() => {
@@ -160,18 +160,22 @@ function Form1() {
             const userData = JSON.parse(user);
             setUsername(userData.username);
             setName(userData.name);
-            setEmail(userData.email);
-            setPhonenumber(userData.phonenumber);
-            // setSex(userData.sex);
-            setDate(userData.dateOfBirth);
-
-
+            // setEmail(userData.email);
+            // setPhonenumber(userData.phonenumber);
+            // // setSex(userData.sex);
+            // setDate(userData.dateOfBirth);
+            
+           
         } else {
             console.log("Chua Dang Nhap Dung");
         }
     }, []);
-
-
+    var date1: any
+    if(date != null){
+       date1 = date.substring(0, 10);
+    }else{
+        date1 = date;
+    }
     // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
 
 
@@ -365,7 +369,7 @@ function Form1() {
                                          rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                         ${!!errors.email ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                         placeholder="Email"
-                                                        value={email}
+                                                        value={editUser?.email}
                                                         {...register('email')}
                                                         onChange={e => setEmail(e.target.value)}
                                                     />
@@ -493,44 +497,24 @@ function Form1() {
                                             </select>
                                         </div>
                                     </div>
-                                    <div className="w-[32%]  ">
-                                        <div className="mt-3">
-                                            <p>Tháng*</p>
-                                            <select onChange={handleMonthChange} className="h-11 px-4 mt-1 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
-                                                <option className=" hidden">Chọn Tháng</option>
-                                                {
-                                                    Array.from({ length: 12 }).map((e, i) => {
-                                                        return (
-                                                            <>
-                                                                <option>{i + 1}</option>
-                                                            </>
-                                                        );
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="w-[32%] ">
-                                        <div className="mt-3">
-                                            <p>Năm*</p>
-                                            <select onChange={handleYearChange} className="h-11 px-4 border-[1px] border-[#FFAAAF] mt-1 text-[#393939] text-sm w-full rounded-[6px] cursor-pointer outline-none ">
-                                                <option className=" hidden">Chọn năm</option>
-                                                {
-                                                    Array.from({ length: 100 }).map((e, i) => {
-                                                        return (
-                                                            <>
-                                                                <option>{1950 + i}</option>
-                                                            </>
-                                                        );
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
-                                        <div>
-                                            <input type="date" onChange={handleDateChange} />
+                                </div> */}
+                                        <div className='w-[100%] mt-4'>
+                                            <Controller control={control} name='dateOfBirth' rules={{
+                                                // required: {
+                                                //     value: true,
+                                                //     message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
+                                                // }
+                                            }} render={({ field }) => (
+                                                <>
+                                                    <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Ngày sinh</label>
+                                                    <input className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
+                                                        type="date"
+                                                        value={date1}
+                                                        onChange={handleDateChange} />
+                                                    {!!errors.dateOfBirth && <p className='text-red-700 mt-2'>{errors.dateOfBirth.message}</p>}</>
+                                            )} />
                                         </div>
                                         {/* button */}
                                         <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
