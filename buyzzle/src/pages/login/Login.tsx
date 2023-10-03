@@ -64,9 +64,9 @@ function Login() {
                 if (response.headers['content-type'] === 'application/json; charset=utf-8') {
                     const jsonString: string = JSON.stringify(response.data);
                     const jsonObject = JSON.parse(jsonString);
-
+                    // console.log("aaaaaaaaaa"+response)
                     // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
-                    console.log(jsonObject);
+                    // console.log(response);
                     // Truy cập các giá trị trong jsonObject
 
                     const username = jsonObject.username;
