@@ -240,12 +240,15 @@ const ProductController = {
         return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
       }
 
+      const SellingPrice = price - (price * (discount / 100));
+      const Pricesale = price * (discount / 100);
+
       const newProduct = {
         name,
         price: parseInt(price),
         rate: parseInt(rate),
-        pricesale: parseInt(pricesale),
-        sellingPrice: parseInt(sellingPrice),
+        pricesale: calculatedPricesale,
+        sellingPrice: calculatedSellingPrice,
         discount: parseInt(discount),
         soldcount: parseInt(soldcount),
         quantity: parseInt(quantity),
@@ -261,12 +264,12 @@ const ProductController = {
       const neww = await prisma.product.create({
         data: newProduct,
       });
+
+      console.log ("a", SellingPrice);
+      console.log ("b", Pricesale);
+
       
-      newProduct.sellingPrice = newProduct.price - (newProduct.price * (newProduct.discount / 100));
-      console.log("🚀 ~ file: ProductController.js:266 ~ addProduct: ~ newProduct.sellingPrice = newProduct.price - (newProduct.price * (newProduct.discount / 100));:", newProduct.sellingPrice = newProduct.price - (newProduct.price * (newProduct.discount / 100)));
-      newProduct.pricesale = newProduct.price * (newProduct.discount / 100);
-      console.log("🚀 ~ file: ProductController.js:268 ~ addProduct: ~ newProduct.pricesale = newProduct.price * (newProduct.discount /100);:", newProduct.pricesale = newProduct.price * (newProduct.discount /100));
-     
+      
       console.log(neww);
       // res.status(200).json("Thêm sản phẩm thành công");
       res.status(200).json(neww);
@@ -439,6 +442,7 @@ const ProductController = {
           gte: parseInt(req.query.minPrice),
         };
       }
+      console.log(req.query.minPrice);
       
 
 
