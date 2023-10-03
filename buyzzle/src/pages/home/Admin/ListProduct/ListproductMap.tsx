@@ -44,9 +44,9 @@ export default function ListproductMap(props: Props) {
           </div>{/* end checkbox */}
 
           {/* InforProduct */}
-          <div className='InforProduct w-[35%] flex items-center'>
+          <div className='InforProduct w-[35%] max-[850px]:w-[50%] flex items-center'>
             <div>
-              <img className='w-[70px] h-[70px] rounded-md' src={products.ProductImage[0].url} alt="imageproduct" />
+              <img className='w-[70px] h-[70px] object-contain rounded-md' src={products.ProductImage[0].url} alt="imageproduct" />
             </div>
             <div className='inforProducts ml-4'>
               <p className='nameProducts text-[#1A1A1A] text-xs font-semibold leading-4 max-w-[250px] uppercase
