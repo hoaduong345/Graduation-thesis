@@ -261,7 +261,10 @@ const ProductController = {
       const neww = await prisma.product.create({
         data: newProduct,
       });
-
+      
+      newProduct.sellingPrice = price - (price * discount / 100);
+      newProduct.pricesale = newProduct.price - newProduct.sellingPrice;
+     
       console.log(neww);
       // res.status(200).json("Thêm sản phẩm thành công");
       res.status(200).json(neww);
@@ -406,7 +409,8 @@ const ProductController = {
       const keyword = req.query.keyword;
       const page = parseInt(req.query.page) || 1;
       const pageSize = parseInt(req.query.pageSize) || 40;
-    
+      const sort = req.query.sort;
+
       const categoryId = req.query.categoryId;
   
       const skip = (page - 1) * pageSize;
@@ -437,9 +441,7 @@ const ProductController = {
 
 
       const result = await prisma.product.findMany({
-        orderBy: {
-          price: "desc",
-        },
+        orderBy: sort ? { price: sort } : {},
         include: {
           ProductImage: true,
           fK_category: true,
