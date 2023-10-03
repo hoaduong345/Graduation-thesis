@@ -8,8 +8,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { bool, boolean } from 'yup';
-import { userController } from '../../../../Controllers/UserController';
-import { isDate } from 'util/types';
 
 type FormValues = {
     username: string,
@@ -25,21 +23,7 @@ type FormValues = {
     // Address: string
 }
 
-// function getSexFromSomeOtherFunction(): string | null {
-//     const user = localStorage.getItem('user');
-//     if (user !== null) {
-//         const userData = JSON.parse(user);
-//         // console.log("userData.sex"+userData.sex)
-//         return userData.sex;
-
-//     } else {
-//         console.log("Chua Dang Nhap Dung");
-//         return null;
-//     }
-
-// }
-
-export default function UserProfile() {
+function Form1() {
     const {
         control,
         handleSubmit,
@@ -144,8 +128,23 @@ export default function UserProfile() {
 
 
 
+    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phonenumber, setPhonenumber] = useState('');
     const [editUser, setEditUser] = useState<FormValues>()
 
+
+    useEffect(() => {
+        // const initialSexValue = getSexFromSomeOtherFunction();
+        // if (initialSexValue !== null) {
+        //     setSex(JSON.parse(initialSexValue));
+
+
+        // } else {
+        //     console.log("initialSexValue = null");
+        // }
+    }, []);
     const [sex, setSex] = useState<boolean>();
 
 
@@ -157,38 +156,58 @@ export default function UserProfile() {
     useEffect(() => {
         const user = localStorage.getItem('user');
         if (user != null) {
+
             const userData = JSON.parse(user);
-            const username = userData.username;
-            console.log("USERNAME: "+ username);
-            userController.getUserWhereUsername(username).then((res) => {
-                setEditUser(res)
-                setSex(res.sex)
-                setDate(res.dateOfBirth.substring(0, 10))
-            })
+            setUsername(userData.username);
+            setName(userData.name);
+            // setEmail(userData.email);
+            // setPhonenumber(userData.phonenumber);
+            // // setSex(userData.sex);
+            // setDate(userData.dateOfBirth);
+            
+           
         } else {
             console.log("Chua Dang Nhap Dung");
         }
-
     }, []);
-  
-  
+    var date1: any
+    if(date != null){
+       date1 = date.substring(0, 10);
+    }else{
+        date1 = date;
+    }
+    // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+
+    //     setSex(event.target.value);
+
+    // }
 
     const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
 
     const onSubmit = async (formData: FormValues) => {
-      
+        // const response = await axios.post(API, data);
+        //   console.log("server: ", response); 
 
         try {
-          
+            // formData.dateOfBirth = `${day}/${month}/${year}`;
             formData.dateOfBirth = date;
+            // const booleanValue = JSON.parse(formData.sex);
+
             formData.sex = JSON.parse(formData.sex);
+            // console.log("checker", booleanValue);
+
+            // const StringValue = "true"
+
+
+
             const response = await axios.put(API, formData);
             console.log("edit thanh cong", response);
 
             if (response.status === 200) {
-                console.log("Edit successfully");
+                console.log("Sign-in successfully");
                 toast.success(
-                    "Cập nhật thành công",
+                    "Edit thành công",
                     {
                         position: "top-right",
                         autoClose: 5000,
@@ -207,9 +226,11 @@ export default function UserProfile() {
                 );
             }
         } catch (error) {
+            // console.log("Them that bai", error);
             console.error(error);
             if (axios.isAxiosError(error) && error.response) {
                 const responseData = error.response.data;
+                // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
                 if (responseData.error) {
                     console.log(`Lỗi2: ${responseData.error}`);
                     const errorMessageUsername = responseData.error.username;
@@ -255,9 +276,7 @@ export default function UserProfile() {
 
 
     };
-    const onChangeInput = (e: any) => {
-        setEditUser(e.target.value)
-    }
+
 
 
     return (
@@ -300,7 +319,7 @@ export default function UserProfile() {
                                                             placeholder="Tên đăng nhập"
                                                             value={param.username}
                                                             {...register('username')}
-                                                            onChange={onChangeInput}
+                                                            onChange={e => setUsername(e.target.value)}
                                                         // disabled
                                                         />
                                                         {!!errors.username && <p className='text-red-700 mt-2'>{errors.username.message}</p>}</>
@@ -325,9 +344,9 @@ export default function UserProfile() {
                                                             className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                         ${!!errors.name ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                             placeholder="Tên người dùng"
-                                                            value={editUser?.name}
+                                                            value={name}
                                                             {...register('name')}
-                                                            onChange={onChangeInput}
+                                                            onChange={e => setName(e.target.value)}
 
                                                         />
                                                         {!!errors.name && <p className='text-red-700 mt-2'>{errors.name.message}</p>}</>
@@ -352,7 +371,7 @@ export default function UserProfile() {
                                                         placeholder="Email"
                                                         value={editUser?.email}
                                                         {...register('email')}
-                                                        onChange={onChangeInput}
+                                                        onChange={e => setEmail(e.target.value)}
                                                     />
                                                     {!!errors.email && <p className='text-red-700 mt-2'>{errors.email.message}</p>}</>
                                             )} />
@@ -448,9 +467,9 @@ export default function UserProfile() {
                                          rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                         ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                             placeholder="Số điện thoại"
-                                                            value={editUser?.phonenumber}
+                                                            value={phonenumber}
                                                             {...register('phonenumber')}
-                                                            onChange={onChangeInput}
+                                                            onChange={e => setPhonenumber(e.target.value)}
                                                         />
                                                         {!!errors.phonenumber && <p className='text-red-700 mt-2'>{errors.phonenumber.message}</p>}</>
                                                 )} />
@@ -492,7 +511,7 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                         type="date"
-                                                        value={date}
+                                                        value={date1}
                                                         onChange={handleDateChange} />
                                                     {!!errors.dateOfBirth && <p className='text-red-700 mt-2'>{errors.dateOfBirth.message}</p>}</>
                                             )} />
