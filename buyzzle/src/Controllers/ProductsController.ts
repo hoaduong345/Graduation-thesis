@@ -42,6 +42,16 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getSortProductbyPrice = async (key: string, id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?sortByPrice=${key}&categoryId=${id}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getSortProductbyDateCreate = async (key: string, id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?sortByDateCreate=${key}&categoryId=${id}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
     remove = async (id: number) => {
         return await axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`)
     }
