@@ -261,7 +261,10 @@ const ProductController = {
       const neww = await prisma.product.create({
         data: newProduct,
       });
-
+      
+      newProduct.sellingPrice = price - (price * discount / 100);
+      newProduct.pricesale = newProduct.price - newProduct.sellingPrice;
+     
       console.log(neww);
       // res.status(200).json("Thêm sản phẩm thành công");
       res.status(200).json(neww);
@@ -406,16 +409,10 @@ const ProductController = {
       const keyword = req.query.keyword;
       const page = parseInt(req.query.page) || 1;
       const pageSize = parseInt(req.query.pageSize) || 40;
-      console.log(
-        "🚀 ~ file: ProductController.js:409 ~ getAllProduct: ~ pageSize:",
-        pageSize
-      );
-      const categoryId = req.query.categoryId;
-      console.log(
-        "🚀 ~ file: ProductController.js:414 ~ getAllProduct: ~ categoryId:",
-        categoryId
-      );
+      const sort = req.query.sort;
 
+      const categoryId = req.query.categoryId;
+  
       const skip = (page - 1) * pageSize;
       const whereClause = {
         name: {
@@ -425,23 +422,26 @@ const ProductController = {
       const totalProduct = await prisma.product.findMany({
         where: whereClause,
       });
-      console.log(
-        "🚀 ~ file: ProductController.js:420 ~ getAllProduct: ~ totalProduct:",
-        totalProduct.length
-      );
+    
 
       if (categoryId) {
         whereClause.fK_category = {
           id: parseInt(categoryId),
         };
         // whereClause.price = {
-        //   gte: 11707,  // lớn hơn hoặc bằng
+        //   gte: 10000,  // lớn hơn hoặc bằng
         // };
       }
+      if (req.query.minPrice) {
+        whereClause.price = {
+          gte: parseInt(req.query.minPrice),
+        };
+      }
+      
+
+
       const result = await prisma.product.findMany({
-        orderBy: {
-          price: "desc",
-        },
+        orderBy: sort ? { price: sort } : {},
         include: {
           ProductImage: true,
           fK_category: true,
@@ -496,18 +496,15 @@ const ProductController = {
     }
   },
 
+
   getNewProducts: async (req, res) => {
     try {
-      // Lấy số lượng sản phẩm mới bạn muốn gợi ý (ví dụ: 5 sản phẩm)
-      const numberOfProducts = 5;
-
       const newProducts = await prisma.product.findMany({
         orderBy: {
-          createdAt: "desc", // Sắp xếp theo thời gian tạo giảm dần để lấy sản phẩm mới nhất
+          createdAt: "desc", // sap xep time de lay san pham moi nhat
         },
-        take: numberOfProducts, // Lấy số lượng sản phẩm mới
+        take: 5, 
       });
-
       res.json(newProducts);
     } catch (error) {
       console.error(error);
