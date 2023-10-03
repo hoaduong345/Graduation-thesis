@@ -11,7 +11,10 @@ import { Cate } from "../../../pages/home/Admin/Category/Category";
 import { Link } from "react-router-dom";
 import { productController } from "../../../Controllers/ProductsController";
 import Productss from "../components/Product";
-import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
+import {
+  ImgOfProduct,
+  Products,
+} from "../../../pages/home/User/FilterPage/FiltersPage";
 
 export type Product = {
   id: number;
@@ -20,23 +23,22 @@ export type Product = {
   price: number;
   discount: number;
   soldCount: number;
+  ProductImage: ImgOfProduct[];
 };
 
 export type FlashSaleList = {
-  id: number,
-  img: string,
-  giamGia: number,
-  title: string,
-  vote: number,
-  price: number,
-  daBan: number,
-}
+  id: number;
+  img: string;
+  giamGia: number;
+  title: string;
+  vote: number;
+  price: number;
+  daBan: number;
+};
 
 function Index() {
-
-
-  const [categoty, setCategory] = useState<Cate[]>([])
-  const [product, setProducts] = useState<Products[]>([])
+  const [categoty, setCategory] = useState<Cate[]>([]);
+  const [product, setProducts] = useState<Product[]>([]);
   const products: Product[] = [
     {
       id: 1,
@@ -88,27 +90,27 @@ function Index() {
     },
   ];
   const getCategory = () => {
-    axios.get('http://localhost:5000/buyzzle/product/allcategory')
-      .then(response => response.data
-      )
-      .then(data => {
-        setCategory(data)
+    axios
+      .get("http://localhost:5000/buyzzle/product/allcategory")
+      .then((response) => response.data)
+      .then((data) => {
+        setCategory(data);
       })
-      .catch(err => console.log(err))
-  }
+      .catch((err) => console.log(err));
+  };
 
   const getAllProduct = () => {
     productController.getAllProducts().then((res: any) => {
-      setProducts(res.rows)
-    })
-  }
+      setProducts(res.rows);
+    });
+  };
   useEffect(() => {
-    getAllProduct()
-  }, [])
+    getAllProduct();
+  }, []);
 
   useEffect(() => {
-    getCategory()
-  }, [])
+    getCategory();
+  }, []);
 
   return (
     <>
@@ -159,11 +161,9 @@ function Index() {
           <h1 className="text-2xl font-bold mb-[15px]">Danh mục:</h1>
           {/* <div className="flex flex-wrap gap-[35px] justify-center"> */}
           <div className="grid grid-cols-6 gap-[35px] justify-center">
-            {
-              categoty.map(e => {
-                return <Category id={e.id} img={e.image} title={e.name} />
-              })
-            }
+            {categoty.map((e) => {
+              return <Category id={e.id} img={e.image} title={e.name} />;
+            })}
 
             {/* <Category img={Images.Category1} title="Thiết bị điện gia dụng" />
             <Category img={Images.Category2} title="Giày dép da" />
@@ -179,7 +179,6 @@ function Index() {
             <Category img={Images.Category11} title="Sắc đẹp" />
             <Category img={Images.Category12} title="Nhà cửa đời sống" /> */}
           </div>
-
         </div>
 
         <div className="container my-[60px] ">

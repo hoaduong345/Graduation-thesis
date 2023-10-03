@@ -439,6 +439,9 @@ const ProductController = {
         // };
       }
       const result = await prisma.product.findMany({
+        orderBy: {
+          price: "desc",
+        },
         include: {
           ProductImage: true,
           fK_category: true,
