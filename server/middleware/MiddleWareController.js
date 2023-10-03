@@ -20,7 +20,7 @@ const MiddleWareController = {
         next();
       });
     } else {
-      console.log("You are not authenticated");
+      console.log("You are not authenticated "+token);
       return res.status(401).json({ message: "Unauthorized" });
     }
   },

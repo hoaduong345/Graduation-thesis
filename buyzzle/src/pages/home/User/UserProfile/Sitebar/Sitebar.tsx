@@ -15,9 +15,10 @@ export default function Sitebar() {
     const API = "http://localhost:5000/buyzzle/auth/logout";
     function LogOut() {
         try {
-            axios.post(API);
-            localStorage.removeItem('user');
-            window.location.href = "/";
+           const reponse = axios.post(API);
+            // localStorage.removeItem('user');
+            console.log(reponse);
+            // window.location.href = "/";
         } catch (error) {
             console.log(error);
         }
