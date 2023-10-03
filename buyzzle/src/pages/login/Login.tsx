@@ -43,7 +43,11 @@ function Login() {
     const onSubmit = handleSubmit(async (data) => {
         try {
             console.log("checker", data);
-            const response = await axios.post(API, data);
+            const response = await axios.post(API, data, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                }, withCredentials: true
+            });
 
             if (response.status === 200) {
                 console.log("Login successfully");
@@ -64,7 +68,7 @@ function Login() {
                     // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
                     console.log(jsonObject);
                     // Truy cập các giá trị trong jsonObject
-                   
+
                     const username = jsonObject.username;
                     const UserData = { username};
                     localStorage.setItem('user', JSON.stringify(UserData));
