@@ -251,9 +251,8 @@ const AuthController = {
                     path: '/',
                     sameSite: 'strict',
                 });
-                const { password, ...others } = user;
-                console.log('Login successfully');
-                return res.status(200).json({ ...others, accessToken });
+                // const { password, ...others } = user;
+                return res.status(200).json({ accessToken });
             }
         } catch (error) {
             console.log(error.message);
@@ -300,6 +299,7 @@ const AuthController = {
     forgotPassword: async (req, res) => {
         try {
             const reqemail = req.body.email;
+            console.log("🚀 ~ file: AuthController.js:302 ~ forgotPassword: ~ reqemail:", reqemail)
 
             const user = await prisma.user.findUnique({
                 where: {
@@ -335,13 +335,14 @@ const AuthController = {
                 console.log('Generated URL:', url);
             }
 
-            const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${forgot_password_token}`;
+            const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
             console.log('Generated URL:', url);
             // await SendEmail(user.email, "Forgot Password", url);
 
             res.status(200).send('A Link has sent to your email');
         } catch (error) {
             console.error(error);
+            console.log("error", error)
             res.status(500).send('Internal server error');
         }
     },
