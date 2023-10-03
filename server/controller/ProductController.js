@@ -262,8 +262,10 @@ const ProductController = {
         data: newProduct,
       });
       
-      newProduct.sellingPrice = price - (price * discount / 100);
-      newProduct.pricesale = newProduct.price - newProduct.sellingPrice;
+      newProduct.sellingPrice = newProduct.price - (newProduct.price * (newProduct.discount / 100));
+      console.log("🚀 ~ file: ProductController.js:266 ~ addProduct: ~ newProduct.sellingPrice = newProduct.price - (newProduct.price * (newProduct.discount / 100));:", newProduct.sellingPrice = newProduct.price - (newProduct.price * (newProduct.discount / 100)));
+      newProduct.pricesale = newProduct.price * (newProduct.discount / 100);
+      console.log("🚀 ~ file: ProductController.js:268 ~ addProduct: ~ newProduct.pricesale = newProduct.price * (newProduct.discount /100);:", newProduct.pricesale = newProduct.price * (newProduct.discount /100));
      
       console.log(neww);
       // res.status(200).json("Thêm sản phẩm thành công");
