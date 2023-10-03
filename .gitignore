@@ -5,3 +5,4 @@ server/prisma/schema.prisma
 buyzzle/yarn.lock
 buyzzle/package-lock.json
 server/prisma/migrations/20231001042651_/migration.sql
+buyzzle/yarn.lock
