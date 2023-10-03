@@ -240,15 +240,15 @@ const ProductController = {
         return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
       }
 
-      const SellingPrice = price - (price * (discount / 100));
+      const SellingPrice = price - price * (discount / 100);
       const Pricesale = price * (discount / 100);
 
       const newProduct = {
         name,
         price: parseInt(price),
         rate: parseInt(rate),
-        pricesale: calculatedPricesale,
-        sellingPrice: calculatedSellingPrice,
+        pricesale: Pricesale,
+        sellingPrice: SellingPrice,
         discount: parseInt(discount),
         soldcount: parseInt(soldcount),
         quantity: parseInt(quantity),
@@ -265,11 +265,9 @@ const ProductController = {
         data: newProduct,
       });
 
-      console.log ("a", SellingPrice);
-      console.log ("b", Pricesale);
+      console.log("a", SellingPrice);
+      console.log("b", Pricesale);
 
-      
-      
       console.log(neww);
       // res.status(200).json("Thêm sản phẩm thành công");
       res.status(200).json(neww);
@@ -341,14 +339,16 @@ const ProductController = {
       if (parseInt(discount) <= 0) {
         return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
       }
+      const SellingPrice = price - price * (discount / 100);
+      const Pricesale = price * (discount / 100);
 
       // Tạo dữ liệu mới để cập nhật
       const updatedProductData = {
         name,
         price: parseInt(price),
         rate: parseInt(rate),
-        pricesale: parseInt(pricesale),
-        sellingPrice: parseInt(sellingPrice),
+        pricesale: Pricesale,
+        sellingPrice: SellingPrice,
         discount: parseInt(discount),
         soldcount: parseInt(soldcount),
         quantity: parseInt(quantity),
@@ -414,10 +414,11 @@ const ProductController = {
       const keyword = req.query.keyword;
       const page = parseInt(req.query.page) || 1;
       const pageSize = parseInt(req.query.pageSize) || 40;
-      const sort = req.query.sort;
+      const sortByPrice = req.query.sortByPrice;
+      const sortByDateCreate = req.query.sortByDateCreate;
 
       const categoryId = req.query.categoryId;
-  
+
       const skip = (page - 1) * pageSize;
       const whereClause = {
         name: {
@@ -427,7 +428,6 @@ const ProductController = {
       const totalProduct = await prisma.product.findMany({
         where: whereClause,
       });
-    
 
       if (categoryId) {
         whereClause.fK_category = {
@@ -443,11 +443,12 @@ const ProductController = {
         };
       }
       console.log(req.query.minPrice);
-      
-
 
       const result = await prisma.product.findMany({
-        orderBy: sort ? { price: sort } : {},
+        orderBy: {
+          sellingPrice: sortByPrice,
+          createdAt: sortByDateCreate,
+        },
         include: {
           ProductImage: true,
           fK_category: true,
@@ -457,7 +458,7 @@ const ProductController = {
         take: pageSize,
       });
       const resultProduct = {
-        allProduct: totalProduct,
+        // allProduct: totalProduct,
         currentPage: page,
         totalPage: Math.ceil(totalProduct.length / pageSize),
         rows: result,
@@ -502,14 +503,13 @@ const ProductController = {
     }
   },
 
-
   getNewProducts: async (req, res) => {
     try {
       const newProducts = await prisma.product.findMany({
         orderBy: {
           createdAt: "desc", // sap xep time de lay san pham moi nhat
         },
-        take: 5, 
+        take: 5,
       });
       res.json(newProducts);
     } catch (error) {
