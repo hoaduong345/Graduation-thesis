@@ -437,7 +437,7 @@ const ProductController = {
       }
 
       if (req.query.minPrice && req.query.maxPrice) {
-        whereClause.price = {
+        whereClause.sellingPrice = {
           gte: parseInt(req.query.minPrice),
           lte: parseInt(req.query.maxPrice),
         };
