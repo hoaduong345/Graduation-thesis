@@ -57,13 +57,20 @@ export default function Productss(props: Props) {
             </div>
           </div>
 
-          <div className="flex justify-between items-center">
-            <p className="text-[16px] text-[#865546] font-bold">
-              {price} vnd
-            </p>
-            <p className="text-[12px] text-[#4c4c4c] font-normal">
-              Đã bán
-              <span> {product.soldCount}</span>
+          <div
+            className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] 
+        max-2xl:max-h-max 
+        max-lg:h-[180px]
+        "
+          >
+            <p
+              className="font-bold text-base max-xl:text-[15px] break-words truncate
+          max-2xl:text-[15px]
+          max-lg:text-2xl
+          max-lg:mt-4
+          "
+            >
+              {product.name}
             </p>
           </div>
         </div>
