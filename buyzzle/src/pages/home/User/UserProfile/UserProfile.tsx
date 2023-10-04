@@ -11,12 +11,15 @@ import { bool, boolean } from 'yup';
 import { userController } from '../../../../Controllers/UserController';
 import { isDate } from 'util/types';
 
+
+
+
 type FormValues = {
     username: string,
     name: string,
     email: string,
     sex: string,
-    phonenumber: number,
+    phonenumber: string,
     dateOfBirth: string,
     // fullName: string,
     // Address: string
@@ -24,6 +27,35 @@ type FormValues = {
 
 
 export default function UserProfile() {
+    const [validUrl, setValidUrl] = useState(false);
+    const param = useParams();
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [imageURL, setImageURL] = useState<string | null>(null);
+    const [editUser, setEditUser] = useState<FormValues>()
+
+   
+   
+    const [sex, setSex] = useState<boolean>();
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user != null) {
+            const userData = JSON.parse(user);
+            const username = userData.username;
+            console.log("USERNAME: " + username);
+            userController.getUserWhereUsername(username).then((res) => {
+                setEditUser(res)
+                setSex(res.sex)
+       
+                setDate(res.dateOfBirth.substring(0, 10))
+            })
+        } else {
+            console.log("Chua Dang Nhap Dung");
+        }
+
+    }, []);
+
+
+
     const {
         control,
         handleSubmit,
@@ -33,24 +65,17 @@ export default function UserProfile() {
         mode: 'all',
         defaultValues:
         {
-            username: '',
-            name: '',
-            email: '',
-            sex: "",
-            dateOfBirth: '',
-            phonenumber: undefined,
+            username: "" + param.username,
+            name: "" + editUser?.name,
+            email: "" + editUser?.email,
+            sex: "" + editUser?.sex,
+            dateOfBirth: "" + editUser?.dateOfBirth,
+            phonenumber: "" + editUser?.phonenumber,
             // fullName: '',
             // Address: ''
         },
 
     });
-
-    const [validUrl, setValidUrl] = useState(false);
-    const param = useParams();
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [imageURL, setImageURL] = useState<string | null>(null);
-
-
 
     useEffect(() => {
         function CheckLink() {
@@ -70,6 +95,8 @@ export default function UserProfile() {
     }, [param]);
 
 
+
+    
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
 
@@ -128,9 +155,7 @@ export default function UserProfile() {
 
 
 
-    const [editUser, setEditUser] = useState<FormValues>()
 
-    const [sex, setSex] = useState<boolean>();
 
 
     const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,31 +163,16 @@ export default function UserProfile() {
     };
 
 
-    useEffect(() => {
-        const user = localStorage.getItem('user');
-        if (user != null) {
-            const userData = JSON.parse(user);
-            const username = userData.username;
-            console.log("USERNAME: "+ username);
-            userController.getUserWhereUsername(username).then((res) => {
-                setEditUser(res)
-                setSex(res.sex)
-                setDate(res.dateOfBirth.substring(0, 10))
-            })
-        } else {
-            console.log("Chua Dang Nhap Dung");
-        }
 
-    }, []);
-  
-  
+
+
 
     const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
     const onSubmit = async (formData: FormValues) => {
-      
+
 
         try {
-          
+            console.log("TESTING: " + formData);
             formData.dateOfBirth = date;
             formData.sex = JSON.parse(formData.sex);
             const response = await axios.put(API, formData);
@@ -242,7 +252,9 @@ export default function UserProfile() {
         setEditUser(e.target.value)
     }
 
-
+    // const isDisabled = (isValid || isDirty)
+    // console.log("isDirty: " + isDirty);
+    // console.log("isValid: " + isValid);
     return (
         <Container>
             <Fragment>
@@ -257,7 +269,7 @@ export default function UserProfile() {
                                 </div>
                                 <div className='mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4'>
 
-                                    <form onSubmit={handleSubmit(onSubmit)} className='card py-4 px-5 col-span-3  rounded-[6px]
+                                    <form className='card py-4 px-5 col-span-3  rounded-[6px]
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'
 
                                     >
@@ -505,9 +517,11 @@ export default function UserProfile() {
                                             )} />
                                         </div>
                                         {/* button */}
-                                        <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
-                                bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
-                                            <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
+                                        <div className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48]`}>
+                                            <button onClick={handleSubmit((formData: any) => {
+                                                onSubmit(formData)
+                                            })} className={`text-center text-base font-bold text-[#FFFFFF]
+                                        `}>
                                                 Lưu
                                             </button>
                                         </div>
