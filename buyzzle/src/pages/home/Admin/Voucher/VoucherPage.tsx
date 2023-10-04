@@ -1,3 +1,4 @@
+import { Controller, useForm } from "react-hook-form";
 import Plus from "../../../../Assets/TSX/Plus";
 import Search from "../../../../Assets/TSX/Search";
 import Container from "../../../../components/container/Container";
@@ -9,6 +10,15 @@ import RemoveCate from "../Assets/TSX/RemoveCate";
 import Handle from "../Assets/TSX/bacham";
 import LogoCate from "../Assets/TSX/logoCateAdmin";
 import SitebarAdmin from "../Sitebar/Sitebar";
+
+type FormValues = {
+   voucherType: string;
+   name: string;
+   startDate: string;
+   endDate: string;
+   quantity: number;
+   voucherCode: string;
+};
 
 export default function VoucherPage() {
    const openModal = () => {
@@ -28,6 +38,11 @@ export default function VoucherPage() {
          modal.close();
       }
    };
+
+   const {
+      control,
+      formState: { errors },
+   } = useForm<FormValues>({ mode: "all" });
 
    return (
       <>
@@ -200,48 +215,107 @@ export default function VoucherPage() {
                                        <div className="grid grid-cols-4 gap-5">
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
-                                                <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
-                                                   Tên Voucher*
-                                                </label>
+                                                <Controller
+                                                   name="name"
+                                                   control={control}
+                                                   rules={{
+                                                      required: {
+                                                         value: true,
+                                                         message:
+                                                            "Không để trống",
+                                                      },
+                                                      minLength: {
+                                                         value: 4,
+                                                         message:
+                                                            "Ít nhất 4 ký tự",
+                                                      },
+                                                      maxLength: {
+                                                         value: 20,
+                                                         message:
+                                                            "Ít hơn 20 ký tự",
+                                                      },
+                                                   }}
+                                                   render={({ field }) => (
+                                                      <>
+                                                         <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
+                                                            Tên Voucher*
+                                                         </label>
 
-                                                <input
-                                                   className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                                         <input
+                                                            className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                   placeholder="Nhập tiêu đề cho mã giảm giá này"
-                                                   //   onChange={handleChange}
-                                                   name="name"
-                                                   //   value={category.name}
+                                                            placeholder="Nhập tiêu đề cho mã giảm giá này"
+                                                            //   onChange={handleChange}
+                                                            value={field.value}
+                                                            onChange={(e) => {
+                                                               const reg =
+                                                                  /[0-9]/;
+                                                               const value =
+                                                                  e.target
+                                                                     .value;
+                                                               field.onChange(
+                                                                  value.replace(
+                                                                     reg,
+                                                                     ""
+                                                                  )
+                                                               );
+                                                            }}
+                                                            //   value={category.name}
+                                                         />
+                                                         {errors.name && (
+                                                            <p className="text-[11px] text-red-700 mt-2">
+                                                               {
+                                                                  errors.name
+                                                                     .message
+                                                               }
+                                                            </p>
+                                                         )}
+                                                         {/* <p className="text-[11px] text-[#718096]">
+                                                            Hiển thị cho người
+                                                            dùng nhận biết sự
+                                                            kiện giảm giá
+                                                         </p> */}
+                                                      </>
+                                                   )}
                                                 />
-                                                <p className="text-[11px] text-[#718096]">
-                                                   Hiển thị cho người dùng nhận
-                                                   biết sự kiện giảm giá
-                                                </p>
                                              </div>
                                           </div>
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
-                                                <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
-                                                   Số Lượng Voucher
-                                                </label>
+                                                <Controller
+                                                   name="quantity"
+                                                   control={control}
+                                                   rules={{}}
+                                                   render={({ field }) => (
+                                                      <>
+                                                         <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
+                                                            Số Lượng Voucher
+                                                         </label>
 
-                                                <input
-                                                   className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                                         <input
+                                                            className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                   placeholder="Nhập số lượng voucher"
-                                                   //    onChange={handleChange}
-                                                   type="number"
-                                                   name="name"
-                                                   //    value={category.name}
+                                                            placeholder="Nhập số lượng voucher"
+                                                            //    onChange={handleChange}
+                                                            type="number"
+                                                            name="name"
+                                                            value={field.value}
+                                                            //    value={category.name}
+                                                         />
+                                                         {/* <p className="text-[11px] text-[#718096]">
+                                                            Số lượng voucher khi
+                                                            sử dụng hết người
+                                                            dùng không thể tiếp
+                                                            tục sử dụng mã này
+                                                            nữa
+                                                         </p> */}
+                                                      </>
+                                                   )}
                                                 />
-                                                <p className="text-[11px] text-[#718096]">
-                                                   Số lượng voucher khi sử dụng
-                                                   hết người dùng không thể tiếp
-                                                   tục sử dụng mã này nữa
-                                                </p>
                                              </div>
                                           </div>
                                        </div>
