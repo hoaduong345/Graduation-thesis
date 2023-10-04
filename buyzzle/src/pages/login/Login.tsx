@@ -70,9 +70,12 @@ function Login() {
                     // Truy cập các giá trị trong jsonObject
 
                     const username = jsonObject.username;
+                    const accessToken = jsonObject.accessToken;
+                    console.log(accessToken);
                     const UserData = { username};
+                    const Token = {accessToken};
                     localStorage.setItem('user', JSON.stringify(UserData));
-
+                    localStorage.setItem("accessToken", JSON.stringify(Token));
                     setTimeout(() => {
                         window.location.href = "/";
                     },

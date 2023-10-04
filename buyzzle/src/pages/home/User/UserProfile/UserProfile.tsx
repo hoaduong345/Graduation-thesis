@@ -681,6 +681,7 @@ export const Form2: React.FC = () => {
     const {
         control,
         handleSubmit,
+        register,
         formState: { errors, isDirty, isValid },
     } = useForm<FormValues>({
         // mode: 'all',
@@ -923,9 +924,10 @@ export const Form2: React.FC = () => {
                                                                     placeholder='Mật khẩu mới'
                                                                 />
                                                             </div>
+                                                            {!!errors.newPassword && <p className='text-red-700 mt-2'>{errors.newPassword.message}</p>}
                                                         </div>
 
-                                                        {!!errors.newPassword && <p className='text-red-700 mt-2'>{errors.newPassword.message}</p>}</>
+                                                        </>
                                                 )} />
                                                 <Controller control={control} name='confirmNewPassword' rules={{
                                                     required: {
@@ -961,9 +963,10 @@ export const Form2: React.FC = () => {
                                                                     placeholder='Xác nhận mật khẩu mới'
                                                                 />
                                                             </div>
+                                                            {!!errors.confirmNewPassword && <p className='text-red-700 mt-2'>{errors.confirmNewPassword.message}</p>}
                                                         </div>
 
-                                                        {!!errors.confirmNewPassword && <p className='text-red-700 mt-2'>{errors.confirmNewPassword.message}</p>}</>
+                                                        </>
                                                 )} />
                                             </div>
                                             {/* button */}
