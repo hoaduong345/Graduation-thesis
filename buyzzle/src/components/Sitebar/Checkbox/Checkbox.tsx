@@ -19,7 +19,8 @@ export default function Checkbox(props: CheckboxCategory) {
           onChange={(e) => {
             // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
             props.onChangeFilter?.(props.title);
-          }} />
+          }}
+        />
         <div
           className="h-6 w-6 absolute rounded-full pointer-events-none
           peer-checked:border-[#EA4B48] peer-checked:border-2"

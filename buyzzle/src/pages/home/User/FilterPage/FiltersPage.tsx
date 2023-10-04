@@ -48,12 +48,28 @@ interface TProductResponse {
   ProductImage: ImgOfProduct[];
 }
 
+export type Props = {
+  onChangeSlider(min: number, max: number): void;
+};
+
+export interface PriceRangeFilterPage {
+  minPrice: number;
+  maxPrice: number;
+  // b3. da xac dinh duoc can chuyen gi va nam o dau
+  // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
+  onChangeSlider?(min: number, max: number): void;
+}
 export default function FiltersPage() {
   const [products, setProducts] = useState<TProductResponse[]>([]);
   const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
   const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
   const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
     useState(true);
+
+  const [rangeValue, setRangeValue] = useState<number>();
+  const handleSliderChange = (value: number) => {
+    setRangeValue(value);
+  };
 
   const { id } = useParams();
   const idCate = Number(id);
@@ -91,8 +107,13 @@ export default function FiltersPage() {
     getData();
   }, []);
 
+  // const getData = () => {
+  //   productController.getList("", idCate).then((res) => {
+  //     setProducts(res);
+  //   });
+  // };
   const getData = () => {
-    productController.getList("", idCate).then((res) => {
+    productController.getFilterProductWithinRange().then((res) => {
       setProducts(res);
     });
   };
@@ -102,7 +123,11 @@ export default function FiltersPage() {
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
-            <SitebarFilter onChangeFilters={() => {}} />
+            <p>Giá trị Slider từ Component Con: {rangeValue}</p>
+            <SitebarFilter
+              sliderValue={rangeValue}
+              onSliderChange={handleSliderChange}
+            />
           </div>
           {/* content-right-filter */}
           <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">

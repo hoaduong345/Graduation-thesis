@@ -52,6 +52,11 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getFilterProductWithinRange = async (): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=100000&maxPrice=2000000`).then((res) => {
+            return res.data as Products[]
+        })
+    }
     remove = async (id: number) => {
         return await axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`)
     }
