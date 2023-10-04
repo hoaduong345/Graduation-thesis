@@ -8,33 +8,54 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { bool, boolean } from 'yup';
+import { userController } from '../../../../Controllers/UserController';
+import { isDate } from 'util/types';
+
+
+
 
 type FormValues = {
     username: string,
     name: string,
     email: string,
     sex: string,
-    phonenumber: number,
+    phonenumber: string,
     dateOfBirth: string,
     // fullName: string,
     // Address: string
 }
 
-function getSexFromSomeOtherFunction(): string | null {
-    const user = localStorage.getItem('user');
-    if (user !== null) {
-        const userData = JSON.parse(user);
-        // console.log("userData.sex"+userData.sex)
-        return userData.sex;
-
-    } else {
-        console.log("Chua Dang Nhap Dung");
-        return null;
-    }
-
-}
 
 export default function UserProfile() {
+    const [validUrl, setValidUrl] = useState(false);
+    const param = useParams();
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [imageURL, setImageURL] = useState<string | null>(null);
+    const [editUser, setEditUser] = useState<FormValues>()
+
+   
+   
+    const [sex, setSex] = useState<boolean>();
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user != null) {
+            const userData = JSON.parse(user);
+            const username = userData.username;
+            console.log("USERNAME: " + username);
+            userController.getUserWhereUsername(username).then((res) => {
+                setEditUser(res)
+                setSex(res.sex)
+       
+                setDate(res.dateOfBirth.substring(0, 10))
+            })
+        } else {
+            console.log("Chua Dang Nhap Dung");
+        }
+
+    }, []);
+
+
+
     const {
         control,
         handleSubmit,
@@ -44,24 +65,17 @@ export default function UserProfile() {
         mode: 'all',
         defaultValues:
         {
-            username: '',
-            name: '',
-            email: '',
-            sex: "",
-            dateOfBirth: '',
-            phonenumber: undefined,
+            username: "" + param.username,
+            name: "" + editUser?.name,
+            email: "" + editUser?.email,
+            sex: "" + editUser?.sex,
+            dateOfBirth: "" + editUser?.dateOfBirth,
+            phonenumber: "" + editUser?.phonenumber,
             // fullName: '',
             // Address: ''
         },
 
     });
-
-    const [validUrl, setValidUrl] = useState(false);
-    const param = useParams();
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [imageURL, setImageURL] = useState<string | null>(null);
-
-
 
     useEffect(() => {
         function CheckLink() {
@@ -79,6 +93,8 @@ export default function UserProfile() {
         };
         CheckLink();
     }, [param]);
+
+
 
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,24 +155,7 @@ export default function UserProfile() {
 
 
 
-    const [username, setUsername] = useState('');
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phonenumber, setPhonenumber] = useState('');
 
-
-
-    useEffect(() => {
-        const initialSexValue = getSexFromSomeOtherFunction();
-        if (initialSexValue !== null) {
-            setSex(JSON.parse(initialSexValue));
-
-
-        } else {
-            console.log("initialSexValue = null");
-        }
-    }, []);
-    const [sex, setSex] = useState<boolean>();
 
 
     const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,60 +163,25 @@ export default function UserProfile() {
     };
 
 
-    useEffect(() => {
-        const user = localStorage.getItem('user');
-        if (user != null) {
-
-            const userData = JSON.parse(user);
-            setUsername(userData.username);
-            setName(userData.name);
-            setEmail(userData.email);
-            setPhonenumber(userData.phonenumber);
-            // setSex(userData.sex);
-            setDate(userData.dateOfBirth);
-
-           
-        } else {
-            console.log("Chua Dang Nhap Dung");
-        }
-    }, []);
-    var date1: any
-    if(date != null){
-       date1 = date.substring(0, 10);
-    }else{
-        date1 = date;
-    }
-    // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
 
 
-    //     setSex(event.target.value);
 
-    // }
 
     const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
     const onSubmit = async (formData: FormValues) => {
-        // const response = await axios.post(API, data);
-        //   console.log("server: ", response); 
+
 
         try {
-            // formData.dateOfBirth = `${day}/${month}/${year}`;
+            console.log("TESTING: " + formData);
             formData.dateOfBirth = date;
-            // const booleanValue = JSON.parse(formData.sex);
-
             formData.sex = JSON.parse(formData.sex);
-            // console.log("checker", booleanValue);
-
-            // const StringValue = "true"
-
-
-
             const response = await axios.put(API, formData);
             console.log("edit thanh cong", response);
 
             if (response.status === 200) {
-                console.log("Sign-in successfully");
+                console.log("Edit successfully");
                 toast.success(
-                    "Edit thành công",
+                    "Cập nhật thành công",
                     {
                         position: "top-right",
                         autoClose: 5000,
@@ -236,11 +200,9 @@ export default function UserProfile() {
                 );
             }
         } catch (error) {
-            // console.log("Them that bai", error);
             console.error(error);
             if (axios.isAxiosError(error) && error.response) {
                 const responseData = error.response.data;
-                // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
                 if (responseData.error) {
                     console.log(`Lỗi2: ${responseData.error}`);
                     const errorMessageUsername = responseData.error.username;
@@ -286,9 +248,13 @@ export default function UserProfile() {
 
 
     };
+    const onChangeInput = (e: any) => {
+        setEditUser(e.target.value)
+    }
 
-
-
+    // const isDisabled = (isValid || isDirty)
+    // console.log("isDirty: " + isDirty);
+    // console.log("isValid: " + isValid);
     return (
         <Container>
             <Fragment>
@@ -303,7 +269,7 @@ export default function UserProfile() {
                                 </div>
                                 <div className='mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4'>
 
-                                    <form onSubmit={handleSubmit(onSubmit)} className='card py-4 px-5 col-span-3  rounded-[6px]
+                                    <form className='card py-4 px-5 col-span-3  rounded-[6px]
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'
 
                                     >
@@ -331,7 +297,7 @@ export default function UserProfile() {
                                                             placeholder="Tên đăng nhập"
                                                             value={param.username}
                                                             {...register('username')}
-                                                            onChange={e => setUsername(e.target.value)}
+                                                            onChange={onChangeInput}
                                                         // disabled
                                                         />
                                                         {!!errors.username && <p className='text-red-700 mt-2'>{errors.username.message}</p>}</>
@@ -357,9 +323,9 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.name ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                             placeholder="Tên người dùng"
-                                                            value={name}
+                                                            value={editUser?.name}
                                                             {...register('name')}
-                                                            onChange={e => setName(e.target.value)}
+                                                            onChange={onChangeInput}
 
                                                         />
                                                         {!!errors.name && <p className='text-red-700 mt-2'>{errors.name.message}</p>}</>
@@ -382,9 +348,9 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.email ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                         placeholder="Email"
-                                                        value={email}
+                                                        value={editUser?.email}
                                                         {...register('email')}
-                                                        onChange={e => setEmail(e.target.value)}
+                                                        onChange={onChangeInput}
                                                     />
                                                     {!!errors.email && <p className='text-red-700 mt-2'>{errors.email.message}</p>}</>
                                             )} />
@@ -466,9 +432,9 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                             placeholder="Số điện thoại"
-                                                            value={phonenumber}
+                                                            value={editUser?.phonenumber}
                                                             {...register('phonenumber')}
-                                                            onChange={e => setPhonenumber(e.target.value)}
+                                                            onChange={onChangeInput}
                                                         />
                                                         {!!errors.phonenumber && <p className='text-red-700 mt-2'>{errors.phonenumber.message}</p>}</>
                                                 )} />
@@ -545,15 +511,19 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              ${!!errors.phonenumber ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                         type="date"
-                                                        value={date1}
+                                                        value={date}
                                                         onChange={handleDateChange} />
                                                     {!!errors.dateOfBirth && <p className='text-red-700 mt-2'>{errors.dateOfBirth.message}</p>}</>
                                             )} />
                                         </div>
                                         {/* button */}
-                                        <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
-                                bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
-                                            <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
+                                        <div onClick={handleSubmit((formData: any) => {
+                                                onSubmit(formData)
+                                            })} className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48]`}>
+                                            <button onClick={handleSubmit((formData: any) => {
+                                                onSubmit(formData)
+                                            })} className={`text-center text-base font-bold text-[#FFFFFF]
+                                        `}>
                                                 Lưu
                                             </button>
                                         </div>
