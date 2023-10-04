@@ -21,7 +21,7 @@ app.listen((process.env.APP_PORT = 5000), () => {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const whitelist = ['http://localhost:5173', 'https://www.getpostman.com', 'https://app.getpostman.com']; // Add Postman origins here
+const whitelist = ['http://localhost:5173', 'https://www.getpostman.com', 'https://app.getpostman.com'];
 const corsOptions = {
     origin: (origin, callback) => {
         if (whitelist.indexOf(origin) !== -1 || !origin) {

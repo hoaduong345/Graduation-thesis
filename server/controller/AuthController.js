@@ -244,7 +244,6 @@ const AuthController = {
                     path: '/',
                     sameSite: 'strict',
                 });
-
                 res.cookie('id', user.id, {
                     httpOnly: true,
                     secure: false,
@@ -473,7 +472,7 @@ const AuthController = {
             res.clearCookie('refreshToken');
             res.clearCookie('accessToken');
             res.clearCookie('id');
-            // localStorage.clear();
+            localStorage.clear();
             res.status(200).send('Logged out successfully');
         } catch (error) {
             res.status(500).send('Logout failed');
