@@ -416,7 +416,6 @@ const ProductController = {
       const pageSize = parseInt(req.query.pageSize) || 40;
       const sortByPrice = req.query.sortByPrice;
       const sortByDateCreate = req.query.sortByDateCreate;
-
       const categoryId = req.query.categoryId;
 
       const skip = (page - 1) * pageSize;
@@ -432,8 +431,7 @@ const ProductController = {
       if (categoryId) {
         whereClause.fK_category = {
           id: parseInt(categoryId),
-        };
-       
+        };   
       }
 
       if (req.query.minPrice && req.query.maxPrice) {
@@ -442,10 +440,10 @@ const ProductController = {
           lte: parseInt(req.query.maxPrice),
         };
       }
-      
-
-
       console.log(req.query.minPrice);
+      console.log(req.query.maxPrice);
+
+      
 
       const result = await prisma.product.findMany({
         orderBy: {
