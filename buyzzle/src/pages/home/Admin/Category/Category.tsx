@@ -14,35 +14,24 @@ import UploadIMG from "../Assets/TSX/UploadIMG";
 import { toast } from "react-toastify";
 import LogoCate from "../Assets/TSX/logoCateAdmin";
 import AddCateBtn from "../Assets/TSX/AddCateAdmin";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../../../Firebase/Config";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 
-export interface Cate {
+type FormValues = {
    id: number;
    name: string;
-   image: string;
-}
-
-type FormValues = {
-   name: string;
-   link: string;
-   desc: string;
+   image: string | undefined;
 };
 
 function Category() {
-   const [category, setCategory] = useState<Cate>({} as Cate);
+   const [categorys, setCategorys] = useState<FormValues[]>([]);
 
    const [images, setImages] = useState("");
    const [url, setUrl] = useState<string>();
-   // const [editProduct, setEditProduct] = useState<FormValues>()
 
-   const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-   ) => {
-      setCategory({ ...category, name: e.target.value });
-   };
+   const [dataForm, setDataForm] = useState<FormValues>({} as FormValues);
 
    useEffect(() => {
       loadImageFile(images);
@@ -87,7 +76,7 @@ function Category() {
                ></div>
                <div
                   className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
-                  onClick={() => console.log("an không ?")}
+                  // onClick={() => console.log("an không ?")}
                >
                   <RemoveIMG />
                </div>
@@ -111,29 +100,28 @@ function Category() {
    };
 
    const {
-      // control,
-      // handleSubmit,
-      // resetField,
-      // watch,
-      // reset,
-      // formState: { errors, isValid, isDirty },
+      control,
+      handleSubmit,
+      register,
+      formState: { errors },
    } = useForm<FormValues>({
       mode: "all",
       defaultValues: {
          name: "",
-         link: "",
-         desc: "",
       },
    });
-   // const isDisabled = !(isValid && isDirty)
 
-   const handleSubmit = () => {
+   const postCategory = (data: FormValues) => {
       closeModal();
-      if (category.id != 0 && category.id != undefined) {
+      console.log(data);
+      if (dataForm.id != 0) {
          axios
             .put(
-               `http://localhost:5000/buyzzle/product/updatecategory/${category.id}`,
-               { name: category.name, image: url }
+               `http://localhost:5000/buyzzle/product/updatecategory/${dataForm.id}`,
+               {
+                  name: data.name,
+                  image: url,
+               }
             )
             .then((response) => {
                return response;
@@ -151,7 +139,7 @@ function Category() {
       } else {
          axios
             .post("http://localhost:5000/buyzzle/product/addcategory", {
-               name: category.name,
+               name: data.name,
                image: url,
             })
             .then((response) => {
@@ -186,8 +174,6 @@ function Category() {
          });
    };
 
-   const [categorys, setCategorys] = useState<Cate[]>([]);
-
    useEffect(() => {
       getList();
    }, []);
@@ -208,13 +194,13 @@ function Category() {
    };
 
    //showdialog demo
-   const openModal = (cate: Cate) => {
+   const openModal = (data: FormValues) => {
       const modal = document.getElementById(
          "my_modal_3"
       ) as HTMLDialogElement | null;
       if (modal) {
-         setCategory(cate);
-         setUrl(cate.image);
+         setUrl(data.image);
+         setDataForm({ id: data.id, name: data.name, image: data.image });
          modal.showModal();
       }
    };
@@ -229,7 +215,7 @@ function Category() {
       }
    };
    const setnull = async () => {
-      setCategory({ name: "", id: 0, image: "" });
+      setDataForm({ id: 0, name: "", image: "" });
    };
    return (
       <>
@@ -294,7 +280,7 @@ function Category() {
                      <div className="items-center flex gap-3 px-6">
                         <button
                            className=""
-                           onClick={() => openModal(category)}
+                           onClick={() => openModal({ id: 0 } as FormValues)}
                         >
                            <Plus />
                         </button>
@@ -325,37 +311,69 @@ function Category() {
                                           <div className="flex gap-3 ">
                                              <div className="flex flex-col gap-5 max-lg:gap-2">
                                                 <div>
-                                                   <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
-                                                      Tiêu Đề Danh Mục*
-                                                   </label>
-                                                   {/* <Controller control={control} name='name' rules={{
-                                                                        required: {
-                                                                            value: true,
-                                                                            message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
-                                                                        },
-                                                                        minLength: {
-                                                                            value: 6,
-                                                                            message: 'Tên sản phẩm phải lớn hơn 6 ký tự'
-                                                                        }
-                                                                    }} render={({ field }) => (
-                                                                        <>
-
-                                                                            <input
-                                                                                className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A]
-                                                        rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                        max-xl:text-xs max-lg:text-[10px]
-                                            ${!!errors.name ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
-                                                                                placeholder="Nhập tiêu đề sản phẩm"
-                                                                                value={field.value}
-                                                                                onChange={(e) => {
-                                                                                    const reg = /[0-9]/;
-                                                                                    const value = e.target.value
-                                                                                    field.onChange(value.replace(reg, ''));
-                                                                                }}
-                                                                            />
-                                                                            {!!errors.name && <p className='text-red-700 mt-2'>{errors.name.message}</p>}</>
-                                                                    )} /> */}
-                                                   <input
+                                                   <Controller
+                                                      name="name"
+                                                      control={control}
+                                                      rules={{
+                                                         required: {
+                                                            value: true,
+                                                            message:
+                                                               "Không để trống",
+                                                         },
+                                                         minLength: {
+                                                            value: 4,
+                                                            message:
+                                                               "Ít nhất 4 ký tự",
+                                                         },
+                                                         maxLength: {
+                                                            value: 25,
+                                                            message:
+                                                               "Nhiều nhất 25 kí tự",
+                                                         },
+                                                      }}
+                                                      render={({ field }) => (
+                                                         <>
+                                                            <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                                               Tiêu Đề Danh Mục*
+                                                            </label>
+                                                            <input
+                                                               className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                                               placeholder="Nhập tiêu đề danh mục"
+                                                               value={
+                                                                  dataForm.name
+                                                               }
+                                                               onChange={(
+                                                                  e
+                                                               ) => {
+                                                                  const reg =
+                                                                     /[!@#$%^&]/;
+                                                                  const value =
+                                                                     e.target
+                                                                        .value;
+                                                                  field.onChange(
+                                                                     value.replace(
+                                                                        reg,
+                                                                        ""
+                                                                     )
+                                                                  );
+                                                               }}
+                                                               name="name"
+                                                            />
+                                                            {errors.name && (
+                                                               <p className="text-[11px] text-red-700 mt-2">
+                                                                  {
+                                                                     errors.name
+                                                                        .message
+                                                                  }
+                                                               </p>
+                                                            )}
+                                                         </>
+                                                      )}
+                                                   />
+                                                   {/* <input
                                                       className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
@@ -364,7 +382,7 @@ function Category() {
                                                       onChange={handleChange}
                                                       name="name"
                                                       value={category.name}
-                                                   />
+                                                   /> */}
                                                 </div>
                                                 {/* <div>
                                                                     <label htmlFor="" className="text-sm max-xl:text-xs max-lg:text-[10px]">Chuỗi Cho Đường Dẫn Tĩnh*</label>
@@ -393,40 +411,68 @@ function Category() {
                                        </div>
                                        <div className="col-span-2 flex flex-col gap-12">
                                           <div className="max-w-max items-center">
-                                             <label htmlFor="images">
-                                                <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2">
-                                                   <input
-                                                      type="file"
-                                                      onChange={(e: any) =>
-                                                         setImages(
-                                                            e.target.files
-                                                         )
-                                                      }
-                                                      id="images"
-                                                      multiple
-                                                      className="hidden "
-                                                   />
-                                                   {renderImg()}
-                                                </div>
-                                             </label>
+                                             <Controller
+                                                control={control}
+                                                name="image"
+                                                rules={{
+                                                   required: {
+                                                      value: true,
+                                                      message:
+                                                         "Hãy chọn một hình",
+                                                   },
+                                                }}
+                                                render={({}) => (
+                                                   <>
+                                                      <label htmlFor="images">
+                                                         <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2">
+                                                            <input
+                                                               {...register(
+                                                                  "image",
+                                                                  {
+                                                                     required: {
+                                                                        value: true,
+                                                                        message:
+                                                                           "Hãy chọn một hình",
+                                                                     },
+                                                                  }
+                                                               )}
+                                                               type="file"
+                                                               onChange={(
+                                                                  e: any
+                                                               ) =>
+                                                                  setImages(
+                                                                     e.target
+                                                                        .files
+                                                                  )
+                                                               }
+                                                               id="images"
+                                                               multiple
+                                                               className="hidden "
+                                                            />
+                                                            {renderImg()}
+                                                            {errors.image && (
+                                                               <p className="text-[13px] text-red-600 mt-2">
+                                                                  {
+                                                                     errors
+                                                                        .image
+                                                                        .message
+                                                                  }
+                                                               </p>
+                                                            )}
+                                                         </div>
+                                                      </label>
+                                                   </>
+                                                )}
+                                             />
                                           </div>
 
-                                          {/* <div className={`flex gap-2 items-center 
-                                                         ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} `}>
-                                                            <button disabled={isDisabled} onClick={handleCreate} className={`text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] rounded-md border-[1px]
-                                                                    max-xl:text-xs max-xl:px-[40px] max-xl:py-1 max-xl:gap-1 max-lg:text-[8px] max-lg:px-[20px]
-                                                                    ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
-                                                                <AddCateBtn />
-                                                                Xác Nhận
-                                                            </button>
-                                                            <button className="p-3 text-white text-base bg-[#EA4B48] rounded-md
-                                                                    max-xl:text-xs max-lg:text-[10px]"
-                                                                onClick={closeModal}
-                                                            >Hủy</button>
-                                                        </div> */}
                                           <div className="flex gap-2 items-center ">
                                              <button
-                                                onClick={handleSubmit}
+                                                onClick={handleSubmit(
+                                                   (data: any) => {
+                                                      postCategory(data);
+                                                   }
+                                                )}
                                                 className="text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] rounded-md border-[1px]"
                                              >
                                                 <AddCateBtn />
