@@ -433,15 +433,18 @@ const ProductController = {
         whereClause.fK_category = {
           id: parseInt(categoryId),
         };
-        // whereClause.price = {
-        //   gte: 10000,  // lớn hơn hoặc bằng
-        // };
+       
       }
-      if (req.query.minPrice) {
+
+      if (req.query.minPrice && req.query.maxPrice) {
         whereClause.price = {
           gte: parseInt(req.query.minPrice),
+          lte: parseInt(req.query.maxPrice),
         };
       }
+      
+
+
       console.log(req.query.minPrice);
 
       const result = await prisma.product.findMany({
