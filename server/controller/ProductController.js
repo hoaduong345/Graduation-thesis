@@ -433,7 +433,6 @@ const ProductController = {
         whereClause.fK_category = {
           id: parseInt(categoryId),
         };
-       
       }
 
       if (req.query.minPrice && req.query.maxPrice) {
@@ -442,8 +441,6 @@ const ProductController = {
           lte: parseInt(req.query.maxPrice),
         };
       }
-      
-
 
       console.log(req.query.minPrice);
 
