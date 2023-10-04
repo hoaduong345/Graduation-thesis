@@ -56,7 +56,7 @@ export default function Productss(props: Props) {
           max-lg:mt-4
           "
             >
-              {product.title}
+              {product.name}
             </p>
 
             <div

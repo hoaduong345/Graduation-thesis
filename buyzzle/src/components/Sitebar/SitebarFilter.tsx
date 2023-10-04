@@ -73,10 +73,7 @@ interface SliderComponentProps {
   sliderValue: number;
   onSliderChange: (value: number) => void;
 }
-export default function SitebarFilter({
-  sliderValue,
-  onSliderChange,
-}: SliderComponentProps) {
+export default function SitebarFilter() {
   const [otherkeywords, setOtherkeywords] = useState<Products[]>();
   const [rangeValue, setRangeValue] = useState([250000000, 500000000]);
   const handleSliderChange = (newValue: [number, number]) => {
@@ -142,9 +139,9 @@ export default function SitebarFilter({
             }}
             handleStyle={{ border: "1px solid red" }}
             // dotStyle={{ backgroundColor: "#EA4B48", outlineColor: "#EA4B48",color:'red',border:'1px solid #EA4B48'}}
-            // onChange={(e: any) => handleSliderChange(e)}
+            onChange={(e: any) => handleSliderChange(e)}
             value={rangeValue}
-            onChange={() => onSliderChange}
+            // onChange={() => onSliderChange}
             range
             // onChange={(e) => {
             //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)

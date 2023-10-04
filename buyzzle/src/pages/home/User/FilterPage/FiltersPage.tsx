@@ -107,27 +107,23 @@ export default function FiltersPage() {
     getData();
   }, []);
 
-  // const getData = () => {
-  //   productController.getList("", idCate).then((res) => {
-  //     setProducts(res);
-  //   });
-  // };
   const getData = () => {
-    productController.getFilterProductWithinRange().then((res) => {
+    productController.getList("", idCate).then((res) => {
       setProducts(res);
     });
   };
+  // const getData = () => {
+  //   productController.getFilterProductWithinRange().then((res) => {
+  //     setProducts(res);
+  //   });
+  // };
 
   return (
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
-            <p>Giá trị Slider từ Component Con: {rangeValue}</p>
-            <SitebarFilter
-              sliderValue={rangeValue}
-              onSliderChange={handleSliderChange}
-            />
+            <SitebarFilter />
           </div>
           {/* content-right-filter */}
           <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">
