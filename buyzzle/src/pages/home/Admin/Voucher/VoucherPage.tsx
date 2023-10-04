@@ -68,7 +68,7 @@ export default function VoucherPage() {
                         </div>
                      </div>
 
-                     <div className="grid grid-cols-7">
+                     <div className="grid grid-cols-6">
                         <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
                            <Delete />
                            <p>Xóa</p>
@@ -86,10 +86,7 @@ export default function VoucherPage() {
                            <p>Thời Gian</p>
                         </div>
                         <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                           <p>Tổng SL</p>
-                        </div>
-                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                           <p>SL Còn lại</p>
+                           <p>Đã dùng / Tổng SL</p>
                         </div>
                      </div>
 
@@ -109,7 +106,7 @@ export default function VoucherPage() {
                            </div>
                            <div>
                               <dialog id="my_modal_3" className="modal ">
-                                 <div className="bg-white relative flex flex-col p-[60px] max-w-[1000px] max-xl:w-[650px] max-lg:w-[450px] max-lg:p-[30px]">
+                                 <div className="bg-white relative flex flex-col p-[40px] max-w-[1000px] max-xl:w-[650px] max-lg:w-[450px] max-lg:p-[30px]">
                                     <form method="dialog">
                                        <button
                                           className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -121,14 +118,14 @@ export default function VoucherPage() {
                                     <div className="flex flex-col gap-6 max-lg:gap-3">
                                        <div className="flex items-center gap-3">
                                           <LogoCate />
-                                          <h3 className="font-bold text-2xl max-xl:text-[18px]">
+                                          <h3 className="font-bold text-2xl max-xl:text-[18px] uppercase">
                                              Mã Voucher
                                           </h3>
                                        </div>
 
                                        <div className="grid grid-cols-4 gap-5">
                                           <div className="col-span-2">
-                                             <div className="flex flex-col gap-2 max-lg:gap-2">
+                                             <div className="flex flex-col gap-1">
                                                 <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
                                                    Loại Voucher*
                                                 </label>
@@ -153,7 +150,7 @@ export default function VoucherPage() {
                                              </div>
                                           </div>
                                           <div className="col-span-1">
-                                             <div className="flex flex-col gap-2 max-lg:gap-2">
+                                             <div className="flex flex-col gap-1">
                                                 <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
                                                    Thời Gian Bắt Đầu
                                                 </label>
@@ -163,9 +160,9 @@ export default function VoucherPage() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                   placeholder="DD/MM/YYYY"
                                                    //    onChange={handleChange}
                                                    name="name"
+                                                   type="date"
                                                    //    value={category.name}
                                                 />
                                                 <p className="text-[11px] text-[#718096]">
@@ -176,7 +173,7 @@ export default function VoucherPage() {
                                              </div>
                                           </div>
                                           <div className="col-span-1">
-                                             <div className="flex flex-col gap-2 max-lg:gap-2">
+                                             <div className="flex flex-col gap-1">
                                                 <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
                                                    Thời Gian Kết Thúc
                                                 </label>
@@ -186,9 +183,9 @@ export default function VoucherPage() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                   placeholder="DD/MM/YYYY"
                                                    //   onChange={handleChange}
                                                    name="name"
+                                                   type="date"
                                                    //   value={category.name}
                                                 />
                                                 <p className="text-[11px] text-[#718096]">
@@ -202,7 +199,7 @@ export default function VoucherPage() {
 
                                        <div className="grid grid-cols-4 gap-5">
                                           <div className="col-span-2">
-                                             <div className="flex flex-col gap-2 max-lg:gap-2">
+                                             <div className="flex flex-col gap-1">
                                                 <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
                                                    Tên Voucher*
                                                 </label>
@@ -218,13 +215,13 @@ export default function VoucherPage() {
                                                    //   value={category.name}
                                                 />
                                                 <p className="text-[11px] text-[#718096]">
-                                                   Hiển thi cho người dùng nhận
+                                                   Hiển thị cho người dùng nhận
                                                    biết sự kiện giảm giá
                                                 </p>
                                              </div>
                                           </div>
                                           <div className="col-span-2">
-                                             <div className="flex flex-col gap-2 max-lg:gap-2">
+                                             <div className="flex flex-col gap-1">
                                                 <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
                                                    Số Lượng Voucher
                                                 </label>
@@ -234,8 +231,9 @@ export default function VoucherPage() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                   placeholder="DD/MM/YYYY"
+                                                   placeholder="Nhập số lượng voucher"
                                                    //    onChange={handleChange}
+                                                   type="number"
                                                    name="name"
                                                    //    value={category.name}
                                                 />
@@ -243,6 +241,34 @@ export default function VoucherPage() {
                                                    Số lượng voucher khi sử dụng
                                                    hết người dùng không thể tiếp
                                                    tục sử dụng mã này nữa
+                                                </p>
+                                             </div>
+                                          </div>
+                                       </div>
+
+                                       <div className="grid grid-cols-4 gap-5">
+                                          <div className="col-span-2">
+                                             <div className="flex flex-col gap-1">
+                                                <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
+                                                   Mã Voucher*
+                                                </label>
+
+                                                <input
+                                                   className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                                   placeholder="Nhập mã voucher"
+                                                   //   onChange={handleChange}
+                                                   name="name"
+                                                   //   value={category.name}
+                                                />
+                                                <p className="text-[11px] text-[#718096]">
+                                                   Mã sử dụng cho người dùng
+                                                   nhập vào đơn hàng của mình và
+                                                   sẽ áp dụng giảm giá theo loại
+                                                   mã giảm giá trên, và không
+                                                   được trùng với mã đã tồn tại
                                                 </p>
                                              </div>
                                           </div>
@@ -257,7 +283,7 @@ export default function VoucherPage() {
                                              Xác Nhận
                                           </button>
                                           <button
-                                             className="p-3 text-white text-base bg-[#EA4B48] rounded-md"
+                                             className="py-3 px-8 text-white text-base bg-[#EA4B48] rounded-md"
                                              onClick={closeModal}
                                           >
                                              Hủy
@@ -269,7 +295,7 @@ export default function VoucherPage() {
                            </div>
                         </div>
 
-                        <div className="grid grid-cols-7 border-t-[1px] py-7">
+                        <div className="grid grid-cols-6 border-t-[1px] py-7">
                            <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
                               <div className="dropdown dropdown-left">
                                  <label tabIndex={0}>
@@ -329,17 +355,12 @@ export default function VoucherPage() {
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
                               <p className="font-medium text-base text-[#1A1A1A]">
-                                 1000
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
-                                 500
+                                 10/1000
                               </p>
                            </div>
                         </div>
 
-                        <div className="grid grid-cols-7 border-t-[1px] py-7">
+                        <div className="grid grid-cols-6 border-t-[1px] py-7">
                            <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
                               <div className="dropdown dropdown-left">
                                  <label tabIndex={0}>
@@ -399,82 +420,7 @@ export default function VoucherPage() {
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
                               <p className="font-medium text-base text-[#1A1A1A]">
-                                 1000
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
-                                 500
-                              </p>
-                           </div>
-                        </div>
-
-                        <div className="grid grid-cols-7 border-t-[1px] py-7">
-                           <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
-                              <div className="dropdown dropdown-left">
-                                 <label tabIndex={0}>
-                                    <Handle />
-                                 </label>
-                                 <ul
-                                    tabIndex={0}
-                                    className="dropdown-content menu bg-white rounded-box w-52
-                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl::origin-left"
-                                 >
-                                    <li>
-                                       <button
-                                          onClick={openModal}
-                                          className="flex items-center gap-4"
-                                       >
-                                          <Edit />
-                                          <p className="text-[#EA4B48] text-sm font-medium">
-                                             Sửa
-                                          </p>
-                                       </button>
-                                    </li>
-                                    <li>
-                                       <button className="flex items-center gap-4">
-                                          <RemoveCate />
-                                          <p className="text-[#EA4B48] text-sm font-medium">
-                                             Xóa
-                                          </p>
-                                       </button>
-                                    </li>
-                                 </ul>
-                              </div>
-                              <input
-                                 type="checkbox"
-                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px]"
-                              />
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
-                                 GPS
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
-                                 Thiết Bị Điện Tử
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#EA4B48]">
-                                 THANGDZ
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
-                                 12/11/23 - 20/11/23
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
-                                 1000
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
-                                 500
+                                 10/1000
                               </p>
                            </div>
                         </div>
