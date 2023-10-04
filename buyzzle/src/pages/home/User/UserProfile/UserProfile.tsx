@@ -96,7 +96,7 @@ export default function UserProfile() {
 
 
 
-    
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
 
@@ -517,7 +517,9 @@ export default function UserProfile() {
                                             )} />
                                         </div>
                                         {/* button */}
-                                        <div className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48]`}>
+                                        <div onClick={handleSubmit((formData: any) => {
+                                                onSubmit(formData)
+                                            })} className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48]`}>
                                             <button onClick={handleSubmit((formData: any) => {
                                                 onSubmit(formData)
                                             })} className={`text-center text-base font-bold text-[#FFFFFF]
