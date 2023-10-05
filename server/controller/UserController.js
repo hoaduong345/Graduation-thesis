@@ -80,10 +80,12 @@ const UserController = {
     try {
       const userID = req.params.username;
       const user = await prisma.user.findUnique({
+        
         where: {
           username: userID,
         },
         select: {
+          id : true,
           image: true, 
           name: true, 
           email: true, 
