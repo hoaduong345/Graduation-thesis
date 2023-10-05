@@ -242,7 +242,7 @@ export default function Addproducts() {
                                             },
                                             maxLength: {
                                                 value: 1000,
-                                                message: 'Mô tả không được vượt quá 300 ký tự!'
+message: 'Mô tả không được vượt quá 300 ký tự!'
                                             },
                                             minLength: {
                                                 value: 20,
