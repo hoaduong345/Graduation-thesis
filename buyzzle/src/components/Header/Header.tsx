@@ -20,7 +20,7 @@ export default function Header() {
   const [idCate, setidCate] = useState<Cate>()
   const user = localStorage.getItem('user');
 
-
+  
   var username;
   const [name, setName] = useState('');
   const [img, setImg] = useState('');

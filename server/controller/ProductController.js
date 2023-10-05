@@ -240,12 +240,15 @@ const ProductController = {
         return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
       }
 
+      const SellingPrice = price - price * (discount / 100);
+      const Pricesale = price * (discount / 100);
+
       const newProduct = {
         name,
         price: parseInt(price),
         rate: parseInt(rate),
-        pricesale: parseInt(pricesale),
-        sellingPrice: parseInt(sellingPrice),
+        pricesale: Pricesale,
+        sellingPrice: SellingPrice,
         discount: parseInt(discount),
         soldcount: parseInt(soldcount),
         quantity: parseInt(quantity),
@@ -261,6 +264,9 @@ const ProductController = {
       const neww = await prisma.product.create({
         data: newProduct,
       });
+
+      console.log("a", SellingPrice);
+      console.log("b", Pricesale);
 
       console.log(neww);
       // res.status(200).json("Thêm sản phẩm thành công");
@@ -333,14 +339,16 @@ const ProductController = {
       if (parseInt(discount) <= 0) {
         return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
       }
+      const SellingPrice = price - price * (discount / 100);
+      const Pricesale = price * (discount / 100);
 
       // Tạo dữ liệu mới để cập nhật
       const updatedProductData = {
         name,
         price: parseInt(price),
         rate: parseInt(rate),
-        pricesale: parseInt(pricesale),
-        sellingPrice: parseInt(sellingPrice),
+        pricesale: Pricesale,
+        sellingPrice: SellingPrice,
         discount: parseInt(discount),
         soldcount: parseInt(soldcount),
         quantity: parseInt(quantity),
@@ -405,16 +413,11 @@ const ProductController = {
       // tìm kiếm = keyword
       const keyword = req.query.keyword;
       const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 10;
-      console.log(
-        "🚀 ~ file: ProductController.js:409 ~ getAllProduct: ~ pageSize:",
-        pageSize
-      );
+      const pageSize = parseInt(req.query.pageSize) || 40;
+      const sortByPrice = req.query.sortByPrice;
+      const sortByDateCreate = req.query.sortByDateCreate;
       const categoryId = req.query.categoryId;
-      console.log(
-        "🚀 ~ file: ProductController.js:414 ~ getAllProduct: ~ categoryId:",
-        categoryId
-      );
+      // const { minPricefind, maxPricefind } = req.query;
 
       const skip = (page - 1) * pageSize;
       const whereClause = {
@@ -425,20 +428,39 @@ const ProductController = {
       const totalProduct = await prisma.product.findMany({
         where: whereClause,
       });
-      console.log(
-        "🚀 ~ file: ProductController.js:420 ~ getAllProduct: ~ totalProduct:",
-        totalProduct.length
-      );
+
+      
 
       if (categoryId) {
         whereClause.fK_category = {
           id: parseInt(categoryId),
-        };
-        // whereClause.price = {
-        //   gte: 11707,  // lớn hơn hoặc bằng
-        // };
+        };   
       }
+
+      if (req.query.minPrice && req.query.maxPrice) {
+        whereClause.sellingPrice = {
+          gte: parseInt(req.query.minPrice),
+          lte: parseInt(req.query.maxPrice),
+        };
+      }
+      console.log(req.query.minPrice);
+      console.log(req.query.maxPrice);
+
+
       const result = await prisma.product.findMany({
+        // where: {
+        //   sellingPrice: {
+        //     gte: parseInt(minPricefind), //Viết tắt của "greater than or equal to," nghĩa là giá trị
+        //     // phải lớn hơn hoặc bằng giá trị mà bạn đang so sánh.
+
+        //     lte: parseInt(maxPricefind), // Viết tắt của "less than or equal to," nghĩa là giá trị
+        //     //phải nhỏ hơn hoặc bằng giá trị mà bạn đang so sánh.
+        //   },
+        // },
+        orderBy: {
+          sellingPrice: sortByPrice,
+          createdAt: sortByDateCreate,
+        },
         include: {
           ProductImage: true,
           fK_category: true,
@@ -447,8 +469,22 @@ const ProductController = {
         skip,
         take: pageSize,
       });
+
+      // const FilterProductWithinRange = await prisma.product.findMany({
+      //   where: {
+      //     sellingPrice: {
+      //       gte: parseInt(minPricefind), //Viết tắt của "greater than or equal to," nghĩa là giá trị
+      //       // phải lớn hơn hoặc bằng giá trị mà bạn đang so sánh.
+
+      //       lte: parseInt(maxPricefind), // Viết tắt của "less than or equal to," nghĩa là giá trị
+      //       //phải nhỏ hơn hoặc bằng giá trị mà bạn đang so sánh.
+      //     },
+      //   },
+      // });
+
       const resultProduct = {
-        allProduct: totalProduct,
+        // allProduct: totalProduct,
+        // FilterProductRange: FilterProductWithinRange,
         currentPage: page,
         totalPage: Math.ceil(totalProduct.length / pageSize),
         rows: result,
@@ -460,28 +496,31 @@ const ProductController = {
     }
   },
 
-  getRecommendedProducts: async (req, res) => {
+  getSugggestProduct: async (req, res) => {
     try {
       const productId = parseInt(req.params.id);
-  
+
       const newProduct = await prisma.product.findUnique({
         where: {
           id: productId,
         },
       });
       if (!newProduct) {
-        return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
+        return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
       }
-      const categoryId = newProduct.categoryID; 
-  
+      const categoryId = newProduct.categoryID;
+
       const recommendedProducts = await prisma.product.findMany({
-        where: {    
+        include: {
+          ProductImage: true,
+        },
+        where: {
           id: {
             not: productId,
           },
           categoryID: categoryId,
         },
-        take: 5, 
+        take: 8,
       });
       res.json(recommendedProducts);
     } catch (error) {
@@ -492,29 +531,18 @@ const ProductController = {
 
   getNewProducts: async (req, res) => {
     try {
-      // Lấy số lượng sản phẩm mới bạn muốn gợi ý (ví dụ: 5 sản phẩm)
-      const numberOfProducts = 5;
-  
       const newProducts = await prisma.product.findMany({
         orderBy: {
-          createdAt: 'desc', // Sắp xếp theo thời gian tạo giảm dần để lấy sản phẩm mới nhất
+          createdAt: "desc", // sap xep time de lay san pham moi nhat
         },
-        take: numberOfProducts, // Lấy số lượng sản phẩm mới
+        take: 5,
       });
-  
       res.json(newProducts);
     } catch (error) {
       console.error(error);
       res.status(500).json(error.message);
     }
   },
-  
-  
-  
-
-
-
-
 };
 
 module.exports = ProductController;

@@ -91,7 +91,7 @@ export default function ListproductsAdmin() {
     onClick: () => setCurrentPage(index),
   } as any);
   const next = () => {
-    if (currentPage === 5) return;
+    if (currentPage === 999) return;
 
     setCurrentPage(currentPage + 1);
   };
@@ -135,40 +135,39 @@ export default function ListproductsAdmin() {
             </div>
             {/* end h2 */}
             <div className='grid gap-4 grid-cols-9 mt-12
-            max-lg:grid-cols-5
-            '>
+          max-lg:grid-cols-5
+          '>
               <div className='col-span-2
-              max-lg:col-span-2
-              '>
+            max-lg:col-span-2
+            '>
                 <div className='flex items-center w-[196px] rounded-md h-[46px] bg-[#EA4B48] justify-evenly cursor-pointer
-                max-xl:w-[156px]
-                max-xl:h-[40px]'>
+              max-xl:w-[156px]
+              max-xl:h-[40px]'>
                   <PlusSquare />
                   <button className='text-center text-base font-bold text-white 
-                  max-xl:text-sm 
-                  '>
+                max-xl:text-sm 
+                '>
                     Thêm sản phẩm
                   </button>
                 </div>
               </div>
               <div className='flex col-span-7 justify-around ml-20 max-2xl:col-span-7 max-2xl:pl-24
-               max-xl:items-center
-               max-xl:pl-0
-               max-xl:ml-5
-               max-lg:col-span-3
-               '>
+             max-xl:items-center
+             max-xl:pl-0
+             max-xl:ml-5
+             max-lg:col-span-3
+             '>
                 {/* input */}
                 <div className="items-center ">
                   <div
                     className="Search-input-headerCenter items-center flex
-                   py-[3px] px-[6px] border-[1px] border-[#FFAAAF] rounded-md
-                   max-2xl:w-[280px]
-                   max-xl:h-[40px]
-                   max-xl:w-[250px]
-                   max-lg:w-[300px]
-                   ">
-                    <div className="mb-2  ">
-                      <Search />
+                 py-[3px] px-[6px] border-[1px] border-[#FFAAAF] rounded-md
+                 max-2xl:w-[280px]
+                 max-xl:h-[40px]
+                 max-xl:w-[250px]
+                 max-lg:w-[300px]
+                 ">
+                    <div className="mb-2  "><Search />
                     </div>
                     <input
                       className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3
@@ -240,27 +239,26 @@ export default function ListproductsAdmin() {
                 <h3 className='text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
                 max-lg:w-[45%]
-                max-lg:text-[10px]
-                '>THÔNG TIN</h3>
+                max-lg:text-[10px]'>THÔNG TIN</h3>
               </div>
               <div className='w-[45%] flex justify-between'>
                 <h3 className='text-[#1A1A1A] text-sm font-semibold leading-4
-                max-xl:text-[13px]
-                max-lg:w-[35%]
-                max-lg:text-[10px]
-                '>SỐ LƯỢNG</h3>
+                  max-xl:text-[13px]
+                  max-lg:w-[35%]
+                  max-lg:text-[10px]
+                  '>SỐ LƯỢNG</h3>
                 <h3 className='text-[#1A1A1A] text-sm font-semibold leading-4
-                max-xl:text-[13px]
-                max-lg:invisible
-                '>TÌNH TRẠNG</h3>
+                  max-xl:text-[13px]
+                  max-lg:invisible
+                  '>TÌNH TRẠNG</h3>
                 <h3 className='text-[#1A1A1A] text-sm font-semibold leading-4
-                max-xl:text-[13px]
-                max-lg:text-[10px]
-                '>SỐ LƯỢNG ĐÃ BÁN</h3>
+                  max-xl:text-[13px]
+                  max-lg:text-[10px]
+                  '>SỐ LƯỢNG ĐÃ BÁN</h3>
                 <h3 className='text-[#1A1A1A] text-sm font-semibold leading-4
-                max-xl:text-[13px]
-                max-lg:invisible
-                '>ĐÁNH GIÁ</h3>
+                  max-xl:text-[13px]
+                  max-lg:invisible
+                  '>ĐÁNH GIÁ</h3>
               </div>
             </div>
             <div >
@@ -288,7 +286,6 @@ export default function ListproductsAdmin() {
                   variant="text"
                   className="flex items-center gap-2"
                   onClick={prev}
-                  disabled={currentPage === 1}
                 >
                   <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
                 </Button>
@@ -306,7 +303,6 @@ export default function ListproductsAdmin() {
                   variant="text"
                   className="flex items-center gap-2"
                   onClick={next}
-                  disabled={currentPage === 5}
                 >
                   Next
                   <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
@@ -315,17 +311,16 @@ export default function ListproductsAdmin() {
             </div>
 
             <div className="flex gap-3 max-lg:visible
-            max-[4000px]:invisible">
+              max-[4000px]:invisible">
               <div>
                 <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9]
-                   transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer
-                   max-xl:w-[125px]
-                   max-xl:h-[40px]
-                   '>
-                  <StatisticalAdmin />
+                     transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer
+                     max-xl:w-[125px]
+                     max-xl:h-[40px]
+                     '><StatisticalAdmin />
                   <button className='text-center text-base font-bold text-[#EA4B48] 
-                    max-xl:font-medium
-                    '>
+                       max-xl:font-medium
+                       '>
                     Thống kê
                   </button>
                 </div>
@@ -333,14 +328,14 @@ export default function ListproductsAdmin() {
 
               <div>
                 <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9]
-                   transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer
-                   max-xl:w-[125px]
-                   max-xl:h-[40px]
-                   '>
+                      transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer
+                      max-xl:w-[125px]
+                      max-xl:h-[40px]
+                      '>
                   <Download />
                   <button className='text-center text-base font-bold text-[#EA4B48]
-                    max-xl:font-medium
-                    '>
+                       max-xl:font-medium
+                       '>
                     Xuất excel
                   </button>
                 </div>
@@ -348,14 +343,14 @@ export default function ListproductsAdmin() {
 
               <div>
                 <div className='flex items-center w-[112px] rounded-md h-[46px] hover:bg-[#FFEAE9]
-                   transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer
-                   max-xl:w-[125px]
-                   max-xl:h-[40px]
-                   '>
+                      transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer
+                      max-xl:w-[125px]
+                      max-xl:h-[40px]
+                      '>
                   <Filter />
                   <button className='text-center text-base font-bold text-[#EA4B48] 
-                    max-xl:font-medium
-                    '>
+                       max-xl:font-medium
+                       '>
                     Bộ lọc
                   </button>
                 </div>

@@ -17,12 +17,13 @@ import axios from "axios";
 import { productController } from "../../../../Controllers/ProductsController";
 import { useParams } from "react-router-dom";
 export interface Cate {
-  id: number
-  name: string
+  id: number;
+  name: string;
 }
 export interface ImgOfProduct {
-  url: string
-}[]
+  url: string;
+}
+[];
 export interface Products {
   id: number;
   name: string;
@@ -36,53 +37,107 @@ export interface Products {
   description: string;
   status: string;
   date: string;
-  fK_category: Cate,
-  ProductImage: ImgOfProduct[],
+  fK_category: Cate;
+  ProductImage: ImgOfProduct[];
 }
 interface TProductResponse {
-  currentPage: number,
-  totalpage: number,
-  rows: Products[]
-  createdAt: string,
-  ProductImage: ImgOfProduct[]
+  currentPage: number;
+  totalpage: number;
+  rows: Products[];
+  createdAt: string;
+  ProductImage: ImgOfProduct[];
 }
 
-export default function FiltersPage() {
-  const [products, setProducts] = useState<TProductResponse[]>([])
+export type Props = {
+  onChangeSlider(min: number, max: number): void;
+};
 
-  const { id } = useParams()
-  const idCate = Number(id)
-  console.log("🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:", idCate)
+export interface PriceRangeFilterPage {
+  minPrice: number;
+  maxPrice: number;
+  // b3. da xac dinh duoc can chuyen gi va nam o dau
+  // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
+  onChangeSlider?(min: number, max: number): void;
+}
+export default function FiltersPage() {
+  const [products, setProducts] = useState<TProductResponse[]>([]);
+  const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
+  const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
+  const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
+    useState(true);
+
+  const [rangeValue, setRangeValue] = useState<number>();
+  const handleSliderChange = (value: number) => {
+    setRangeValue(value);
+  };
+
+  const { id } = useParams();
+  const idCate = Number(id);
+  console.log("🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:", idCate);
+  const handleActiveBTNLowToHighClick = () => {
+    productController.getSortProductbyPrice("asc", idCate).then((res) => {
+      console.log(
+        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+        res
+      );
+      setActiveBtnLowToHigh(false);
+      setActiveBtnHighToLow(true);
+      setProducts(res);
+    });
+  };
+  const handleActiveBTNHighToLowClick = () => {
+    productController.getSortProductbyPrice("desc", idCate).then((res) => {
+      console.log(
+        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+        res
+      );
+      setActiveBtnLowToHigh(true);
+      setActiveBtnHighToLow(false);
+      setProducts(res);
+    });
+  };
+  const handleActiveBTNLatestCreationDate = () => {
+    setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
+    productController.getSortProductbyDateCreate("desc", idCate).then((res) => {
+      setProducts(res);
+    });
+  };
 
   useEffect(() => {
-    getData()
-  }, [])
+    getData();
+  }, []);
 
   const getData = () => {
     productController.getList("", idCate).then((res) => {
-      setProducts(res)
-    })
-  }
+      setProducts(res);
+    });
+  };
+  // const getData = () => {
+  //   productController.getFilterProductWithinRange().then((res) => {
+  //     setProducts(res);
+  //   });
+  // };
 
   return (
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
-            <SitebarFilter onChangeFilters={() => {
-            }} />
+            <SitebarFilter />
           </div>
           {/* content-right-filter */}
           <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">
             <div className="max-lg:hidden">
-              <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-xl:text-2xl max-lg:text-xl" >
+              <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-xl:text-2xl max-lg:text-xl">
                 THƯƠNG HIỆU NỔI TIẾNG:
               </h2>
 
               {/* thuong hieu noi tieng */}
               <div className="flex  w-[100%] justify-start gap-10 mt-[34px] max-2xl:justify-around max-lg:hidden">
-                <div className="square border border-[#FFAAAF] cursor-pointer px-14 pt-[15px] max-2xl:px-[66px] max-2xl:py-[25px]
-              max-xl:px-14 max-xl:my-auto">
+                <div
+                  className="square border border-[#FFAAAF] cursor-pointer px-14 pt-[15px] max-2xl:px-[66px] max-2xl:py-[25px]
+              max-xl:px-14 max-xl:my-auto"
+                >
                   <img
                     className="max-2xl:w-[150px] max-xl:w-[180px]"
                     src="https://www.freepnglogos.com/uploads/starbucks-logo-png-25.png"
@@ -90,8 +145,10 @@ export default function FiltersPage() {
                     alt="starbucks logo png"
                   />
                 </div>
-                <div className="square border border-[#FFAAAF] px-14 py-[10px] cursor-pointer max-2xl:px-[70px] max-2xl:py-[25px]
-              max-xl:px-16 max-xl:my-auto">
+                <div
+                  className="square border border-[#FFAAAF] px-14 py-[10px] cursor-pointer max-2xl:px-[70px] max-2xl:py-[25px]
+              max-xl:px-16 max-xl:my-auto"
+                >
                   <img
                     className="max-2xl:w-[130px] max-xl:w-[160px]"
                     src={Images.unilever}
@@ -99,8 +156,10 @@ export default function FiltersPage() {
                     alt="adidas logo png white images"
                   />
                 </div>
-                <div className="square border border-[#FFAAAF] px-12 pt-[14px]  cursor-pointer max-2xl:px-2 max-2xl:py-[19px]
-               max-xl:px-3 max-xl:my-auto">
+                <div
+                  className="square border border-[#FFAAAF] px-12 pt-[14px]  cursor-pointer max-2xl:px-2 max-2xl:py-[19px]
+               max-xl:px-3 max-xl:my-auto"
+                >
                   <img
                     className="max-2xl:w-[250px] max-xl:w-[310px]"
                     src={Images.Puma}
@@ -120,13 +179,15 @@ export default function FiltersPage() {
             </div>
             <div className="bg-[#FFEAE9] h-[60px] mt-[18px] rounded-[6px] ">
               <div className="txt-content flex">
-                <div className="content-left w-[50.5%] flex items-center justify-start gap-5 h-[60px]
+                <div
+                  className="content-left w-[50.5%] flex items-center justify-start gap-5 h-[60px]
                  max-2xl:w-[51.5%] 
                  max-2xl:gap-7
                  max-xl:w-[52%]
                  max-xl:gap-4
                  max-lg:w-[65%]
-                ">
+                "
+                >
                   <p className="text-[#000000] text-sm ml-5 font-semibold max-2xl:text-lg max-lg:">
                     Sắp xếp theo
                   </p>
@@ -142,10 +203,18 @@ export default function FiltersPage() {
                   </button>
                   <button
                     type="button"
-                    className="transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
-                   max-2xl:py-[5px] max-2xl:text-base 
-                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
+                    className={
+                      activeBtnLatestCreationDate
+                        ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
+                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                    max-2xl:py-[5px] max-2xl:text-base 
+                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
+                        : `transition duration-150 outline outline-2 outline-[#EA4B48] bg-[#FFAAAF] hover:bg-[#FFAAAF] font-medium
+                        rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] text-white
+                        max-2xl:py-[5px] max-2xl:text-base
+                        max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
+                    }
+                    onClick={handleActiveBTNLatestCreationDate}
                   >
                     Mới Nhất
                   </button>
@@ -160,26 +229,46 @@ export default function FiltersPage() {
                   </button>
                 </div>
 
-                <div className="content-left flex items-center justify-start gap-5 h-[60px] 
+                <div
+                  className="content-left flex items-center justify-start gap-5 h-[60px] 
                 max-2xl:gap-7
                 max-xl:gap-4
-                ">
-                  <p className="text-[#000000] font-semibold text-sm max-2xl:text-lg">Giá</p>
+                "
+                >
+                  <p className="text-[#000000] font-semibold text-sm max-2xl:text-lg">
+                    Giá
+                  </p>
                   <button
                     type="button"
-                    className="transition duration-150 outline outline-2 outline-[#EA4B48] hover:bg-[#FFAAAF] font-medium
-                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] bg-white
-                   max-2xl:py-[5px] max-2xl:text-base 
-                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
+                    className={
+                      activeBtnLowToHigh
+                        ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#ffeced] font-medium
+                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                    max-2xl:py-[5px] max-2xl:text-base
+                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm`
+                        : `transition duration-150 outline outline-2 outline-[#EA4B48] bg-[#FFAAAF] hover:bg-[#FFAAAF] font-medium
+                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] text-white
+                    max-2xl:py-[5px] max-2xl:text-base
+                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
+                    }
+                    onClick={handleActiveBTNLowToHighClick}
                   >
                     Thấp Nhất
                   </button>
                   <button
                     type="button"
-                    className="transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
-                   max-2xl:py-[5px] max-2xl:text-base
-                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
+                    className={
+                      activeBtnHighToLow
+                        ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
+                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                    max-2xl:py-[5px] max-2xl:text-base
+                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm`
+                        : `transition duration-150 outline outline-2 outline-[#EA4B48] bg-[#FFAAAF] hover:bg-[#FFAAAF] font-medium
+                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] text-white
+                    max-2xl:py-[5px] max-2xl:text-base
+                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
+                    }
+                    onClick={handleActiveBTNHighToLowClick}
                   >
                     Cao Nhất
                   </button>

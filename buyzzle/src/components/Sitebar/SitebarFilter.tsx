@@ -7,7 +7,11 @@ import Checkbox from "./Checkbox/Checkbox";
 import ButtonSuggestt from "./ButtonSuggest/ButtonSuggest";
 import { title } from "process";
 import { useState } from "react";
-import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
+import {
+  PriceRangeFilterPage,
+  Products,
+} from "../../pages/home/User/FilterPage/FiltersPage";
+import { numberFormat } from "../../Helper";
 
 // rati star
 export interface RatingStar {
@@ -62,11 +66,19 @@ arrBtnSug.push(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type Props = {
-  onChangeFilters(title: string): void;
-};
-export default function SitebarFilter(props: Props) {
+// export type Props = {
+//   onChangeFilters(title: string): void;
+// };
+interface SliderComponentProps {
+  sliderValue: number;
+  onSliderChange: (value: number) => void;
+}
+export default function SitebarFilter() {
   const [otherkeywords, setOtherkeywords] = useState<Products[]>();
+  const [rangeValue, setRangeValue] = useState([250000000, 500000000]);
+  const handleSliderChange = (newValue: [number, number]) => {
+    setRangeValue(newValue);
+  };
 
   return (
     <>
@@ -90,10 +102,10 @@ export default function SitebarFilter(props: Props) {
                 title={item.title}
                 key={index}
                 // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
-                onChangeFilter={(title) => {
-                  console.log("SiteFilterPages: " + title);
-                  props.onChangeFilters?.(title);
-                }}
+                // onChangeFilter={(title) => {
+                //   console.log("SiteFilterPages: " + title);
+                //   props.onChangeFilters?.(title);
+                // }}
               />
             );
           })}
@@ -112,19 +124,35 @@ export default function SitebarFilter(props: Props) {
         </div>
         <div className="slider">
           <Slider
-            min={0}
-            max={100}
+            min={1000}
+            max={1000000000}
+            step={1}
+            marks={{
+              1000: "Low",
+              500000000: "Medium",
+              1000000000: "High",
+            }}
+            pushable={false}
+            // value={rangeValue}
             trackStyle={{
               backgroundColor: "#EA4B48",
             }}
             handleStyle={{ border: "1px solid red" }}
             // dotStyle={{ backgroundColor: "#EA4B48", outlineColor: "#EA4B48",color:'red',border:'1px solid #EA4B48'}}
-            onChange={(e) => console.log(e)}
+            onChange={(e: any) => handleSliderChange(e)}
+            value={rangeValue}
+            // onChange={() => onSliderChange}
             range
+            // onChange={(e) => {
+            //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
+            //   props.onChangeSlider?.(props.maxPrice, props.minPrice);
+            // }}
           />
-          <div className="flex mt-[16px] justify-start gap-2">
+          <div className="flex mt-[20px] justify-start gap-2 ">
             <p className="max-w-max">Giá: </p>
-            <p className="font-extrabold max-w-max">50đ - 1,500đ</p>
+            <p className="font-extrabold max-w-max ">
+              {numberFormat(rangeValue[0])} - {numberFormat(rangeValue[1])}
+            </p>
           </div>
         </div>
 

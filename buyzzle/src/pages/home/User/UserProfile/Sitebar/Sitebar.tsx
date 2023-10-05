@@ -16,9 +16,9 @@ export default function Sitebar() {
     function LogOut() {
         try {
            const reponse = axios.post(API);
-            // localStorage.removeItem('user');
+            localStorage.removeItem('user');
             console.log(reponse);
-            // window.location.href = "/";
+            window.location.href = "/";
         } catch (error) {
             console.log(error);
         }
