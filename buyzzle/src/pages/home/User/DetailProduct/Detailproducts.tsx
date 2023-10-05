@@ -23,6 +23,7 @@ import Rating from "./Rating";
 import { productController } from "../../../../Controllers/ProductsController";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { Products } from "../FilterPage/FiltersPage";
+import { useScroll } from "../../../../hooks/useScrollPages";
 
 export interface ImgOfProduct {
   url: string;
@@ -48,6 +49,7 @@ export type Product = {
   soldCount: number;
 };
 export default function Detailproducts() {
+  useScroll();
   const [first, setfirst] = useState<FormValues>();
   const [quantity, setQuantity] = useState(1);
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
