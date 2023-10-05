@@ -689,6 +689,178 @@ export default function VoucherPage() {
                               </p>
                            </div>
                         </div>
+
+                        <div className="grid grid-cols-6 border-t-[1px] py-7">
+                           <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
+                              <div className="dropdown dropdown-left">
+                                 <label tabIndex={0}>
+                                    <Handle />
+                                 </label>
+                                 <ul
+                                    tabIndex={0}
+                                    className="dropdown-content menu bg-white rounded-box w-52
+                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                                 >
+                                    <li>
+                                       <button
+                                          onClick={openModal}
+                                          className="flex items-center gap-4"
+                                       >
+                                          <Edit />
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                            max-[940px]:text-xs "
+                                          >
+                                             Sửa
+                                          </p>
+                                       </button>
+                                    </li>
+                                    <li>
+                                       <button className="flex items-center gap-4">
+                                          <RemoveCate />
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                             max-[940px]:text-xs "
+                                          >
+                                             Xóa
+                                          </p>
+                                       </button>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <input
+                                 type="checkbox"
+                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                              />
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A] 
+                                    max-[940px]:text-xs "
+                              >
+                                 GPS
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
+                                 Thiết Bị Điện Tử
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#EA4B48]
+                                 max-[940px]:text-xs "
+                              >
+                                 THANGDZ
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                max-[940px]:text-xs "
+                              >
+                                 12/11/23 - 20/11/23
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
+                                 10/1000
+                              </p>
+                           </div>
+                        </div>
+
+                        <div className="grid grid-cols-6 border-t-[1px] py-7">
+                           <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
+                              <div className="dropdown dropdown-left">
+                                 <label tabIndex={0}>
+                                    <Handle />
+                                 </label>
+                                 <ul
+                                    tabIndex={0}
+                                    className="dropdown-content menu bg-white rounded-box w-52
+                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                                 >
+                                    <li>
+                                       <button
+                                          onClick={openModal}
+                                          className="flex items-center gap-4"
+                                       >
+                                          <Edit />
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                            max-[940px]:text-xs "
+                                          >
+                                             Sửa
+                                          </p>
+                                       </button>
+                                    </li>
+                                    <li>
+                                       <button className="flex items-center gap-4">
+                                          <RemoveCate />
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                             max-[940px]:text-xs "
+                                          >
+                                             Xóa
+                                          </p>
+                                       </button>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <input
+                                 type="checkbox"
+                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                              />
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A] 
+                                    max-[940px]:text-xs "
+                              >
+                                 GPS
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
+                                 Thiết Bị Điện Tử
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#EA4B48]
+                                 max-[940px]:text-xs "
+                              >
+                                 THANGDZ
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                max-[940px]:text-xs "
+                              >
+                                 12/11/23 - 20/11/23
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
+                                 10/1000
+                              </p>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>

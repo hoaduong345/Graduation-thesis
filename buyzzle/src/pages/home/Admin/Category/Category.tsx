@@ -29,12 +29,7 @@ function Category() {
 
    const [loading, setLoading] = useState(false);
 
-   const [images, setImages] = useState("");
    const [url, setUrl] = useState<string>();
-
-   useEffect(() => {
-      loadImageFile(images);
-   }, [images]);
 
    // img firebase
    const loadImageFile = async (images: any) => {
@@ -109,7 +104,6 @@ function Category() {
    const {
       control,
       handleSubmit,
-      register,
       clearErrors,
       reset,
       watch,
@@ -124,6 +118,10 @@ function Category() {
    });
 
    const postCategory = (data: FormValues) => {
+      if (!url) {
+         toast.error("thieu hinh", {});
+         return;
+      }
       closeModal();
       if (data.id != 0) {
          axios
@@ -211,6 +209,7 @@ function Category() {
       if (modal) {
          // setUrl(data.image);
          reset({ name: data.name, id: data.id });
+         setUrl(data.image);
          modal.showModal();
       }
    };
@@ -417,29 +416,12 @@ function Category() {
                                              <Controller
                                                 control={control}
                                                 name="image"
-                                                // rules={{
-                                                //    required: {
-                                                //       value: true,
-                                                //       message:
-                                                //          "Hãy chọn một hình",
-                                                //    },
-                                                // }}
                                                 render={({ field }) => (
                                                    <>
                                                       <label htmlFor="images">
                                                          <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2">
                                                             {load()}
                                                             <input
-                                                               {...register(
-                                                                  "image",
-                                                                  {
-                                                                     required: {
-                                                                        value: true,
-                                                                        message:
-                                                                           "Hãy chọn một hình",
-                                                                     },
-                                                                  }
-                                                               )}
                                                                value={
                                                                   field.value
                                                                }
@@ -447,20 +429,12 @@ function Category() {
                                                                onChange={(
                                                                   e: any
                                                                ) => {
-                                                                  setImages(
+                                                                  loadImageFile(
                                                                      e.target
                                                                         .files
                                                                   );
-                                                                  const reg =
-                                                                     /[]/;
-                                                                  const value =
-                                                                     e.target
-                                                                        .value;
                                                                   field.onChange(
-                                                                     value.replace(
-                                                                        reg,
-                                                                        ""
-                                                                     )
+                                                                     e
                                                                   );
                                                                }}
                                                                id="images"
