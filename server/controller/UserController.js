@@ -84,6 +84,7 @@ const UserController = {
           username: userID,
         },
         select: {
+          id: true,
           image: true, 
           name: true, 
           email: true, 

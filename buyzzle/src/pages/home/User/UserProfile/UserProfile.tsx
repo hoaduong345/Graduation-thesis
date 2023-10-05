@@ -16,6 +16,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 
 type FormValues = {
+    id: number,
     username: string,
     name: string,
     email: string,
@@ -38,7 +39,8 @@ export default function UserProfile() {
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDate(event.target.value);
     };
-
+    const [id, setId] = useState<string>("11");
+    // const id: number | undefined = getID()!;
     const [sex, setSex] = useState<boolean>();
     useEffect(() => {
         const user = localStorage.getItem('user');
@@ -49,7 +51,8 @@ export default function UserProfile() {
             userController.getUserWhereUsername(username).then((res) => {
                 setEditUser(res)
                 setSex(res.sex)
-
+                setId(res.id)
+                console.log("ID: "+id);
                 setDate(res.dateOfBirth.substring(0, 10))
             })
         } else {
@@ -169,7 +172,7 @@ export default function UserProfile() {
 
 
 
-    const [url, setUrl] = useState<string>();
+    const [url, setUrl] = useState<string>("");
 
     useEffect(() => {
         loadImageFile(image);
@@ -211,8 +214,10 @@ const onSubmit = async (formData: FormValues) => {
         formData.dateOfBirth = date;
         formData.sex = JSON.parse(formData.sex);
         const response = await axios.put(API, formData);
+        formData.id = parseInt(id);
         if(response){
-            await axios addImages(response.id, url);
+            console.log("id:"+id);
+            await addImages(formData.id, url);
         }
         
         console.log("edit thanh cong", response);
