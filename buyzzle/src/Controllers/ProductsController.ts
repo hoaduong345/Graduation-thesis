@@ -32,6 +32,11 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getAllProductsSearch = async (name: string | undefined): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
     getSearchProduct = async (name: string | undefined): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
             return res.data as Products[]

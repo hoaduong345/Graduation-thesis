@@ -1,6 +1,6 @@
 /* eslint-disable no-var */
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Map from "../../Assets/TSX/Map";
 import Globe from "../../Assets/TSX/Globe";
 import Chevron_down from "../../Assets/TSX/Chevron-down";
@@ -11,26 +11,45 @@ import Search from "../../Assets/TSX/Search";
 import Shoppingcart from "../../Assets/TSX/Shopping-cart";
 import Ellips from "../../Assets/TSX/Ellips";
 import Container from "../container/Container";
-import { useState } from "react";
+import React, {
+  ChangeEvent,
+  useContext,
+  useState,
+  KeyboardEvent,
+  useEffect,
+} from "react";
 import { Cate } from "../../pages/product/AddCategory";
+import { ThemeContext } from "../../hooks/Context/ThemeContextProvider";
+import { Product } from "../home/Index";
+import useDebounce from "../../useDebounceHook/useDebounce";
+import { productController } from "../../Controllers/ProductsController";
+import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 
-
-
+// type Props = {
+//   product: Products;
+// };
 export default function Header() {
+  const [idCate, setidCate] = useState<Cate>();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const navigate = useNavigate();
+  // const [inputValue, setInputValue] = useState("");
 
-  const [idCate, setidCate] = useState<Cate>()
-  const user = localStorage.getItem('user');
+  // const { product } = props;
+  // console.log("🚀 ~ file: Header.tsx:37 ~ Header ~ product:", product.id);
+  const dataSearchBodyIndexFromHeader = useContext(ThemeContext);
+  const [productSearch, setProductSearch] = useState<Products[]>([]);
+  const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
+  const [isSearch, setIsSearch] = useState(false);
 
-
+  const user = localStorage.getItem("user");
+  const dataInputHeaderSearch = useContext(ThemeContext);
   var username;
   var img;
   var name;
 
-
-
+  console.log(isSearch);
 
   if (user != null) {
-
     username = JSON.parse(user).username;
     img = JSON.parse(user).img;
     name = JSON.parse(user).name;
@@ -42,7 +61,37 @@ export default function Header() {
   }
   const href = `/userprofilepage/${username}`;
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    dataInputHeaderSearch?.onChange(e);
+    setShowSuggestions(true);
+  };
+  // Function to hide suggestions
+  const hideSuggestions = () => {
+    setShowSuggestions(false);
+  };
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      console.log("sss");
+    }
+  };
+  const getSearhvalue = (value: any) => {
+    productController
+      .getAllProductsSearch(debouncedInputValue?.data.toString())
+      .then((res: any) => {
+        setProductSearch(res.rows);
+      });
+  };
 
+  useEffect(() => {
+    getSearhvalue(debouncedInputValue);
+    if (dataSearchBodyIndexFromHeader?.data != "") {
+      productController
+        .getAllProductsSearch(dataSearchBodyIndexFromHeader?.data.toString())
+        .then((res: any) => {
+          setProductSearch(res.rows);
+        });
+    }
+  }, [debouncedInputValue]);
   return (
     <>
       <header className="Header">
@@ -95,8 +144,7 @@ export default function Header() {
                   <div
                     className="Search-input-headerCenter items-center flex w-[90%]
                    py-[6px] px-[6px] border-[2px] border-[#FFAAAF] rounded-lg
-                   max-xl:py-[1px]
-                   "
+                   max-xl:py-[1px]"
                   >
                     <div className="mb-2">
                       <Search />
@@ -105,7 +153,42 @@ export default function Header() {
                       className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm
                       max-[426px]:text-[6px]  max-[426px]:p-[0]"
                       placeholder="Tìm kiếm..."
+                      onKeyDown={handleKeyPress}
+                      onChange={(e) => handleChange(e)}
+                      onBlur={() => (isSearch ? null : hideSuggestions())} // Hide suggestions when the input loses focus
                     />
+                    {showSuggestions && (
+                      <div className="absolute w-[665px] z-10  bg-white border border-gray-300 rounded mt-2 p-2 top-28">
+                        {productSearch.slice(0, 6).map((itemsSearch) => {
+                          return (
+                            <div
+                              className="text-base cursor-default
+                                  hover:bg-gray-100 p-1 pl-2 hover:rounded-md duration-200 font-normal"
+                              onClick={(e) => {
+                                setShowSuggestions(false);
+                                navigate(`/Detailproducts/${itemsSearch.id}`);
+                                hideSuggestions();
+                              }}
+                              onMouseOver={() => {
+                                setIsSearch(true);
+                              }}
+                              onMouseLeave={() => {
+                                setIsSearch(false);
+                              }}
+                            >
+                              {itemsSearch.name &&
+                              itemsSearch.name.length > 30 ? (
+                                `${itemsSearch.name.substring(0, 30)}...`
+                              ) : itemsSearch.name ? (
+                                itemsSearch.name
+                              ) : (
+                                <p>Không có sản phẩm</p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                     <div className="flex items-center">
                       <button
                         className="btn-search bg-[#FFEAE9] p-[7px] rounded-lg font-bold text-[#1A1A1A] 
@@ -117,6 +200,12 @@ export default function Header() {
                     </div>
                   </div>
                 </div>
+                {/* <dialog id="my_modal_3" className="max-2xl:modal ">
+                  <div className="relative bg-white h-40 w-72">
+                    sádsadssadasdsd sádsadssad asdsd sádsadssadasdsds ádsa
+                    dssadasdsd
+                  </div>
+                </dialog> */}
 
                 <div className="items-center flex relative gap-2">
                   <div className="items-center flex pr-11 max-[769px]:pr-[10px]">
@@ -140,13 +229,12 @@ export default function Header() {
                           </div>
                         ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
-                            <p className="text-1xl text-stone-50">{name.substring(0, 1).toUpperCase()}</p>
+                            <p className="text-1xl text-stone-50">
+                              {name.substring(0, 1).toUpperCase()}
+                            </p>
                           </div>
-
                         )}
-
                       </a>
-
                     ) : (
                       <div className="flex text-[#1A1A1A] ml-[10px]">
                         <a href="/login">ĐĂNG NHẬP</a>
@@ -154,13 +242,12 @@ export default function Header() {
                         <a href="/register">ĐĂNG KÍ</a>
                       </div>
                     )}
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </Container >
+        </Container>
 
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
@@ -201,7 +288,7 @@ export default function Header() {
             </div>
           </Container>
         </div>
-      </header >
+      </header>
     </>
   );
 }

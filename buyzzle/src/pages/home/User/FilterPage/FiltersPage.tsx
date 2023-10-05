@@ -14,7 +14,7 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
-import { useScroll } from "../../../../hooks/useScrollPages";
+import { useScroll } from "../../../../hooks/Scroll/useScrollPages";
 export interface Cate {
   id: number;
   name: string;
@@ -119,6 +119,7 @@ export default function FiltersPage() {
   useEffect(() => {
     handleFilter(debouncedInputValue);
   }, [debouncedInputValue]);
+
   const handleFilter = async (debouncedInputValue: any) => {
     console.log(debouncedInputValue);
 
