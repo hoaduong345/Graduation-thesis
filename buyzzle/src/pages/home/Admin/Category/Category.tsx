@@ -71,6 +71,7 @@ function Category() {
          return <></>;
       }
    };
+
    const renderImg = () => {
       if (url) {
          return (
@@ -118,7 +119,7 @@ function Category() {
       defaultValues: {
          name: "",
          id: 0,
-         image: url,
+         image: "",
       },
    });
 
@@ -226,6 +227,7 @@ function Category() {
    };
    const setnull = async () => {
       reset({ id: 0, name: "", image: "" });
+      setUrl("");
    };
    console.log(watch());
    return (
@@ -444,12 +446,23 @@ function Category() {
                                                                type="file"
                                                                onChange={(
                                                                   e: any
-                                                               ) =>
+                                                               ) => {
                                                                   setImages(
                                                                      e.target
                                                                         .files
-                                                                  )
-                                                               }
+                                                                  );
+                                                                  const reg =
+                                                                     /[]/;
+                                                                  const value =
+                                                                     e.target
+                                                                        .value;
+                                                                  field.onChange(
+                                                                     value.replace(
+                                                                        reg,
+                                                                        ""
+                                                                     )
+                                                                  );
+                                                               }}
                                                                id="images"
                                                                multiple
                                                                className="hidden "
