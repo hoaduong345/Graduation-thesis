@@ -27,10 +27,10 @@ type FormValues = {
 function Category() {
    const [categorys, setCategorys] = useState<FormValues[]>([]);
 
+   const [loading, setLoading] = useState(false);
+
    const [images, setImages] = useState("");
    const [url, setUrl] = useState<string>();
-
-   const [loading, setLoading] = useState(false);
 
    useEffect(() => {
       loadImageFile(images);
@@ -47,7 +47,7 @@ function Category() {
                   .ref("multipleFiles")
                   .child(images[i].name)
                   .getDownloadURL()
-                  .then((url: any) => {
+                  .then((url: string) => {
                      setUrl(url);
                      return url;
                   });
@@ -118,6 +118,7 @@ function Category() {
       defaultValues: {
          name: "",
          id: 0,
+         image: url,
       },
    });
 
@@ -226,7 +227,7 @@ function Category() {
    const setnull = async () => {
       reset({ id: 0, name: "", image: "" });
    };
-   // console.log(watch());
+   console.log(watch());
    return (
       <>
          <Container>
