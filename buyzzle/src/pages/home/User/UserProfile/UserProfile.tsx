@@ -143,7 +143,7 @@ export default function UserProfile() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phonenumber, setPhonenumber] = useState('');
-
+    const [editUser, setEditUser] = useState<FormValues>()
 
 
     useEffect(() => {
@@ -171,11 +171,11 @@ export default function UserProfile() {
             const userData = JSON.parse(user);
             setUsername(userData.username);
             setName(userData.name);
-            setEmail(userData.email);
-            setPhonenumber(userData.phonenumber);
-            // setSex(userData.sex);
-            setDate(userData.dateOfBirth);
-
+            // setEmail(userData.email);
+            // setPhonenumber(userData.phonenumber);
+            // // setSex(userData.sex);
+            // setDate(userData.dateOfBirth);
+            
            
         } else {
             console.log("Chua Dang Nhap Dung");
@@ -382,7 +382,7 @@ export default function UserProfile() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.email ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                         placeholder="Email"
-                                                        value={email}
+                                                        value={editUser?.email}
                                                         {...register('email')}
                                                         onChange={e => setEmail(e.target.value)}
                                                     />

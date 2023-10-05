@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../../../../components/container/Container";
 import { Images } from "../../../../Assets/TS";
 import Plus from "../../../../Assets/TSX/Plus";
@@ -10,6 +10,17 @@ import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 
 export default function Cart() {
+  const [quantity, setQuantity] = useState(1);
+
+  const minus = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+  const plus = () => {
+    setQuantity(quantity + 1);
+  };
+
   return (
     <Container>
       <div>
@@ -73,7 +84,7 @@ export default function Cart() {
 
               {/* Đơn giá */}
               <div className="w-[18.2%]">
-                <div className="flex">
+                <div className="flex gap-2 items-center">
                   {/* Số tiền đầu */}
                   <p className="text-[#7A828A] text-xs line-through leading-none	">
                     60.000
@@ -89,17 +100,23 @@ export default function Cart() {
               {/* Tăng giảm số lượng */}
               <div className=" flex items-center w-[13.7%]">
                 {/* Giảm số lượng */}
-                <div className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]">
+                <div
+                  className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
+                  onClick={minus}
+                >
                   <Minus />
                 </div>
                 {/* end Giảm số lượng */}
                 {/* Số lượng */}
                 <div>
-                  <p className="text-base mx-2 font-medium">5</p>
+                  <p className="text-base mx-2 font-medium">{quantity}</p>
                 </div>
                 {/* end Số lượng */}
                 {/* Tăng số lượng */}
-                <div className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]">
+                <div
+                  className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
+                  onClick={plus}
+                >
                   <Plus />
                 </div>
                 {/* end Tăng số lượng */}
