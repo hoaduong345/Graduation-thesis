@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Images } from "../../../../Assets/TS";
+import BookOff from "../../../../Assets/TSX/BookOff";
+import FoodLogo from "../../../../Assets/TSX/FoodLogo";
+import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
+import MangoLogo from "../../../../Assets/TSX/MangoLogo";
+import Series from "../../../../Assets/TSX/Series";
+import StepsLogo from "../../../../Assets/TSX/StepsLogo";
+import { productController } from "../../../../Controllers/ProductsController";
+import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
+import Container from "../../../../components/container/Container";
+import SlidesFilter from "../../../../components/home/components/slides/SlidesFilter/SlidesFilter";
 import "../../../css/filter.css";
 import Filter from "./Filter";
-import Container from "../../../../components/container/Container";
-import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
-import { Images } from "../../../../Assets/TS";
-import SlidesFilter from "../../../../components/home/components/slides/SlidesFilter/SlidesFilter";
-import ArrowPrev from "../../../../Assets/TSX/ArrowPrev";
-import ArrowNext from "../../../../Assets/TSX/ArrowNext";
-import StepsLogo from "../../../../Assets/TSX/StepsLogo";
-import Series from "../../../../Assets/TSX/Series";
-import BookOff from "../../../../Assets/TSX/BookOff";
-import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
-import FoodLogo from "../../../../Assets/TSX/FoodLogo";
-import MangoLogo from "../../../../Assets/TSX/MangoLogo";
-import axios from "axios";
-import { productController } from "../../../../Controllers/ProductsController";
-import { useParams } from "react-router-dom";
+import useDebounce from "../../../../useDebounceHook/useDebounce";
+import { useScroll } from "../../../../hooks/useScrollPages";
 export interface Cate {
   id: number;
   name: string;
@@ -41,14 +40,16 @@ export interface Products {
   ProductImage: ImgOfProduct[];
 }
 interface TProductResponse {
-  currentPage: number;
-  totalpage: number;
-  rows: Products[];
-  createdAt: string;
-  ProductImage: ImgOfProduct[];
+  currentPage?: number;
+  totalpage?: number;
+  rows?: Products[];
+  createdAt?: string;
+  ProductImage?: ImgOfProduct[];
 }
 
 export type Props = {
+  minPrice: number;
+  maxPrice: number;
   onChangeSlider(min: number, max: number): void;
 };
 
@@ -57,73 +58,99 @@ export interface PriceRangeFilterPage {
   maxPrice: number;
   // b3. da xac dinh duoc can chuyen gi va nam o dau
   // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
-  onChangeSlider?(min: number, max: number): void;
+  onChangeSlider(min: number, max: number): void;
 }
 export default function FiltersPage() {
-  const [products, setProducts] = useState<TProductResponse[]>([]);
+  const [products, setProducts] = useState<Products[]>([]);
   const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
   const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
   const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
     useState(true);
+  const [sliderValues, setSliderValues] = useState<[number, number]>([
+    0, 10000000,
+  ]);
 
-  const [rangeValue, setRangeValue] = useState<number>();
-  const handleSliderChange = (value: number) => {
-    setRangeValue(value);
-  };
+  const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
 
   const { id } = useParams();
   const idCate = Number(id);
   console.log("🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:", idCate);
   const handleActiveBTNLowToHighClick = () => {
-    productController.getSortProductbyPrice("asc", idCate).then((res) => {
+    productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
       console.log(
         "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
         res
       );
       setActiveBtnLowToHigh(false);
       setActiveBtnHighToLow(true);
-      setProducts(res);
+      setProducts(res.rows);
     });
   };
   const handleActiveBTNHighToLowClick = () => {
-    productController.getSortProductbyPrice("desc", idCate).then((res) => {
+    productController.getSortProductbyPrice("desc", idCate).then((res: any) => {
       console.log(
         "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
         res
       );
       setActiveBtnLowToHigh(true);
       setActiveBtnHighToLow(false);
-      setProducts(res);
+      setProducts(res.rows);
     });
   };
   const handleActiveBTNLatestCreationDate = () => {
     setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
-    productController.getSortProductbyDateCreate("desc", idCate).then((res) => {
-      setProducts(res);
-    });
+    productController
+      .getSortProductbyDateCreate("desc", idCate)
+      .then((res: any) => {
+        setProducts(res.rows);
+      });
   };
 
   useEffect(() => {
     getData();
+    useScroll();
   }, []);
-
   const getData = () => {
-    productController.getList("", idCate).then((res) => {
-      setProducts(res);
+    productController.getList("", idCate).then((res: any) => {
+      console.log(res);
+      setProducts(res.rows);
     });
   };
-  // const getData = () => {
-  //   productController.getFilterProductWithinRange().then((res) => {
-  //     setProducts(res);
-  //   });
-  // };
+  useEffect(() => {
+    handleFilter(debouncedInputValue);
+  }, [debouncedInputValue]);
+  const handleFilter = async (debouncedInputValue: any) => {
+    console.log(debouncedInputValue);
+
+    await productController
+      .getFilterProductWithinRange(
+        debouncedInputValue[0],
+        debouncedInputValue[1],
+        idCate
+      )
+      .then((res: any) => {
+        setProducts(res.rows);
+      });
+  };
+  function handleSliderChange(value: [number, number]): void {
+    console.log("value", value);
+    // productController
+    //   .getFilterProductWithinRange(value[0], value[1])
+    //   .then((res: any) => {
+    //     setProducts(res.rows);
+    //   });
+    setSliderValues(value);
+  }
 
   return (
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
-            <SitebarFilter />
+            <SitebarFilter
+              value={sliderValues}
+              onSliderChange={handleSliderChange}
+            />
           </div>
           {/* content-right-filter */}
           <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">
@@ -281,12 +308,8 @@ export default function FiltersPage() {
             </div>
 
             <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
-              {products?.rows?.map((items) => {
-                return (
-                  <>
-                    <Filter product={items} />
-                  </>
-                );
+              {products?.map((items) => {
+                return <Filter product={items} />;
               })}
             </div>
             {/* <div
