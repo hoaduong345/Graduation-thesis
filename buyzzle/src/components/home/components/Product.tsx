@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 type Props = {
   product: Product
 }
-export default function Products(props: Props) {
+export default function Products1(props: Props) {
   const { product } = props
   const discountedPrice = product.price * (product.discount / 100)
   const price = product.price - discountedPrice

@@ -69,13 +69,15 @@ const CartController = {
             const product = await prisma.product.findUnique({
                 where: { id: productId },
               });
+            console.log("🚀 ~ file: CartController.js:72 ~ updateCart: ~ product:", product)
           
               if (!product) {
                 throw new Error(`Product with ID ${productId} not found.`);
               } 
+              
             await prisma.itemCart.create({
                 data: {
-                    productid: parseInt(product.id) ,
+                    // productid: 3 ,
                     quantity,
                     total: 0,
                     cartschema: { connect: { id: cart.id } },
@@ -104,7 +106,7 @@ const CartController = {
                     userId: id,
                 },
                 include: {
-                    item: true, // Include the items associated with the cart
+                    item: true, 
                 },
             });
             if (!cart) {
