@@ -52,8 +52,8 @@ class ProductController {
             return res.data as Products[]
         })
     }
-    getFilterProductWithinRange = async (): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=100000&maxPrice=2000000`).then((res) => {
+    getFilterProductWithinRange = async (min: number, max: number, id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryId=${id}`).then((res) => {
             return res.data as Products[]
         })
     }

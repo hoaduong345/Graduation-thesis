@@ -15,6 +15,7 @@ import {
   ImgOfProduct,
   Products,
 } from "../../../pages/home/User/FilterPage/FiltersPage";
+import { useScroll } from "../../../hooks/useScrollPages";
 
 export type Product = {
   id: number;
@@ -37,6 +38,7 @@ export type FlashSaleList = {
 };
 
 function Index() {
+  useScroll();
   const [categoty, setCategory] = useState<Cate[]>([]);
   const [product, setProducts] = useState<Product[]>([]);
   const products: Product[] = [

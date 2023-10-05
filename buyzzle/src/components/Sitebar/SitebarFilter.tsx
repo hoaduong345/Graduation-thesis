@@ -70,15 +70,59 @@ arrBtnSug.push(
 //   onChangeFilters(title: string): void;
 // };
 interface SliderComponentProps {
-  sliderValue: number;
-  onSliderChange: (value: number) => void;
+  value: [number, number];
+  onSliderChange: (value: [number, number]) => void;
 }
-export default function SitebarFilter() {
-  const [otherkeywords, setOtherkeywords] = useState<Products[]>();
-  const [rangeValue, setRangeValue] = useState([250000000, 500000000]);
+export default function SitebarFilter({
+  value,
+  onSliderChange,
+}: SliderComponentProps) {
+  const [rangeValue, setRangeValue] = useState([5000, 300000]);
   const handleSliderChange = (newValue: [number, number]) => {
+    console.log("sdssdsd", newValue);
     setRangeValue(newValue);
+    onSliderChange(newValue);
   };
+
+  // const [rangeValue, setRangeValue] = useState([5000, 70000]);
+  // const [sliderValues, setSliderValues] = useState<[number, number]>(value);
+
+  // const handleSliderChange = (newValue: number) => {
+  //   console.log("sdssdsd", newValue);
+  //   // setRangeValue(newValue);
+  //   // onSliderChange(newValue);
+  //   if (sliderValue1 === newValue) {
+  //     setSliderValue1(newValue);
+  //   } else {
+  //     setSliderValue2(newValue);
+  //   }
+
+  //   onSliderChange([sliderValue1, sliderValue2]);
+  // };
+
+  // Sử dụng useEffect để theo dõi giá trị trong mảng value và cập nhật biến riêng lẻ
+  // useEffect(() => {
+  //   setSliderValues(value);
+  // }, [value]);
+
+  // const handleSliderChange = (newValues: [number, number]) => {
+  //   console.log(newValues);
+  //   setSliderValues(newValues);
+  //   onSliderChange(newValues);
+  // };
+  // const [sliderValue1, setSliderValue1] = useState<number>(value[0]);
+  // const [sliderValue2, setSliderValue2] = useState<number>(value[1]);
+  // useEffect(() => {
+  //   setSliderValue1(value[0]);
+  //   setSliderValue2(value[1]);
+  // }, [value]);
+
+  // const handleSliderChange = (newValues: [number, number]) => {
+  //   setSliderValue1(newValues[0]);
+  //   setSliderValue2(newValues[1]);
+  //   onSliderChange(newValues);
+  //   console.log("newValues[0],newValues[1]", newValues[0], newValues[1]);
+  // };
 
   return (
     <>
@@ -125,27 +169,27 @@ export default function SitebarFilter() {
         <div className="slider">
           <Slider
             min={1000}
-            max={1000000000}
+            max={1000000}
             step={1}
             marks={{
               1000: "Low",
-              500000000: "Medium",
-              1000000000: "High",
+              500000: "Medium",
+              1000000: "High",
             }}
             pushable={false}
-            // value={rangeValue}
+            value={rangeValue}
             trackStyle={{
               backgroundColor: "#EA4B48",
             }}
             handleStyle={{ border: "1px solid red" }}
             // dotStyle={{ backgroundColor: "#EA4B48", outlineColor: "#EA4B48",color:'red',border:'1px solid #EA4B48'}}
             onChange={(e: any) => handleSliderChange(e)}
-            value={rangeValue}
+            // value={rangeValue}
             // onChange={() => onSliderChange}
             range
             // onChange={(e) => {
             //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
-            //   props.onChangeSlider?.(props.maxPrice, props.minPrice);
+            //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
             // }}
           />
           <div className="flex mt-[20px] justify-start gap-2 ">
