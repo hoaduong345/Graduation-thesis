@@ -429,10 +429,12 @@ const ProductController = {
         where: whereClause,
       });
 
+      
+
       if (categoryId) {
         whereClause.fK_category = {
           id: parseInt(categoryId),
-        };
+        };   
       }
 
       if (req.query.minPrice && req.query.maxPrice) {
@@ -444,7 +446,6 @@ const ProductController = {
       console.log(req.query.minPrice);
       console.log(req.query.maxPrice);
 
-      
 
       const result = await prisma.product.findMany({
         // where: {

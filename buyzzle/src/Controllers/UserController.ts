@@ -7,6 +7,7 @@ export const appConfig = {
 }
 
 export interface ModelUser{
+    id: string,
     email: string,
     username: string,
     // password: string,
