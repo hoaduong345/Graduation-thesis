@@ -15,8 +15,8 @@ import SitebarAdmin from "../Sitebar/Sitebar";
 import ListproductMap from "./ListproductMap";
 import { Button } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
-import SalesIcon from "../Assets/Icon/SalesIcon";
-import FilterListproduct from "./FilterListproduct";
+import FilterListproduct from "./Filter/FilterListproduct";
+import EmptyProductPage from "./EmptyProduct/EmptyProductPage";
 export default function ListproductsAdmin() {
    const [products, setProducts] = useState<any>({});
    const [search, setSearch] = useState("");
@@ -98,7 +98,7 @@ export default function ListproductsAdmin() {
          onClick: () => setCurrentPage(index),
       } as any);
    const next = () => {
-      if (currentPage === 5) return;
+      if (currentPage === 999) return;
 
       setCurrentPage(currentPage + 1);
    };
@@ -370,17 +370,9 @@ export default function ListproductsAdmin() {
                            );
                         })
                      ) : (
-                        <div className="p-32 items-center flex flex-col gap-6">
-                           <div className="max-w-max mx-auto">
-                              <SalesIcon />
-                           </div>
-                           <p className="text-[#b39393] text-xl">
-                              Danh sách sản phẩm trống
-                           </p>
-                           <button className="bg-[#EA4B48] w-[20%] cursor-pointer py-2 text-white rounded">
-                              Thêm Ngay
-                           </button>
-                        </div>
+                        <>
+                           <EmptyProductPage />
+                        </>
                      )}
                   </div>
                   {/* <Pagination postPer={postPerPage} totalPosts={products.length} /> */}
@@ -390,7 +382,6 @@ export default function ListproductsAdmin() {
                            variant="text"
                            className="flex items-center gap-2"
                            onClick={prev}
-                           disabled={currentPage === 1}
                         >
                            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
                            Previous
@@ -417,7 +408,6 @@ export default function ListproductsAdmin() {
                            variant="text"
                            className="flex items-center gap-2"
                            onClick={next}
-                           disabled={currentPage === 5}
                         >
                            Next
                            <ArrowRightIcon

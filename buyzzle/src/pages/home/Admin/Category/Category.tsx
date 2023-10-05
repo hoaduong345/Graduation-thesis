@@ -1,28 +1,27 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import Container from "../../../../components/container/Container";
-import SitebarAdmin from "../Sitebar/Sitebar";
-import Search from "../../../../Assets/TSX/Search";
-import Download from "../Assets/TSX/Download";
-import Delete from "../Assets/TSX/Delete";
-import Line from "../Assets/TSX/Line";
-import Plus from "../../../../Assets/TSX/Plus";
-import Handle from "../Assets/TSX/bacham";
-import RemoveCate from "../Assets/TSX/RemoveCate";
-import Edit from "../Assets/TSX/Edit";
-import UploadIMG from "../Assets/TSX/UploadIMG";
-import { toast } from "react-toastify";
-import LogoCate from "../Assets/TSX/logoCateAdmin";
-import AddCateBtn from "../Assets/TSX/AddCateAdmin";
-import { Controller, useForm } from "react-hook-form";
 import { ref, uploadBytes } from "firebase/storage";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import Plus from "../../../../Assets/TSX/Plus";
+import Search from "../../../../Assets/TSX/Search";
 import { storage } from "../../../../Firebase/Config";
-import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
+import Container from "../../../../components/container/Container";
+import AddCateBtn from "../Assets/TSX/AddCateAdmin";
+import Delete from "../Assets/TSX/Delete";
+import Download from "../Assets/TSX/Download";
+import Edit from "../Assets/TSX/Edit";
+import Line from "../Assets/TSX/Line";
+import RemoveCate from "../Assets/TSX/RemoveCate";
+import UploadIMG from "../Assets/TSX/UploadIMG";
+import Handle from "../Assets/TSX/bacham";
+import LogoCate from "../Assets/TSX/logoCateAdmin";
+import SitebarAdmin from "../Sitebar/Sitebar";
 
 type FormValues = {
    id: number;
    name: string;
-   image: string | undefined;
+   image: string;
 };
 
 function Category() {
@@ -31,7 +30,7 @@ function Category() {
    const [images, setImages] = useState("");
    const [url, setUrl] = useState<string>();
 
-   const [dataForm, setDataForm] = useState<FormValues>({} as FormValues);
+   const [loading, setLoading] = useState(false);
 
    useEffect(() => {
       loadImageFile(images);
@@ -41,7 +40,7 @@ function Category() {
    const loadImageFile = async (images: any) => {
       for (let i = 0; i < images.length; i++) {
          const imageRef = ref(storage, `multipleFiles/${images[i].name}`);
-
+         setLoading(true);
          await uploadBytes(imageRef, images[i])
             .then(() => {
                storage
@@ -55,10 +54,23 @@ function Category() {
             })
             .catch((err) => {
                alert(err);
-            });
+            })
+            .finally(() => setLoading(false));
       }
    };
 
+   const load = () => {
+      if (loading) {
+         return (
+            <div
+               style={{ borderTopColor: "transparent" }}
+               className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
+            />
+         );
+      } else {
+         return <></>;
+      }
+   };
    const renderImg = () => {
       if (url) {
          return (
@@ -74,12 +86,6 @@ function Category() {
                   className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
                                                                     opacity-0 transition duration-300 ease-in-out group-hover:opacity-20"
                ></div>
-               <div
-                  className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
-                  // onClick={() => console.log("an không ?")}
-               >
-                  <RemoveIMG />
-               </div>
             </div>
          );
       } else {
@@ -103,21 +109,24 @@ function Category() {
       control,
       handleSubmit,
       register,
+      clearErrors,
+      reset,
+      watch,
       formState: { errors },
    } = useForm<FormValues>({
       mode: "all",
       defaultValues: {
          name: "",
+         id: 0,
       },
    });
 
    const postCategory = (data: FormValues) => {
       closeModal();
-      console.log(data);
-      if (dataForm.id != 0) {
+      if (data.id != 0) {
          axios
             .put(
-               `http://localhost:5000/buyzzle/product/updatecategory/${dataForm.id}`,
+               `http://localhost:5000/buyzzle/product/updatecategory/${data.id}`,
                {
                   name: data.name,
                   image: url,
@@ -134,7 +143,6 @@ function Category() {
             })
             .catch((error) => {
                console.error("Error:", error);
-               // Xử lý lỗi nếu có
             });
       } else {
          axios
@@ -199,8 +207,8 @@ function Category() {
          "my_modal_3"
       ) as HTMLDialogElement | null;
       if (modal) {
-         setUrl(data.image);
-         setDataForm({ id: data.id, name: data.name, image: data.image });
+         // setUrl(data.image);
+         reset({ name: data.name, id: data.id });
          modal.showModal();
       }
    };
@@ -210,13 +218,15 @@ function Category() {
          "my_modal_3"
       ) as HTMLDialogElement | null;
       if (modal) {
+         clearErrors();
          await setnull();
          modal.close();
       }
    };
    const setnull = async () => {
-      setDataForm({ id: 0, name: "", image: "" });
+      reset({ id: 0, name: "", image: "" });
    };
+   // console.log(watch());
    return (
       <>
          <Container>
@@ -343,7 +353,7 @@ function Category() {
                                             `}
                                                                placeholder="Nhập tiêu đề danh mục"
                                                                value={
-                                                                  dataForm.name
+                                                                  field.value
                                                                }
                                                                onChange={(
                                                                   e
@@ -373,16 +383,6 @@ function Category() {
                                                          </>
                                                       )}
                                                    />
-                                                   {/* <input
-                                                      className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                      placeholder="Nhập tiêu đề danh mục"
-                                                      onChange={handleChange}
-                                                      name="name"
-                                                      value={category.name}
-                                                   /> */}
                                                 </div>
                                                 {/* <div>
                                                                     <label htmlFor="" className="text-sm max-xl:text-xs max-lg:text-[10px]">Chuỗi Cho Đường Dẫn Tĩnh*</label>
@@ -414,17 +414,18 @@ function Category() {
                                              <Controller
                                                 control={control}
                                                 name="image"
-                                                rules={{
-                                                   required: {
-                                                      value: true,
-                                                      message:
-                                                         "Hãy chọn một hình",
-                                                   },
-                                                }}
-                                                render={({}) => (
+                                                // rules={{
+                                                //    required: {
+                                                //       value: true,
+                                                //       message:
+                                                //          "Hãy chọn một hình",
+                                                //    },
+                                                // }}
+                                                render={({ field }) => (
                                                    <>
                                                       <label htmlFor="images">
                                                          <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2">
+                                                            {load()}
                                                             <input
                                                                {...register(
                                                                   "image",
@@ -436,6 +437,9 @@ function Category() {
                                                                      },
                                                                   }
                                                                )}
+                                                               value={
+                                                                  field.value
+                                                               }
                                                                type="file"
                                                                onChange={(
                                                                   e: any
@@ -449,6 +453,7 @@ function Category() {
                                                                multiple
                                                                className="hidden "
                                                             />
+
                                                             {renderImg()}
                                                             {errors.image && (
                                                                <p className="text-[13px] text-red-600 mt-2">

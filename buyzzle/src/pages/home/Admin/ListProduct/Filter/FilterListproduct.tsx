@@ -1,6 +1,6 @@
 import Slider from "rc-slider";
-import DeleteWhite from "../Assets/TSX/DeleteWhite";
-import { RatingStar } from "../../../../components/Sitebar/SitebarFilter";
+import DeleteWhite from "../../Assets/TSX/DeleteWhite";
+import { RatingStar } from "../../../../../components/Sitebar/SitebarFilter";
 import FilterRateMap from "./FilterRateMap";
 import { useState } from "react";
 
