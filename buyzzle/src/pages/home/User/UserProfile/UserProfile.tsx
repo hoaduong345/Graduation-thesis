@@ -66,7 +66,7 @@ export const Form1: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [imageURL, setImageURL] = useState<string | null>(null);
 
-
+    
 
     useEffect(() => {
         function CheckLink() {
@@ -81,7 +81,7 @@ export const Form1: React.FC = () => {
 
                 setValidUrl(false);
             }
-        };
+        }
         CheckLink();
     }, [param]);
 
@@ -184,7 +184,7 @@ export const Form1: React.FC = () => {
             formData.sex = JSON.parse(formData.sex);
             const response = await axios.put(API, formData);
             console.log("edit thanh cong", response);
-
+            
             if (response.status === 200) {
                 console.log("Edit successfully");
                 toast.success(
@@ -693,6 +693,9 @@ export const Form2: React.FC = () => {
         },
 
     });
+    const instance = axios.create({
+        withCredentials: true,
+    })
     const [validUrl, setValidUrl] = useState(false);
     const param = useParams();
 
@@ -761,7 +764,7 @@ export const Form2: React.FC = () => {
 
         try {
             console.log("checker", formData);
-            const response = await axios.put(API2, formData);
+            const response = await instance.put(API2, formData);
             console.log("Change successfully", response);
 
             if (response.status === 200) {
