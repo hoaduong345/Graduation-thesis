@@ -19,7 +19,7 @@ import {
 export type Product = {
   id: number;
   imgSrc: string;
-  title: string;
+  name: string;
   price: number;
   discount: number;
   soldCount: number;

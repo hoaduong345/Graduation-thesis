@@ -417,6 +417,7 @@ const ProductController = {
       const sortByPrice = req.query.sortByPrice;
       const sortByDateCreate = req.query.sortByDateCreate;
       const categoryId = req.query.categoryId;
+      // const { minPricefind, maxPricefind } = req.query;
 
       const skip = (page - 1) * pageSize;
       const whereClause = {
@@ -431,7 +432,7 @@ const ProductController = {
       if (categoryId) {
         whereClause.fK_category = {
           id: parseInt(categoryId),
-        };   
+        };
       }
 
       if (req.query.minPrice && req.query.maxPrice) {
@@ -446,6 +447,15 @@ const ProductController = {
       
 
       const result = await prisma.product.findMany({
+        // where: {
+        //   sellingPrice: {
+        //     gte: parseInt(minPricefind), //Viết tắt của "greater than or equal to," nghĩa là giá trị
+        //     // phải lớn hơn hoặc bằng giá trị mà bạn đang so sánh.
+
+        //     lte: parseInt(maxPricefind), // Viết tắt của "less than or equal to," nghĩa là giá trị
+        //     //phải nhỏ hơn hoặc bằng giá trị mà bạn đang so sánh.
+        //   },
+        // },
         orderBy: {
           sellingPrice: sortByPrice,
           createdAt: sortByDateCreate,
@@ -458,8 +468,22 @@ const ProductController = {
         skip,
         take: pageSize,
       });
+
+      // const FilterProductWithinRange = await prisma.product.findMany({
+      //   where: {
+      //     sellingPrice: {
+      //       gte: parseInt(minPricefind), //Viết tắt của "greater than or equal to," nghĩa là giá trị
+      //       // phải lớn hơn hoặc bằng giá trị mà bạn đang so sánh.
+
+      //       lte: parseInt(maxPricefind), // Viết tắt của "less than or equal to," nghĩa là giá trị
+      //       //phải nhỏ hơn hoặc bằng giá trị mà bạn đang so sánh.
+      //     },
+      //   },
+      // });
+
       const resultProduct = {
         // allProduct: totalProduct,
+        // FilterProductRange: FilterProductWithinRange,
         currentPage: page,
         totalPage: Math.ceil(totalProduct.length / pageSize),
         rows: result,

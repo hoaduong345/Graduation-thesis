@@ -89,7 +89,7 @@ export default function Addproducts() {
         // console.log("🚀 ~ file: Addproducts.tsx:33 ~ handleAddproduct ~ _data:", _data)
         axios.post(`${appConfig.apiUrl}/addproduct`, _data)
             .then(response => {
-                console.log(response.config.data)
+console.log(response.config.data)
                 return response
             }).then(async (responseData) => {
                 toast.success("Thêm thành công !")
@@ -166,7 +166,7 @@ export default function Addproducts() {
                                     <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Mô Tả Sản Phẩm</span>
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
-                            shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
+shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
                                         <Controller control={control} name='productName' rules={{
                                             required: {
                                                 value: true,
@@ -204,7 +204,7 @@ export default function Addproducts() {
                                             },
                                             maxLength: {
                                                 value: 1000,
-                                                message: 'Mô tả không được vượt quá 300 ký tự!'
+message: 'Mô tả không được vượt quá 300 ký tự!'
                                             },
                                             minLength: {
                                                 value: 20,
@@ -243,7 +243,7 @@ export default function Addproducts() {
                                                 <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Mô Tả Chi Tiết Sản Phẩm<span className='text-[#FF0000]'>*</span></p>
                                                 <Editor
                                                     apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
-                                                    onInit={(editor) => (editorRef.current = editor)}
+onInit={(editor) => (editorRef.current = editor)}
                                                     onEditorChange={(e) => field.onChange(e)}
                                                     value={field.value}
                                                     init={{
@@ -284,7 +284,7 @@ export default function Addproducts() {
                                                             'wordcount',
                                                             'visualblocks',
                                                             'visualchars',
-                                                            'code',
+'code',
                                                             'fullscreen',
                                                             'insertdatetime',
                                                             'media',
@@ -324,8 +324,7 @@ export default function Addproducts() {
                                                     message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
                                                 }
                                             }}
-
-                                            render={({ field }) => (
+render={({ field }) => (
                                                 <>
 
                                                     <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs'>Danh Mục Sản Phẩm<span className='text-[#FF0000]'>*</span></p>
@@ -365,7 +364,7 @@ export default function Addproducts() {
                                         <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs'>Tag<span className='text-[#FF0000]'>*</span></p>
                                         {/* Dropdown */}
                                         <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                            <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md">
+<select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md">
                                                 <option>key-word tìm kiếm / key-word tìm kiếm 1</option>
                                                 <option>key-word tìm kiếm 2 / key-word tìm kiếm 3</option>
                                             </select>
@@ -398,7 +397,7 @@ export default function Addproducts() {
                                                                 <div id="images" className='text-center mt-2'>
                                                                     <p className='text-[#5D5FEF] text-center -tracking-tighter font-bold max-[1024px]:text-xs max-[768px]:text-[10px]'>Click to upload
                                                                         <p className='text-[#1A1A1A] font-normal text-sm tracking-widest max-[1024px]:text-[11px] max-[768px]:text-[10px]'>or drag and drop</p></p>
-                                                                </div>
+</div>
                                                             </div>
                                                         </label>
                                                     </div>{/* end form upload img */}
@@ -436,7 +435,7 @@ export default function Addproducts() {
 
 
                                 {/* Giá và số lượng sản phẩm */}
-                                <div className='mt-7'>
+<div className='mt-7'>
                                     <span className='text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base'>Giá & Số Lượng</span>
                                     {/* card */}
                                     <div className='card w-[100%] py-6 px-6 mt-2 rounded-md
@@ -469,7 +468,7 @@ export default function Addproducts() {
                                                                     placeholder="000.000"
                                                                     value={field.value}
                                                                     onChange={(e) => {
-                                                                        const reg = /[^1-9]/g
+const reg = /[^1-9]/g
                                                                         const value = e.target.value
                                                                         field.onChange(value.replace(reg, ''))
                                                                     }}
@@ -504,7 +503,7 @@ export default function Addproducts() {
                                                             `}>
                                                                 <input
                                                                     className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
-                                                                            max-xl:text-sm max-lg:text-[13px]"
+max-xl:text-sm max-lg:text-[13px]"
                                                                     placeholder="000.000"
                                                                     value={field.value}
                                                                     maxLength={3}
@@ -540,7 +539,7 @@ export default function Addproducts() {
                                                     <input
                                                         className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
                                                             max-xl:text-sm max-lg:text-[13px]
-                                                    ${!!errors.productQuantity ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'} `}
+${!!errors.productQuantity ? 'border-[1px] border-red-900' : 'border-[1px] border-[#FFAAAF]'} `}
                                                         placeholder="000.000"
                                                         value={field.value}
                                                         onChange={(e) => {
@@ -578,7 +577,7 @@ export default function Addproducts() {
                                 </div>
                                 {/* button */}
                                 <div className='flex w-[50%] justify-between mt-6 max-[1330px]:gap-5 max-[1330px]:w-[55%] max-[1024px]:w-[75%]'>
-                                    <div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer
+<div className='flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer
                                             max-[1330px]:w-[160px] max-[1024px]:w-[190px]'>
                                         <Link to='/' >
                                             <button className='text-center text-base font-bold text-[#1A1A1A] max-xl:text-sm max-lg:text-[13px]'>
