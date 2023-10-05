@@ -267,55 +267,53 @@ export default function UserProfile() {
     }
   };
 
-  const API2 = `http://localhost:5000/buyzzle/auth/changepassword`;
+  const API2 = "http://localhost:5000/buyzzle/auth/changepassword";
   const onSubmit2 = async (formData: FormValues) => {
-    try {
-      console.log("TESTING: " + formData);
-      formData.dateOfBirth = date;
-      formData.sex = JSON.parse(formData.sex);
-      const response = await axios.put(API2, formData);
-      formData.id = parseInt(id);
-      if (response) {
-        console.log("id:" + id);
-        await addImages(formData.id, url);
-      }
+    // const response = await axios.post(API, data);
+    //   console.log("server: ", response);
 
-      console.log("edit thanh cong", response);
+    try {
+      console.log("checker", formData);
+      const response = await axios.put(API2, formData);
+      console.log("Change successfully", response);
 
       if (response.status === 200) {
-        console.log("Edit successfully");
-        toast.success("Cập nhật thành công", {
+        console.log("Change successfully");
+        toast.success("Change successfully", {
           position: "top-right",
           autoClose: 5000,
         });
       } else {
-        console.log("Sign-in Failed!");
-        toast.warning("Sign-in failed", {
+        console.log("Change Failed!");
+        toast.warning("Change failed", {
           position: "top-right",
           autoClose: 5000,
         });
       }
     } catch (error) {
+      // console.log("Them that bai", error);
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
+        // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData.error) {
           console.log(`Lỗi2: ${responseData.error}`);
-          const errorMessageUsername = responseData.error.username;
-          const errorMessageEmail = responseData.error.email;
-          const errorMessagePhoneNumber = responseData.error.phonenumber;
-          if (errorMessageUsername) {
-            toast.warning(errorMessageUsername, {
+          const errorMessageoldPassword = responseData.error.oldPassword;
+          const errorMessagenewPassword = responseData.error.newPassword;
+          const errorMessageconfirmNewPassword =
+            responseData.error.confirmNewPassword;
+          if (errorMessageoldPassword) {
+            toast.warning(errorMessageoldPassword, {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessageEmail) {
-            toast.warning(errorMessageEmail, {
+          } else if (errorMessagenewPassword) {
+            toast.warning(errorMessagenewPassword, {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessagePhoneNumber) {
-            toast.warning(errorMessagePhoneNumber, {
+          } else if (errorMessageconfirmNewPassword) {
+            toast.warning(errorMessageconfirmNewPassword, {
               position: "top-right",
               autoClose: 5000,
             });
@@ -326,25 +324,6 @@ export default function UserProfile() {
       } else {
         console.error("Lỗi gửi yêu cầu không thành công", error);
       }
-    }
-  };
-  const onChangeInput2 = (e: any) => {
-    setEditUser(e.target.value);
-  };
-  const onChangeImage2 = (e: any) => {
-    // setImage(e.target.files)
-    // setSelectedFile(e.target.files);
-    const file = e.target.files?.[0];
-    if (file) {
-      console.log(`Selected file: ${file}`);
-      setSelectedFile(file);
-      setImage(file);
-
-      // You can perform further actions with the selected file here
-    } else {
-      setSelectedFile(null); // Reset the selectedFile state when no file is selected
-      setImage("" + null); // Reset the imageURL state
-      console.log("No file selected");
     }
   };
 
@@ -364,10 +343,7 @@ export default function UserProfile() {
                   </div>
                 </div>
                 <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
-                  <form
-                    className="card py-4 px-5 col-span-3  rounded-[6px]
-                                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                  >
+                  <form className="card py-4 px-5 col-span-3  rounded-[6px] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                     <span className="text-[#000] text-2xl font-normal ">
                       Hồ sơ của tôi
                     </span>
@@ -401,12 +377,12 @@ export default function UserProfile() {
                               {/* input addNameProducts */}
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.username
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                                rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                ${
+                                                  !!errors.username
+                                                    ? "border-[2px] border-red-900"
+                                                    : "border-[1px] border-[#FFAAAF]"
+                                                }`}
                                 placeholder="Tên đăng nhập"
                                 value={param.username}
                                 {...register("username")}
@@ -449,12 +425,12 @@ export default function UserProfile() {
                               {/* input addNameProducts */}
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.name
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                                rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                ${
+                                                  !!errors.name
+                                                    ? "border-[2px] border-red-900"
+                                                    : "border-[1px] border-[#FFAAAF]"
+                                                }`}
                                 placeholder="Tên người dùng"
                                 value={editUser?.name}
                                 {...register("name")}
@@ -493,12 +469,12 @@ export default function UserProfile() {
                             {/* input addNameProducts */}
                             <input
                               className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.email
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                                rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                ${
+                                                  !!errors.email
+                                                    ? "border-[2px] border-red-900"
+                                                    : "border-[1px] border-[#FFAAAF]"
+                                                }`}
                               placeholder="Email"
                               value={editUser?.email}
                               {...register("email")}
@@ -537,11 +513,11 @@ export default function UserProfile() {
                                 checked={sex === true}
                                 onChange={handleSexChange}
                                 className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
-                                            checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
+                                                checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               />
                               <div
                                 className="h-6 w-6 absolute rounded-full pointer-events-none
-                                            peer-checked:border-[#EA4B48] peer-checked:border-2"
+                                                peer-checked:border-[#EA4B48] peer-checked:border-2"
                               />
                             </div>
                           </div>
@@ -559,26 +535,26 @@ export default function UserProfile() {
                                 checked={sex === false}
                                 onChange={handleSexChange}
                                 className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
-                                            checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
+                                                checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               />
                               <div
                                 className="h-6 w-6 absolute rounded-full pointer-events-none
-                                            peer-checked:border-[#EA4B48] peer-checked:border-2"
+                                                peer-checked:border-[#EA4B48] peer-checked:border-2"
                               />
                             </div>
                           </div>
                         </div>
                       </div>
                       {/* <div className='w-[48%]'>
-                                                <label htmlFor='gender' className='text-[#4C4C4C] text-sm font-medium'>Giới tính</label>
-                                                <div className='flex w-[100%] mt-6'>
-                                                    <select id="gender" name="gender">
-                                                        <option value="Nam">Nam</option>
-                                                        <option value="Nữ">Nữ</option>
-                                                        <option value="Khác">Khác</option>
-                                                    </select>
-                                                </div>
-                                            </div> */}
+                                                    <label htmlFor='gender' className='text-[#4C4C4C] text-sm font-medium'>Giới tính</label>
+                                                    <div className='flex w-[100%] mt-6'>
+                                                        <select id="gender" name="gender">
+                                                            <option value="Nam">Nam</option>
+                                                            <option value="Nữ">Nữ</option>
+                                                            <option value="Khác">Khác</option>
+                                                        </select>
+                                                    </div>
+                                                </div> */}
                       <div className="w-[48%]">
                         <Controller
                           control={control}
@@ -601,12 +577,12 @@ export default function UserProfile() {
                               {/* input addNameProducts */}
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.phonenumber
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                                rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                ${
+                                                  !!errors.phonenumber
+                                                    ? "border-[2px] border-red-900"
+                                                    : "border-[1px] border-[#FFAAAF]"
+                                                }`}
                                 placeholder="Số điện thoại"
                                 value={editUser?.phonenumber}
                                 {...register("phonenumber")}
@@ -623,63 +599,63 @@ export default function UserProfile() {
                       </div>
                     </div>
                     {/* <div className='w-[100%] flex h-auto items-center'>
-                                    <div className='w-[15%] mt-[33px]'>
-                                        <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Ngày sinh</label>
-                                    </div>
-                                    <div className=' w-[100%] flex justify-start gap-3'>
-                                        <div className="w-[32%] ">
-                                            <div className="mt-3">
-                                                <p>Ngày*</p>
-                                                <select onChange={handleDayChange} className="h-11 mt-1 px-4 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
-                                                    <option className=" hidden">Chọn ngày</option>
-                                                    {
-                                                        Array.from({ length: 31 }).map((e, i) => {
-                                                            return (
-                                                                <>
-                                                                    <option>{i + 1}</option>
-                                                                </>
-                                                            )
-                                                        })
-                                                    }
-                                                </select>
+                                        <div className='w-[15%] mt-[33px]'>
+                                            <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Ngày sinh</label>
+                                        </div>
+                                        <div className=' w-[100%] flex justify-start gap-3'>
+                                            <div className="w-[32%] ">
+                                                <div className="mt-3">
+                                                    <p>Ngày*</p>
+                                                    <select onChange={handleDayChange} className="h-11 mt-1 px-4 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
+                                                        <option className=" hidden">Chọn ngày</option>
+                                                        {
+                                                            Array.from({ length: 31 }).map((e, i) => {
+                                                                return (
+                                                                    <>
+                                                                        <option>{i + 1}</option>
+                                                                    </>
+                                                                )
+                                                            })
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="w-[32%]  ">
+                                                <div className="mt-3">
+                                                    <p>Tháng*</p>
+                                                    <select onChange={handleMonthChange} className="h-11 px-4 mt-1 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
+                                                        <option className=" hidden">Chọn Tháng</option>
+                                                        {
+                                                            Array.from({ length: 12 }).map((e, i) => {
+                                                                return (
+                                                                    <>
+                                                                        <option>{i + 1}</option>
+                                                                    </>
+                                                                );
+                                                            })
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="w-[32%] ">
+                                                <div className="mt-3">
+                                                    <p>Năm*</p>
+                                                    <select onChange={handleYearChange} className="h-11 px-4 border-[1px] border-[#FFAAAF] mt-1 text-[#393939] text-sm w-full rounded-[6px] cursor-pointer outline-none ">
+                                                        <option className=" hidden">Chọn năm</option>
+                                                        {
+                                                            Array.from({ length: 100 }).map((e, i) => {
+                                                                return (
+                                                                    <>
+                                                                        <option>{1950 + i}</option>
+                                                                    </>
+                                                                );
+                                                            })
+                                                        }
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="w-[32%]  ">
-                                            <div className="mt-3">
-                                                <p>Tháng*</p>
-                                                <select onChange={handleMonthChange} className="h-11 px-4 mt-1 border-[1px] border-[#FFAAAF] text-sm text-[#393939] w-full rounded-[6px] cursor-pointer outline-none ">
-                                                    <option className=" hidden">Chọn Tháng</option>
-                                                    {
-                                                        Array.from({ length: 12 }).map((e, i) => {
-                                                            return (
-                                                                <>
-                                                                    <option>{i + 1}</option>
-                                                                </>
-                                                            );
-                                                        })
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="w-[32%] ">
-                                            <div className="mt-3">
-                                                <p>Năm*</p>
-                                                <select onChange={handleYearChange} className="h-11 px-4 border-[1px] border-[#FFAAAF] mt-1 text-[#393939] text-sm w-full rounded-[6px] cursor-pointer outline-none ">
-                                                    <option className=" hidden">Chọn năm</option>
-                                                    {
-                                                        Array.from({ length: 100 }).map((e, i) => {
-                                                            return (
-                                                                <>
-                                                                    <option>{1950 + i}</option>
-                                                                </>
-                                                            );
-                                                        })
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> */}
+                                    </div> */}
                     <div className="w-[100%] mt-4">
                       <Controller
                         control={control}
@@ -702,12 +678,12 @@ export default function UserProfile() {
                             </label>
                             <input
                               className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             ${
-                                               !!errors.phonenumber
-                                                 ? "border-[2px] border-red-900"
-                                                 : "border-[1px] border-[#FFAAAF]"
-                                             }`}
+                                                rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                ${
+                                                  !!errors.phonenumber
+                                                    ? "border-[2px] border-red-900"
+                                                    : "border-[1px] border-[#FFAAAF]"
+                                                }`}
                               type="date"
                               value={date}
                               onChange={handleDateChange}
@@ -722,16 +698,12 @@ export default function UserProfile() {
                       />
                     </div>
                     {/* button */}
-                    <div
-                      className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48]`}
-                    >
+                    <div className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48]`}>
                       <button
                         onClick={handleSubmit((formData: any) => {
                           onSubmit(formData);
                         })}
-                        className={`text-center text-base font-bold text-[#FFFFFF]
-                                        `}
-                      >
+                        className={`text-center text-base font-bold text-[#FFFFFF]`}>
                         Lưu
                       </button>
                     </div>
@@ -739,10 +711,7 @@ export default function UserProfile() {
 
                   {/* Form */}
 
-                  <div
-                    className="card py-4 px-5 col-span-2 rounded-[6px]
-                        shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                  >
+                  <div className="card py-4 px-5 col-span-2 rounded-[6px] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                     <div className=" flex flex-col items-center my-auto">
                       <div className="avatar online">
                         <div className="max-w-[174px] rounded-full border-[4px] border-[#2E89FF]">
@@ -772,8 +741,8 @@ export default function UserProfile() {
                       <label htmlFor="images">
                         <div
                           className="flex items-center w-[141px] rounded-md h-[32px]
-                                 hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48]
-                                  border-[1px] justify-evenly cursor-pointer mt-5"
+                                        hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48]
+                                        border-[1px] justify-evenly cursor-pointer mt-5"
                           onClick={() => {
                             if (!!selectedFile) {
                               console.log("Confirm");
@@ -798,215 +767,293 @@ export default function UserProfile() {
                   </div>
 
                   {/* <div className='card py-4 px-5 rounded-[6px] col-span-5
-                            shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
-                                <span className='text-[#000] text-2xl font-normal '>Địa chỉ thanh toán</span>
-                                <p className='text-[#393939] text-sm font-normal'>Thêm địa chỉ để dễ dàng giao hàng</p>
-                                <div className='border-[1px] border-[#E0E0E0] w-full my-4 '></div>
-                                <div className='flex gap-7'>
-                                    <div className='leftAdress w-[50%]'>
-                                        <div className='flex w-[100%] gap-6 justify-between'>
-                                            <div className='w-[55%]'>
-                                                <Controller control={control} name='fullName' rules={{
+                                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]'>
+                                    <span className='text-[#000] text-2xl font-normal '>Địa chỉ thanh toán</span>
+                                    <p className='text-[#393939] text-sm font-normal'>Thêm địa chỉ để dễ dàng giao hàng</p>
+                                    <div className='border-[1px] border-[#E0E0E0] w-full my-4 '></div>
+                                    <div className='flex gap-7'>
+                                        <div className='leftAdress w-[50%]'>
+                                            <div className='flex w-[100%] gap-6 justify-between'>
+                                                <div className='w-[55%]'>
+                                                    <Controller control={control} name='fullName' rules={{
+                                                        required: {
+                                                            value: true,
+                                                            message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
+                                                        }
+                                                    }} render={({ field }) => (
+                                                        <>
+                                                            <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Họ và tên</label> */}
+                  {/* input addNameProducts */}
+                  {/* <input
+                                                                className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                ${!!errors.fullName ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
+                                                                placeholder="Họ và tên"
+                                                                value={field.value}
+                                                                onChange={field.onChange}
+                                                            />
+                                                            {!!errors.fullName && <p className='text-red-700 mt-2'>{errors.fullName.message}</p>}</>
+                                                    )} />
+                                                    {/* end input addNameProducts */}
+                  {/* </div>
+                                                <div className='w-[43%]'>
+                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Loại đỉa chỉ*</p> */}
+                  {/* Dropdown */}
+                  {/* <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                                        <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
+                                                            <option>Địa chỉ văn phòng</option>
+                                                            <option>Địa chỉ công ty</option>
+                                                            <option>Nhà riêng</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className='w-[100%] mt-4'>
+                                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Địa chỉ*</p> */}
+                  {/* Dropdown */}
+                  {/* <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                                    <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
+                                                        <option className='hidden'>Tỉnh/Thành phố, Quận/Huyện, Phường/Xã</option>
+                                                        <option>Thiết bị điện da dụng</option>
+                                                        <option>Giày dép da</option>
+                                                        <option>Máy ảnh</option>
+                                                        <option>Thời trang nam</option>
+                                                        <option>Thiết bị điện tử</option>
+                                                        <option>Nhà cửa đời sống</option>
+                                                        <option>Sắc đẹp</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className='w-[100%] mt-4'>
+                                                <Controller control={control} name='Address' rules={{
                                                     required: {
                                                         value: true,
                                                         message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
                                                     }
                                                 }} render={({ field }) => (
                                                     <>
-                                                        <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Họ và tên</label> */}
+                                                        <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Địa chỉ cụ thể</label> */}
                   {/* input addNameProducts */}
                   {/* <input
                                                             className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                            rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                             ${!!errors.fullName ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
                                                             placeholder="Họ và tên"
                                                             value={field.value}
                                                             onChange={field.onChange}
                                                         />
-                                                        {!!errors.fullName && <p className='text-red-700 mt-2'>{errors.fullName.message}</p>}</>
-                                                )} />
-                                                {/* end input addNameProducts */}
-                  {/* </div>
-                                            <div className='w-[43%]'>
-                                                <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Loại đỉa chỉ*</p> */}
-                  {/* Dropdown */}
-                  {/* <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                                    <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
-                                                        <option>Địa chỉ văn phòng</option>
-                                                        <option>Địa chỉ công ty</option>
-                                                        <option>Nhà riêng</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className='w-[100%] mt-4'>
-                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px]'>Địa chỉ*</p> */}
-                  {/* Dropdown */}
-                  {/* <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                                <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
-                                                    <option className='hidden'>Tỉnh/Thành phố, Quận/Huyện, Phường/Xã</option>
-                                                    <option>Thiết bị điện da dụng</option>
-                                                    <option>Giày dép da</option>
-                                                    <option>Máy ảnh</option>
-                                                    <option>Thời trang nam</option>
-                                                    <option>Thiết bị điện tử</option>
-                                                    <option>Nhà cửa đời sống</option>
-                                                    <option>Sắc đẹp</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className='w-[100%] mt-4'>
-                                            <Controller control={control} name='Address' rules={{
-                                                required: {
-                                                    value: true,
-                                                    message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
-                                                }
-                                            }} render={({ field }) => (
-                                                <>
-                                                    <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Địa chỉ cụ thể</label> */}
-                  {/* input addNameProducts */}
-                  {/* <input
-                                                        className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                        ${!!errors.fullName ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
-                                                        placeholder="Họ và tên"
-                                                        value={field.value}
-                                                        onChange={field.onChange}
-                                                    />
-                                                    {!!errors.Address && <p className='text-red-700 mt-2'>{errors.Address.message}</p>}</>
-                                            )} /> */}
+                                                        {!!errors.Address && <p className='text-red-700 mt-2'>{errors.Address.message}</p>}</>
+                                                )} /> */}
                   {/* end input addNameProducts */}
                   {/* </div>
-                                    </div>
-                                    <div className='rightAdressMap w-[46%]'>
-                                        <iframe width="100%" height="118%"
-                                            title="map"
-                                            src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" />
-                                    </div>
-                                </div> */}
+                                        </div>
+                                        <div className='rightAdressMap w-[46%]'>
+                                            <iframe width="100%" height="118%"
+                                                title="map"
+                                                src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" />
+                                        </div>
+                                    </div> */}
 
                   {/* button */}
                   {/* <div className='w-[50%]'>
-                                    <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
-                                bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
-                                        <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
-                                            Lưu
-                                        </button>
+                                        <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
+                                    bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
+                                            <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
+                                                Lưu
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </div> */}
+                                </div> */}
 
-                  <div
-                    className="card py-4 px-5 rounded-[6px] col-span-5
-                            shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                  <form
+                    onSubmit={handleSubmit(onSubmit2)}
+                    className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                   >
                     <span className="text-[#000] text-2xl font-normal ">
                       Thay đổi mật khẩu
                     </span>
                     <div className="border-[1px] border-[#E0E0E0] w-full my-4 "></div>
                     <div className="w-[100%]">
-                      <div className="w-[100%]">
-                        <label
-                          className="font-medium block mb-1 text-gray-700"
-                          htmlFor="password"
-                        >
-                          Mật khẩu hiện tại:
-                        </label>
-                        <div className="relative w-full items-center">
-                          <button
-                            type="button"
-                            className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
-                            onClick={toggleShowPassword}
-                          >
-                            {showPassword ? <ShowPass /> : <HidePass />}
-                          </button>
-                          <input
-                            className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             border-[1px] border-[#FFAAAF]"
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            onChange={handleInputChange}
-                            placeholder="Nhập mật khẩu hiện tại"
-                            autoComplete="off"
-                          />
-                        </div>
-                      </div>
+                      {/* <div className='w-[100%]'> */}
+                      <Controller
+                        control={control}
+                        name="oldPassword"
+                        rules={{
+                          required: {
+                            value: true,
+                            message:
+                              "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                          },
+                          minLength: {
+                            value: 6,
+                            message: "Tên sản phẩm phải lớn hơn 6 ký tự",
+                          },
+                        }}
+                        render={({ field }) => (
+                          <>
+                            <label
+                              htmlFor="name"
+                              className="text-[#4C4C4C] text-sm font-medium"
+                            >
+                              Mật khẩu hiện tại
+                            </label>
+                            {/* input addNameProducts */}
+                            <div className="relative w-full items-center">
+                              <button
+                                type="button"
+                                className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
+                                onClick={toggleShowPassword}
+                              >
+                                {showPassword ? <ShowPass /> : <HidePass />}
+                              </button>
+                              <input
+                                className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 border-[1px] border-[#FFAAAF]"
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                onChange={field.onChange}
+                                value={field.value}
+                                placeholder="Nhập mật khẩu hiện tại"
+                              />
+                            </div>
+                            {!!errors.oldPassword && (
+                              <p className="text-red-700 mt-2">
+                                {errors.oldPassword.message}
+                              </p>
+                            )}
+                          </>
+                        )}
+                      />
+                      {/* </div> */}
                       <div className="flex w-[100%] justify-between  mt-4">
-                        <div className="w-[48%]">
-                          <label
-                            className="font-medium block mb-1 text-gray-700"
-                            htmlFor="password"
-                          >
-                            Mật khẩu mới:
-                          </label>
-                          <div className="relative w-full items-center">
-                            <button
-                              type="button"
-                              className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
-                              onClick={toggleShowPassword2}
-                            >
-                              {showPassword2 ? <ShowPass /> : <HidePass />}
-                            </button>
-                            <input
-                              className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             border-[1px] border-[#FFAAAF]"
-                              id="password"
-                              type={showPassword2 ? "text" : "password"}
-                              onChange={handleInputChange}
-                              placeholder="Nhập mật khẩu mới:"
-                              autoComplete="off"
-                            />
-                          </div>
-                        </div>
-                        <div className="w-[48%]">
-                          <label
-                            className="font-medium block mb-1 text-gray-700"
-                            htmlFor="password"
-                          >
-                            Xác nhận mật khẩu mới:
-                          </label>
-                          <div className="relative w-full items-center">
-                            <button
-                              type="button"
-                              className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
-                              onClick={toggleShowPassword3}
-                            >
-                              {showPassword3 ? <ShowPass /> : <HidePass />}
-                            </button>
-                            <input
-                              className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             border-[1px] border-[#FFAAAF]"
-                              id="password"
-                              type={showPassword3 ? "text" : "password"}
-                              onChange={handleInputChange}
-                              placeholder="Xác nhận mật khẩu mới:"
-                              autoComplete="off"
-                            />
-                          </div>
-                        </div>
+                        <Controller
+                          control={control}
+                          name="newPassword"
+                          rules={{
+                            required: {
+                              value: true,
+                              message:
+                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                            },
+                            minLength: {
+                              value: 6,
+                              message: "Tên sản phẩm phải lớn hơn 6 ký tự",
+                            },
+                          }}
+                          render={({ field }) => (
+                            <>
+                              {/* input addNameProducts */}
+                              <div className="w-[48%]">
+                                <label
+                                  htmlFor="name"
+                                  className="text-[#4C4C4C] text-sm font-medium"
+                                >
+                                  Mật khẩu mới
+                                </label>
+                                <div className="relative w-full items-center">
+                                  <button
+                                    type="button"
+                                    className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
+                                    onClick={toggleShowPassword2}
+                                  >
+                                    {showPassword2 ? (
+                                      <ShowPass />
+                                    ) : (
+                                      <HidePass />
+                                    )}
+                                  </button>
+                                  <input
+                                    className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 border-[1px] border-[#FFAAAF]"
+                                    id="password"
+                                    type={showPassword2 ? "text" : "password"}
+                                    onChange={field.onChange}
+                                    value={field.value}
+                                    placeholder="Mật khẩu mới"
+                                  />
+                                </div>
+                                {!!errors.newPassword && (
+                                  <p className="text-red-700 mt-2">
+                                    {errors.newPassword.message}
+                                  </p>
+                                )}
+                              </div>
+                            </>
+                          )}
+                        />
+                        <Controller
+                          control={control}
+                          name="confirmNewPassword"
+                          rules={{
+                            required: {
+                              value: true,
+                              message:
+                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                            },
+                            minLength: {
+                              value: 6,
+                              message: "Tên sản phẩm phải lớn hơn 6 ký tự",
+                            },
+                          }}
+                          render={({ field }) => (
+                            <>
+                              {/* input addNameProducts */}
+                              <div className="w-[48%]">
+                                <label
+                                  htmlFor="name"
+                                  className="text-[#4C4C4C] text-sm font-medium"
+                                >
+                                  Xác nhận mật khẩu mới
+                                </label>
+                                <div className="relative w-full items-center">
+                                  <button
+                                    type="button"
+                                    className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
+                                    onClick={toggleShowPassword3}
+                                  >
+                                    {showPassword3 ? (
+                                      <ShowPass />
+                                    ) : (
+                                      <HidePass />
+                                    )}
+                                  </button>
+                                  <input
+                                    className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 border-[1px] border-[#FFAAAF]"
+                                    id="password"
+                                    type={showPassword3 ? "text" : "password"}
+                                    onChange={field.onChange}
+                                    value={field.value}
+                                    placeholder="Xác nhận mật khẩu mới"
+                                  />
+                                </div>
+                                {!!errors.confirmNewPassword && (
+                                  <p className="text-red-700 mt-2">
+                                    {errors.confirmNewPassword.message}
+                                  </p>
+                                )}
+                              </div>
+                            </>
+                          )}
+                        />
                       </div>
                       {/* button */}
-                      <div
-                        className="flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
-                                bg-[#EA4B48] hover:bg-[#ff6d65] mt-5"
-                      >
-                        <button
-                          className={`text-center text-base font-bold text-[#FFFFFF]`}
-                        >
-                          Lưu
-                        </button>
-                      </div>
+                      <div className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
+                                            bg-[#EA4B48] hover:bg-[#ff6d65] mt-5`}>
+                      <button
+                        onClick={handleSubmit((formData: any) => {
+                          onSubmit2(formData);
+                        })}
+                        className={`text-center text-base font-bold text-[#FFFFFF]`}>
+                        Lưu
+                      </button>
                     </div>
-                    <div className="w-[100%] mt-4">
-                      <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
+                    </div>
+                  </form>
+                  <div className="w-[100%] mt-4">
+                    {/* <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
                         Địa chỉ*
-                      </p>{" "}
-                      */
-                      {/* Dropdown */}
-                      {/* <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                      </p>{" "} */}
+
+                    {/* Dropdown */}
+                    {/* <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                             <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none ">
                                                 <option className='hidden'>Tỉnh/Thành phố, Quận/Huyện, Phường/Xã</option>
                                                 <option>Thiết bị điện da dụng</option>
@@ -1028,8 +1075,8 @@ export default function UserProfile() {
                                         }} render={({ field }) => (
                                             <>
                                                 <label htmlFor='name' className='text-[#4C4C4C] text-sm font-medium'>Địa chỉ cụ thể</label> */}
-                      {/* input addNameProducts */}
-                      {/* <input
+                    {/* input addNameProducts */}
+                    {/* <input
                                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                          rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                         ${!!errors.Address ? 'border-[2px] border-red-900' : 'border-[1px] border-[#FFAAAF]'}`}
@@ -1039,8 +1086,8 @@ export default function UserProfile() {
                                                 />
                                                 {!!errors.Address && <p className='text-red-700 mt-2'>{errors.Address.message}</p>}</>
                                         )} /> */}
-                      {/* end input addNameProducts */}
-                      {/* </div>
+                    {/* end input addNameProducts */}
+                    {/* </div>
                                 </div>
                                 <div className='rightAdressMap w-[46%]'>
                                     <iframe width="100%" height="118%"
@@ -1048,8 +1095,8 @@ export default function UserProfile() {
                                         src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" />
                                 </div>
                             </div> */}
-                      {/* button */}
-                      {/* <div className='w-[50%]'>
+                    {/* button */}
+                    {/* <div className='w-[50%]'>
                                 <div className='flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly 
                             bg-[#EA4B48] hover:bg-[#ff6d65] mt-5'>
                                     <button className={`text-center text-base font-bold text-[#FFFFFF]`}>
@@ -1058,7 +1105,6 @@ export default function UserProfile() {
                                 </div>
                             </div>
                         </div> */}
-                    </div>
                   </div>
                 </div>
               </div>
