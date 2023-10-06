@@ -22,8 +22,6 @@ import { ThemeContext } from "../../hooks/Context/ThemeContextProvider";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import Container from "../container/Container";
-import { Cate } from "../../pages/product/AddCategory";
-import { userController } from "../../Controllers/UserController";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -35,33 +33,21 @@ export default function Header() {
   const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
   const [isSearch, setIsSearch] = useState(false);
 
+  const user = localStorage.getItem("user");
+  const dataInputHeaderSearch = useContext(ThemeContext);
   var username;
-  const [name, setName] = useState('');
-  const [img, setImg] = useState('');
-  useEffect(() => {
-    const user = localStorage.getItem('user');
-    if (user != null) {
-      const userData = JSON.parse(user);
-      const username = userData.username;
-      console.log("USERNAME: " + username);
-      userController.getUserWhereUsername(username).then((res) => {
-        // setEditUser(res)
-        setName(res.name)
-        const UserImageArray = JSON.stringify(res.UserImage);
-        const urlTaker = JSON.parse(UserImageArray);
-        setImg(urlTaker[0].url);
-        console.log("ID: " + img);
-      })
-    } else {
-      console.log("Chua Dang Nhap Dung");
-    }
+  var img;
+  var name;
 
-  }, []);
-
-
+  // console.log(isSearch);
 
   if (user != null) {
     username = JSON.parse(user).username;
+    img = JSON.parse(user).img;
+    name = JSON.parse(user).name;
+
+    // console.log(name.substring(0, 1));
+    // console.log("USER: " + name, img);
   } else {
     console.log("Chua dang nhap");
   }
@@ -71,10 +57,6 @@ export default function Header() {
     dataInputHeaderSearch?.onChange(e);
     setShowSuggestions(true);
     setText(e.target.value);
-    console.log(
-      "🚀 ~ file: Header.tsx:68 ~ handleChange ~ e.target.value:",
-      e.target.value
-    );
   };
   // Function to hide suggestions
   const hideSuggestions = () => {
@@ -82,7 +64,8 @@ export default function Header() {
   };
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
-      console.log("Click");
+      navigate(`/FiltersPage/${text}`);
+      setShowSuggestions(false);
     }
   };
   const getSearhvalue = (value: any) => {
@@ -108,7 +91,7 @@ export default function Header() {
       <header className="Header">
         <Container>
           <div className="Header-top bg-white">
-            <div className="container mx-auto">
+<div className="container mx-auto">
               <div className="Header-top-content flex justify-between max-[426px]:text-[8px]">
                 <div className="content-left flex py-2">
                   <Map />
@@ -171,7 +154,7 @@ export default function Header() {
                     {showSuggestions && (
                       <>
                         <div className="absolute w-[665px] z-10  bg-white border border-gray-300 rounded mt-2 p-2 top-28">
-                          {/* // tên sản phẩm */}
+{/* // tên sản phẩm */}
                           <div>
                             <h1 className="text-base font-bold cursor-default p-1 pl-2">
                               Sản phẩm
@@ -222,7 +205,7 @@ export default function Header() {
                                             <p>Không có sản phẩm</p>
                                           )}
                                         </div>
-                                        <p className="text-gray-600 text-xs">
+<p className="text-gray-600 text-xs">
                                           SL: {itemsSearch.quantity}
                                         </p>
                                       </div>
@@ -275,7 +258,7 @@ export default function Header() {
                                         <div className="text-[14px] ">
                                           {itemsSearch.name &&
                                           itemsSearch.name.length > 21 ? (
-                                            `${itemsSearch.name.substring(
+`${itemsSearch.name.substring(
                                               0,
                                               21
                                             )}...`
@@ -330,17 +313,16 @@ export default function Header() {
                     {user ? (
                       <a className=" flex gap-2" href={href}>
                         <div className="font-medium flex items-center justify-center">
-                          {name}
+                          {username}
                         </div>
                         {img ? (
-                          <div className="relative">
-                            <img className="w-10 h-10 rounded-full border-4 " src={img} alt="" />
-
+                          <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
+                            <p className="text-1xl text-stone-50">{img}</p>
                           </div>
-                        ) : (
+) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
                             <p className="text-1xl text-stone-50">
-                              {name.substring(0, 1).toUpperCase()}
+                              {/* {name.substring(0, 1).toUpperCase()} */}
                             </p>
                           </div>
                         )}
