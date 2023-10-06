@@ -1,63 +1,97 @@
 /* eslint-disable no-var */
 
-import { Link } from "react-router-dom";
-import Map from "../../Assets/TSX/Map";
-import Globe from "../../Assets/TSX/Globe";
-import Chevron_down from "../../Assets/TSX/Chevron-down";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Bell from "../../Assets/TSX/Bell";
-import Headphones from "../../Assets/TSX/headphones";
+import Chevron_down from "../../Assets/TSX/Chevron-down";
+import Ellips from "../../Assets/TSX/Ellips";
+import Globe from "../../Assets/TSX/Globe";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
+import Map from "../../Assets/TSX/Map";
 import Search from "../../Assets/TSX/Search";
 import Shoppingcart from "../../Assets/TSX/Shopping-cart";
-import Ellips from "../../Assets/TSX/Ellips";
+import Headphones from "../../Assets/TSX/headphones";
+import { productController } from "../../Controllers/ProductsController";
+import { ThemeContext } from "../../hooks/Context/ThemeContextProvider";
+import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
+import useDebounce from "../../useDebounceHook/useDebounce";
 import Container from "../container/Container";
-import { Cate } from "../../pages/product/AddCategory";
-import { ChangeEvent, Fragment, useState, useEffect } from 'react'
-import { userController } from "../../Controllers/UserController";
 
 export default function Header() {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const navigate = useNavigate();
+  const [text, setText] = useState("");
 
-  const [idCate, setidCate] = useState<Cate>()
-  const user = localStorage.getItem('user');
+  const dataSearchBodyIndexFromHeader = useContext(ThemeContext);
+  const [productSearch, setProductSearch] = useState<Products[]>([]);
+  const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
+  const [isSearch, setIsSearch] = useState(false);
 
-  
+  const user = localStorage.getItem("user");
+  const dataInputHeaderSearch = useContext(ThemeContext);
   var username;
-  const [name, setName] = useState('');
-  const [img, setImg] = useState('');
-  useEffect(() => {
-    const user = localStorage.getItem('user');
-    if (user != null) {
-      const userData = JSON.parse(user);
-      const username = userData.username;
-      console.log("USERNAME: " + username);
-      userController.getUserWhereUsername(username).then((res) => {
-        // setEditUser(res)
-        setName(res.name)
-        setImg(res.image)
-      })
-    } else {
-      console.log("Chua Dang Nhap Dung");
-    }
+  var img;
+  var name;
 
-  }, []);
-
-
+  // console.log(isSearch);
 
   if (user != null) {
-
     username = JSON.parse(user).username;
+    img = JSON.parse(user).img;
+    name = JSON.parse(user).name;
+
+    // console.log(name.substring(0, 1));
+    // console.log("USER: " + name, img);
   } else {
     console.log("Chua dang nhap");
   }
   const href = `/userprofilepage/${username}`;
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    dataInputHeaderSearch?.onChange(e);
+    setShowSuggestions(true);
+    setText(e.target.value);
+  };
+  // Function to hide suggestions
+  const hideSuggestions = () => {
+    setShowSuggestions(false);
+  };
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      navigate(`/FiltersPage/${text}`);
+      setShowSuggestions(false);
+    }
+  };
+  const getSearhvalue = (value: any) => {
+    productController
+      .getAllProductsSearch(debouncedInputValue?.data.toString())
+      .then((res: any) => {
+        setProductSearch(res.rows);
+      });
+  };
 
+  useEffect(() => {
+    getSearhvalue(debouncedInputValue);
+    if (dataSearchBodyIndexFromHeader?.data != "") {
+      productController
+        .getAllProductsSearch(dataSearchBodyIndexFromHeader?.data.toString())
+        .then((res: any) => {
+          setProductSearch(res.rows);
+        });
+    }
+  }, [debouncedInputValue]);
   return (
     <>
       <header className="Header">
         <Container>
           <div className="Header-top bg-white">
-            <div className="container mx-auto">
+<div className="container mx-auto">
               <div className="Header-top-content flex justify-between max-[426px]:text-[8px]">
                 <div className="content-left flex py-2">
                   <Map />
@@ -104,8 +138,7 @@ export default function Header() {
                   <div
                     className="Search-input-headerCenter items-center flex w-[90%]
                    py-[6px] px-[6px] border-[2px] border-[#FFAAAF] rounded-lg
-                   max-xl:py-[1px]
-                   "
+                   max-xl:py-[1px]"
                   >
                     <div className="mb-2">
                       <Search />
@@ -114,7 +147,140 @@ export default function Header() {
                       className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm
                       max-[426px]:text-[6px]  max-[426px]:p-[0]"
                       placeholder="Tìm kiếm..."
+                      onKeyDown={handleKeyPress}
+                      onChange={(e) => handleChange(e)}
+                      onBlur={() => (isSearch ? null : hideSuggestions())} // Hide suggestions when the input loses focus
                     />
+                    {showSuggestions && (
+                      <>
+                        <div className="absolute w-[665px] z-10  bg-white border border-gray-300 rounded mt-2 p-2 top-28">
+{/* // tên sản phẩm */}
+<div>
+                            <h1 className="text-base font-bold cursor-default p-1 pl-2">
+                              Sản phẩm
+                            </h1>
+                            <div className="grid grid-cols-3 gap-4 py-3 border-dashed border-b-2 solid #E8E8EA w-[98%] mx-auto">
+                              {productSearch.slice(0, 6).map((itemsSearch) => {
+                                return (
+                                  <>
+                                    <div
+                                      className="flex items-center gap-1 h-12
+                                hover:rounded-md duration-200
+                                hover:shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                                    >
+                                      <div>
+                                        <img
+                                          src={itemsSearch.ProductImage[0].url}
+                                          alt="ProductImage"
+                                          className="w-14 h-12"
+                                        />
+                                      </div>
+                                      <div
+                                        className="text-base cursor-default p-1 pl-2  font-normal w-full"
+                                        onClick={(e) => {
+                                          setShowSuggestions(false);
+
+                                          navigate(
+                                            `/Detailproducts/${itemsSearch.id}`
+                                          );
+                                          hideSuggestions();
+                                        }}
+                                        onMouseOver={() => {
+                                          setIsSearch(true);
+                                        }}
+                                        onMouseLeave={() => {
+                                          setIsSearch(false);
+                                        }}
+                                      >
+                                        <div className="text-[14px] ">
+                                          {itemsSearch.name &&
+                                          itemsSearch.name.length > 21 ? (
+                                            `${itemsSearch.name.substring(
+                                              0,
+                                              21
+                                            )}...`
+                                          ) : itemsSearch.name ? (
+                                            itemsSearch.name
+                                          ) : (
+                                            <p>Không có sản phẩm</p>
+                                          )}
+                                        </div>
+<p className="text-gray-600 text-xs">
+                                          SL: {itemsSearch.quantity}
+</p>
+                                      </div>
+                                    </div>
+                                  </>
+                                );
+                              })}
+                            </div>
+                          </div>
+                          {/* // danh mục */}
+                          <div>
+                            <h1 className="text-base font-bold cursor-default p-1 pl-2 mt-2">
+                              Từ khóa
+                            </h1>
+                            <p className="text-base cursor-default p-1 pl-2 font-normal">
+                              {text}
+                            </p>
+                            {/* <div className="grid grid-cols-3 gap-4 py-3  w-[98%] mx-auto">
+                              {productSearch.slice(0, 6).map((itemsSearch) => {
+                                return (
+                                  <>
+                                    <div
+                                      className="flex items-center gap-1 h-12
+                                hover:rounded-md duration-200
+                                hover:shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                                    >
+                                      <div>
+                                        <img
+                                          src={itemsSearch.ProductImage[0].url}
+                                          alt="ProductImage"
+                                          className="w-14 h-12"
+                                        />
+                                      </div>
+                                      <div
+                                        className="text-base cursor-default p-1 pl-2  font-normal w-full"
+                                        onClick={(e) => {
+                                          setShowSuggestions(false);
+                                          navigate(
+                                            `/Detailproducts/${itemsSearch.id}`
+                                          );
+                                          hideSuggestions();
+                                        }}
+                                        onMouseOver={() => {
+                                          setIsSearch(true);
+                                        }}
+                                        onMouseLeave={() => {
+                                          setIsSearch(false);
+                                        }}
+                                      >
+                                        <div className="text-[14px] ">
+                                          {itemsSearch.name &&
+                                          itemsSearch.name.length > 21 ? (
+`${itemsSearch.name.substring(
+                                              0,
+                                              21
+                                            )}...`
+) : itemsSearch.name ? (
+                                            itemsSearch.name
+                                          ) : (
+                                            <p>Không có sản phẩm</p>
+                                          )}
+                                        </div>
+                                        <p className="text-gray-600 text-xs">
+                                          SL: {itemsSearch.quantity}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </>
+                                );
+                              })}
+                            </div> */}
+                          </div>
+                        </div>
+                      </>
+                    )}
                     <div className="flex items-center">
                       <button
                         className="btn-search bg-[#FFEAE9] p-[7px] rounded-lg font-bold text-[#1A1A1A] 
@@ -126,6 +292,12 @@ export default function Header() {
                     </div>
                   </div>
                 </div>
+                {/* <dialog id="my_modal_3" className="max-2xl:modal ">
+                  <div className="relative bg-white h-40 w-72">
+                    sádsadssadasdsd sádsadssad asdsd sádsadssadasdsds ádsa
+                    dssadasdsd
+                  </div>
+                </dialog> */}
 
                 <div className="items-center flex relative gap-2">
                   <div className="items-center flex pr-11 max-[769px]:pr-[10px]">
@@ -141,22 +313,20 @@ export default function Header() {
                     {user ? (
                       <a className=" flex gap-2" href={href}>
                         <div className="font-medium flex items-center justify-center">
-                          {name}
+                          {username}
                         </div>
                         {img ? (
-                          <div className="relative">
-                            <img className="w-10 h-10 rounded-full border-4 " src={img} alt=""/>
-                              
-                          </div>
-                        ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
-                            <p className="text-1xl text-stone-50">{name.substring(0, 1).toUpperCase()}</p>
+                            <p className="text-1xl text-stone-50">{img}</p>
                           </div>
-
+) : (
+                          <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
+                            <p className="text-1xl text-stone-50">
+{/* {name.substring(0, 1).toUpperCase()} */}
+                            </p>
+                          </div>
                         )}
-
                       </a>
-
                     ) : (
                       <div className="flex text-[#1A1A1A] ml-[10px]">
                         <a href="/login">ĐĂNG NHẬP</a>
@@ -164,13 +334,12 @@ export default function Header() {
                         <a href="/register">ĐĂNG KÍ</a>
                       </div>
                     )}
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </Container >
+        </Container>
 
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
@@ -181,7 +350,7 @@ export default function Header() {
                   <Link to="/ProductsPage">Gấu Bông Bobbicraft</Link>
                 </li> */}
                 <li>
-                  <Link to={`/FiltersPage/${idCate}`}>Áo Nam</Link>
+                  <Link to={`#`}>Áo Nam</Link>
                 </li>
                 <li>
                   <Link to="/admin/Addproductspage">Thêm sản phẩm</Link>
@@ -211,7 +380,7 @@ export default function Header() {
             </div>
           </Container>
         </div>
-      </header >
+      </header>
     </>
   );
 }

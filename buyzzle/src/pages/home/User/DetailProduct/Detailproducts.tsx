@@ -23,7 +23,7 @@ import Rating from "./Rating";
 import { productController } from "../../../../Controllers/ProductsController";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { Products } from "../FilterPage/FiltersPage";
-import { useScroll } from "../../../../hooks/useScrollPages";
+import { useScroll } from "../../../../hooks/Scroll/useScrollPages";
 
 export interface ImgOfProduct {
   url: string;
@@ -50,7 +50,7 @@ export type Product = {
 };
 export default function Detailproducts() {
   useScroll();
-  const [first, setfirst] = useState<FormValues>();
+  const [first, setfirst] = useState<FormValues | undefined>(undefined);
   const [quantity, setQuantity] = useState(1);
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
   const { id } = useParams();
@@ -68,10 +68,11 @@ export default function Detailproducts() {
       .catch((error) => {
         console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
-    RecommandProductDetailPage(id);
+    if (!id) return;
+    RecommandProductDetailPage(Number(id));
   }, []);
 
   const plusQuantity = () => {

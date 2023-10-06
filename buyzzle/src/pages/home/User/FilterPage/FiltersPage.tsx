@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Images } from "../../../../Assets/TS";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
@@ -14,7 +14,7 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
-import { useScroll } from "../../../../hooks/useScrollPages";
+import { useScroll } from "../../../../hooks/Scroll/useScrollPages";
 export interface Cate {
   id: number;
   name: string;
@@ -75,6 +75,13 @@ export default function FiltersPage() {
   const { id } = useParams();
   const idCate = Number(id);
   console.log("🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:", idCate);
+  const { pathname } = useLocation();
+  const keywordSearch = String(pathname);
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:79 ~ FiltersPage ~ text:",
+    keywordSearch
+  );
+
   const handleActiveBTNLowToHighClick = () => {
     productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
       console.log(
@@ -108,8 +115,9 @@ export default function FiltersPage() {
 
   useEffect(() => {
     getData();
-    useScroll();
+    getSearchDataName();
   }, []);
+
   const getData = () => {
     productController.getList("", idCate).then((res: any) => {
       console.log(res);
@@ -119,6 +127,7 @@ export default function FiltersPage() {
   useEffect(() => {
     handleFilter(debouncedInputValue);
   }, [debouncedInputValue]);
+
   const handleFilter = async (debouncedInputValue: any) => {
     console.log(debouncedInputValue);
 
@@ -134,13 +143,20 @@ export default function FiltersPage() {
   };
   function handleSliderChange(value: [number, number]): void {
     console.log("value", value);
-    // productController
-    //   .getFilterProductWithinRange(value[0], value[1])
-    //   .then((res: any) => {
-    //     setProducts(res.rows);
-    //   });
     setSliderValues(value);
   }
+
+  const getSearchDataName = () => {
+    productController
+      .getSearchAndPaginationProduct(keywordSearch.slice(13).toString())
+      .then((res: any) => {
+        console.log(res);
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Container>
@@ -305,6 +321,9 @@ export default function FiltersPage() {
             {/* banner filter */}
             <div className="banner-filter max-w-[970px] my-5 max-2xl:max-w-[1150px] max-2xl:mx-auto">
               <SlidesFilter />
+            </div>
+            <div>
+              <p>KẾT QUẢ TÌM KIẾM VỚI: {keywordSearch.slice(13)}</p>
             </div>
 
             <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">

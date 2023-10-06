@@ -5,9 +5,8 @@ import Arrow from "../../../Assets/TSX/arrow";
 
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
 import Progess from "../components/progess";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Cate } from "../../../pages/home/Admin/Category/Category";
 import { Link } from "react-router-dom";
 import { productController } from "../../../Controllers/ProductsController";
 import Productss from "../components/Product";
@@ -15,7 +14,10 @@ import {
   ImgOfProduct,
   Products,
 } from "../../../pages/home/User/FilterPage/FiltersPage";
-import { useScroll } from "../../../hooks/useScrollPages";
+import { ThemeContext } from "../../../hooks/Context/ThemeContextProvider";
+import { useScroll } from "../../../hooks/Scroll/useScrollPages";
+import { Cate } from "../components/Category";
+import useDebounce from "../../../useDebounceHook/useDebounce";
 
 export type Product = {
   id: number;
@@ -41,56 +43,7 @@ function Index() {
   useScroll();
   const [categoty, setCategory] = useState<Cate[]>([]);
   const [product, setProducts] = useState<Product[]>([]);
-  const products: Product[] = [
-    {
-      id: 1,
-      imgSrc: Images.spGoiY1,
-      title: "Bộ Máy Tính Case PC Chơi Game 1",
-      price: 1200000,
-      discount: 50,
-      soldCount: 33,
-    },
-    {
-      id: 2,
-      imgSrc: Images.spGoiY1,
-      title: "Bộ Máy Tính Case PC Chơi Game 2",
-      price: 500000,
-      discount: 5,
-      soldCount: 12,
-    },
-    {
-      id: 3,
-      imgSrc: Images.spGoiY1,
-      title: "Bộ Máy Tính Case PC Chơi Game 3",
-      price: 680000,
-      discount: 10,
-      soldCount: 42,
-    },
-    {
-      id: 4,
-      imgSrc: Images.spGoiY1,
-      title: "Bộ Máy Tính Case PC Chơi Game 4",
-      price: 900000,
-      discount: 20,
-      soldCount: 55,
-    },
-    {
-      id: 5,
-      imgSrc: Images.spGoiY1,
-      title: "Bộ Máy Tính Case PC Chơi Game 5",
-      price: 1000000,
-      discount: 70,
-      soldCount: 8,
-    },
-    {
-      id: 6,
-      imgSrc: Images.spGoiY1,
-      title: "Bộ Máy Tính Case PC Chơi Game 5",
-      price: 1000000,
-      discount: 70,
-      soldCount: 8,
-    },
-  ];
+
   const getCategory = () => {
     axios
       .get("http://localhost:5000/buyzzle/product/allcategory")
@@ -101,17 +54,14 @@ function Index() {
       .catch((err) => console.log(err));
   };
 
-  const getAllProduct = () => {
+  const getAllProducts = () => {
     productController.getAllProducts().then((res: any) => {
       setProducts(res.rows);
     });
   };
   useEffect(() => {
-    getAllProduct();
-  }, []);
-
-  useEffect(() => {
     getCategory();
+    getAllProducts();
   }, []);
 
   return (
@@ -164,7 +114,7 @@ function Index() {
           {/* <div className="flex flex-wrap gap-[35px] justify-center"> */}
           <div className="grid grid-cols-6 gap-[35px] justify-center">
             {categoty.map((e) => {
-              return <Category id={e.id} img={e.image} title={e.name} />;
+              return <Category id={e.id} image={e.image} name={e.name} />;
             })}
 
             {/* <Category img={Images.Category1} title="Thiết bị điện gia dụng" />
