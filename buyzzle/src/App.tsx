@@ -2,6 +2,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRouteElements from "./hooks/useRouterElement";
 import "./App.css";
+import TextLoadingSkeleton from "./TextLoadingSkeleton";
 
 function App() {
   const routeElements = useRouteElements();
@@ -10,6 +11,7 @@ function App() {
     <>
       <ToastContainer />
       <div>{routeElements}</div>
+      {/* <TextLoadingSkeleton /> */}
     </>
   );
 }

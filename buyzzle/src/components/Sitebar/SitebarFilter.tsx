@@ -7,7 +7,11 @@ import Checkbox from "./Checkbox/Checkbox";
 import ButtonSuggestt from "./ButtonSuggest/ButtonSuggest";
 import { title } from "process";
 import { useState } from "react";
-import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
+import {
+  PriceRangeFilterPage,
+  Products,
+} from "../../pages/home/User/FilterPage/FiltersPage";
+import { numberFormat } from "../../Helper";
 
 // rati star
 export interface RatingStar {
@@ -62,11 +66,63 @@ arrBtnSug.push(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type Props = {
-  onChangeFilters(title: string): void;
-};
-export default function SitebarFilter(props: Props) {
-  const [otherkeywords, setOtherkeywords] = useState<Products[]>();
+// export type Props = {
+//   onChangeFilters(title: string): void;
+// };
+interface SliderComponentProps {
+  value: [number, number];
+  onSliderChange: (value: [number, number]) => void;
+}
+export default function SitebarFilter({
+  value,
+  onSliderChange,
+}: SliderComponentProps) {
+  const [rangeValue, setRangeValue] = useState([5000, 300000]);
+  const handleSliderChange = (newValue: [number, number]) => {
+    console.log("sdssdsd", newValue);
+    setRangeValue(newValue);
+    onSliderChange(newValue);
+  };
+
+  // const [rangeValue, setRangeValue] = useState([5000, 70000]);
+  // const [sliderValues, setSliderValues] = useState<[number, number]>(value);
+
+  // const handleSliderChange = (newValue: number) => {
+  //   console.log("sdssdsd", newValue);
+  //   // setRangeValue(newValue);
+  //   // onSliderChange(newValue);
+  //   if (sliderValue1 === newValue) {
+  //     setSliderValue1(newValue);
+  //   } else {
+  //     setSliderValue2(newValue);
+  //   }
+
+  //   onSliderChange([sliderValue1, sliderValue2]);
+  // };
+
+  // Sử dụng useEffect để theo dõi giá trị trong mảng value và cập nhật biến riêng lẻ
+  // useEffect(() => {
+  //   setSliderValues(value);
+  // }, [value]);
+
+  // const handleSliderChange = (newValues: [number, number]) => {
+  //   console.log(newValues);
+  //   setSliderValues(newValues);
+  //   onSliderChange(newValues);
+  // };
+  // const [sliderValue1, setSliderValue1] = useState<number>(value[0]);
+  // const [sliderValue2, setSliderValue2] = useState<number>(value[1]);
+  // useEffect(() => {
+  //   setSliderValue1(value[0]);
+  //   setSliderValue2(value[1]);
+  // }, [value]);
+
+  // const handleSliderChange = (newValues: [number, number]) => {
+  //   setSliderValue1(newValues[0]);
+  //   setSliderValue2(newValues[1]);
+  //   onSliderChange(newValues);
+  //   console.log("newValues[0],newValues[1]", newValues[0], newValues[1]);
+  // };
 
   return (
     <>
@@ -90,10 +146,10 @@ export default function SitebarFilter(props: Props) {
                 title={item.title}
                 key={index}
                 // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
-                onChangeFilter={(title) => {
-                  console.log("SiteFilterPages: " + title);
-                  props.onChangeFilters?.(title);
-                }}
+                // onChangeFilter={(title) => {
+                //   console.log("SiteFilterPages: " + title);
+                //   props.onChangeFilters?.(title);
+                // }}
               />
             );
           })}
@@ -112,19 +168,35 @@ export default function SitebarFilter(props: Props) {
         </div>
         <div className="slider">
           <Slider
-            min={0}
-            max={100}
+            min={1000}
+            max={1000000}
+            step={1}
+            marks={{
+              1000: "Low",
+              500000: "Medium",
+              1000000: "High",
+            }}
+            pushable={false}
+            value={rangeValue}
             trackStyle={{
               backgroundColor: "#EA4B48",
             }}
             handleStyle={{ border: "1px solid red" }}
             // dotStyle={{ backgroundColor: "#EA4B48", outlineColor: "#EA4B48",color:'red',border:'1px solid #EA4B48'}}
-            onChange={(e) => console.log(e)}
+            onChange={(e: any) => handleSliderChange(e)}
+            // value={rangeValue}
+            // onChange={() => onSliderChange}
             range
+            // onChange={(e) => {
+            //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
+            //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
+            // }}
           />
-          <div className="flex mt-[16px] justify-start gap-2">
+          <div className="flex mt-[20px] justify-start gap-2 ">
             <p className="max-w-max">Giá: </p>
-            <p className="font-extrabold max-w-max">50đ - 1,500đ</p>
+            <p className="font-extrabold max-w-max ">
+              {numberFormat(rangeValue[0])} - {numberFormat(rangeValue[1])}
+            </p>
           </div>
         </div>
 

@@ -33,9 +33,10 @@ export default function Header() {
       userController.getUserWhereUsername(username).then((res) => {
         // setEditUser(res)
         setName(res.name)
-        setImg(res.image)
-
-        console.log(name);
+        const UserImageArray = JSON.stringify(res.UserImage);
+        const urlTaker = JSON.parse(UserImageArray);
+        setImg(urlTaker[0].url);
+        console.log("ID: " + img);
       })
     } else {
       console.log("Chua Dang Nhap Dung");
@@ -147,8 +148,8 @@ export default function Header() {
                         </div>
                         {img ? (
                           <div className="relative">
-                            <img className="w-10 h-10 rounded-full border-4 " src={img} alt=""/>
-                              
+                            <img className="w-10 h-10 rounded-full border-4 " src={img} alt="" />
+
                           </div>
                         ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">

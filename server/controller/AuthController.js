@@ -244,7 +244,6 @@ const AuthController = {
                     path: '/',
                     sameSite: 'strict',
                 });
-
                 res.cookie('id', user.id, {
                     httpOnly: true,
                     secure: false,
@@ -252,8 +251,7 @@ const AuthController = {
                     sameSite: 'strict',
                 });
                 const { password, ...others } = user;
-                console.log('Login successfully');
-                return res.status(200).json({ ...others, accessToken });
+                return res.status(200).json({ accessToken , ...others });
             }
         } catch (error) {
             console.log(error.message);
@@ -472,7 +470,7 @@ const AuthController = {
             res.clearCookie('refreshToken');
             res.clearCookie('accessToken');
             res.clearCookie('id');
-            // localStorage.clear();
+            localStorage.clear();
             res.status(200).send('Logged out successfully');
         } catch (error) {
             res.status(500).send('Logout failed');

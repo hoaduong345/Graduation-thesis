@@ -7,6 +7,7 @@ export const appConfig = {
 }
 
 export interface ModelUser{
+    id: string,
     email: string,
     username: string,
     // password: string,
@@ -15,6 +16,7 @@ export interface ModelUser{
     image: string,
     dateOfBirth: Date,
     sex: boolean,
+    UserImage: string[],
 };
 
 class UserController {

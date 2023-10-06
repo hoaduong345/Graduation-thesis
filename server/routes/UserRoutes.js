@@ -11,7 +11,7 @@ router.delete("/deleteregister/:id", UserController.deleteregister);
 
 router.put("/userprofile/:username", UserController.UserProfile);
 
-router.put("/updatepassword/:id", UserController.UpdatePassword);
+router.post("/addimageuser", UserController.addImageUser);
 
 router.get("/chitietuser/:username", UserController.getUser);
 
