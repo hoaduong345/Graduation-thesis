@@ -78,25 +78,42 @@ const UserController = {
 
   getUser: async (req, res) => {
     try {
-      const userID = req.params.username;
-      const user = await prisma.user.findUnique({
+      const UserId = req.params.username;
+      
+      const userWithImage = await prisma.user.findUnique({
+        include: {
+          UserImage: true
+        },
         where: {
-          username: userID,
+          username: UserId 
+        }
+      });
+  
+      // Tìm thông tin người dùng không có ảnh
+      const userWithoutImage = await prisma.user.findUnique({
+        where: {
+          username: UserId 
         },
         select: {
           id: true,
-          image: true, 
-          name: true, 
-          email: true, 
-          phonenumber: true, 
-          sex: true, 
-          dateOfBirth: true,
-        },
+          name: true,
+          email: true,
+          phonenumber: true,
+          sex: true,
+          dateOfBirth: true
+        }
       });
   
-      if (!user) {
-        return res.status(404).json("Không tìm thấy User");
+      // Kiểm tra nếu không tìm thấy người dùng
+      if (!userWithImage || !userWithoutImage) {
+        return res.status(404).json({ error: "Không tìm thấy người dùng" });
       }
+  
+      // Kết hợp thông tin từ cả hai kết quả
+      const user = {
+        ...userWithoutImage,
+        UserImage: userWithImage.UserImage
+      };
   
       res.status(200).json(user);
     } catch (error) {

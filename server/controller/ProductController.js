@@ -429,8 +429,6 @@ const ProductController = {
         where: whereClause,
       });
 
-      
-
       if (categoryId) {
         whereClause.fK_category = {
           id: parseInt(categoryId),
@@ -445,22 +443,15 @@ const ProductController = {
       }
       console.log(req.query.minPrice);
       console.log(req.query.maxPrice);
+      
 
 
       const result = await prisma.product.findMany({
-        // where: {
-        //   sellingPrice: {
-        //     gte: parseInt(minPricefind), //Viết tắt của "greater than or equal to," nghĩa là giá trị
-        //     // phải lớn hơn hoặc bằng giá trị mà bạn đang so sánh.
-
-        //     lte: parseInt(maxPricefind), // Viết tắt của "less than or equal to," nghĩa là giá trị
-        //     //phải nhỏ hơn hoặc bằng giá trị mà bạn đang so sánh.
-        //   },
-        // },
         orderBy: {
           sellingPrice: sortByPrice,
           createdAt: sortByDateCreate,
         },
+        
         include: {
           ProductImage: true,
           fK_category: true,
@@ -469,19 +460,6 @@ const ProductController = {
         skip,
         take: pageSize,
       });
-
-      // const FilterProductWithinRange = await prisma.product.findMany({
-      //   where: {
-      //     sellingPrice: {
-      //       gte: parseInt(minPricefind), //Viết tắt của "greater than or equal to," nghĩa là giá trị
-      //       // phải lớn hơn hoặc bằng giá trị mà bạn đang so sánh.
-
-      //       lte: parseInt(maxPricefind), // Viết tắt của "less than or equal to," nghĩa là giá trị
-      //       //phải nhỏ hơn hoặc bằng giá trị mà bạn đang so sánh.
-      //     },
-      //   },
-      // });
-
       const resultProduct = {
         // allProduct: totalProduct,
         // FilterProductRange: FilterProductWithinRange,
