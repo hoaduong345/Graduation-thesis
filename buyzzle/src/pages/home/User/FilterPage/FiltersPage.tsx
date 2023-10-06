@@ -40,117 +40,36 @@ export interface Products {
   ProductImage: ImgOfProduct[];
 }
 interface TProductResponse {
-  currentPage?: number;
-  totalpage?: number;
-  rows?: Products[];
-  createdAt?: string;
-  ProductImage?: ImgOfProduct[];
+  currentPage: number;
+  totalpage: number;
+  rows: Products[];
+  createdAt: string;
+  ProductImage: ImgOfProduct[];
 }
 
-export type Props = {
-  minPrice: number;
-  maxPrice: number;
-  onChangeSlider(min: number, max: number): void;
-};
-
-export interface PriceRangeFilterPage {
-  minPrice: number;
-  maxPrice: number;
-  // b3. da xac dinh duoc can chuyen gi va nam o dau
-  // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
-  onChangeSlider(min: number, max: number): void;
-}
 export default function FiltersPage() {
-  const [products, setProducts] = useState<Products[]>([]);
-  const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
-  const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
-  const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
-    useState(true);
-  const [sliderValues, setSliderValues] = useState<[number, number]>([
-    0, 10000000,
-  ]);
-
-  const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
+  const [products, setProducts] = useState<TProductResponse[]>([]);
 
   const { id } = useParams();
   const idCate = Number(id);
   console.log("🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:", idCate);
-  const handleActiveBTNLowToHighClick = () => {
-    productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-        res
-      );
-      setActiveBtnLowToHigh(false);
-      setActiveBtnHighToLow(true);
-      setProducts(res.rows);
-    });
-  };
-  const handleActiveBTNHighToLowClick = () => {
-    productController.getSortProductbyPrice("desc", idCate).then((res: any) => {
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-        res
-      );
-      setActiveBtnLowToHigh(true);
-      setActiveBtnHighToLow(false);
-      setProducts(res.rows);
-    });
-  };
-  const handleActiveBTNLatestCreationDate = () => {
-    setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
-    productController
-      .getSortProductbyDateCreate("desc", idCate)
-      .then((res: any) => {
-        setProducts(res.rows);
-      });
-  };
 
   useEffect(() => {
     getData();
-    useScroll();
   }, []);
+
   const getData = () => {
-    productController.getList("", idCate).then((res: any) => {
-      console.log(res);
-      setProducts(res.rows);
+    productController.getList("", idCate).then((res) => {
+      setProducts(res);
     });
   };
-  useEffect(() => {
-    handleFilter(debouncedInputValue);
-  }, [debouncedInputValue]);
-  const handleFilter = async (debouncedInputValue: any) => {
-    console.log(debouncedInputValue);
-
-    await productController
-      .getFilterProductWithinRange(
-        debouncedInputValue[0],
-        debouncedInputValue[1],
-        idCate
-      )
-      .then((res: any) => {
-        setProducts(res.rows);
-      });
-  };
-  function handleSliderChange(value: [number, number]): void {
-    console.log("value", value);
-    // productController
-    //   .getFilterProductWithinRange(value[0], value[1])
-    //   .then((res: any) => {
-    //     setProducts(res.rows);
-    //   });
-    setSliderValues(value);
-  }
 
   return (
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
-            <SitebarFilter
-              value={sliderValues}
-              onSliderChange={handleSliderChange}
-            />
+            <SitebarFilter onChangeFilters={() => {}} />
           </div>
           {/* content-right-filter */}
           <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">
@@ -230,18 +149,10 @@ export default function FiltersPage() {
                   </button>
                   <button
                     type="button"
-                    className={
-                      activeBtnLatestCreationDate
-                        ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
-                    max-2xl:py-[5px] max-2xl:text-base 
-                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
-                        : `transition duration-150 outline outline-2 outline-[#EA4B48] bg-[#FFAAAF] hover:bg-[#FFAAAF] font-medium
-                        rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] text-white
-                        max-2xl:py-[5px] max-2xl:text-base
-                        max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
-                    }
-                    onClick={handleActiveBTNLatestCreationDate}
+                    className="transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
+                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                   max-2xl:py-[5px] max-2xl:text-base 
+                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
                   >
                     Mới Nhất
                   </button>
@@ -267,35 +178,19 @@ export default function FiltersPage() {
                   </p>
                   <button
                     type="button"
-                    className={
-                      activeBtnLowToHigh
-                        ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#ffeced] font-medium
-                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
-                    max-2xl:py-[5px] max-2xl:text-base
-                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm`
-                        : `transition duration-150 outline outline-2 outline-[#EA4B48] bg-[#FFAAAF] hover:bg-[#FFAAAF] font-medium
-                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] text-white
-                    max-2xl:py-[5px] max-2xl:text-base
-                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
-                    }
-                    onClick={handleActiveBTNLowToHighClick}
+                    className="transition duration-150 outline outline-2 outline-[#EA4B48] hover:bg-[#FFAAAF] font-medium
+                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] bg-white
+                   max-2xl:py-[5px] max-2xl:text-base 
+                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
                   >
                     Thấp Nhất
                   </button>
                   <button
                     type="button"
-                    className={
-                      activeBtnHighToLow
-                        ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
-                    max-2xl:py-[5px] max-2xl:text-base
-                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm`
-                        : `transition duration-150 outline outline-2 outline-[#EA4B48] bg-[#FFAAAF] hover:bg-[#FFAAAF] font-medium
-                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] text-white
-                    max-2xl:py-[5px] max-2xl:text-base
-                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
-                    }
-                    onClick={handleActiveBTNHighToLowClick}
+                    className="transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
+                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                   max-2xl:py-[5px] max-2xl:text-base
+                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
                   >
                     Cao Nhất
                   </button>
@@ -308,8 +203,12 @@ export default function FiltersPage() {
             </div>
 
             <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
-              {products?.map((items) => {
-                return <Filter product={items} />;
+              {products?.rows?.map((items) => {
+                return (
+                  <>
+                    <Filter product={items} />
+                  </>
+                );
               })}
             </div>
             {/* <div

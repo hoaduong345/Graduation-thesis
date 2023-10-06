@@ -16,7 +16,7 @@ export default function Rate(props: RatingStar) {
         {[1, 2, 3, 4, 5].map((item) => {
           return (
             <svg
-              className={`w-4 h-4 ${props.rating >= item ? `text-yellow-300` : `red`
+              className={`w-4 h-4 ${props.rating >= item ? `text-yellow-300` : `text-black`
                 }`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
