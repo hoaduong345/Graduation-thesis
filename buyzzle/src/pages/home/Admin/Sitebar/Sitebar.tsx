@@ -10,6 +10,7 @@ import SettingsIcon from "../Assets/Icon/SettingsIcon";
 import Oder from "../Assets/Icon/Oder";
 import MessagesIcon from "../Assets/Icon/MessagesIcon";
 import { Link, useLocation } from "react-router-dom";
+import CategoryIcon from "../Assets/Icon/CategoryIcon";
 export interface Category {
    title: ReactNode;
    icon: ReactNode;
@@ -32,6 +33,11 @@ const listCate: Category[] = [
       pathName: "/admin/ListproductsAdmin",
    },
    {
+      title: "Danh mục",
+      icon: <CategoryIcon />,
+      pathName: "/admin/category",
+   },
+   {
       title: "Sự Kiện",
       icon: <EventIcon />,
       pathName: "/admin/statistics",
@@ -42,11 +48,6 @@ const listCate: Category[] = [
       pathName: "/admin/members",
    },
 
-   {
-      title: "Danh mục",
-      icon: <SalesIcon />,
-      pathName: "/admin/category",
-   },
    {
       title: "Khuyễn Mãi",
       icon: <SalesIcon />,
@@ -76,7 +77,7 @@ const listCate: Category[] = [
 export default function SitebarAdmin() {
    const { pathname } = useLocation();
    const loadBorder = (index: number) => {
-      if ((index + 1) % 3 == 0) {
+      if ((index + 1) % 2 == 0) {
          return (
             <p className="border-dashed border-t-2 solid #E8E8EA w-[100%]"></p>
          );
@@ -84,7 +85,7 @@ export default function SitebarAdmin() {
    };
    return (
       <div
-         className="mt-28 py-8 px-5 w-56 h-[587px] rounded-[6px] mb-5 bg-white 
+         className="mt-28 py-8 px-5 w-56 rounded-[6px] mb-5 bg-white 
       shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
       "
       >
@@ -96,7 +97,7 @@ export default function SitebarAdmin() {
                      hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7 
                      ${
                         element.pathName == pathname
-                           ? `bg-[#FFEAE9]`
+                           ? `bg-[#FFEAE9] rounded-[6px]`
                            : `bg-white`
                      }  `}
                   >

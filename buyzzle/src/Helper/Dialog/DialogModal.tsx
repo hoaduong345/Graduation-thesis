@@ -22,7 +22,7 @@ export default function DialogModal(props: Props) {
                <div className="flex flex-col gap-10 max-lg:gap-4">
                   <div className="flex items-center">
                      <LogoCate />
-                     <h3 className="font-bold text-2xl max-xl:text-[18px]">
+                     <h3 className="font-bold text-2xl max-xl:text-[18px] uppercase">
                         {title}
                      </h3>
                   </div>
