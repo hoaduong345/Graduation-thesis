@@ -12,8 +12,6 @@ dotenv.config();
 
 
 const UserController = {
-  // GENERATE ACCESS TOKEN
-
 
   deleteregister: async (req, res) => {
     try {
@@ -80,25 +78,42 @@ const UserController = {
 
   getUser: async (req, res) => {
     try {
-      const userID = req.params.username;
-  
-      const user = await prisma.user.findUnique({
+      const UserId = req.params.username;
+      
+      const userWithImage = await prisma.user.findUnique({
+        include: {
+          UserImage: true
+        },
         where: {
-          username: userID,
-        },
-        select: {
-          image: true, 
-          name: true, 
-          email: true, 
-          phonenumber: true, 
-          sex: true, 
-          dateOfBirth: true,
-        },
+          username: UserId 
+        }
       });
   
-      if (!user) {
-        return res.status(404).json("Không tìm thấy User");
+      // Tìm thông tin người dùng không có ảnh
+      const userWithoutImage = await prisma.user.findUnique({
+        where: {
+          username: UserId 
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phonenumber: true,
+          sex: true,
+          dateOfBirth: true
+        }
+      });
+  
+      // Kiểm tra nếu không tìm thấy người dùng
+      if (!userWithImage || !userWithoutImage) {
+        return res.status(404).json({ error: "Không tìm thấy người dùng" });
       }
+  
+      // Kết hợp thông tin từ cả hai kết quả
+      const user = {
+        ...userWithoutImage,
+        UserImage: userWithImage.UserImage
+      };
   
       res.status(200).json(user);
     } catch (error) {
@@ -107,51 +122,28 @@ const UserController = {
     }
   },
   
+   
+   addImageUser : async(req, res) =>{
+      try{
+        const {url , iduser} = req.body;
+
+        const newImagesUser = {
+          url,
+          iduser : parseInt(iduser),
+        };
+        
+        const data = await prisma.userImage.create({
+            data : newImagesUser,
+        });
+        res.status(200).json("Thêm hinh thành công");
+      }catch(error){
+        console.error(error);
+        res.status(500).json(error.message);
+      }
+   },
+
+
 
   
-
-  UpdatePassword: async (req, res) => {
-    try {
-      const userId = parseInt(req.params.id);
-      const oldPassword = req.body.oldPassword;
-      const newPassword = req.body.newPassword;
-      const newPasswordConfirmation = req.body.newPasswordConfirmation;
-
-      if (newPassword !== newPasswordConfirmation) {
-        return res.status(400).json("Mật khẩu mới và xác nhận mật khẩu không khớp");
-      }
-
-      const user = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-      });
-
-      // Xác thực mật khẩu cũ
-      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-
-      if (!isPasswordValid) {
-        return res.status(401).json("Mật khẩu cũ không chính xác");
-      }
-
-      // Mật khẩu cũ hợp lệ, tiến hành cập nhật mật khẩu mới
-      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-
-      const updatePassword = await prisma.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          password: hashedNewPassword, // Lưu mật khẩu mới đã mã hóa
-        },
-      });
-
-      res.status(200).json("Cập nhật mật khẩu thành công");
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
-  },
-
-
 };
 module.exports = UserController;

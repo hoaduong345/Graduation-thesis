@@ -113,22 +113,25 @@ export default function VoucherPage() {
                      <div className="grid grid-cols-6">
                         <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
                            <Delete />
-                           <p>Xóa</p>
+                           <p className="max-[940px]:text-sm">Xóa</p>
                         </div>
-                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                            <p>Loại Voucher</p>
                         </div>
-                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                            <p>Tên Voucher</p>
                         </div>
-                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                            <p>Mã Voucher</p>
                         </div>
-                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                            <p>Thời Gian</p>
                         </div>
-                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                           <p>Đã dùng / Tổng SL</p>
+                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                           <p>
+                              Đã dùng / Tổng{" "}
+                              <span className="max-[940px]:hidden"> SL</span>
+                           </p>
                         </div>
                      </div>
 
@@ -141,7 +144,7 @@ export default function VoucherPage() {
                                  className="flex gap-3 items-center "
                               >
                                  <Plus />
-                                 <p className="cursor-default text-[#7A828A] text-base font-bold">
+                                 <p className="cursor-default text-[#7A828A] text-base font-bold max-[940px]:text-sm ">
                                     THÊM VOUCHER
                                  </p>
                               </button>
@@ -165,7 +168,7 @@ export default function VoucherPage() {
                                           </h3>
                                        </div>
 
-                                       <div className="grid grid-cols-4 gap-5">
+                                       <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
                                                 <Controller
@@ -365,7 +368,7 @@ export default function VoucherPage() {
                                           </div>
                                        </div>
 
-                                       <div className="grid grid-cols-4 gap-5">
+                                       <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
                                                 <Controller
@@ -500,7 +503,7 @@ export default function VoucherPage() {
                                           </div>
                                        </div>
 
-                                       <div className="grid grid-cols-4 gap-5">
+                                       <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
                                                 <Controller
@@ -530,7 +533,6 @@ export default function VoucherPage() {
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                                             placeholder="Nhập mã voucher"
-                                                            //   onChange={handleChange}
                                                             name="name"
                                                             value={field.value}
                                                             onChange={(e) => {
@@ -580,13 +582,17 @@ export default function VoucherPage() {
                                                    postVoucher(data);
                                                 }
                                              )}
-                                             className="text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] rounded-md border-[1px]"
+                                             className="text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] items-center rounded-md border-[1px]
+                                             max-lg:text-sm max-lg:py-[10px] max-lg:px-8 max-lg:gap-2
+                                             max-[940px]:text-[13px] max-[940px]:py-[6px] max-[940px]:px-7 "
                                           >
                                              <AddCateBtn />
                                              Xác Nhận
                                           </button>
                                           <button
-                                             className="py-3 px-8 text-white text-base bg-[#EA4B48] rounded-md"
+                                             className="py-3 px-8 text-white text-base bg-[#EA4B48] rounded-md
+                                             max-lg:text-sm
+                                             max-[940px]:text-[13px] max-[940px]:py-2 max-[940px]:px-4"
                                              onClick={closeModal}
                                           >
                                              Hủy
@@ -608,7 +614,7 @@ export default function VoucherPage() {
                                     tabIndex={0}
                                     className="dropdown-content menu bg-white rounded-box w-52
                                                 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl::origin-left"
+                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
                                  >
                                     <li>
                                        <button
@@ -616,7 +622,10 @@ export default function VoucherPage() {
                                           className="flex items-center gap-4"
                                        >
                                           <Edit />
-                                          <p className="text-[#EA4B48] text-sm font-medium">
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                            max-[940px]:text-xs "
+                                          >
                                              Sửa
                                           </p>
                                        </button>
@@ -624,7 +633,10 @@ export default function VoucherPage() {
                                     <li>
                                        <button className="flex items-center gap-4">
                                           <RemoveCate />
-                                          <p className="text-[#EA4B48] text-sm font-medium">
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                             max-[940px]:text-xs "
+                                          >
                                              Xóa
                                           </p>
                                        </button>
@@ -633,31 +645,46 @@ export default function VoucherPage() {
                               </div>
                               <input
                                  type="checkbox"
-                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px]"
+                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
                               />
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A] 
+                                    max-[940px]:text-xs "
+                              >
                                  GPS
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
                                  Thiết Bị Điện Tử
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#EA4B48]">
+                              <p
+                                 className="font-medium text-base text-[#EA4B48]
+                                 max-[940px]:text-xs "
+                              >
                                  THANGDZ
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                max-[940px]:text-xs "
+                              >
                                  12/11/23 - 20/11/23
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
                                  10/1000
                               </p>
                            </div>
@@ -673,7 +700,7 @@ export default function VoucherPage() {
                                     tabIndex={0}
                                     className="dropdown-content menu bg-white rounded-box w-52
                                                 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl::origin-left"
+                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
                                  >
                                     <li>
                                        <button
@@ -681,7 +708,10 @@ export default function VoucherPage() {
                                           className="flex items-center gap-4"
                                        >
                                           <Edit />
-                                          <p className="text-[#EA4B48] text-sm font-medium">
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                            max-[940px]:text-xs "
+                                          >
                                              Sửa
                                           </p>
                                        </button>
@@ -689,7 +719,10 @@ export default function VoucherPage() {
                                     <li>
                                        <button className="flex items-center gap-4">
                                           <RemoveCate />
-                                          <p className="text-[#EA4B48] text-sm font-medium">
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                             max-[940px]:text-xs "
+                                          >
                                              Xóa
                                           </p>
                                        </button>
@@ -698,31 +731,132 @@ export default function VoucherPage() {
                               </div>
                               <input
                                  type="checkbox"
-                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px]"
+                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
                               />
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A] 
+                                    max-[940px]:text-xs "
+                              >
                                  GPS
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
                                  Thiết Bị Điện Tử
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#EA4B48]">
+                              <p
+                                 className="font-medium text-base text-[#EA4B48]
+                                 max-[940px]:text-xs "
+                              >
                                  THANGDZ
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                max-[940px]:text-xs "
+                              >
                                  12/11/23 - 20/11/23
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p className="font-medium text-base text-[#1A1A1A]">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
+                                 10/1000
+                              </p>
+                           </div>
+                        </div>
+
+                        <div className="grid grid-cols-6 border-t-[1px] py-7">
+                           <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
+                              <div className="dropdown dropdown-left">
+                                 <label tabIndex={0}>
+                                    <Handle />
+                                 </label>
+                                 <ul
+                                    tabIndex={0}
+                                    className="dropdown-content menu bg-white rounded-box w-52
+                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                                 >
+                                    <li>
+                                       <button
+                                          onClick={openModal}
+                                          className="flex items-center gap-4"
+                                       >
+                                          <Edit />
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                            max-[940px]:text-xs "
+                                          >
+                                             Sửa
+                                          </p>
+                                       </button>
+                                    </li>
+                                    <li>
+                                       <button className="flex items-center gap-4">
+                                          <RemoveCate />
+                                          <p
+                                             className="text-[#EA4B48] text-sm font-medium
+                                             max-[940px]:text-xs "
+                                          >
+                                             Xóa
+                                          </p>
+                                       </button>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <input
+                                 type="checkbox"
+                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                              />
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A] 
+                                    max-[940px]:text-xs "
+                              >
+                                 GPS
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
+                                 Thiết Bị Điện Tử
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#EA4B48]
+                                 max-[940px]:text-xs "
+                              >
+                                 THANGDZ
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                max-[940px]:text-xs "
+                              >
+                                 12/11/23 - 20/11/23
+                              </p>
+                           </div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                              <p
+                                 className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                              >
                                  10/1000
                               </p>
                            </div>

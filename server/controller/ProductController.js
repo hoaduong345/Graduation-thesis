@@ -257,7 +257,7 @@ const ProductController = {
         date: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
-        productId: parseInt(productId),
+        // productId: parseInt(productId),
         categoryID: parseInt(categoryID),
       };
 
@@ -432,7 +432,7 @@ const ProductController = {
       if (categoryId) {
         whereClause.fK_category = {
           id: parseInt(categoryId),
-        };
+        };   
       }
 
       if (req.query.minPrice && req.query.maxPrice) {
@@ -441,23 +441,17 @@ const ProductController = {
           lte: parseInt(req.query.maxPrice),
         };
       }
-
       console.log(req.query.minPrice);
+      console.log(req.query.maxPrice);
+      
+
 
       const result = await prisma.product.findMany({
-        // where: {
-        //   sellingPrice: {
-        //     gte: parseInt(minPricefind), //Viết tắt của "greater than or equal to," nghĩa là giá trị
-        //     // phải lớn hơn hoặc bằng giá trị mà bạn đang so sánh.
-
-        //     lte: parseInt(maxPricefind), // Viết tắt của "less than or equal to," nghĩa là giá trị
-        //     //phải nhỏ hơn hoặc bằng giá trị mà bạn đang so sánh.
-        //   },
-        // },
         orderBy: {
           sellingPrice: sortByPrice,
           createdAt: sortByDateCreate,
         },
+        
         include: {
           ProductImage: true,
           fK_category: true,
@@ -466,19 +460,6 @@ const ProductController = {
         skip,
         take: pageSize,
       });
-
-      // const FilterProductWithinRange = await prisma.product.findMany({
-      //   where: {
-      //     sellingPrice: {
-      //       gte: parseInt(minPricefind), //Viết tắt của "greater than or equal to," nghĩa là giá trị
-      //       // phải lớn hơn hoặc bằng giá trị mà bạn đang so sánh.
-
-      //       lte: parseInt(maxPricefind), // Viết tắt của "less than or equal to," nghĩa là giá trị
-      //       //phải nhỏ hơn hoặc bằng giá trị mà bạn đang so sánh.
-      //     },
-      //   },
-      // });
-
       const resultProduct = {
         // allProduct: totalProduct,
         // FilterProductRange: FilterProductWithinRange,

@@ -89,7 +89,7 @@ export default function Productss(props: Props) {
                 {numberFormat(product.price)}
               </p>
               <p
-                className="text-[16px] text-[#865546] col-span-2 font-bold 
+className="text-[16px] text-[#865546] col-span-2 font-bold 
           max-2xl:text-sm
           max-lg:text-2xl
             "
