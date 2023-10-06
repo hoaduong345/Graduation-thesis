@@ -61,6 +61,14 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
+    // {
+    //   path: "/FiltersPage/:text",
+    //   element: (
+    //     <MainLayout>
+    //       <FiltersPage />
+    //     </MainLayout>
+    //   ),
+    // },
 
     {
       path: "/register",

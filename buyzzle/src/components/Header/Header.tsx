@@ -57,10 +57,6 @@ export default function Header() {
     dataInputHeaderSearch?.onChange(e);
     setShowSuggestions(true);
     setText(e.target.value);
-    console.log(
-      "🚀 ~ file: Header.tsx:68 ~ handleChange ~ e.target.value:",
-      e.target.value
-    );
   };
   // Function to hide suggestions
   const hideSuggestions = () => {
@@ -68,7 +64,8 @@ export default function Header() {
   };
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
-      console.log("Click");
+      navigate(`/FiltersPage/${text}`);
+      setShowSuggestions(false);
     }
   };
   const getSearhvalue = (value: any) => {
