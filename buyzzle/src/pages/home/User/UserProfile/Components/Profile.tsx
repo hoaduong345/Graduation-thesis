@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import { bool, boolean } from "yup";
 import { userController } from "../../../../../Controllers/UserController";
 import { isDate } from "util/types";
-import { appConfig } from "../../../../../configsEnv";
+import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
@@ -166,7 +166,7 @@ export default function UserProfile() {
       url: url,
     };
     await axios
-      .post(`${appConfig.apiUrl}/addimageuser`, urlImages)
+      .post(`${appConfigUser.apiUrl}/addimageuser`, urlImages)
       .then((response) => response.data);
   };
 
