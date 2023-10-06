@@ -51,6 +51,9 @@ router.get("/recommendedproducts/:id", ProductController.getSugggestProduct);
 
 router.get("/getnewproducts", ProductController.getNewProducts);
 
+// router.get("/search", ProductController.suggestions);
+
+
 // thêm danh mục
 
 router.post("/addcategory", ProductController.addCategory);

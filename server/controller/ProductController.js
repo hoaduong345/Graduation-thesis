@@ -441,11 +441,7 @@ const ProductController = {
           lte: parseInt(req.query.maxPrice),
         };
       }
-      console.log(req.query.minPrice);
-      console.log(req.query.maxPrice);
       
-
-
       const result = await prisma.product.findMany({
         orderBy: {
           sellingPrice: sortByPrice,
@@ -521,6 +517,31 @@ const ProductController = {
       res.status(500).json(error.message);
     }
   },
+
+
+  // suggestions : async (req, res) => {
+  //     try {
+  //       const keyword = req.query.keyword || '';
+    
+  //       const suggestions = await prisma.product.findMany({
+  //         where: {
+  //           name: {
+  //             contains: keyword,
+  //           },
+  //         },
+  //         select: {
+  //           name: true,
+  //         },
+  //       });
+    
+  //       const suggestionNames = suggestions.map(product => product.name);
+  //       res.status(200).json(suggestionNames);
+  //     } catch (error) {
+  //       console.error(error);
+  //       res.status(500).json({ error: 'Internal Server Error' });
+  //     }
+  //   },
+
 };
 
 module.exports = ProductController;
