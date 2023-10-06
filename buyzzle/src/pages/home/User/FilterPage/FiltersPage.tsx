@@ -115,6 +115,7 @@ export default function FiltersPage() {
 
   useEffect(() => {
     getData();
+    getSearchDataName();
   }, []);
 
   const getData = () => {
@@ -322,7 +323,7 @@ export default function FiltersPage() {
               <SlidesFilter />
             </div>
             <div>
-              <p>{keywordSearch.slice(13)}</p>
+              <p>KẾT QUẢ TÌM KIẾM VỚI: {keywordSearch.slice(13)}</p>
             </div>
 
             <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
