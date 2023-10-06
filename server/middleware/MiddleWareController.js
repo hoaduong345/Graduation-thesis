@@ -9,9 +9,6 @@ const MiddleWareController = {
   // VERIFY TOKEN
   verifyAuthenticate: (req, res, next) => {
     const token = req.cookies.accessToken;
-    console.log("🚀 ~ file: MiddleWareController.js:12 ~ token:", token)
-   
-
     if (token) {
       jwt.verify(token, process.env.SECRECT_KEY, (err, user) => {
         if (err) {

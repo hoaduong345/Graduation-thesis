@@ -14,7 +14,7 @@ import UserProfile from "../pages/home/User/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
 import ConfirmAccount from "../pages/confirmAccount/ConfirmAccount";
 import Forgotpassword from "../pages/forgotpassword/Forgotpassword";
-import ChangePassword from "../pages/forgotpassword/ChangePassword";
+import Resetpassword from "../pages/forgotpassword/Resetpassword";
 import path from "../contants/path";
 import Addproducts from "../pages/home/Admin/Addproduct/Addproducts";
 import Category from "../pages/home/Admin/Category/Category";
@@ -194,10 +194,10 @@ export default function useRouterEmelent() {
     },
 
     {
-      path: path.changepassword,
+      path: path.resetpassword,
       element: (
         <RegisterLoginLayout>
-          <ChangePassword />
+          <Resetpassword />
           <ConfirmAccount />
         </RegisterLoginLayout>
 

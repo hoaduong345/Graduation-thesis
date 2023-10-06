@@ -64,15 +64,18 @@ function Login() {
                 if (response.headers['content-type'] === 'application/json; charset=utf-8') {
                     const jsonString: string = JSON.stringify(response.data);
                     const jsonObject = JSON.parse(jsonString);
-
+                    // console.log("aaaaaaaaaa"+response)
                     // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
-                    console.log(jsonObject);
+                    // console.log(response);
                     // Truy cập các giá trị trong jsonObject
 
                     const username = jsonObject.username;
+                    const accessToken = jsonObject.accessToken;
+                    console.log(accessToken);
                     const UserData = { username};
+                    const Token = {accessToken};
                     localStorage.setItem('user', JSON.stringify(UserData));
-
+                    localStorage.setItem("accessToken", JSON.stringify(Token));
                     setTimeout(() => {
                         window.location.href = "/";
                     },
@@ -93,7 +96,29 @@ function Login() {
                 );
             }
         } catch (error) {
-            console.error(error);
+            // console.log(error);
+            if (axios.isAxiosError(error) && error.response) {
+                const responseData = error.response.data;
+                console.log(responseData);
+                // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
+                if (responseData) {
+                //   const errorMessage = responseData.error.password;
+                  console.log(`Lỗi1:1 ${responseData}`);
+                  toast.warning(
+                    responseData,
+                    {
+                      position: "top-right",
+                      autoClose: 5000,
+            
+                    }
+                  );
+                } else {
+                  console.log('Lỗi không xác định từ server');
+                }
+              } else {
+                console.error('Lỗi gửi yêu cầu không thành công', error);
+               
+              }
         }
 
     });

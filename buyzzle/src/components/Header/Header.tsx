@@ -34,6 +34,8 @@ export default function Header() {
         // setEditUser(res)
         setName(res.name)
         setImg(res.image)
+
+        console.log(name);
       })
     } else {
       console.log("Chua Dang Nhap Dung");
