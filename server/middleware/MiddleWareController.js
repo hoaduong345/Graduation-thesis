@@ -9,7 +9,6 @@ const MiddleWareController = {
   // VERIFY TOKEN
   verifyAuthenticate: (req, res, next) => {
     const token = req.cookies.accessToken;
-
     if (token) {
       jwt.verify(token, process.env.SECRECT_KEY, (err, user) => {
         if (err) {
@@ -20,7 +19,7 @@ const MiddleWareController = {
         next();
       });
     } else {
-      console.log("You are not authenticated");
+      console.log("You are not authenticated "+token);
       return res.status(401).json({ message: "Unauthorized" });
     }
   },

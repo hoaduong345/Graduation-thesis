@@ -231,20 +231,19 @@ const AuthController = {
                         data: { refresh_token: refreshToken },
                     });
                 }
-                res.cookie('refreshToken', refreshToken, {
+                res.cookie('refreshtoken', refreshToken, {
                     httpOnly: true,
                     secure: false,
                     path: '/',
                     sameSite: 'strict',
                 });
 
-                res.cookie('accessToken', accessToken, {
+                res.cookie('accesstoken', accessToken, {
                     httpOnly: true,
                     secure: false,
                     path: '/',
                     sameSite: 'strict',
                 });
-
                 res.cookie('id', user.id, {
                     httpOnly: true,
                     secure: false,
@@ -472,7 +471,7 @@ const AuthController = {
             res.clearCookie('refreshToken');
             res.clearCookie('accessToken');
             res.clearCookie('id');
-            // localStorage.clear();
+            localStorage.clear();
             res.status(200).send('Logged out successfully');
         } catch (error) {
             res.status(500).send('Logout failed');

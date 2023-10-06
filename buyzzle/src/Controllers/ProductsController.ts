@@ -27,6 +27,11 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getAllProducts = async (): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts`).then((res) => {
+            return res.data as Products[]
+        })
+    }
     getSearchProduct = async (name: string | undefined): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
             return res.data as Products[]
@@ -37,11 +42,31 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getSortProductbyPrice = async (key: string, id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?sortByPrice=${key}&categoryId=${id}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getSortProductbyDateCreate = async (key: string, id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?sortByDateCreate=${key}&categoryId=${id}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getFilterProductWithinRange = async (min: number, max: number, id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryId=${id}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
     remove = async (id: number) => {
         return await axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`)
     }
     update = async (id: number, data: FormValues) => {
         return await axios.put(`${appConfig.apiUrl}/updateproduct/${id}`, data)
+    }
+    getProductSuggest = async (id: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/recommendedproducts/${id}`).then((res) => {
+            return res.data as Products[]
+        })
     }
 }
 

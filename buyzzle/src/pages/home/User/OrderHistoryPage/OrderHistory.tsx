@@ -7,8 +7,15 @@ import QuantityHistory from '../../../../Assets/TSX/QuantityHistory'
 import ArrowNext from '../../../../Assets/TSX/ArrowNext'
 import ArrowNextHistory from '../../../../Assets/TSX/ArrowNextHistory'
 import { IonIcon } from '@ionic/react'
-
+import {
+    Accordion,
+    AccordionHeader,
+    AccordionBody,
+} from "@material-tailwind/react";
 export default function OrderHistory() {
+    const [open, setOpen] = useState<number>();
+
+    const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
     const [arrowAction, setArrowAction] = useState(false)
     const openModal = () => {
         const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
@@ -49,203 +56,208 @@ export default function OrderHistory() {
                 <div className="flex-col mt-9 col-span-3 max-2xl:col-span-5">
                     <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8 max-lg:text-xs">
-                            <div className="overflow-hidden ">
-                                <table className="min-w-full text-center text-sm max-lg:text-[11px] relative z-20 ">
-                                    <thead
-                                        className="border-b bg-[#FFEAE9] font-medium dark:text-[#4C4C4C]">
-                                        <tr>
-                                            <th scope="col" className=" px-6 py-4 max-2xl:text-left ">#ID ĐƠN HÀNG</th>
-                                            <th scope="col" className=" px-6 py-4">NGÀY TẠO ĐƠN</th>
-                                            <th scope="col" className=" px-6 py-4">TỔNG PHÍ</th>
-                                            <th scope="col" className=" px-6 py-4">TRẠNG THÁI</th>
-                                            <th scope="col" className=" px-6 py-4"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="border-b dark:border-neutral-500 bg-white">
-                                            <div className='flex items-center justify-start ml-4'>
-                                                <div className='cursor-pointer'
-                                                    onClick={() => setArrowAction(!arrowAction)}>
-                                                    {
-                                                        arrowAction ? <ArrowDown /> : <ArrowNextHistory />
-                                                    }
+                            <div className=" ">
+                                <div className=" w-full text-center text-sm max-lg:text-[11px]  z-20 ">
+                                    <div
+                                        className="border-b w-full bg-[#FFEAE9] font-medium dark:text-[#4C4C4C]">
+                                        <div className=' justify-around w-full flex '>
+                                            <div className=" py-4 max-2xl:text-left ">#ID ĐƠN HÀNG</div>
+                                            <div className=" py-4">NGÀY TẠO ĐƠN</div>
+                                            <div className=" py-4">TỔNG PHÍ</div>
+                                            <div className=" py-4">TRẠNG THÁI</div>
+                                            <div className=" py-4"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <Accordion open={open === 1}>
+                                    <div className='w-full bg-black' onClick={() => handleOpen(1)}>
+                                        <div className='text-sm bg-black ' >
+                                            <div className="border-b dark:border-neutral-500 bg-white px-4">
+                                                <div className='cursor-pointer flex items-center py-4 w-full justify-start'>
+                                                    <div className='w-[5%]'>
+                                                        {
+                                                            open ? <ArrowDown /> : <ArrowNextHistory />
+                                                        }
+                                                    </div>
+                                                    <div className='w-[24%]'>#1HPTH</div>
+                                                    <div className='w-[20%]'>20/10/2023</div>
+                                                    <div className='w-[22%]'>₫302.000 (2 Sản Phẩm)</div>
+                                                    <div className='w-[22%] ml-1'> Đã giao cho ĐVVC</div>
+                                                    <div >Xem</div>
                                                 </div>
-                                                <td className="whitespace-nowrap px-3 py-4 font-medium">#1HPTH</td>
                                             </div>
-                                            <td className="whitespace-nowrap  px-6 py-4">20/10/2023</td>
-                                            <td className="whitespace-nowrap  px-6 py-4 ">₫302.000 (2 Sản Phẩm)</td>
-                                            <td className="whitespace-nowrap  px-6 py-4"> Đã giao cho ĐVVC</td>
-                                            <td className="whitespace-nowrap  px-6 py-4 text-[#EA4B48] text-base max-lg:text-xs"
-                                                onClick={() => setArrowAction(!arrowAction)}>
-                                                {
-                                                    !arrowAction ? 'Xem' : 'Đóng'
-                                                }
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <table className={`w-[100%] text-center relative 
-                                transition-all duration-500 ease-in ${arrowAction ? 'top-0' : 'top-[-310px]'}`}>
-                                    <thead
-                                        className="border-b bg-[#F2F2F2] dark:text-[#4C4C4C]">
-                                        <tr>
-                                            <th className=" px-[50px] py-2 w-[50%] text-left font-normal">Thông tin sản phẩm</th>
-                                            <th className=" px-6 py-2 w-[14%] font-normal">Giá</th>
-                                            <th className=" px-6 py-2 w-[14%] font-normal max-lg:px-4 max-lg:py-2">Số lượng</th>
-                                            <th className=" px-6 py-2 w-[14%] font-normal">Tổng</th>
-                                            <th className=" px-6 py-2 w-[14%] font-normal"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="border-b dark:border-[#E0E0E0]">
-                                            <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
-                                                <img src={Images.imageproduct4} className='w-[50px] h-[50px] 
+                                        </div>
+                                    </div>
+                                    <AccordionBody>
+                                        <table className='w-full'>
+                                            <thead
+                                                className="border-b bg-[#F2F2F2] dark:text-[#4C4C4C]">
+                                                <tr>
+                                                    <th className=" px-[50px] py-2 w-[50%] text-left font-normal">Thông tin sản phẩm</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal">Giá</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal max-lg:px-4 max-lg:py-2">Số lượng</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal">Tổng</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="border-b dark:border-[#E0E0E0] text-center">
+                                                    <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
+                                                        <img src={Images.imageproduct4} className='w-[50px] h-[50px] 
                                                 max-lg:h-[35px]  max-lg:w-[35px]
                                                 ' alt="imgProduct" />
-                                                <QuantityHistory />
-                                                <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
-                                                <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
-                                            </td>
-                                            <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
-                                            <td className="whitespace-nowrap  px-6 py-4">x1</td>
-                                            <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
-                                        </tr>
-                                        <tr className="border-b dark:border-[#E0E0E0]">
-                                            <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
-                                                <img src={Images.imageproduct4} className='w-[50px] h-[50px]
+                                                        <QuantityHistory />
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
+                                                    </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">x1</td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                </tr>
+                                                <tr className="border-b dark:border-[#E0E0E0] text-center">
+                                                    <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
+                                                        <img src={Images.imageproduct4} className='w-[50px] h-[50px]
                                                 max-lg:h-[35px]  max-lg:w-[35px]
                                                 ' alt="imgProduct" />
-                                                <QuantityHistory />
-                                                <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
-                                                <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
-                                            </td>
-                                            <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
-                                            <td className="whitespace-nowrap  px-6 py-4">x1</td>
-                                            <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                {/* Don thu hai */}
-                                <div>
-                                    <table className="min-w-full text-center text-sm max-lg:text-xs">
-                                        <tbody>
-                                            <tr className="border-b dark:border-neutral-500">
-                                                <div className='flex items-center justify-start ml-4 w-[150px]'>
-                                                    <div>
-                                                        <ArrowNextHistory />
-                                                    </div>
-                                                    <td className="whitespace-nowrap  px-3 py-4 font-medium">#1HPTH</td>
-                                                </div>
-                                                <td className="whitespace-nowrap  px-6 py-4">20/10/2023</td>
-                                                <td className="whitespace-nowrap  px-6 py-4 max-xl:break-words">₫302.000 (2 Sản Phẩm)</td>
-                                                <td className="whitespace-nowrap  px-6 py-4"> Đã giao cho ĐVVC</td>
-                                                <td className="whitespace-nowrap  px-6 py-4 text-[#EA4B48] text-base max-lg:text-xs">Xem</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {/* end Don thu hai */}
-                                {/* Don thu hai */}
-                                <div>
-                                    <table className="min-w-full text-center text-sm max-lg:text-xs">
-                                        <tbody>
-                                            <tr className="border-b dark:border-neutral-500">
-                                                <div className='flex items-center justify-start ml-4 w-[150px]'>
-                                                    <div>
-                                                        <ArrowDown />
-                                                    </div>
-                                                    <td className="whitespace-nowrap  px-3 py-4 font-medium">#1HPTH</td>
-                                                </div>
-                                                <td className="whitespace-nowrap  px-6 py-4">20/10/2023</td>
-                                                <td className="whitespace-nowrap  px-6 py-4 max-xl:break-words">₫302.000 (2 Sản Phẩm)</td>
-                                                <td className="whitespace-nowrap  px-6 py-4"> Đã giao cho ĐVVC</td>
-                                                <td className="whitespace-nowrap  px-6 py-4 text-[#EA4B48] text-base max-lg:text-xs">Xem</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <table className="w-[100%] text-center">
-                                        <thead
-                                            className="border-b bg-[#F2F2F2] dark:text-[#4C4C4C]">
-                                            <tr>
-                                                <th className=" px-[50px] py-2 w-[50%] text-left font-normal">Thông tin sản phẩm</th>
-                                                <th className=" px-6 py-2 w-[14%] font-normal">Giá</th>
-                                                <th className=" px-6 py-2 w-[14%] font-normal">Số lượng</th>
-                                                <th className=" px-6 py-2 w-[14%] font-normal">Tổng</th>
-                                                <th className=" px-6 py-2 w-[14%] font-normal"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr className="border-b dark:border-[#E0E0E0]">
-                                                <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
-                                                    <img src={Images.imageproduct4} className='w-[50px] h-[50px]
-                                                    max-lg:h-[35px]  max-lg:w-[35px]
-                                                    ' alt="imgProduct" />
-                                                    <QuantityHistory />
-                                                    <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
-                                                    <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
-                                                </td>
-                                                <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
-                                                <td className="whitespace-nowrap  px-6 py-4">x1</td>
-                                                <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
-                                            </tr>
-                                            <tr className="border-b dark:border-[#E0E0E0]">
-                                                <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
-                                                    <img src={Images.imageproduct4} className='w-[50px] h-[50px]
-                                                    max-lg:h-[35px]  max-lg:w-[35px]
-                                                    ' alt="imgProduct" />
-                                                    <QuantityHistory />
-                                                    <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
-                                                    <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
-                                                </td>
-                                                <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
-                                                <td className="whitespace-nowrap  px-6 py-4">x1</td>
-                                                <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {/* end Don thu hai */}
-                                {/* Don thu hai */}
-                                <div>
-                                    <table className="min-w-full text-center text-sm max-lg:text-xs">
-                                        <tbody>
-                                            <tr className="border-b dark:border-neutral-500">
-                                                <div className='flex items-center justify-start ml-4 w-[150px]'>
-                                                    <div>
-                                                        <ArrowNextHistory />
-                                                    </div>
-                                                    <td className="whitespace-nowrap  px-3 py-4 font-medium">#1HPTH</td>
-                                                </div>
-                                                <td className="whitespace-nowrap  px-6 py-4">20/10/2023</td>
-                                                <td className="whitespace-nowrap  px-6 py-4 max-xl:break-words">₫302.000 (2 Sản Phẩm)</td>
-                                                <td className="whitespace-nowrap  px-6 py-4"> Đã giao cho ĐVVC</td>
-                                                <td className="whitespace-nowrap  px-6 py-4 text-[#EA4B48] text-base max-lg:text-xs">Xem</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                        <QuantityHistory />
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
+                                                    </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">x1</td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
 
-                                </div>
-                                {/* end Don thu hai */}
-                                {/* Don thu hai */}
-                                <div>
-                                    <table className="min-w-full text-center text-sm max-lg:text-xs">
-                                        <tbody>
-                                            <tr className="border-b dark:border-neutral-500">
-                                                <div className='flex items-center justify-start ml-4 w-[150px]'>
-                                                    <div>
-                                                        <ArrowNextHistory />
+                                    </AccordionBody>
+                                </Accordion>
+                                <Accordion open={open === 2}>
+                                    <div className='w-full bg-black' onClick={() => handleOpen(2)}>
+                                        <div className='text-sm bg-black ' >
+                                            <div className="border-b dark:border-neutral-500 bg-white px-4">
+                                                <div className='cursor-pointer flex items-center py-4 w-full justify-start'>
+                                                    <div className='w-[5%]'>
+                                                        {
+                                                            open ? <ArrowDown /> : <ArrowNextHistory />
+                                                        }
                                                     </div>
-                                                    <td className="whitespace-nowrap  px-3 py-4 font-medium">#1HPTH</td>
+                                                    <div className='w-[24%]'>#1HPTH</div>
+                                                    <div className='w-[20%]'>20/10/2023</div>
+                                                    <div className='w-[22%]'>₫302.000 (2 Sản Phẩm)</div>
+                                                    <div className='w-[22%] ml-1'> Đã giao cho ĐVVC</div>
+                                                    <div >Xem</div>
                                                 </div>
-                                                <td className="whitespace-nowrap  px-6 py-4">20/10/2023</td>
-                                                <td className="whitespace-nowrap  px-6 py-4 max-xl:break-words">₫302.000 (2 Sản Phẩm)</td>
-                                                <td className="whitespace-nowrap  px-6 py-4"> Đã giao cho ĐVVC</td>
-                                                <td className="whitespace-nowrap  px-6 py-4 text-[#EA4B48] text-base max-lg:text-xs">Xem</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {/* end Don thu hai */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <AccordionBody>
+                                        <table className='w-full'>
+                                            <thead
+                                                className="border-b bg-[#F2F2F2] dark:text-[#4C4C4C]">
+                                                <tr>
+                                                    <th className=" px-[50px] py-2 w-[50%] text-left font-normal">Thông tin sản phẩm</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal">Giá</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal max-lg:px-4 max-lg:py-2">Số lượng</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal">Tổng</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="border-b dark:border-[#E0E0E0] text-center">
+                                                    <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
+                                                        <img src={Images.imageproduct4} className='w-[50px] h-[50px] 
+                                                max-lg:h-[35px]  max-lg:w-[35px]
+                                                ' alt="imgProduct" />
+                                                        <QuantityHistory />
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
+                                                    </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">x1</td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                </tr>
+                                                <tr className="border-b dark:border-[#E0E0E0] text-center">
+                                                    <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
+                                                        <img src={Images.imageproduct4} className='w-[50px] h-[50px]
+                                                max-lg:h-[35px]  max-lg:w-[35px]
+                                                ' alt="imgProduct" />
+                                                        <QuantityHistory />
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
+                                                    </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">x1</td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </AccordionBody>
+                                </Accordion>
+                                <Accordion open={open === 3}>
+                                    <div className='w-full bg-black' onClick={() => handleOpen(3)}>
+                                        <div className='text-sm bg-black ' >
+                                            <div className="border-b dark:border-neutral-500 bg-white px-4">
+                                                <div className='cursor-pointer flex items-center py-4 w-full justify-start'>
+                                                    <div className='w-[5%]'>
+                                                        {
+                                                            open ? <ArrowDown /> : <ArrowNextHistory />
+                                                        }
+                                                    </div>
+                                                    <div className='w-[24%]'>#1HPTH</div>
+                                                    <div className='w-[20%]'>20/10/2023</div>
+                                                    <div className='w-[22%]'>₫302.000 (2 Sản Phẩm)</div>
+                                                    <div className='w-[22%] ml-1'> Đã giao cho ĐVVC</div>
+                                                    <div >Xem</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <AccordionBody>
+                                        <table className='w-full'>
+                                            <thead
+                                                className="border-b bg-[#F2F2F2] dark:text-[#4C4C4C]">
+                                                <tr>
+                                                    <th className=" px-[50px] py-2 w-[50%] text-left font-normal">Thông tin sản phẩm</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal">Giá</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal max-lg:px-4 max-lg:py-2">Số lượng</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal">Tổng</th>
+                                                    <th className=" px-6 py-2 w-[14%] font-normal"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="border-b dark:border-[#E0E0E0] text-center">
+                                                    <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
+                                                        <img src={Images.imageproduct4} className='w-[50px] h-[50px] 
+                                                max-lg:h-[35px]  max-lg:w-[35px]
+                                                ' alt="imgProduct" />
+                                                        <QuantityHistory />
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
+                                                    </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">x1</td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                </tr>
+                                                <tr className="border-b dark:border-[#E0E0E0] text-center">
+                                                    <td className='flex items-center pl-[50px] py-4 text-left gap-3'>
+                                                        <img src={Images.imageproduct4} className='w-[50px] h-[50px]
+                                                max-lg:h-[35px]  max-lg:w-[35px]
+                                                ' alt="imgProduct" />
+                                                        <QuantityHistory />
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>+2</p>
+                                                        <p className='text-[#4C4C4C] text-base font-medium max-lg:text-sm'>Điện Thoại Samsung s20</p>
+                                                    </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">x1</td>
+                                                    <td className="whitespace-nowrap  px-6 py-4">₫30.000 </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </AccordionBody>
+                                </Accordion>
                             </div>
                         </div>
                     </div>

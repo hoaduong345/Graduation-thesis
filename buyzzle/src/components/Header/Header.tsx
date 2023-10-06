@@ -11,32 +11,43 @@ import Search from "../../Assets/TSX/Search";
 import Shoppingcart from "../../Assets/TSX/Shopping-cart";
 import Ellips from "../../Assets/TSX/Ellips";
 import Container from "../container/Container";
-import { useState } from "react";
 import { Cate } from "../../pages/product/AddCategory";
-
-
+import { ChangeEvent, Fragment, useState, useEffect } from 'react'
+import { userController } from "../../Controllers/UserController";
 
 export default function Header() {
 
   const [idCate, setidCate] = useState<Cate>()
   const user = localStorage.getItem('user');
 
-
-  var username;
-  var img;
-  var name;
   
+  var username;
+  const [name, setName] = useState('');
+  const [img, setImg] = useState('');
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user != null) {
+      const userData = JSON.parse(user);
+      const username = userData.username;
+      console.log("USERNAME: " + username);
+      userController.getUserWhereUsername(username).then((res) => {
+        // setEditUser(res)
+        setName(res.name)
+        setImg(res.image)
+
+        console.log(name);
+      })
+    } else {
+      console.log("Chua Dang Nhap Dung");
+    }
+
+  }, []);
 
 
 
   if (user != null) {
 
     username = JSON.parse(user).username;
-    img = JSON.parse(user).img;
-    name = JSON.parse(user).name;
-
-    console.log(name.substring(0, 1));
-    console.log("USER: " + name, img);
   } else {
     console.log("Chua dang nhap");
   }
@@ -132,11 +143,12 @@ export default function Header() {
                     {user ? (
                       <a className=" flex gap-2" href={href}>
                         <div className="font-medium flex items-center justify-center">
-                          {username}
+                          {name}
                         </div>
                         {img ? (
-                          <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
-                            <p className="text-1xl text-stone-50">{img}</p>
+                          <div className="relative">
+                            <img className="w-10 h-10 rounded-full border-4 " src={img} alt=""/>
+                              
                           </div>
                         ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
