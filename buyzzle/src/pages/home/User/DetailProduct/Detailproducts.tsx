@@ -28,6 +28,7 @@ import {
    ModelCart,
    cartControllers,
 } from "../../../../Controllers/CartControllers";
+import { toast } from "react-toastify";
 
 export interface ImgOfProduct {
    url: string;
@@ -111,7 +112,9 @@ export default function Detailproducts() {
    };
 
    const addCart = (data: ModelCart) => {
-      cartControllers.addCart(data);
+      cartControllers.addCart(data).then(() => {
+         toast.success("Thêm thành công");
+      });
    };
 
    return (
