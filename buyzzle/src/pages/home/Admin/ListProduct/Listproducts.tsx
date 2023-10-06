@@ -16,7 +16,7 @@ import ListproductMap from "./ListproductMap";
 import { Button } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import FilterListproduct from "./Filter/FilterListproduct";
-import EmptyProductPage from "./EmptyProduct/EmptyProductPage";
+import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 export default function ListproductsAdmin() {
    const [products, setProducts] = useState<any>({});
    const [search, setSearch] = useState("");
@@ -371,7 +371,10 @@ export default function ListproductsAdmin() {
                         })
                      ) : (
                         <>
-                           <EmptyProductPage />
+                           <EmptyPage
+                              title="Danh sách sản phẩm trống"
+                              button="Thêm Ngay"
+                           />
                         </>
                      )}
                   </div>

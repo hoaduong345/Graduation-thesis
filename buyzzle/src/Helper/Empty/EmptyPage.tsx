@@ -1,4 +1,10 @@
-export default function EmptyProductPage() {
+interface EmptyModel {
+   title: string;
+   button: string;
+}
+
+export default function EmptyPage(props: EmptyModel) {
+   const { title, button } = props;
    return (
       <>
          <div
@@ -26,11 +32,9 @@ export default function EmptyProductPage() {
             </div>
             <span className="sr-only">Loading...</span>
             <div className="items-center flex flex-col gap-6 absolute left-[30%]">
-               <p className="text-[#b39393] text-xl">
-                  Danh sách sản phẩm trống
-               </p>
+               <p className="text-[#b39393] text-xl">{title}</p>
                <button className="bg-[#EA4B48] w-[50%] cursor-pointer py-2 text-white rounded">
-                  Thêm Ngay
+                  {button}
                </button>
             </div>
          </div>
