@@ -17,7 +17,6 @@ import UploadIMG from "../Assets/TSX/UploadIMG";
 import Handle from "../Assets/TSX/bacham";
 import LogoCate from "../Assets/TSX/logoCateAdmin";
 import SitebarAdmin from "../Sitebar/Sitebar";
-import DialogModal from "../../../../Helper/Dialog/DialogModal";
 
 type FormValues = {
    id: number;
@@ -26,8 +25,6 @@ type FormValues = {
 };
 
 function Category() {
-   const idModal = "category";
-
    const [categorys, setCategorys] = useState<FormValues[]>([]);
 
    const [loading, setLoading] = useState(false);
@@ -230,19 +227,6 @@ function Category() {
       reset({ id: 0, name: "", image: "" });
       setUrl("");
    };
-   const openModalTest = async (id: string) => {
-      const modal = document.getElementById(id) as HTMLDialogElement | null;
-      if (modal) {
-         modal.showModal();
-      }
-   };
-   const closeModalTest = async (id: string) => {
-      const modal = document.getElementById(id) as HTMLDialogElement | null;
-      if (modal) {
-         modal.close();
-      }
-   };
-   const saveModalTest = async () => {};
 
    return (
       <>

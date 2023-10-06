@@ -2,14 +2,13 @@ import { Controller, useForm } from "react-hook-form";
 import Plus from "../../../../Assets/TSX/Plus";
 import Search from "../../../../Assets/TSX/Search";
 import Container from "../../../../components/container/Container";
-import AddCateBtn from "../Assets/TSX/AddCateAdmin";
 import Delete from "../Assets/TSX/Delete";
 import Download from "../Assets/TSX/Download";
 import Edit from "../Assets/TSX/Edit";
 import RemoveCate from "../Assets/TSX/RemoveCate";
 import Handle from "../Assets/TSX/bacham";
-import LogoCate from "../Assets/TSX/logoCateAdmin";
 import SitebarAdmin from "../Sitebar/Sitebar";
+import DialogModal from "../../../../Helper/Dialog/DialogModal";
 
 type FormValues = {
    voucherType: string;
@@ -21,28 +20,13 @@ type FormValues = {
 };
 
 export default function VoucherPage() {
-   const openModal = () => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
-      if (modal) {
-         modal.showModal();
-      }
-   };
-
-   const closeModal = async () => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
-      if (modal) {
-         modal.close();
-      }
-   };
+   const idModal = "voucher";
 
    const {
       control,
       handleSubmit,
       reset,
+      clearErrors,
       formState: { errors },
    } = useForm<FormValues>({
       mode: "all",
@@ -56,7 +40,22 @@ export default function VoucherPage() {
       },
    });
 
-   const postVoucher = (data: FormValues) => {
+   const openModal = async (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         modal.showModal();
+      }
+   };
+
+   const closeModal = async (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         clearErrors();
+         modal.close();
+      }
+   };
+
+   const saveModal = (data: FormValues) => {
       const dataForm = {
          voucherType: data.voucherType,
          name: data.name,
@@ -140,7 +139,7 @@ export default function VoucherPage() {
                            <div className="col-span-1"></div>
                            <div className="col-span-6">
                               <button
-                                 onClick={openModal}
+                                 onClick={() => openModal(idModal)}
                                  className="flex gap-3 items-center "
                               >
                                  <Plus />
@@ -150,24 +149,9 @@ export default function VoucherPage() {
                               </button>
                            </div>
                            <div>
-                              <dialog id="my_modal_3" className="modal ">
-                                 <div className="bg-white relative flex flex-col p-[40px] max-w-[1000px] max-xl:w-[650px] max-lg:w-[450px] max-lg:p-[30px]">
-                                    <form method="dialog">
-                                       <button
-                                          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                                          onClick={closeModal}
-                                       >
-                                          ✕
-                                       </button>
-                                    </form>
-                                    <div className="flex flex-col gap-6 max-lg:gap-3">
-                                       <div className="flex items-center gap-3">
-                                          <LogoCate />
-                                          <h3 className="font-bold text-2xl max-xl:text-[18px] uppercase">
-                                             Mã Voucher
-                                          </h3>
-                                       </div>
-
+                              <DialogModal
+                                 body={
+                                    <>
                                        <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
@@ -234,11 +218,6 @@ export default function VoucherPage() {
                                                                }
                                                             </p>
                                                          )}
-                                                         {/* <p className="text-[11px] text-[#718096]">
-                                                            Loại giảm giá trực
-                                                            tiếp cho sản phẩm
-                                                            hoặc phí vẫn chuyển
-                                                         </p> */}
                                                       </>
                                                    )}
                                                 />
@@ -267,7 +246,6 @@ export default function VoucherPage() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                            //    onChange={handleChange}
                                                             name="name"
                                                             type="date"
                                                             value={field.value}
@@ -284,7 +262,6 @@ export default function VoucherPage() {
                                                                   )
                                                                );
                                                             }}
-                                                            //    value={category.name}
                                                          />
                                                          {errors.startDate && (
                                                             <p className="text-[11px] text-red-700 mt-2">
@@ -295,12 +272,6 @@ export default function VoucherPage() {
                                                                }
                                                             </p>
                                                          )}
-                                                         {/* <p className="text-[11px] text-[#718096]">
-                                                            Sẽ bắt đầu áp dụng
-                                                            mã giảm giá cho đến
-                                                            khi thời gian này
-                                                            bắt đầu
-                                                         </p> */}
                                                       </>
                                                    )}
                                                 />
@@ -329,7 +300,6 @@ export default function VoucherPage() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                            //   onChange={handleChange}
                                                             name="name"
                                                             type="date"
                                                             value={field.value}
@@ -355,12 +325,6 @@ export default function VoucherPage() {
                                                                }
                                                             </p>
                                                          )}
-                                                         {/* <p className="text-[11px] text-[#718096]">
-                                                            Sẽ kết thúc không
-                                                            thể áp dụng mã giảm
-                                                            giá khi thời gian
-                                                            này qua
-                                                         </p> */}
                                                       </>
                                                    )}
                                                 />
@@ -403,7 +367,6 @@ export default function VoucherPage() {
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                                             placeholder="Nhập tiêu đề cho mã giảm giá này"
-                                                            //   onChange={handleChange}
                                                             value={field.value}
                                                             onChange={(e) => {
                                                                const reg =
@@ -427,11 +390,6 @@ export default function VoucherPage() {
                                                                }
                                                             </p>
                                                          )}
-                                                         {/* <p className="text-[11px] text-[#718096]">
-                                                            Hiển thị cho người
-                                                            dùng nhận biết sự
-                                                            kiện giảm giá
-                                                         </p> */}
                                                       </>
                                                    )}
                                                 />
@@ -461,7 +419,6 @@ export default function VoucherPage() {
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                                             placeholder="Nhập số lượng voucher"
-                                                            //    onChange={handleChange}
                                                             type="number"
                                                             name="name"
                                                             value={field.value}
@@ -478,7 +435,6 @@ export default function VoucherPage() {
                                                                   )
                                                                );
                                                             }}
-                                                            //    value={category.name}
                                                          />
                                                          {errors.quantity && (
                                                             <p className="text-[11px] text-red-700 mt-2">
@@ -489,13 +445,6 @@ export default function VoucherPage() {
                                                                }
                                                             </p>
                                                          )}
-                                                         {/* <p className="text-[11px] text-[#718096]">
-                                                            Số lượng voucher khi
-                                                            sử dụng hết người
-                                                            dùng không thể tiếp
-                                                            tục sử dụng mã này
-                                                            nữa
-                                                         </p> */}
                                                       </>
                                                    )}
                                                 />
@@ -558,16 +507,6 @@ export default function VoucherPage() {
                                                                }
                                                             </p>
                                                          )}
-                                                         {/* <p className="text-[11px] text-[#718096]">
-                                                            Mã sử dụng cho người
-                                                            dùng nhập vào đơn
-                                                            hàng của mình và sẽ
-                                                            áp dụng giảm giá
-                                                            theo loại mã giảm
-                                                            giá trên, và không
-                                                            được trùng với mã đã
-                                                            tồn tại
-                                                         </p> */}
                                                       </>
                                                    )}
                                                 />
@@ -575,7 +514,7 @@ export default function VoucherPage() {
                                           </div>
                                        </div>
 
-                                       <div className="flex gap-2 items-center justify-end">
+                                       {/* <div className="flex gap-2 items-center justify-end">
                                           <button
                                              onClick={handleSubmit(
                                                 (data: any) => {
@@ -597,97 +536,17 @@ export default function VoucherPage() {
                                           >
                                              Hủy
                                           </button>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </dialog>
-                           </div>
-                        </div>
-
-                        <div className="grid grid-cols-6 border-t-[1px] py-7">
-                           <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
-                              <div className="dropdown dropdown-left">
-                                 <label tabIndex={0}>
-                                    <Handle />
-                                 </label>
-                                 <ul
-                                    tabIndex={0}
-                                    className="dropdown-content menu bg-white rounded-box w-52
-                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                                 >
-                                    <li>
-                                       <button
-                                          onClick={openModal}
-                                          className="flex items-center gap-4"
-                                       >
-                                          <Edit />
-                                          <p
-                                             className="text-[#EA4B48] text-sm font-medium
-                                            max-[940px]:text-xs "
-                                          >
-                                             Sửa
-                                          </p>
-                                       </button>
-                                    </li>
-                                    <li>
-                                       <button className="flex items-center gap-4">
-                                          <RemoveCate />
-                                          <p
-                                             className="text-[#EA4B48] text-sm font-medium
-                                             max-[940px]:text-xs "
-                                          >
-                                             Xóa
-                                          </p>
-                                       </button>
-                                    </li>
-                                 </ul>
-                              </div>
-                              <input
-                                 type="checkbox"
-                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                                       </div> */}
+                                    </>
+                                 }
+                                 id={idModal}
+                                 title="Mã Voucher"
+                                 onClose={() => closeModal(idModal)}
+                                 onSave={handleSubmit((data: any) => {
+                                    saveModal(data);
+                                 })}
                               />
                            </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A] 
-                                    max-[940px]:text-xs "
-                              >
-                                 GPS
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
-                                 max-[940px]:text-xs "
-                              >
-                                 Thiết Bị Điện Tử
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#EA4B48]
-                                 max-[940px]:text-xs "
-                              >
-                                 THANGDZ
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
-                                max-[940px]:text-xs "
-                              >
-                                 12/11/23 - 20/11/23
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
-                                 max-[940px]:text-xs "
-                              >
-                                 10/1000
-                              </p>
-                           </div>
                         </div>
 
                         <div className="grid grid-cols-6 border-t-[1px] py-7">
@@ -704,93 +563,7 @@ export default function VoucherPage() {
                                  >
                                     <li>
                                        <button
-                                          onClick={openModal}
-                                          className="flex items-center gap-4"
-                                       >
-                                          <Edit />
-                                          <p
-                                             className="text-[#EA4B48] text-sm font-medium
-                                            max-[940px]:text-xs "
-                                          >
-                                             Sửa
-                                          </p>
-                                       </button>
-                                    </li>
-                                    <li>
-                                       <button className="flex items-center gap-4">
-                                          <RemoveCate />
-                                          <p
-                                             className="text-[#EA4B48] text-sm font-medium
-                                             max-[940px]:text-xs "
-                                          >
-                                             Xóa
-                                          </p>
-                                       </button>
-                                    </li>
-                                 </ul>
-                              </div>
-                              <input
-                                 type="checkbox"
-                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                              />
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A] 
-                                    max-[940px]:text-xs "
-                              >
-                                 GPS
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
-                                 max-[940px]:text-xs "
-                              >
-                                 Thiết Bị Điện Tử
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#EA4B48]
-                                 max-[940px]:text-xs "
-                              >
-                                 THANGDZ
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
-                                max-[940px]:text-xs "
-                              >
-                                 12/11/23 - 20/11/23
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
-                                 max-[940px]:text-xs "
-                              >
-                                 10/1000
-                              </p>
-                           </div>
-                        </div>
-
-                        <div className="grid grid-cols-6 border-t-[1px] py-7">
-                           <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
-                              <div className="dropdown dropdown-left">
-                                 <label tabIndex={0}>
-                                    <Handle />
-                                 </label>
-                                 <ul
-                                    tabIndex={0}
-                                    className="dropdown-content menu bg-white rounded-box w-52
-                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                                 >
-                                    <li>
-                                       <button
-                                          onClick={openModal}
+                                          onClick={() => openModal(idModal)}
                                           className="flex items-center gap-4"
                                        >
                                           <Edit />
