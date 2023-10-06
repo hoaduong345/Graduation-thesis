@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const CartController = {
-    // ADD ITEM TO CART
+    // ADD ITEM TO CART ////
     addToCart: async (req, res) => {
         try {
             const userId = parseInt(req.cookies.id);
