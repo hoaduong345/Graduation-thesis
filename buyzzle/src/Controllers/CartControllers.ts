@@ -10,12 +10,10 @@ export interface ModelCart {
     price: number,
     total: number
 }
-console.log(appConfig.apiUrl)
+
 class CartControllers {
     addCart = async (data: ModelCart): Promise<ModelCart> => {
-        return await axios.post(`${appConfig.apiUrl}`, data).then(res => {
-            return res.data as ModelCart
-        })
+        return await axios.post(`${appConfig.apiUrl}`, data)
     }
 }
 

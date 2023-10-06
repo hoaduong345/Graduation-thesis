@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const CartController = {
-    // ADD ITEM TO CART ////
+    // ADD ITEM TO CART
     addToCart: async (req, res) => {
         try {
             const userId = parseInt(req.cookies.id);
@@ -21,7 +21,7 @@ const CartController = {
             const updatedCart = await CartController.updateCart(cart, productId, quantity);
             res.status(200).json(updatedCart);
         } catch (error) {
-            console.error("error",error);
+            console.error('error', error);
             res.status(500).json({
                 error: 'An error occurred while adding the product to the cart.',
             });
@@ -68,13 +68,13 @@ const CartController = {
         } else {
             const product = await prisma.product.findUnique({
                 where: { id: productId },
-              });
-            console.log("🚀 ~ file: CartController.js:72 ~ updateCart: ~ product:", product)
-          
-              if (!product) {
+            });
+            console.log('🚀 ~ file: CartController.js:72 ~ updateCart: ~ product:', product);
+
+            if (!product) {
                 throw new Error(`Product with ID ${productId} not found.`);
-              } 
-              
+            }
+
             await prisma.itemCart.create({
                 data: {
                     // productid: 3 ,
@@ -106,7 +106,7 @@ const CartController = {
                     userId: id,
                 },
                 include: {
-                    item: true, 
+                    item: true,
                 },
             });
             if (!cart) {
