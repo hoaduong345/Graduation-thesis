@@ -93,13 +93,11 @@ export default function Cart() {
                                  />
                                  <div>
                                     <p className="text-[#1A1A1A] text-base font-medium mx-3">
-                                       Ly giữ nhiệt cao cấp Tyeso V2 900ml cốc
-                                       nước giữ nhiệt thể
-                                       thaow-[5%]w-[5%]w-[5%]w-[5%]w-[5%]
+                                       {e.product.name}
                                     </p>
                                     <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mx-3 mt-3">
                                        <p className="text-[#EA4B48] px-[10px] py-1">
-                                          Giảm 23%
+                                          Giảm {e.product.discount}%
                                        </p>
                                     </div>
                                  </div>
