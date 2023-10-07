@@ -34,6 +34,7 @@ export default function Cart() {
    return (
       <Container>
          <div>
+            <h1 className="mt-12 text-[32px] uppercase">Giỏ Hàng</h1>
             <div
                className="bg-white h-[91px] mt-[50px] rounded-md items-center flex
                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"

@@ -7,7 +7,6 @@ import Plus from "../../../../Assets/TSX/Plus";
 import Search from "../../../../Assets/TSX/Search";
 import { storage } from "../../../../Firebase/Config";
 import Container from "../../../../components/container/Container";
-import AddCateBtn from "../Assets/TSX/AddCateAdmin";
 import Delete from "../Assets/TSX/Delete";
 import Download from "../Assets/TSX/Download";
 import Edit from "../Assets/TSX/Edit";
@@ -15,8 +14,8 @@ import Line from "../Assets/TSX/Line";
 import RemoveCate from "../Assets/TSX/RemoveCate";
 import UploadIMG from "../Assets/TSX/UploadIMG";
 import Handle from "../Assets/TSX/bacham";
-import LogoCate from "../Assets/TSX/logoCateAdmin";
 import SitebarAdmin from "../Sitebar/Sitebar";
+import DialogModal from "../../../../Helper/Dialog/DialogModal";
 
 type FormValues = {
    id: number;
@@ -118,12 +117,12 @@ function Category() {
       },
    });
 
-   const postCategory = (data: FormValues) => {
+   const saveModal = (id: string, data: FormValues) => {
       if (!url) {
          toast.error("Thêm Hình", {});
          return;
       }
-      closeModal();
+      closeModal(id);
       if (data.id != 0) {
          axios
             .put(
@@ -194,31 +193,24 @@ function Category() {
             return bien;
          })
          .then((data) => {
-            closeModal();
+            closeModal("");
             setCategorys(data);
          })
          .catch((error) => {
             console.log(error);
          });
    };
-
-   //showdialog demo
-   const openModal = (data: FormValues) => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
+   const openModal = (id: string, data: FormValues) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
-         // setUrl(data.image);
          reset({ name: data.name, id: data.id });
          setUrl(data.image);
          modal.showModal();
       }
    };
 
-   const closeModal = async () => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
+   const closeModal = async (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          clearErrors();
          await setnull();
@@ -293,32 +285,25 @@ function Category() {
                      <div className="items-center flex gap-3 px-6">
                         <button
                            className=""
-                           onClick={() => openModal({ id: 0 } as FormValues)}
+                           onClick={() =>
+                              openModal(idModal, { id: 0 } as FormValues)
+                           }
                         >
                            <Plus />
                         </button>
                         <p className="cursor-default text-[#7A828A] text-base font-bold">
                            THÊM DANH MỤC
                         </p>
-                        <div>
-                           <dialog id="my_modal_3" className="modal ">
-                              <div className="bg-white relative flex flex-col p-[60px] max-xl:w-[650px] max-lg:w-[450px] max-lg:p-[30px]">
-                                 <form method="dialog">
-                                    <button
-                                       className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                                       onClick={closeModal}
-                                    >
-                                       ✕
-                                    </button>
-                                 </form>
-                                 <div className="flex flex-col gap-10 max-lg:gap-4">
-                                    <div className="flex items-center">
-                                       <LogoCate />
-                                       <h3 className="font-bold text-2xl max-xl:text-[18px]">
-                                          DANH MỤC SẢN PHẨM
-                                       </h3>
-                                    </div>
-
+                        <div className=" z-[-200]">
+                           <DialogModal
+                              id={idModal}
+                              onClose={() => closeModal(idModal)}
+                              onSave={handleSubmit((data: any) => {
+                                 saveModal(idModal, data);
+                              })}
+                              title="Danh Mục Sản Phẩm"
+                              body={
+                                 <>
                                     <div className="grid grid-cols-5 gap-8">
                                        <div className="col-span-3">
                                           <div className="flex gap-3 ">
@@ -459,31 +444,11 @@ function Category() {
                                                 )}
                                              />
                                           </div>
-
-                                          <div className="flex gap-2 items-center ">
-                                             <button
-                                                onClick={handleSubmit(
-                                                   (data: any) => {
-                                                      postCategory(data);
-                                                   }
-                                                )}
-                                                className="text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] rounded-md border-[1px]"
-                                             >
-                                                <AddCateBtn />
-                                                Xác Nhận
-                                             </button>
-                                             <button
-                                                className="p-3 text-white text-base bg-[#EA4B48] rounded-md"
-                                                onClick={closeModal}
-                                             >
-                                                Hủy
-                                             </button>
-                                          </div>
                                        </div>
                                     </div>
-                                 </div>
-                              </div>
-                           </dialog>
+                                 </>
+                              }
+                           />
                         </div>
                      </div>
 
@@ -508,7 +473,9 @@ function Category() {
                                           >
                                              <li>
                                                 <button
-                                                   onClick={() => openModal(e)}
+                                                   onClick={() =>
+                                                      openModal(idModal, e)
+                                                   }
                                                    className="flex items-center gap-4"
                                                 >
                                                    <Edit />
