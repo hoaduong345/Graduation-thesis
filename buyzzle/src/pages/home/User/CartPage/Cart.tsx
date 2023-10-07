@@ -87,7 +87,7 @@ export default function Cart() {
                               </div>
                               <div className="flex w-[40%]">
                                  <img
-                                    src={Images.product}
+                                    src={e.product.ProductImage[0].url}
                                     className="w-[112px] h-[112px]"
                                     alt="product"
                                  />
@@ -105,7 +105,7 @@ export default function Cart() {
                               <div className="w-[18.2%]">
                                  <div className="flex gap-2 items-center">
                                     <p className="text-[#7A828A] text-xs line-through leading-none	">
-                                       60.000
+                                       {e.price}
                                     </p>{" "}
                                     <p className="text-[#EA4B48] text-xl">
                                        30.000
@@ -133,7 +133,7 @@ export default function Cart() {
                               </div>
                               <div className="w-[13.7%]">
                                  <p className="text-[#EA4B48] text-xl">
-                                    30.000
+                                    {e.total}
                                  </p>
                               </div>
                               <div
