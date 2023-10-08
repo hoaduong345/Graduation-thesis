@@ -11,21 +11,21 @@ import Oder from "../Assets/Icon/Oder";
 import MessagesIcon from "../Assets/Icon/MessagesIcon";
 import { Link, useLocation } from "react-router-dom";
 import CategoryIcon from "../Assets/Icon/CategoryIcon";
-export interface Category {
+export interface SitebarAdmin {
    title: ReactNode;
    icon: ReactNode;
    pathName: string;
 }
-const listCate: Category[] = [
+const listSitebar: SitebarAdmin[] = [
    {
       title: <p>Trang Chủ</p>,
       icon: <HomeSitebar />,
-      pathName: "/admin/home",
+      pathName: "",
    },
    {
       title: "Thống Kê",
       icon: <Statistical />,
-      pathName: "/admin/statistic",
+      pathName: "",
    },
    {
       title: "Sản Phẩm",
@@ -40,18 +40,18 @@ const listCate: Category[] = [
    {
       title: "Sự Kiện",
       icon: <EventIcon />,
-      pathName: "/admin/statistics",
+      pathName: "",
    },
    {
       title: "Thành Viên",
       icon: <Members />,
-      pathName: "/admin/members",
+      pathName: "",
    },
 
    {
       title: "Khuyễn Mãi",
       icon: <SalesIcon />,
-      pathName: "/admin/sales",
+      pathName: "",
    },
    {
       title: "Mã Giảm Giá",
@@ -66,12 +66,12 @@ const listCate: Category[] = [
    {
       title: "Tin Nhắn",
       icon: <MessagesIcon />,
-      pathName: "/admin/message",
+      pathName: "",
    },
    {
       title: "Cài Đặt",
       icon: <SettingsIcon />,
-      pathName: "/admin/setting",
+      pathName: "",
    },
 ];
 export default function SitebarAdmin() {
@@ -89,7 +89,7 @@ export default function SitebarAdmin() {
       shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
       "
       >
-         {listCate.map((element, index) => {
+         {listSitebar.map((element, index) => {
             return (
                <>
                   <div

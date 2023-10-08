@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Container from "../../../../components/container/Container";
-import { Images } from "../../../../Assets/TS";
 import Plus from "../../../../Assets/TSX/Plus";
 import Minus from "../../../../Assets/TSX/Minus";
 import Delete from "../../Admin/Assets/TSX/Delete";
