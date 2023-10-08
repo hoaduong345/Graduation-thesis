@@ -7,7 +7,6 @@ import Plus from "../../../../Assets/TSX/Plus";
 import Search from "../../../../Assets/TSX/Search";
 import { storage } from "../../../../Firebase/Config";
 import Container from "../../../../components/container/Container";
-import AddCateBtn from "../Assets/TSX/AddCateAdmin";
 import Delete from "../Assets/TSX/Delete";
 import Download from "../Assets/TSX/Download";
 import Edit from "../Assets/TSX/Edit";
@@ -15,8 +14,8 @@ import Line from "../Assets/TSX/Line";
 import RemoveCate from "../Assets/TSX/RemoveCate";
 import UploadIMG from "../Assets/TSX/UploadIMG";
 import Handle from "../Assets/TSX/bacham";
-import LogoCate from "../Assets/TSX/logoCateAdmin";
 import SitebarAdmin from "../Sitebar/Sitebar";
+import DialogModal from "../../../../Helper/Dialog/DialogModal";
 
 type FormValues = {
    id: number;
@@ -25,6 +24,8 @@ type FormValues = {
 };
 
 function Category() {
+   const idModal = "category";
+
    const [categorys, setCategorys] = useState<FormValues[]>([]);
 
    const [loading, setLoading] = useState(false);
@@ -116,12 +117,12 @@ function Category() {
       },
    });
 
-   const postCategory = (data: FormValues) => {
+   const saveModal = (id: string, data: FormValues) => {
       if (!url) {
-         toast.error("thieu hinh", {});
+         toast.error("Thêm Hình", {});
          return;
       }
-      closeModal();
+      closeModal(id);
       if (data.id != 0) {
          axios
             .put(
@@ -192,31 +193,24 @@ function Category() {
             return bien;
          })
          .then((data) => {
-            closeModal();
+            closeModal("");
             setCategorys(data);
          })
          .catch((error) => {
             console.log(error);
          });
    };
-
-   //showdialog demo
-   const openModal = (data: FormValues) => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
+   const openModal = (id: string, data: FormValues) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
-         // setUrl(data.image);
          reset({ name: data.name, id: data.id });
          setUrl(data.image);
          modal.showModal();
       }
    };
 
-   const closeModal = async () => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
+   const closeModal = async (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          clearErrors();
          await setnull();
@@ -282,143 +276,6 @@ function Category() {
                         </div>
                         <div className="flex gap-[72px] col-span-2  max-lg:gap-[30px]">
                            <Line />
-                           {/* <button
-                              onClick={() => openModalTest(idModal)}
-                              className="pt-[12px] text-[16px] max-lg:text-sm"
-                           >
-                              Trạng thái
-                           </button>
-                           <DialogModal
-                              body={
-                                 <>
-                                    <div className="grid grid-cols-5 gap-8">
-                                       <div className="col-span-3">
-                                          <div className="flex gap-3 ">
-                                             <div className="flex flex-col gap-5 max-lg:gap-2">
-                                                <div>
-                                                   <Controller
-                                                      name="name"
-                                                      control={control}
-                                                      rules={{
-                                                         required: {
-                                                            value: true,
-                                                            message:
-                                                               "Không để trống",
-                                                         },
-                                                         minLength: {
-                                                            value: 4,
-                                                            message:
-                                                               "Ít nhất 4 ký tự",
-                                                         },
-                                                         maxLength: {
-                                                            value: 25,
-                                                            message:
-                                                               "Nhiều nhất 25 kí tự",
-                                                         },
-                                                      }}
-                                                      render={({ field }) => (
-                                                         <>
-                                                            <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
-                                                               Tiêu Đề Danh Mục*
-                                                            </label>
-                                                            <input
-                                                               className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                               placeholder="Nhập tiêu đề danh mục"
-                                                               value={
-                                                                  field.value
-                                                               }
-                                                               onChange={(
-                                                                  e
-                                                               ) => {
-                                                                  const reg =
-                                                                     /[!@#$%^&]/;
-                                                                  const value =
-                                                                     e.target
-                                                                        .value;
-                                                                  field.onChange(
-                                                                     value.replace(
-                                                                        reg,
-                                                                        ""
-                                                                     )
-                                                                  );
-                                                               }}
-                                                               name="name"
-                                                            />
-                                                            {errors.name && (
-                                                               <p className="text-[11px] text-red-700 mt-2">
-                                                                  {
-                                                                     errors.name
-                                                                        .message
-                                                                  }
-                                                               </p>
-                                                            )}
-                                                         </>
-                                                      )}
-                                                   />
-                                                </div>
-                                                
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <div className="col-span-2 flex flex-col gap-12">
-                                          <div className="max-w-max items-center">
-                                             <Controller
-                                                control={control}
-                                                name="image"
-                                                render={({ field }) => (
-                                                   <>
-                                                      <label htmlFor="images">
-                                                         <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2">
-                                                            {load()}
-                                                            <input
-                                                               value={
-                                                                  field.value
-                                                               }
-                                                               type="file"
-                                                               onChange={(
-                                                                  e: any
-                                                               ) => {
-                                                                  loadImageFile(
-                                                                     e.target
-                                                                        .files
-                                                                  );
-                                                                  field.onChange(
-                                                                     e
-                                                                  );
-                                                               }}
-                                                               id="images"
-                                                               multiple
-                                                               className="hidden "
-                                                            />
-
-                                                            {renderImg()}
-                                                            {errors.image && (
-                                                               <p className="text-[13px] text-red-600 mt-2">
-                                                                  {
-                                                                     errors
-                                                                        .image
-                                                                        .message
-                                                                  }
-                                                               </p>
-                                                            )}
-                                                         </div>
-                                                      </label>
-                                                   </>
-                                                )}
-                                             />
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </>
-                              }
-                              id={idModal}
-                              title="Danh Mục Sản Phẩm"
-                              onSave={() => saveModalTest()}
-                              onClose={() => closeModalTest(idModal)}
-                           /> */}
                            <p className="pt-[12px] text-[16px] max-lg:text-sm">
                               Trạng thái
                            </p>
@@ -428,32 +285,25 @@ function Category() {
                      <div className="items-center flex gap-3 px-6">
                         <button
                            className=""
-                           onClick={() => openModal({ id: 0 } as FormValues)}
+                           onClick={() =>
+                              openModal(idModal, { id: 0 } as FormValues)
+                           }
                         >
                            <Plus />
                         </button>
                         <p className="cursor-default text-[#7A828A] text-base font-bold">
                            THÊM DANH MỤC
                         </p>
-                        <div>
-                           <dialog id="my_modal_3" className="modal ">
-                              <div className="bg-white relative flex flex-col p-[60px] max-xl:w-[650px] max-lg:w-[450px] max-lg:p-[30px]">
-                                 <form method="dialog">
-                                    <button
-                                       className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                                       onClick={closeModal}
-                                    >
-                                       ✕
-                                    </button>
-                                 </form>
-                                 <div className="flex flex-col gap-10 max-lg:gap-4">
-                                    <div className="flex items-center">
-                                       <LogoCate />
-                                       <h3 className="font-bold text-2xl max-xl:text-[18px]">
-                                          DANH MỤC SẢN PHẨM
-                                       </h3>
-                                    </div>
-
+                        <div className=" z-[-200]">
+                           <DialogModal
+                              id={idModal}
+                              onClose={() => closeModal(idModal)}
+                              onSave={handleSubmit((data: any) => {
+                                 saveModal(idModal, data);
+                              })}
+                              title="Danh Mục Sản Phẩm"
+                              body={
+                                 <>
                                     <div className="grid grid-cols-5 gap-8">
                                        <div className="col-span-3">
                                           <div className="flex gap-3 ">
@@ -594,31 +444,11 @@ function Category() {
                                                 )}
                                              />
                                           </div>
-
-                                          <div className="flex gap-2 items-center ">
-                                             <button
-                                                onClick={handleSubmit(
-                                                   (data: any) => {
-                                                      postCategory(data);
-                                                   }
-                                                )}
-                                                className="text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] rounded-md border-[1px]"
-                                             >
-                                                <AddCateBtn />
-                                                Xác Nhận
-                                             </button>
-                                             <button
-                                                className="p-3 text-white text-base bg-[#EA4B48] rounded-md"
-                                                onClick={closeModal}
-                                             >
-                                                Hủy
-                                             </button>
-                                          </div>
                                        </div>
                                     </div>
-                                 </div>
-                              </div>
-                           </dialog>
+                                 </>
+                              }
+                           />
                         </div>
                      </div>
 
@@ -643,7 +473,9 @@ function Category() {
                                           >
                                              <li>
                                                 <button
-                                                   onClick={() => openModal(e)}
+                                                   onClick={() =>
+                                                      openModal(idModal, e)
+                                                   }
                                                    className="flex items-center gap-4"
                                                 >
                                                    <Edit />

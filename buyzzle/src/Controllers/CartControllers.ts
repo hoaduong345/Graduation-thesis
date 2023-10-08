@@ -10,11 +10,23 @@ export interface ModelCart {
     price: number,
     total: number
 }
-console.log(appConfig.apiUrl)
+
 class CartControllers {
     addCart = async (data: ModelCart): Promise<ModelCart> => {
-        return await axios.post(`${appConfig.apiUrl}`, data).then(res => {
-            return res.data as ModelCart
+        return await axios.post(`${appConfig.apiUrl}`, data, {
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            }, withCredentials: true
+        })
+    }
+
+    getCart = async (): Promise<ModelCart[]> => {
+        return await axios.get(`${appConfig.apiUrl}`, {
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            }, withCredentials: true
+        }).then(res => {
+            return res.data as ModelCart[]
         })
     }
 }

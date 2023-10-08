@@ -57,29 +57,33 @@ const CartController = {
             include: { item: true },
         });
     },
+
     updateCart: async (cart, productId, quantity) => {
         const existingCartItem = cart.item.find((item) => item.productid === productId);
-
+        const newQuantity = existingCartItem.quantity + quantity
+        const newtotal = newQuantity * existingCartItem.price
         if (existingCartItem) {
             await prisma.itemCart.update({
                 where: { id: existingCartItem.id },
-                data: { quantity: existingCartItem.quantity + quantity },
+                data: { quantity: newQuantity,
+                    price: existingCartItem.price,
+                    total: newtotal
+                 },
             });
         } else {
             const product = await prisma.product.findUnique({
                 where: { id: productId },
               });
-            console.log("🚀 ~ file: CartController.js:72 ~ updateCart: ~ product:", product)
           
               if (!product) {
                 throw new Error(`Product with ID ${productId} not found.`);
               } 
-              
+              const newQuantity = product.quantity
             await prisma.itemCart.create({
                 data: {
-                    // productid: 3 ,
                     quantity,
-                    total: 0,
+                    price,
+                    total: quantity* product.price,
                     cartschema: { connect: { id: cart.id } },
                     product: { connect: { id: product.id } },
                 },
@@ -106,7 +110,15 @@ const CartController = {
                     userId: id,
                 },
                 include: {
-                    item: true, 
+                    item: {
+                        include:{
+                            product:{
+                                include:{
+                                    ProductImage: true
+                                }
+                            }
+                        }
+                    }, 
                 },
             });
             if (!cart) {
