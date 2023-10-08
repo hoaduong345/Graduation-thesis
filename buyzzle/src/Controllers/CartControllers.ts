@@ -7,8 +7,6 @@ const appConfig = {
 export interface ModelCart {
     productId: number,
     quantity: number,
-    price: number,
-    total: number
 }
 
 class CartControllers {

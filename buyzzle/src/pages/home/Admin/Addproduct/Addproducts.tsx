@@ -50,16 +50,11 @@ export default function Addproducts() {
          })
          .catch((err) => console.log(err));
    };
-   useEffect(() => {
-      delayIMG();
-   }, []);
-   const delayIMG = () => {
-      // Set a timeout to change the message after 3 seconds
-      const timeoutId = setTimeout(() => {
-         setLoadingImage(false); // Update the message after the delay
-      }, 7000); // 3000 milliseconds (3 seconds)
 
-      // Clear the timeout if the component unmounts or if you want to cancel it for some reason
+   const delayIMG = () => {
+      const timeoutId = setTimeout(() => {
+         setLoadingImage(false);
+      }, 7000);
       return () => {
          clearTimeout(timeoutId);
       };
