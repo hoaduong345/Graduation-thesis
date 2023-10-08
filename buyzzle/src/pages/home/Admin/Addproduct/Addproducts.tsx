@@ -112,6 +112,7 @@ export default function Addproducts() {
          })
          .then(async (responseData) => {
             toast.success("Thêm thành công !");
+            resetImages();
             for (let i = 0; i < url.length; i++) {
                await addImages(responseData?.data.id, url[i]);
             }
@@ -130,6 +131,10 @@ export default function Addproducts() {
       await axios
          .post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
          .then((response) => response.data);
+   };
+
+   const resetImages = () => {
+      setUrl([]);
    };
 
    const {
@@ -239,7 +244,7 @@ export default function Addproducts() {
                                           placeholder="Nhập tiêu đề sản phẩm"
                                           value={field.value}
                                           onChange={(e) => {
-                                             const reg = /[0-9]/;
+                                             const reg = /[!@#$%^&*]/;
                                              const value = e.target.value;
                                              field.onChange(
                                                 value.replace(reg, "")
@@ -621,7 +626,7 @@ message: 'Mô tả không được vượt quá 300 ký tự!'
                                                    placeholder="000.000"
                                                    value={field.value}
                                                    onChange={(e) => {
-                                                      const reg = /[^1-9]/g;
+                                                      const reg = /[a-zA-Z]/g;
                                                       const value =
                                                          e.target.value;
                                                       field.onChange(
@@ -685,7 +690,7 @@ message: 'Mô tả không được vượt quá 300 ký tự!'
                                                    value={field.value}
                                                    maxLength={3}
                                                    onChange={(e) => {
-                                                      const reg = /[^1-9]/g;
+                                                      const reg = /[a-zA-z]/g;
                                                       const value =
                                                          e.target.value;
                                                       field.onChange(
@@ -745,7 +750,7 @@ message: 'Mô tả không được vượt quá 300 ký tự!'
                                           placeholder="000.000"
                                           value={field.value}
                                           onChange={(e) => {
-                                             const reg = /[^1-9]/g;
+                                             const reg = /[^0-9]/g;
                                              const value = e.target.value;
                                              field.onChange(
                                                 value.replace(reg, "")
