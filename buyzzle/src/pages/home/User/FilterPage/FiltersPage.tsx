@@ -82,7 +82,7 @@ export default function FiltersPage() {
   );
 
   const handleActiveBTNLowToHighClick = () => {
-productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
+    productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
       console.log(
         "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
         res
@@ -113,9 +113,16 @@ productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
   };
 
   useEffect(() => {
-    getData();
-    getSearchDataName();
-  }, []);
+    if (keywordSearch) {
+      getSearchDataName();
+    }
+  }, [keywordSearch]);
+
+  useEffect(() => {
+    if (id) {
+      getData();
+    }
+  }, [id]);
 
   const getData = () => {
     productController.getList("", idCate).then((res: any) => {
@@ -177,7 +184,7 @@ productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
               {/* thuong hieu noi tieng */}
               <div className="flex  w-[100%] justify-start gap-10 mt-[34px] max-2xl:justify-around max-lg:hidden">
                 <div
-className="square border border-[#FFAAAF] cursor-pointer px-14 pt-[15px] max-2xl:px-[66px] max-2xl:py-[25px]
+                  className="square border border-[#FFAAAF] cursor-pointer px-14 pt-[15px] max-2xl:px-[66px] max-2xl:py-[25px]
               max-xl:px-14 max-xl:my-auto"
                 >
                   <img
@@ -244,7 +251,7 @@ className="square border border-[#FFAAAF] cursor-pointer px-14 pt-[15px] max-2xl
                     Liên Quan
                   </button>
                   <button
-type="button"
+                    type="button"
                     className={
                       activeBtnLatestCreationDate
                         ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
@@ -301,7 +308,7 @@ type="button"
                     type="button"
                     className={
                       activeBtnHighToLow
-? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
+                        ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
                     rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
                     max-2xl:py-[5px] max-2xl:text-base
                     max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm`
@@ -377,7 +384,7 @@ type="button"
 
           <div className="border-[1px] border-[#E6E6E6] " />
           <div className="cursor-pointer">
-<FoodLogoo />
+            <FoodLogoo />
           </div>
 
           <div className="border-[1px] border-[#E6E6E6] " />
