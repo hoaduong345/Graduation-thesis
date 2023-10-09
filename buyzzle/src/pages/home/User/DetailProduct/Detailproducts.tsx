@@ -301,8 +301,6 @@ export default function Detailproducts() {
                                  addCart({
                                     productId: Number(id),
                                     quantity: quantity,
-                                    price: 100,
-                                    total: 200,
                                  })
                               }
                               className="text-center text-base font-bold text-[#4C4C4C] "

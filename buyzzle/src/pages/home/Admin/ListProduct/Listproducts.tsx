@@ -68,16 +68,6 @@ export default function ListproductsAdmin() {
       .catch(() => {
         toast.error("Xóa thất bại !");
       });
-
-    await imagesController
-      .remove(id)
-      .then((_) => {
-        toast.success("Xóa thành công !");
-        getData(debouncedInputValueSearch);
-      })
-      .catch(() => {
-        toast.error("Xóa thất bại !");
-      });
   };
 
   const [open, setOpen] = useState(false);

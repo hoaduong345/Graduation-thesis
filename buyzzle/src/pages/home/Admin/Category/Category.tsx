@@ -16,6 +16,7 @@ import UploadIMG from "../Assets/TSX/UploadIMG";
 import Handle from "../Assets/TSX/bacham";
 import SitebarAdmin from "../Sitebar/Sitebar";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
+import Loading from "../../../../Helper/Loading/Loading";
 
 type FormValues = {
    id: number;
@@ -57,14 +58,7 @@ function Category() {
 
    const load = () => {
       if (loading) {
-         return (
-            <div
-               style={{ borderTopColor: "transparent" }}
-               className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
-            />
-         );
-      } else {
-         return <></>;
+         return <Loading />;
       }
    };
 

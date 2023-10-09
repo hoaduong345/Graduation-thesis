@@ -30,6 +30,7 @@ model User {
   fK_Role              Role?     @relation(fields: [role], references: [id])
   cart                 Cart[]
   UserImage UserImage[]
+  Rating      Rating[]
   // roleId               Role? @relation(fields: [id], references: [id])
 }
 
@@ -80,6 +81,7 @@ model Product {
   OrderDetail  OrderDetail[]
   ProductImage ProductImage[]
   cart        ItemCart[]
+  Rating      Rating[]
 }
 
 model Category {
@@ -121,6 +123,19 @@ model ProductImage {
   fK_propductImage Product? @relation(fields: [idproduct], references: [id], onDelete: Cascade)
 }
 
+model Rating {
+  id          Int  @id @default(autoincrement())
+  idproduct   Int?
+  product     Product? @relation(fields: [idproduct], references: [id])
+  iduser      Int?
+  user        User? @relation(fields: [iduser], references: [id])
+  ratingValue Int?     
+  comment     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+}
+
+
 model Order {
   id          Int           @id @default(autoincrement())
   name        String?
@@ -153,3 +168,5 @@ model discount {
   quatity    Int?
   limit_code Int?
 }
+
+
