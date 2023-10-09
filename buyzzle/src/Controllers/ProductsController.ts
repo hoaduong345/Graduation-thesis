@@ -1,5 +1,5 @@
 import axios from "axios"
-import { FormValues } from "../pages/home/Admin/Addproduct/Addproducts"
+import { FormValues } from "../pages/home/Admin/EditProduct/EditProductMap"
 import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 
 export const appConfig = {
