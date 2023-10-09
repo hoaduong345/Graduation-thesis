@@ -18,7 +18,6 @@ export type FormValues = {
    price: number;
    description: string;
    quantity: number;
-   //    productImage: string;
    discount: number;
    categoryID: number;
 };
@@ -29,7 +28,6 @@ export interface Cate {
 }
 
 export default function EditProductMap() {
-   const [editProduct, setEditProduct] = useState<FormValues>();
    const [url, setUrl] = useState<string[]>([]);
    const editorRef = useRef<any>(null);
    const [categoty, setCategory] = useState<Cate[]>([]);
@@ -40,17 +38,11 @@ export default function EditProductMap() {
       control,
       handleSubmit,
       reset,
-      formState: { errors },
-      register,
+      formState: { errors, isDirty, isValid },
    } = useForm<FormValues>({
       mode: "all",
-      defaultValues: {
-         name: "",
-         price: 1,
-         description: "",
-         discount: 1,
-      },
    });
+   const isDisabled = !(isValid && isDirty);
 
    const handleRemoveOnlyIMG = (id: number) => {
       imagesController
@@ -91,7 +83,6 @@ export default function EditProductMap() {
          quantity: data.quantity,
          discount: data.discount,
          categoryID: Number(data.categoryID),
-         //  productImage: data.productImage,
       };
       console.log(_data);
       productController
@@ -107,7 +98,6 @@ export default function EditProductMap() {
             for (let i = 0; i < url.length; i++) {
                await updateImages(responseData?.data.id, url[i]);
             }
-            reset({});
          })
          .catch(() => {
             toast.error("Sua sanr phaarm that bai !");
@@ -130,7 +120,14 @@ export default function EditProductMap() {
             return detailForm;
          })
          .then((detailForm) => {
-            setEditProduct(detailForm.data);
+            reset({
+               name: detailForm.data.name,
+               description: detailForm.data.description,
+               price: detailForm.data.price,
+               discount: detailForm.data.discount,
+               quantity: detailForm.data.quantity,
+               categoryID: detailForm.data.categoryID,
+            });
             setEditImages(detailForm.data.ProductImage);
          })
          .catch((error) => {
@@ -166,13 +163,9 @@ export default function EditProductMap() {
       }
    };
 
-   const onChangeInput = (e: any) => {
-      setEditProduct(e.target.value);
-   };
-
    return (
       <>
-         <form onSubmit={handleSubmit(submitData)}>
+         <form>
             <div className="grid grid-cols-2 gap-6">
                <div>
                   {/* Mô Tả Sản Phẩm */}
@@ -218,9 +211,12 @@ export default function EditProductMap() {
                                                   : "border-[1px] border-[#FFAAAF]"
                                             }`}
                                     placeholder="Nhập tiêu đề sản phẩm"
-                                    value={editProduct?.name}
-                                    {...register("name")}
-                                    onChange={onChangeInput}
+                                    value={field.value}
+                                    onChange={(e) => {
+                                       const value = e.target.value;
+                                       const reg = /[!@#$%^&*]/;
+                                       field.onChange(value.replace(reg, ""));
+                                    }}
                                  />
                                  {!!errors.name && (
                                     <p className="text-red-700 mt-2">
@@ -232,46 +228,15 @@ export default function EditProductMap() {
                         />
                         {/* end input addNameProducts */}
 
-                        {/* <Controller control={control} name='description' rules={{
-                                    required: {
-                                        value: true,
-                                        message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
-                                    },
-                                    maxLength: {
-                                        value: 1000,
-                                        message: 'Mô tả không được vượt quá 300 ký tự!'
-                                    },
-                                    minLength: {
-                                        value: 20,
-                                        message: 'Mô tả sản phẩm tối thiểu 20 ký tự!'
-                                    }
-
-                                }}
-                                    render={({ field }) => (
-                                        <>
-                                            <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
-                                            {/* input addNameProducts */}
-                        {/* <textarea className={`focus:outline-none text-[#333333] text-base font-medium 
-                                                border-[1px] border-[#FFAAAF] rounded-[6px] px-[10px] py-[7px] w-[100%] h-[251px] 
-                                                ${!!errors.description ? 'border-[2px] border-red-900' : ' border-[1px] border-[#FFAAAF]'}
-                                                `}
-                                                placeholder='Nhập mô tả chi tiết sản phẩm <HTML>'
-                                                maxLength={1000}
-                                                rows={4} cols={50}
-                                                value={editProduct?.description}
-                                                {...register('description')}
-                                                onChange={onChangeInput}
-                                            >
-                                            </textarea>
-                                            {/* end input addNameProducts 
-                                        </>
-                                    )}
-                                />
-                                {!!errors.description && <p className='text-red-700 mt-2'>{errors.description.message}</p>} */}
-
                         <Controller
                            control={control}
                            name="description"
+                           rules={{
+                              required: {
+                                 value: true,
+                                 message: "Không để trống",
+                              },
+                           }}
                            render={({ field }) => (
                               <>
                                  <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
@@ -284,7 +249,6 @@ export default function EditProductMap() {
                                     }
                                     onEditorChange={(e) => field.onChange(e)}
                                     value={field.value}
-                                    {...register("description")}
                                     init={{
                                        height: 500,
                                        menubar: false,
@@ -318,6 +282,11 @@ export default function EditProductMap() {
                                           "body { font-family:Helvetica,Arial,sans-serif; font-size:22px;fontsize }",
                                     }}
                                  />
+                                 {!!errors.description && (
+                                    <p className="text-red-700 mt-2">
+                                       {errors.description.message}
+                                    </p>
+                                 )}
                               </>
                            )}
                         />
@@ -351,14 +320,7 @@ export default function EditProductMap() {
                                  <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                     <select
                                        className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
-                                       {...register("categoryID")}
-                                       onChange={(e) => {
-                                          const reg = /[]/;
-                                          const value = e.target.value;
-                                          field.onChange(
-                                             value.replace(reg, "")
-                                          );
-                                       }}
+                                       onChange={field.onChange}
                                        value={field.value}
                                     >
                                        <option value="">
@@ -422,7 +384,6 @@ export default function EditProductMap() {
                                  >
                                     <input
                                        type="file"
-                                       // onChange={field.onChange}
                                        onChange={(e: any) =>
                                           loadImageFile(e.target.files)
                                        }
@@ -564,14 +525,15 @@ export default function EditProductMap() {
                                              className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
                                                             max-xl:text-sm  max-lg:text-[13px]"
                                              placeholder="000.000"
-                                             value={editProduct?.price}
-                                             {...register("price")}
-                                             onChange={onChangeInput}
-                                             // onChange={(e) => {
-                                             //     const reg = /[^1-9]/g
-                                             //     const value = e.target.value
-                                             //     field.onChange(value.replace(reg, ''))
-                                             // }}
+                                             value={field.value}
+                                             onChange={(e) => {
+                                                const value = e.target.value;
+                                                const reg =
+                                                   /[a-zA-Z!@#$%^&*(){}[\]"=+:"_-]/;
+                                                field.onChange(
+                                                   value.replace(reg, "")
+                                                );
+                                             }}
                                           />
                                           <p className="text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px]  max-lg:text-[13px]">
                                              VNĐ
@@ -592,11 +554,12 @@ export default function EditProductMap() {
                               rules={{
                                  required: {
                                     value: true,
-                                    message: "",
+                                    message:
+                                       "Bạn nên nhập số '0' nếu sản phẩm này không giảm giá",
                                  },
                                  maxLength: {
                                     value: 2,
-                                    message: "Giảm sản phẩm tối đa 100%!",
+                                    message: "Giảm sản phẩm tối đa 99%!",
                                  },
                                  minLength: {
                                     value: 1,
@@ -623,14 +586,15 @@ export default function EditProductMap() {
                                                             max-xl:text-sm max-lg:text-[13px]"
                                              placeholder="000.000"
                                              maxLength={3}
-                                             // onChange={(e) => {
-                                             //     const reg = /[^1-9]/g
-                                             //     const value = e.target.value
-                                             //     field.onChange(value.replace(reg, ''))
-                                             // }}
-                                             value={editProduct?.discount}
-                                             {...register("discount")}
-                                             onChange={onChangeInput}
+                                             value={field.value}
+                                             onChange={(e) => {
+                                                const value = e.target.value;
+                                                const reg =
+                                                   /[a-zA-Z!@#$%^&*(){}[\]"=+:"_-]/;
+                                                field.onChange(
+                                                   value.replace(reg, "")
+                                                );
+                                             }}
                                           />
                                           <p className="text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px] max-lg:text-[13px]">
                                              %
@@ -676,14 +640,13 @@ export default function EditProductMap() {
                                                           : "border-[1px] border-[#FFAAAF]"
                                                     } `}
                                     placeholder="000.000"
-                                    // onChange={(e) => {
-                                    //     const reg = /[^1-9]/g
-                                    //     const value = e.target.value
-                                    //     field.onChange(value.replace(reg, ''))
-                                    // }}
-                                    value={editProduct?.quantity}
-                                    {...register("quantity")}
-                                    onChange={onChangeInput}
+                                    value={field.value}
+                                    onChange={(e) => {
+                                       const value = e.target.value;
+                                       const reg =
+                                          /[a-zA-Z!@#$%^&*(){}[\]"=+:"_-]/;
+                                       field.onChange(value.replace(reg, ""));
+                                    }}
                                  />
                                  {errors.quantity && (
                                     <p className="text-red-700 mt-2">
@@ -741,13 +704,25 @@ export default function EditProductMap() {
 
                      <div
                         className={`flex items-center w-[150px] rounded-md h-[46px] transition 
-                                    duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer
-                                    max-[1330px]:w-[280px] max-[1024px]:w-[320px]
+                                    duration-150 justify-evenly  max-[1330px]:w-[280px] max-[1024px]:w-[320px]
+                                ${
+                                   isDisabled
+                                      ? "bg-[#aeaeae] cursor-not-allowed"
+                                      : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                                }
                                     `}
                      >
                         <button
+                           disabled={isDisabled}
+                           onClick={handleSubmit((data: any) => {
+                              submitData(data);
+                           })}
                            className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
-                                        `}
+                                        ${
+                                           isDisabled
+                                              ? "cursor-not-allowed"
+                                              : "cursor-pointer"
+                                        } `}
                         >
                            Sửa sản phẩm
                         </button>
