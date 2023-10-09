@@ -12,6 +12,7 @@ import { productController } from "../../../../Controllers/ProductsController";
 import { storage } from "../../../../Firebase/Config";
 import { appConfig } from "../../../../configsEnv";
 import UploadIMG from "../Assets/TSX/UploadIMG";
+import Loading from "../../../../Helper/Loading/Loading";
 
 export type FormValues = {
    name: string;
@@ -27,12 +28,19 @@ export interface Cate {
    id: number;
 }
 
+interface EditImage {
+   url: string;
+   id: number;
+}
+
 export default function EditProductMap() {
    const [url, setUrl] = useState<string[]>([]);
    const editorRef = useRef<any>(null);
    const [categoty, setCategory] = useState<Cate[]>([]);
 
-   const [editImages, setEditImages] = useState<string[]>([]);
+   const [editImages, setEditImages] = useState<EditImage[]>([]);
+
+   const [loadingImage, setLoadingImage] = useState(false);
 
    const {
       control,
@@ -143,6 +151,7 @@ export default function EditProductMap() {
 
    // img firebase
    const loadImageFile = async (images: any) => {
+      setLoadingImage(true);
       for (let i = 0; i < images.length; i++) {
          const imageRef = ref(storage, `multipleFiles/${images[i].name}`);
 
@@ -159,7 +168,20 @@ export default function EditProductMap() {
             })
             .catch((err) => {
                alert(err);
-            });
+            })
+            .finally(() => setLoadingImage(false));
+      }
+   };
+
+   const loading = () => {
+      if (loadingImage) {
+         return (
+            <>
+               <div className="absolute left-[65%] top-[50%] z-30">
+                  <Loading />
+               </div>
+            </>
+         );
       }
    };
 
@@ -442,6 +464,7 @@ export default function EditProductMap() {
                                     );
                                  })}
 
+                                 {loading()}
                                  {url.map((e) => {
                                     return (
                                        <>

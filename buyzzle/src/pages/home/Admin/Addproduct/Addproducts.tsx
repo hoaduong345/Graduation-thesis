@@ -79,7 +79,6 @@ export default function Addproducts() {
                      return url;
                   });
             })
-            .finally()
             .catch((err) => {
                alert(err);
             });
@@ -552,7 +551,6 @@ message: 'Mô tả không được vượt quá 300 ký tự!'
                                                                   <RemoveIMG />
                                                                </div>
                                                             </div>
-                                                            {/* {endLoading()} */}
                                                          </div>
                                                       </>
                                                    );
