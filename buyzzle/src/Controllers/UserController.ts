@@ -16,6 +16,7 @@ export interface ModelUser{
     image: string,
     dateOfBirth: Date,
     sex: boolean,
+    UserImage: string[],
 };
 
 class UserController {
