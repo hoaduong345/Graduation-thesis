@@ -7,7 +7,15 @@ const appConfig = {
 export interface ModelCart {
     productId: number,
     quantity: number,
+
 }
+
+// export interface test extends ModelCart {
+
+//     items?:itemCart[]
+
+// }
+
 
 class CartControllers {
     addCart = async (data: ModelCart): Promise<ModelCart> => {
