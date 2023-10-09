@@ -114,7 +114,7 @@ export default function Header() {
       <header className="Header">
         <Container>
           <div className="Header-top bg-white">
-<div className="container mx-auto">
+            <div className="container mx-auto">
               <div className="Header-top-content flex justify-between max-[426px]:text-[8px]">
                 <div className="content-left flex py-2">
                   <Map />
@@ -177,7 +177,7 @@ export default function Header() {
                     {showSuggestions && (
                       <>
                         <div className="absolute w-[665px] z-10  bg-white border border-gray-300 rounded mt-2 p-2 top-28">
-{/* // tên sản phẩm */}
+                          {/* // tên sản phẩm */}
                           <div>
                             <h1 className="text-base font-bold cursor-default p-1 pl-2">
                               Sản phẩm
@@ -217,10 +217,10 @@ export default function Header() {
                                       >
                                         <div className="text-[14px] ">
                                           {itemsSearch.name &&
-                                          itemsSearch.name.length > 21 ? (
+                                          itemsSearch.name.length > 17 ? (
                                             `${itemsSearch.name.substring(
                                               0,
-                                              21
+                                              17
                                             )}...`
                                           ) : itemsSearch.name ? (
                                             itemsSearch.name
@@ -228,7 +228,7 @@ export default function Header() {
                                             <p>Không có sản phẩm</p>
                                           )}
                                         </div>
-<p className="text-gray-600 text-xs">
+                                        <p className="text-gray-600 text-xs">
                                           SL: {itemsSearch.quantity}
 </p>
                                       </div>
@@ -343,7 +343,7 @@ export default function Header() {
                             <img className="w-10 h-10 rounded-full border-4 " src={img} alt="" />
 
                           </div>
-) : (
+                        ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
                             <p className="text-1xl text-stone-50">{name.substring(0, 1).toUpperCase()}</p>
                           </div>
