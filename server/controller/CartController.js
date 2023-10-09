@@ -102,6 +102,16 @@ const CartController = {
             include: { item: true },
         });
     },
+// DELETE ITEM FROM CART
+
+    deleteItem : async(req,res) =>{
+        try {
+            const productID = parseInt(req.params.id)
+        } catch (error) {
+            console.log("error", error)
+            res.status(404).send("Delete item failed")
+        }
+    },
 
     getCart: async (req, res) => {
         try {
