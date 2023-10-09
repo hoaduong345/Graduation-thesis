@@ -49,12 +49,12 @@ router.get("/getnewproducts", ProductController.getNewProducts);
 //rating
 router.post("/rating", ProductController.addProductRating);
 router.get("/ratingcomment/:productId", ProductController.getAllRatingandComment);
-// router.put("/updateratingcomment/:ratingId", ProductController.updateRatingandComment);
-// router.delete("/deleteratingcomment/:ratingId", ProductController.deleteRatingandComment);
+router.put("/updateratingcomment/:ratingId", ProductController.updateRatingandComment);
+router.delete("/deleteratingcomment/:ratingId", ProductController.deleteRatingandComment);
 router.get("/avergaeRating/:productId", ProductController.avergaeRating);
  
-router.put("/updateratingcomment/:ratingId",  MiddleWareController.verifyAuthenticate, MiddleWareRatingController.isAuthor, ProductController.updateRatingandComment);
-router.delete("/deleteratingcomment/:userId/:ratingId", MiddleWareRatingController.isAuthenticated, MiddleWareRatingController.isAuthor, ProductController.deleteRatingandComment);
+// router.put("/updateratingcomment/:ratingId",  MiddleWareController.verifyAuthenticate, MiddleWareRatingController.isAuthor, ProductController.updateRatingandComment);
+// router.delete("/deleteratingcomment/:userId/:ratingId", MiddleWareRatingController.isAuthenticated, MiddleWareRatingController.isAuthor, ProductController.deleteRatingandComment);
 
 
 
