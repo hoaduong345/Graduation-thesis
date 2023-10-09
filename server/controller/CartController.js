@@ -15,6 +15,7 @@ const CartController = {
 
             if (!cart) {
                 cart = await CartController.createCart(userId, productId, quantity);
+                cart.subtotal += cart.item.price * quantity;
                 return res.status(201).json(cart);
             }
 
@@ -44,13 +45,13 @@ const CartController = {
         return prisma.cart.create({
             data: {
                 userId,
-                subtotal: product.price * quantity,
+                subtotal: product.sellingPrice * quantity,
                 item: {
                     create: {
                         productid: productId,
                         quantity,
-                        price: product.price,
-                        total: product.price * quantity,
+                        price: product.sellingPrice,
+                        total: product.sellingPrice * quantity,
                     },
                 },
             },
@@ -60,14 +61,14 @@ const CartController = {
 
     updateCart: async (cart, productId, quantity) => {
         const existingCartItem = cart.item.find((item) => item.productid === productId);
-        const newQuantity = existingCartItem.quantity + quantity
-        const newtotal = newQuantity * existingCartItem.price
+        // const newQuantity = existingCartItem.quantity + quantity
+        // const newtotal = newQuantity * existingCartItem.price
         if (existingCartItem) {
             await prisma.itemCart.update({
                 where: { id: existingCartItem.id },
-                data: { quantity: newQuantity,
-                    price: existingCartItem.price,
-                    total: newtotal
+                data: { quantity: existingCartItem.quantity + quantity ,
+                    price: existingCartItem.sellingPrice,
+                    // total: newtotal
                  },
             });
         } else {
@@ -78,12 +79,12 @@ const CartController = {
               if (!product) {
                 throw new Error(`Product with ID ${productId} not found.`);
               } 
-              const newQuantity = product.quantity
+              
             await prisma.itemCart.create({
                 data: {
                     quantity,
-                    price,
-                    total: quantity* product.price,
+                    price : product.sellingPrice,
+                    total: quantity* product.sellingPrice,
                     cartschema: { connect: { id: cart.id } },
                     product: { connect: { id: product.id } },
                 },
