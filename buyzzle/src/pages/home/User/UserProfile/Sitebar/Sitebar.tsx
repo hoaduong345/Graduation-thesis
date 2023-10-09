@@ -10,15 +10,18 @@ import Logout from '../../../../../Assets/TSX/Logout'
 import axios from 'axios'
 
 export default function Sitebar() {
-
+    const instance = axios.create({
+        withCredentials: true,
+    })
     // http://localhost:5000/buyzzle/auth/logout
     const API = "http://localhost:5000/buyzzle/auth/logout";
-    function LogOut() {
+    async function LogOut() {
+
         try {
-           const reponse = axios.post(API);
-            localStorage.removeItem('user');
-            console.log(reponse);
-            window.location.href = "/";
+            const response = await instance.post(API);
+            // localStorage.removeItem('user');
+            console.log(response);
+            // window.location.href = "/";
         } catch (error) {
             console.log(error);
         }
