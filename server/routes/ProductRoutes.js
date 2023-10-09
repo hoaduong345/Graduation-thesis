@@ -1,6 +1,8 @@
-// const sendEmail = require("../utils/sendEmail");
+
 
 const ProductController = require("../controller/ProductController");
+const MiddleWareRatingController = require("../middleware/MiddleWareRatingController");
+const MiddleWareController = require("../middleware/MiddleWareController");
 
 const router = require("express").Router();
 
@@ -17,13 +19,6 @@ router.get("/chitietproduct/:id", ProductController.getProductDetail);
 
 router.get("/allproducts", ProductController.getAllProduct);
 
-// router.get("/paginated", ProductController.getProductsPaginated);
-
-// router.get("/search", ProductController.searchProducts);
-
-// router.post("/addtocart/:id", ProductController.addToCart);
-
-// router.delete("/deletetocart/:id", ProductController.deleteToCart);
 
 router.post("/addimagesbyproductid", ProductController.addImagesByProductsID);
 
@@ -51,7 +46,17 @@ router.get("/recommendedproducts/:id", ProductController.getSugggestProduct);
 
 router.get("/getnewproducts", ProductController.getNewProducts);
 
-// router.get("/search", ProductController.suggestions);
+//rating
+router.post("/rating", ProductController.addProductRating);
+router.get("/ratingcomment/:productId", ProductController.getAllRatingandComment);
+// router.put("/updateratingcomment/:ratingId", ProductController.updateRatingandComment);
+// router.delete("/deleteratingcomment/:ratingId", ProductController.deleteRatingandComment);
+router.get("/avergaeRating/:productId", ProductController.avergaeRating);
+ 
+router.put("/updateratingcomment/:ratingId",  MiddleWareController.verifyAuthenticate, MiddleWareRatingController.isAuthor, ProductController.updateRatingandComment);
+router.delete("/deleteratingcomment/:userId/:ratingId", MiddleWareRatingController.isAuthenticated, MiddleWareRatingController.isAuthor, ProductController.deleteRatingandComment);
+
+
 
 
 // thêm danh mục
