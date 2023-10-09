@@ -221,7 +221,7 @@ const ProductController = {
         description,
         status,
         date,
-        productId,
+        
         createdAt,
         updatedAt,
         categoryID,
@@ -257,7 +257,7 @@ const ProductController = {
         date: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
-        productId: parseInt(productId),
+      
         categoryID: parseInt(categoryID),
       };
 

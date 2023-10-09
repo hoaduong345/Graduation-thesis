@@ -74,7 +74,7 @@ model Product {
   description  String? @db.VarChar(15000)
   status       String?
   date         DateTime?      @default(now())
-  productId    Int?
+  // productId    Int?
   createdAt    DateTime?      @default(now())
   updatedAt    DateTime?      @default(now())
   categoryID   Int?
