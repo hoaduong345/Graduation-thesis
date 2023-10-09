@@ -24,6 +24,8 @@ import CheckOut from "../../pages/home/User/CheckoutPage/CheckOut";
 import OrderDetailPage from "../../pages/home/User/OrderDetail/OrderDetailPage";
 import VoucherPage from "../../pages/home/Admin/Management/Voucher/VoucherPage";
 import Category from "../../pages/home/Admin/Management/Category/Category";
+import Members from "../../pages/home/Admin/Assets/Icon/Members";
+import User from "../../pages/home/Admin/Management/User/User";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -186,6 +188,10 @@ export default function useRouterEmelent() {
         {
           path: "voucher",
           element: <VoucherPage />,
+        },
+        {
+          path: "usersmanager",
+          element: <User />,
         },
       ],
     },
