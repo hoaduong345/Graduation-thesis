@@ -18,10 +18,12 @@ export default function Sitebar() {
     async function LogOut() {
 
         try {
+            console.log("CHECK COOkies:"+instance);
             const response = await instance.post(API);
-            // localStorage.removeItem('user');
+            localStorage.removeItem('user');
+
             console.log(response);
-            // window.location.href = "/";
+            window.location.href = "/";
         } catch (error) {
             console.log(error);
         }

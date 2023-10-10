@@ -28,7 +28,7 @@ export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
   const [text, setText] = useState("");
- const dataInputHeaderSearch = useContext(ThemeContext);
+  const dataInputHeaderSearch = useContext(ThemeContext);
   const dataSearchBodyIndexFromHeader = useContext(ThemeContext);
   const [productSearch, setProductSearch] = useState<Products[]>([]);
   const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
@@ -60,10 +60,13 @@ export default function Header() {
 
   }, []);
 
-
+  // setTimeout(() => {
+  //   localStorage.removeItem("user");
+  //   alert("Phiên đăng nhập đã hết, vui lòng đăng nhập lại để tiếp tục");
+  //   window.location.href = "/";
+  // }, 30 * 1000);
 
   if (user != null) {
-
     username = JSON.parse(user).username;
   } else {
     console.log("Chua dang nhap");
@@ -109,7 +112,7 @@ export default function Header() {
       <header className="Header">
         <Container>
           <div className="Header-top bg-white">
-<div className="container mx-auto">
+            <div className="container mx-auto">
               <div className="Header-top-content flex justify-between max-[426px]:text-[8px]">
                 <div className="content-left flex py-2">
                   <Map />
@@ -172,7 +175,7 @@ export default function Header() {
                     {showSuggestions && (
                       <>
                         <div className="absolute w-[665px] z-10  bg-white border border-gray-300 rounded mt-2 p-2 top-28">
-{/* // tên sản phẩm */}
+                          {/* // tên sản phẩm */}
                           <div>
                             <h1 className="text-base font-bold cursor-default p-1 pl-2">
                               Sản phẩm
@@ -212,7 +215,7 @@ export default function Header() {
                                       >
                                         <div className="text-[14px] ">
                                           {itemsSearch.name &&
-                                          itemsSearch.name.length > 21 ? (
+                                            itemsSearch.name.length > 21 ? (
                                             `${itemsSearch.name.substring(
                                               0,
                                               21
@@ -223,7 +226,7 @@ export default function Header() {
                                             <p>Không có sản phẩm</p>
                                           )}
                                         </div>
-<p className="text-gray-600 text-xs">
+                                        <p className="text-gray-600 text-xs">
                                           SL: {itemsSearch.quantity}
                                         </p>
                                       </div>
@@ -328,7 +331,7 @@ export default function Header() {
                     </div>
                   </div>
                   <div className="items-center">
-                  {user ? (
+                    {user ? (
                       <a className=" flex gap-2" href={href}>
                         <div className="font-medium flex items-center justify-center">
                           {name}
