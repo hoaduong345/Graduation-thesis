@@ -215,10 +215,10 @@ export default function Header() {
                                       >
                                         <div className="text-[14px] ">
                                           {itemsSearch.name &&
-                                            itemsSearch.name.length > 21 ? (
+                                          itemsSearch.name.length > 17 ? (
                                             `${itemsSearch.name.substring(
                                               0,
-                                              21
+                                              17
                                             )}...`
                                           ) : itemsSearch.name ? (
                                             itemsSearch.name

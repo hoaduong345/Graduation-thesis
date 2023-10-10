@@ -63,11 +63,13 @@ export default function StepperPage() {
                </span>
             </li>
          </ol>
-         <div className=" grid grid-cols-4 justify-center mt-2 px-20">
-            <p className="text-[#EA4B48]">Đặt hàng</p>
-            <p className="text-[#EA4B48]">Giao cho ĐVVT</p>
-            <p className="text-[#333333]">Đang giao hàng</p>
-            <p className="text-[#333333]">Giao hàng thành công</p>
+         <div className="w-[100%] mt-3 flex">
+            <p className="text-[#EA4B48] w-[23%] text-center">Đặt hàng</p>
+            <p className="text-[#EA4B48] w-[27%] text-center">Giao cho ĐVVT</p>
+            <p className="text-[#333333] w-[25%] text-center">Đang giao hàng</p>
+            <p className="text-[#333333] w-[25%] text-center">
+               Giao hàng thành công
+            </p>
          </div>
          {/* <ul className="steps">
             <li className="step step-primary max-lg:text-xs">Đặt hàng</li>

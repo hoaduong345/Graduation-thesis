@@ -11,28 +11,91 @@ import PinkMedium from "../../../../Assets/SVG/LetterPayment/PinkMedium";
 import BlueMedium from "../../../../Assets/SVG/LetterPayment/BlueMedium";
 import PinkMediumSmall from "../../../../Assets/SVG/LetterPayment/PinkMediumSmall";
 import BlueMediumSmall from "../../../../Assets/SVG/LetterPayment/BlueMediumSmall";
+import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import Address from "../../../../Assets/SVG/LetterPayment/Address";
+import { Controller, useForm } from "react-hook-form";
+
+type FormValues = {
+   name: string;
+   address: string;
+   typeAddress: string;
+   currentAddress: string;
+   phone: number;
+};
+
+const userInfo: FormValues[] = [
+   {
+      name: "Trần Văn Bình",
+      address: "Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk",
+      currentAddress: "407 Hoàng Diệu",
+      typeAddress: "Công ty",
+      phone: 933234442,
+   },
+   {
+      name: "Nguyễn Trọng Nhâm",
+      address: "Phường Tân An, Thành Phố Buôn Ma Thuột, Đắk Lắk",
+      currentAddress: "12 Nguyễn Chí Thanh",
+      typeAddress: "Nhà riêng",
+      phone: 383404215,
+   },
+];
 
 export default function CheckOut() {
+   const idModal = "checkout";
+   const idModalUpdate = "my_modal_update";
+
    const [chooseMomo, setChooseMoMo] = useState(false);
    const [chooseZalo, setChooseZalo] = useState(false);
    const [chooseCOD, setChooseCOD] = useState(false);
 
-   const openModal = () => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
+   const {
+      control,
+      handleSubmit,
+      clearErrors,
+      reset,
+      formState: { errors },
+   } = useForm<FormValues>({
+      mode: "all",
+      defaultValues: {
+         address: "",
+         currentAddress: "",
+         typeAddress: "",
+         name: "",
+      },
+   });
+
+   const openModal = (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          modal.showModal();
       }
    };
-   const openUpadate = () => {
-      const modal = document.getElementById(
-         "my_modal_update"
-      ) as HTMLDialogElement | null;
+   const closeModal = async (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
+         clearErrors();
+         setNull();
+         modal.close();
+      }
+   };
+   const saveModal = (data: FormValues) => {
+      console.log(data);
+   };
+   const openUpadate = (id: string, i: number) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         reset({
+            address: userInfo[i].address,
+            name: userInfo[i].name,
+            typeAddress: userInfo[i].typeAddress,
+            currentAddress: userInfo[i].currentAddress,
+         });
          modal.showModal();
       }
+   };
+
+   const setNull = () => {
+      reset({});
    };
 
    return (
@@ -81,7 +144,7 @@ export default function CheckOut() {
                                        </p>
                                     </div>
                                     <button
-                                       onClick={openModal}
+                                       onClick={() => openModal(idModal)}
                                        className="text-[10px] text-[#5D5FEF] font-semibold max-[870px]:text-[8px]"
                                     >
                                        Thay đổi
@@ -121,202 +184,339 @@ export default function CheckOut() {
                               </div>
                            </div>
                            <div>
-                              <dialog id="my_modal_3" className="modal">
-                                 <div className="modal-box">
-                                    <form method="dialog">
-                                       <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                                          ✕
-                                       </button>
-                                    </form>
-                                    <div className="border-b-[1px] pb-4 mb-4">
-                                       <h1 className="text-[#EA4B48] text-sm font-lg font-bold tracking-normal leading-tight max-[870px]:text-xs">
-                                          Địa Chỉ Của Tôi
-                                       </h1>
-                                    </div>
-
-                                    {/* <input id="name" className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Nhập địa chỉ của bạn" /> */}
-
-                                    <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
-                                       <div className="flex items-center mr-4 justify-start ">
-                                          <input
-                                             type="radio"
-                                             name="colored-radio"
-                                             id="orange-radio"
-                                             className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
+                              <DialogAddress
+                                 id={idModal}
+                                 title="Địa Chỉ Của Tôi"
+                                 onClose={() => closeModal(idModal)}
+                                 onSave={() => saveModal({} as FormValues)}
+                                 body={
+                                    <>
+                                       {userInfo.map((e, i) => {
+                                          return (
+                                             <>
+                                                <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
+                                                   <div className="flex items-center mr-4 justify-start ">
+                                                      <input
+                                                         checked
+                                                         type="radio"
+                                                         name="colored-radio"
+                                                         id="orange-radio"
+                                                         className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
                                                                 checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                          />
-                                          <div
-                                             className="h-5 w-5 absolute rounded-full pointer-events-none
+                                                      />
+                                                      <div
+                                                         className="h-5 w-5 absolute rounded-full pointer-events-none
                                                                 peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                          />
-                                       </div>
-                                       <div className="flex flex-col gap-1">
-                                          <div className="flex justify-between w-full">
-                                             <div className="flex items-center gap-3">
-                                                <p className="text-sm font-medium text-[#1A1A1A]">
-                                                   Trần Văn Bình
-                                                </p>
-                                                <p className="text-[10px] text-[#4C4C4C]">
-                                                   (+84) 933234442
-                                                </p>
-                                             </div>
-                                             <div className="">
-                                                <button
-                                                   onClick={openUpadate}
-                                                   className="text-[#5D5FEF] text-[10px]"
-                                                >
-                                                   Cập nhật
-                                                </button>
-                                             </div>
-                                          </div>
-                                          <div>
-                                             <p className="text-[13px] font-normal text-[#4C4C4C]">
-                                                407 Hoàng Diệu, Phường Thống
-                                                Nhất, Thành Phố Buôn Ma Thuột,
-                                                Đắk Lắk{" "}
-                                             </p>
-                                          </div>
-                                       </div>
-                                    </div>
+                                                      />
+                                                   </div>
+                                                   <div className="flex flex-col gap-1">
+                                                      <div className="flex justify-between w-full">
+                                                         <div className="flex items-center gap-3">
+                                                            <p className="text-sm font-medium text-[#1A1A1A]">
+                                                               {e.name}
+                                                            </p>
+                                                            <p className="text-[10px] text-[#4C4C4C]">
+                                                               (+84) {e.phone}
+                                                            </p>
+                                                         </div>
+                                                         <div className="">
+                                                            <button
+                                                               onClick={() =>
+                                                                  openUpadate(
+                                                                     idModalUpdate,
+                                                                     i
+                                                                  )
+                                                               }
+                                                               className="text-[#5D5FEF] text-[10px]"
+                                                            >
+                                                               Cập nhật
+                                                            </button>
+                                                         </div>
+                                                      </div>
+                                                      <div>
+                                                         <p className="text-[13px] font-normal text-[#4C4C4C]">
+                                                            {e.currentAddress}
+                                                            <span> </span>
+                                                            {e.address}
+                                                         </p>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </>
+                                          );
+                                       })}
 
-                                    <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
-                                       <div className="flex items-center mr-4 justify-start ">
-                                          <input
-                                             type="radio"
-                                             name="colored-radio"
-                                             id="orange-radio"
-                                             className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
-                                                                checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                          />
-                                          <div
-                                             className="h-5 w-5 absolute rounded-full pointer-events-none
-                                                                peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                          />
-                                       </div>
-                                       <div className="flex flex-col gap-1">
-                                          <div className="flex justify-between w-full">
-                                             <div className="flex items-center gap-3">
-                                                <p className="text-sm font-medium text-[#1A1A1A]">
-                                                   Trần Văn Bình
-                                                </p>
-                                                <p className="text-[10px] text-[#4C4C4C]">
-                                                   (+84) 933234442
-                                                </p>
-                                             </div>
-                                             <div className="">
-                                                <button className="text-[#5D5FEF] text-[10px]">
-                                                   Cập nhật
-                                                </button>
-                                             </div>
-                                          </div>
-                                          <div>
-                                             <p className="text-[13px] font-normal text-[#4C4C4C]">
-                                                407 Hoàng Diệu, Phường Thống
-                                                Nhất, Thành Phố Buôn Ma Thuột,
-                                                Đắk Lắk{" "}
+                                       <div className="border-b-[1px] pb-4 mb-4 flex gap-1 items-center justify-center">
+                                          <button
+                                             onClick={() =>
+                                                openUpadate(idModalUpdate, NaN)
+                                             }
+                                             className="flex gap-1"
+                                          >
+                                             <Address />
+                                             <p className="text-sm text-[#4C4C4C]">
+                                                Thêm địa chỉ mới
                                              </p>
-                                          </div>
+                                          </button>
                                        </div>
-                                    </div>
-
-                                    <div className="border-b-[1px] pb-4 mb-4 flex gap-1 items-center justify-center">
-                                       <button className="flex gap-1">
-                                          <Address />
-                                          <p className="text-sm text-[#4C4C4C]">
-                                             Thêm địa chỉ mới
-                                          </p>
-                                       </button>
-                                    </div>
-                                    <div className="flex justify-end gap-2">
-                                       <button className="py-2 px-11 border-[1px] border-[#EA4B48] text-sm text-[#1A1A1A] rounded">
-                                          Hủy
-                                       </button>
-                                       <button className="py-2 px-11 border-[1px] text-sm text-[#FCFCFD] rounded bg-[#EA4B48]">
-                                          Xác Nhận
-                                       </button>
-                                    </div>
-                                 </div>
-                              </dialog>
+                                    </>
+                                 }
+                              />
                            </div>
 
                            <div>
-                              <dialog id="my_modal_update" className="modal">
-                                 <div className="w-[512px] bg-white p-4 relative rounded-md">
-                                    <form method="dialog">
-                                       <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                                          ✕
-                                       </button>
-                                    </form>
-                                    <div className="border-b-[1px] pb-4 mb-4">
-                                       <h1 className="text-[#EA4B48] text-sm font-lg font-bold tracking-normal leading-tight max-[870px]:text-xs">
-                                          Cập Nhật Địa Chỉ
-                                       </h1>
-                                    </div>
+                              <DialogAddress
+                                 id={idModalUpdate}
+                                 title="Cập Nhật Địa Chỉ"
+                                 onClose={() => closeModal(idModalUpdate)}
+                                 onSave={handleSubmit((data: any) => {
+                                    saveModal(data);
+                                 })}
+                                 body={
+                                    <>
+                                       <div className="flex flex-col gap-2">
+                                          <div className="flex justify-around gap-5">
+                                             <div className=" w-full">
+                                                <Controller
+                                                   control={control}
+                                                   name="name"
+                                                   rules={{
+                                                      required: {
+                                                         value: true,
+                                                         message:
+                                                            "Không để trống",
+                                                      },
+                                                      minLength: {
+                                                         value: 4,
+                                                         message:
+                                                            "Ít nhất 4 ký tự",
+                                                      },
+                                                      maxLength: {
+                                                         value: 25,
+                                                         message:
+                                                            "Nhiều nhất 25 ký tự",
+                                                      },
+                                                   }}
+                                                   render={({ field }) => (
+                                                      <>
+                                                         <label className="text-sm text-[#4C4C4C]">
+                                                            Họ và tên:
+                                                         </label>
+                                                         <input
+                                                            id="name"
+                                                            className="max-[870px]:text-xs mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
+                                                            placeholder="Nhập Họ Tên"
+                                                            value={field.value}
+                                                            onChange={(e) => {
+                                                               const reg =
+                                                                  /[!@#$%^&*]/;
+                                                               const value =
+                                                                  e.target
+                                                                     .value;
+                                                               field.onChange(
+                                                                  value.replace(
+                                                                     reg,
+                                                                     ""
+                                                                  )
+                                                               );
+                                                            }}
+                                                         />
+                                                         {errors.name && (
+                                                            <p className="text-red-600 text-xs my-2">
+                                                               {
+                                                                  errors.name
+                                                                     .message
+                                                               }
+                                                            </p>
+                                                         )}
+                                                      </>
+                                                   )}
+                                                />
+                                             </div>
+                                             <div className=" w-full">
+                                                <Controller
+                                                   name="typeAddress"
+                                                   control={control}
+                                                   rules={{
+                                                      required: {
+                                                         value: true,
+                                                         message:
+                                                            "Vui lòng chọn",
+                                                      },
+                                                   }}
+                                                   render={({ field }) => (
+                                                      <>
+                                                         <label className="text-sm text-[#4C4C4C]">
+                                                            Loại địa chỉ
+                                                         </label>
+                                                         <select
+                                                            id="name"
+                                                            className="max-[870px]:text-xs mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
+                                                            value={field.value}
+                                                            onChange={(e) => {
+                                                               const value =
+                                                                  e.target
+                                                                     .value;
+                                                               const reg = /[]/;
+                                                               field.onChange(
+                                                                  value.replace(
+                                                                     reg,
+                                                                     ""
+                                                                  )
+                                                               );
+                                                            }}
+                                                         >
+                                                            <option value="">
+                                                               -- Chọn loại địa
+                                                               chỉ --
+                                                            </option>
+                                                            <option>
+                                                               Nhà riêng
+                                                            </option>
+                                                            <option>
+                                                               Công ty
+                                                            </option>
+                                                         </select>
+                                                         {errors.typeAddress && (
+                                                            <p className="text-red-600 text-xs my-2">
+                                                               {
+                                                                  errors
+                                                                     .typeAddress
+                                                                     .message
+                                                               }
+                                                            </p>
+                                                         )}
+                                                      </>
+                                                   )}
+                                                />
+                                             </div>
+                                          </div>
 
-                                    <div className="flex justify-around gap-5">
-                                       <div className=" w-full">
-                                          <label className="text-sm text-[#4C4C4C]">
-                                             Họ và tên:
-                                          </label>
-                                          <input
-                                             id="name"
-                                             className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
-                                             placeholder="Nhập Họ Tên"
-                                          />
+                                          <div>
+                                             <Controller
+                                                name="address"
+                                                control={control}
+                                                rules={{
+                                                   required: {
+                                                      value: true,
+                                                      message: "Vui lòng chọn",
+                                                   },
+                                                }}
+                                                render={({ field }) => (
+                                                   <>
+                                                      <label className="text-sm text-[#4C4C4C]">
+                                                         Địa chỉ:
+                                                      </label>
+                                                      <select
+                                                         id="name"
+                                                         className="max-[870px]:text-xs mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
+                                                         value={field.value}
+                                                         onChange={(e) => {
+                                                            const value =
+                                                               e.target.value;
+                                                            const reg = /[]/;
+                                                            field.onChange(
+                                                               value.replace(
+                                                                  reg,
+                                                                  ""
+                                                               )
+                                                            );
+                                                         }}
+                                                      >
+                                                         <option value="">
+                                                            -- Tỉnh/Thành phố,
+                                                            Quận/Huyện,
+                                                            Phường/Xã --
+                                                         </option>
+                                                         <option>
+                                                            Phường Thống Nhất,
+                                                            Thành Phố Buôn Ma
+                                                            Thuột, Đắk Lắk
+                                                         </option>
+                                                         <option>
+                                                            Phường Tân An, Thành
+                                                            Phố Buôn Ma Thuột,
+                                                            Đắk Lắk
+                                                         </option>
+                                                      </select>
+                                                      {errors.address && (
+                                                         <p className="text-red-600 text-xs my-2">
+                                                            {
+                                                               errors.address
+                                                                  .message
+                                                            }
+                                                         </p>
+                                                      )}
+                                                   </>
+                                                )}
+                                             />
+                                          </div>
+
+                                          <div className="flex flex-col border-b-[1px] pb-4 mb-4 gap-2">
+                                             <Controller
+                                                name="currentAddress"
+                                                control={control}
+                                                rules={{
+                                                   required: {
+                                                      value: true,
+                                                      message: "Không để trống",
+                                                   },
+                                                   minLength: {
+                                                      value: 4,
+                                                      message:
+                                                         "Ít nhất 4 ký tự",
+                                                   },
+                                                   maxLength: {
+                                                      value: 200,
+                                                      message:
+                                                         "Nhiều nhất 200 ký tự",
+                                                   },
+                                                }}
+                                                render={({ field }) => (
+                                                   <>
+                                                      <label className="text-sm text-[#4C4C4C]">
+                                                         Địa chỉ cụ thể:
+                                                      </label>
+                                                      <textarea
+                                                         className="text-xs p-3 border-[#FFAAAF] rounded border"
+                                                         cols={30}
+                                                         rows={4}
+                                                         value={field.value}
+                                                         onChange={(e) => {
+                                                            const value =
+                                                               e.target.value;
+                                                            const reg =
+                                                               /[!@#$%^&*]/;
+                                                            field.onChange(
+                                                               value.replace(
+                                                                  reg,
+                                                                  ""
+                                                               )
+                                                            );
+                                                         }}
+                                                         defaultValue={
+                                                            "407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk "
+                                                         }
+                                                      />
+                                                      {errors.currentAddress && (
+                                                         <p className="text-red-600 text-xs my-2">
+                                                            {
+                                                               errors
+                                                                  .currentAddress
+                                                                  .message
+                                                            }
+                                                         </p>
+                                                      )}
+                                                   </>
+                                                )}
+                                             />
+                                          </div>
                                        </div>
-                                       <div className=" w-full">
-                                          <label className="text-sm text-[#4C4C4C]">
-                                             Loại địa chỉ
-                                          </label>
-                                          <select
-                                             id="name"
-                                             className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
-                                          >
-                                             <option value="">Nhà riêng</option>
-                                          </select>
-                                       </div>
-                                    </div>
-
-                                    <div>
-                                       <label className="text-sm text-[#4C4C4C]">
-                                          Địa chỉ:
-                                       </label>
-                                       <select
-                                          id="name"
-                                          className="max-[870px]:text-xs mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
-                                       >
-                                          <option value="">
-                                             Tỉnh/Thành phố, Quận/Huyện,
-                                             Phường/Xã
-                                          </option>
-                                       </select>
-                                    </div>
-
-                                    <div className="flex flex-col border-b-[1px] pb-4 mb-4 gap-2">
-                                       <label className="text-sm text-[#4C4C4C]">
-                                          Địa chỉ cụ thể:
-                                       </label>
-                                       <textarea
-                                          className="text-xs p-3 border-[#FFAAAF] rounded border"
-                                          cols={30}
-                                          rows={4}
-                                          defaultValue={
-                                             "407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk "
-                                          }
-                                       />
-                                    </div>
-
-                                    <div className="flex justify-end gap-2">
-                                       <button className="py-2 px-11 border-[1px] border-[#EA4B48] text-sm text-[#1A1A1A] rounded">
-                                          Hủy
-                                       </button>
-                                       <button className="py-2 px-11 border-[1px] text-sm text-[#FCFCFD] rounded bg-[#EA4B48]">
-                                          Xác Nhận
-                                       </button>
-                                    </div>
-                                 </div>
-                              </dialog>
+                                    </>
+                                 }
+                              />
                            </div>
+
                            <div className="flex flex-col gap-3">
                               <div className="grid grid-cols-4 px-[26px] py-[10px] bg-[#F2F2F2]">
                                  <h4 className="col-span-2 font-normal text-[#1A1A1A] text-sm max-[870px]:text-xs">

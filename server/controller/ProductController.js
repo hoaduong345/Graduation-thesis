@@ -320,7 +320,6 @@ const ProductController = {
         description,
         status,
         date,
-        productId,
         createdAt,
         updatedAt,
         categoryID,
@@ -357,7 +356,6 @@ const ProductController = {
         date: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
-        productId: parseInt(productId),
         categoryID: parseInt(categoryID),
       };
 
@@ -441,11 +439,14 @@ const ProductController = {
           lte: parseInt(req.query.maxPrice),
         };
       }
-      console.log(req.query.minPrice);
-      console.log(req.query.maxPrice);
+      if (req.query.minQuantity && req.query.maxQuantity) {
+        whereClause.quantity = {
+            gte: parseInt(req.query.minQuantity),
+            lte: parseInt(req.query.maxQuantity),
+        };
+    }
+   
       
-
-
       const result = await prisma.product.findMany({
         orderBy: {
           sellingPrice: sortByPrice,
@@ -521,6 +522,141 @@ const ProductController = {
       res.status(500).json(error.message);
     }
   },
+
+
+
+  addProductRating: async (req, res) => {
+    try {
+      const { productId, userId, ratingValue, comment } = req.body;
+      const rating = await prisma.rating.create({
+        data: {
+          idproduct: productId,
+          iduser: userId,
+          ratingValue,
+          comment,
+        },
+      });
+  
+      res.status(200).json("Đánh giá sản phẩm thành công");
+    } catch (error) {
+      console.error(error);
+      res.status(200).json("Đánh giá sản phẩm không thành công");
+    }
+  },
+
+  getAllRatingandComment: async (req, res) => {
+    try {
+      const productId = parseInt(req.params.productId);
+      const ratings = await prisma.rating.findMany({
+        where: {
+          idproduct: productId,
+        },
+        include: {
+          user: {
+            select: {
+              username: true, 
+            },
+          },
+        },
+      });
+      res.status(200).json(ratings);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+  updateRatingandComment : async(req, res) =>{
+    try {
+      const ratingId = parseInt(req.params.ratingId);
+      const { ratingValue, comment } = req.body;
+  
+      const existingRating = await prisma.rating.findUnique({
+        where: {
+          id: ratingId,
+        },
+      });
+  
+      if (!existingRating) {
+        return res.status(404).json("Đánh giá không tồn tại");
+      }
+  
+      const updatedRating = await prisma.rating.update({
+        where: {
+          id: ratingId,
+        },
+        data: {
+          ratingValue,
+          comment,
+        },
+      });
+  
+      res.status(200).json("Cập nhật đánh giá sản phẩm thành công");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json("Cập nhật đánh giá sản phẩm không thành công");
+    }
+  },
+
+  deleteRatingandComment : async(req, res) =>{
+    try {
+      const ratingId = parseInt(req.params.ratingId);
+  
+      const existingRating = await prisma.rating.findUnique({
+        where: {
+          id: ratingId,
+        },
+      });
+  
+      if (!existingRating) {
+        return res.status(404).json("Đánh giá không tồn tại");
+      }
+  
+      await prisma.rating.delete({
+        where: {
+          id: ratingId,
+        },
+      });
+  
+      res.status(200).json("Xóa đánh giá sản phẩm thành công");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json("Xóa đánh giá sản phẩm không thành công");
+    }
+  },
+
+
+  avergaeRating : async(req, res) =>{
+    try {
+      const productId = parseInt(req.params.productId);
+      const ratings = await prisma.rating.findMany({
+        where: {
+          idproduct: productId,
+        },
+      });
+  
+      if (ratings.length === 0) {
+        return res.status(200).json(0); 
+      }
+  
+      const totalRating = ratings.reduce(
+        (sum, rating) => sum + rating.ratingValue,
+        0
+      );
+      const averageRating = totalRating / ratings.length;
+  
+      res.status(200).json(averageRating);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+
+  
+
+  
+
 };
 
 module.exports = ProductController;

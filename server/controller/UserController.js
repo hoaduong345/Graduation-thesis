@@ -104,7 +104,7 @@ const UserController = {
         }
       });
   
-      // Kiểm tra nếu không tìm thấy người dùng
+     
       if (!userWithImage || !userWithoutImage) {
         return res.status(404).json({ error: "Không tìm thấy người dùng" });
       }
