@@ -167,6 +167,7 @@ const UserController = {
         },
       });
       res.status(200).json("Cập nhật hình ảnh thành công");
+      //ádaddadaw
     }catch(error){
       res.status(500).json(error.message);
     }
