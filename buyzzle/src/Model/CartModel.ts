@@ -1,4 +1,4 @@
-import { Products } from "../pages/home/User/FilterPage/FiltersPage"
+import { Product } from "./ProductModel"
 
 export interface CartModel {
     status: boolean,
@@ -12,5 +12,5 @@ interface CartProduct {
 interface CartItem {
 
     quantity: number,
-    product: Products
+    product: Product
 }
