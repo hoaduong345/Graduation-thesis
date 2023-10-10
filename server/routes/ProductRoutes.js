@@ -4,16 +4,18 @@ const ProductController = require("../controller/ProductController");
 const MiddleWareRatingController = require("../middleware/MiddleWareRatingController");
 const MiddleWareController = require("../middleware/MiddleWareController");
 
+const MiddleWareProductController = require("../middleware/MiddleWareProductController");
+
 const router = require("express").Router();
 
 // thêm sản phẩm
 router.post("/addImagesByProductsID", ProductController.addImagesByProductsID);
 
-router.post("/addproduct", ProductController.addProduct);
+router.post("/addproduct", MiddleWareProductController.isValidate, ProductController.addProduct);
 
 router.delete("/deleteproduct/:id", ProductController.deleteProduct);
 
-router.put("/updateproduct/:id", ProductController.updateProduct);
+router.put("/updateproduct/:id",MiddleWareProductController.isValidate, ProductController.updateProduct);
 
 router.get("/chitietproduct/:id", ProductController.getProductDetail);
 

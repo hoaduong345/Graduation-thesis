@@ -9,6 +9,9 @@ const CartRouter = require('./routes/CartRoutes');
 
 const UserRouter = require('./routes/UserRoutes');
 
+const OrderRouter = require('./routes/OrderRoutes');
+
+
 const ProductRoutes = require('./routes/ProductRoutes');
 const cookieParser = require('cookie-parser');
 dotenv.config();
@@ -48,3 +51,5 @@ app.use('/buyzzle/user', UserRouter);
 app.use('/buyzzle/product', ProductRoutes);
 // CART
 app.use('/buyzzle/cart', CartRouter);
+
+app.use('/buyzzle/order', OrderRouter);
