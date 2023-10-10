@@ -1,4 +1,5 @@
-import { Product } from "./ProductModel"
+import { Products } from "./ProductModel"
+
 
 export interface CartModel {
     status: boolean,
@@ -12,5 +13,6 @@ interface CartProduct {
 interface CartItem {
 
     quantity: number,
-    product: Product
+    product: Products
+    total: number
 }

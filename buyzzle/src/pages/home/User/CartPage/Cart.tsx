@@ -13,19 +13,21 @@ import { numberFormat } from "../../../../Helper";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 
 export default function Cart() {
-   const idModal = "confirmCart";
+   const idItemCart = "confirmCart";
+   const idAllCart = "confirmAllCart";
 
    const [cart, setCart] = useState<CartModel>();
-   //  const [quantity, setQuantity] = useState(1);
 
-   //  const minus = () => {
-   //     if (quantity > 1) {
-   //        setQuantity(quantity - 1);
-   //     }
-   //  };
-   //  const plus = () => {
-   //     setQuantity(quantity + 1);
-   //  };
+   // const [quantity, setQuantity] = useState<number>(0);
+
+   // const minus = () => {
+   //    if (quantity > 1) {
+   //       setQuantity(quantity - 1);
+   //    }
+   // };
+   // const plus = () => {
+   //    setQuantity(quantity + 1);
+   // };
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -39,13 +41,14 @@ export default function Cart() {
    const removeItemCart = (id: number) => {
       cartControllers.removeItemCart(id).then(() => {
          getCart();
-         closeModal(idModal);
+         closeModal(idItemCart);
       });
    };
 
    const removeAllCart = () => {
       cartControllers.removeAllCart().then(() => {
          getCart();
+         closeModal(idAllCart);
       });
    };
 
@@ -112,6 +115,7 @@ export default function Cart() {
                      return (
                         <>
                            <div
+                              key={e.product.id}
                               className="bg-white h-auto rounded-md items-center py-[30px]
                               shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
                                  grid grid-cols-12"
@@ -170,14 +174,12 @@ export default function Cart() {
                               </div>
                               <div className="col-span-2 flex justify-center">
                                  <p className="text-[#EA4B48] text-xl">
-                                    {numberFormat(
-                                       e.quantity * e.product.sellingPrice
-                                    )}
+                                    {numberFormat(e.total)}
                                  </p>
                               </div>
                               <div className="col-span-1 justify-center flex">
                                  <button
-                                    onClick={() => openModal(idModal)}
+                                    onClick={() => openModal(idItemCart)}
                                     className="p-3 rounded-full
                     shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]"
                                  >
@@ -186,8 +188,8 @@ export default function Cart() {
                               </div>
                               <DialogAddress
                                  body={<></>}
-                                 id={idModal}
-                                 onClose={() => closeModal(idModal)}
+                                 id={idItemCart}
+                                 onClose={() => closeModal(idItemCart)}
                                  onSave={() => removeItemCart(e.product.id)}
                                  title="Bạn Chắc Chắn!"
                               />
@@ -233,7 +235,9 @@ export default function Cart() {
                         <div className="flex w-[40%] text-[#1A1A1A] text-base">
                            <div>Chọn Tất Cả</div>
                            {/* Tổng số lượng được tick chọn trong giỏ hàng */}
-                           <div className="mx-2 gap-2">(0)</div>
+                           <div className="mx-2 gap-2">
+                              ({cart?.data.item.length})
+                           </div>
                            {/* end Tổng số lượng được tick chọn trong giỏ hàng */}
                         </div>
                         {/* Xóa */}
@@ -241,7 +245,10 @@ export default function Cart() {
                            className="rounded-full shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]
                         "
                         >
-                           <div onClick={removeAllCart} className="p-3">
+                           <div
+                              onClick={() => openModal(idAllCart)}
+                              className="p-3"
+                           >
                               <Delete />
                            </div>
                         </div>
@@ -256,13 +263,13 @@ export default function Cart() {
                         <div className="flex items-center gap-2">
                            <div>
                               <p className="text-[#EA4B48] text-3xl">
-                                 ₫180.000
+                                 {numberFormat(cart?.data.subtotal)}
                               </p>
                               {/* end Tiền những sản phẩm đã chọn */}
                               <div className="flex">
                                  <p>Tiết kiệm : </p>
                                  {/* Tiết kiệm */}
-                                 <p className="ml-2 text-[#EA4B48]">đ30k</p>
+                                 <p className="ml-2 text-[#EA4B48]">{77}k</p>
                                  {/* Tiết kiệm */}
                               </div>
                            </div>
@@ -276,6 +283,13 @@ export default function Cart() {
                            <Buyzzle />
                            <p>Mua ngay</p>
                         </button>
+                        <DialogAddress
+                           body={<></>}
+                           id={idAllCart}
+                           onClose={() => closeModal(idAllCart)}
+                           onSave={() => removeAllCart()}
+                           title="Xóa toàn bộ Giỏ hàng!"
+                        />
                      </div>
                   </div>
                </div>
