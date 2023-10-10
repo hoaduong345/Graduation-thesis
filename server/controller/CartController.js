@@ -59,24 +59,48 @@ const CartController = {
         });
     },
 
+    
+    // createItem: async (userId, productId, quantity) => {
+    //     const product = await prisma.product.findFirst({
+    //         where: { id: productId },
+    //     });
+    //     return prisma.itemCart.create({
+    //         data: {
+    //             userId,
+    //             subtotal: product.sellingPrice * quantity,
+    //             item: {
+    //                 create: {
+    //                     productid: productId,
+    //                     quantity,
+    //                     price: product.sellingPrice,
+    //                     total: product.sellingPrice * quantity,
+    //                 },
+    //             },
+    //         },
+    //         include: { item: true },
+    //     });
+    // },
+
+
     updateCart: async (cart, productId, quantity) => {
         const existingCartItem = cart.item.find((item) => item.productid === productId);
-        // const newQuantity = existingCartItem.quantity + quantity
-        // const newtotal = newQuantity * existingCartItem.price
+
+        console.log("🚀 ~ file: CartController.js:87 ~ updateCart: ~ existingCartItem:", existingCartItem)
+        
         if (existingCartItem) {
             await prisma.itemCart.update({
                 where: { id: existingCartItem.id },
                 data: {
                     quantity: existingCartItem.quantity + quantity,
-                    price: existingCartItem.sellingPrice,
-                    // total: newtotal
+                    price: existingCartItem.price,
+                    total: (existingCartItem.quantity + quantity) * existingCartItem.price
                 },
             });
         } else {
             const product = await prisma.product.findUnique({
                 where: { id: productId },
             });
-
+            
             if (!product) {
                 throw new Error(`Product with ID ${productId} not found.`);
             }
@@ -104,7 +128,6 @@ const CartController = {
         });
     },
     // DELETE ITEM FROM CART
-
     deleteItem: async (req, res) => {
         try {
             const userId = parseInt(req.cookies.id);
@@ -131,6 +154,16 @@ const CartController = {
                     id: cartItem.id,
                 },
             });
+            const newSubtotal = cart.subtotal - cartItem.total
+
+            await prisma.cart.update({
+                where :{
+                    id: cart.id
+                },
+                data:{
+                    subtotal : newSubtotal
+                }
+            })
             res.status(200).send('Delete item successfully');
         } catch (error) {
             console.log('error', error);
