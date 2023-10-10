@@ -221,7 +221,7 @@ export default function Header() {
                               Từ khóa
                             </h1>
                             <p className="text-base cursor-default p-1 pl-2 font-normal">
-                              {text}
+                              {text == "" ? "" : `"${text}"`}
                             </p>
                             {/* <div className="grid grid-cols-3 gap-4 py-3  w-[98%] mx-auto">
                               {productSearch.slice(0, 6).map((itemsSearch) => {
@@ -344,25 +344,21 @@ export default function Header() {
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
             <div className="container mx-auto">
-              {/* <ul className="flex justify-between h-[60px] font-bold text-[#1A1A1A]leading-15 items-center leading-[100%]"> */}
               <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
-                {/* <li>
-                  <Link to="/ProductsPage">Gấu Bông Bobbicraft</Link>
-                </li> */}
                 <li>
-                  <Link to={`#`}>Áo Nam</Link>
+                  <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link>
                 </li>
                 <li>
-                  <Link to="/admin/Addproductspage">Thêm sản phẩm</Link>
+                  <Link to="/admin/category">categoryAdmin</Link>
                 </li>
                 <li>
-                  <Link to="/admin/chitietproduct">Editproductspage</Link>
+                  <Link to="/admin/voucher">voucherAdmin</Link>
+                </li>
+                <li>
+                  <Link to="/admin/usersmanager">usersmanagerAdmin</Link>
                 </li>
                 <li>
                   <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
-                </li>
-                <li>
-                  <Link to="/UserProfilePage">UserProfilePage</Link>
                 </li>
                 <li>
                   <Link to="/orderhistory">orderhistory</Link>
@@ -370,10 +366,10 @@ export default function Header() {
                 <li>
                   <a href="/checkout">check out</a>
                 </li>
-                {/*  <li>
-                  <a href="#">Sữa Baby</a>
-                </li>
                 <li>
+                  <a href="/orderdetail">orderdetail</a>
+                </li>
+                {/*  <li>
                   <a href="#">Sữa Baby</a>
                 </li> */}
               </ul>

@@ -205,7 +205,7 @@ export default function FilterListproduct({
             <div className="slider">
               <Slider
                 min={1}
-                max={1000}
+                max={10000}
                 step={1}
                 pushable={false}
                 value={rangeQuantityValue}
@@ -223,7 +223,7 @@ export default function FilterListproduct({
                                  quantity ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
                                } `}
                 >
-                  Giá:{" "}
+                  Số lượng:{" "}
                 </p>
                 <p
                   className={`font-medium max-w-max text-sm max-xl:text-[13px]

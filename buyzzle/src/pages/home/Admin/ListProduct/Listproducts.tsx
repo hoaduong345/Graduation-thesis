@@ -150,6 +150,7 @@ export default function ListproductsAdmin() {
     setSliderPriceValues(price);
     console.log("price Range:", price);
   };
+
   return (
     <>
       <Container>
@@ -291,6 +292,7 @@ export default function ListproductsAdmin() {
                     max-xl:font-medium
                     max-lg:text-xs
                     "
+                        // onClick={(e) => getData(e)}
                       >
                         Xuất excel
                       </button>
