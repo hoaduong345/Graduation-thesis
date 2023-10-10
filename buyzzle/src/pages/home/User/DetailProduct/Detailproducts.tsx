@@ -227,11 +227,12 @@ export default function Detailproducts() {
                     <div className="items-center flex">
                       <p className="text-[36px] text-[#EA4B48] font-bold ">
                         {numberFormat(
-                          first?.price - first?.price * (first?.discount / 100)
+                          first?.price! -
+                            first?.price! * (first?.discount! / 100)
                         )}
                       </p>
                       <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
-                        {numberFormat(first?.price)}đ
+                        {numberFormat(first?.price!)}đ
                       </p>
                     </div>
                     <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mt-[5px]">
@@ -353,7 +354,7 @@ export default function Detailproducts() {
       <Container>
         <div
           className="px-[113px] py-[78px] text-sm break-all"
-          dangerouslySetInnerHTML={{ __html: first?.description }}
+          dangerouslySetInnerHTML={{ __html: first?.description as any }}
         ></div>
 
         {/* <Detail /> */}

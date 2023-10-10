@@ -8,25 +8,26 @@ import Back from "../../Admin/Assets/TSX/Back";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef, useState } from "react";
-export default function OrderDetailPage() {
-  const [selectedRating, setSelectedRating] = useState<number | null>(null);
+import { RatingComment } from "../../../../Model/RatingAndComment";
+import { toast } from "react-toastify";
+import { RatingAndCommentController } from "../../../../Controllers/Rating&Comment";
 
+export default function OrderDetailPage() {
   const editorRef = useRef<any>(null);
   const {
     control,
     handleSubmit,
     reset,
+    register,
+    setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<RatingComment>({
     mode: "all",
-    //  defaultValues: {
-    //    productName: "",
-    //    productDesc: "",
-    //    productImage: "",
-    //    productPrice: 1,
-    //    productQuantity: 1,
-    //    productDiscount: 1,
-    //  },
+    defaultValues: {
+      comment: "",
+      ratingValue: 5,
+      iduser: 1,
+    },
   });
   const idDialogRating = "dialogRating";
   const onClose = (id: string) => {
@@ -36,12 +37,14 @@ export default function OrderDetailPage() {
     }
   };
 
-  const onSave = async (id: string) => {
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
-    }
-  };
+  // const onSave = async (id: string, data: RatingComment) => {
+  //   const modal = document.getElementById(id) as HTMLDialogElement | null;
+  //   if (modal) {
+  //     handleAddProductRating(data);
+  //     console.log("first");
+  //     modal.close();
+  //   }
+  // };
   const openDialog = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
@@ -49,8 +52,26 @@ export default function OrderDetailPage() {
     }
   };
   const handleRatingClick = (rating: number) => {
-    setSelectedRating(rating);
+    setValue("ratingValue", rating);
     console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
+  };
+
+  //Thêm đánh giá
+  const handleAddProductRating = (id: string, data: RatingComment) => {
+    RatingAndCommentController.postRatingAndComment(data)
+      .then((_) => {
+        setValue("iduser", data.iduser);
+        console.log(
+          "🚀 ~ file: OrderDetailPage.tsx:64 ~ .then ~ data.iduser:",
+          data.iduser
+        );
+        toast.success("Đánh giá thành công !");
+        reset({});
+        onClose(id);
+      })
+      .catch(() => {
+        toast.error("Đánh giá thất bại !");
+      });
   };
 
   return (
@@ -224,7 +245,19 @@ export default function OrderDetailPage() {
                   <DialogModal
                     id={idDialogRating}
                     onClose={() => onClose(idDialogRating)}
-                    onSave={() => onSave(idDialogRating)}
+                    onSave={handleSubmit((data: RatingComment) => {
+                      const htmlString = data.comment;
+                      const regex = /<p>(.*?)<\/p>/;
+                      const match = htmlString.match(regex);
+                      if (match) {
+                        const extractedText = match[1];
+                        const _data: RatingComment = {
+                          ...data,
+                          comment: extractedText,
+                        };
+                        handleAddProductRating(idDialogRating, _data);
+                      }
+                    })}
                     title="Đánh Giá Sản Phẩm"
                     body={
                       <>
@@ -253,15 +286,32 @@ export default function OrderDetailPage() {
                             <div className="rating mt-1 ">
                               <div className="flex items-center justify-start gap-3 ">
                                 <div className="rating rating-lg gap-3">
-                                  {[1, 2, 3, 4, 5].map((rating) => (
-                                    <input
-                                      key={rating}
-                                      type="radio"
-                                      name="rating-5"
-                                      className="mask mask-star-2 bg-orange-400"
-                                      onClick={() => handleRatingClick(rating)}
-                                    />
-                                  ))}
+                                  <Controller
+                                    control={control}
+                                    name="ratingValue"
+                                    rules={{
+                                      required: {
+                                        value: true,
+                                        message: "",
+                                      },
+                                    }}
+                                    render={({}) => (
+                                      <>
+                                        {[1, 2, 3, 4, 5].map((rating) => (
+                                          <input
+                                            key={rating}
+                                            type="radio"
+                                            name="rating-5"
+                                            className="mask mask-star-2 bg-orange-400"
+                                            onClick={() =>
+                                              handleRatingClick(rating)
+                                            }
+                                            // ref={register}
+                                          />
+                                        ))}
+                                      </>
+                                    )}
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -280,7 +330,7 @@ export default function OrderDetailPage() {
                           /> */}
                           <Controller
                             control={control}
-                            name="productDesc"
+                            name="comment"
                             rules={{
                               required: {
                                 value: true,
@@ -290,8 +340,8 @@ export default function OrderDetailPage() {
                             }}
                             render={({ field }) => (
                               <>
-                                <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
-                                  Mô Tả Chi Tiết Sản Phẩm
+                                <p className="text-[#4C4C4C] text-base font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
+                                  Mô tả chất lượng sản phẩm
                                   <span className="text-[#FF0000]">*</span>
                                 </p>
                                 <Editor
