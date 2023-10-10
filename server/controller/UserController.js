@@ -142,6 +142,38 @@ const UserController = {
       }
    },
 
+   updateImageUser : async (req, res) => {
+    try{
+      const { id } = req.params;
+      const { url, iduser } = req.body;
+
+      const existingImage = await prisma.userImage.findUnique({
+          where: {
+            id : parseInt(id),
+          },
+      });
+
+      if(!existingImage){
+        return res.status(404).json("Hình ảnh không tồn tại");
+      }
+
+      const updateImage = await prisma.userImage.update({
+        where : {
+          id : parseInt(id),
+        },
+        data : {
+          url,
+          iduser : parseInt(iduser),
+        },
+      });
+      res.status(200).json("Cập nhật hình ảnh thành công");
+      //ádaddadaw
+    }catch(error){
+      res.status(500).json(error.message);
+    }
+      
+   },
+
 
 
   

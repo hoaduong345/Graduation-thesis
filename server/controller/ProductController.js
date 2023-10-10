@@ -220,25 +220,12 @@ const ProductController = {
         quantity,
         description,
         status,
-        date,
-        productId,
+        date,   
         createdAt,
         updatedAt,
         categoryID,
       } = req.body;
 
-      if (name.length <= 6) {
-        return res.status(400).json("Tên sản phẩm phải có ít nhất 6 kí tự");
-      }
-      if (parseInt(price) <= 0) {
-        return res.status(400).json("Giá sản phẩm phải lớn hơn 0");
-      }
-      if (parseInt(pricesale) <= 0) {
-        return res.status(400).json("Sản phẩm Sale phải lớn hơn 0");
-      }
-      if (parseInt(discount) <= 0) {
-        return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
-      }
 
       const SellingPrice = price - price * (discount / 100);
       const Pricesale = price * (discount / 100);
@@ -325,19 +312,7 @@ const ProductController = {
         categoryID,
       } = req.body;
 
-      // Kiểm tra validate
-      if (name.length <= 6) {
-        return res.status(400).json("Tên sản phẩm phải có ít nhất 6 kí tự");
-      }
-      if (parseInt(price) <= 0) {
-        return res.status(400).json("Giá sản phẩm phải lớn hơn 0");
-      }
-      if (parseInt(pricesale) <= 0) {
-        return res.status(400).json("Sản phẩm Sale phải lớn hơn 0");
-      }
-      if (parseInt(discount) <= 0) {
-        return res.status(400).json("Giảm giá sản phẩm phải lớn hơn 0");
-      }
+     
       const SellingPrice = price - price * (discount / 100);
       const Pricesale = price * (discount / 100);
 
@@ -512,7 +487,7 @@ const ProductController = {
     try {
       const newProducts = await prisma.product.findMany({
         orderBy: {
-          createdAt: "desc", // sap xep time de lay san pham moi nhat
+          createdAt: "desc", 
         },
         take: 5,
       });
@@ -522,6 +497,35 @@ const ProductController = {
       res.status(500).json(error.message);
     }
   },
+
+
+  getSaleProducts : async(req, res) => {
+    try{  
+        const discount = 60;
+        const saleProducts = await prisma.product.findMany({
+          where: {
+             discount : {
+               gt : discount,
+             }, 
+          },
+          take: 3,
+        });
+        res.json(saleProducts);
+    }catch(error){
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+
+
+
+
+
+
+
+
+
 
 
 

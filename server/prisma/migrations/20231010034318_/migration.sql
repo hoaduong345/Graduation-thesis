@@ -12,6 +12,7 @@ CREATE TABLE `User` (
     `updateAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `dateOfBirth` DATETIME(3) NULL,
     `sex` BOOLEAN NULL,
+    `address` VARCHAR(191) NULL,
     `refresh_token` VARCHAR(191) NULL,
     `forgotpassword_token` VARCHAR(300) NULL,
     `role` INTEGER NULL,
@@ -109,8 +110,6 @@ CREATE TABLE `ItemCart` (
 
 -- CreateTable
 CREATE TABLE `ProductImage` (
-<<<<<<<< HEAD:server/prisma/migrations/20231006090443_/migration.sql
-========
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `url` VARCHAR(191) NULL,
     `idproduct` INTEGER NULL,
@@ -120,7 +119,6 @@ CREATE TABLE `ProductImage` (
 
 -- CreateTable
 CREATE TABLE `Rating` (
->>>>>>>> Huydev:server/prisma/migrations/20231008060510_/migration.sql
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `idproduct` INTEGER NULL,
     `iduser` INTEGER NULL,
