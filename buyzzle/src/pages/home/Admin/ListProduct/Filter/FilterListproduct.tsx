@@ -24,8 +24,8 @@ export default function FilterListproduct({
   const [price, setPrice] = useState(false);
   const [purchase, setPurchase] = useState(false);
   const [quantity, setPQuantity] = useState(false);
-  const [rangePriceValue, setRangePriceValue] = useState([50000, 300000]);
-  const [rangeQuantityValue, setRangeQuantityValue] = useState([50, 300]);
+  const [rangePriceValue, setRangePriceValue] = useState([5000000, 30000000]);
+  const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
   const handleSliderChangePrice = (price: [number, number]) => {
     console.log(
       "🚀 ~ file: FilterListproduct.tsx:29 ~ handleSliderChangePrice ~ price:",
@@ -66,7 +66,7 @@ export default function FilterListproduct({
             <div className="slider">
               <Slider
                 min={1000}
-                max={1000000}
+                max={1000000000}
                 step={1}
                 pushable={false}
                 value={rangePriceValue}
