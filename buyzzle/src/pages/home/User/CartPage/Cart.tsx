@@ -15,8 +15,11 @@ import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 export default function Cart() {
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
+   var totalCart = 0;
 
    const [cart, setCart] = useState<CartModel>();
+   const [productChecked, setProductChecked] = useState<CartItem[]>([]);
+   const [checkedALL, setCheckedAll] = useState<CartItem[]>([]);
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -28,11 +31,10 @@ export default function Cart() {
    }, []);
    const [idProduct, setIdProduct] = useState(0);
    const removeItemCart = () => {
-      console.log(idProduct);
-      // cartControllers.removeItemCart(id).then(() => {
-      //    getCart();
-      //    closeModal(idItemCart);
-      // });
+      cartControllers.removeItemCart(idProduct).then(() => {
+         getCart();
+         closeModal(idItemCart);
+      });
    };
 
    const removeAllCart = () => {
@@ -56,15 +58,23 @@ export default function Cart() {
       }
    };
 
-   // const [productChecked, setProductChecked] = useState<CartItem[]>([]);
-   // // 2 array : 1 array cart, 1 array cart checked
-   // const handleChecked = (checked: boolean, item: CartItem) => {
-   //    console.log(checked);
-   //    if (checked) {
-   //       setProductChecked((prev) => [...prev, item]);
-   //    } else {
-   //    }
-   // };
+   // 2 array : 1 array cart, 1 array cart checked
+   const handleChecked = (checked: boolean, item: CartItem) => {
+      if (checked) {
+         setProductChecked((prev) => [...prev, item]);
+      } else {
+         let cloneProduct = [...productChecked];
+         let products = cloneProduct.filter((e) => {
+            return e.productid !== item.productid;
+         });
+         setProductChecked(products);
+      }
+   };
+
+   for (let i = 0; i < productChecked.length; i++) {
+      const element = productChecked[i];
+      totalCart += element.total;
+   }
 
    return (
       <Container>
@@ -79,6 +89,7 @@ export default function Cart() {
             >
                <div className="col-span-1 text-center leading-none	">
                   <input
+                     checked={checkedALL.includes(productChecked)}
                      type="checkbox"
                      className="checkbox checkbox-sm items-center"
                   />
@@ -122,10 +133,10 @@ export default function Cart() {
                            >
                               <div className="col-span-1 text-center leading-none	">
                                  <input
-                                    // checked={productChecked.includes(e)}
-                                    // onChange={(ele) =>
-                                    //    handleChecked(ele.target.checked, e)
-                                    // }
+                                    checked={productChecked.includes(e)}
+                                    onChange={(ele) =>
+                                       handleChecked(ele.target.checked, e)
+                                    }
                                     type="checkbox"
                                     className="checkbox checkbox-sm items-center"
                                  />
@@ -259,14 +270,14 @@ export default function Cart() {
                      <div className="flex items-center justify-between w-[55%] p-4">
                         <div>
                            <p>
-                              Tổng thanh toán ({cart?.data.item.length} sản
+                              Tổng thanh toán ({productChecked.length} sản
                               phẩm):
                            </p>
                         </div>{" "}
                         <div className="flex items-center gap-2">
                            <div>
                               <p className="text-[#EA4B48] text-3xl">
-                                 {numberFormat(cart?.data.subtotal ?? 0)}
+                                 {numberFormat(totalCart ?? 0)}
                               </p>
                               <div className="flex">
                                  <p>Tiết kiệm : </p>
