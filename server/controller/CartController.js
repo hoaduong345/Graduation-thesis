@@ -149,11 +149,29 @@ const CartController = {
             if (!cart) {
                 return res.send('Cart is not valid');
             }
-            await prisma.cart.delete({
-                where:{
-                    id: cart.id
-                }
-            })
+            const cartItems = await prisma.itemCart.findMany({
+                where: {
+                    cartid: cart.id,
+                },
+            });
+            if (cartItems.length === 0) {
+                return res.send('No items in the cart to delete');
+            }
+            for (const cartItem of cartItems) {
+                await prisma.itemCart.delete({
+                    where: {
+                        id: cartItem.id,
+                    },
+                });
+            }
+            const updateCart = await prisma.cart.update({
+                where: {
+                    id: cart.id,
+                },
+                data: {
+                    subtotal: 0,
+                },
+            });
             res.status(200).send('Delete cart successfully');
         } catch (error) {
             console.log('error', error);
@@ -161,9 +179,8 @@ const CartController = {
         }
     },
     // UPDATE CART
-    updateItem : async(req,res) =>{
+    updateItem: async (req, res) => {
         try {
-            
         } catch (error) {
             console.log('error', error);
             res.status(404).send('Update item failed');
