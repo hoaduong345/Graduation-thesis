@@ -18,6 +18,10 @@ export default function Cart() {
 
    const [cart, setCart] = useState<CartModel>();
 
+   const [checkItemCart, setCheckItemCart] = useState(false);
+
+   var totalCart = 0;
+
    // const [quantity, setQuantity] = useState<number>(0);
 
    // const minus = () => {
@@ -63,6 +67,13 @@ export default function Cart() {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          modal.close();
+      }
+   };
+
+   const chooseItemCart = (id: string) => {
+      const choose = document.getElementById(id) as HTMLDialogElement | null;
+      if (choose) {
+         setCheckItemCart(!checkItemCart);
       }
    };
 
@@ -122,6 +133,11 @@ export default function Cart() {
                            >
                               <div className="col-span-1 text-center leading-none	">
                                  <input
+                                    id={e.product.id.toString()}
+                                    checked={checkItemCart}
+                                    onClick={() =>
+                                       chooseItemCart(e.product.id.toString())
+                                    }
                                     type="checkbox"
                                     className="checkbox checkbox-sm items-center"
                                  />
@@ -174,7 +190,9 @@ export default function Cart() {
                               </div>
                               <div className="col-span-2 flex justify-center">
                                  <p className="text-[#EA4B48] text-xl">
-                                    {numberFormat(e.total)}
+                                    {numberFormat(
+                                       e.product.sellingPrice * e.quantity
+                                    )}
                                  </p>
                               </div>
                               <div className="col-span-1 justify-center flex">
@@ -199,12 +217,10 @@ export default function Cart() {
                   })}
                </div>
 
-               {/* fixed */}
                <div
                   className="bg-white mt-[50px] items-center
                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                >
-                  {/* Input voucher */}
                   <div className=" border-b-[1px] border-[#E0E0E0] w-[100%] mx-auto">
                      <div className="flex items-center justify-end p-4">
                         <div className="mr-3">
@@ -222,7 +238,6 @@ export default function Cart() {
                         </div>
                      </div>
                   </div>
-                  {/* end Input voucher */}
 
                   <div className="w-[100%] flex items-center justify-between">
                      <div className="p-4 flex items-center w-[35%]">
@@ -233,14 +248,11 @@ export default function Cart() {
                            />
                         </div>
                         <div className="flex w-[40%] text-[#1A1A1A] text-base">
-                           <div>Chọn Tất Cả</div>
-                           {/* Tổng số lượng được tick chọn trong giỏ hàng */}
+                           <p>Chọn Tất Cả</p>
                            <div className="mx-2 gap-2">
                               ({cart?.data.item.length})
                            </div>
-                           {/* end Tổng số lượng được tick chọn trong giỏ hàng */}
                         </div>
-                        {/* Xóa */}
                         <div
                            className="rounded-full shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]
                         "
@@ -254,23 +266,20 @@ export default function Cart() {
                         </div>
                      </div>
                      <div className="flex items-center justify-between w-[55%] p-4">
-                        {/* Tổng số sản phẩm thanh toán  */}
                         <div>
-                           <p>Tổng thanh toán (323 sản phẩm):</p>
+                           <p>
+                              Tổng thanh toán ({cart?.data.item.length} sản
+                              phẩm):
+                           </p>
                         </div>{" "}
-                        {/* end Tổng số sản phẩm thanh toán  */}
-                        {/* Tiền */}
                         <div className="flex items-center gap-2">
                            <div>
                               <p className="text-[#EA4B48] text-3xl">
-                                 {numberFormat(cart?.data.subtotal)}
+                                 {numberFormat(cart?.data.subtotal ?? 0)}
                               </p>
-                              {/* end Tiền những sản phẩm đã chọn */}
                               <div className="flex">
                                  <p>Tiết kiệm : </p>
-                                 {/* Tiết kiệm */}
                                  <p className="ml-2 text-[#EA4B48]">{77}k</p>
-                                 {/* Tiết kiệm */}
                               </div>
                            </div>
                            <ArrowUp />
@@ -293,7 +302,6 @@ export default function Cart() {
                      </div>
                   </div>
                </div>
-               {/* end fixed */}
             </div>
          </div>
       </Container>
