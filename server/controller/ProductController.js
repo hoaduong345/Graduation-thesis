@@ -392,7 +392,7 @@ const ProductController = {
       const categoryId = req.query.categoryId;
       const discount = 60;
 
-      const saleProducts = await prisma.product.findMany({
+      const FlashsaleProducts = await prisma.product.findMany({
         where: {
             discount: {
                 gt: discount,
@@ -450,7 +450,7 @@ const ProductController = {
       const resultProduct = {
         // allProduct: totalProduct,
         // FilterProductRange: FilterProductWithinRange,
-        saleProducts: saleProducts, 
+        FlashsaleProducts: FlashsaleProducts, 
         currentPage: page,
         totalPage: Math.ceil(totalProduct.length / pageSize),
         rows: result,
