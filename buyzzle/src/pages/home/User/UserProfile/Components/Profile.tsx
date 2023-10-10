@@ -33,65 +33,82 @@ export default function UserProfile() {
   const param = useParams();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [image, setImage] = useState("");
-  const [editUser, setEditUser] = useState<FormValues>();
+  // const [editUser, setEditUser] = useState<FormValues>();
   const [date, setDate] = useState("");
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
 
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
-  };
+
   const [id, setId] = useState<string>("11");
   // const id: number | undefined = getID()!;
   const [sex, setSex] = useState<boolean>();
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user != null) {
-      const userData = JSON.parse(user);
-      const username = userData.username;
-      console.log("USERNAME: " + username);
-      userController.getUserWhereUsername(username).then((res) => {
-        setEditUser(res);
-        setSex(res.sex);
-        setId(res.id);
 
-        const UserImageArray = JSON.stringify(res.UserImage);
-        console.log("Hinh cua user: " + UserImageArray);
-        if (UserImageArray == "[]") {
-          console.log("Chua co hinh");
-          setCheckImageUrl(false);
-        } else {
-          const urlTaker = JSON.parse(UserImageArray);
-          setUrlThen(urlTaker[0].url);
-          console.log("ID: " + urlThen);
-          setCheckImageUrl(true);
-        }
-
-        setDate(res.dateOfBirth.substring(0, 10));
-      });
-    } else {
-      console.log("Chua Dang Nhap Dung");
-    }
-  }, []);
 
   const {
     control,
     handleSubmit,
     register,
+    reset,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
-    defaultValues: {
-      username: "" + param.username,
-      name: "" + editUser?.name,
-      email: "" + editUser?.email,
-      sex: "" + editUser?.sex,
-      dateOfBirth: "" + editUser?.dateOfBirth,
-      phonenumber: "" + editUser?.phonenumber,
-      // fullName: '',
-      // Address: ''
-    },
+
   });
+  const isDisabled = !(isValid && isDirty);
+  console.log("CHECHERRRRR:" + isDirty);
+
+
+  const getUserData = () => {
+    const user = localStorage.getItem("user");
+    if (user != null) {
+      const userData = JSON.parse(user);
+      const username = userData.username;
+      console.log("USERNAME: " + username);
+      userController.getUserWhereUsername(username)
+        .then((res) => {
+          return res;
+        })
+        .then((res) => {
+          reset({
+            username: userData.username,
+            name: res.name,
+            email: res.email,
+            sex: res.sex,
+            phonenumber: res.phonenumber,
+            dateOfBirth: (res.dateOfBirth).substring(0,10),
+          });
+          // setEditUser(res);
+          setSex(res.sex);
+          setId(res.id);
+
+          const UserImageArray = JSON.stringify(res.UserImage);
+          console.log("dateOfBirth:"+res.dateOfBirth);
+          // console.log("Hinh cua user: " + UserImageArray);
+          if (UserImageArray == "[]") {
+            // console.log("Chua co hinh");
+            setCheckImageUrl(false);
+          } else {
+            const urlTaker = JSON.parse(UserImageArray);
+            setUrlThen(urlTaker[0].url);
+            // console.log("ID: " + urlThen);
+            setCheckImageUrl(true);
+          }
+
+          // setDate(res.dateOfBirth.substring(0, 10));
+        }).catch((error) => {
+          console.log(
+            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
+            error
+          );
+        });
+    } else {
+      console.log("Chua Dang Nhap Dung");
+    }
+  }
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   useEffect(() => {
     function CheckLink() {
@@ -107,34 +124,10 @@ export default function UserProfile() {
     CheckLink();
   }, [param]);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-  const [errorss, setErrors] = useState({
-    username: "",
-    password: "",
-  });
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const { name, value } = e.target;
-    // setFormData({
-    //     ...formData,
-    //     [name]: value,
-    // });
-    // if (isFormSubmitted) {
-    //     setErrors({
-    //         ...errorss,
-    //         [name]: '',
-    //     });
-    // }
-  };
+
+
 
   const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSex(JSON.parse(event.target.value));
@@ -143,6 +136,8 @@ export default function UserProfile() {
   useEffect(() => {
     loadImageFile(image);
   }, [image]);
+
+
 
   // img firebase
   const loadImageFile = async (image: any) => {
@@ -174,7 +169,6 @@ export default function UserProfile() {
   const onSubmit = async (formData: FormValues) => {
     try {
       console.log("TESTING: " + formData);
-      formData.dateOfBirth = date;
       formData.sex = JSON.parse(formData.sex);
       const response = await axios.put(API, formData);
       formData.id = parseInt(id);
@@ -231,9 +225,7 @@ export default function UserProfile() {
       }
     }
   };
-  const onChangeInput = (e: any) => {
-    setEditUser(e.target.value);
-  };
+
 
   const onChangeImage = (e: any) => {
     // setImage(e.target.files)
@@ -249,7 +241,12 @@ export default function UserProfile() {
       console.log("No file selected");
     }
   };
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value);
+  };
 
+ 
+  
   return (
     <Container>
       <Fragment>
@@ -301,16 +298,15 @@ export default function UserProfile() {
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.username
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                            ${!!errors.username
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
                                 placeholder="Tên đăng nhập"
-                                value={param.username}
-                                {...register("username")}
-                                onChange={onChangeInput}
-                                // disabled
+                                value={field.value}
+                              // {...register("username")}
+                              // onChange={onChangeInput}
+                              // disabled
                               />
                               {!!errors.username && (
                                 <p className="text-red-700 mt-2">
@@ -349,15 +345,19 @@ export default function UserProfile() {
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                       ${
-                                                         !!errors.name
-                                                           ? "border-[2px] border-red-900"
-                                                           : "border-[1px] border-[#FFAAAF]"
-                                                       }`}
+                                                       ${!!errors.name
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
                                 placeholder="Tên người dùng"
-                                value={editUser?.name}
-                                {...register("name")}
-                                onChange={onChangeInput}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  const reg = /[!@#$%^&*]/;
+                                  field.onChange(value.replace(reg, ""));
+                                }}
+                                value={field.value}
+                              // {...register("name")}
+
                               />
                               {!!errors.name && (
                                 <p className="text-red-700 mt-2">
@@ -393,15 +393,19 @@ export default function UserProfile() {
                             <input
                               className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                       ${
-                                                         !!errors.email
-                                                           ? "border-[2px] border-red-900"
-                                                           : "border-[1px] border-[#FFAAAF]"
-                                                       }`}
+                                                       ${!!errors.email
+                                  ? "border-[2px] border-red-900"
+                                  : "border-[1px] border-[#FFAAAF]"
+                                }`}
                               placeholder="Email"
-                              value={editUser?.email}
-                              {...register("email")}
-                              onChange={onChangeInput}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                const reg = /[!#$%^&*]/;
+                                field.onChange(value.replace(reg, ""));
+                              }}
+                              value={field.value}
+                            // {...register("email")}
+                            // onChange={onChangeInput}
                             />
                             {!!errors.email && (
                               <p className="text-red-700 mt-2">
@@ -491,15 +495,19 @@ export default function UserProfile() {
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                       ${
-                                                         !!errors.phonenumber
-                                                           ? "border-[2px] border-red-900"
-                                                           : "border-[1px] border-[#FFAAAF]"
-                                                       }`}
+                                                       ${!!errors.phonenumber
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
                                 placeholder="Số điện thoại"
-                                value={editUser?.phonenumber}
-                                {...register("phonenumber")}
-                                onChange={onChangeInput}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  const reg = /[!@#$%^&*]/;
+                                  field.onChange(value.replace(reg, ""));
+                                }}
+                                value={field.value}
+                              // {...register("phonenumber")}
+                              // onChange={onChangeInput}
                               />
                               {!!errors.phonenumber && (
                                 <p className="text-red-700 mt-2">
@@ -517,10 +525,10 @@ export default function UserProfile() {
                         name="dateOfBirth"
                         rules={
                           {
-                            // required: {
-                            //     value: true,
-                            //     message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
-                            // }
+                            required: {
+                              value: true,
+                              message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
+                            }
                           }
                         }
                         render={({ field }) => (
@@ -533,15 +541,15 @@ export default function UserProfile() {
                             </label>
                             <input
                               className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             ${
-                                               !!errors.phonenumber
-                                                 ? "border-[2px] border-red-900"
-                                                 : "border-[1px] border-[#FFAAAF]"
-                                             }`}
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2`}
                               type="date"
-                              value={date}
-                              onChange={handleDateChange}
+                              value={field.value}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                const reg = /[!@#$%^&*]/;
+                                field.onChange(value.replace(reg, ""));
+                              }}
+                              
                             />
                             {!!errors.dateOfBirth && (
                               <p className="text-red-700 mt-2">
@@ -554,14 +562,22 @@ export default function UserProfile() {
                     </div>
                     {/* button */}
                     <div
-                      className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48]`}
+                      className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
+                        ? "bg-[#aeaeae] cursor-not-allowed"
+                        : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                        }
+                         `}
                     >
                       <button
+                        disabled={isDisabled}
                         onClick={handleSubmit((formData: any) => {
                           onSubmit(formData);
                         })}
                         className={`text-center text-base font-bold text-[#FFFFFF]
-                                        `}
+                        ${isDisabled
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                          }                `}
                       >
                         Lưu
                       </button>

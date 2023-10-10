@@ -51,7 +51,7 @@ export default function EditProductMap() {
       mode: "all",
    });
    const isDisabled = !(isValid && isDirty);
-
+   // console.log("CHECHERRRRR:"+isDirty);
    const handleRemoveOnlyIMG = (id: number) => {
       imagesController
          .remove(id)
