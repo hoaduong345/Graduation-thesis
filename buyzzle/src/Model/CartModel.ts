@@ -10,8 +10,8 @@ interface CartProduct {
     subtotal: number,
     item: CartItem[]
 }
-interface CartItem {
-
+export interface CartItem {
+    productid: number,
     quantity: number,
     product: Products
     total: number

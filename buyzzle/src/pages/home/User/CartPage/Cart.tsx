@@ -8,7 +8,7 @@ import SearchVoucher from "../../../../Assets/TSX/SearchVoucher";
 import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import { cartControllers } from "../../../../Controllers/CartControllers";
-import { CartModel } from "../../../../Model/CartModel";
+import { CartItem, CartModel } from "../../../../Model/CartModel";
 import { numberFormat } from "../../../../Helper";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 
@@ -18,21 +18,6 @@ export default function Cart() {
 
    const [cart, setCart] = useState<CartModel>();
 
-   const [checkItemCart, setCheckItemCart] = useState(false);
-
-   var totalCart = 0;
-
-   // const [quantity, setQuantity] = useState<number>(0);
-
-   // const minus = () => {
-   //    if (quantity > 1) {
-   //       setQuantity(quantity - 1);
-   //    }
-   // };
-   // const plus = () => {
-   //    setQuantity(quantity + 1);
-   // };
-
    const getCart = () => {
       cartControllers.getCart().then((res) => {
          setCart(res);
@@ -41,12 +26,13 @@ export default function Cart() {
    useEffect(() => {
       getCart();
    }, []);
-
-   const removeItemCart = (id: number) => {
-      cartControllers.removeItemCart(id).then(() => {
-         getCart();
-         closeModal(idItemCart);
-      });
+   const [idProduct, setIdProduct] = useState(0);
+   const removeItemCart = () => {
+      console.log(idProduct);
+      // cartControllers.removeItemCart(id).then(() => {
+      //    getCart();
+      //    closeModal(idItemCart);
+      // });
    };
 
    const removeAllCart = () => {
@@ -70,12 +56,15 @@ export default function Cart() {
       }
    };
 
-   const chooseItemCart = (id: string) => {
-      const choose = document.getElementById(id) as HTMLDialogElement | null;
-      if (choose) {
-         setCheckItemCart(!checkItemCart);
-      }
-   };
+   // const [productChecked, setProductChecked] = useState<CartItem[]>([]);
+   // // 2 array : 1 array cart, 1 array cart checked
+   // const handleChecked = (checked: boolean, item: CartItem) => {
+   //    console.log(checked);
+   //    if (checked) {
+   //       setProductChecked((prev) => [...prev, item]);
+   //    } else {
+   //    }
+   // };
 
    return (
       <Container>
@@ -133,11 +122,10 @@ export default function Cart() {
                            >
                               <div className="col-span-1 text-center leading-none	">
                                  <input
-                                    id={e.product.id.toString()}
-                                    checked={checkItemCart}
-                                    onClick={() =>
-                                       chooseItemCart(e.product.id.toString())
-                                    }
+                                    // checked={productChecked.includes(e)}
+                                    // onChange={(ele) =>
+                                    //    handleChecked(ele.target.checked, e)
+                                    // }
                                     type="checkbox"
                                     className="checkbox checkbox-sm items-center"
                                  />
@@ -197,24 +185,27 @@ export default function Cart() {
                               </div>
                               <div className="col-span-1 justify-center flex">
                                  <button
-                                    onClick={() => openModal(idItemCart)}
+                                    onClick={() => {
+                                       openModal(idItemCart);
+                                       setIdProduct(Number(e.productid));
+                                    }}
                                     className="p-3 rounded-full
                     shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]"
                                  >
                                     <Delete />
                                  </button>
                               </div>
-                              <DialogAddress
-                                 body={<></>}
-                                 id={idItemCart}
-                                 onClose={() => closeModal(idItemCart)}
-                                 onSave={() => removeItemCart(e.product.id)}
-                                 title="Bạn Chắc Chắn!"
-                              />
                            </div>
                         </>
                      );
                   })}
+                  <DialogAddress
+                     body={<></>}
+                     id={idItemCart}
+                     onClose={() => closeModal(idItemCart)}
+                     onSave={removeItemCart}
+                     title="Bạn Chắc Chắn!"
+                  />
                </div>
 
                <div
