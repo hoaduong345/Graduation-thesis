@@ -7,8 +7,10 @@ import Container from "../../../../components/container/Container";
 import Back from "../../Admin/Assets/TSX/Back";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { Editor } from "@tinymce/tinymce-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 export default function OrderDetailPage() {
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
+
   const editorRef = useRef<any>(null);
   const {
     control,
@@ -46,6 +48,11 @@ export default function OrderDetailPage() {
       modal.showModal();
     }
   };
+  const handleRatingClick = (rating: number) => {
+    setSelectedRating(rating);
+    console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
+  };
+
   return (
     <Container>
       <div className="body-filter container mx-auto">
@@ -246,31 +253,15 @@ export default function OrderDetailPage() {
                             <div className="rating mt-1 ">
                               <div className="flex items-center justify-start gap-3 ">
                                 <div className="rating rating-lg gap-3">
-                                  <input
-                                    type="radio"
-                                    name="rating-5"
-                                    className="mask mask-star-2 bg-orange-400"
-                                  />
-                                  <input
-                                    type="radio"
-                                    name="rating-5"
-                                    className="mask mask-star-2 bg-orange-400"
-                                  />
-                                  <input
-                                    type="radio"
-                                    name="rating-5"
-                                    className="mask mask-star-2 bg-orange-400"
-                                  />
-                                  <input
-                                    type="radio"
-                                    name="rating-5"
-                                    className="mask mask-star-2 bg-orange-400"
-                                  />
-                                  <input
-                                    type="radio"
-                                    name="rating-5"
-                                    className="mask mask-star-2 bg-orange-400"
-                                  />
+                                  {[1, 2, 3, 4, 5].map((rating) => (
+                                    <input
+                                      key={rating}
+                                      type="radio"
+                                      name="rating-5"
+                                      className="mask mask-star-2 bg-orange-400"
+                                      onClick={() => handleRatingClick(rating)}
+                                    />
+                                  ))}
                                 </div>
                               </div>
                             </div>
