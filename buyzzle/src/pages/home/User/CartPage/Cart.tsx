@@ -7,13 +7,15 @@ import Voucher from "../../../../Assets/TSX/Voucher";
 import SearchVoucher from "../../../../Assets/TSX/SearchVoucher";
 import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
-import {
-   ModelCart,
-   cartControllers,
-} from "../../../../Controllers/CartControllers";
+import { cartControllers } from "../../../../Controllers/CartControllers";
+import { CartModel } from "../../../../Model/CartModel";
+import { numberFormat } from "../../../../Helper";
+import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 
 export default function Cart() {
-   const [cart, setCart] = useState<ModelCart[]>([]);
+   const idModal = "confirmCart";
+
+   const [cart, setCart] = useState<CartModel>();
    //  const [quantity, setQuantity] = useState(1);
 
    //  const minus = () => {
@@ -24,11 +26,42 @@ export default function Cart() {
    //  const plus = () => {
    //     setQuantity(quantity + 1);
    //  };
-   useEffect(() => {
+
+   const getCart = () => {
       cartControllers.getCart().then((res) => {
-         setCart(res.data.item);
+         setCart(res);
       });
+   };
+   useEffect(() => {
+      getCart();
    }, []);
+
+   const removeItemCart = (id: number) => {
+      cartControllers.removeItemCart(id).then(() => {
+         getCart();
+         closeModal(idModal);
+      });
+   };
+
+   const removeAllCart = () => {
+      cartControllers.removeAllCart().then(() => {
+         getCart();
+      });
+   };
+
+   const openModal = (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         modal.showModal();
+      }
+   };
+
+   const closeModal = (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         modal.close();
+      }
+   };
 
    return (
       <Container>
@@ -74,8 +107,8 @@ export default function Cart() {
                </div>
             </div>
             <div>
-               <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[630px] mt-8 flex flex-col gap-5">
-                  {cart.map((e) => {
+               <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[630px] mt-8 flex flex-col gap-5 overflow-x-hidden">
+                  {cart?.data.item.map((e) => {
                      return (
                         <>
                            <div
@@ -107,12 +140,12 @@ export default function Cart() {
                                  </div>
                               </div>
                               <div className="col-span-2">
-                                 <div className="flex gap-2 items-center justify-center">
+                                 <div className="flex gap-3 items-center justify-center">
                                     <p className="text-[#7A828A] text-xs line-through leading-none	">
-                                       {e.price}
+                                       {numberFormat(e.product.price)}
                                     </p>{" "}
                                     <p className="text-[#EA4B48] text-xl">
-                                       {e.product.sellingPrice}
+                                       {numberFormat(e.product.sellingPrice)}
                                     </p>
                                  </div>
                               </div>
@@ -137,17 +170,27 @@ export default function Cart() {
                               </div>
                               <div className="col-span-2 flex justify-center">
                                  <p className="text-[#EA4B48] text-xl">
-                                    {e.quantity * e.product.sellingPrice}
+                                    {numberFormat(
+                                       e.quantity * e.product.sellingPrice
+                                    )}
                                  </p>
                               </div>
                               <div className="col-span-1 justify-center flex">
                                  <button
+                                    onClick={() => openModal(idModal)}
                                     className="p-3 rounded-full
                     shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]"
                                  >
                                     <Delete />
                                  </button>
                               </div>
+                              <DialogAddress
+                                 body={<></>}
+                                 id={idModal}
+                                 onClose={() => closeModal(idModal)}
+                                 onSave={() => removeItemCart(e.product.id)}
+                                 title="Bạn Chắc Chắn!"
+                              />
                            </div>
                         </>
                      );
@@ -190,7 +233,7 @@ export default function Cart() {
                         <div className="flex w-[40%] text-[#1A1A1A] text-base">
                            <div>Chọn Tất Cả</div>
                            {/* Tổng số lượng được tick chọn trong giỏ hàng */}
-                           <div className="mx-2 gap-2">(231443)</div>
+                           <div className="mx-2 gap-2">(0)</div>
                            {/* end Tổng số lượng được tick chọn trong giỏ hàng */}
                         </div>
                         {/* Xóa */}
@@ -198,7 +241,7 @@ export default function Cart() {
                            className="rounded-full shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]
                         "
                         >
-                           <div className="p-3">
+                           <div onClick={removeAllCart} className="p-3">
                               <Delete />
                            </div>
                         </div>

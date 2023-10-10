@@ -140,6 +140,7 @@ export default function Addproducts() {
       mode: "all",
       defaultValues: {
          productName: "",
+         categoryID: 0,
          productDesc: "",
          productImage: "",
          productPrice: 1,
