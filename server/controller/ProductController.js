@@ -541,7 +541,7 @@ const ProductController = {
         },
       });
   
-      res.status(200).json("Đánh giá sản phẩm thành công");
+      res.status(200).json(rating);
     } catch (error) {
       console.error(error);
       res.status(200).json("Đánh giá sản phẩm không thành công");
@@ -595,7 +595,7 @@ const ProductController = {
         },
       });
   
-      res.status(200).json("Cập nhật đánh giá sản phẩm thành công");
+      res.status(200).json(updatedRating);
     } catch (error) {
       console.error(error);
       res.status(500).json("Cập nhật đánh giá sản phẩm không thành công");
