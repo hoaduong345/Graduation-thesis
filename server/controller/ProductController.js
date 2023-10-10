@@ -512,7 +512,7 @@ const ProductController = {
     try {
       const newProducts = await prisma.product.findMany({
         orderBy: {
-          createdAt: "desc", // sap xep time de lay san pham moi nhat
+          createdAt: "desc", 
         },
         take: 5,
       });
@@ -522,6 +522,35 @@ const ProductController = {
       res.status(500).json(error.message);
     }
   },
+
+
+  getSaleProducts : async(req, res) => {
+    try{  
+        const discount = 60;
+        const saleProducts = await prisma.product.findMany({
+          where: {
+             discount : {
+               gt : discount,
+             }, 
+          },
+          take: 3,
+        });
+        res.json(saleProducts);
+    }catch(error){
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+
+
+
+
+
+
+
+
+
 
 
 

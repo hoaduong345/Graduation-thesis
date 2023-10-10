@@ -66,11 +66,7 @@ export default function Header() {
   //   window.location.href = "/";
   // }, 30 * 1000);
 
-  if (user != null) {
-    username = JSON.parse(user).username;
-  } else {
-    console.log("Chua dang nhap");
-  }
+
   const href = `/userprofilepage/${username}`;
 
 
