@@ -24,6 +24,7 @@ model User {
   updateAt             DateTime  @default(now())
   dateOfBirth          DateTime?
   sex                  Boolean?
+  address              String?
   refresh_token        String?
   forgotpassword_token String?   @db.VarChar(300)
   role                 Int?
