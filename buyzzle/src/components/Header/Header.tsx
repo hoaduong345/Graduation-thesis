@@ -36,7 +36,7 @@ export default function Header() {
 
   const user = localStorage.getItem('user');
 
-
+  const [href, setHref]= useState('');
   var username;
   const [name, setName] = useState('');
   const [img, setImg] = useState('');
@@ -45,6 +45,7 @@ export default function Header() {
     if (user != null) {
       const userData = JSON.parse(user);
       const username = userData.username;
+      setHref(`/userprofilepage/${username}`);
       console.log("USERNAME: " + username);
       userController.getUserWhereUsername(username).then((res) => {
         // setEditUser(res)
@@ -53,6 +54,7 @@ export default function Header() {
         const urlTaker = JSON.parse(UserImageArray);
         setImg(urlTaker[0].url);
         console.log("ID: " + img);
+      
       })
     } else {
       console.log("Chua Dang Nhap Dung");
@@ -67,7 +69,7 @@ export default function Header() {
   // }, 30 * 1000);
 
 
-  const href = `/userprofilepage/${username}`;
+
 
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

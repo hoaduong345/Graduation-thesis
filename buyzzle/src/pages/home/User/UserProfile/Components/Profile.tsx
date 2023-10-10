@@ -63,24 +63,29 @@ export default function UserProfile() {
     if (user != null) {
       const userData = JSON.parse(user);
       const username = userData.username;
-      console.log("USERNAME: " + username);
+      console.log("USERNAME1: " + username);
       userController.getUserWhereUsername(username)
         .then((res) => {
           return res;
         })
         .then((res) => {
+          if(res.dateOfBirth==null){
+            res.dateOfBirth = "dd/mm/yyyy";
+          }else{
+            res.dateOfBirth = (res.dateOfBirth).substring(0,10);
+          }
           reset({
             username: userData.username,
             name: res.name,
             email: res.email,
             sex: res.sex,
             phonenumber: res.phonenumber,
-            dateOfBirth: (res.dateOfBirth).substring(0,10),
+            dateOfBirth: res.dateOfBirth,
           });
           // setEditUser(res);
           setSex(res.sex);
           setId(res.id);
-
+          
           const UserImageArray = JSON.stringify(res.UserImage);
           console.log("dateOfBirth:"+res.dateOfBirth);
           // console.log("Hinh cua user: " + UserImageArray);
@@ -168,6 +173,11 @@ export default function UserProfile() {
   const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
   const onSubmit = async (formData: FormValues) => {
     try {
+      console.log("selectedFile:"+selectedFile);
+      if (selectedFile == null && CheckImageUrl == null) {
+        toast.error("Hãy chọn hình");
+        return;
+     }
       console.log("TESTING: " + formData);
       formData.sex = JSON.parse(formData.sex);
       const response = await axios.put(API, formData);
@@ -178,6 +188,7 @@ export default function UserProfile() {
       }
 
       console.log("edit thanh cong", response);
+ 
 
       if (response.status === 200) {
         console.log("Edit successfully");
