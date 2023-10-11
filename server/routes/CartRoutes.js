@@ -7,6 +7,9 @@ router.get("/",CartController.getCart)
 // DELETE ITEM
 router.delete("/:id", CartController.deleteItem)
 // DELETE all item on cart
-router.delete("/", CartController.deleteCart)
+router.delete("/", CartController.deleteAllItemOnCart)
+// Increase and decrease item on cart
+router.put("/increase", CartController.increaseItem)
+router.put("/decrease", CartController.decreaseItem)
 
 module.exports = router;

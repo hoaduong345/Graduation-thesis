@@ -59,48 +59,22 @@ const CartController = {
         });
     },
 
-    
-    // createItem: async (userId, productId, quantity) => {
-    //     const product = await prisma.product.findFirst({
-    //         where: { id: productId },
-    //     });
-    //     return prisma.itemCart.create({
-    //         data: {
-    //             userId,
-    //             subtotal: product.sellingPrice * quantity,
-    //             item: {
-    //                 create: {
-    //                     productid: productId,
-    //                     quantity,
-    //                     price: product.sellingPrice,
-    //                     total: product.sellingPrice * quantity,
-    //                 },
-    //             },
-    //         },
-    //         include: { item: true },
-    //     });
-    // },
-
-
     updateCart: async (cart, productId, quantity) => {
         const existingCartItem = cart.item.find((item) => item.productid === productId);
-
-        console.log("🚀 ~ file: CartController.js:87 ~ updateCart: ~ existingCartItem:", existingCartItem)
-        
         if (existingCartItem) {
             await prisma.itemCart.update({
                 where: { id: existingCartItem.id },
                 data: {
                     quantity: existingCartItem.quantity + quantity,
                     price: existingCartItem.price,
-                    total: (existingCartItem.quantity + quantity) * existingCartItem.price
+                    total: (existingCartItem.quantity + quantity) * existingCartItem.price,
                 },
             });
         } else {
             const product = await prisma.product.findUnique({
                 where: { id: productId },
             });
-            
+
             if (!product) {
                 throw new Error(`Product with ID ${productId} not found.`);
             }
@@ -154,16 +128,16 @@ const CartController = {
                     id: cartItem.id,
                 },
             });
-            const newSubtotal = cart.subtotal - cartItem.total
+            const newSubtotal = cart.subtotal - cartItem.total;
 
             await prisma.cart.update({
-                where :{
-                    id: cart.id
+                where: {
+                    id: cart.id,
                 },
-                data:{
-                    subtotal : newSubtotal
-                }
-            })
+                data: {
+                    subtotal: newSubtotal,
+                },
+            });
             res.status(200).send('Delete item successfully');
         } catch (error) {
             console.log('error', error);
@@ -171,7 +145,7 @@ const CartController = {
         }
     },
     // DELETE ALL ITEM ON CART
-    deleteCart: async (req, res) => {
+    deleteAllItemOnCart: async (req, res) => {
         try {
             const userId = parseInt(req.cookies.id);
             const cart = await prisma.cart.findFirst({
@@ -219,7 +193,77 @@ const CartController = {
             res.status(404).send('Update item failed');
         }
     },
+    // INCREASE-ITEM (tăng số lượng của item)
+    increaseItem: async (res, req) => {
+        try {
+            const {cartId, productId} = req.body
 
+            const cartItem = await prisma.itemCart.findFirst({
+                where: { cartid: cartId, productid: productId },
+            });
+        
+            if (!cartItem) throw new Error("Item not found in cart.");
+        
+            await prisma.itemCart.update({
+                where: { id: cartItem.id },
+                data: {
+                    quantity: cartItem.quantity + 1,
+                    total: (cartItem.quantity + 1) * cartItem.price,
+                },
+            });
+            const cartItems = await prisma.itemCart.findMany({
+                where: { cartid: cartId }
+            });
+        
+            const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
+        
+            const newCart = await prisma.cart.update({
+                where: { id: cartId },
+                data: { subtotal: subtotal }
+            });
+
+            res.status(200).send(newCart)
+        } catch (error) {
+            console.log("error",error)
+            res.status(404).send("Increase item is failed")
+        }
+    },
+    // DECREASE-ITEM (Giảm số lượng của item)
+    decreaseItem: async (cartId, productId) => {
+        try {
+            const cartItem = await prisma.itemCart.findFirst({
+                where: { cartid: cartId, productid: productId },
+            });
+        
+            if (!cartItem) throw new Error("Item not found in cart.");
+            if (cartItem.quantity <= 1) throw new Error("Quantity can't be less than 1.");
+        
+            await prisma.itemCart.update({
+                where: { id: cartItem.id },
+                data: {
+                    quantity: cartItem.quantity - 1,
+                    total: (cartItem.quantity - 1) * cartItem.price,
+                },
+            });
+            const cartItems = await prisma.itemCart.findMany({
+                where: { cartid: cartId }
+            });
+        
+            const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
+        
+            const newCart = await prisma.cart.update({
+                where: { id: cartId },
+                data: { subtotal: subtotal }
+            });
+            res.status(200).send(newCart)
+        } catch (error) {
+            console.log("error",error)
+            res.status(404).send("Decrease item is failed")
+        }
+
+    },
+
+    // GET CART
     getCart: async (req, res) => {
         try {
             const id = parseInt(req.cookies.id);
