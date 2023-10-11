@@ -185,59 +185,62 @@ const CartController = {
             res.status(404).send('Delete all item failed');
         }
     },
-    // UPDATE CART
-    updateItem: async (req, res) => {
-        try {
-        } catch (error) {
-            console.log('error', error);
-            res.status(404).send('Update item failed');
-        }
-    },
-    // INCREASE-ITEM (tăng số lượng của item)
-    increaseItem: async (res, req) => {
-        try {
-            const {cartId, productId} = req.body
 
+    // INCREASE-ITEM (tăng số lượng của item)
+    increaseItem: async (req, res) => {
+        try {
+            const cartId = parseInt(req.body.cartId);
+            const productId = parseInt(req.body.productId)
+            console.log("🚀 ~ file: CartController.js:195 ~ increaseItem: ~ productId:", productId)
+            console.log("🚀 ~ file: CartController.js:193 ~ increaseItem: ~ cartId:", cartId)
+            const increase = 1
             const cartItem = await prisma.itemCart.findFirst({
                 where: { cartid: cartId, productid: productId },
             });
-        
-            if (!cartItem) throw new Error("Item not found in cart.");
-        
+
+            if (!cartItem) throw new Error('Item not found in cart.');
+
             await prisma.itemCart.update({
                 where: { id: cartItem.id },
                 data: {
-                    quantity: cartItem.quantity + 1,
-                    total: (cartItem.quantity + 1) * cartItem.price,
+                    quantity: cartItem.quantity + increase,
+                    total: (cartItem.quantity + increase) * cartItem.price,
                 },
             });
             const cartItems = await prisma.itemCart.findMany({
-                where: { cartid: cartId }
-            });
-        
-            const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
-        
-            const newCart = await prisma.cart.update({
-                where: { id: cartId },
-                data: { subtotal: subtotal }
+                where: { cartid: cartId },
             });
 
-            res.status(200).send(newCart)
+            const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
+
+            const newCart = await prisma.cart.update({
+                where: { id: cartId },
+                data: { subtotal: subtotal },
+                include:{
+                    item:true
+                }
+            });
+
+            res.status(200).json({
+                status: true,
+                data: newCart,
+            });
         } catch (error) {
-            console.log("error",error)
-            res.status(404).send("Increase item is failed")
+            console.log('error', error);
+            // res.status(404).send('Increase item is failed');
         }
     },
     // DECREASE-ITEM (Giảm số lượng của item)
-    decreaseItem: async (cartId, productId) => {
+    decreaseItem: async (res, req) => {
         try {
+            const { cartId, productId } = req.body;
             const cartItem = await prisma.itemCart.findFirst({
                 where: { cartid: cartId, productid: productId },
             });
-        
-            if (!cartItem) throw new Error("Item not found in cart.");
+
+            if (!cartItem) throw new Error('Item not found in cart.');
             if (cartItem.quantity <= 1) throw new Error("Quantity can't be less than 1.");
-        
+
             await prisma.itemCart.update({
                 where: { id: cartItem.id },
                 data: {
@@ -246,21 +249,24 @@ const CartController = {
                 },
             });
             const cartItems = await prisma.itemCart.findMany({
-                where: { cartid: cartId }
+                where: { cartid: cartId },
             });
-        
+
             const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
-        
+
             const newCart = await prisma.cart.update({
                 where: { id: cartId },
-                data: { subtotal: subtotal }
+                data: { subtotal: subtotal },
             });
-            res.status(200).send(newCart)
-        } catch (error) {
-            console.log("error",error)
-            res.status(404).send("Decrease item is failed")
-        }
 
+            res.status(200).json({
+                status: true,
+                data: newCart,
+            });
+        } catch (error) {
+            console.log('error', error);
+            res.status(404).send('Decrease item is failed');
+        }
     },
 
     // GET CART
