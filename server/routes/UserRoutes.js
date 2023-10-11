@@ -17,4 +17,6 @@ router.put("/updateimageuser/:iduser", UserController.updateImageUser)
 
 router.get("/chitietuser/:username", UserController.getUser);
 
+router.get("/alluser", UserController.getAllUser);
+
 module.exports = router;

@@ -1,39 +1,36 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-const multer = require("multer");
-const path = require("path");
+const multer = require('multer');
+const path = require('path');
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "image"); // Thư mục lưu trữ ảnh
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
+    destination: (req, file, cb) => {
+        cb(null, 'image'); // Thư mục lưu trữ ảnh
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, uniqueSuffix + '-' + file.originalname);
+    },
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = [".jpg", ".jpeg", ".png"];
-  const fileExtension = path.extname(file.originalname).toLowerCase();
-  if (allowedExtensions.includes(fileExtension)) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error("Chỉ chấp nhận tệp ảnh có định dạng .jpg, .jpeg, hoặc .png"),
-      false
-    );
-  }
+    const allowedExtensions = ['.jpg', '.jpeg', '.png'];
+    const fileExtension = path.extname(file.originalname).toLowerCase();
+    if (allowedExtensions.includes(fileExtension)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Chỉ chấp nhận tệp ảnh có định dạng .jpg, .jpeg, hoặc .png'), false);
+    }
 };
 
 const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
-  // limits: {
-  //   fileSize: 1024 * 1024 * 5,
-  // },
+    storage: storage,
+    fileFilter: fileFilter,
+    // limits: {
+    //   fileSize: 1024 * 1024 * 5,
+    // },
 });
 
 const ProductController = {
