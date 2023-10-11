@@ -18,19 +18,43 @@ import useThrottle from "@rooks/use-throttle";
 export default function Cart() {
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
-   var totalCart = 0;
 
    const [cart, setCart] = useState<CartModel>({} as CartModel);
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
-   var checkAll: boolean = false;
-   const handleIncreaseQuantity = (data: UpdateCart) => {
-      cartControllers.increaseCart(data).then(() => {
-         getCart();
-      });
-   };
-   const handleDecreaseQuantity = () => {};
 
-   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 1500);
+   var checkAll: boolean =
+      productChecked.length === cart?.data?.item?.length &&
+      cart?.data?.item?.length !== 0;
+   const handleIncreaseQuantity = (data: UpdateCart) => {
+      cartControllers.increaseCart(data).then((res) => {
+         setCart(res);
+      });
+      const indexProduct = productChecked.findIndex(
+         (item) => item.productid === data.productId
+      );
+      const _productChecked = [...productChecked];
+      _productChecked[indexProduct].quantity += 1;
+
+      setProductChecked(_productChecked);
+   };
+   const handleDecreaseQuantity = (data: UpdateCart) => {
+      // if () {
+
+      cartControllers.decreaseCart(data).then((res) => {
+         setCart(res);
+      });
+      const indexProduct = productChecked.findIndex(
+         (item) => item.productid === data.productId
+      );
+      const _productChecked = [...productChecked];
+      _productChecked[indexProduct].quantity -= 1;
+
+      setProductChecked(_productChecked);
+      // }
+   };
+
+   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 500);
+   const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -41,16 +65,22 @@ export default function Cart() {
       getCart();
    }, []);
    const [idProduct, setIdProduct] = useState(0);
-   const removeItemCart = () => {
+   const removeItemCart = (id: number) => {
       cartControllers.removeItemCart(idProduct).then(() => {
          getCart();
          closeModal(idItemCart);
+         const _productChecked = [...productChecked];
+         const Product = _productChecked.filter(
+            (item) => item.productid !== id
+         );
+         setProductChecked(Product);
       });
    };
 
    const removeAllCart = () => {
       cartControllers.removeAllCart().then(() => {
          getCart();
+         setProductChecked([]);
          closeModal(idAllCart);
       });
    };
@@ -71,12 +101,7 @@ export default function Cart() {
 
    // 2 array : 1 array cart, 1 array cart checked
    const handleChecked = (checked: boolean, item: CartItem) => {
-      if (productChecked.length == cart?.data.item.length) {
-         checkAll = true;
-      } else {
-         checkAll = false;
-      }
-
+      console.log(checked);
       if (checked) {
          setProductChecked((prev) => [...prev, item]);
       } else {
@@ -97,11 +122,28 @@ export default function Cart() {
          setProductChecked([]);
       }
    };
-   for (let i = 0; i < productChecked.length; i++) {
-      const element = productChecked[i];
-      totalCart += element.total;
-   }
+   const get = () => {
+      let totalCart = 0;
+      let sale = 0;
+      for (let i = 0; i < productChecked.length; i++) {
+         const element = productChecked[i];
+         totalCart += element.quantity * element.product.sellingPrice;
+         sale +=
+            element.quantity *
+            (element.product.price - element.product.sellingPrice);
+      }
 
+      return {
+         sale,
+         totalCart,
+      };
+   };
+   const checked = (item: CartItem) => {
+      const _check = productChecked.findIndex(
+         (el) => el.productid == item.productid
+      );
+      return _check !== -1;
+   };
    return (
       <Container>
          <div>
@@ -115,7 +157,7 @@ export default function Cart() {
             >
                <div className="col-span-1 text-center leading-none	">
                   <input
-                     onClick={() => !checkAll}
+                     checked={checkAll}
                      type="checkbox"
                      className="checkbox checkbox-sm items-center"
                      onChange={(element) =>
@@ -150,7 +192,7 @@ export default function Cart() {
                </div>
             </div>
             <div>
-               <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[630px] mt-8 flex flex-col gap-5 overflow-x-hidden">
+               <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[430px] mt-8 flex flex-col gap-5 overflow-x-hidden">
                   {(cart?.data?.item ?? []).map((e) => {
                      return (
                         <>
@@ -162,7 +204,7 @@ export default function Cart() {
                            >
                               <div className="col-span-1 text-center leading-none	">
                                  <input
-                                    checked={productChecked.includes(e)}
+                                    checked={checked(e)}
                                     onChange={(element) =>
                                        handleChecked(element.target.checked, e)
                                     }
@@ -200,7 +242,12 @@ export default function Cart() {
                               <div className=" flex items-center col-span-2 justify-center gap-1">
                                  <div
                                     className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                    onClick={handleDecreaseQuantity}
+                                    onClick={() =>
+                                       minusThrottled({
+                                          productId: e.productid,
+                                          cartId: e.cartid,
+                                       })
+                                    }
                                  >
                                     <Minus />
                                  </div>
@@ -248,7 +295,7 @@ export default function Cart() {
                      body={<></>}
                      id={idItemCart}
                      onClose={() => closeModal(idItemCart)}
-                     onSave={removeItemCart}
+                     onSave={() => removeItemCart(idProduct)}
                      title="Bạn Chắc Chắn!"
                   />
                </div>
@@ -274,11 +321,14 @@ export default function Cart() {
                         </div>
                      </div>
                   </div>
-
-                  <div className="w-[100%] flex items-center justify-between">
+                  <div className="w-[100%] flex items-center justify-between  ">
                      <div className="p-4 flex items-center w-[35%]">
                         <div className="w-[15%] text-center leading-none	">
                            <input
+                              checked={checkAll}
+                              onChange={(element) =>
+                                 handleCheckedAll(element.target.checked)
+                              }
                               type="checkbox"
                               className="checkbox checkbox-sm items-center"
                            />
@@ -311,11 +361,13 @@ export default function Cart() {
                         <div className="flex items-center gap-2">
                            <div>
                               <p className="text-[#EA4B48] text-3xl">
-                                 {numberFormat(totalCart ?? 0)}
+                                 {numberFormat(get().totalCart)}
                               </p>
                               <div className="flex">
                                  <p>Tiết kiệm : </p>
-                                 <p className="ml-2 text-[#EA4B48]">{77}k</p>
+                                 <p className="ml-2 text-[#EA4B48]">
+                                    {numberFormat(get().sale)}
+                                 </p>
                               </div>
                            </div>
                            <ArrowUp />
