@@ -12,7 +12,7 @@ import { CartItem, CartModel } from "../../../../Model/CartModel";
 import { numberFormat } from "../../../../Helper";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import useThrottle from "@rooks/use-throttle";
-
+// import { cloneDeep } from "lodash";
 export default function Cart() {
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
@@ -21,11 +21,13 @@ export default function Cart() {
    const [cart, setCart] = useState<CartModel>();
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
    const [checkAll, setCheckAll] = useState(false);
+   const plus = (id: number) => {
+      const product = cart?.data.item.find((e) => e.product.id == id);
+      console.log(product);
+   };
+   const minus = () => {};
 
-   const [quantity, setQuantity] = useState(0);
-   const plus = () => setQuantity(quantity + 1);
-   const minus = () => setQuantity(quantity - 1);
-   const [plusThrottled] = useThrottle(plus, 500);
+   const [plusThrottled] = useThrottle(plus, 1500);
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -152,7 +154,7 @@ export default function Cart() {
                      return (
                         <>
                            <div
-                              key={e.product.id}
+                              key={e.productid}
                               className="bg-white h-auto rounded-md items-center py-[30px]
                               shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
                                  grid grid-cols-12"
@@ -203,12 +205,14 @@ export default function Cart() {
                                  </div>
                                  <div>
                                     <p className="text-base mx-2 font-medium">
-                                       {quantity}
+                                       {e.quantity}
                                     </p>
                                  </div>
                                  <div
                                     className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                    onClick={plusThrottled}
+                                    onClick={() => {
+                                       plusThrottled(e.productid);
+                                    }}
                                  >
                                     <Plus />
                                  </div>
