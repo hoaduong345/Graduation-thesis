@@ -190,7 +190,9 @@ const CartController = {
     increaseItem: async (req, res) => {
         try {
             const cartId = parseInt(req.body.cartId);
-            const productId = parseInt(req.body.cartId)
+            const productId = parseInt(req.body.productId)
+            console.log("🚀 ~ file: CartController.js:195 ~ increaseItem: ~ productId:", productId)
+            console.log("🚀 ~ file: CartController.js:193 ~ increaseItem: ~ cartId:", cartId)
             const increase = 1
             const cartItem = await prisma.itemCart.findFirst({
                 where: { cartid: cartId, productid: productId },
