@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, useState, useEffect } from "react";
+import { ChangeEvent, Fragment, useState, useEffect, CSSProperties } from "react";
 import Container from "../../../../../components/container/Container";
 import Sitebar from "../Sitebar/Sitebar";
 import { ChangeHandler, Controller, useForm } from "react-hook-form";
@@ -13,20 +13,23 @@ import { isDate } from "util/types";
 import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import ClipLoader from "react-spinners/ClipLoader";
+import { type } from "os";
 
 type FormValues = {
-  id: number;
+
   username: string;
   name: string;
   email: string;
   sex: string;
   phonenumber: string;
   dateOfBirth: string;
-  // fullName: string,
-  // Address: string
-  UserImage: string[];
-};
 
+};
+type FormImage = {
+  id: number;
+  UserImage: string[];
+}
 export default function UserProfile() {
   const [validUrl, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
@@ -55,7 +58,7 @@ export default function UserProfile() {
 
   });
   const isDisabled = !(isValid && isDirty);
-  console.log("CHECHERRRRR:" + isDirty);
+
 
 
   const getUserData = () => {
@@ -69,10 +72,10 @@ export default function UserProfile() {
           return res;
         })
         .then((res) => {
-          if(res.dateOfBirth==null){
+          if (res.dateOfBirth == null) {
             res.dateOfBirth = "dd/mm/yyyy";
-          }else{
-            res.dateOfBirth = (res.dateOfBirth).substring(0,10);
+          } else {
+            res.dateOfBirth = (res.dateOfBirth).substring(0, 10);
           }
           reset({
             username: userData.username,
@@ -85,9 +88,9 @@ export default function UserProfile() {
           // setEditUser(res);
           setSex(res.sex);
           setId(res.id);
-          
+
           const UserImageArray = JSON.stringify(res.UserImage);
-          console.log("dateOfBirth:"+res.dateOfBirth);
+          console.log("User:" + res.name);
           // console.log("Hinh cua user: " + UserImageArray);
           if (UserImageArray == "[]") {
             // console.log("Chua co hinh");
@@ -171,44 +174,46 @@ export default function UserProfile() {
   };
 
 
-  const EditImages =async (id: number, url: string) => {
+  const EditImages = async (id: number, url: string) => {
     const urlImages = {
       iduser: id,
       url: url,
     };
     await axios
-      .put(`${appConfigUser.apiUrl}/updateimageuser`, urlImages)
+      .put(`${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`, urlImages.url)
       .then((response) => response.data);
 
   }
 
 
   const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
-  const onSubmit = async (formData: FormValues) => {
+  const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
-      console.log("selectedFile:"+selectedFile);
+      console.log("selectedFile:" + selectedFile);
       if (selectedFile == null && CheckImageUrl == null) {
         toast.error("Hãy chọn hình");
         return;
-     }
+      }
       // console.log("TESTING: " + formData);
       formData.sex = JSON.parse(formData.sex);
       const response = await axios.put(API, formData);
-      formData.id = parseInt(id);
+      FormImage.id = parseInt(id);
       if (response) {
-        console.log("id:" + id);
-        if(CheckImageUrl == null){
-          await addImages(formData.id, url);
-        }else{
+        console.log("UrlThen" + url);
+
+        if (CheckImageUrl == false) {
+          await addImages(FormImage.id, url);
+          setCheckImageUrl(true);
+        } else {
           console.log("CHAY");
-          await EditImages(formData.id, url);
-         
+          await EditImages(FormImage.id, url);
+
         }
-       
+
       }
 
       console.log("edit thanh cong", response);
- 
+
 
       if (response.status === 200) {
         console.log("Edit successfully");
@@ -276,13 +281,19 @@ export default function UserProfile() {
     setDate(event.target.value);
   };
 
- 
-  
+  const override: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+  };
+  let [color, setColor] = useState("#ff1100");
+
   return (
     <Container>
       <Fragment>
         {validUrl ? (
           <body className="body-filter container mx-auto">
+
             <div>
               <div className="grid grid-cols-4 gap-4">
                 <div>
@@ -580,7 +591,7 @@ export default function UserProfile() {
                                 const reg = /[!@#$%^&*]/;
                                 field.onChange(value.replace(reg, ""));
                               }}
-                              
+
                             />
                             {!!errors.dateOfBirth && (
                               <p className="text-red-700 mt-2">
@@ -601,8 +612,8 @@ export default function UserProfile() {
                     >
                       <button
                         disabled={isDisabled}
-                        onClick={handleSubmit((formData: any) => {
-                          onSubmit(formData);
+                        onClick={handleSubmit((formData: any, FormImage: any) => {
+                          onSubmit(formData, FormImage);
                         })}
                         className={`text-center text-base font-bold text-[#FFFFFF]
                         ${isDisabled
@@ -687,6 +698,10 @@ export default function UserProfile() {
                 </div>
               </div>
             </div>
+
+
+
+
           </body>
         ) : (
           <Container>
