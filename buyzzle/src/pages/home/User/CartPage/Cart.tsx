@@ -37,20 +37,19 @@ export default function Cart() {
 
       setProductChecked(_productChecked);
    };
-   const handleDecreaseQuantity = (data: UpdateCart) => {
-      // if () {
+   const handleDecreaseQuantity = (quantity: number, data: UpdateCart) => {
+      if (quantity > 1) {
+         cartControllers.decreaseCart(data).then((res) => {
+            setCart(res);
+         });
+         const indexProduct = productChecked.findIndex(
+            (item) => item.productid === data.productId
+         );
+         const _productChecked = [...productChecked];
+         _productChecked[indexProduct].quantity -= 1;
 
-      cartControllers.decreaseCart(data).then((res) => {
-         setCart(res);
-      });
-      const indexProduct = productChecked.findIndex(
-         (item) => item.productid === data.productId
-      );
-      const _productChecked = [...productChecked];
-      _productChecked[indexProduct].quantity -= 1;
-
-      setProductChecked(_productChecked);
-      // }
+         setProductChecked(_productChecked);
+      }
    };
 
    const [plusThrottled] = useThrottle(handleIncreaseQuantity, 500);
@@ -243,7 +242,7 @@ export default function Cart() {
                                  <div
                                     className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
                                     onClick={() =>
-                                       minusThrottled({
+                                       minusThrottled(e.quantity, {
                                           productId: e.productid,
                                           cartId: e.cartid,
                                        })
