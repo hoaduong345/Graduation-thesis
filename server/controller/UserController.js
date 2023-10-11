@@ -164,6 +164,15 @@ const UserController = {
       
    },
 
+   getAllUser : async(req, res) => {
+      try{
+        const AllUser = await prisma.user.findMany();
+        res.status(200).json(AllUser);
+      }catch(error){
+          res.status(500).json(error);
+      }
+   },
+
 
 
   
