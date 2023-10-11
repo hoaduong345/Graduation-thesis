@@ -38,10 +38,10 @@ export default function Header() {
 
   const [href, setHref]= useState('');
   var username;
-  const [name, setName] = useState('');
-  const [img, setImg] = useState('');
+  const [name, setName] = useState("");
+  const [img, setImg] = useState("");
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem("user");
     if (user != null) {
       const userData = JSON.parse(user);
       const username = userData.username;
@@ -49,7 +49,7 @@ export default function Header() {
       console.log("USERNAME: " + username);
       userController.getUserWhereUsername(username).then((res) => {
         // setEditUser(res)
-        setName(res.name)
+        setName(res.name);
         const UserImageArray = JSON.stringify(res.UserImage);
         const urlTaker = JSON.parse(UserImageArray);
         setImg(urlTaker[0].url);
@@ -59,7 +59,6 @@ export default function Header() {
     } else {
       console.log("Chua Dang Nhap Dung");
     }
-
   }, []);
 
   // setTimeout(() => {
@@ -67,7 +66,6 @@ export default function Header() {
   //   alert("Phiên đăng nhập đã hết, vui lòng đăng nhập lại để tiếp tục");
   //   window.location.href = "/";
   // }, 30 * 1000);
-
 
 
 
@@ -240,7 +238,7 @@ export default function Header() {
                               Từ khóa
                             </h1>
                             <p className="text-base cursor-default p-1 pl-2 font-normal">
-                              {text}
+                              {text == "" ? "" : `"${text}"`}
                             </p>
                             {/* <div className="grid grid-cols-3 gap-4 py-3  w-[98%] mx-auto">
                               {productSearch.slice(0, 6).map((itemsSearch) => {
@@ -336,18 +334,18 @@ export default function Header() {
                         </div>
                         {img ? (
                           <div className="relative">
-                            <img className="w-10 h-10 rounded-full border-4 " src={img} alt="" />
-
+                            <img
+                              className="w-10 h-10 rounded-full border-4 "
+                              src={img}
+                              alt=""
+                            />
                           </div>
                         ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
                             <p className="text-1xl text-stone-50">{name.substring(0, 1).toUpperCase()}</p>
                           </div>
-
                         )}
-
                       </a>
-
                     ) : (
                       <div className="flex text-[#1A1A1A] ml-[10px]">
                         <a href="/login">ĐĂNG NHẬP</a>
@@ -365,25 +363,21 @@ export default function Header() {
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
             <div className="container mx-auto">
-              {/* <ul className="flex justify-between h-[60px] font-bold text-[#1A1A1A]leading-15 items-center leading-[100%]"> */}
               <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
-                {/* <li>
-                  <Link to="/ProductsPage">Gấu Bông Bobbicraft</Link>
-                </li> */}
                 <li>
-                  <Link to={`#`}>Áo Nam</Link>
+                  <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link>
                 </li>
                 <li>
-                  <Link to="/admin/Addproductspage">Thêm sản phẩm</Link>
+                  <Link to="/admin/category">categoryAdmin</Link>
                 </li>
                 <li>
-                  <Link to="/admin/chitietproduct">Editproductspage</Link>
+                  <Link to="/admin/voucher">voucherAdmin</Link>
+                </li>
+                <li>
+                  <Link to="/admin/usersmanager">usersmanagerAdmin</Link>
                 </li>
                 <li>
                   <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
-                </li>
-                <li>
-                  <Link to="/UserProfilePage">UserProfilePage</Link>
                 </li>
                 <li>
                   <Link to="/orderhistory">orderhistory</Link>
@@ -391,10 +385,10 @@ export default function Header() {
                 <li>
                   <a href="/checkout">check out</a>
                 </li>
-                {/*  <li>
-                  <a href="#">Sữa Baby</a>
-                </li>
                 <li>
+                  <a href="/orderdetail">orderdetail</a>
+                </li>
+                {/*  <li>
                   <a href="#">Sữa Baby</a>
                 </li> */}
               </ul>

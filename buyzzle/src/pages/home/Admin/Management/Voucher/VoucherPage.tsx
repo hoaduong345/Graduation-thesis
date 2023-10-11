@@ -182,8 +182,8 @@ export default function VoucherPage() {
                                             value.replace(reg, "")
                                           );
                                         }}
-                                        className={`focus:outline-none border-[1px] text-center text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                        className={`focus:outline-none border-[1px] text-center text-[#333333] text-sm placeholder-[#7A828A]
+                                             rounded-[6px] px-[20px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                       >
@@ -227,8 +227,8 @@ export default function VoucherPage() {
                                       </label>
 
                                       <input
-                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                        className={`focus:outline-none border-[1px] text-[#333333] text-sm placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-1
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                         name="name"
@@ -270,8 +270,8 @@ export default function VoucherPage() {
                                       </label>
 
                                       <input
-                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                        className={`focus:outline-none border-[1px] text-[#333333] text-sm placeholder-[#7A828A]
+                                             rounded-[6px] px-[20px] py-[12px] w-[100%] mt-1
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                         name="name"
@@ -297,7 +297,7 @@ export default function VoucherPage() {
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
+                          <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2 mt-2">
                             <div className="col-span-2">
                               <div className="flex flex-col gap-1">
                                 <Controller
@@ -324,11 +324,11 @@ export default function VoucherPage() {
                                       </label>
 
                                       <input
-                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                        className={`focus:outline-none border-[1px] text-[#333333] text-sm placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                        placeholder="Nhập tiêu đề cho mã giảm giá này"
+                                        placeholder="Tiêu đề cho mã khuyến mãi"
                                         value={field.value}
                                         onChange={(e) => {
                                           const reg = /[!@#$%^&]/;
@@ -366,7 +366,7 @@ export default function VoucherPage() {
                                       </label>
 
                                       <input
-                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                        className={`focus:outline-none border-[1px] text-[#333333] text-sm placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
@@ -394,7 +394,7 @@ export default function VoucherPage() {
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
+                          <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2 mt-2">
                             <div className="col-span-2">
                               <div className="flex flex-col gap-1">
                                 <Controller
@@ -417,7 +417,7 @@ export default function VoucherPage() {
                                       </label>
 
                                       <input
-                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                        className={`focus:outline-none border-[1px] text-[#333333] text-sm placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}

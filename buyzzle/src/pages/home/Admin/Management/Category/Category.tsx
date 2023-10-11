@@ -291,7 +291,11 @@ function Category() {
                     onSave={handleSubmit((data: any) => {
                       saveModal(idModal, data);
                     })}
-                    title="Danh Mục Sản Phẩm"
+                    title={
+                      <>
+                        <p>Danh Mục Sản Phẩm</p>
+                      </>
+                    }
                     body={
                       <>
                         <div className="grid grid-cols-5 gap-8">
@@ -379,7 +383,7 @@ function Category() {
                                 render={({ field }) => (
                                   <>
                                     <label htmlFor="images">
-                                      <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2">
+                                      <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-10 cursor-pointer max-lg:p-2">
                                         {load()}
                                         <input
                                           value={field.value}

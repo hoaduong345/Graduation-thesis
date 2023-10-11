@@ -48,7 +48,7 @@ router.get("/recommendedproducts/:id", ProductController.getSugggestProduct);
 
 router.get("/getnewproducts", ProductController.getNewProducts);
 
-router.get("/getsaleproducts", ProductController.getSaleProducts);
+// router.get("/getsaleproducts", ProductController.getSaleProducts);
 
 //rating
 router.post("/rating", ProductController.addProductRating);

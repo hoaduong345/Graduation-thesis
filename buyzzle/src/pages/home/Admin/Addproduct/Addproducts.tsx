@@ -140,6 +140,7 @@ export default function Addproducts() {
       mode: "all",
       defaultValues: {
          productName: "",
+         categoryID: 0,
          productDesc: "",
          productImage: "",
          productPrice: 1,
@@ -253,42 +254,6 @@ export default function Addproducts() {
                                     </>
                                  )}
                               />
-
-                              {/* <Controller control={control} name='productDesc' rules={{
-                                            required: {
-                                                value: true,
-                                                message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
-                                            },
-                                            maxLength: {
-                                                value: 1000,
-message: 'Mô tả không được vượt quá 300 ký tự!'
-                                            },
-                                            minLength: {
-                                                value: 20,
-                                                message: 'Mô tả sản phẩm tối thiểu 20 ký tự!'
-                                            }
-
-                                        }}
-                                            render={({ field }) => (
-                                                <>
-                                                    <p className='text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px]'>Mô Tả Chi Tiết Sản Phẩm*</p>
-                                                    {/* input addNameProducts */}
-                              {/*    <textarea className={`focus:outline-none text-[#333333] text-base font-medium 
-                                                border-[1px] border-[#FFAAAF] rounded-[6px] px-[10px] py-[7px] w-[100%] h-[251px] 
-                                                ${!!errors.productDesc ? 'border-[2px] border-red-900' : ' border-[1px] border-[#FFAAAF]'}
-                                                `}
-                                                        placeholder='Nhập mô tả chi tiết sản phẩm <HTML>'
-                                                        maxLength={1000}
-                                                        rows={4} cols={50}
-                                                        value={field.value}
-                                                        onChange={field.onChange}
-                                                    >
-                                                    </textarea>
-                                                    {/* end input addNameProducts */}
-                              {/*      </>
-                                            )}
-                                        />
-                                        {!!errors.productDesc && <p className='text-red-700 mt-2'>{errors.productDesc.message}</p>} */}
                               <Controller
                                  control={control}
                                  name="productDesc"

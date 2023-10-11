@@ -415,6 +415,17 @@ const ProductController = {
       const sortByPrice = req.query.sortByPrice;
       const sortByDateCreate = req.query.sortByDateCreate;
       const categoryId = req.query.categoryId;
+      const discount = 60;
+
+      const FlashsaleProducts = await prisma.product.findMany({
+        where: {
+            discount: {
+                gt: discount,
+            },
+        },
+        take: 3,
+    });
+      
       // const { minPricefind, maxPricefind } = req.query;
 
       const skip = (page - 1) * pageSize;
@@ -464,6 +475,7 @@ const ProductController = {
       const resultProduct = {
         // allProduct: totalProduct,
         // FilterProductRange: FilterProductWithinRange,
+        FlashsaleProducts: FlashsaleProducts, 
         currentPage: page,
         totalPage: Math.ceil(totalProduct.length / pageSize),
         rows: result,
@@ -524,23 +536,7 @@ const ProductController = {
   },
 
 
-  getSaleProducts : async(req, res) => {
-    try{  
-        const discount = 60;
-        const saleProducts = await prisma.product.findMany({
-          where: {
-             discount : {
-               gt : discount,
-             }, 
-          },
-          take: 3,
-        });
-        res.json(saleProducts);
-    }catch(error){
-      console.error(error);
-      res.status(500).json(error.message);
-    }
-  },
+
 
 
 
@@ -566,7 +562,7 @@ const ProductController = {
         },
       });
   
-      res.status(200).json("Đánh giá sản phẩm thành công");
+      res.status(200).json(rating);
     } catch (error) {
       console.error(error);
       res.status(200).json("Đánh giá sản phẩm không thành công");
@@ -620,7 +616,7 @@ const ProductController = {
         },
       });
   
-      res.status(200).json("Cập nhật đánh giá sản phẩm thành công");
+      res.status(200).json(updatedRating);
     } catch (error) {
       console.error(error);
       res.status(500).json("Cập nhật đánh giá sản phẩm không thành công");
