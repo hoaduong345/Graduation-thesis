@@ -185,19 +185,13 @@ const CartController = {
             res.status(404).send('Delete all item failed');
         }
     },
-    // UPDATE CART
-    updateItem: async (req, res) => {
-        try {
-        } catch (error) {
-            console.log('error', error);
-            res.status(404).send('Update item failed');
-        }
-    },
+
     // INCREASE-ITEM (tăng số lượng của item)
-    increaseItem: async (res, req) => {
+    increaseItem: async (req, res) => {
         try {
-            const { cartId, productId } = req.body;
-            
+            const cartId = parseInt(req.body.cartId);
+            const productId = parseInt(req.body.cartId)
+            const increase = 1
             const cartItem = await prisma.itemCart.findFirst({
                 where: { cartid: cartId, productid: productId },
             });
@@ -207,8 +201,8 @@ const CartController = {
             await prisma.itemCart.update({
                 where: { id: cartItem.id },
                 data: {
-                    quantity: cartItem.quantity + 1,
-                    total: (cartItem.quantity + 1) * cartItem.price,
+                    quantity: cartItem.quantity + increase,
+                    total: (cartItem.quantity + increase) * cartItem.price,
                 },
             });
             const cartItems = await prisma.itemCart.findMany({
@@ -220,6 +214,9 @@ const CartController = {
             const newCart = await prisma.cart.update({
                 where: { id: cartId },
                 data: { subtotal: subtotal },
+                include:{
+                    item:true
+                }
             });
 
             res.status(200).json({
@@ -228,7 +225,7 @@ const CartController = {
             });
         } catch (error) {
             console.log('error', error);
-            res.status(404).send('Increase item is failed');
+            // res.status(404).send('Increase item is failed');
         }
     },
     // DECREASE-ITEM (Giảm số lượng của item)
