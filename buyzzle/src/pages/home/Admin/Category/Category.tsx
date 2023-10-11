@@ -33,6 +33,8 @@ function Category() {
 
    const [url, setUrl] = useState<string>();
 
+   const [checkedCategory, setCheckedCategory] = useState<FormValues[]>([]);
+
    // img firebase
    const loadImageFile = async (images: any) => {
       for (let i = 0; i < images.length; i++) {
@@ -216,6 +218,23 @@ function Category() {
       setUrl("");
    };
 
+   const handleChecked = (checked: boolean, data: FormValues) => {
+      if (checked) {
+         setCheckedCategory((prev) => [...prev, data]);
+      } else {
+         const cloneCate = [...checkedCategory];
+         const cloneCates = cloneCate.filter((e) => e.id !== data.id);
+         setCheckedCategory(cloneCates);
+      }
+   };
+   const handleCheckedAll = (checked: boolean) => {
+      if (checked) {
+         setCheckedCategory(categorys);
+      } else {
+         setCheckedCategory([]);
+      }
+   };
+   console.log(checkedCategory);
    return (
       <>
          <Container>
@@ -257,7 +276,13 @@ function Category() {
 
                      <div className="grid grid-cols-10 items-center">
                         <div className="col-span-1 py-[15px] pl-[35px]">
-                           <Delete />
+                           {/* <Delete /> */}
+                           <input
+                              type="checkbox"
+                              onChange={(e) =>
+                                 handleCheckedAll(e.target.checked)
+                              }
+                           />
                         </div>
                         <div className="col-span-2">
                            <Line />
@@ -491,7 +516,16 @@ function Category() {
                                              </li>
                                           </ul>
                                        </div>
-                                       <input type="checkbox" />
+                                       <input
+                                          type="checkbox"
+                                          checked={checkedCategory.includes(e)}
+                                          onChange={(element) =>
+                                             handleChecked(
+                                                element.target.checked,
+                                                e
+                                             )
+                                          }
+                                       />
                                     </div>
                                     <div>
                                        <img

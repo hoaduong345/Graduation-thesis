@@ -19,6 +19,7 @@ export default function Cart() {
 
    const [cart, setCart] = useState<CartModel>();
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
+   const [checkAll, setCheckAll] = useState(false);
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -59,6 +60,12 @@ export default function Cart() {
 
    // 2 array : 1 array cart, 1 array cart checked
    const handleChecked = (checked: boolean, item: CartItem) => {
+      if (productChecked.length == cart?.data.item.length) {
+         setCheckAll(true);
+      } else {
+         setCheckAll(false);
+      }
+
       if (checked) {
          setProductChecked((prev) => [...prev, item]);
       } else {
@@ -79,7 +86,7 @@ export default function Cart() {
          setProductChecked([]);
       }
    };
-
+   console.log(productChecked);
    for (let i = 0; i < productChecked.length; i++) {
       const element = productChecked[i];
       totalCart += element.total;
@@ -98,7 +105,8 @@ export default function Cart() {
             >
                <div className="col-span-1 text-center leading-none	">
                   <input
-                     // checked
+                     checked={checkAll}
+                     onClick={() => setCheckAll(!checkAll)}
                      type="checkbox"
                      className="checkbox checkbox-sm items-center"
                      onChange={(element) =>
