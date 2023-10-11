@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Container from "../../../../components/container/Container";
-import { Images } from "../../../../Assets/TS";
 import Plus from "../../../../Assets/TSX/Plus";
 import Minus from "../../../../Assets/TSX/Minus";
 import Delete from "../../Admin/Assets/TSX/Delete";
@@ -8,88 +7,145 @@ import Voucher from "../../../../Assets/TSX/Voucher";
 import SearchVoucher from "../../../../Assets/TSX/SearchVoucher";
 import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
-import {
-   ModelCart,
-   cartControllers,
-} from "../../../../Controllers/CartControllers";
+import { cartControllers } from "../../../../Controllers/CartControllers";
+import { CartModel } from "../../../../Model/CartModel";
+import { numberFormat } from "../../../../Helper";
+import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 
 export default function Cart() {
-   const [cart, setCart] = useState<ModelCart[]>([]);
-   //  const [quantity, setQuantity] = useState(1);
+   const idItemCart = "confirmCart";
+   const idAllCart = "confirmAllCart";
 
-   //  const minus = () => {
-   //     if (quantity > 1) {
-   //        setQuantity(quantity - 1);
-   //     }
-   //  };
-   //  const plus = () => {
-   //     setQuantity(quantity + 1);
-   //  };
-   useEffect(() => {
+   const [cart, setCart] = useState<CartModel>();
+
+   const [checkItemCart, setCheckItemCart] = useState(false);
+
+   var totalCart = 0;
+
+   // const [quantity, setQuantity] = useState<number>(0);
+
+   // const minus = () => {
+   //    if (quantity > 1) {
+   //       setQuantity(quantity - 1);
+   //    }
+   // };
+   // const plus = () => {
+   //    setQuantity(quantity + 1);
+   // };
+
+   const getCart = () => {
       cartControllers.getCart().then((res) => {
-         setCart(res.data.item);
+         setCart(res);
       });
+   };
+   useEffect(() => {
+      getCart();
    }, []);
+
+   const removeItemCart = (id: number) => {
+      cartControllers.removeItemCart(id).then(() => {
+         getCart();
+         closeModal(idItemCart);
+      });
+   };
+
+   const removeAllCart = () => {
+      cartControllers.removeAllCart().then(() => {
+         getCart();
+         closeModal(idAllCart);
+      });
+   };
+
+   const openModal = (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         modal.showModal();
+      }
+   };
+
+   const closeModal = (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         modal.close();
+      }
+   };
+
+   const chooseItemCart = (id: string) => {
+      const choose = document.getElementById(id) as HTMLDialogElement | null;
+      if (choose) {
+         setCheckItemCart(!checkItemCart);
+      }
+   };
 
    return (
       <Container>
          <div>
-            <h1 className="mt-12 text-[32px] uppercase">Giỏ Hàng</h1>
+            <h1 className="mt-12 text-[32px] uppercase font-medium">
+               Giỏ Hàng
+            </h1>
             <div
-               className="bg-white h-[91px] mt-[50px] rounded-md items-center flex
-                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+               className="bg-white py-7 mt-[50px] rounded-md items-center
+                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
+                grid grid-cols-12"
             >
-               <div className="w-[5%] text-center leading-none	">
+               <div className="col-span-1 text-center leading-none	">
                   <input
                      type="checkbox"
                      className="checkbox checkbox-sm items-center"
                   />
                </div>
-               <div className="w-[40%]">
+               <div className="col-span-4">
                   <p className="text-[#1A1A1A] text-base font-medium">
                      Sản Phẩm
                   </p>
                </div>
-               <div className="w-[18%]">
+               <div className="col-span-2 flex justify-center">
                   <p className="text-[#1A1A1A] text-base font-medium">
                      Đơn giá
                   </p>
                </div>
-               <div className="w-[13%]">
+               <div className="col-span-2 flex justify-center">
                   <p className="text-[#1A1A1A] text-base font-medium">
                      Số Lượng{" "}
                   </p>
                </div>
-               <div className="w-[14%]">
+               <div className="col-span-2 flex justify-center">
                   <p className="text-[#1A1A1A] text-base font-medium">
                      Số Tiền
                   </p>
                </div>
-               <div>
+               <div className="col-span-1 flex justify-center">
                   <p className="text-[#1A1A1A] text-base font-medium">
                      Thao Tác
                   </p>
                </div>
             </div>
             <div>
-               <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[630px] overflow-x-hidden mt-[72px]">
-                  {cart.map((e) => {
+               <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[630px] mt-8 flex flex-col gap-5 overflow-x-hidden">
+                  {cart?.data.item.map((e) => {
                      return (
                         <>
                            <div
-                              className="bg-white h-auto  rounded-md items-center flex py-[40px]
-                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                              key={e.product.id}
+                              className="bg-white h-auto rounded-md items-center py-[30px]
+                              shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
+                                 grid grid-cols-12"
                            >
-                              <div className="w-[5%] text-center leading-none	">
+                              <div className="col-span-1 text-center leading-none	">
                                  <input
+                                    id={e.product.id.toString()}
+                                    checked={checkItemCart}
+                                    onClick={() =>
+                                       chooseItemCart(e.product.id.toString())
+                                    }
                                     type="checkbox"
                                     className="checkbox checkbox-sm items-center"
                                  />
                               </div>
-                              <div className="flex w-[40%]">
+                              <div className="flex col-span-4 items-center">
                                  <img
                                     src={e.product.ProductImage[0].url}
-                                    className="w-[112px] h-[112px]"
+                                    className="w-[112px] h-[112px] object-contain"
                                     alt="product"
                                  />
                                  <div>
@@ -103,19 +159,19 @@ export default function Cart() {
                                     </div>
                                  </div>
                               </div>
-                              <div className="w-[18.2%]">
-                                 <div className="flex gap-2 items-center">
+                              <div className="col-span-2">
+                                 <div className="flex gap-3 items-center justify-center">
                                     <p className="text-[#7A828A] text-xs line-through leading-none	">
-                                       {e.price}
+                                       {numberFormat(e.product.price)}
                                     </p>{" "}
                                     <p className="text-[#EA4B48] text-xl">
-                                       30.000
+                                       {numberFormat(e.product.sellingPrice)}
                                     </p>
                                  </div>
                               </div>
-                              <div className=" flex items-center w-[13.7%]">
+                              <div className=" flex items-center col-span-2 justify-center gap-1">
                                  <div
-                                    className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
+                                    className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
                                     // onClick={minus}
                                  >
                                     <Minus />
@@ -126,37 +182,45 @@ export default function Cart() {
                                     </p>
                                  </div>
                                  <div
-                                    className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
+                                    className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
                                     // onClick={plus}
                                  >
                                     <Plus />
                                  </div>
                               </div>
-                              <div className="w-[13.7%]">
+                              <div className="col-span-2 flex justify-center">
                                  <p className="text-[#EA4B48] text-xl">
-                                    {e.total}
+                                    {numberFormat(
+                                       e.product.sellingPrice * e.quantity
+                                    )}
                                  </p>
                               </div>
-                              <div
-                                 className="rounded-full
+                              <div className="col-span-1 justify-center flex">
+                                 <button
+                                    onClick={() => openModal(idItemCart)}
+                                    className="p-3 rounded-full
                     shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]"
-                              >
-                                 <div className="p-3">
+                                 >
                                     <Delete />
-                                 </div>
+                                 </button>
                               </div>
+                              <DialogAddress
+                                 body={<></>}
+                                 id={idItemCart}
+                                 onClose={() => closeModal(idItemCart)}
+                                 onSave={() => removeItemCart(e.product.id)}
+                                 title="Bạn Chắc Chắn!"
+                              />
                            </div>
                         </>
                      );
                   })}
                </div>
 
-               {/* fixed */}
                <div
                   className="bg-white mt-[50px] items-center
                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                >
-                  {/* Input voucher */}
                   <div className=" border-b-[1px] border-[#E0E0E0] w-[100%] mx-auto">
                      <div className="flex items-center justify-end p-4">
                         <div className="mr-3">
@@ -174,7 +238,6 @@ export default function Cart() {
                         </div>
                      </div>
                   </div>
-                  {/* end Input voucher */}
 
                   <div className="w-[100%] flex items-center justify-between">
                      <div className="p-4 flex items-center w-[35%]">
@@ -185,39 +248,38 @@ export default function Cart() {
                            />
                         </div>
                         <div className="flex w-[40%] text-[#1A1A1A] text-base">
-                           <div>Chọn Tất Cả</div>
-                           {/* Tổng số lượng được tick chọn trong giỏ hàng */}
-                           <div className="mx-2 gap-2">(231443)</div>
-                           {/* end Tổng số lượng được tick chọn trong giỏ hàng */}
+                           <p>Chọn Tất Cả</p>
+                           <div className="mx-2 gap-2">
+                              ({cart?.data.item.length})
+                           </div>
                         </div>
-                        {/* Xóa */}
                         <div
                            className="rounded-full shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]
                         "
                         >
-                           <div className="p-3">
+                           <div
+                              onClick={() => openModal(idAllCart)}
+                              className="p-3"
+                           >
                               <Delete />
                            </div>
                         </div>
                      </div>
                      <div className="flex items-center justify-between w-[55%] p-4">
-                        {/* Tổng số sản phẩm thanh toán  */}
                         <div>
-                           <p>Tổng thanh toán (323 sản phẩm):</p>
+                           <p>
+                              Tổng thanh toán ({cart?.data.item.length} sản
+                              phẩm):
+                           </p>
                         </div>{" "}
-                        {/* end Tổng số sản phẩm thanh toán  */}
-                        {/* Tiền */}
                         <div className="flex items-center gap-2">
                            <div>
                               <p className="text-[#EA4B48] text-3xl">
-                                 ₫180.000
+                                 {numberFormat(cart?.data.subtotal ?? 0)}
                               </p>
-                              {/* end Tiền những sản phẩm đã chọn */}
                               <div className="flex">
                                  <p>Tiết kiệm : </p>
-                                 {/* Tiết kiệm */}
-                                 <p className="ml-2 text-[#EA4B48]">đ30k</p>
-                                 {/* Tiết kiệm */}
+                                 <p className="ml-2 text-[#EA4B48]">{77}k</p>
                               </div>
                            </div>
                            <ArrowUp />
@@ -230,10 +292,16 @@ export default function Cart() {
                            <Buyzzle />
                            <p>Mua ngay</p>
                         </button>
+                        <DialogAddress
+                           body={<></>}
+                           id={idAllCart}
+                           onClose={() => closeModal(idAllCart)}
+                           onSave={() => removeAllCart()}
+                           title="Xóa toàn bộ Giỏ hàng!"
+                        />
                      </div>
                   </div>
                </div>
-               {/* end fixed */}
             </div>
          </div>
       </Container>

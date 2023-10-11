@@ -14,6 +14,7 @@ import BlueMediumSmall from "../../../../Assets/SVG/LetterPayment/BlueMediumSmal
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import Address from "../../../../Assets/SVG/LetterPayment/Address";
 import { Controller, useForm } from "react-hook-form";
+import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 
 type FormValues = {
    name: string;
@@ -776,14 +777,15 @@ export default function CheckOut() {
                                  </div>
                               </div>
                            </div>
-                           <div className="">
-                              <button
-                                 className="text-base text-[#FCFCFD] font-bold bg-[#7879F1] px-[100px] py-[11px] rounded-md w-full
-                                                    max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
-                              >
-                                 Đặt Hàng
-                              </button>
-                           </div>
+                           <button
+                              className="justify-center gap-3 items-center text-base font-bold text-white w-full
+                             rounded-md py-[11px] hover:bg-[#ff6d65] flex mt-6
+                                transition duration-150 bg-[#EA4B48] cursor-pointer
+                                max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
+                           >
+                              <Buyzzle />
+                              <p>Mua ngay</p>
+                           </button>
                         </div>
                      </div>
                   </div>

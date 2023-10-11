@@ -68,16 +68,6 @@ export default function ListproductsAdmin() {
       .catch(() => {
         toast.error("Xóa thất bại !");
       });
-
-    await imagesController
-      .remove(id)
-      .then((_) => {
-        toast.success("Xóa thành công !");
-        getData(debouncedInputValueSearch);
-      })
-      .catch(() => {
-        toast.error("Xóa thất bại !");
-      });
   };
 
   const [open, setOpen] = useState(false);
@@ -160,6 +150,7 @@ export default function ListproductsAdmin() {
     setSliderPriceValues(price);
     console.log("price Range:", price);
   };
+
   return (
     <>
       <Container>
@@ -301,6 +292,7 @@ export default function ListproductsAdmin() {
                     max-xl:font-medium
                     max-lg:text-xs
                     "
+                        // onClick={(e) => getData(e)}
                       >
                         Xuất excel
                       </button>
