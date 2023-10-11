@@ -2,7 +2,7 @@ import { type } from "os";
 import { Images } from "../../../Assets/TS";
 import { Product } from "../Index";
 import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
-import { numberFormat } from "../../../Helper";
+import { numberFormat } from "../../../Helper/Format";
 import { Link } from "react-router-dom";
 
 export type Props = {
@@ -89,7 +89,7 @@ export default function Productss(props: Props) {
                 {numberFormat(product.price)}
               </p>
               <p
-className="text-[16px] text-[#865546] col-span-2 font-bold 
+                className="text-[16px] text-[#865546] col-span-2 font-bold 
           max-2xl:text-sm
           max-lg:text-2xl
             "

@@ -11,7 +11,7 @@ import {
   PriceRangeFilterPage,
   Products,
 } from "../../pages/home/User/FilterPage/FiltersPage";
-import { numberFormat } from "../../Helper";
+import { numberFormat } from "../../Helper/Format";
 
 // rati star
 export interface RatingStar {

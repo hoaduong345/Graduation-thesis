@@ -8,7 +8,7 @@ import Back from "../../Admin/Assets/TSX/Back";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef, useState } from "react";
-import { RatingComment } from "../../../../Model/RatingAndComment";
+import { Rating } from "../../../../Model/RatingAndComment";
 import { toast } from "react-toastify";
 import { RatingAndCommentController } from "../../../../Controllers/Rating&Comment";
 
@@ -21,7 +21,7 @@ export default function OrderDetailPage() {
     register,
     setValue,
     formState: { errors },
-  } = useForm<RatingComment>({
+  } = useForm<Rating>({
     mode: "all",
     defaultValues: {
       comment: "",
@@ -37,14 +37,6 @@ export default function OrderDetailPage() {
     }
   };
 
-  // const onSave = async (id: string, data: RatingComment) => {
-  //   const modal = document.getElementById(id) as HTMLDialogElement | null;
-  //   if (modal) {
-  //     handleAddProductRating(data);
-  //     console.log("first");
-  //     modal.close();
-  //   }
-  // };
   const openDialog = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
@@ -57,7 +49,7 @@ export default function OrderDetailPage() {
   };
 
   //Thêm đánh giá
-  const handleAddProductRating = (id: string, data: RatingComment) => {
+  const handleAddProductRating = (id: string, data: Rating) => {
     RatingAndCommentController.postRatingAndComment(data)
       .then((_) => {
         setValue("iduser", data.iduser);
@@ -245,13 +237,13 @@ export default function OrderDetailPage() {
                   <DialogModal
                     id={idDialogRating}
                     onClose={() => onClose(idDialogRating)}
-                    onSave={handleSubmit((data: RatingComment) => {
+                    onSave={handleSubmit((data: Rating) => {
                       const htmlString = data.comment;
                       const regex = /<p>(.*?)<\/p>/;
                       const match = htmlString.match(regex);
                       if (match) {
                         const extractedText = match[1];
-                        const _data: RatingComment = {
+                        const _data: Rating = {
                           ...data,
                           comment: extractedText,
                         };

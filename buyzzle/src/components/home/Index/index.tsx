@@ -10,14 +10,12 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { productController } from "../../../Controllers/ProductsController";
 import Productss from "../components/Product";
-import {
-  ImgOfProduct,
-  Products,
-} from "../../../pages/home/User/FilterPage/FiltersPage";
+import { ImgOfProduct } from "../../../pages/home/User/FilterPage/FiltersPage";
 import { ThemeContext } from "../../../hooks/Context/ThemeContextProvider";
 import { useScroll } from "../../../hooks/Scroll/useScrollPages";
 import { Cate } from "../components/Category";
 import useDebounce from "../../../useDebounceHook/useDebounce";
+import { Products } from "../../../Model/ProductModel";
 
 export type Product = {
   id: number;

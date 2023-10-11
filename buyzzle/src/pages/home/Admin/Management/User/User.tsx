@@ -7,7 +7,7 @@ import Delete from "../../Assets/TSX/Delete";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Edit from "../../Assets/TSX/Edit";
 import Handle from "../../Assets/TSX/bacham";
-import { numberFormat } from "../../../../../Helper";
+import { numberFormat } from "../../../../../Helper/Format";
 
 export default function User() {
   const active = [
