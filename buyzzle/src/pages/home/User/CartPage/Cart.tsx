@@ -11,6 +11,7 @@ import { cartControllers } from "../../../../Controllers/CartControllers";
 import { CartItem, CartModel } from "../../../../Model/CartModel";
 import { numberFormat } from "../../../../Helper";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
+import useThrottle from "@rooks/use-throttle";
 
 export default function Cart() {
    const idItemCart = "confirmCart";
@@ -20,6 +21,11 @@ export default function Cart() {
    const [cart, setCart] = useState<CartModel>();
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
    const [checkAll, setCheckAll] = useState(false);
+
+   const [quantity, setQuantity] = useState(0);
+   const plus = () => setQuantity(quantity + 1);
+   const minus = () => setQuantity(quantity - 1);
+   const [plusThrottled] = useThrottle(plus, 500);
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -191,18 +197,18 @@ export default function Cart() {
                               <div className=" flex items-center col-span-2 justify-center gap-1">
                                  <div
                                     className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                    // onClick={minus}
+                                    onClick={minus}
                                  >
                                     <Minus />
                                  </div>
                                  <div>
                                     <p className="text-base mx-2 font-medium">
-                                       {e.quantity}
+                                       {quantity}
                                     </p>
                                  </div>
                                  <div
                                     className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                    // onClick={plus}
+                                    onClick={plusThrottled}
                                  >
                                     <Plus />
                                  </div>

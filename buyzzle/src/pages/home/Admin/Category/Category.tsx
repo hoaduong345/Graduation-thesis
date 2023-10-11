@@ -7,7 +7,7 @@ import Plus from "../../../../Assets/TSX/Plus";
 import Search from "../../../../Assets/TSX/Search";
 import { storage } from "../../../../Firebase/Config";
 import Container from "../../../../components/container/Container";
-import Delete from "../Assets/TSX/Delete";
+// import Delete from "../Assets/TSX/Delete";
 import Download from "../Assets/TSX/Download";
 import Edit from "../Assets/TSX/Edit";
 import Line from "../Assets/TSX/Line";
@@ -475,7 +475,10 @@ function Category() {
                         {categorys.map((e) => {
                            return (
                               <>
-                                 <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between px-6">
+                                 <div
+                                    key={e.id}
+                                    className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between px-6"
+                                 >
                                     <div className=" flex gap-[20px] max-lg:gap-2">
                                        <button>
                                           <Plus />
