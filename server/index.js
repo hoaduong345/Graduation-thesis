@@ -8,6 +8,7 @@ const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
 const ProductRoutes = require('./routes/ProductRoutes');
+const VoucherRouter = require('./routes/VoucherRoutes');
 const cookieParser = require('cookie-parser');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -43,6 +44,7 @@ app.use('/buyzzle/auth', AuthRouter);
 app.use('/buyzzle/user', UserRouter);
 app.use('/buyzzle/product', ProductRoutes);
 app.use('/buyzzle/cart', CartRouter);
+app.use('/buyzzle/voucher', VoucherRouter);
 
 // Setup socket.io
 const server = http.createServer(app);
@@ -59,7 +61,6 @@ io.on('connection', (socket) => {
     });
 });
 
-
 server.listen(process.env.APP_PORT || 5000, () => {
-    console.log('Server up and running on port ' + (process.env.APP_PORT));
+    console.log('Server up and running on port ' + process.env.APP_PORT);
 });
