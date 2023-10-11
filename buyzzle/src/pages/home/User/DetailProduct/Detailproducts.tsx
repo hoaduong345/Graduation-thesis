@@ -59,7 +59,7 @@ export default function Detailproducts() {
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
   const { id } = useParams();
   console.log(id);
-
+  //
   useEffect(() => {
     axios
       .get(`${appConfig.apiUrl}/chitietproduct/${id}`)
