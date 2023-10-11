@@ -38,7 +38,7 @@ model User {
 model UserImage {
   id               Int      @id @default(autoincrement())
   url              String?
-  iduser        Int?
+  iduser            Int?
   fK_UserImage User? @relation(fields: [iduser], references: [id], onDelete: Cascade)
 }
 
