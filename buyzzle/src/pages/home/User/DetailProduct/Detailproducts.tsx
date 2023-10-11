@@ -23,7 +23,12 @@ import Rating from "./Rating";
 import { productController } from "../../../../Controllers/ProductsController";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { Products } from "../FilterPage/FiltersPage";
-import { useScroll } from "../../../../hooks/useScrollPages";
+import { useScroll } from "../../../../hooks/Scroll/useScrollPages";
+import {
+  ModelCart,
+  cartControllers,
+} from "../../../../Controllers/CartControllers";
+import { toast } from "react-toastify";
 
 export interface ImgOfProduct {
   url: string;
@@ -49,8 +54,7 @@ export type Product = {
   soldCount: number;
 };
 export default function Detailproducts() {
-  useScroll();
-  const [first, setfirst] = useState<FormValues>();
+  const [first, setfirst] = useState<FormValues | undefined>(undefined);
   const [quantity, setQuantity] = useState(1);
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
   const { id } = useParams();
@@ -68,10 +72,13 @@ export default function Detailproducts() {
       .catch((error) => {
         console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
       });
-  }, []);
+    useScroll();
+  }, [id]);
 
   useEffect(() => {
-    RecommandProductDetailPage(id);
+    if (!id) return;
+    RecommandProductDetailPage(Number(id));
+    useScroll();
   }, []);
 
   const plusQuantity = () => {
@@ -102,6 +109,12 @@ export default function Detailproducts() {
       });
   };
 
+  const addCart = (data: ModelCart) => {
+    cartControllers.addCart(data).then(() => {
+      toast.success("Thêm thành công");
+    });
+  };
+
   return (
     <>
       <Container>
@@ -109,7 +122,7 @@ export default function Detailproducts() {
           <div className="grid gap-4 grid-cols-10 mt-24">
             <div className="col-span-4">
               <img
-                className="w-auto h-[388px]"
+                className="w-[533px] h-[388px] object-cover"
                 src={first?.ProductImage[0].url}
                 alt=""
               />
@@ -118,13 +131,11 @@ export default function Detailproducts() {
               <div>
                 <div className="col-span-2 grid grid-rows-4 grid-flow-col gap-3 relative ">
                   <div
-                    className="cursor-pointer absolute border-[1px] left-[13%] 
-                                    p-1 w-14 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md top-[-17px] 
+                    className="cursor-pointer absolute border-[1px] left-[20%] 
+                                    px-4 py-2 w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md top-[-17px] 
                                     "
                   >
-                    <div className="ml-3">
-                      <ArrowUp />
-                    </div>
+                    <ArrowUp />
                   </div>
                   {
                     // first?.ProductImage.filter( e)
@@ -135,13 +146,11 @@ export default function Detailproducts() {
                     })
                   }
                   <div
-                    className="cursor-pointer absolute border-[1px] left-[13%] 
-                                    p-1 w-14 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px] 
+                    className="cursor-pointer absolute border-[1px] left-[20%] 
+                              px-4 pb-[7.5px] pt-[8px] w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px] 
                                     "
                   >
-                    <div className="ml-3">
-                      <ArrowDown />
-                    </div>
+                    <ArrowDown />
                   </div>
                 </div>
               </div>
@@ -191,7 +200,7 @@ export default function Detailproducts() {
                 </div>
                 <div className="flex ml-1 gap-2">
                   <div>
-                    <p className="underline text-[#1A1A1A] text-base">500</p>
+                    <p className="text-[#1A1A1A] text-base">500</p>
                   </div>
                   <div>
                     <p className="text-[#4C4C4C] text-sm mt-[2px] mr-1">
@@ -203,7 +212,7 @@ export default function Detailproducts() {
 
                 <div className="flex col-span-1 ml-[-38px] gap-2 items-center">
                   <div>
-                    <p className="underline text-[#1A1A1A] text-base">1k</p>
+                    <p className="text-[#1A1A1A] text-base">1k</p>
                   </div>
                   <div>
                     <p className="text-[#4C4C4C] text-sm">Đã bán</p>
@@ -218,11 +227,12 @@ export default function Detailproducts() {
                     <div className="items-center flex">
                       <p className="text-[36px] text-[#EA4B48] font-bold ">
                         {numberFormat(
-                          first?.price - first?.price * (first?.discount / 100)
+                          first?.price! -
+                            first?.price! * (first?.discount! / 100)
                         )}
                       </p>
                       <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
-                        {first?.price}đ
+                        {numberFormat(first?.price!)}đ
                       </p>
                     </div>
                     <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mt-[5px]">
@@ -277,19 +287,27 @@ export default function Detailproducts() {
                 <div>
                   <LoveProduct />
                 </div>
+                <div className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
+                  <button
+                    onClick={() =>
+                      addCart({
+                        productId: Number(id),
+                        quantity: quantity,
+                      })
+                    }
+                    className="text-center text-base font-bold text-[#4C4C4C] "
+                  >
+                    Thêm Vào Giỏ Hàng
+                  </button>
+                  <Cart />
+                </div>
                 <div
-                  className=" flex items-center w-[312px] rounded-md h-[58px] hover:bg-[#ff6d65]
+                  className=" flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
                                 transition duration-150 bg-[#EA4B48] justify-evenly cursor-pointer"
                 >
                   <button className="text-center text-base font-bold text-white ">
                     Mua ngay
                   </button>
-                </div>
-                <div className="flex items-center w-[224px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
-                  <button className="text-center text-base font-bold text-[#4C4C4C] ">
-                    Thêm Vào Giỏ Hàng
-                  </button>
-                  <Cart />
                 </div>
               </div>
               {/* end Mua ngay */}
@@ -336,7 +354,7 @@ export default function Detailproducts() {
       <Container>
         <div
           className="px-[113px] py-[78px] text-sm break-all"
-          dangerouslySetInnerHTML={{ __html: first?.description }}
+          dangerouslySetInnerHTML={{ __html: first?.description as any }}
         ></div>
 
         {/* <Detail /> */}

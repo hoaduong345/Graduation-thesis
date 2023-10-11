@@ -231,14 +231,14 @@ const AuthController = {
                         data: { refresh_token: refreshToken },
                     });
                 }
-                res.cookie('refreshToken', refreshToken, {
+                res.cookie('refreshtoken', refreshToken, {
                     httpOnly: true,
                     secure: false,
                     path: '/',
                     sameSite: 'strict',
                 });
 
-                res.cookie('accessToken', accessToken, {
+                res.cookie('accesstoken', accessToken, {
                     httpOnly: true,
                     secure: false,
                     path: '/',

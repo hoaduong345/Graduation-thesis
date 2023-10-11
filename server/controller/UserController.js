@@ -76,6 +76,62 @@ const UserController = {
     }
   },
 
+  PaymentAddress: async (req, res) => {
+    try {
+      const Name = req.body.username;
+
+      const updatedPaymentAddress = {
+        username:req.body.username,
+        addresstype: req.body.addresstype,
+        address: req.body.address,
+        specificaddress : req.body.specificaddress
+        
+        
+      };
+
+      const update = await prisma.user.update({
+        where: {
+          username: Name,
+        },
+        data: updatedPaymentAddress,
+      });
+
+      res.status(200).json(update);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+  getPaymentAddress : async(req, res) => {
+    try {
+      const Name = req.params.username;
+  
+      // Tìm thông tin người dùng không có ảnh
+      const userWithoutImage = await prisma.user.findUnique({
+        where: {
+          username: Name,
+        },
+        select: {
+          id: true,
+          username: true,
+          address: true,
+          addresstype: true,
+          specificaddress: true
+        }
+      });
+
+      res.status(200).json(userWithoutImage);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+  },
+
+   
+
+
+
   getUser: async (req, res) => {
     try {
       const UserId = req.params.username;
@@ -104,7 +160,7 @@ const UserController = {
         }
       });
   
-      // Kiểm tra nếu không tìm thấy người dùng
+     
       if (!userWithImage || !userWithoutImage) {
         return res.status(404).json({ error: "Không tìm thấy người dùng" });
       }
@@ -141,6 +197,40 @@ const UserController = {
         res.status(500).json(error.message);
       }
    },
+
+   updateImageUser : async (req, res) => {
+    try{
+      const { iduser } = req.params;
+      const { url } = req.body;
+
+      const updateImage = await prisma.userImage.update({
+         where: {
+           id: parseInt(iduser), 
+          },
+          data: {
+          url,
+           }
+      });
+
+      res.status(200).json("Cập nhật hình ảnh thành công");
+      
+    }catch(error){
+      res.status(500).json(error.message);
+    }
+      
+   },
+
+   getAllUser : async(req, res) => {
+      try{
+        const AllUser = await prisma.user.findMany();
+        res.status(200).json(AllUser);
+      }catch(error){
+          res.status(500).json(error);
+      }
+   },
+
+
+
 
 
 

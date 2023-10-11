@@ -1,5 +1,5 @@
 import axios from "axios"
-import { FormValues } from "../pages/home/Admin/Addproduct/Addproducts"
+import { FormValues } from "../pages/home/Admin/EditProduct/EditProductMap"
 import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 
 export const appConfig = {
@@ -32,12 +32,17 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getAllProductsSearch = async (name: string | undefined): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
     getSearchProduct = async (name: string | undefined): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}`).then((res) => {
             return res.data as Products[]
         })
     }
-    getSearchAndPaginationProduct = async (name: string | undefined, page: number, pageSize: number): Promise<Products[]> => {
+    getSearchAndPaginationProduct = async (name?: string | undefined, page?: number, pageSize?: number): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&page=${page}&pageSize=${pageSize}`).then((res) => {
             return res.data as Products[]
         })
@@ -52,11 +57,21 @@ class ProductController {
             return res.data as Products[]
         })
     }
-    getFilterProductWithinRange = async (min: number, max: number, id: number): Promise<Products[]> => {
+    getFilterProductWithinRangeIDCategory = async (min: number, max: number, id: number): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryId=${id}`).then((res) => {
             return res.data as Products[]
         })
     }
+    getFilterProductbyPriceAndQuantityWithinRangePagination = async (minPrice: number, maxPrice: number, page: number, pageSize: number, minQuantity: number, maxQuantity: number,): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&pageSize=${pageSize}&minQuantity=${minQuantity}&maxQuantity=${maxQuantity}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    // getFilterProductbyQuantityWithinRangePagination = async (minQuantity: number, maxQuantity: number, page: number, pageSize: number): Promise<Products[]> => {
+    //     return await axios.get(`${appConfig.apiUrl}/allproducts?minQuantity=${minQuantity}&maxQuantity=${maxQuantity}&page=${page}&pageSize=${pageSize}`).then((res) => {
+    //         return res.data as Products[]
+    //     })
+    // }
     remove = async (id: number) => {
         return await axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`)
     }

@@ -13,6 +13,14 @@ router.put("/userprofile/:username", UserController.UserProfile);
 
 router.post("/addimageuser", UserController.addImageUser);
 
+router.put("/updateimageuser/:iduser", UserController.updateImageUser)
+
 router.get("/chitietuser/:username", UserController.getUser);
+
+router.get("/alluser", UserController.getAllUser);
+
+router.put("/paymentaddress/:username", UserController.PaymentAddress);
+
+router.get("/getpaymentaddress/:username", UserController.getPaymentAddress);
 
 module.exports = router;
