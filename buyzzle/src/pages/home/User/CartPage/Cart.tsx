@@ -19,7 +19,6 @@ export default function Cart() {
 
    const [cart, setCart] = useState<CartModel>();
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
-   const [checkedALL, setCheckedAll] = useState<CartItem[]>([]);
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -71,6 +70,16 @@ export default function Cart() {
       }
    };
 
+   const handleCheckedAll = (checked: boolean) => {
+      if (checked) {
+         if (cart?.data.item) {
+            setProductChecked(cart?.data.item);
+         }
+      } else {
+         setProductChecked([]);
+      }
+   };
+
    for (let i = 0; i < productChecked.length; i++) {
       const element = productChecked[i];
       totalCart += element.total;
@@ -89,9 +98,12 @@ export default function Cart() {
             >
                <div className="col-span-1 text-center leading-none	">
                   <input
-                     checked={checkedALL.includes(productChecked)}
+                     // checked
                      type="checkbox"
                      className="checkbox checkbox-sm items-center"
+                     onChange={(element) =>
+                        handleCheckedAll(element.target.checked)
+                     }
                   />
                </div>
                <div className="col-span-4">
@@ -134,8 +146,8 @@ export default function Cart() {
                               <div className="col-span-1 text-center leading-none	">
                                  <input
                                     checked={productChecked.includes(e)}
-                                    onChange={(ele) =>
-                                       handleChecked(ele.target.checked, e)
+                                    onChange={(element) =>
+                                       handleChecked(element.target.checked, e)
                                     }
                                     type="checkbox"
                                     className="checkbox checkbox-sm items-center"
