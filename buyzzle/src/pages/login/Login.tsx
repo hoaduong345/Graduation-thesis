@@ -146,7 +146,7 @@ function Login() {
                         <h1 className=' login-a '>ĐĂNG NHẬP</h1>
                         <div className='mb-4'>
                             <label htmlFor='email' className='login-a4 font-sans'>
-                                Tên tài khoản
+                                Email
                             </label>
                             <input
                                 type="text"
