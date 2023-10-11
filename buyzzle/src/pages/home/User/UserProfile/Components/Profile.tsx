@@ -170,6 +170,19 @@ export default function UserProfile() {
       .then((response) => response.data);
   };
 
+
+  const EditImages =async (id: number, url: string) => {
+    const urlImages = {
+      iduser: id,
+      url: url,
+    };
+    await axios
+      .put(`${appConfigUser.apiUrl}/updateimageuser`, urlImages)
+      .then((response) => response.data);
+
+  }
+
+
   const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
   const onSubmit = async (formData: FormValues) => {
     try {
@@ -178,13 +191,20 @@ export default function UserProfile() {
         toast.error("Hãy chọn hình");
         return;
      }
-      console.log("TESTING: " + formData);
+      // console.log("TESTING: " + formData);
       formData.sex = JSON.parse(formData.sex);
       const response = await axios.put(API, formData);
       formData.id = parseInt(id);
       if (response) {
         console.log("id:" + id);
-        await addImages(formData.id, url);
+        if(CheckImageUrl == null){
+          await addImages(formData.id, url);
+        }else{
+          console.log("CHAY");
+          await EditImages(formData.id, url);
+         
+        }
+       
       }
 
       console.log("edit thanh cong", response);
