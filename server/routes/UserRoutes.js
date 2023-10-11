@@ -19,4 +19,8 @@ router.get("/chitietuser/:username", UserController.getUser);
 
 router.get("/alluser", UserController.getAllUser);
 
+router.put("/paymentaddress/:username", UserController.PaymentAddress);
+
+router.get("/getpaymentaddress/:username", UserController.getPaymentAddress);
+
 module.exports = router;
