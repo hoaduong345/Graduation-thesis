@@ -26,8 +26,9 @@ CREATE TABLE `User` (
 CREATE TABLE `UserImage` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `url` VARCHAR(191) NULL,
-    `iduser` INTEGER NULL,
+    `iduser` INTEGER NOT NULL,
 
+    UNIQUE INDEX `UserImage_id_key`(`id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
