@@ -7,27 +7,31 @@ import Voucher from "../../../../Assets/TSX/Voucher";
 import SearchVoucher from "../../../../Assets/TSX/SearchVoucher";
 import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
-import { cartControllers } from "../../../../Controllers/CartControllers";
+import {
+   UpdateCart,
+   cartControllers,
+} from "../../../../Controllers/CartControllers";
 import { CartItem, CartModel } from "../../../../Model/CartModel";
 import { numberFormat } from "../../../../Helper";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import useThrottle from "@rooks/use-throttle";
-// import { cloneDeep } from "lodash";
 export default function Cart() {
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
    var totalCart = 0;
 
-   const [cart, setCart] = useState<CartModel>();
+   const [cart, setCart] = useState<CartModel>({} as CartModel);
+   console.log("🚀 ~ file: Cart.tsx:26 ~ Cart ~ cart:", cart);
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
    const [checkAll, setCheckAll] = useState(false);
-   const plus = (id: number) => {
-      const product = cart?.data.item.find((e) => e.product.id == id);
-      console.log(product);
+   const handleIncreaseQuantity = (data: UpdateCart) => {
+      cartControllers.increaseCart(data).then(() => {
+         getCart();
+      });
    };
-   const minus = () => {};
+   const handleDecreaseQuantity = () => {};
 
-   const [plusThrottled] = useThrottle(plus, 1500);
+   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 1500);
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -94,7 +98,6 @@ export default function Cart() {
          setProductChecked([]);
       }
    };
-   console.log(productChecked);
    for (let i = 0; i < productChecked.length; i++) {
       const element = productChecked[i];
       totalCart += element.total;
@@ -150,7 +153,7 @@ export default function Cart() {
             </div>
             <div>
                <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[630px] mt-8 flex flex-col gap-5 overflow-x-hidden">
-                  {cart?.data.item.map((e) => {
+                  {(cart?.data?.item ?? []).map((e) => {
                      return (
                         <>
                            <div
@@ -199,7 +202,7 @@ export default function Cart() {
                               <div className=" flex items-center col-span-2 justify-center gap-1">
                                  <div
                                     className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                    onClick={minus}
+                                    onClick={handleDecreaseQuantity}
                                  >
                                     <Minus />
                                  </div>
@@ -211,7 +214,10 @@ export default function Cart() {
                                  <div
                                     className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
                                     onClick={() => {
-                                       plusThrottled(e.productid);
+                                       plusThrottled({
+                                          productId: e.productid,
+                                          cartId: e.cartid,
+                                       });
                                     }}
                                  >
                                     <Plus />
@@ -282,7 +288,7 @@ export default function Cart() {
                         <div className="flex w-[40%] text-[#1A1A1A] text-base">
                            <p>Chọn Tất Cả</p>
                            <div className="mx-2 gap-2">
-                              ({cart?.data.item.length})
+                              ({cart?.data?.item?.length ?? 0})
                            </div>
                         </div>
                         <div
