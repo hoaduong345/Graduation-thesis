@@ -196,14 +196,14 @@ const CartController = {
     // INCREASE-ITEM (tăng số lượng của item)
     increaseItem: async (res, req) => {
         try {
-            const {cartId, productId} = req.body
-
+            const { cartId, productId } = req.body;
+            
             const cartItem = await prisma.itemCart.findFirst({
                 where: { cartid: cartId, productid: productId },
             });
-        
-            if (!cartItem) throw new Error("Item not found in cart.");
-        
+
+            if (!cartItem) throw new Error('Item not found in cart.');
+
             await prisma.itemCart.update({
                 where: { id: cartItem.id },
                 data: {
@@ -212,32 +212,36 @@ const CartController = {
                 },
             });
             const cartItems = await prisma.itemCart.findMany({
-                where: { cartid: cartId }
-            });
-        
-            const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
-        
-            const newCart = await prisma.cart.update({
-                where: { id: cartId },
-                data: { subtotal: subtotal }
+                where: { cartid: cartId },
             });
 
-            res.status(200).send(newCart)
+            const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
+
+            const newCart = await prisma.cart.update({
+                where: { id: cartId },
+                data: { subtotal: subtotal },
+            });
+
+            res.status(200).json({
+                status: true,
+                data: newCart,
+            });
         } catch (error) {
-            console.log("error",error)
-            res.status(404).send("Increase item is failed")
+            console.log('error', error);
+            res.status(404).send('Increase item is failed');
         }
     },
     // DECREASE-ITEM (Giảm số lượng của item)
-    decreaseItem: async (cartId, productId) => {
+    decreaseItem: async (res, req) => {
         try {
+            const { cartId, productId } = req.body;
             const cartItem = await prisma.itemCart.findFirst({
                 where: { cartid: cartId, productid: productId },
             });
-        
-            if (!cartItem) throw new Error("Item not found in cart.");
+
+            if (!cartItem) throw new Error('Item not found in cart.');
             if (cartItem.quantity <= 1) throw new Error("Quantity can't be less than 1.");
-        
+
             await prisma.itemCart.update({
                 where: { id: cartItem.id },
                 data: {
@@ -246,21 +250,24 @@ const CartController = {
                 },
             });
             const cartItems = await prisma.itemCart.findMany({
-                where: { cartid: cartId }
+                where: { cartid: cartId },
             });
-        
+
             const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
-        
+
             const newCart = await prisma.cart.update({
                 where: { id: cartId },
-                data: { subtotal: subtotal }
+                data: { subtotal: subtotal },
             });
-            res.status(200).send(newCart)
-        } catch (error) {
-            console.log("error",error)
-            res.status(404).send("Decrease item is failed")
-        }
 
+            res.status(200).json({
+                status: true,
+                data: newCart,
+            });
+        } catch (error) {
+            console.log('error', error);
+            res.status(404).send('Decrease item is failed');
+        }
     },
 
     // GET CART
