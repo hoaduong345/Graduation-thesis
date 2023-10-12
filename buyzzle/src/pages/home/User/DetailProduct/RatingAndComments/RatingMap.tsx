@@ -265,22 +265,25 @@ export default function RatingMap(props: Props) {
       <DialogModal
         id={idDialogRating}
         onClose={() => onClose(idDialogRating)}
-        onSave={handleSubmit(async (data: Rating) => {
-          const htmlString = data.comment;
-          const regex = /<p>(.*?)<\/p>/;
-          const match = htmlString.match(regex);
-          if (match) {
-            const extractedText = match[1];
-            const _data: Rating = {
-              ...data,
-              comment: extractedText,
-            };
-            await props
-              .handleEditProductRating(idDialogRating, _data, idRating)
-              .finally(() => {
-                onClose(idDialogRating);
-              });
-          }
+        // onSave={handleSubmit(async (data: Rating) => {
+        //   const htmlString = data.comment;
+        //   const regex = /<p>(.*?)<\/p>/;
+        //   const match = htmlString.match(regex);
+        //   if (match) {
+        //     const extractedText = match[1];
+        //     const _data: Rating = {
+        //       ...data,
+        //       comment: extractedText,
+        //     };
+
+        //   }
+        // })}
+        onSave={handleSubmit((data: Rating) => {
+          props
+            .handleEditProductRating(idDialogRating, data, idRating)
+            .finally(() => {
+              onClose(idDialogRating);
+            });
         })}
         title="Đánh Giá Sản Phẩm"
         body={
@@ -301,7 +304,7 @@ export default function RatingMap(props: Props) {
                   <p className="text-[#393939] text-sm font-normal">SL: x2</p>
                 </div>
               </div>
-              <div className=" col-span-1 flex">
+              <div>
                 <p className="text-[#393939] text-lg font-semibold">
                   Chất lượng sản phẩm:
                 </p>
@@ -363,73 +366,13 @@ export default function RatingMap(props: Props) {
                       Mô tả chất lượng sản phẩm
                       <span className="text-[#FF0000]">*</span>
                     </p>
-                    <Editor
-                      apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
-                      onInit={(editor) => (editorRef.current = editor)}
-                      onEditorChange={(e) => field.onChange(e)}
+                    <textarea
+                      rows={4}
+                      className="block p-2.5 w-full text-sm text-gray-900 outline-none
+                             border-[1px] border-[#FFAAAF] rounded-md mt-2"
+                      placeholder="Để lại bình luận..."
                       value={field.value}
-                      init={{
-                        block_formats:
-                          "Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3",
-                        height: 200,
-                        width: 800,
-                        menubar: false,
-                        tiny_pageembed_classes: [
-                          {
-                            text: "Responsive - 21x9",
-                            value: "tiny-pageembed--21by9",
-                          },
-                          {
-                            text: "Responsive - 16x9",
-                            value: "tiny-pageembed--16by9",
-                          },
-                          {
-                            text: "Responsive - 4x3",
-                            value: "tiny-pageembed--4by3",
-                          },
-                          {
-                            text: "Responsive - 1x1",
-                            value: "tiny-pageembed--1by1",
-                          },
-                        ],
-
-                        plugins: [
-                          "advlist",
-                          "autolink",
-                          "link",
-                          "image",
-                          "lists",
-                          "charmap",
-                          "preview",
-                          "anchor",
-                          "pagebreak",
-                          "searchreplace",
-                          "wordcount",
-                          "visualblocks",
-                          "visualchars",
-                          "code",
-                          "fullscreen",
-                          "insertdatetime",
-                          "media",
-                          "p",
-                          "h1, h2, h3, h4, h5, h6",
-                          "div",
-                          "address",
-                          "pre",
-                          "div",
-                          "code",
-                          "dt, dd",
-                          "samp",
-                          "table",
-                          "emoticons",
-                          "template",
-                          "help",
-                        ],
-                        toolbar:
-                          "undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons",
-                        content_style:
-                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                      }}
+                      onChange={(e) => field.onChange(e)}
                     />
                   </>
                 )}
