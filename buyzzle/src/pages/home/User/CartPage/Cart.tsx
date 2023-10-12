@@ -54,8 +54,8 @@ export default function Cart() {
       }
    };
 
-   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 500);
-   const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
+   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 1500);
+   const [minusThrottled] = useThrottle(handleDecreaseQuantity, 1500);
 
    const getCart = () => {
       cartControllers.getCart().then((res) => {
@@ -229,9 +229,13 @@ export default function Cart() {
                                        alt="product"
                                     />
                                     <div>
-                                       <p className="text-[#1A1A1A] text-base font-medium mx-3">
-                                          {e.product.name}
-                                       </p>
+                                       <Link
+                                          to={`/Detailproducts/${e.productid}`}
+                                       >
+                                          <p className="text-[#1A1A1A] text-base font-medium mx-3">
+                                             {e.product.name}
+                                          </p>
+                                       </Link>
                                        <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mx-3 mt-3">
                                           <p className="text-[#EA4B48] px-[10px] py-1">
                                              Giảm {e.product.discount}%
