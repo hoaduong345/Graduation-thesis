@@ -19,25 +19,25 @@ import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 type FormValues = {
    name: string;
    address: string;
-   typeAddress: string;
-   currentAddress: string;
-   phone: number;
+   addresstype: string;
+   specificaddress: string;
+   phonenumber: number;
 };
 
 const userInfo: FormValues[] = [
    {
       name: "Trần Văn Bình",
       address: "Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk",
-      currentAddress: "407 Hoàng Diệu",
-      typeAddress: "Công ty",
-      phone: 933234442,
+      specificaddress: "407 Hoàng Diệu",
+      addresstype: "Công ty",
+      phonenumber: 933234442,
    },
    {
       name: "Nguyễn Trọng Nhâm",
       address: "Phường Tân An, Thành Phố Buôn Ma Thuột, Đắk Lắk",
-      currentAddress: "12 Nguyễn Chí Thanh",
-      typeAddress: "Nhà riêng",
-      phone: 383404215,
+      specificaddress: "12 Nguyễn Chí Thanh",
+      addresstype: "Nhà riêng",
+      phonenumber: 383404215,
    },
 ];
 
@@ -59,8 +59,8 @@ export default function CheckOut() {
       mode: "all",
       defaultValues: {
          address: "",
-         currentAddress: "",
-         typeAddress: "",
+         specificaddress: "",
+         addresstype: "",
          name: "",
       },
    });
@@ -88,8 +88,8 @@ export default function CheckOut() {
          reset({
             address: userInfo[i].address,
             name: userInfo[i].name,
-            typeAddress: userInfo[i].typeAddress,
-            currentAddress: userInfo[i].currentAddress,
+            addresstype: userInfo[i].addresstype,
+            specificaddress: userInfo[i].specificaddress,
          });
          modal.showModal();
       }
@@ -217,7 +217,7 @@ export default function CheckOut() {
                                                                {e.name}
                                                             </p>
                                                             <p className="text-[10px] text-[#4C4C4C]">
-                                                               (+84) {e.phone}
+                                                               (+84) {e.phonenumber}
                                                             </p>
                                                          </div>
                                                          <div className="">
@@ -236,7 +236,7 @@ export default function CheckOut() {
                                                       </div>
                                                       <div>
                                                          <p className="text-[13px] font-normal text-[#4C4C4C]">
-                                                            {e.currentAddress}
+                                                            {e.specificaddress}
                                                             <span> </span>
                                                             {e.address}
                                                          </p>
@@ -336,7 +336,7 @@ export default function CheckOut() {
                                              </div>
                                              <div className=" w-full">
                                                 <Controller
-                                                   name="typeAddress"
+                                                   name="addresstype"
                                                    control={control}
                                                    rules={{
                                                       required: {
@@ -378,11 +378,11 @@ export default function CheckOut() {
                                                                Công ty
                                                             </option>
                                                          </select>
-                                                         {errors.typeAddress && (
+                                                         {errors.addresstype && (
                                                             <p className="text-red-600 text-xs my-2">
                                                                {
                                                                   errors
-                                                                     .typeAddress
+                                                                     .addresstype
                                                                      .message
                                                                }
                                                             </p>
@@ -455,7 +455,7 @@ export default function CheckOut() {
 
                                           <div className="flex flex-col border-b-[1px] pb-4 mb-4 gap-2">
                                              <Controller
-                                                name="currentAddress"
+                                                name="specificaddress"
                                                 control={control}
                                                 rules={{
                                                    required: {
@@ -499,11 +499,11 @@ export default function CheckOut() {
                                                             "407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk "
                                                          }
                                                       />
-                                                      {errors.currentAddress && (
+                                                      {errors.specificaddress && (
                                                          <p className="text-red-600 text-xs my-2">
                                                             {
                                                                errors
-                                                                  .currentAddress
+                                                                  .specificaddress
                                                                   .message
                                                             }
                                                          </p>
