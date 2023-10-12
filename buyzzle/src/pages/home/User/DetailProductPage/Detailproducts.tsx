@@ -29,6 +29,7 @@ import { toast } from "react-toastify";
 import { numberFormat, roundedNumber } from "../../../../Helper/Format";
 import Rating from "../DetailProduct/RatingAndComments/Rating";
 import { Rate } from "../../../../Model/ProductModel";
+import { Products } from "../FilterPage/FiltersPage";
 
 export interface ImgOfProduct {
   url: string;
@@ -57,7 +58,7 @@ export default function Detailproducts() {
   const [first, setfirst] = useState<Rate | undefined>(undefined);
 
   const [quantity, setQuantity] = useState(1);
-  const [recommandProduct, setRecommandProduct] = useState<Rate[]>([]);
+  const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
   const { id } = useParams();
   console.log(id);
   //
@@ -186,7 +187,9 @@ export default function Detailproducts() {
                 </div>
                 <div className="flex ml-1 gap-2">
                   <div>
-                    <p className="text-[#1A1A1A] text-base">500</p>
+                    <p className="text-[#1A1A1A] text-base">
+                      {first?.Rating.length}
+                    </p>
                   </div>
                   <div>
                     <p className="text-[#4C4C4C] text-sm mt-[2px] mr-1">
@@ -198,7 +201,11 @@ export default function Detailproducts() {
 
                 <div className="flex col-span-1 ml-[-38px] gap-2 items-center">
                   <div>
-                    <p className="text-[#1A1A1A] text-base">1k</p>
+                    <p className="text-[#1A1A1A] text-base">
+                      {first?.productDetail.soldcount > 0
+                        ? first?.productDetail.soldcount
+                        : 0}
+                    </p>
                   </div>
                   <div>
                     <p className="text-[#4C4C4C] text-sm">Đã bán</p>

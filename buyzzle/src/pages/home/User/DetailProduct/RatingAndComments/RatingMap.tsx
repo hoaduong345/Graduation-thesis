@@ -15,8 +15,9 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import { cloneDeep } from "lodash";
-import { Rate, Rating } from "../../../../../Model/RatingAndComment";
+import { Rating } from "../../../../../Model/RatingAndComment";
 import { rating } from "@material-tailwind/react";
+import { Rate } from "../../../../../Model/ProductModel";
 interface FormValues {
   id: number;
   idproduct: number;
@@ -33,10 +34,6 @@ interface FormValues {
 }
 export default function RatingMap() {
   const [rateAndcomment, setRateAndcomment] = useState<Rate>();
-  console.log(
-    "🚀 ~ file: RatingMap.tsx:20 ~ RatingMap ~ rateAndcomment:",
-    rateAndcomment
-  );
   const [idRating, setidRating] = useState<number>(0);
   const { id } = useParams();
   console.log("idididid", id);
@@ -99,7 +96,7 @@ export default function RatingMap() {
           }
           return item;
         });
-        setRateAndcomment(_rateAndComment);
+        setRateAndcomment(_rateAndComment as any);
         onClose(id);
       })
       .catch(() => {
@@ -187,8 +184,8 @@ export default function RatingMap() {
                     <ul
                       tabIndex={0}
                       className="dropdown-content menu bg-white rounded-box w-52
-                              shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                              max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                                    shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                    max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
                     >
                       <li>
                         <button
@@ -205,7 +202,7 @@ export default function RatingMap() {
                           <Edit />
                           <p
                             className="text-[#EA4B48] text-sm font-medium
-                          max-[940px]:text-xs "
+                                max-[940px]:text-xs "
                           >
                             Chỉnh sửa
                           </p>
@@ -219,7 +216,7 @@ export default function RatingMap() {
                           <RemoveCate />
                           <p
                             className="text-[#EA4B48] text-sm font-medium
-                           max-[940px]:text-xs "
+                                 max-[940px]:text-xs "
                           >
                             Xóa
                           </p>
@@ -290,6 +287,7 @@ export default function RatingMap() {
           </>
         );
       })}
+
       <DialogModal
         id={idDialogRating}
         onClose={() => onClose(idDialogRating)}
