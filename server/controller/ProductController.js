@@ -532,9 +532,9 @@ const ProductController = {
 
     addProductRating: async (req, res) => {
         try {
-            // const userId = parseInt(req.cookies.id);
-            // console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
-            const { productId,userId, ratingValue, comment } = req.body;
+            const userId = parseInt(req.cookies.id);
+            console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
+            const { productId, ratingValue, comment } = req.body;
             const rating = await prisma.rating.create({
                 data: {
                     idproduct: productId,
@@ -554,6 +554,9 @@ const ProductController = {
     getAllRatingandComment: async (req, res) => {
         try {
             const productId = parseInt(req.params.productId);
+            const page = parseInt(req.query.page) || 1; 
+            const perPage = parseInt(req.query.perPage) || 10; 
+    
             const ratings = await prisma.rating.findMany({
                 where: {
                     idproduct: productId,
@@ -570,23 +573,32 @@ const ProductController = {
                         },
                     },
                 },
+                skip: (page - 1) * perPage,
+                take: perPage,
             });
+    
             if (ratings.length === 0) {
                 return res.status(200).json(0);
             }
+    
             const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
             const averageRating = totalRating / ratings.length;
-            const resultProduct = {
+            
+            const resultProduct = {          
+                currentPage: page,
+                perPage: perPage,
+                total: ratings.length, 
                 averageRating: averageRating,
                 Rating: ratings,
             };
-
+    
             res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    
 
     updateRatingandComment: async (req, res) => {
         try {
@@ -647,28 +659,7 @@ const ProductController = {
         }
     },
 
-    avergaeRating: async (req, res) => {
-        try {
-            const productId = parseInt(req.params.productId);
-            const ratings = await prisma.rating.findMany({
-                where: {
-                    idproduct: productId,
-                },
-            });
 
-            if (ratings.length === 0) {
-                return res.status(200).json(0);
-            }
-
-            const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
-            const averageRating = totalRating / ratings.length;
-
-            res.status(200).json(averageRating);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
-        }
-    },
 
 
     addImageComment : async(req, res) =>{
