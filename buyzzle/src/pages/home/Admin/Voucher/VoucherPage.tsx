@@ -10,17 +10,16 @@ import Handle from "../Assets/TSX/bacham";
 import SitebarAdmin from "../Sitebar/Sitebar";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import { useEffect, useState } from "react";
-import { categoryController } from "../../../../Controllers/CategoryController";
-import { Cate } from "../../../../components/home/components/Category";
 import { voucherControllers } from "../../../../Controllers/VoucherControllers";
-import { VoucherModel } from "../../../../Model/VoucherModel";
+import { Voucher, VoucherModel } from "../../../../Model/VoucherModel";
 import { toast } from "react-toastify";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
-import ReactPaginate from "react-paginate";
 import "./voucher.css";
+import moment from "moment";
 
 type FormValues = {
-   voucherType: number;
+   id: number;
+   discount: number;
    startDate: string;
    endDate: string;
    quantity: number;
@@ -31,22 +30,22 @@ export default function VoucherPage() {
    const idModal = "voucher";
    const idRemove = "removeVoucher";
 
-   const [category, setCategory] = useState<Cate[]>([]);
-   const [voucher, setVoucher] = useState<VoucherModel[]>([]);
+   const [voucher, setVoucher] = useState<Voucher>({} as Voucher);
    const [idVoucher, setIdVoucher] = useState<number | undefined>(0);
-   const [page, setPage] = useState(1);
-   const [total, setTotal] = useState(0);
-
+   // const [page, setPage] = useState(1);
+   // const [total, setTotal] = useState(0);
+   const currentDate = (date: Date) => {
+      return moment(date).format("L");
+   };
    useEffect(() => {
       getVoucher();
-      getCategory();
    }, []);
 
    const getVoucher = async () => {
-      await voucherControllers.get(page).then((res) => {
+      await voucherControllers.get(1).then((res) => {
          console.log(res);
-         setVoucher(res.data);
-         setTotal(res.totalPage);
+         setVoucher(res);
+         // setTotal(res.totalPage);
       });
    };
 
@@ -54,12 +53,6 @@ export default function VoucherPage() {
       await voucherControllers.remove(id);
       getVoucher();
       closeModal(idRemove);
-   };
-
-   const getCategory = async () => {
-      await categoryController.getAll().then((res) => {
-         setCategory(res.data);
-      });
    };
 
    const {
@@ -71,7 +64,8 @@ export default function VoucherPage() {
    } = useForm<FormValues>({
       mode: "all",
       defaultValues: {
-         voucherType: 0,
+         id: 0,
+         discount: 1,
          quantity: 1,
          voucherCode: "",
          startDate: "",
@@ -98,30 +92,37 @@ export default function VoucherPage() {
 
    const saveModal = (data: FormValues) => {
       const dataForm: VoucherModel = {
-         categoryId: Number(data.voucherType),
+         id: Number(data.id),
+         discount: Number(data.discount),
          quantity: Number(data.quantity),
          code: data.voucherCode,
          startDay: new Date(data.startDate),
          endDay: new Date(data.endDate),
       };
 
-      voucherControllers.add(dataForm).then(() => {
-         getVoucher();
-         toast.success("Thành Công");
-      });
+      closeModal(idModal);
+      if (data.id == 0) {
+         voucherControllers.add(dataForm).then(() => {
+            getVoucher();
+            toast.success("Thành Công");
+         });
+      } else {
+         voucherControllers.update(dataForm.id, dataForm).then(() => {
+            getVoucher();
+            toast.success("Thành Công");
+         });
+      }
 
       reset({});
-
-      closeModal(idModal);
    };
 
-   const handlePageClick = async (event: any) => {
-      const newOffset = (event.selected % total) + 1;
+   // const handlePageClick = async (event: any) => {
+   //    const newOffset = (event.selected % total) + 1;
 
-      await voucherControllers.get(newOffset).then((res) => {
-         setVoucher(res.data);
-      });
-   };
+   //    await voucherControllers.get(newOffset).then((res) => {
+   //       setVoucher(res.data);
+   //    });
+   // };
 
    return (
       <>
@@ -168,10 +169,10 @@ export default function VoucherPage() {
                            <p className="max-[940px]:text-sm">Xóa</p>
                         </div>
                         <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
-                           <p>Danh mục Áp dụng</p>
+                           <p>Mã Voucher</p>
                         </div>
                         <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
-                           <p>Mã Voucher</p>
+                           <p>Giảm Giá</p>
                         </div>
                         <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                            <p>Thời Gian</p>
@@ -190,7 +191,7 @@ export default function VoucherPage() {
                            <div className="col-span-6">
                               <button
                                  onClick={() =>
-                                    openModal(idModal, {} as FormValues)
+                                    openModal(idModal, { id: 0 } as FormValues)
                                  }
                                  className="flex gap-3 items-center "
                               >
@@ -208,27 +209,37 @@ export default function VoucherPage() {
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
                                                 <Controller
+                                                   name="voucherCode"
                                                    control={control}
-                                                   name="voucherType"
                                                    rules={{
                                                       required: {
                                                          value: true,
                                                          message:
-                                                            "Vui lòng chọn",
+                                                            "Không để trống",
+                                                      },
+                                                      maxLength: {
+                                                         value: 20,
+                                                         message:
+                                                            "Nhiều nhất 20 ký tự",
                                                       },
                                                    }}
                                                    render={({ field }) => (
                                                       <>
                                                          <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
-                                                            Danh Mục Áp Dụng*
+                                                            Mã Voucher*
                                                          </label>
 
-                                                         <select
-                                                            name=""
-                                                            id=""
+                                                         <input
+                                                            className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                                            placeholder="Nhập mã voucher"
+                                                            name="name"
                                                             value={field.value}
                                                             onChange={(e) => {
-                                                               const reg = /[]/;
+                                                               const reg =
+                                                                  /[!@#$%^& ]/;
                                                                const value =
                                                                   e.target
                                                                      .value;
@@ -239,41 +250,12 @@ export default function VoucherPage() {
                                                                   )
                                                                );
                                                             }}
-                                                            className={`focus:outline-none border-[1px] text-center text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                         >
-                                                            <option
-                                                               value=""
-                                                               className="text-[#718096]"
-                                                            >
-                                                               {" "}
-                                                               -- Chọn danh mục
-                                                               --
-                                                            </option>
-                                                            <option>
-                                                               Tất cả
-                                                            </option>
-                                                            {category.map(
-                                                               (e) => {
-                                                                  return (
-                                                                     <option
-                                                                        value={
-                                                                           e.id
-                                                                        }
-                                                                     >
-                                                                        {e.name}
-                                                                     </option>
-                                                                  );
-                                                               }
-                                                            )}
-                                                         </select>
-                                                         {errors.voucherType && (
+                                                         />
+                                                         {errors.voucherCode && (
                                                             <p className="text-[11px] text-red-700 mt-2">
                                                                {
                                                                   errors
-                                                                     .voucherType
+                                                                     .voucherCode
                                                                      .message
                                                                }
                                                             </p>
@@ -396,37 +378,37 @@ export default function VoucherPage() {
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
                                                 <Controller
-                                                   name="voucherCode"
                                                    control={control}
+                                                   name="discount"
                                                    rules={{
                                                       required: {
                                                          value: true,
                                                          message:
-                                                            "Không để trống",
+                                                            "Vui lòng chọn",
                                                       },
                                                       maxLength: {
-                                                         value: 20,
+                                                         value: 2,
                                                          message:
-                                                            "Nhiều nhất 20 ký tự",
+                                                            "Nhỏ hơn 100%",
                                                       },
                                                    }}
                                                    render={({ field }) => (
                                                       <>
                                                          <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
-                                                            Mã Voucher*
+                                                            Giảm Giá (%)*
                                                          </label>
-
                                                          <input
                                                             className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                            placeholder="Nhập mã voucher"
+                                                            placeholder="Nhập % giảm giá"
+                                                            type="number"
                                                             name="name"
                                                             value={field.value}
                                                             onChange={(e) => {
                                                                const reg =
-                                                                  /[!@#$%^&]/;
+                                                                  /[a-zA-Z!@#$e]/;
                                                                const value =
                                                                   e.target
                                                                      .value;
@@ -438,11 +420,12 @@ export default function VoucherPage() {
                                                                );
                                                             }}
                                                          />
-                                                         {errors.voucherCode && (
+
+                                                         {errors.discount && (
                                                             <p className="text-[11px] text-red-700 mt-2">
                                                                {
                                                                   errors
-                                                                     .voucherCode
+                                                                     .discount
                                                                      .message
                                                                }
                                                             </p>
@@ -520,7 +503,7 @@ export default function VoucherPage() {
                            </div>
                         </div>
 
-                        {voucher.map((e) => {
+                        {voucher.data?.map((e) => {
                            return (
                               <>
                                  <div className="grid grid-cols-5 border-t-[1px] py-7">
@@ -539,8 +522,8 @@ export default function VoucherPage() {
                                                 <button
                                                    onClick={() =>
                                                       openModal(idModal, {
-                                                         voucherType:
-                                                            e.categoryId,
+                                                         id: e.id,
+                                                         discount: e.discount,
                                                          startDate:
                                                             e.startDay.toString(),
                                                          endDate:
@@ -587,14 +570,7 @@ export default function VoucherPage() {
                                           className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
                                        />
                                     </div>
-                                    <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                                       <p
-                                          className="font-medium text-base text-[#1A1A1A] 
-                                    max-[940px]:text-xs "
-                                       >
-                                          {e.fK_category?.name ?? "Tất cả"}
-                                       </p>
-                                    </div>
+
                                     <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
                                        <p
                                           className="font-medium text-base text-[#EA4B48]
@@ -605,10 +581,19 @@ export default function VoucherPage() {
                                     </div>
                                     <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
                                        <p
+                                          className="font-medium text-base text-[#1A1A1A] 
+                                    max-[940px]:text-xs "
+                                       >
+                                          {e.discount ?? "FREE SHIP"}%
+                                       </p>
+                                    </div>
+                                    <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                                       <p
                                           className="font-medium text-base text-[#1A1A1A]
                                 max-[940px]:text-xs "
                                        >
-                                          12/11/23 - 20/11/23
+                                          {currentDate(e.startDay)} -{" "}
+                                          {currentDate(e.endDay)}
                                        </p>
                                     </div>
                                     <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
@@ -631,7 +616,7 @@ export default function VoucherPage() {
                            onSave={() => onRemoveVoucher(idVoucher)}
                            id={idRemove}
                         />
-                        <div className="pani">
+                        {/* <div className="pani">
                            <ReactPaginate
                               breakLabel="..."
                               nextLabel=" >"
@@ -641,7 +626,7 @@ export default function VoucherPage() {
                               previousLabel="<"
                               renderOnZeroPageCount={null}
                            />
-                        </div>
+                        </div> */}
                      </div>
                   </div>
                </div>

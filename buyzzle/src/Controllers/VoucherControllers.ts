@@ -13,14 +13,20 @@ class VoucherControllers {
         })
     }
 
-    add = async (data: VoucherModel): Promise<VoucherModel> => {
+    add = async (data: VoucherModel): Promise<Voucher> => {
         return await axios.post(`${appConfig.apiUrl}`, data).then((res) => {
-            return res.data as VoucherModel
+            return res.data as Voucher
         })
     }
 
     remove = async (id: number | undefined) => {
         return await axios.delete(`${appConfig.apiUrl}/${id}`)
+    }
+
+    update = async (id: number, data: VoucherModel): Promise<Voucher> => {
+        return await axios.put(`${appConfig.apiUrl}/${id}`, data).then(res => {
+            return res.data as Voucher
+        })
     }
 }
 export const voucherControllers = new VoucherControllers

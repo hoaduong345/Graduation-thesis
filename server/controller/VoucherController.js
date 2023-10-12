@@ -8,7 +8,7 @@ const VoucherController = {
 
             const keyword = req.query.name;
 
-            const limit = 5;
+            const limit = 100;
 
             const startIndex = (pageCurr - 1) * limit;
 
@@ -20,9 +20,6 @@ const VoucherController = {
                 //         contains: keyword || '',
                 //     },
                 // },
-                include: {
-                    fK_category: true,
-                },
                 skip: startIndex,
                 take: limit,
             });
@@ -43,16 +40,16 @@ const VoucherController = {
 
     add: async (req, res) => {
         try {
-            const { code, quantity, startDay, endDay, categoryId } = req.body;
+            const { code, quantity, startDay, endDay, discount } = req.body;
 
             const newVoucher = {
                 code,
+                discount: parseInt(discount),
                 quantity: parseInt(quantity),
                 startDay,
                 endDay,
                 createdAt: new Date(),
                 updatedAt: new Date(),
-                categoryId: parseInt(categoryId),
             };
 
             const neww = await prisma.voucher.create({
@@ -77,6 +74,34 @@ const VoucherController = {
             });
 
             res.status(200).json('thành công');
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(error.message);
+        }
+    },
+
+    update: async (req, res) => {
+        try {
+            const voucherid = parseInt(req.params.id);
+
+            const { code, quantity, startDay, endDay, discount } = req.body;
+
+            const updateVoucher = {
+                code,
+                discount: parseInt(discount),
+                quantity: parseInt(quantity),
+                startDay,
+                endDay,
+                updatedAt: new Date(),
+            };
+
+            const updatedProduct = await prisma.voucher.update({
+                where: {
+                    id: voucherid,
+                },
+                data: updateVoucher,
+            });
+            res.status(200).json(updatedProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);

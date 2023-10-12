@@ -89,7 +89,6 @@ model Category {
   createdAt DateTime? @default(now())
   image     String?
   products  Product[]
-  voucher   Voucher[]
 }
 
 model Cart {
@@ -159,13 +158,12 @@ model OrderDetail {
 }
 
 model Voucher {
-  id          Int       @id @default(autoincrement())
-  code        String?
-  quantity    Int?
-  categoryId  Int?
-  startDay    DateTime?
-  endDay      DateTime?
-  createdAt   DateTime? @default(now())
-  updatedAt   DateTime? @default(now())
-  fK_category Category? @relation(fields: [categoryId], references: [id])
+  id        Int       @id @default(autoincrement())
+  code      String?
+  discount  Int?
+  quantity  Int?
+  startDay  DateTime?
+  endDay    DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
 }

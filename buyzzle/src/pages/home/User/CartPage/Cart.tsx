@@ -15,6 +15,7 @@ import { CartItem, CartModel } from "../../../../Model/CartModel";
 import { numberFormat } from "../../../../Helper";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import useThrottle from "@rooks/use-throttle";
+import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 export default function Cart() {
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
@@ -192,104 +193,116 @@ export default function Cart() {
             </div>
             <div>
                <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[430px] mt-8 flex flex-col gap-5 overflow-x-hidden">
-                  {(cart?.data?.item ?? []).map((e) => {
-                     return (
-                        <>
-                           <div
-                              key={e.productid}
-                              className="bg-white h-auto rounded-md items-center py-[30px]
+                  {cart?.data?.item.length > 0 ? (
+                     (cart?.data?.item ?? []).map((e) => {
+                        return (
+                           <>
+                              <div
+                                 key={e.productid}
+                                 className="bg-white h-auto rounded-md items-center py-[30px]
                               shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
                                  grid grid-cols-12"
-                           >
-                              <div className="col-span-1 text-center leading-none	">
-                                 <input
-                                    checked={checked(e)}
-                                    onChange={(element) =>
-                                       handleChecked(element.target.checked, e)
-                                    }
-                                    type="checkbox"
-                                    className="checkbox checkbox-sm items-center"
-                                 />
-                              </div>
-                              <div className="flex col-span-4 items-center">
-                                 <img
-                                    src={e.product.ProductImage[0].url}
-                                    className="w-[112px] h-[112px] object-contain"
-                                    alt="product"
-                                 />
-                                 <div>
-                                    <p className="text-[#1A1A1A] text-base font-medium mx-3">
-                                       {e.product.name}
-                                    </p>
-                                    <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mx-3 mt-3">
-                                       <p className="text-[#EA4B48] px-[10px] py-1">
-                                          Giảm {e.product.discount}%
+                              >
+                                 <div className="col-span-1 text-center leading-none	">
+                                    <input
+                                       checked={checked(e)}
+                                       onChange={(element) =>
+                                          handleChecked(
+                                             element.target.checked,
+                                             e
+                                          )
+                                       }
+                                       type="checkbox"
+                                       className="checkbox checkbox-sm items-center"
+                                    />
+                                 </div>
+                                 <div className="flex col-span-4 items-center">
+                                    <img
+                                       src={e.product.ProductImage[0].url}
+                                       className="w-[112px] h-[112px] object-contain"
+                                       alt="product"
+                                    />
+                                    <div>
+                                       <p className="text-[#1A1A1A] text-base font-medium mx-3">
+                                          {e.product.name}
+                                       </p>
+                                       <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mx-3 mt-3">
+                                          <p className="text-[#EA4B48] px-[10px] py-1">
+                                             Giảm {e.product.discount}%
+                                          </p>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div className="col-span-2">
+                                    <div className="flex gap-3 items-center justify-center">
+                                       <p className="text-[#7A828A] text-xs line-through leading-none	">
+                                          {numberFormat(e.product.price)}
+                                       </p>{" "}
+                                       <p className="text-[#EA4B48] text-xl">
+                                          {numberFormat(e.product.sellingPrice)}
                                        </p>
                                     </div>
                                  </div>
-                              </div>
-                              <div className="col-span-2">
-                                 <div className="flex gap-3 items-center justify-center">
-                                    <p className="text-[#7A828A] text-xs line-through leading-none	">
-                                       {numberFormat(e.product.price)}
-                                    </p>{" "}
+                                 <div className=" flex items-center col-span-2 justify-center gap-1">
+                                    <div
+                                       className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
+                                       onClick={() =>
+                                          minusThrottled(e.quantity, {
+                                             productId: e.productid,
+                                             cartId: e.cartid,
+                                          })
+                                       }
+                                    >
+                                       <Minus />
+                                    </div>
+                                    <div>
+                                       <p className="text-base mx-2 font-medium">
+                                          {e.quantity}
+                                       </p>
+                                    </div>
+                                    <div
+                                       className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
+                                       onClick={() => {
+                                          plusThrottled({
+                                             productId: e.productid,
+                                             cartId: e.cartid,
+                                          });
+                                       }}
+                                    >
+                                       <Plus />
+                                    </div>
+                                 </div>
+                                 <div className="col-span-2 flex justify-center">
                                     <p className="text-[#EA4B48] text-xl">
-                                       {numberFormat(e.product.sellingPrice)}
+                                       {numberFormat(
+                                          e.product.sellingPrice * e.quantity
+                                       )}
                                     </p>
                                  </div>
-                              </div>
-                              <div className=" flex items-center col-span-2 justify-center gap-1">
-                                 <div
-                                    className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                    onClick={() =>
-                                       minusThrottled(e.quantity, {
-                                          productId: e.productid,
-                                          cartId: e.cartid,
-                                       })
-                                    }
-                                 >
-                                    <Minus />
-                                 </div>
-                                 <div>
-                                    <p className="text-base mx-2 font-medium">
-                                       {e.quantity}
-                                    </p>
-                                 </div>
-                                 <div
-                                    className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                    onClick={() => {
-                                       plusThrottled({
-                                          productId: e.productid,
-                                          cartId: e.cartid,
-                                       });
-                                    }}
-                                 >
-                                    <Plus />
-                                 </div>
-                              </div>
-                              <div className="col-span-2 flex justify-center">
-                                 <p className="text-[#EA4B48] text-xl">
-                                    {numberFormat(
-                                       e.product.sellingPrice * e.quantity
-                                    )}
-                                 </p>
-                              </div>
-                              <div className="col-span-1 justify-center flex">
-                                 <button
-                                    onClick={() => {
-                                       openModal(idItemCart);
-                                       setIdProduct(Number(e.productid));
-                                    }}
-                                    className="p-3 rounded-full
+                                 <div className="col-span-1 justify-center flex">
+                                    <button
+                                       onClick={() => {
+                                          openModal(idItemCart);
+                                          setIdProduct(Number(e.productid));
+                                       }}
+                                       className="p-3 rounded-full
                     shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]"
-                                 >
-                                    <Delete />
-                                 </button>
+                                    >
+                                       <Delete />
+                                    </button>
+                                 </div>
                               </div>
-                           </div>
-                        </>
-                     );
-                  })}
+                           </>
+                        );
+                     })
+                  ) : (
+                     <>
+                        <EmptyPage
+                           title="Danh Sách Giỏ hàng trống"
+                           button="Thêm Ngay"
+                        />
+                     </>
+                  )}
                   <DialogAddress
                      body={<></>}
                      id={idItemCart}
