@@ -1,48 +1,27 @@
-import { type } from "os";
-import { Images } from "../../../Assets/TS";
-import { Product } from "../Index";
-import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
-import { numberFormat } from "../../../Helper/Format";
+import React from "react";
+import { Images } from "../../../../Assets/TS";
+import { numberFormat } from "../../../../Helper/Format";
+import { Products } from "../FilterPage/FiltersPage";
 import { Link } from "react-router-dom";
+import { Rate } from "../../../../Model/ProductModel";
 
-export type Props = {
-  product: Product;
-};
-
-export default function Productss(props: Props) {
-  const { product } = props;
+export default function DetailRecommandProduct({
+  productRecommand,
+}: {
+  productRecommand: Products;
+}) {
   return (
     <>
-      <Link to={`/Detailproducts/${product.id}`}>
+      <Link to={`/Detailproducts/${productRecommand.id}`}>
         <div
-          className="w-[210px] h-[311px] flex-col cursor-pointer
-       hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] transition duration-200
-       max-2xl:w-[230px] max-2xl:h-[351px] 
-       max-lg:w-[310px] max-lg:h-[530px]
-       "
+          className="w-[210px] h-[311px] flex-col cursor-pointer transition duration-200 max-xl:max-w-[180px]
+                                        hover:shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] "
         >
-          <div className="relative figure ">
-            {product.ProductImage.length == 0 ? (
-              <>
-                <p>No Images</p>
-                <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] hidden text-white bg-[#ea4b48] rounded">
-                  Giảm {product.discount}%
-                </p>
-              </>
-            ) : (
-              <>
-                <img
-                  className="h-[207px] w-[100%] max-2xl:h-[247px]  max-lg:h-[347px] "
-                  alt=""
-                  src={product.ProductImage[0].url}
-                />
-                <p className="absolute top-[5%] left-[3.5%] p-[5px] text-[12px] text-white bg-[#ea4b48] rounded">
-                  Giảm {product.discount}%
-                </p>
-              </>
-            )}
-          </div>
-
+          <img
+            className="h-[207px] w-[100%] max-2xl:h-[247px]  max-lg:h-[347px] "
+            alt=""
+            src={productRecommand.ProductImage[0].url}
+          />
           <div
             className="p-[10px] border-x-[1px] border-b-[1px] border-[#FFAAAF] 
         max-2xl:max-h-max 
@@ -56,7 +35,7 @@ export default function Productss(props: Props) {
           max-lg:mt-4
           "
             >
-              {product.name}
+              {productRecommand.name}
             </p>
 
             <div
@@ -69,7 +48,11 @@ export default function Productss(props: Props) {
           max-lg:text-[10px]
             "
               >
-                Giảm {numberFormat(product.price * (product.discount / 100))}k
+                Giảm{" "}
+                {numberFormat(
+                  productRecommand.price * (productRecommand.discount / 100)
+                )}
+                k
               </div>
               <div
                 className="text-[7px]  bg110k max-w-[51px] bg-red-500 text-white text-center p-[3px]
@@ -86,7 +69,7 @@ export default function Productss(props: Props) {
           max-lg:text-[15px]
           "
               >
-                {numberFormat(product.price)}
+                {numberFormat(productRecommand.price)}
               </p>
               <p
                 className="text-[16px] text-[#865546] col-span-2 font-bold 
@@ -95,7 +78,8 @@ export default function Productss(props: Props) {
             "
               >
                 {numberFormat(
-                  product.price - product.price * (product.discount / 100)
+                  productRecommand.price -
+                    productRecommand.price * (productRecommand.discount / 100)
                 )}
               </p>
             </div>

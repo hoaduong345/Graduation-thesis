@@ -365,7 +365,35 @@ const ProductController = {
             if (!productDetail) {
                 return res.status(404).json('Không tìm thấy sản phẩm');
             }
-            res.status(200).json(productDetail);
+
+            const ratings = await prisma.rating.findMany({
+                where: {
+                    idproduct: productId,
+                },
+                include: {
+                    user: {
+                        select: {
+                            username: true,
+                        },
+                    },
+                    product: {
+                        select: {
+                            quantity: true,
+                        },
+                    },
+                },
+            });
+            if (ratings.length === 0) {
+                return res.status(200).json(0);
+            }
+            const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
+            const averageRating = totalRating / ratings.length;
+            const resultProduct = {
+                averageRating: averageRating,
+                Rating: ratings,
+                productDetail: productDetail,
+            };
+            res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -433,6 +461,7 @@ const ProductController = {
                 include: {
                     ProductImage: true,
                     fK_category: true,
+                    Rating: true,
                 },
                 where: whereClause,
                 skip,
@@ -535,9 +564,24 @@ const ProductController = {
                             username: true,                    
                         },
                     },
+                    product: {
+                        select: {
+                            quantity: true,
+                        },
+                    },
                 },
             });
-            res.status(200).json(ratings);
+            if (ratings.length === 0) {
+                return res.status(200).json(0);
+            }
+            const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
+            const averageRating = totalRating / ratings.length;
+            const resultProduct = {
+                averageRating: averageRating,
+                Rating: ratings,
+            };
+
+            res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);

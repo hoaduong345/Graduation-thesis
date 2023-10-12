@@ -3,7 +3,7 @@ import { Products } from "../../User/FilterPage/FiltersPage";
 import Edit from "../Assets/TSX/Edit";
 import { Link } from "react-router-dom";
 import Delete from "../Assets/TSX/Delete";
-import { numberFormat } from "../../../../Helper";
+import { numberFormat } from "../../../../Helper/Format";
 type Props = {
   products: Products;
   HandleXoa: (id: number) => void;

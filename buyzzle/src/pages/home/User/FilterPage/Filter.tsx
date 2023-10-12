@@ -1,7 +1,7 @@
 import { Products } from "./FiltersPage";
 import { Images } from "../../../../Assets/TS";
 import { Link } from "react-router-dom";
-import { numberFormat } from "../../../../Helper";
+import { numberFormat } from "../../../../Helper/Format";
 type Props = {
   product: Products;
 };

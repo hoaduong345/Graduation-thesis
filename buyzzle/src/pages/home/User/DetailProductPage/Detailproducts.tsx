@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Images } from "../../../../Assets/TS";
-import { numberFormat } from "../../../../Helper";
 import Container from "../../../../components/container/Container";
 import { appConfig } from "../../../../configsEnv";
 
@@ -19,16 +18,18 @@ import LoveProduct from "../../Admin/Assets/TSX/LoveProduct";
 import SaveLink from "../../Admin/Assets/TSX/SaveLink";
 import Share from "../../Admin/Assets/TSX/Share";
 import TW from "../../Admin/Assets/TSX/TW";
-import Rating from "./Rating";
 import { productController } from "../../../../Controllers/ProductsController";
 import DetailRecommandProduct from "./DetailRecommandProduct";
-import { Products } from "../FilterPage/FiltersPage";
 import { useScroll } from "../../../../hooks/Scroll/useScrollPages";
 import {
   ModelCart,
   cartControllers,
 } from "../../../../Controllers/CartControllers";
 import { toast } from "react-toastify";
+import { numberFormat, roundedNumber } from "../../../../Helper/Format";
+import Rating from "../DetailProduct/RatingAndComments/Rating";
+import { Rate } from "../../../../Model/ProductModel";
+import { Products } from "../FilterPage/FiltersPage";
 
 export interface ImgOfProduct {
   url: string;
@@ -54,12 +55,13 @@ export type Product = {
   soldCount: number;
 };
 export default function Detailproducts() {
-  const [first, setfirst] = useState<FormValues | undefined>(undefined);
+  const [first, setfirst] = useState<Rate | undefined>(undefined);
+
   const [quantity, setQuantity] = useState(1);
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
   const { id } = useParams();
   console.log(id);
-
+  //
   useEffect(() => {
     axios
       .get(`${appConfig.apiUrl}/chitietproduct/${id}`)
@@ -97,7 +99,7 @@ export default function Detailproducts() {
     );
     productController
       .getProductSuggest(id)
-      .then((res) => {
+      .then((res: any) => {
         console.log(
           "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
           res
@@ -123,7 +125,7 @@ export default function Detailproducts() {
             <div className="col-span-4">
               <img
                 className="w-[533px] h-[388px] object-cover"
-                src={first?.ProductImage[0].url}
+                src={first?.productDetail.ProductImage[0].url}
                 alt=""
               />
             </div>
@@ -139,7 +141,7 @@ export default function Detailproducts() {
                   </div>
                   {
                     // first?.ProductImage.filter( e)
-                    first?.ProductImage.slice(1, 5).map((e) => {
+                    first?.productDetail.ProductImage.slice(1, 5).map((e) => {
                       return (
                         <img className="h-[88px] w-[88px]" src={e.url} alt="" />
                       );
@@ -157,7 +159,7 @@ export default function Detailproducts() {
             </div>
             <div className="col-span-5 ">
               <p className="text-[32px] text-[#393939] font-medium leading-9">
-                {first?.name}
+                {first?.productDetail.name}
               </p>
               {/* Thống kê */}
               <div className="grid grid-cols-4 mt-8">
@@ -167,40 +169,27 @@ export default function Detailproducts() {
                   <div className="rating ">
                     <div className="flex items-center justify-start gap-1 ">
                       <div className="rating rating-xs">
-                        <input
-                          type="radio"
-                          name="rating-5"
-                          className="mask mask-star-2 bg-orange-400"
-                        />
-                        <input
-                          type="radio"
-                          name="rating-5"
-                          className="mask mask-star-2 bg-orange-400"
-                        />
-                        <input
-                          type="radio"
-                          name="rating-5"
-                          className="mask mask-star-2 bg-orange-400"
-                        />
-                        <input
-                          type="radio"
-                          name="rating-5"
-                          className="mask mask-star-2 bg-orange-400"
-                        />
-                        <input
-                          type="radio"
-                          name="rating-5"
-                          className="mask mask-star-2 bg-orange-400"
-                        />
+                        {[1, 2, 3, 4, 5].map((rating) => (
+                          <input
+                            key={rating}
+                            type="radio"
+                            name="rating-5"
+                            className="mask mask-star-2 bg-orange-400"
+                          />
+                        ))}
                       </div>
-                      <p className="text-[#EA4B48] text-sm">4.0</p>
+                      <p className="text-[#EA4B48] text-sm">
+                        {roundedNumber(first?.averageRating!)}.0
+                      </p>
                     </div>
                   </div>
                   <div className="border-r-2 border-[#E0E0E0]"></div>
                 </div>
                 <div className="flex ml-1 gap-2">
                   <div>
-                    <p className="text-[#1A1A1A] text-base">500</p>
+                    <p className="text-[#1A1A1A] text-base">
+                      {first?.Rating.length}
+                    </p>
                   </div>
                   <div>
                     <p className="text-[#4C4C4C] text-sm mt-[2px] mr-1">
@@ -212,7 +201,11 @@ export default function Detailproducts() {
 
                 <div className="flex col-span-1 ml-[-38px] gap-2 items-center">
                   <div>
-                    <p className="text-[#1A1A1A] text-base">1k</p>
+                    <p className="text-[#1A1A1A] text-base">
+                      {first?.productDetail.soldcount > 0
+                        ? first?.productDetail.soldcount
+                        : 0}
+                    </p>
                   </div>
                   <div>
                     <p className="text-[#4C4C4C] text-sm">Đã bán</p>
@@ -227,17 +220,18 @@ export default function Detailproducts() {
                     <div className="items-center flex">
                       <p className="text-[36px] text-[#EA4B48] font-bold ">
                         {numberFormat(
-                          first?.price! -
-                            first?.price! * (first?.discount! / 100)
+                          first?.productDetail.price! -
+                            first?.productDetail.price! *
+                              (first?.productDetail.discount! / 100)
                         )}
                       </p>
                       <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
-                        {numberFormat(first?.price!)}đ
+                        {numberFormat(first?.productDetail.price!)}đ
                       </p>
                     </div>
                     <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mt-[5px]">
                       <p className="text-[#EA4B48] px-[10px] py-1">
-                        Giảm {first?.discount}%
+                        Giảm {first?.productDetail.discount}%
                       </p>
                     </div>
                   </div>
@@ -354,7 +348,9 @@ export default function Detailproducts() {
       <Container>
         <div
           className="px-[113px] py-[78px] text-sm break-all"
-          dangerouslySetInnerHTML={{ __html: first?.description as any }}
+          dangerouslySetInnerHTML={{
+            __html: first?.productDetail.description as any,
+          }}
         ></div>
 
         {/* <Detail /> */}

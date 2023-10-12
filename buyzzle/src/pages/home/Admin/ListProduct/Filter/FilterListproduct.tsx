@@ -6,7 +6,7 @@ import {
 } from "../../../../../components/Sitebar/SitebarFilter";
 import FilterRateMap from "./FilterRateMap";
 import { useState } from "react";
-import { numberFormat } from "../../../../../Helper";
+import { numberFormat } from "../../../../../Helper/Format";
 
 const arrRating: RatingStar[] = [
   { checked: false, rating: 5 },
