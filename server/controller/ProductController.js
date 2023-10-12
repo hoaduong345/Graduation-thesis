@@ -503,9 +503,9 @@ const ProductController = {
 
     addProductRating: async (req, res) => {
         try {
-            const userId = parseInt(req.cookies.id);
-            console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
-            const { productId, ratingValue, comment } = req.body;
+            // const userId = parseInt(req.cookies.id);
+            // console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
+            const { productId,userId, ratingValue, comment } = req.body;
             const rating = await prisma.rating.create({
                 data: {
                     idproduct: productId,
@@ -532,7 +532,7 @@ const ProductController = {
                 include: {
                     user: {
                         select: {
-                            username: true,
+                            username: true,                    
                         },
                     },
                 },
@@ -625,6 +625,49 @@ const ProductController = {
             res.status(500).json(error.message);
         }
     },
+
+
+    addImageComment : async(req, res) =>{
+      try{
+        const { url, idcomment } = req.body
+
+        const newImageComment = {
+          url,
+          idcomment : parseInt(idcomment),
+        };
+
+        const data = await prisma.commentImage.create({
+            date : newImageComment,
+        }); 
+        res.status(200).json(data);
+      }catch(error){
+        console.error(error);
+        res.status(500).json(error.message);
+      }
+    },
+
+    updateImageComment : async (req, res) => {
+      try{
+          const { id } = req.params;
+          const {url , idcomment} = req.body;
+
+          const updateImageComment = await prisma.commentImage.update({
+            where : {
+              id : parseInt(id),
+            },
+            data : {
+                url,
+                idcomment : parseInt(idcomment)
+            },
+          });
+
+          res.status(200).json(data);
+      }catch(error){
+        res.status(500).json(error.message);
+      }
+    },
+
+
 };
 
 module.exports = ProductController;
