@@ -554,7 +554,6 @@ const ProductController = {
     getAllRatingandComment: async (req, res) => {
         try {
             const productId = parseInt(req.params.productId);
-
             const ratings = await prisma.rating.findMany({
                 where: {
                     idproduct: productId,
