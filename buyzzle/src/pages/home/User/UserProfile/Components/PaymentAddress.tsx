@@ -10,6 +10,9 @@ import { ChangeHandler, Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from 'yup';
+
 
 type FormValues = {
   id: number;
@@ -18,6 +21,8 @@ type FormValues = {
   address: string;
   specificaddress: string;
 };
+
+
 
 export default function PaymentAddress() {
   const [editAddress, setAddress] = useState<FormValues>();
@@ -90,10 +95,17 @@ export default function PaymentAddress() {
     "Yên Bái",
   ];
 
+  const validationSchema = yup.object().shape({
+    specificaddress: yup
+        .string()
+        .required('Vui lòng nhập địa chỉ'),
+});
+
   const {
     control,
     handleSubmit,
     register,
+    
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
@@ -159,13 +171,13 @@ export default function PaymentAddress() {
         const responseData = error.response.data;
         if (responseData.error) {
           console.log(`Lỗi2: ${responseData.error}`);
-          const errorMessageName = responseData.error.name;
+          const errorMessageUsername = responseData.error.username;
           const errorMessageAddresstype = responseData.error.addresstype;
           const errorMessageAddress = responseData.error.address;
           const errorMessageSpecificaddress =
             responseData.error.specificaddress;
-          if (errorMessageName) {
-            toast.warning(errorMessageName, {
+          if (errorMessageUsername) {
+            toast.warning(errorMessageUsername, {
               position: "top-right",
               autoClose: 5000,
             });
@@ -196,7 +208,6 @@ export default function PaymentAddress() {
 
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
-    console.log("sssssssssss", event.target.value);
   };
 
   const onChangeInput = (e: any) => {
