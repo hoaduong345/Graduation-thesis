@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { Editor } from "@tinymce/tinymce-react";
+import { useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import { Images } from "../../../../../Assets/TS";
+import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
+import LineCMT from "../../../../../Assets/TSX/LineCMT";
 import Period from "../../../../../Assets/TSX/Period";
+import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
+import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import { currentDate } from "../../../../../Helper/Format";
-import Handle from "../../../Admin/Assets/TSX/bacham";
+import { stars } from "../../../../../Helper/StarRating/Star";
+import { Rate } from "../../../../../Model/ProductModel";
+import { Rating } from "../../../../../Model/RatingAndComment";
 import Edit from "../../../Admin/Assets/TSX/Edit";
 import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
-import LineCMT from "../../../../../Assets/TSX/LineCMT";
-import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
-import { Editor } from "@tinymce/tinymce-react";
-import { useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import DialogModal from "../../../../../Helper/Dialog/DialogModal";
-import { cloneDeep } from "lodash";
-import { Rating } from "../../../../../Model/RatingAndComment";
-import { rating } from "@material-tailwind/react";
-import { Rate } from "../../../../../Model/ProductModel";
-import { stars } from "../../../../../Helper/StarRating/Star";
+import Handle from "../../../Admin/Assets/TSX/bacham";
 interface FormValues {
   id: number;
   idproduct: number;
@@ -33,19 +29,20 @@ interface FormValues {
     username: string;
   };
 }
-export default function RatingMap() {
-  const [rateAndcomment, setRateAndcomment] = useState<Rate>();
+type Props = {
+  handleEditProductRating: (
+    id: string,
+    data: Rating,
+    idRating: number
+  ) => Promise<void>;
+  rateAndcomment: Rate;
+  handleRemoveRating: (id: number) => void;
+};
+export default function RatingMap(props: Props) {
   const [idRating, setidRating] = useState<number>(0);
   const { id } = useParams();
   console.log("idididid", id);
-  useEffect(() => {
-    getComment(Number(id));
-  }, []);
-  const getComment = (id: number) => {
-    RatingAndCommentController.getRatingAndComment(id).then((res: any) => {
-      setRateAndcomment(res);
-    });
-  };
+
   const editorRef = useRef<any>(null);
   const {
     control,
@@ -82,38 +79,10 @@ export default function RatingMap() {
     setValue("ratingValue", rating);
     console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
   };
-  //Sửa đánh giá
-  const handleEditProductRating = (id: string, data: Rating) => {
-    RatingAndCommentController.EditRatingAndComment(idRating, data)
-      .then((res) => {
-        toast.success("Đánh giá thành công !");
-        const _rateAndComment = rateAndcomment?.Rating.map((item) => {
-          if (item.id === res.data?.id) {
-            return {
-              ...item,
-              comment: res.data?.comment,
-              ratingValue: res.data?.ratingValue,
-            };
-          }
-          return item;
-        });
-        setRateAndcomment(_rateAndComment as any);
-        onClose(id);
-      })
-      .catch(() => {
-        toast.error("Đánh giá thất bại !");
-      });
-    console.log("Sửa bình luận!");
-  };
-  //Xóa comment
-  const handleRemoveRating = (id: number) => {
-    RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
-      getComment(id);
-    });
-  };
+
   return (
     <div>
-      {rateAndcomment?.Rating.map((rating) => {
+      {props.rateAndcomment?.Rating.map((rating) => {
         return (
           <>
             <div className="border-t-[1px] border-[#EA4B48] px-11 py-8">
@@ -216,7 +185,7 @@ export default function RatingMap() {
                       <li>
                         <button
                           className="flex items-center gap-4"
-                          onClick={() => handleRemoveRating(rating.id)}
+                          onClick={() => props.handleRemoveRating(rating.id)}
                         >
                           <RemoveCate />
                           <p
@@ -289,14 +258,14 @@ export default function RatingMap() {
                 </p>
               </div>
             </div>
+            {/* end content comment */}
           </>
         );
       })}
-
       <DialogModal
         id={idDialogRating}
         onClose={() => onClose(idDialogRating)}
-        onSave={handleSubmit((data: Rating) => {
+        onSave={handleSubmit(async (data: Rating) => {
           const htmlString = data.comment;
           const regex = /<p>(.*?)<\/p>/;
           const match = htmlString.match(regex);
@@ -306,7 +275,11 @@ export default function RatingMap() {
               ...data,
               comment: extractedText,
             };
-            handleEditProductRating(idDialogRating, _data);
+            await props
+              .handleEditProductRating(idDialogRating, _data, idRating)
+              .finally(() => {
+                onClose(idDialogRating);
+              });
           }
         })}
         title="Đánh Giá Sản Phẩm"

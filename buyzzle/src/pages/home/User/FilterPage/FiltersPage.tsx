@@ -34,6 +34,7 @@ export interface Products {
   quantity: number;
   description: string;
   status: string;
+  createdAt: string;
   date: string;
   fK_category: Cate;
   ProductImage: ImgOfProduct[];

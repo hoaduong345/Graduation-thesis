@@ -16,7 +16,6 @@ export interface ProductDetail {
     categoryID: number
     ProductImage: ProductImage[]
 }
-
 export interface Rate {
     FlashsaleProducts: FlashsaleProduct[]
     currentPage: number

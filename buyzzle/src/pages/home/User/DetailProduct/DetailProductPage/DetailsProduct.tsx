@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
 import Container from "../../../../../components/container/Container";
@@ -26,14 +26,25 @@ import {
   cartControllers,
 } from "../../../../../Controllers/CartControllers";
 import { toast } from "react-toastify";
-import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
-import Rating from "../RatingAndComments/Rating";
+import {
+  currentDate,
+  numberFormat,
+  roundedNumber,
+} from "../../../../../Helper/Format";
 import { Rate } from "../../../../../Model/ProductModel";
 import { Products } from "../../FilterPage/FiltersPage";
 import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import RatingMap from "../RatingAndComments/RatingMap";
 import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
 import { stars } from "../../../../../Helper/StarRating/Star";
+import { Rating } from "../../../../../Model/RatingAndComment";
+import { useForm } from "react-hook-form";
+import Period from "../../../../../Assets/TSX/Period";
+import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
+import LineCMT from "../../../../../Assets/TSX/LineCMT";
+import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
+import Edit from "../../../Admin/Assets/TSX/Edit";
+import Handle from "../../../Admin/Assets/TSX/bacham";
 
 export interface ImgOfProduct {
   url: string;
@@ -49,6 +60,17 @@ export type FormValues = {
   quantity: number;
   ProductImage: ImgOfProduct[];
   discount: number;
+  id: number;
+  iduser: number;
+  ratingValue: number;
+  comment: string;
+  createdAt: Date;
+  product: {
+    quantity: number;
+  };
+  user: {
+    username: string;
+  };
 };
 export type Product = {
   id: number;
@@ -69,7 +91,7 @@ const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 2 },
   { checked: false, rating: 1 },
 ];
-export default function Detailproducts() {
+export default function DetailsProduct() {
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
 
@@ -83,9 +105,9 @@ export default function Detailproducts() {
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
   const { id } = useParams();
   console.log(id);
-  //
-  useEffect(() => {
-    axios
+
+  const getDetailProduct = async () => {
+    await axios
       .get(`${appConfig.apiUrl}/chitietproduct/${id}`)
       .then((detail) => {
         return detail;
@@ -96,11 +118,17 @@ export default function Detailproducts() {
       .catch((error) => {
         console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
       });
+  };
+  //
+  useEffect(() => {
+    getDetailProduct();
     useScroll();
   }, [id]);
 
   useEffect(() => {
     if (!id) return;
+    getComment(Number(id));
+    getDetailProduct();
     RecommandProductDetailPage(Number(id));
     useScroll();
   }, []);
@@ -126,6 +154,7 @@ export default function Detailproducts() {
           "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
           res
         );
+        getDetailProduct();
         setRecommandProduct(res);
       })
       .catch((err) => {
@@ -136,6 +165,53 @@ export default function Detailproducts() {
   const addCart = (data: ModelCart) => {
     cartControllers.addCart(data).then(() => {
       toast.success("Thêm thành công");
+    });
+  };
+
+  const [rateAndcomment, setRateAndcomment] = useState<Rate>();
+  const getComment = (id: number) => {
+    RatingAndCommentController.getRatingAndComment(id).then((res: any) => {
+      setRateAndcomment(res);
+    });
+  };
+  //Sửa đánh giá
+  const handleEditProductRating = async (
+    id: string,
+    data: Rating,
+    idRating: number
+  ) => {
+    await RatingAndCommentController.EditRatingAndComment(idRating, data)
+      .then((res) => {
+        toast.success("Đánh giá thành công !");
+        const _rateAndComment = rateAndcomment?.Rating.map((item) => {
+          if (item.id === res.data?.id) {
+            return {
+              ...item,
+              comment: res.data?.comment,
+              ratingValue: res.data?.ratingValue,
+            };
+          }
+          return item;
+        });
+        setRateAndcomment((prevRateAndcomment: any) => {
+          const newRateAndcomment = {
+            ...prevRateAndcomment,
+            Rating: _rateAndComment,
+          };
+          return newRateAndcomment;
+        });
+        getDetailProduct();
+        // onClose(id);
+      })
+      .catch(() => {
+        toast.error("Đánh giá thất bại !");
+      });
+    console.log("Sửa bình luận!");
+  };
+  //Xóa comment
+  const handleRemoveRating = (id: number) => {
+    RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
+      getComment(id);
     });
   };
   return (
@@ -386,10 +462,12 @@ export default function Detailproducts() {
             {/* Left Comment */}
             <div className="col-span-2 ">
               <div>
-                <RatingMap />
-                {/* end content comment */}
+                <RatingMap
+                  handleEditProductRating={handleEditProductRating}
+                  rateAndcomment={rateAndcomment!}
+                  handleRemoveRating={handleRemoveRating}
+                />
               </div>
-
               {/* ///////////////////////////////////////////////////// */}
             </div>
             {/* end Left Comment */}
