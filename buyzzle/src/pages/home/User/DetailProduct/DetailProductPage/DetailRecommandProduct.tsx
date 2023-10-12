@@ -1,15 +1,14 @@
 import React from "react";
-import { Images } from "../../../../Assets/TS";
-import { numberFormat } from "../../../../Helper/Format";
-import { Products } from "../FilterPage/FiltersPage";
+import { Images } from "../../../../../Assets/TS";
+import { numberFormat } from "../../../../../Helper/Format";
+import { Products } from "../../FilterPage/FiltersPage";
 import { Link } from "react-router-dom";
-import { Rate } from "../../../../Model/ProductModel";
-
-export default function DetailRecommandProduct({
-  productRecommand,
-}: {
+import { Rate } from "../../../../../Model/ProductModel";
+type Props = {
   productRecommand: Products;
-}) {
+};
+export default function DetailRecommandProduct(props: Props) {
+  const { productRecommand } = props;
   return (
     <>
       <Link to={`/Detailproducts/${productRecommand.id}`}>

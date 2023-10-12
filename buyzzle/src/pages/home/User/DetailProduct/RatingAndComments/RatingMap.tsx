@@ -18,6 +18,7 @@ import { cloneDeep } from "lodash";
 import { Rating } from "../../../../../Model/RatingAndComment";
 import { rating } from "@material-tailwind/react";
 import { Rate } from "../../../../../Model/ProductModel";
+import { stars } from "../../../../../Helper/StarRating/Star";
 interface FormValues {
   id: number;
   idproduct: number;
@@ -150,18 +151,22 @@ export default function RatingMap() {
                     {/* rating */}
                     <div className="flex gap-1">
                       <div className="rating rating-xs">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <input
-                            key={star}
-                            type="radio"
-                            name="rating-5"
-                            value={rating.ratingValue}
-                            className="mask mask-star-2 bg-orange-400"
-                          />
+                        {stars.map((_, index) => (
+                          <button key={index}>
+                            {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                            <img
+                              src={
+                                index < rating.ratingValue
+                                  ? Images.star1
+                                  : Images.star2
+                              }
+                              alt=""
+                            />
+                          </button>
                         ))}
                       </div>
                       <p className="text-[#4C4C4C] font-normal text-xs">
-                        {Math.round(rateAndcomment.averageRating)}.0
+                        {Math.round(rating.ratingValue)}.0
                       </p>
                     </div>
                     {/* end rating */}

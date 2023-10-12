@@ -4,13 +4,16 @@ import { Product } from "../Index";
 import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
 import { numberFormat } from "../../../Helper/Format";
 import { Link } from "react-router-dom";
+import { Rate, Row } from "../../../Model/ProductModel";
 
 export type Props = {
-  product: Product;
+  product: Row;
 };
 
 export default function Productss(props: Props) {
   const { product } = props;
+  // Tạo một mảng với đủ số lượng sao (5 sao) mà bạn muốn hiển thị
+  const stars = Array(5).fill(0);
   return (
     <>
       <Link to={`/Detailproducts/${product.id}`}>
@@ -106,23 +109,17 @@ export default function Productss(props: Props) {
           "
             >
               <div>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star2} alt="" />
-                </button>
+                {stars.map((_, index) => (
+                  <button key={index}>
+                    {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                    <img
+                      src={index < product.rate ? Images.star1 : Images.star2}
+                      alt=""
+                    />
+                  </button>
+                ))}
                 <span className="text-[12px] mr-[30px] ml-[4px] max-lg:text-base">
-                  {4.2}
+                  {product.rate}
                 </span>
               </div>
 

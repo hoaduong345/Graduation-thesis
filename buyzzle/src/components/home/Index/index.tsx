@@ -15,7 +15,7 @@ import { ThemeContext } from "../../../hooks/Context/ThemeContextProvider";
 import { useScroll } from "../../../hooks/Scroll/useScrollPages";
 import { Cate } from "../components/Category";
 import useDebounce from "../../../useDebounceHook/useDebounce";
-import { Products } from "../../../Model/ProductModel";
+import { Rate, Row } from "../../../Model/ProductModel";
 
 export type Product = {
   id: number;
@@ -40,7 +40,7 @@ export type FlashSaleList = {
 function Index() {
   useScroll();
   const [categoty, setCategory] = useState<Cate[]>([]);
-  const [product, setProducts] = useState<Product[]>([]);
+  const [product, setProducts] = useState<Row[]>([]);
 
   const getCategory = () => {
     axios
@@ -476,7 +476,7 @@ function Index() {
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
 
           <div className="flex flex-wrap gap-3 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
-            {product.map((product) => {
+            {product?.map((product) => {
               return <Productss product={product} />;
             })}
           </div>
