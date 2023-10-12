@@ -3,8 +3,6 @@ import Container from "../../../../components/container/Container";
 import Plus from "../../../../Assets/TSX/Plus";
 import Minus from "../../../../Assets/TSX/Minus";
 import Delete from "../../Admin/Assets/TSX/Delete";
-import Voucher from "../../../../Assets/TSX/Voucher";
-import SearchVoucher from "../../../../Assets/TSX/SearchVoucher";
 import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import {
@@ -16,6 +14,7 @@ import { numberFormat } from "../../../../Helper";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import useThrottle from "@rooks/use-throttle";
 import EmptyPage from "../../../../Helper/Empty/EmptyPage";
+import { Link } from "react-router-dom";
 export default function Cart() {
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
@@ -122,9 +121,10 @@ export default function Cart() {
          }
       } else {
          setProductChecked([]);
+         localStorage.clear();
       }
    };
-   const get = () => {
+   const calculatePrice = () => {
       let totalCart = 0;
       let sale = 0;
       for (let i = 0; i < productChecked.length; i++) {
@@ -145,6 +145,10 @@ export default function Cart() {
          (el) => el.productid == item.productid
       );
       return _check !== -1;
+   };
+
+   const buynow = () => {
+      sessionStorage.setItem("cartBuyzzle", JSON.stringify(productChecked));
    };
    return (
       <Container>
@@ -315,26 +319,9 @@ export default function Cart() {
                </div>
 
                <div
-                  className="bg-white mt-[50px] items-center
+                  className="bg-white mt-[30px] items-center
                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                >
-                  <div className=" border-b-[1px] border-[#E0E0E0] w-[100%] mx-auto">
-                     <div className="flex items-center justify-end p-4">
-                        <div className="mr-3">
-                           <Voucher />
-                        </div>
-                        <div className="flex items-center justify-between rounded-[6px] border-[1px] border-[#FFAAAF]">
-                           <input
-                              className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                 px-[10px] rounded-[6px] py-[12px] w-[287px]"
-                              placeholder="Nhập mã voucher"
-                           />
-                           <div className="pr-2">
-                              <SearchVoucher />
-                           </div>
-                        </div>
-                     </div>
-                  </div>
                   <div className="w-[100%] flex items-center justify-between  ">
                      <div className="p-4 flex items-center w-[35%]">
                         <div className="w-[15%] text-center leading-none	">
@@ -375,25 +362,27 @@ export default function Cart() {
                         <div className="flex items-center gap-2">
                            <div>
                               <p className="text-[#EA4B48] text-3xl">
-                                 {numberFormat(get().totalCart)}
+                                 {numberFormat(calculatePrice().totalCart)}
                               </p>
                               <div className="flex">
                                  <p>Tiết kiệm : </p>
                                  <p className="ml-2 text-[#EA4B48]">
-                                    {numberFormat(get().sale)}
+                                    {numberFormat(calculatePrice().sale)}
                                  </p>
                               </div>
                            </div>
                            <ArrowUp />
                         </div>
-                        <button
+                        <Link
+                           to="/checkout"
+                           onClick={buynow}
                            className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 
                                 transition duration-150 bg-[#EA4B48] cursor-pointer"
                         >
                            <Buyzzle />
                            <p>Mua ngay</p>
-                        </button>
+                        </Link>
                         <DialogAddress
                            body={<></>}
                            id={idAllCart}
