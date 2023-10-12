@@ -11,7 +11,7 @@ import SitebarAdmin from "../Sitebar/Sitebar";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import { useEffect, useState } from "react";
 import { voucherControllers } from "../../../../Controllers/VoucherControllers";
-import { Voucher, VoucherModel } from "../../../../Model/VoucherModel";
+import { VoucherModel } from "../../../../Model/VoucherModel";
 import { toast } from "react-toastify";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import "./voucher.css";
@@ -30,10 +30,8 @@ export default function VoucherPage() {
    const idModal = "voucher";
    const idRemove = "removeVoucher";
 
-   const [voucher, setVoucher] = useState<Voucher>({} as Voucher);
+   const [voucher, setVoucher] = useState<VoucherModel[]>([]);
    const [idVoucher, setIdVoucher] = useState<number | undefined>(0);
-   // const [page, setPage] = useState(1);
-   // const [total, setTotal] = useState(0);
    const currentDate = (date: Date) => {
       return moment(date).format("L");
    };
@@ -43,9 +41,7 @@ export default function VoucherPage() {
 
    const getVoucher = async () => {
       await voucherControllers.get(1).then((res) => {
-         console.log(res);
-         setVoucher(res);
-         // setTotal(res.totalPage);
+         setVoucher(res.data);
       });
    };
 
@@ -503,7 +499,7 @@ export default function VoucherPage() {
                            </div>
                         </div>
 
-                        {voucher.data?.map((e) => {
+                        {voucher.map((e) => {
                            return (
                               <>
                                  <div className="grid grid-cols-5 border-t-[1px] py-7">
