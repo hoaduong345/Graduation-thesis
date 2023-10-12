@@ -45,6 +45,8 @@ import LineCMT from "../../../../../Assets/TSX/LineCMT";
 import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
 import Edit from "../../../Admin/Assets/TSX/Edit";
 import Handle from "../../../Admin/Assets/TSX/bacham";
+import { Button, IconButton } from "@material-tailwind/react";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 
 export interface ImgOfProduct {
   url: string;
@@ -103,6 +105,8 @@ export default function DetailsProduct() {
   }, [first]);
   const [quantity, setQuantity] = useState(1);
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { id } = useParams();
   console.log(id);
 
@@ -131,8 +135,7 @@ export default function DetailsProduct() {
     getComment(Number(id));
     getDetailProduct();
     RecommandProductDetailPage(Number(id));
-    useScroll();
-  }, []);
+  }, [currentPage]);
 
   const plusQuantity = () => {
     setQuantity(quantity + 1);
@@ -169,12 +172,37 @@ export default function DetailsProduct() {
       toast.success("Thêm thành công");
     });
   };
-
+  // useEffect(() => {
+  //   RatingAndCommentController.getRatingAndComment(currentPage, 2).then(
+  //     (res: any) => {
+  //       setRateAndcomment(res);
+  //     }
+  //   );
+  // }, []);
   const [rateAndcomment, setRateAndcomment] = useState<Rate>();
   const getComment = (id: number) => {
-    RatingAndCommentController.getRatingAndComment(id).then((res: any) => {
-      setRateAndcomment(res);
-    });
+    RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
+      (res: any) => {
+        setRateAndcomment(res);
+      }
+    );
+  };
+  const getItemProps = (index: number) =>
+    ({
+      variant: currentPage === index ? "filled" : "text",
+      color: "gray",
+      onClick: () => setCurrentPage(index),
+    } as any);
+  const next = () => {
+    if (currentPage === 999) return;
+
+    setCurrentPage(currentPage + 1);
+  };
+
+  const prev = () => {
+    if (currentPage === 1) return;
+
+    setCurrentPage(currentPage - 1);
   };
   //Sửa đánh giá
   const handleEditProductRating = async (
@@ -470,6 +498,37 @@ export default function DetailsProduct() {
                   handleRemoveRating={handleRemoveRating}
                 />
               </div>
+              <div className="pagination">
+                <div className="flex">
+                  <Button
+                    variant="text"
+                    className="flex items-center gap-2"
+                    onClick={prev}
+                  >
+                    <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
+                    Previous
+                  </Button>
+                  {[...new Array(first?.totalRatings)].map((item, index) => {
+                    const page = index + 1;
+                    console.log(item);
+                    return (
+                      <>
+                        <IconButton className="bg-none" {...getItemProps(page)}>
+                          <p className="ml-[-2px] text-sm">{page}</p>
+                        </IconButton>
+                      </>
+                    );
+                  })}
+                  <Button
+                    variant="text"
+                    className="flex items-center gap-2"
+                    onClick={next}
+                  >
+                    Next
+                    <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
               {/* ///////////////////////////////////////////////////// */}
             </div>
             {/* end Left Comment */}
@@ -522,29 +581,6 @@ export default function DetailsProduct() {
               })}
             </div>
           </div>
-        </div>
-        <div className="pagination">
-          <a href="#" className="prev mr-[60px]">
-            <ArrowPrev />
-          </a>
-          <a href="#" className="page">
-            1
-          </a>
-          <a href="#" className="page">
-            2
-          </a>
-          <a href="#" className="page">
-            ...
-          </a>
-          <a href="#" className="page">
-            7
-          </a>
-          <a href="#" className="page">
-            8
-          </a>
-          <a href="#" className="next ml-[60px]">
-            <ArrowNext />
-          </a>
         </div>
       </Container>
     </>
