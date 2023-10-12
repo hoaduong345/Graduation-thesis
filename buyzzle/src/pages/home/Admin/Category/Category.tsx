@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -17,8 +16,9 @@ import Handle from "../Assets/TSX/bacham";
 import SitebarAdmin from "../Sitebar/Sitebar";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import Loading from "../../../../Helper/Loading/Loading";
+import { categoryController } from "../../../../Controllers/CategoryController";
 
-type FormValues = {
+export type FormValues = {
    id: number;
    name: string;
    image: string;
@@ -120,62 +120,33 @@ function Category() {
       }
       closeModal(id);
       if (data.id != 0) {
-         axios
-            .put(
-               `http://localhost:5000/buyzzle/product/updatecategory/${data.id}`,
-               {
-                  name: data.name,
-                  image: url,
-               }
-            )
-            .then((response) => {
-               return response;
-            })
-            .then((data) => {
-               toast.success("Cập nhật thành công!!");
-               console.log(data);
-               getList();
-               setnull();
-            })
-            .catch((error) => {
-               console.error("Error:", error);
-            });
-      } else {
-         axios
-            .post("http://localhost:5000/buyzzle/product/addcategory", {
+         categoryController
+            .update(data.id, {
+               id: data.id,
                name: data.name,
                image: url,
             })
-            .then((response) => {
-               return response;
-            })
-            .then((data) => {
-               toast.success("Thêm thành công!!");
-               console.log(data);
+            .then(() => {
+               toast.success("Cập nhật thành công!!");
                getList();
                setnull();
-            })
-            .catch((error) => {
-               console.error("Error:", error);
-               // Xử lý lỗi nếu có
+            });
+      } else {
+         categoryController
+            .create({ id: data.id, name: data.name, image: url })
+            .then(() => {
+               toast.success("Thêm thành công!!");
+               getList();
+               setnull();
             });
       }
    };
 
    const remove = (id: number) => {
-      axios
-         .delete(`http://localhost:5000/buyzzle/product/deletecategory/${id}`)
-         .then((response) => {
-            return response;
-         })
-         .then(() => {
-            toast.error("Successfully");
-            getList();
-         })
-         .catch((error) => {
-            console.error("Error:", error);
-            alert(error);
-         });
+      categoryController.remove(id).then(() => {
+         toast.error("Successfully");
+         getList();
+      });
    };
 
    useEffect(() => {
@@ -183,18 +154,10 @@ function Category() {
    }, []);
 
    const getList = () => {
-      fetch("http://localhost:5000/buyzzle/product/allcategory")
-         .then((data) => {
-            const bien = data.json();
-            return bien;
-         })
-         .then((data) => {
-            closeModal("");
-            setCategorys(data);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
+      categoryController.getAll().then((res) => {
+         closeModal("");
+         setCategorys(res.data);
+      });
    };
    const openModal = (id: string, data: FormValues) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;

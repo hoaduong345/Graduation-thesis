@@ -50,6 +50,8 @@ export default function Cart() {
          _productChecked[indexProduct].quantity -= 1;
 
          setProductChecked(_productChecked);
+      } else {
+         return;
       }
    };
 
