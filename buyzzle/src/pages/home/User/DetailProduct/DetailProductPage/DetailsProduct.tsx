@@ -123,6 +123,7 @@ export default function DetailsProduct() {
   useEffect(() => {
     getDetailProduct();
     useScroll();
+    RecommandProductDetailPage(Number(id));
   }, [id]);
 
   useEffect(() => {
@@ -149,12 +150,13 @@ export default function DetailsProduct() {
     );
     productController
       .getProductSuggest(id)
-      .then((res: any) => {
+      .then((res) => {
         console.log(
           "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
           res
         );
-        getDetailProduct();
+        // getDetailProduct();
+        getComment(id);
         setRecommandProduct(res);
       })
       .catch((err) => {
@@ -261,7 +263,7 @@ export default function DetailsProduct() {
               {/* Thống kê */}
               <div className="grid grid-cols-4 mt-8">
                 <div className="flex col-span-1 gap-4">
-                  <p className="text-[#1A1A1A] text-base">(100)</p>
+                  {/* <p className="text-[#1A1A1A] text-base">(100)</p> */}
                   {/* rating  */}
                   <div>
                     <div className="flex items-center justify-start gap-2 ">
