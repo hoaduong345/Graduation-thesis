@@ -1,35 +1,39 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Images } from "../../../../Assets/TS";
-import Container from "../../../../components/container/Container";
-import { appConfig } from "../../../../configsEnv";
+import { Images } from "../../../../../Assets/TS";
+import Container from "../../../../../components/container/Container";
+import { appConfig } from "../../../../../configsEnv";
 
-import ArrowDown from "../../../../Assets/TSX/ArrowDown";
-import ArrowNext from "../../../../Assets/TSX/ArrowNext";
-import ArrowPrev from "../../../../Assets/TSX/ArrowPrev";
-import ArrowUp from "../../../../Assets/TSX/ArrowUp";
-import Minus from "../../../../Assets/TSX/Minus";
-import Plus from "../../../../Assets/TSX/Plus";
-import Cart from "../../Admin/Assets/TSX/Cart";
-import FB from "../../Admin/Assets/TSX/FB";
-import Insta from "../../Admin/Assets/TSX/Insta";
-import LoveProduct from "../../Admin/Assets/TSX/LoveProduct";
-import SaveLink from "../../Admin/Assets/TSX/SaveLink";
-import Share from "../../Admin/Assets/TSX/Share";
-import TW from "../../Admin/Assets/TSX/TW";
-import { productController } from "../../../../Controllers/ProductsController";
+import ArrowDown from "../../../../../Assets/TSX/ArrowDown";
+import ArrowNext from "../../../../../Assets/TSX/ArrowNext";
+import ArrowPrev from "../../../../../Assets/TSX/ArrowPrev";
+import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
+import Minus from "../../../../../Assets/TSX/Minus";
+import Plus from "../../../../../Assets/TSX/Plus";
+import Cart from "../../../Admin/Assets/TSX/Cart";
+import FB from "../../../Admin/Assets/TSX/FB";
+import Insta from "../../../Admin/Assets/TSX/Insta";
+import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
+import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
+import Share from "../../../Admin/Assets/TSX/Share";
+import TW from "../../../Admin/Assets/TSX/TW";
+import { productController } from "../../../../../Controllers/ProductsController";
 import DetailRecommandProduct from "./DetailRecommandProduct";
-import { useScroll } from "../../../../hooks/Scroll/useScrollPages";
+import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import {
   ModelCart,
   cartControllers,
-} from "../../../../Controllers/CartControllers";
+} from "../../../../../Controllers/CartControllers";
 import { toast } from "react-toastify";
-import { numberFormat, roundedNumber } from "../../../../Helper/Format";
-import Rating from "../DetailProduct/RatingAndComments/Rating";
-import { Rate } from "../../../../Model/ProductModel";
-import { Products } from "../FilterPage/FiltersPage";
+import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
+import Rating from "../RatingAndComments/Rating";
+import { Rate } from "../../../../../Model/ProductModel";
+import { Products } from "../../FilterPage/FiltersPage";
+import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
+import RatingMap from "../RatingAndComments/RatingMap";
+import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
+import { stars } from "../../../../../Helper/StarRating/Star";
 
 export interface ImgOfProduct {
   url: string;
@@ -54,9 +58,27 @@ export type Product = {
   discount: number;
   soldCount: number;
 };
+export interface RatingStarDetail {
+  checked: boolean;
+  rating: number;
+}
+const arrRating: RatingStarDetail[] = [
+  { checked: false, rating: 5 },
+  { checked: false, rating: 4 },
+  { checked: false, rating: 3 },
+  { checked: false, rating: 2 },
+  { checked: false, rating: 1 },
+];
 export default function Detailproducts() {
   const [first, setfirst] = useState<Rate | undefined>(undefined);
+  const [selectedRating, setSelectedRating] = useState(0);
 
+  // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
+  useEffect(() => {
+    if (first) {
+      setSelectedRating(roundedNumber(first.averageRating));
+    }
+  }, [first]);
   const [quantity, setQuantity] = useState(1);
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
   const { id } = useParams();
@@ -116,7 +138,6 @@ export default function Detailproducts() {
       toast.success("Thêm thành công");
     });
   };
-
   return (
     <>
       <Container>
@@ -166,20 +187,25 @@ export default function Detailproducts() {
                 <div className="flex col-span-1 gap-4">
                   <p className="text-[#1A1A1A] text-base">(100)</p>
                   {/* rating  */}
-                  <div className="rating ">
-                    <div className="flex items-center justify-start gap-1 ">
+                  <div>
+                    <div className="flex items-center justify-start gap-2 ">
                       <div className="rating rating-xs">
-                        {[1, 2, 3, 4, 5].map((rating) => (
-                          <input
-                            key={rating}
-                            type="radio"
-                            name="rating-5"
-                            className="mask mask-star-2 bg-orange-400"
-                          />
+                        {stars.map((_, index) => (
+                          <button key={index}>
+                            {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                            <img
+                              src={
+                                index < selectedRating
+                                  ? Images.star1
+                                  : Images.star2
+                              }
+                              alt=""
+                            />
+                          </button>
                         ))}
                       </div>
                       <p className="text-[#EA4B48] text-sm">
-                        {roundedNumber(first?.averageRating!)}.0
+                        {roundedNumber(selectedRating)}.0
                       </p>
                     </div>
                   </div>
@@ -317,7 +343,7 @@ export default function Detailproducts() {
             </div>
             <div className="mt-11 col-span-2 ">
               <div className="flex flex-wrap gap-3 ">
-                {recommandProduct.map((items) => {
+                {recommandProduct.slice(0, 8).map((items) => {
                   console.log(
                     "🚀 ~ file: Detailproducts.tsx:247 ~ recommandProduct?.rows?.map ~ itemsssss:",
                     items
@@ -354,12 +380,68 @@ export default function Detailproducts() {
         ></div>
 
         {/* <Detail /> */}
-        <Rating />
+        {/* <Rating /> */}
+        <div className="mt-5 ">
+          <div className="grid gap-4 grid-cols-3">
+            {/* Left Comment */}
+            <div className="col-span-2 ">
+              <div>
+                <RatingMap />
+                {/* end content comment */}
+              </div>
+
+              {/* ///////////////////////////////////////////////////// */}
+            </div>
+            {/* end Left Comment */}
+            {/* Right rating */}
+            <div>
+              <div
+                className="col-span-1 w-[312px] h-auto p-4 float-right
+                        shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+              >
+                <div className="py-5">
+                  <p className="text-[#1A1A1A] text-xl text-center font-medium">
+                    Tìm Kiếm
+                  </p>
+                  <div className="rate flex justify-center mt-3">
+                    <div className="mt-3">
+                      {arrRating.map((item, index) => {
+                        return (
+                          <RateDetailCMT
+                            checked={item.checked}
+                            rating={item.rating}
+                            key={index}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* end Right rating */}
+          </div>
+        </div>
       </Container>
-      <div className="border-[2px] mt-[70pxs] border-[#EA4B48]"></div>
+      <div className="border-[2px] mt-[70px] border-[#EA4B48]"></div>
       <Container>
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
+          <div className="mt-11 col-span-2 ">
+            <div className="flex flex-wrap gap-3 ">
+              {recommandProduct.map((items) => {
+                console.log(
+                  "🚀 ~ file: Detailproducts.tsx:247 ~ recommandProduct?.rows?.map ~ itemsssss:",
+                  items
+                );
+                return (
+                  <>
+                    <DetailRecommandProduct productRecommand={items} />
+                  </>
+                );
+              })}
+            </div>
+          </div>
         </div>
         <div className="pagination">
           <a href="#" className="prev mr-[60px]">

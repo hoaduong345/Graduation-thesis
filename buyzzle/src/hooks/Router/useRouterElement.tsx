@@ -25,7 +25,7 @@ import VoucherPage from "../../pages/home/Admin/Management/Voucher/VoucherPage";
 import Category from "../../pages/home/Admin/Management/Category/Category";
 import Members from "../../pages/home/Admin/Assets/Icon/Members";
 import User from "../../pages/home/Admin/Management/User/User";
-import Detailproducts from "../../pages/home/User/DetailProductPage/Detailproducts";
+import Detailproducts from "../../pages/home/User/DetailProduct/DetailProductPage/Detailproducts";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([

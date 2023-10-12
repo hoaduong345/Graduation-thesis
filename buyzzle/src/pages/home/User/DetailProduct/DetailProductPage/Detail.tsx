@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Products } from "../FilterPage/FiltersPage";
-import ArrowUp from "../../../../Assets/TSX/ArrowUp";
-import ArrowDown from "../../../../Assets/TSX/ArrowDown";
-import { numberFormat } from "../../../../Helper/Format";
-import Minus from "../../../../Assets/TSX/Minus";
-import Plus from "../../../../Assets/TSX/Plus";
-import FB from "../../Admin/Assets/TSX/FB";
-import TW from "../../Admin/Assets/TSX/TW";
-import Insta from "../../Admin/Assets/TSX/Insta";
-import SaveLink from "../../Admin/Assets/TSX/SaveLink";
-import Share from "../../Admin/Assets/TSX/Share";
-import LoveProduct from "../../Admin/Assets/TSX/LoveProduct";
+import { Products } from "../../FilterPage/FiltersPage";
+import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
+import ArrowDown from "../../../../../Assets/TSX/ArrowDown";
+import { numberFormat } from "../../../../../Helper/Format";
+import Minus from "../../../../../Assets/TSX/Minus";
+import Plus from "../../../../../Assets/TSX/Plus";
+import FB from "../../../Admin/Assets/TSX/FB";
+import TW from "../../../Admin/Assets/TSX/TW";
+import Insta from "../../../Admin/Assets/TSX/Insta";
+import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
+import Share from "../../../Admin/Assets/TSX/Share";
+import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
 import axios from "axios";
 import {
   ModelCart,
   cartControllers,
-} from "../../../../Controllers/CartControllers";
+} from "../../../../../Controllers/CartControllers";
 import { useParams } from "react-router-dom";
-import { appConfig } from "../../../../configsEnv";
-import { useScroll } from "../../../../hooks/Scroll/useScrollPages";
+import { appConfig } from "../../../../../configsEnv";
+import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import { toast } from "react-toastify";
-import Cart from "../CartPage/Cart";
+import Cart from "../../CartPage/Cart";
 
 export default function Detail() {
   const [first, setfirst] = useState<Products | undefined>(undefined);

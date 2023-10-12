@@ -411,6 +411,7 @@ const ProductController = {
             const sortByDateCreate = req.query.sortByDateCreate;
             const categoryId = req.query.categoryId;
             const discount = 60;
+            const productId = parseInt(req.params.id);
 
             const FlashsaleProducts = await prisma.product.findMany({
                 where: {
@@ -451,13 +452,33 @@ const ProductController = {
                     lte: parseInt(req.query.maxQuantity),
                 };
             }
-
+            const ratings = await prisma.rating.findMany({
+                // where: {
+                //     idproduct: productId,
+                // },
+                include: {
+                    user: {
+                        select: {
+                            username: true,
+                        },
+                    },
+                    product: {
+                        select: {
+                            quantity: true,
+                        },
+                    },
+                },
+            });
+            if (ratings.length === 0) {
+                return res.status(200).json(0);
+            }
+            // const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
+            // const averageRating = totalRating / ratings.length;
             const result = await prisma.product.findMany({
                 orderBy: {
                     sellingPrice: sortByPrice,
                     createdAt: sortByDateCreate,
                 },
-
                 include: {
                     ProductImage: true,
                     fK_category: true,
@@ -467,13 +488,20 @@ const ProductController = {
                 skip,
                 take: pageSize,
             });
+
+            result.map((item) => {
+                const totalRating = item.Rating.reduce((sum, rating) => sum + rating.ratingValue, 0);
+                const averageRating = totalRating / item.Rating.length;
+                item.rate = averageRating;
+            });
+
             const resultProduct = {
-                // allProduct: totalProduct,
-                // FilterProductRange: FilterProductWithinRange,
                 FlashsaleProducts: FlashsaleProducts,
                 currentPage: page,
                 totalPage: Math.ceil(totalProduct.length / pageSize),
                 rows: result,
+                // averageRating: averageRating,
+                Rating: ratings,
             };
             res.status(200).json(resultProduct);
         } catch (error) {
@@ -506,7 +534,7 @@ const ProductController = {
                     },
                     categoryID: categoryId,
                 },
-                take: 8,
+                take: 10,
             });
             res.json(recommendedProducts);
         } catch (error) {
