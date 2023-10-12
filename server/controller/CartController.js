@@ -237,7 +237,7 @@ const CartController = {
         }
     },
     // DECREASE-ITEM (Giảm số lượng của item)
-    decreaseItem: async (res, req) => {
+    decreaseItem: async (req, res) => {
         try {
             const cartId = parseInt(req.body.cartId);
             const productId = parseInt(req.body.productId);
@@ -247,6 +247,7 @@ const CartController = {
             });
 
             if (!cartItem) throw new Error('Item not found in cart.');
+            
 
             await prisma.itemCart.update({
                 where: { id: cartItem.id },
