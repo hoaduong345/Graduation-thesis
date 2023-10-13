@@ -1,18 +1,12 @@
-import {
-  ChangeEvent,
-  Fragment,
-  useState,
-  useEffect,
-  SetStateAction,
-} from "react";
+import { ChangeEvent, Fragment, useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
-import { ChangeHandler, Controller, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from 'yup';
-
+import * as yup from "yup";
+import { userController } from "../../../../../Controllers/UserController";
+import { Console } from "console";
 
 type FormValues = {
   id: number;
@@ -22,13 +16,12 @@ type FormValues = {
   specificaddress: string;
 };
 
-
-
 export default function PaymentAddress() {
   const [editAddress, setAddress] = useState<FormValues>();
   const [validUrl, setValidUrl] = useState(false);
   const param = useParams();
-  const [selectedOption, setSelectedOption] = useState("string");
+  const [selectedOption, setSelectedOption] = useState<string>("aaaaa");
+  const [id, setId] = useState<string>("11");
 
   const provinces = [
     "Tỉnh/Thành phố, Quận/Huyện, Phường/Xã",
@@ -95,30 +88,19 @@ export default function PaymentAddress() {
     "Yên Bái",
   ];
 
-  const validationSchema = yup.object().shape({
-    specificaddress: yup
-        .string()
-        .required('Vui lòng nhập địa chỉ'),
-});
-
   const {
     control,
     handleSubmit,
     register,
-    
+    reset,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
-    defaultValues: {
-      username: "" + param.username,
-      addresstype: "" + editAddress?.addresstype,
-      address: "" + editAddress?.address,
-      specificaddress: "",
-    },
   });
 
+  const isDisabled = !(isValid && isDirty);
+
   const API = `http://localhost:5000/buyzzle/user/paymentaddress/${param.username}`;
-  const API2 = `http://localhost:5000/buyzzle/user/getpaymentaddress/${param.username}`;
 
   useEffect(() => {
     function CheckLink() {
@@ -133,12 +115,48 @@ export default function PaymentAddress() {
     CheckLink();
   }, [param]);
 
+  const getUserData = () => {
+    const user = localStorage.getItem("user");
+    if (user != null) {
+      const userData = JSON.parse(user);
+      const username = userData.username;
+      console.log("USERNAME1: " + username);
+      userController
+        .getUserWhereUsername2(username)
+        .then((res) => {
+          console.log("TEST " + res);
+          return res;
+        })
+        .then((res) => {
+          reset({
+            username: userData.username,
+            addresstype: res.addresstype,
+            address: res.address,
+            specificaddress: res.specificaddress,
+          });
+          setId(res.id);
+          setSelectedOption(res.address);
+        })
+        .catch((error) => {
+          console.log(
+            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
+            error
+          );
+        });
+    } else {
+      console.log("Chua Dang Nhap Dung");
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
   const sendToDatabase = async (formData: FormValues) => {
     try {
       const response1 = await axios.put(API, formData); // Gọi API1
-      const response2 = await axios.get(API2); // Gọi API2
 
-      return [response1, response2];
+      return response1;
     } catch (error) {
       throw error;
     }
@@ -147,12 +165,13 @@ export default function PaymentAddress() {
   const onSubmit = async (formData: FormValues) => {
     try {
       console.log("TESTING: " + formData);
-      formData.address = selectedOption;
-      const [response1, response2] = await sendToDatabase(formData);
+      formData.address = JSON.parse(formData.address);
+      formData.addresstype = JSON.parse(formData.addresstype);
+      const response1 = await sendToDatabase(formData);
 
-      console.log("edit thanh cong", response1, response2);
+      console.log("edit thanh cong", response1);
 
-      if (response1.status === 200 && response2.status === 200) {
+      if (response1.status === 200) {
         console.log("Edit successfully");
         toast.success("Cập nhật thành công", {
           position: "top-right",
@@ -207,7 +226,7 @@ export default function PaymentAddress() {
   };
 
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(event.target.value);
+    setSelectedOption(JSON.parse(event.target.value));
   };
 
   const onChangeInput = (e: any) => {
@@ -267,9 +286,9 @@ export default function PaymentAddress() {
                                                 : "border-[1px] border-[#FFAAAF]"
                                             }`}
                                   placeholder="Họ và tên"
-                                  value={param.username}
-                                  {...register("username")}
-                                  onChange={onChangeInput}
+                                  value={field.value}
+                                  // {...register("username")}
+                                  // onChange={onChangeInput}
                                 />
                                 {!!errors.username && (
                                   <p className="text-red-700 mt-2">
@@ -288,13 +307,12 @@ export default function PaymentAddress() {
                           {/* Dropdown */}
                           <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                             <Controller
-                              name="addresstype" // Đặt tên cho trường được quản lý bởi React Hook Form
+                              name="addresstype"
                               control={control}
                               render={({ field }) => (
                                 <select
                                   className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
-                                  value={field.value} // Sử dụng field.value thay vì selectedOption
-                                  onChange={field.onChange} // Sử dụng field.onChange thay vì handleSelectChange
+                                  {...field} // Sử dụng {...field} để gán giá trị và sự kiện onChange tự động
                                 >
                                   <option value="Địa chỉ văn phòng">
                                     Địa chỉ văn phòng
@@ -309,29 +327,42 @@ export default function PaymentAddress() {
                           </div>
                         </div>
                       </div>
-                      <div className="w-[100%] mt-4">
-                        <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
-                          Địa chỉ*
-                        </p>
-                        {/* Dropdown */}
-                        <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                          <select
-                            className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
-                            value={selectedOption} // Đảm bảo giá trị của select được quản lý bởi selectedOption
-                            onChange={handleSelectChange}
-                          >
-                            {provinces.map((province, index) => (
-                              <option key={index} value={province}>
-                                {province}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                     <div className="w-[100%] mt-4">
+                        <Controller
+                          control={control}
+                          name="address"
+                          render={({ field }) => (
+                            <>
+                              <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
+                                Địa chỉ*
+                              </p>
+                              {/* Dropdown */}
+                              <div className="w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                <select
+                                  className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
+                                  value={field.value} // Sử dụng field.value thay vì selectedOption
+                                  {...register("address")}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    const reg = /[!@#$%^&*]/;
+                                    field.onChange(value.replace(reg, ""));
+                                  }}
+                                >
+                                  {provinces.map((province, index) => (
+                                    <option key={index} value={province}>
+                                      {province}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </>
+                          )}
+                        />
                       </div>
                       <div className="w-[100%] mt-4">
                         <Controller
                           control={control}
-                          name="address"
+                          name="specificaddress"
                           rules={{
                             required: {
                               value: true,
@@ -357,9 +388,12 @@ export default function PaymentAddress() {
                                                 : "border-[1px] border-[#FFAAAF]"
                                             }`}
                                 placeholder="Địa chỉ cụ thể"
-                                value={editAddress?.specificaddress}
-                                {...register("specificaddress")}
-                                onChange={onChangeInput}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  const reg = /[!@#$%^&*]/;
+                                  field.onChange(value.replace(reg, ""));
+                                }}
+                                value={field.value}
                               />
                               {!!errors.specificaddress && (
                                 <p className="text-red-700 mt-2">
@@ -383,13 +417,27 @@ export default function PaymentAddress() {
                   </div>
 
                   {/* button */}
-                  <div className="flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] mt-5">
-                    <button
-                      className={`text-center text-base font-bold text-[#FFFFFF]`}
+                  <div
+                      className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
+                        ? "bg-[#aeaeae] cursor-not-allowed"
+                        : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                        }
+                         `}
                     >
-                      Lưu
-                    </button>
-                  </div>
+                      <button
+                        disabled={isDisabled}
+                        onClick={handleSubmit((formData: any) => {
+                          onSubmit(formData);
+                        })}
+                        className={`text-center text-base font-bold text-[#FFFFFF]
+                        ${isDisabled
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                          }                `}
+                      >
+                        Lưu
+                      </button>
+                    </div>
                 </form>
               </div>
             </div>

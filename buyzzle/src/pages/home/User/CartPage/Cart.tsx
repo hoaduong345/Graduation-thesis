@@ -10,14 +10,14 @@ import {
    cartControllers,
 } from "../../../../Controllers/CartControllers";
 import { CartItem, CartModel } from "../../../../Model/CartModel";
-import { numberFormat } from "../../../../Helper";
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import useThrottle from "@rooks/use-throttle";
 import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { Link } from "react-router-dom";
+import { numberFormat } from "../../../../Helper/Format";
 export default function Cart() {
-  const idItemCart = "confirmCart";
-  const idAllCart = "confirmAllCart";
+   const idItemCart = "confirmCart";
+   const idAllCart = "confirmAllCart";
 
    const [cart, setCart] = useState<CartModel>({} as CartModel);
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
@@ -57,17 +57,12 @@ export default function Cart() {
    const [plusThrottled] = useThrottle(handleIncreaseQuantity, 1500);
    const [minusThrottled] = useThrottle(handleDecreaseQuantity, 1500);
 
-  const getCart = () => {
-    cartControllers.getCart().then((res) => {
-      setCart(res);
-    });
-  };
-  useEffect(() => {
-    getCart();
-  }, []);
-
-  const removeItemCart = (id: number) => {
-    cartControllers.removeItemCart(id).then(() => {
+   const getCart = () => {
+      cartControllers.getCart().then((res) => {
+         setCart(res);
+      });
+   };
+   useEffect(() => {
       getCart();
    }, []);
    const [idProduct, setIdProduct] = useState(0);
@@ -87,23 +82,23 @@ export default function Cart() {
       cartControllers.removeAllCart().then(() => {
          getCart();
          setProductChecked([]);
-         closeModal(idAllCart);
+closeModal(idAllCart);
       });
    };
 
-  const closeModal = (id: string) => {
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
-    }
-  };
+   const openModal = (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         modal.showModal();
+      }
+   };
 
-  const chooseItemCart = (id: string) => {
-    const choose = document.getElementById(id) as HTMLDialogElement | null;
-    if (choose) {
-      setCheckItemCart(!checkItemCart);
-    }
-  };
+   const closeModal = (id: string) => {
+      const modal = document.getElementById(id) as HTMLDialogElement | null;
+      if (modal) {
+         modal.close();
+      }
+   };
 
    // 2 array : 1 array cart, 1 array cart checked
    const handleChecked = (checked: boolean, item: CartItem) => {
@@ -183,7 +178,7 @@ export default function Cart() {
                </div>
                <div className="col-span-2 flex justify-center">
                   <p className="text-[#1A1A1A] text-base font-medium">
-                     Đơn giá
+Đơn giá
                   </p>
                </div>
                <div className="col-span-2 flex justify-center">
@@ -240,7 +235,7 @@ export default function Cart() {
                                           <p className="text-[#1A1A1A] text-base font-medium mx-3">
                                              {e.product.name}
                                           </p>
-                                       </Link>
+</Link>
                                        <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mx-3 mt-3">
                                           <p className="text-[#EA4B48] px-[10px] py-1">
                                              Giảm {e.product.discount}%
@@ -290,7 +285,7 @@ export default function Cart() {
                                  <div className="col-span-2 flex justify-center">
                                     <p className="text-[#EA4B48] text-xl">
                                        {numberFormat(
-                                          e.product.sellingPrice * e.quantity
+e.product.sellingPrice * e.quantity
                                        )}
                                     </p>
                                  </div>
@@ -355,7 +350,7 @@ export default function Cart() {
                         >
                            <div
                               onClick={() => openModal(idAllCart)}
-                              className="p-3"
+className="p-3"
                            >
                               <Delete />
                            </div>
@@ -403,9 +398,7 @@ export default function Cart() {
                   </div>
                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </Container>
-  );
+         </div>
+      </Container>
+   );
 }

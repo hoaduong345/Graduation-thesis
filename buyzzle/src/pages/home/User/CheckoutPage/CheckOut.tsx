@@ -16,14 +16,14 @@ import Address from "../../../../Assets/SVG/LetterPayment/Address";
 import { Controller, useForm } from "react-hook-form";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import { CartItem } from "../../../../Model/CartModel";
-import { numberFormat } from "../../../../Helper";
 import { userController } from "../../../../Controllers/UserController";
+import { numberFormat } from "../../../../Helper/Format";
 
 type FormValues = {
    name: string;
    address: string;
-   typeAddress: string;
-   currentAddress: string;
+   addresstype: string;
+   specificaddress: string;
    phonenumber: number;
 };
 
@@ -115,8 +115,8 @@ export default function CheckOut() {
          reset({
             address: "",
             name: user.name,
-            typeAddress: "",
-            currentAddress: "",
+            addresstype: "",
+            specificaddress: "",
          });
          modal.showModal();
       }
