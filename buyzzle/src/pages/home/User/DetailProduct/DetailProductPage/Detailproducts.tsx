@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
 import Container from "../../../../../components/container/Container";
@@ -26,27 +26,14 @@ import {
   cartControllers,
 } from "../../../../../Controllers/CartControllers";
 import { toast } from "react-toastify";
-import {
-  currentDate,
-  numberFormat,
-  roundedNumber,
-} from "../../../../../Helper/Format";
+import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
+import Rating from "../RatingAndComments/Rating";
 import { Rate } from "../../../../../Model/ProductModel";
 import { Products } from "../../FilterPage/FiltersPage";
 import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import RatingMap from "../RatingAndComments/RatingMap";
 import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
 import { stars } from "../../../../../Helper/StarRating/Star";
-import { Rating } from "../../../../../Model/RatingAndComment";
-import { useForm } from "react-hook-form";
-import Period from "../../../../../Assets/TSX/Period";
-import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
-import LineCMT from "../../../../../Assets/TSX/LineCMT";
-import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
-import Edit from "../../../Admin/Assets/TSX/Edit";
-import Handle from "../../../Admin/Assets/TSX/bacham";
-import { Button, IconButton } from "@material-tailwind/react";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 
 export interface ImgOfProduct {
   url: string;
@@ -62,17 +49,6 @@ export type FormValues = {
   quantity: number;
   ProductImage: ImgOfProduct[];
   discount: number;
-  id: number;
-  iduser: number;
-  ratingValue: number;
-  comment: string;
-  createdAt: Date;
-  product: {
-    quantity: number;
-  };
-  user: {
-    username: string;
-  };
 };
 export type Product = {
   id: number;
@@ -93,7 +69,7 @@ const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 2 },
   { checked: false, rating: 1 },
 ];
-export default function DetailsProduct() {
+export default function Detailproducts() {
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
 
@@ -105,13 +81,11 @@ export default function DetailsProduct() {
   }, [first]);
   const [quantity, setQuantity] = useState(1);
   const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
   const { id } = useParams();
   console.log(id);
-
-  const getDetailProduct = async () => {
-    await axios
+  //
+  useEffect(() => {
+    axios
       .get(`${appConfig.apiUrl}/chitietproduct/${id}`)
       .then((detail) => {
         return detail;
@@ -122,20 +96,14 @@ export default function DetailsProduct() {
       .catch((error) => {
         console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
       });
-  };
-  //
-  useEffect(() => {
-    getDetailProduct();
     useScroll();
-    RecommandProductDetailPage(Number(id));
   }, [id]);
 
   useEffect(() => {
     if (!id) return;
-    getComment(Number(id));
-    getDetailProduct();
     RecommandProductDetailPage(Number(id));
-  }, [currentPage]);
+    useScroll();
+  }, []);
 
   const plusQuantity = () => {
     setQuantity(quantity + 1);
@@ -153,13 +121,11 @@ export default function DetailsProduct() {
     );
     productController
       .getProductSuggest(id)
-      .then((res) => {
+      .then((res: any) => {
         console.log(
           "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
           res
         );
-        // getDetailProduct();
-        getComment(id);
         setRecommandProduct(res);
       })
       .catch((err) => {
@@ -170,78 +136,6 @@ export default function DetailsProduct() {
   const addCart = (data: ModelCart) => {
     cartControllers.addCart(data).then(() => {
       toast.success("Thêm thành công");
-    });
-  };
-  // useEffect(() => {
-  //   RatingAndCommentController.getRatingAndComment(currentPage, 2).then(
-  //     (res: any) => {
-  //       setRateAndcomment(res);
-  //     }
-  //   );
-  // }, []);
-  const [rateAndcomment, setRateAndcomment] = useState<Rate>();
-  const getComment = (id: number) => {
-    RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
-      (res: any) => {
-        setRateAndcomment(res);
-      }
-    );
-  };
-  const getItemProps = (index: number) =>
-    ({
-      variant: currentPage === index ? "filled" : "text",
-      color: "gray",
-      onClick: () => setCurrentPage(index),
-    } as any);
-  const next = () => {
-    if (currentPage === 999) return;
-
-    setCurrentPage(currentPage + 1);
-  };
-
-  const prev = () => {
-    if (currentPage === 1) return;
-
-    setCurrentPage(currentPage - 1);
-  };
-  //Sửa đánh giá
-  const handleEditProductRating = async (
-    id: string,
-    data: Rating,
-    idRating: number
-  ) => {
-    await RatingAndCommentController.EditRatingAndComment(idRating, data)
-      .then((res) => {
-        toast.success("Đánh giá thành công !");
-        const _rateAndComment = rateAndcomment?.Rating.map((item) => {
-          if (item.id === res.data?.id) {
-            return {
-              ...item,
-              comment: res.data?.comment,
-              ratingValue: res.data?.ratingValue,
-            };
-          }
-          return item;
-        });
-        setRateAndcomment((prevRateAndcomment: any) => {
-          const newRateAndcomment = {
-            ...prevRateAndcomment,
-            Rating: _rateAndComment,
-          };
-          return newRateAndcomment;
-        });
-        getDetailProduct();
-        // onClose(id);
-      })
-      .catch(() => {
-        toast.error("Đánh giá thất bại !");
-      });
-    console.log("Sửa bình luận!");
-  };
-  //Xóa comment
-  const handleRemoveRating = (id: number) => {
-    RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
-      getComment(id);
     });
   };
   return (
@@ -291,7 +185,7 @@ export default function DetailsProduct() {
               {/* Thống kê */}
               <div className="grid grid-cols-4 mt-8">
                 <div className="flex col-span-1 gap-4">
-                  {/* <p className="text-[#1A1A1A] text-base">(100)</p> */}
+                  <p className="text-[#1A1A1A] text-base">(100)</p>
                   {/* rating  */}
                   <div>
                     <div className="flex items-center justify-start gap-2 ">
@@ -492,43 +386,10 @@ export default function DetailsProduct() {
             {/* Left Comment */}
             <div className="col-span-2 ">
               <div>
-                <RatingMap
-                  handleEditProductRating={handleEditProductRating}
-                  rateAndcomment={rateAndcomment!}
-                  handleRemoveRating={handleRemoveRating}
-                />
+                <RatingMap />
+                {/* end content comment */}
               </div>
-              <div className="pagination">
-                <div className="flex">
-                  <Button
-                    variant="text"
-                    className="flex items-center gap-2"
-                    onClick={prev}
-                  >
-                    <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
-                    Previous
-                  </Button>
-                  {[...new Array(first?.totalRatings)].map((item, index) => {
-                    const page = index + 1;
-                    console.log(item);
-                    return (
-                      <>
-                        <IconButton className="bg-none" {...getItemProps(page)}>
-                          <p className="ml-[-2px] text-sm">{page}</p>
-                        </IconButton>
-                      </>
-                    );
-                  })}
-                  <Button
-                    variant="text"
-                    className="flex items-center gap-2"
-                    onClick={next}
-                  >
-                    Next
-                    <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
+
               {/* ///////////////////////////////////////////////////// */}
             </div>
             {/* end Left Comment */}
@@ -581,6 +442,29 @@ export default function DetailsProduct() {
               })}
             </div>
           </div>
+        </div>
+        <div className="pagination">
+          <a href="#" className="prev mr-[60px]">
+            <ArrowPrev />
+          </a>
+          <a href="#" className="page">
+            1
+          </a>
+          <a href="#" className="page">
+            2
+          </a>
+          <a href="#" className="page">
+            ...
+          </a>
+          <a href="#" className="page">
+            7
+          </a>
+          <a href="#" className="page">
+            8
+          </a>
+          <a href="#" className="next ml-[60px]">
+            <ArrowNext />
+          </a>
         </div>
       </Container>
     </>
