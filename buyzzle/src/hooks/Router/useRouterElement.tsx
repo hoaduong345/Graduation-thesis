@@ -25,11 +25,8 @@ import VoucherPage from "../../pages/home/Admin/Management/Voucher/VoucherPage";
 import Category from "../../pages/home/Admin/Management/Category/Category";
 import Members from "../../pages/home/Admin/Assets/Icon/Members";
 import User from "../../pages/home/Admin/Management/User/User";
-import Detailproducts from "../../pages/home/User/DetailProduct/DetailProductPage/Detailproducts";
-<<<<<<< HEAD
+import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 
-=======
->>>>>>> parent of 619ddbb (Merge branch 'ThangCode9' into dev)
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -105,7 +102,7 @@ export default function useRouterEmelent() {
       path: "detailproducts/:id",
       element: (
         <MainLayout>
-          <Detailproducts />
+          <DetailsProduct />
         </MainLayout>
       ),
     },
@@ -183,7 +180,7 @@ export default function useRouterEmelent() {
 
         {
           path: "Detailproducts/:id",
-          element: <Detailproducts />,
+          element: <DetailsProduct />,
         },
         {
           path: "category",

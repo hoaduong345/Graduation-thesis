@@ -16,11 +16,10 @@ export interface ProductDetail {
     categoryID: number
     ProductImage: ProductImage[]
 }
-
 export interface Rate {
     FlashsaleProducts: FlashsaleProduct[]
     currentPage: number
-    totalPage: number
+    totalRatings: number
     productDetail: ProductDetail
     rows: Row[]
     averageRating: number

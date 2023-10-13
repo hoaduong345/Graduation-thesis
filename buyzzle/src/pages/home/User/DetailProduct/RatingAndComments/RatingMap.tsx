@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { Editor } from "@tinymce/tinymce-react";
+import { useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import { Images } from "../../../../../Assets/TS";
+import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
+import LineCMT from "../../../../../Assets/TSX/LineCMT";
 import Period from "../../../../../Assets/TSX/Period";
+import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
+import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import { currentDate } from "../../../../../Helper/Format";
-import Handle from "../../../Admin/Assets/TSX/bacham";
+import { stars } from "../../../../../Helper/StarRating/Star";
+import { Rate } from "../../../../../Model/ProductModel";
+import { Rating } from "../../../../../Model/RatingAndComment";
 import Edit from "../../../Admin/Assets/TSX/Edit";
 import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
-import LineCMT from "../../../../../Assets/TSX/LineCMT";
-import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
-import { Editor } from "@tinymce/tinymce-react";
-import { useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import DialogModal from "../../../../../Helper/Dialog/DialogModal";
-import { cloneDeep } from "lodash";
-import { Rating } from "../../../../../Model/RatingAndComment";
-import { rating } from "@material-tailwind/react";
-import { Rate } from "../../../../../Model/ProductModel";
-import { stars } from "../../../../../Helper/StarRating/Star";
+import Handle from "../../../Admin/Assets/TSX/bacham";
 interface FormValues {
   id: number;
   idproduct: number;
@@ -33,19 +29,20 @@ interface FormValues {
     username: string;
   };
 }
-export default function RatingMap() {
-  const [rateAndcomment, setRateAndcomment] = useState<Rate>();
+type Props = {
+  handleEditProductRating: (
+    id: string,
+    data: Rating,
+    idRating: number
+  ) => Promise<void>;
+  rateAndcomment: Rate;
+  handleRemoveRating: (id: number) => void;
+};
+export default function RatingMap(props: Props) {
   const [idRating, setidRating] = useState<number>(0);
   const { id } = useParams();
   console.log("idididid", id);
-  useEffect(() => {
-    getComment(Number(id));
-  }, []);
-  const getComment = (id: number) => {
-    RatingAndCommentController.getRatingAndComment(id).then((res: any) => {
-      setRateAndcomment(res);
-    });
-  };
+
   const editorRef = useRef<any>(null);
   const {
     control,
@@ -82,38 +79,10 @@ export default function RatingMap() {
     setValue("ratingValue", rating);
     console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
   };
-  //Sửa đánh giá
-  const handleEditProductRating = (id: string, data: Rating) => {
-    RatingAndCommentController.EditRatingAndComment(idRating, data)
-      .then((res) => {
-        toast.success("Đánh giá thành công !");
-        const _rateAndComment = rateAndcomment?.Rating.map((item) => {
-          if (item.id === res.data?.id) {
-            return {
-              ...item,
-              comment: res.data?.comment,
-              ratingValue: res.data?.ratingValue,
-            };
-          }
-          return item;
-        });
-        setRateAndcomment(_rateAndComment as any);
-        onClose(id);
-      })
-      .catch(() => {
-        toast.error("Đánh giá thất bại !");
-      });
-    console.log("Sửa bình luận!");
-  };
-  //Xóa comment
-  const handleRemoveRating = (id: number) => {
-    RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
-      getComment(id);
-    });
-  };
+
   return (
     <div>
-      {rateAndcomment?.Rating.map((rating) => {
+      {props.rateAndcomment?.Rating.map((rating) => {
         return (
           <>
             <div className="border-t-[1px] border-[#EA4B48] px-11 py-8">
@@ -216,7 +185,7 @@ export default function RatingMap() {
                       <li>
                         <button
                           className="flex items-center gap-4"
-                          onClick={() => handleRemoveRating(rating.id)}
+                          onClick={() => props.handleRemoveRating(rating.id)}
                         >
                           <RemoveCate />
                           <p
@@ -289,25 +258,32 @@ export default function RatingMap() {
                 </p>
               </div>
             </div>
+            {/* end content comment */}
           </>
         );
       })}
-
       <DialogModal
         id={idDialogRating}
         onClose={() => onClose(idDialogRating)}
+        // onSave={handleSubmit(async (data: Rating) => {
+        //   const htmlString = data.comment;
+        //   const regex = /<p>(.*?)<\/p>/;
+        //   const match = htmlString.match(regex);
+        //   if (match) {
+        //     const extractedText = match[1];
+        //     const _data: Rating = {
+        //       ...data,
+        //       comment: extractedText,
+        //     };
+
+        //   }
+        // })}
         onSave={handleSubmit((data: Rating) => {
-          const htmlString = data.comment;
-          const regex = /<p>(.*?)<\/p>/;
-          const match = htmlString.match(regex);
-          if (match) {
-            const extractedText = match[1];
-            const _data: Rating = {
-              ...data,
-              comment: extractedText,
-            };
-            handleEditProductRating(idDialogRating, _data);
-          }
+          props
+            .handleEditProductRating(idDialogRating, data, idRating)
+            .finally(() => {
+              onClose(idDialogRating);
+            });
         })}
         title="Đánh Giá Sản Phẩm"
         body={
@@ -328,7 +304,7 @@ export default function RatingMap() {
                   <p className="text-[#393939] text-sm font-normal">SL: x2</p>
                 </div>
               </div>
-              <div className=" col-span-1 flex">
+              <div>
                 <p className="text-[#393939] text-lg font-semibold">
                   Chất lượng sản phẩm:
                 </p>
@@ -390,73 +366,13 @@ export default function RatingMap() {
                       Mô tả chất lượng sản phẩm
                       <span className="text-[#FF0000]">*</span>
                     </p>
-                    <Editor
-                      apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
-                      onInit={(editor) => (editorRef.current = editor)}
-                      onEditorChange={(e) => field.onChange(e)}
+                    <textarea
+                      rows={4}
+                      className="block p-2.5 w-full text-sm text-gray-900 outline-none
+                             border-[1px] border-[#FFAAAF] rounded-md mt-2"
+                      placeholder="Để lại bình luận..."
                       value={field.value}
-                      init={{
-                        block_formats:
-                          "Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3",
-                        height: 200,
-                        width: 800,
-                        menubar: false,
-                        tiny_pageembed_classes: [
-                          {
-                            text: "Responsive - 21x9",
-                            value: "tiny-pageembed--21by9",
-                          },
-                          {
-                            text: "Responsive - 16x9",
-                            value: "tiny-pageembed--16by9",
-                          },
-                          {
-                            text: "Responsive - 4x3",
-                            value: "tiny-pageembed--4by3",
-                          },
-                          {
-                            text: "Responsive - 1x1",
-                            value: "tiny-pageembed--1by1",
-                          },
-                        ],
-
-                        plugins: [
-                          "advlist",
-                          "autolink",
-                          "link",
-                          "image",
-                          "lists",
-                          "charmap",
-                          "preview",
-                          "anchor",
-                          "pagebreak",
-                          "searchreplace",
-                          "wordcount",
-                          "visualblocks",
-                          "visualchars",
-                          "code",
-                          "fullscreen",
-                          "insertdatetime",
-                          "media",
-                          "p",
-                          "h1, h2, h3, h4, h5, h6",
-                          "div",
-                          "address",
-                          "pre",
-                          "div",
-                          "code",
-                          "dt, dd",
-                          "samp",
-                          "table",
-                          "emoticons",
-                          "template",
-                          "help",
-                        ],
-                        toolbar:
-                          "undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons",
-                        content_style:
-                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                      }}
+                      onChange={(e) => field.onChange(e)}
                     />
                   </>
                 )}
