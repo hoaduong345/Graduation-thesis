@@ -700,7 +700,7 @@ const ProductController = {
         };
 
         const data = await prisma.commentImage.create({
-            date : newImageComment,
+            data : newImageComment,
         }); 
         res.status(200).json(data);
       }catch(error){
