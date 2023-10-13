@@ -146,7 +146,7 @@ function Login() {
                         <h1 className=' login-a '>ĐĂNG NHẬP</h1>
                         <div className='mb-4'>
                             <label htmlFor='email' className='login-a4 font-sans'>
-                                Tên tài khoản
+                                Email
                             </label>
                             <input
                                 type="text"
@@ -239,7 +239,7 @@ function Login() {
                         </div>
                         <div className='mt-6 text-center'>
                             <span className='text-gray-600'>Bạn chưa có tài khoản Buyzzle? </span>
-                            <a href='#' className='text-black-500 hover:underline font-bold'>
+                            <a href='/register' className='text-black-500 hover:underline font-bold'>
                                 Đăng ký
                             </a>
                         </div>

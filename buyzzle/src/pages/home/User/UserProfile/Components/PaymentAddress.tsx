@@ -1,49 +1,124 @@
-import { ChangeEvent, Fragment, useState, useEffect } from "react";
+import {
+  ChangeEvent,
+  Fragment,
+  useState,
+  useEffect,
+  SetStateAction,
+} from "react";
 import Container from "../../../../../components/container/Container";
-import Sitebar from "../Sitebar/Sitebar";
 import { ChangeHandler, Controller, useForm } from "react-hook-form";
-import HidePass from "../../../../../Assets/TSX/HidePass";
-import ShowPass from "../../../../../Assets/TSX/ShowPass";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { bool, boolean } from "yup";
-import { userController } from "../../../../../Controllers/UserController";
-import { isDate } from "util/types";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from 'yup';
+
 
 type FormValues = {
+  id: number;
   username: string;
-  name: string;
-  email: string;
-  sex: string;
-  phonenumber: number;
-  dateOfBirth: string;
-  oldPassword: string;
-  newPassword: string;
-  confirmNewPassword: string;
-  // fullName: string,
-  // Address: string
+  addresstype: string;
+  address: string;
+  specificaddress: string;
 };
 
-export default function ChangePassword() {
+
+
+export default function PaymentAddress() {
+  const [editAddress, setAddress] = useState<FormValues>();
+  const [validUrl, setValidUrl] = useState(false);
+  const param = useParams();
+  const [selectedOption, setSelectedOption] = useState("string");
+
+  const provinces = [
+    "Tỉnh/Thành phố, Quận/Huyện, Phường/Xã",
+    "An Giang",
+    "Bà Rịa - Vũng Tàu",
+    "Bạc Liêu",
+    "Bắc Giang",
+    "Bắc Kạn",
+    "Bắc Ninh",
+    "Bình Định",
+    "Bình Dương",
+    "Bình Phước",
+    "Bình Thuận",
+    "Cà Mau",
+    "Cao Bằng",
+    "Đà Nẵng",
+    "Đắk Lắk",
+    "Đắk Nông",
+    "Điện Biên",
+    "Đồng Nai",
+    "Đồng Tháp",
+    "Gia Lai",
+    "Hà Giang",
+    "Hà Nam",
+    "Hà Nội",
+    "Hà Tĩnh",
+    "Hải Dương",
+    "Hải Phòng",
+    "Hậu Giang",
+    "Hòa Bình",
+    "Hưng Yên",
+    "Khánh Hòa",
+    "Kiên Giang",
+    "Kon Tum",
+    "Lai Châu",
+    "Lâm Đồng",
+    "Lạng Sơn",
+    "Lào Cai",
+    "Long An",
+    "Nam Định",
+    "Nghệ An",
+    "Ninh Bình",
+    "Ninh Thuận",
+    "Phú Thọ",
+    "Phú Yên",
+    "Quảng Bình",
+    "Quảng Nam",
+    "Quảng Ngãi",
+    "Quảng Ninh",
+    "Quảng Trị",
+    "Sóc Trăng",
+    "Sơn La",
+    "Tây Ninh",
+    "Thái Bình",
+    "Thái Nguyên",
+    "Thanh Hóa",
+    "Thừa Thiên-Huế",
+    "Tiền Giang",
+    "TP. HCM",
+    "Trà Vinh",
+    "Tuyên Quang",
+    "Vĩnh Long",
+    "Vĩnh Phúc",
+    "Yên Bái",
+  ];
+
+  const validationSchema = yup.object().shape({
+    specificaddress: yup
+        .string()
+        .required('Vui lòng nhập địa chỉ'),
+});
+
   const {
     control,
     handleSubmit,
     register,
+    
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
-    // mode: 'all',
+    mode: "all",
     defaultValues: {
-      oldPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
+      username: "" + param.username,
+      addresstype: "" + editAddress?.addresstype,
+      address: "" + editAddress?.address,
+      specificaddress: "",
     },
   });
-  const instance = axios.create({
-    withCredentials: true,
-  });
-  const [validUrl, setValidUrl] = useState(false);
-  const param = useParams();
+
+  const API = `http://localhost:5000/buyzzle/user/paymentaddress/${param.username}`;
+  const API2 = `http://localhost:5000/buyzzle/user/getpaymentaddress/${param.username}`;
 
   useEffect(() => {
     function CheckLink() {
@@ -58,101 +133,85 @@ export default function ChangePassword() {
     CheckLink();
   }, [param]);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPassword2, setShowPassword2] = useState(false);
-  const [showPassword3, setShowPassword3] = useState(false);
-  const [formData2, setFormData2] = useState({
-    username: "",
-    password: "",
-  });
-  const [errorss, setErrors] = useState({
-    username: "",
-    password: "",
-  });
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const sendToDatabase = async (formData: FormValues) => {
+    try {
+      const response1 = await axios.put(API, formData); // Gọi API1
+      const response2 = await axios.get(API2); // Gọi API2
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleShowPassword2 = () => {
-    setShowPassword2(!showPassword2);
-  };
-
-  const toggleShowPassword3 = () => {
-    setShowPassword3(!showPassword3);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData2({
-      ...formData2,
-      [name]: value,
-    });
-
-    if (isFormSubmitted) {
-      setErrors({
-        ...errorss,
-        [name]: "",
-      });
+      return [response1, response2];
+    } catch (error) {
+      throw error;
     }
   };
 
-  const API2 = "http://localhost:5000/buyzzle/auth/changepassword";
-  const onSubmit2 = async (formData: FormValues) => {
+  const onSubmit = async (formData: FormValues) => {
     try {
-      console.log("checker", formData);
-      const response = await instance.put(API2, formData);
-      console.log("Change successfully", response);
+      console.log("TESTING: " + formData);
+      formData.address = selectedOption;
+      const [response1, response2] = await sendToDatabase(formData);
 
-      if (response.status === 200) {
-        console.log("Change successfully");
-        toast.success("Change successfully", {
+      console.log("edit thanh cong", response1, response2);
+
+      if (response1.status === 200 && response2.status === 200) {
+        console.log("Edit successfully");
+        toast.success("Cập nhật thành công", {
           position: "top-right",
           autoClose: 5000,
         });
       } else {
-        console.log("Change Failed!");
-        toast.warning("Change failed", {
+        console.log("Sign-in Failed!");
+        toast.warning("Sign-in failed", {
           position: "top-right",
           autoClose: 5000,
         });
       }
     } catch (error) {
-      // console.log("Them that bai", error);
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-        // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData.error) {
           console.log(`Lỗi2: ${responseData.error}`);
-          const errorMessageoldPassword = responseData.error.oldPassword;
-          const errorMessagenewPassword = responseData.error.newPassword;
-          const errorMessageconfirmNewPassword =
-            responseData.error.confirmNewPassword;
-          if (errorMessageoldPassword) {
-            toast.warning(errorMessageoldPassword, {
+          const errorMessageUsername = responseData.error.username;
+          const errorMessageAddresstype = responseData.error.addresstype;
+          const errorMessageAddress = responseData.error.address;
+          const errorMessageSpecificaddress =
+            responseData.error.specificaddress;
+          if (errorMessageUsername) {
+            toast.warning(errorMessageUsername, {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessagenewPassword) {
-            toast.warning(errorMessagenewPassword, {
+          } else if (errorMessageAddresstype) {
+            toast.warning(errorMessageAddresstype, {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessageconfirmNewPassword) {
-            toast.warning(errorMessageconfirmNewPassword, {
+          } else if (errorMessageAddress) {
+            toast.warning(errorMessageAddress, {
               position: "top-right",
               autoClose: 5000,
             });
+          } else if (errorMessageSpecificaddress) {
+            toast.warning(errorMessageSpecificaddress, {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          } else {
+            console.log("Lỗi không xác định từ server");
           }
         } else {
-          console.log("Lỗi không xác định từ server");
+          console.error("Lỗi gửi yêu cầu không thành công", error);
         }
-      } else {
-        console.error("Lỗi gửi yêu cầu không thành công", error);
       }
     }
+  };
+
+  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const onChangeInput = (e: any) => {
+    setAddress(e.target.value);
   };
 
   return (
@@ -160,193 +219,178 @@ export default function ChangePassword() {
       <Fragment>
         {validUrl ? (
           <body className="body-filter container mx-auto">
-            <div className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"></div>
-            <div>
-              <div className="grid grid-cols-4 gap-4">
-                <div>
-                  <div className="col-span-1 max-2xl:hidden"></div>
-                </div>
-                <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
-                  <form
-                    onSubmit={handleSubmit(onSubmit2)}
-                    className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                  >
-                    <span className="text-[#000] text-2xl font-normal ">
-                      Thay đổi mật khẩu
-                    </span>
-                    <div className="border-[1px] border-[#E0E0E0] w-full my-4 "></div>
-                    <div className="w-[100%]">
-                      {/* <div className='w-[100%]'> */}
-                      <Controller
-                        control={control}
-                        name="oldPassword"
-                        rules={{
-                          required: {
-                            value: true,
-                            message:
-                              "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                          },
-                          minLength: {
-                            value: 6,
-                            message: "Tên sản phẩm phải lớn hơn 6 ký tự",
-                          },
-                        }}
-                        render={({ field }) => (
-                          <>
-                            <label
-                              htmlFor="name"
-                              className="text-[#4C4C4C] text-sm font-medium"
-                            >
-                              Mật khẩu hiện tại
-                            </label>
-                            {/* input addNameProducts */}
-                            <div className="relative w-full items-center">
-                              <button
-                                type="button"
-                                className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
-                                onClick={toggleShowPassword}
-                              >
-                                {showPassword ? <ShowPass /> : <HidePass />}
-                              </button>
-                              <input
-                                className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 border-[1px] border-[#FFAAAF]"
-                                id="password"
-                                type={showPassword ? "text" : "password"}
-                                onChange={field.onChange}
-                                value={field.value}
-                                placeholder="Nhập mật khẩu hiện tại"
-                              />
-                            </div>
-                            {!!errors.oldPassword && (
-                              <p className="text-red-700 mt-2">
-                                {errors.oldPassword.message}
-                              </p>
+            <div className="grid grid-cols-4 gap-4">
+              <div>
+                <div className="col-span-1 max-2xl:hidden"></div>
+              </div>
+              <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                >
+                  <span className="text-[#000] text-2xl font-normal ">
+                    Địa chỉ thanh toán
+                  </span>
+                  <p className="text-[#393939] text-sm font-normal">
+                    Thêm địa chỉ để dễ dàng giao hàng
+                  </p>
+                  <div className="border-[1px] border-[#E0E0E0] w-full my-4 "></div>
+                  <div className="flex gap-7">
+                    <div className="leftAdress w-[50%]">
+                      <div className="flex w-[100%] gap-6 justify-between">
+                        <div className="w-[55%]">
+                          <Controller
+                            control={control}
+                            name="username"
+                            rules={{
+                              required: {
+                                value: true,
+                                message:
+                                  "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                              },
+                            }}
+                            render={({ field }) => (
+                              <>
+                                <label
+                                  htmlFor="username"
+                                  className="text-[#4C4C4C] text-sm font-medium"
+                                >
+                                  Họ và tên
+                                </label>
+                                {/* input addNameProducts */}
+                                <input
+                                  className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                            ${
+                                              !!errors.username
+                                                ? "border-[2px] border-red-900"
+                                                : "border-[1px] border-[#FFAAAF]"
+                                            }`}
+                                  placeholder="Họ và tên"
+                                  value={param.username}
+                                  {...register("username")}
+                                  onChange={onChangeInput}
+                                />
+                                {!!errors.username && (
+                                  <p className="text-red-700 mt-2">
+                                    {errors.username.message}
+                                  </p>
+                                )}
+                              </>
                             )}
-                          </>
-                        )}
-                      />
-                      {/* </div> */}
-                      <div className="flex w-[100%] justify-between  mt-4">
-                        <Controller
-                          control={control}
-                          name="newPassword"
-                          rules={{
-                            required: {
-                              value: true,
-                              message:
-                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                            },
-                            minLength: {
-                              value: 6,
-                              message: "Tên sản phẩm phải lớn hơn 6 ký tự",
-                            },
-                          }}
-                          render={({ field }) => (
-                            <>
-                              {/* input addNameProducts */}
-                              <div className="w-[48%]">
-                                <label
-                                  htmlFor="name"
-                                  className="text-[#4C4C4C] text-sm font-medium"
+                          />
+                          {/* end input addNameProducts */}
+                        </div>
+                        <div className="w-[43%]">
+                          <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
+                            Loại đỉa chỉ*
+                          </p>
+                          {/* Dropdown */}
+                          <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                            <Controller
+                              name="addresstype" // Đặt tên cho trường được quản lý bởi React Hook Form
+                              control={control}
+                              render={({ field }) => (
+                                <select
+                                  className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
+                                  value={field.value} // Sử dụng field.value thay vì selectedOption
+                                  onChange={field.onChange} // Sử dụng field.onChange thay vì handleSelectChange
                                 >
-                                  Mật khẩu mới
-                                </label>
-                                <div className="relative w-full items-center">
-                                  <button
-                                    type="button"
-                                    className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
-                                    onClick={toggleShowPassword2}
-                                  >
-                                    {showPassword2 ? (
-                                      <ShowPass />
-                                    ) : (
-                                      <HidePass />
-                                    )}
-                                  </button>
-                                  <input
-                                    className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 border-[1px] border-[#FFAAAF]"
-                                    id="password"
-                                    type={showPassword2 ? "text" : "password"}
-                                    onChange={field.onChange}
-                                    value={field.value}
-                                    placeholder="Mật khẩu mới"
-                                  />
-                                </div>
-                                {!!errors.newPassword && (
-                                  <p className="text-red-700 mt-2">
-                                    {errors.newPassword.message}
-                                  </p>
-                                )}
-                              </div>
-                            </>
-                          )}
-                        />
-                        <Controller
-                          control={control}
-                          name="confirmNewPassword"
-                          rules={{
-                            required: {
-                              value: true,
-                              message:
-                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                            },
-                            minLength: {
-                              value: 6,
-                              message: "Tên sản phẩm phải lớn hơn 6 ký tự",
-                            },
-                          }}
-                          render={({ field }) => (
-                            <>
-                              {/* input addNameProducts */}
-                              <div className="w-[48%]">
-                                <label
-                                  htmlFor="name"
-                                  className="text-[#4C4C4C] text-sm font-medium"
-                                >
-                                  Xác nhận mật khẩu mới
-                                </label>
-                                <div className="relative w-full items-center">
-                                  <button
-                                    type="button"
-                                    className="absolute right-4 top-8 transform -translate-y-1/2 text-gray-500"
-                                    onClick={toggleShowPassword3}
-                                  >
-                                    {showPassword3 ? (
-                                      <ShowPass />
-                                    ) : (
-                                      <HidePass />
-                                    )}
-                                  </button>
-                                  <input
-                                    className="focus:outline-none text-[#333333] text-base placeholder-[#7A828A] rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 border-[1px] border-[#FFAAAF]"
-                                    id="password"
-                                    type={showPassword3 ? "text" : "password"}
-                                    onChange={field.onChange}
-                                    value={field.value}
-                                    placeholder="Xác nhận mật khẩu mới"
-                                  />
-                                </div>
-                                {!!errors.confirmNewPassword && (
-                                  <p className="text-red-700 mt-2">
-                                    {errors.confirmNewPassword.message}
-                                  </p>
-                                )}
-                              </div>
-                            </>
-                          )}
-                        />
+                                  <option value="Địa chỉ văn phòng">
+                                    Địa chỉ văn phòng
+                                  </option>
+                                  <option value="Địa chỉ công ty">
+                                    Địa chỉ công ty
+                                  </option>
+                                  <option value="Nhà riêng">Nhà riêng</option>
+                                </select>
+                              )}
+                            />
+                          </div>
+                        </div>
                       </div>
-                      {/* button */}
-                      <div className="flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] mt-5">
-                        <button
-                          className={`text-center text-base font-bold text-[#FFFFFF]`}
-                        >
-                          Lưu
-                        </button>
+                      <div className="w-[100%] mt-4">
+                        <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
+                          Địa chỉ*
+                        </p>
+                        {/* Dropdown */}
+                        <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                          <select
+                            className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
+                            value={selectedOption} // Đảm bảo giá trị của select được quản lý bởi selectedOption
+                            onChange={handleSelectChange}
+                          >
+                            {provinces.map((province, index) => (
+                              <option key={index} value={province}>
+                                {province}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      <div className="w-[100%] mt-4">
+                        <Controller
+                          control={control}
+                          name="address"
+                          rules={{
+                            required: {
+                              value: true,
+                              message:
+                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                            },
+                          }}
+                          render={({ field }) => (
+                            <>
+                              <label
+                                htmlFor="specificaddress"
+                                className="text-[#4C4C4C] text-sm font-medium"
+                              >
+                                Địa chỉ cụ thể
+                              </label>
+                              {/* input addNameProducts */}
+                              <input
+                                className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                            ${
+                                              !!errors.specificaddress
+                                                ? "border-[2px] border-red-900"
+                                                : "border-[1px] border-[#FFAAAF]"
+                                            }`}
+                                placeholder="Địa chỉ cụ thể"
+                                value={editAddress?.specificaddress}
+                                {...register("specificaddress")}
+                                onChange={onChangeInput}
+                              />
+                              {!!errors.specificaddress && (
+                                <p className="text-red-700 mt-2">
+                                  {errors.specificaddress.message}
+                                </p>
+                              )}
+                            </>
+                          )}
+                        />
+                        {/* end input addNameProducts */}
                       </div>
                     </div>
-                  </form>
-                </div>
+                    <div className="rightAdressMap w-[46%]">
+                      <iframe
+                        width="100%"
+                        height="118%"
+                        title="map"
+                        src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed"
+                      />
+                    </div>
+                  </div>
+
+                  {/* button */}
+                  <div className="flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] mt-5">
+                    <button
+                      className={`text-center text-base font-bold text-[#FFFFFF]`}
+                    >
+                      Lưu
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </body>
@@ -478,7 +522,8 @@ export default function ChangePassword() {
                     cy="732.18168"
                     rx="7.5"
                     ry="20"
-                    transform="translate(-606.25475 830.05533) rotate(-89.32491)"
+                    transform="translate(-606.25475 830.05533)
+rotate(-89.32491)"
                     fill="#2f2e41"
                   ></ellipse>
                   <circle
@@ -543,7 +588,8 @@ export default function ChangePassword() {
                     cy="716.94619"
                     rx="20"
                     ry="7.5"
-                    transform="translate(-214.42477 209.56103) rotate(-17.08345)"
+                    transform="translate(-214.42477 209.56103)
+rotate(-17.08345)"
                     fill="#2f2e41"
                   ></ellipse>
                   <circle

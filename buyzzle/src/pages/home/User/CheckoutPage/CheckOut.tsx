@@ -86,8 +86,8 @@ export default function CheckOut() {
       mode: "all",
       defaultValues: {
          address: "",
-         currentAddress: "",
-         typeAddress: "",
+         specificaddress: "",
+         addresstype: "",
          name: "",
       },
    });
@@ -405,7 +405,7 @@ export default function CheckOut() {
                                              </div>
                                              <div className=" w-full">
                                                 <Controller
-                                                   name="typeAddress"
+                                                   name="addresstype"
                                                    control={control}
                                                    rules={{
                                                       required: {
@@ -447,11 +447,11 @@ export default function CheckOut() {
                                                                Công ty
                                                             </option>
                                                          </select>
-                                                         {errors.typeAddress && (
+                                                         {errors.addresstype && (
                                                             <p className="text-red-600 text-xs my-2">
                                                                {
                                                                   errors
-                                                                     .typeAddress
+                                                                     .addresstype
                                                                      .message
                                                                }
                                                             </p>
@@ -524,7 +524,7 @@ export default function CheckOut() {
 
                                           <div className="flex flex-col border-b-[1px] pb-4 mb-4 gap-2">
                                              <Controller
-                                                name="currentAddress"
+                                                name="specificaddress"
                                                 control={control}
                                                 rules={{
                                                    required: {
@@ -568,11 +568,11 @@ export default function CheckOut() {
                                                             "407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk "
                                                          }
                                                       />
-                                                      {errors.currentAddress && (
+                                                      {errors.specificaddress && (
                                                          <p className="text-red-600 text-xs my-2">
                                                             {
                                                                errors
-                                                                  .currentAddress
+                                                                  .specificaddress
                                                                   .message
                                                             }
                                                          </p>
