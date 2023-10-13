@@ -11,10 +11,10 @@ import {
 } from "../../../../Controllers/CartControllers";
 import { CartItem, CartModel } from "../../../../Model/CartModel";
 import { numberFormat } from "../../../../Helper";
-import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import useThrottle from "@rooks/use-throttle";
 import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { Link } from "react-router-dom";
+import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 export default function Cart() {
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
@@ -313,8 +313,8 @@ export default function Cart() {
                         />
                      </>
                   )}
-                  <DialogAddress
-                     body={<></>}
+                  <DialogComfirm
+                     desc="Bạn có chắc chắn muốn xóa danh mục này không, sau khi xóa thì không thể khôi phục lại"
                      id={idItemCart}
                      onClose={() => closeModal(idItemCart)}
                      onSave={() => removeItemCart(idProduct)}
@@ -387,8 +387,8 @@ export default function Cart() {
                            <Buyzzle />
                            <p>Mua ngay</p>
                         </Link>
-                        <DialogAddress
-                           body={<></>}
+                        <DialogComfirm
+                           desc="Bạn có chắc chắn muốn xóa danh mục này không, sau khi xóa thì không thể khôi phục lại"
                            id={idAllCart}
                            onClose={() => closeModal(idAllCart)}
                            onSave={() => removeAllCart()}
