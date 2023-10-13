@@ -44,6 +44,9 @@ router.get('/ratingcomment/:productId', ProductController.getAllRatingandComment
 router.put('/updateratingcomment/:ratingId', ProductController.updateRatingandComment);
 router.delete('/deleteratingcomment/:ratingId', ProductController.deleteRatingandComment);
 
+router.post('/addimagecomment', ProductController.addImageComment);
+
+
 // router.put("/updateratingcomment/:ratingId",  MiddleWareController.verifyAuthenticate, MiddleWareRatingController.isAuthor, ProductController.updateRatingandComment);
 // router.delete("/deleteratingcomment/:userId/:ratingId", MiddleWareRatingController.isAuthenticated, MiddleWareRatingController.isAuthor, ProductController.deleteRatingandComment);
 

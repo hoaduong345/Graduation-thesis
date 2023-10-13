@@ -723,11 +723,14 @@ const existingRating = await prisma.rating.findUnique({
             },
           });
 
-          res.status(200).json(data);
-      }catch(error){
-        res.status(500).json(error.message);
-        // dit cu m
-      }
+            const data = await prisma.commentImage.create({
+                data: newImageComment,
+            });
+            res.status(200).json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(error.message);
+        }
     },
 
 
