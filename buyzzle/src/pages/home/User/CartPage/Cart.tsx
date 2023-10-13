@@ -77,7 +77,7 @@ export default function Cart() {
          setProductChecked(Product);
       });
    };
-
+   // asdasd
    const removeAllCart = () => {
       cartControllers.removeAllCart().then(() => {
          getCart();
