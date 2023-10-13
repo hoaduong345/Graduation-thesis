@@ -7,6 +7,9 @@ const bodyParser = require('body-parser');
 const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
+const OrderRouter = require('./routes/OrderRoutes');
+
+
 const ProductRoutes = require('./routes/ProductRoutes');
 const cookieParser = require('cookie-parser');
 const http = require('http');
@@ -63,3 +66,4 @@ io.on('connection', (socket) => {
 server.listen(process.env.APP_PORT || 5000, () => {
     console.log('Server up and running on port ' + (process.env.APP_PORT));
 });
+app.use('/buyzzle/order', OrderRouter);

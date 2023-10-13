@@ -22,29 +22,46 @@ import { ThemeContext } from "../../hooks/Context/ThemeContextProvider";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import Container from "../container/Container";
+import { userController } from "../../Controllers/UserController";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
   const [text, setText] = useState("");
-
+  const dataInputHeaderSearch = useContext(ThemeContext);
   const dataSearchBodyIndexFromHeader = useContext(ThemeContext);
   const [productSearch, setProductSearch] = useState<Products[]>([]);
   const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
   const [isSearch, setIsSearch] = useState(false);
 
   const user = localStorage.getItem("user");
-  const dataInputHeaderSearch = useContext(ThemeContext);
-  var username;
-  var img;
-  var name;
 
-  // console.log(isSearch);
+  var username;
+  const [name, setName] = useState("");
+  const [img, setImg] = useState("");
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user != null) {
+      const userData = JSON.parse(user);
+      const username = userData.username;
+      console.log("USERNAME: " + username);
+      userController.getUserWhereUsername(username).then((res) => {
+        // setEditUser(res)
+        setName(res.name);
+        const UserImageArray = JSON.stringify(res.UserImage);
+        const urlTaker = JSON.parse(UserImageArray);
+        setImg(urlTaker[0].url);
+        console.log("ID: " + img);
+      });
+    } else {
+      console.log("Chua Dang Nhap Dung");
+    }
+  }, []);
 
   if (user != null) {
     username = JSON.parse(user).username;
-    img = JSON.parse(user).img;
-    name = JSON.parse(user).name;
+    // img = JSON.parse(user).img;
+    // name = JSON.parse(user).name;
 
     // console.log(name.substring(0, 1));
     // console.log("USER: " + name, img);
@@ -221,7 +238,7 @@ export default function Header() {
                               Từ khóa
                             </h1>
                             <p className="text-base cursor-default p-1 pl-2 font-normal">
-                              {text}
+                              {text == "" ? "" : `"${text}"`}
                             </p>
                             {/* <div className="grid grid-cols-3 gap-4 py-3  w-[98%] mx-auto">
                               {productSearch.slice(0, 6).map((itemsSearch) => {
@@ -316,13 +333,17 @@ export default function Header() {
                           {username}
                         </div>
                         {img ? (
-                          <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
-                            <p className="text-1xl text-stone-50">{img}</p>
+                          <div className="relative">
+                            <img
+                              className="w-10 h-10 rounded-full border-4 "
+                              src={img}
+                              alt=""
+                            />
                           </div>
                         ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
                             <p className="text-1xl text-stone-50">
-                              {/* {name.substring(0, 1).toUpperCase()} */}
+                              {name.substring(0, 1).toUpperCase()}
                             </p>
                           </div>
                         )}
@@ -344,25 +365,21 @@ export default function Header() {
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
             <div className="container mx-auto">
-              {/* <ul className="flex justify-between h-[60px] font-bold text-[#1A1A1A]leading-15 items-center leading-[100%]"> */}
               <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
-                {/* <li>
-                  <Link to="/ProductsPage">Gấu Bông Bobbicraft</Link>
-                </li> */}
                 <li>
-                  <Link to={`#`}>Áo Nam</Link>
+                  <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link>
                 </li>
                 <li>
-                  <Link to="/admin/Addproductspage">Thêm sản phẩm</Link>
+                  <Link to="/admin/category">categoryAdmin</Link>
                 </li>
                 <li>
-                  <Link to="/admin/chitietproduct">Editproductspage</Link>
+                  <Link to="/admin/voucher">voucherAdmin</Link>
+                </li>
+                <li>
+                  <Link to="/admin/usersmanager">usersmanagerAdmin</Link>
                 </li>
                 <li>
                   <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
-                </li>
-                <li>
-                  <Link to="/UserProfilePage">UserProfilePage</Link>
                 </li>
                 <li>
                   <Link to="/orderhistory">orderhistory</Link>
@@ -370,10 +387,10 @@ export default function Header() {
                 <li>
                   <a href="/checkout">check out</a>
                 </li>
-                {/*  <li>
-                  <a href="#">Sữa Baby</a>
-                </li>
                 <li>
+                  <a href="/orderdetail">orderdetail</a>
+                </li>
+                {/*  <li>
                   <a href="#">Sữa Baby</a>
                 </li> */}
               </ul>

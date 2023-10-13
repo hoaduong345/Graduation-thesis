@@ -77,6 +77,5 @@ export const Images = {
   zalo: "../src/Assets/PNG/Logo-ZaloPay.png",
   nhanHang: "../src/Assets/PNG/nhanhang.png",
   detailHover: "../src/Assets/PNG/Line 56.png",
-
 };
 

@@ -69,7 +69,7 @@ export default function FiltersPage() {
 
   // Slider Price SiteBarFilterPages
   const [sliderValues, setSliderValues] = useState<[number, number]>([
-    0, 10000000,
+    0, 10000000000,
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
 

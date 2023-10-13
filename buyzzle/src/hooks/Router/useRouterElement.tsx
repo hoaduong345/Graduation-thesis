@@ -17,13 +17,15 @@ import Forgotpassword from "../../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../../pages/forgotpassword/Resetpassword";
 import path from "../../contants/path";
 import Addproducts from "../../pages/home/Admin/Addproduct/Addproducts";
-import Category from "../../pages/home/Admin/Category/Category";
-import Detailproducts from "../../pages/home/User/DetailProduct/Detailproducts";
 import Cart from "../../pages/home/User/CartPage/Cart";
 import OrderHistory from "../../pages/home/User/OrderHistoryPage/OrderHistory";
 import CheckOut from "../../pages/home/User/CheckoutPage/CheckOut";
 import OrderDetailPage from "../../pages/home/User/OrderDetail/OrderDetailPage";
-import VoucherPage from "../../pages/home/Admin/Voucher/VoucherPage";
+import VoucherPage from "../../pages/home/Admin/Management/Voucher/VoucherPage";
+import Category from "../../pages/home/Admin/Management/Category/Category";
+import Members from "../../pages/home/Admin/Assets/Icon/Members";
+import User from "../../pages/home/Admin/Management/User/User";
+import Detailproducts from "../../pages/home/User/DetailProduct/DetailProductPage/Detailproducts";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -186,6 +188,10 @@ export default function useRouterEmelent() {
         {
           path: "voucher",
           element: <VoucherPage />,
+        },
+        {
+          path: "usersmanager",
+          element: <User />,
         },
       ],
     },
