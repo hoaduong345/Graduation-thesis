@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import Voucher from "../../../../Assets/TSX/Voucher";
@@ -15,39 +15,66 @@ import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import Address from "../../../../Assets/SVG/LetterPayment/Address";
 import { Controller, useForm } from "react-hook-form";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
+import { CartItem } from "../../../../Model/CartModel";
+import { numberFormat } from "../../../../Helper";
+import { userController } from "../../../../Controllers/UserController";
 
 type FormValues = {
    name: string;
    address: string;
    typeAddress: string;
    currentAddress: string;
-   phone: number;
+   phonenumber: number;
 };
 
-const userInfo: FormValues[] = [
-   {
-      name: "Trần Văn Bình",
-      address: "Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk",
-      currentAddress: "407 Hoàng Diệu",
-      typeAddress: "Công ty",
-      phone: 933234442,
-   },
-   {
-      name: "Nguyễn Trọng Nhâm",
-      address: "Phường Tân An, Thành Phố Buôn Ma Thuột, Đắk Lắk",
-      currentAddress: "12 Nguyễn Chí Thanh",
-      typeAddress: "Nhà riêng",
-      phone: 383404215,
-   },
-];
+interface User {
+   username: string;
+}
 
 export default function CheckOut() {
    const idModal = "checkout";
    const idModalUpdate = "my_modal_update";
 
-   const [chooseMomo, setChooseMoMo] = useState(false);
-   const [chooseZalo, setChooseZalo] = useState(false);
-   const [chooseCOD, setChooseCOD] = useState(false);
+   const [user, setUser] = useState<FormValues>({} as FormValues);
+   const [payment, setPayment] = useState([
+      {
+         id: 1,
+         icon: Images.momo,
+         title: "Thanh toán bằng ví Momo",
+         color: "#9c9c9c",
+      },
+      {
+         id: 2,
+         icon: Images.zalo,
+         title: "Thanh toán bằng ví Zalopay",
+         color: "#9c9c9c",
+      },
+      {
+         id: 3,
+         icon: Images.nhanHang,
+         title: "Thanh toán khi nhận hàng",
+         color: "#9c9c9c",
+      },
+   ]);
+
+   const localCart = sessionStorage.getItem("cartBuyzzle");
+   const listLocalCart: CartItem[] =
+      localCart == null ? [] : JSON.parse(localCart);
+
+   const localUsername = localStorage.getItem("user");
+   const userLocal: User =
+      localUsername == null ? "" : JSON.parse(localUsername);
+   useEffect(() => {
+      getUser();
+   }, []);
+
+   const getUser = async () => {
+      await userController
+         .getUserWhereUsername(userLocal.username)
+         .then((res) => {
+            setUser(res);
+         });
+   };
 
    const {
       control,
@@ -82,14 +109,14 @@ export default function CheckOut() {
    const saveModal = (data: FormValues) => {
       console.log(data);
    };
-   const openUpadate = (id: string, i: number) => {
+   const openUpadate = (id: string) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          reset({
-            address: userInfo[i].address,
-            name: userInfo[i].name,
-            typeAddress: userInfo[i].typeAddress,
-            currentAddress: userInfo[i].currentAddress,
+            address: "",
+            name: user.name,
+            typeAddress: "",
+            currentAddress: "",
          });
          modal.showModal();
       }
@@ -99,9 +126,58 @@ export default function CheckOut() {
       reset({});
    };
 
+   const calculatePrice = () => {
+      let totalCart = 0;
+      let sale = 0;
+      for (let i = 0; i < listLocalCart.length; i++) {
+         const element = listLocalCart[i];
+         totalCart += element.quantity * element.product.sellingPrice;
+         sale +=
+            element.quantity *
+            (element.product.price - element.product.sellingPrice);
+      }
+
+      return {
+         sale,
+         totalCart,
+      };
+   };
+
+   const paymentChecked = (id: number) => {
+      const updatedItems = payment.map((item) => {
+         if (item.id === id) {
+            return { ...item, color: "#393939" };
+         } else {
+            return { ...item, color: "#9c9c9c" };
+         }
+         return item;
+      });
+
+      setPayment(updatedItems);
+   };
+
    return (
       <>
          <Container>
+            {/* <div role="status">
+               <svg
+                  aria-hidden="true"
+                  className="inline w-10 h-10 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+               >
+                  <path
+                     d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                     fill="currentColor"
+                  />
+                  <path
+                     d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                     fill="currentFill"
+                  />
+               </svg>
+               <span className="sr-only">Loading...</span>
+            </div> */}
             <div className="body-filter container mx-auto">
                <div className="grid grid-cols-4 gap-6">
                   <div className="col-span-1 max-2xl:hidden">
@@ -154,9 +230,9 @@ export default function CheckOut() {
                                  <div>
                                     <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
                                        <span className="font-bold">
-                                          Trần Văn Bảo (+84) 92381882
+                                          {user.name} {user.phonenumber}
                                        </span>{" "}
-                                       407 Hoàng Diệu, Phường Thống Nhất, Thành
+                                       12 Nguyễn Chí Thanh Phường Tân An, Thành
                                        Phố Buôn Ma Thuột, Đắk Lắk
                                     </p>
                                  </div>
@@ -192,65 +268,58 @@ export default function CheckOut() {
                                  onSave={() => saveModal({} as FormValues)}
                                  body={
                                     <>
-                                       {userInfo.map((e, i) => {
-                                          return (
-                                             <>
-                                                <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
-                                                   <div className="flex items-center mr-4 justify-start ">
-                                                      <input
-                                                         checked
-                                                         type="radio"
-                                                         name="colored-radio"
-                                                         id="orange-radio"
-                                                         className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
+                                       <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
+                                          <div className="flex items-center mr-4 justify-start ">
+                                             <input
+                                                checked
+                                                type="radio"
+                                                name="colored-radio"
+                                                id="orange-radio"
+                                                className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
                                                                 checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                                      />
-                                                      <div
-                                                         className="h-5 w-5 absolute rounded-full pointer-events-none
+                                             />
+                                             <div
+                                                className="h-5 w-5 absolute rounded-full pointer-events-none
                                                                 peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                                      />
-                                                   </div>
-                                                   <div className="flex flex-col gap-1">
-                                                      <div className="flex justify-between w-full">
-                                                         <div className="flex items-center gap-3">
-                                                            <p className="text-sm font-medium text-[#1A1A1A]">
-                                                               {e.name}
-                                                            </p>
-                                                            <p className="text-[10px] text-[#4C4C4C]">
-                                                               (+84) {e.phone}
-                                                            </p>
-                                                         </div>
-                                                         <div className="">
-                                                            <button
-                                                               onClick={() =>
-                                                                  openUpadate(
-                                                                     idModalUpdate,
-                                                                     i
-                                                                  )
-                                                               }
-                                                               className="text-[#5D5FEF] text-[10px]"
-                                                            >
-                                                               Cập nhật
-                                                            </button>
-                                                         </div>
-                                                      </div>
-                                                      <div>
-                                                         <p className="text-[13px] font-normal text-[#4C4C4C]">
-                                                            {e.currentAddress}
-                                                            <span> </span>
-                                                            {e.address}
-                                                         </p>
-                                                      </div>
-                                                   </div>
+                                             />
+                                          </div>
+                                          <div className="flex flex-col gap-1">
+                                             <div className="flex justify-between w-full">
+                                                <div className="flex items-center gap-3">
+                                                   <p className="text-sm font-medium text-[#1A1A1A]">
+                                                      {user.name}
+                                                   </p>
+                                                   <p className="text-[10px] text-[#4C4C4C]">
+                                                      (+84) {user.phonenumber}
+                                                   </p>
                                                 </div>
-                                             </>
-                                          );
-                                       })}
+                                                <div className="">
+                                                   <button
+                                                      onClick={() =>
+                                                         openUpadate(
+                                                            idModalUpdate
+                                                         )
+                                                      }
+                                                      className="text-[#5D5FEF] text-[10px]"
+                                                   >
+                                                      Cập nhật
+                                                   </button>
+                                                </div>
+                                             </div>
+                                             <div>
+                                                <p className="text-[13px] font-normal text-[#4C4C4C]">
+                                                   12 Nguyễn Chí Thanh Phường
+                                                   Tân An, Thành Phố Buôn Ma
+                                                   Thuột, Đắk Lắk
+                                                </p>
+                                             </div>
+                                          </div>
+                                       </div>
 
                                        <div className="border-b-[1px] pb-4 mb-4 flex gap-1 items-center justify-center">
                                           <button
                                              onClick={() =>
-                                                openUpadate(idModalUpdate, NaN)
+                                                openUpadate(idModalUpdate)
                                              }
                                              className="flex gap-1"
                                           >
@@ -530,94 +599,52 @@ export default function CheckOut() {
                                     TỔNG
                                  </h4>
                               </div>
-                              <div className="grid grid-cols-4 px-[26px] py-[16px] items-center bg-[#FFFFFF] shadow">
-                                 <div className="col-span-2 text-sm flex gap-4 items-center">
-                                    <img src={Images.cateAD} alt="" />
-                                    <div>
-                                       <p className="text-base text-[#393939] max-[870px]:text-[13px]">
-                                          Máy tính để bàn
-                                       </p>
-                                       <p className="text-sm text-[#1A1A1A] max-[870px]:text-[13px]">
-                                          SL:{" "}
-                                          <span className="text-[#4C4C4C]">
-                                             x2
-                                          </span>
-                                       </p>
-                                    </div>
-                                 </div>
-                                 <div className="col-span-1 flex gap-2 justify-around items-center">
-                                    <p className="font-medium text-[#7A828A] text-sm line-through max-[870px]:text-[13px]">
-                                       ₫56.000
-                                    </p>
-                                    <p className="font-medium text-[#1A1A1A] text-base max-[870px]:text-[13px]">
-                                       ₫36.000
-                                    </p>
-                                 </div>
-                                 <div className="col-span-1">
-                                    <p className="font-medium text-[#EA4B48] text-base text-center max-[870px]:text-[13px]">
-                                       ₫72.000
-                                    </p>
-                                 </div>
-                              </div>
-
-                              <div className="grid grid-cols-4 px-[26px] py-[16px] items-center bg-[#FFFFFF] shadow">
-                                 <div className="col-span-2 text-sm flex gap-4 items-center">
-                                    <img src={Images.cateAD} alt="" />
-                                    <div>
-                                       <p className="text-base text-[#393939] max-[870px]:text-[13px]">
-                                          Máy tính để bàn
-                                       </p>
-                                       <p className="text-sm text-[#1A1A1A] max-[870px]:text-[13px]">
-                                          SL:{" "}
-                                          <span className="text-[#4C4C4C]">
-                                             x2
-                                          </span>
-                                       </p>
-                                    </div>
-                                 </div>
-                                 <div className="col-span-1 flex gap-2 justify-around items-center">
-                                    <p className="font-medium text-[#7A828A] text-sm line-through max-[870px]:text-[13px]">
-                                       ₫56.000
-                                    </p>
-                                    <p className="font-medium text-[#1A1A1A] text-base max-[870px]:text-[13px]">
-                                       ₫36.000
-                                    </p>
-                                 </div>
-                                 <div className="col-span-1">
-                                    <p className="font-medium text-[#EA4B48] text-base text-center max-[870px]:text-[13px]">
-                                       ₫72.000
-                                    </p>
-                                 </div>
-                              </div>
-                              <div className="grid grid-cols-4 px-[26px] py-[16px] items-center bg-[#FFFFFF] shadow">
-                                 <div className="col-span-2 text-sm flex gap-4 items-center">
-                                    <img src={Images.cateAD} alt="" />
-                                    <div>
-                                       <p className="text-base text-[#393939] max-[870px]:text-[13px]">
-                                          Máy tính để bàn
-                                       </p>
-                                       <p className="text-sm text-[#1A1A1A] max-[870px]:text-[13px]">
-                                          SL:{" "}
-                                          <span className="text-[#4C4C4C]">
-                                             x2
-                                          </span>
-                                       </p>
-                                    </div>
-                                 </div>
-                                 <div className="col-span-1 flex gap-2 justify-around items-center">
-                                    <p className="font-medium text-[#7A828A] text-sm line-through max-[870px]:text-[13px]">
-                                       ₫56.000
-                                    </p>
-                                    <p className="font-medium text-[#1A1A1A] text-base max-[870px]:text-[13px]">
-                                       ₫36.000
-                                    </p>
-                                 </div>
-                                 <div className="col-span-1">
-                                    <p className="font-medium text-[#EA4B48] text-base text-center max-[870px]:text-[13px]">
-                                       ₫72.000
-                                    </p>
-                                 </div>
-                              </div>
+                              {listLocalCart.map((e) => {
+                                 return (
+                                    <>
+                                       <div className="grid grid-cols-4 px-[26px] py-[16px] items-center bg-[#FFFFFF] shadow">
+                                          <div className="col-span-2 text-sm flex gap-4 items-center">
+                                             <img
+                                                className="w-[70px] h-[70px] object-contain"
+                                                src={
+                                                   e.product.ProductImage[0].url
+                                                }
+                                                alt=""
+                                             />
+                                             <div>
+                                                <p className="text-base text-[#393939] max-[870px]:text-[13px]">
+                                                   {e.product.name}
+                                                </p>
+                                                <p className="text-sm text-[#1A1A1A] max-[870px]:text-[13px]">
+                                                   SL:{" "}
+                                                   <span className="text-[#4C4C4C]">
+                                                      x{e.quantity}
+                                                   </span>
+                                                </p>
+                                             </div>
+                                          </div>
+                                          <div className="col-span-1 flex gap-2 justify-around items-center">
+                                             <p className="font-medium text-[#7A828A] text-sm line-through max-[870px]:text-[13px]">
+                                                {numberFormat(e.product.price)}
+                                             </p>
+                                             <p className="font-medium text-[#1A1A1A] text-base max-[870px]:text-[13px]">
+                                                {numberFormat(
+                                                   e.product.sellingPrice
+                                                )}
+                                             </p>
+                                          </div>
+                                          <div className="col-span-1">
+                                             <p className="font-medium text-[#EA4B48] text-base text-center max-[870px]:text-[13px]">
+                                                {numberFormat(
+                                                   e.quantity *
+                                                      e.product.sellingPrice
+                                                )}
+                                             </p>
+                                          </div>
+                                       </div>
+                                    </>
+                                 );
+                              })}
                            </div>
                         </div>
 
@@ -664,8 +691,8 @@ export default function CheckOut() {
                                  <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
                                     Tổng Giá Sản Phẩm:{" "}
                                  </p>
-                                 <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
-                                    ₫216.000
+                                 <p className="text-base text-[#EA4B48] max-[870px]:text-[11px]">
+                                    {numberFormat(calculatePrice().totalCart)}
                                  </p>
                               </div>
                               <div className="flex justify-between">
@@ -674,20 +701,20 @@ export default function CheckOut() {
                                  </p>
                                  <div className="flex gap-1">
                                     <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
-                                       ₫0
+                                       {numberFormat(0)}
                                     </p>
                                     <p className="text-[#EA4B48]"> - </p>
                                     <p className="text-sm text-[#FFAAAF] line-through max-[870px]:text-[11px]">
-                                       ₫15.000
+                                       {numberFormat(49000)}
                                     </p>
                                  </div>
                               </div>
                               <div className="flex justify-between">
                                  <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
-                                    Tổng Phí:{" "}
+                                    Tổng Thanh Toán:{" "}
                                  </p>
                                  <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
-                                    ₫231.000
+                                    {numberFormat(calculatePrice().totalCart)}
                                  </p>
                               </div>
                            </div>
@@ -696,85 +723,40 @@ export default function CheckOut() {
                                  Phương Thức Thanh Toán
                               </h4>
                               <div className="flex flex-col gap-[10px]">
-                                 <div className="flex gap-3 items-center">
-                                    <input
-                                       className="max-lg:w-[10px]"
-                                       name="choose"
-                                       type="radio"
-                                       onChange={() =>
-                                          setChooseMoMo(!chooseMomo)
-                                       }
-                                       checked={chooseMomo}
-                                    />
-                                    <div className="w-6">
-                                       <img
-                                          className="w-full h-full object-contain"
-                                          src={Images.momo}
-                                          alt=""
-                                       />
-                                    </div>
-                                    <p
-                                       className={`max-lg:text-[10px] ${
-                                          chooseMomo
-                                             ? "text-[#393939]"
-                                             : "text-[#9c9c9c]"
-                                       }`}
-                                    >
-                                       Thanh toán bằng ví Momo
-                                    </p>
-                                 </div>
-                                 <div className="flex gap-3 items-center">
-                                    <input
-                                       className="max-lg:w-[10px]"
-                                       name="choose"
-                                       type="radio"
-                                       onChange={() =>
-                                          setChooseZalo(!chooseZalo)
-                                       }
-                                       checked={chooseZalo}
-                                    />
-                                    <div className="w-6">
-                                       <img
-                                          className="w-full h-full object-contain"
-                                          src={Images.zalo}
-                                          alt=""
-                                       />
-                                    </div>
-                                    <p
-                                       className={`max-lg:text-[10px] ${
-                                          chooseZalo
-                                             ? "text-[#393939]"
-                                             : "text-[#9c9c9c]"
-                                       }`}
-                                    >
-                                       Thanh toán bằng ví ZaloPay
-                                    </p>
-                                 </div>
-                                 <div className="flex gap-3 items-center">
-                                    <input
-                                       className="max-lg:w-[10px]"
-                                       name="choose"
-                                       type="radio"
-                                       onChange={() => setChooseCOD(!chooseCOD)}
-                                       checked={chooseCOD}
-                                    />
-                                    <div className="w-6">
-                                       <img
-                                          className="w-full h-full object-contain"
-                                          src={Images.nhanHang}
-                                          alt=""
-                                       />
-                                    </div>
-                                    <p
-                                       className={`max-lg:text-[10px] ${
-                                          chooseCOD
-                                             ? "text-[#393939]"
-                                             : "text-[#9c9c9c]"
-                                       }`}
-                                    >
-                                       Thanh toán Khi Nhận Hàng
-                                    </p>
-                                 </div>
+                                 {payment.map((element) => {
+                                    return (
+                                       <>
+                                          <div
+                                             key={element.id}
+                                             className="flex gap-3 items-center"
+                                          >
+                                             <input
+                                                className="max-lg:w-[10px]"
+                                                name="choose"
+                                                type="radio"
+                                                onChange={() =>
+                                                   paymentChecked(element.id)
+                                                }
+                                             />
+                                             <div className="w-6">
+                                                <img
+                                                   className="w-full h-full object-contain"
+                                                   src={element.icon}
+                                                   alt=""
+                                                />
+                                             </div>
+                                             <p
+                                                className="max-lg:text-[10px]"
+                                                style={{
+                                                   color: `${element.color}`,
+                                                }}
+                                             >
+                                                {element.title}
+                                             </p>
+                                          </div>
+                                       </>
+                                    );
+                                 })}
                               </div>
                            </div>
                            <button
