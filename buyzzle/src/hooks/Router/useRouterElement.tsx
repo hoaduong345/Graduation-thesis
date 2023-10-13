@@ -27,7 +27,6 @@ import Members from "../../pages/home/Admin/Assets/Icon/Members";
 import User from "../../pages/home/Admin/Management/User/User";
 import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 
-
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
