@@ -555,7 +555,7 @@ export default function VoucherPage() {
                                        </div>
                                        <input
                                           type="checkbox"
-                                          className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                                          className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
                                        />
                                     </div>
 

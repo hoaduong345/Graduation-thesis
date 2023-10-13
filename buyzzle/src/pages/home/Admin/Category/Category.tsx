@@ -39,6 +39,8 @@ function Category() {
 
    const [checkedCategory, setCheckedCategory] = useState<FormValues[]>([]);
 
+   var checkAll: boolean = checkedCategory.length === categorys?.length;
+
    // img firebase
    const loadImageFile = async (images: any) => {
       for (let i = 0; i < images.length; i++) {
@@ -245,6 +247,8 @@ function Category() {
                         <div className="col-span-1 py-[15px] pl-[35px]">
                            {/* <Delete /> */}
                            <input
+                              checked={checkAll}
+                              className="checkbox checkbox-sm items-center"
                               type="checkbox"
                               onChange={(e) =>
                                  handleCheckedAll(e.target.checked)
@@ -461,7 +465,6 @@ function Category() {
                                              </li>
                                              <li>
                                                 <button
-                                                   // onClick={() => remove(e.id)}
                                                    onClick={() => {
                                                       openModal(
                                                          idComfirm,
@@ -480,6 +483,7 @@ function Category() {
                                           </ul>
                                        </div>
                                        <input
+                                          className="checkbox checkbox-sm items-center"
                                           type="checkbox"
                                           checked={checkedCategory.includes(e)}
                                           onChange={(element) =>
