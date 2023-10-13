@@ -251,7 +251,7 @@ const AuthController = {
                     sameSite: 'strict',
                 });
                 const { password, ...others } = user;
-                return res.status(200).json({ accessToken , ...others });
+                return res.status(200).json({ accessToken, ...others });
             }
         } catch (error) {
             console.log(error.message);
@@ -403,7 +403,7 @@ const AuthController = {
     changePassword: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            const refresh_token = req.cookies.refreshToken;
+            const refresh_token = req.cookies.refreshtoken;
             const token = decode(refresh_token);
             const user = await prisma.user.findUnique({
                 where: {
@@ -433,6 +433,7 @@ const AuthController = {
             const refreshTokenPayload = {
                 email: user.email,
             };
+            console.log(refreshTokenPayload);
 
             const newRefreshToken = jwt.sign(refreshTokenPayload, process.env.JWT_REFRESH_TOKEN, {
                 expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token

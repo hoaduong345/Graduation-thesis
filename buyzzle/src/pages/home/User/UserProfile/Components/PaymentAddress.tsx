@@ -25,7 +25,7 @@ export default function PaymentAddress() {
 
   const provinces = [
     "Tỉnh/Thành phố, Quận/Huyện, Phường/Xã",
-    "An Giang",
+    `An Giang`,
     "Bà Rịa - Vũng Tàu",
     "Bạc Liêu",
     "Bắc Giang",
@@ -96,6 +96,11 @@ export default function PaymentAddress() {
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
+    defaultValues: {
+      addresstype: "",
+      address: "",
+      specificaddress: "",
+   },
   });
 
   const isDisabled = !(isValid && isDirty);
@@ -121,16 +126,15 @@ export default function PaymentAddress() {
       const userData = JSON.parse(user);
       const username = userData.username;
       console.log("USERNAME1: " + username);
-      userController
-        .getUserWhereUsername2(username)
+      userController.getUserWhereUsername2(username)
         .then((res) => {
-          console.log("TEST " + res);
+          console.log("TEST " +JSON.stringify(res));
           return res;
         })
         .then((res) => {
           reset({
             username: userData.username,
-            addresstype: res.addresstype,
+            addresstype:res.addresstype,
             address: res.address,
             specificaddress: res.specificaddress,
           });
@@ -165,10 +169,7 @@ export default function PaymentAddress() {
   const onSubmit = async (formData: FormValues) => {
     try {
       console.log("TESTING: " + formData);
-      formData.address = JSON.parse(formData.address);
-      formData.addresstype = JSON.parse(formData.addresstype);
       const response1 = await sendToDatabase(formData);
-
       console.log("edit thanh cong", response1);
 
       if (response1.status === 200) {
@@ -193,8 +194,7 @@ export default function PaymentAddress() {
           const errorMessageUsername = responseData.error.username;
           const errorMessageAddresstype = responseData.error.addresstype;
           const errorMessageAddress = responseData.error.address;
-          const errorMessageSpecificaddress =
-            responseData.error.specificaddress;
+          const errorMessageSpecificaddress = responseData.error.specificaddress;
           if (errorMessageUsername) {
             toast.warning(errorMessageUsername, {
               position: "top-right",
