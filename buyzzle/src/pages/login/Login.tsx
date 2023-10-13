@@ -64,18 +64,13 @@ function Login() {
                 if (response.headers['content-type'] === 'application/json; charset=utf-8') {
                     const jsonString: string = JSON.stringify(response.data);
                     const jsonObject = JSON.parse(jsonString);
-                    // console.log("aaaaaaaaaa"+response)
-                    // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
-                    // console.log(response);
-                    // Truy cập các giá trị trong jsonObject
-
+    
                     const username = jsonObject.username;
-                    const accessToken = jsonObject.accessToken;
-                    console.log(accessToken);
+
                     const UserData = { username};
-                    const Token = {accessToken};
+
                     localStorage.setItem('user', JSON.stringify(UserData));
-                    localStorage.setItem("accessToken", JSON.stringify(Token));
+
                     setTimeout(() => {
                         window.location.href = "/";
                     },

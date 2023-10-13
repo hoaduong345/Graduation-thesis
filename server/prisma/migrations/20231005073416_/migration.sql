@@ -65,6 +65,7 @@ CREATE TABLE `Product` (
     `description` VARCHAR(15000) NULL,
     `status` VARCHAR(191) NULL,
     `date` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `productId` INTEGER NULL,
     `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `categoryID` INTEGER NULL,
@@ -109,25 +110,9 @@ CREATE TABLE `ItemCart` (
 
 -- CreateTable
 CREATE TABLE `ProductImage` (
-<<<<<<<< HEAD:server/prisma/migrations/20231006090443_/migration.sql
-========
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `url` VARCHAR(191) NULL,
     `idproduct` INTEGER NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Rating` (
->>>>>>>> Huydev:server/prisma/migrations/20231008060510_/migration.sql
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `idproduct` INTEGER NULL,
-    `iduser` INTEGER NULL,
-    `ratingValue` INTEGER NULL,
-    `comment` VARCHAR(191) NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -194,12 +179,6 @@ ALTER TABLE `ItemCart` ADD CONSTRAINT `ItemCart_cartid_fkey` FOREIGN KEY (`carti
 
 -- AddForeignKey
 ALTER TABLE `ProductImage` ADD CONSTRAINT `ProductImage_idproduct_fkey` FOREIGN KEY (`idproduct`) REFERENCES `Product`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Rating` ADD CONSTRAINT `Rating_idproduct_fkey` FOREIGN KEY (`idproduct`) REFERENCES `Product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Rating` ADD CONSTRAINT `Rating_iduser_fkey` FOREIGN KEY (`iduser`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `OrderDetail` ADD CONSTRAINT `OrderDetail_orderId_fkey` FOREIGN KEY (`orderId`) REFERENCES `Order`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

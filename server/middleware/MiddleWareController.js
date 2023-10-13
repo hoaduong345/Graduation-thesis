@@ -8,14 +8,16 @@ dotenv.config();
 const MiddleWareController = {
   // VERIFY TOKEN
   verifyAuthenticate: (req, res, next) => {
-    const token = req.cookies.accessToken;
+    const token = req.cookies.accesstoken;
     if (token) {
       jwt.verify(token, process.env.SECRECT_KEY, (err, user) => {
         if (err) {
-          console.log("Token is not valid");
-          return res.status(401).json({ message: 'Unauthorized' });
+          console.log("Token is not valid1:"+err);
+
+          return res.status(401).json({ message: `Unauthorized:${token}` });
         }
         req.user = user;
+        console.log("Cookies:"+token);
         next();
       });
     } else {

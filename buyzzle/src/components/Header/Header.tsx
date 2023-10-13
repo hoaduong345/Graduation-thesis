@@ -34,8 +34,9 @@ export default function Header() {
   const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
   const [isSearch, setIsSearch] = useState(false);
 
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem('user');
 
+  const [href, setHref]= useState('');
   var username;
   const [name, setName] = useState("");
   const [img, setImg] = useState("");
@@ -44,6 +45,7 @@ export default function Header() {
     if (user != null) {
       const userData = JSON.parse(user);
       const username = userData.username;
+      setHref(`/userprofilepage/${username}`);
       console.log("USERNAME: " + username);
       userController.getUserWhereUsername(username).then((res) => {
         // setEditUser(res)
@@ -52,23 +54,21 @@ export default function Header() {
         const urlTaker = JSON.parse(UserImageArray);
         setImg(urlTaker[0].url);
         console.log("ID: " + img);
-      });
+      
+      })
     } else {
       console.log("Chua Dang Nhap Dung");
     }
   }, []);
 
-  if (user != null) {
-    username = JSON.parse(user).username;
-    // img = JSON.parse(user).img;
-    // name = JSON.parse(user).name;
+  // setTimeout(() => {
+  //   localStorage.removeItem("user");
+  //   alert("Phiên đăng nhập đã hết, vui lòng đăng nhập lại để tiếp tục");
+  //   window.location.href = "/";
+  // }, 30 * 1000);
 
-    // console.log(name.substring(0, 1));
-    // console.log("USER: " + name, img);
-  } else {
-    console.log("Chua dang nhap");
-  }
-  const href = `/userprofilepage/${username}`;
+
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     dataInputHeaderSearch?.onChange(e);
@@ -330,7 +330,7 @@ export default function Header() {
                     {user ? (
                       <a className=" flex gap-2" href={href}>
                         <div className="font-medium flex items-center justify-center">
-                          {username}
+                          {name}
                         </div>
                         {img ? (
                           <div className="relative">
@@ -342,9 +342,7 @@ export default function Header() {
                           </div>
                         ) : (
                           <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
-                            <p className="text-1xl text-stone-50">
-                              {name.substring(0, 1).toUpperCase()}
-                            </p>
+                            <p className="text-1xl text-stone-50">{name.substring(0, 1).toUpperCase()}</p>
                           </div>
                         )}
                       </a>

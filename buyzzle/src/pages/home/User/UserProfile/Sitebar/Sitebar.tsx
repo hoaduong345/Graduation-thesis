@@ -55,22 +55,27 @@ const listSitebar: SitebarUser[] = [
 ];
 
 export default function Sitebar() {
-  const { pathname } = useLocation();
+   const { pathname } = useLocation();
 
+   const instance = axios.create({
+      withCredentials: true,
+  })
+  // http://localhost:5000/buyzzle/auth/logout
   const API = "http://localhost:5000/buyzzle/auth/logout";
-  function LogOut() {
-    try {
-      const reponse = axios.post(API);
-      localStorage.removeItem("user");
-      console.log(reponse);
-      window.location.href = "/";
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  return (
-    <div
-      className="mt-9 py-5 px-5 h-auto rounded-[6px] bg-white
+  async function LogOut() {
+
+      try {
+          const response = await instance.post(API);
+          localStorage.removeItem('user');
+          console.log(response);
+          window.location.href = "/";
+      } catch (error) {
+          console.log(error);
+      }
+   }
+   return (
+      <div
+         className="mt-9 py-5 px-5 h-auto rounded-[6px] bg-white
     shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
     >
       {listSitebar.map((e) => {
@@ -85,18 +90,20 @@ export default function Sitebar() {
                              ? `bg-[#FFEAE9] rounded-md`
                              : `bg-white`
                          }   `}
-              >
-                {e.icon}
-                <span className="text-base font-normal ">{e.title}</span>
-              </div>
-            </Link>
-          </>
-        );
-      })}
+                     >
+                        {e.icon}
+                        <span className="text-base font-normal ">
+                           {e.title}
+                        </span>
+                     </div>
+                  </Link>
+               </>
+            );
+         })}
 
-      <button
-        onClick={LogOut}
-        className=" w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
+         <button
+            onClick={LogOut}
+            className=" w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
      hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4"
       >
         <Logout />

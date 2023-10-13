@@ -96,7 +96,7 @@ const ProductController = {
                 return res.status(404).json('Danh mục không tồn tại');
             }
             // Cập nhật thông tin của danh mục
-            const updatedCategory = await prisma.category.update({
+const updatedCategory = await prisma.category.update({
                 where: {
                     id: categoryId,
                 },
@@ -197,7 +197,7 @@ const ProductController = {
                     },
                 });
             }
-            res.status(200).json('Xóa hình ảnh thành công');
+res.status(200).json('Xóa hình ảnh thành công');
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -303,7 +303,7 @@ const ProductController = {
                 description,
                 status,
                 date,
-                createdAt,
+createdAt,
                 updatedAt,
                 categoryID,
             } = req.body;
@@ -390,7 +390,7 @@ const ProductController = {
             const averageRating = totalRating / ratings.length;
             const resultProduct = {
                 averageRating: averageRating,
-                Rating: ratings,
+Rating: ratings,
                 productDetail: productDetail,
             };
             res.status(200).json(resultProduct);
@@ -476,7 +476,7 @@ const ProductController = {
             // const averageRating = totalRating / ratings.length;
             const result = await prisma.product.findMany({
                 orderBy: {
-                    sellingPrice: sortByPrice,
+sellingPrice: sortByPrice,
                     createdAt: sortByDateCreate,
                 },
                 include: {
@@ -566,7 +566,7 @@ const ProductController = {
             const rating = await prisma.rating.create({
                 data: {
                     idproduct: productId,
-                    iduser: userId,
+iduser: userId,
                     ratingValue,
                     comment,
                 },
@@ -582,9 +582,9 @@ const ProductController = {
     getAllRatingandComment: async (req, res) => {
         try {
             const productId = parseInt(req.params.productId);
-            const page = parseInt(req.query.page) || 1;
-            const perPage = parseInt(req.query.perPage) || 40;
-
+            const page = parseInt(req.query.page) || 1; 
+            const perPage = parseInt(req.query.perPage) || 10; 
+    
             const ratings = await prisma.rating.findMany({
                 where: {
                     idproduct: productId,
@@ -592,7 +592,7 @@ const ProductController = {
                 include: {
                     user: {
                         select: {
-                            username: true,
+                            username: true,                    
                         },
                     },
                     product: {
@@ -604,33 +604,29 @@ const ProductController = {
                 skip: (page - 1) * perPage,
                 take: perPage,
             });
-
+    
             if (ratings.length === 0) {
                 return res.status(200).json(0);
             }
-            // Lấy số lượng tổng cộng của đánh giá cho sản phẩm
-            const totalRatings = await prisma.rating.count({
-                where: {
-                    idproduct: productId,
-                },
-            });
+    
             const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
-            const averageRating = totalRating / totalRatings;
-
-            const resultProduct = {
+            const averageRating = totalRating / ratings.length;
+            
+            const resultProduct = {          
                 currentPage: page,
                 perPage: perPage,
-                totalRatings: Math.ceil(totalRatings / perPage),
+                total: ratings.length, 
                 averageRating: averageRating,
                 Rating: ratings,
             };
-
+    
             res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    
 
     updateRatingandComment: async (req, res) => {
         try {
@@ -667,8 +663,7 @@ const ProductController = {
     deleteRatingandComment: async (req, res) => {
         try {
             const ratingId = parseInt(req.params.ratingId);
-
-            const existingRating = await prisma.rating.findUnique({
+const existingRating = await prisma.rating.findUnique({
                 where: {
                     id: ratingId,
                 },
@@ -691,46 +686,51 @@ const ProductController = {
         }
     },
 
-    addImageComment: async (req, res) => {
-        try {
-            const { url, idcomment } = req.body;
 
-            const newImageComment = {
+
+
+    addImageComment : async(req, res) =>{
+      try{
+        const { url, idcomment } = req.body
+
+        const newImageComment = {
+          url,
+          idcomment : parseInt(idcomment),
+        };
+
+        const data = await prisma.commentImage.create({
+            date : newImageComment,
+        }); 
+        res.status(200).json(data);
+      }catch(error){
+        console.error(error);
+        res.status(500).json(error.message);
+      }
+    },
+
+    updateImageComment : async (req, res) => {
+      try{
+          const { id } = req.params;
+          const {url , idcomment} = req.body;
+
+          const updateImageComment = await prisma.commentImage.update({
+            where : {
+              id : parseInt(id),
+            },
+            data : {
                 url,
-                idcomment: parseInt(idcomment),
-            };
+                idcomment : parseInt(idcomment)
+            },
+          });
 
-            const data = await prisma.commentImage.create({
-                date: newImageComment,
-            });
-            res.status(200).json(data);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
-        }
+          res.status(200).json(data);
+      }catch(error){
+        res.status(500).json(error.message);
+        // dit cu m
+      }
     },
 
-    updateImageComment: async (req, res) => {
-        try {
-            const { id } = req.params;
-            const { url, idcomment } = req.body;
 
-            const updateImageComment = await prisma.commentImage.update({
-                where: {
-                    id: parseInt(id),
-                },
-                data: {
-                    url,
-                    idcomment: parseInt(idcomment),
-                },
-            });
-
-            res.status(200).json(data);
-        } catch (error) {
-            res.status(500).json(error.message);
-            // dit cu m
-        }
-    },
 };
 
 module.exports = ProductController;
