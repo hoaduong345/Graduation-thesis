@@ -14,9 +14,8 @@ class RatingAndComment {
             return res.data
         })
     }
-
-    getRatingAndComment = async (id: number): Promise<Rate> => {
-        return await axios.get(`${appConfig.apiUrl}/ratingcomment/${id}`, {
+    getRatingAndComment = async (id: number, page?: number, perPage?: number): Promise<Rate> => {
+        return await axios.get(`${appConfig.apiUrl}/ratingcomment/${id}?page=${page}&perPage=${perPage}`, {
             headers: {
                 "Access-Control-Allow-Origin": "*"
             }, withCredentials: true
