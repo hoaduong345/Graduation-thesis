@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 import { voucherControllers } from "../../../../Controllers/VoucherControllers";
 import { VoucherModel } from "../../../../Model/VoucherModel";
 import { toast } from "react-toastify";
-import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import "./voucher.css";
 import moment from "moment";
+import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 
 type FormValues = {
    id: number;
@@ -111,14 +111,6 @@ export default function VoucherPage() {
 
       reset({});
    };
-
-   // const handlePageClick = async (event: any) => {
-   //    const newOffset = (event.selected % total) + 1;
-
-   //    await voucherControllers.get(newOffset).then((res) => {
-   //       setVoucher(res.data);
-   //    });
-   // };
 
    return (
       <>
@@ -563,7 +555,7 @@ export default function VoucherPage() {
                                        </div>
                                        <input
                                           type="checkbox"
-                                          className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                                          className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
                                        />
                                     </div>
 
@@ -605,24 +597,13 @@ export default function VoucherPage() {
                            );
                         })}
 
-                        <DialogAddress
-                           body={<></>}
+                        <DialogComfirm
+                           desc="voucher"
                            onClose={() => closeModal(idRemove)}
-                           title="Bạn chắc chắn"
+                           title="Xóa voucher này"
                            onSave={() => onRemoveVoucher(idVoucher)}
                            id={idRemove}
                         />
-                        {/* <div className="pani">
-                           <ReactPaginate
-                              breakLabel="..."
-                              nextLabel=" >"
-                              onPageChange={handlePageClick}
-                              pageRangeDisplayed={5}
-                              pageCount={total}
-                              previousLabel="<"
-                              renderOnZeroPageCount={null}
-                           />
-                        </div> */}
                      </div>
                   </div>
                </div>
