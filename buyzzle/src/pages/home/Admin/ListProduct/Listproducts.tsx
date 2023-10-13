@@ -42,7 +42,7 @@ export default function ListproductsAdmin() {
       .getSearchAndPaginationProduct(search, currentPage, 2)
       .then((res) => {
         setProducts(res);
-      });
+      }); 
   }, [search, currentPage]);
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export default function ListproductsAdmin() {
       .then((res: any) => {
         console.log(res);
         setProducts(res);
+    
       });
   };
 

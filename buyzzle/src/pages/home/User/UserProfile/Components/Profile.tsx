@@ -1,22 +1,18 @@
-import { ChangeEvent, Fragment, useState, useEffect, CSSProperties } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
 import Sitebar from "../Sitebar/Sitebar";
-import { ChangeHandler, Controller, useForm } from "react-hook-form";
-import HidePass from "../../../../../Assets/TSX/HidePass";
-import ShowPass from "../../../../../Assets/TSX/ShowPass";
+import { Controller, useForm } from "react-hook-form";
+
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { bool, boolean } from "yup";
+
 import { userController } from "../../../../../Controllers/UserController";
-import { isDate } from "util/types";
 import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import ClipLoader from "react-spinners/ClipLoader";
-import { type } from "os";
 
-type FormValues = {
+export type FormValues = {
 
   username: string;
   name: string;
@@ -26,9 +22,11 @@ type FormValues = {
   dateOfBirth: string;
 
 };
-type FormImage = {
+export type FormImage = {
+
   id: number;
   UserImage: string[];
+
 }
 export default function UserProfile() {
   const [validUrl, setValidUrl] = useState(false);
@@ -37,7 +35,6 @@ export default function UserProfile() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [image, setImage] = useState("");
   // const [editUser, setEditUser] = useState<FormValues>();
-  const [date, setDate] = useState("");
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
 
@@ -85,24 +82,16 @@ export default function UserProfile() {
             phonenumber: res.phonenumber,
             dateOfBirth: res.dateOfBirth,
           });
-          // setEditUser(res);
           setSex(res.sex);
           setId(res.id);
-
           const UserImageArray = JSON.stringify(res.UserImage);
-          console.log("User:" + res.name);
-          // console.log("Hinh cua user: " + UserImageArray);
           if (UserImageArray == "[]") {
-            // console.log("Chua co hinh");
             setCheckImageUrl(false);
           } else {
             const urlTaker = JSON.parse(UserImageArray);
             setUrlThen(urlTaker[0].url);
-            // console.log("ID: " + urlThen);
             setCheckImageUrl(true);
           }
-
-          // setDate(res.dateOfBirth.substring(0, 10));
         }).catch((error) => {
           console.log(
             "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
@@ -190,7 +179,7 @@ export default function UserProfile() {
   const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
       console.log("selectedFile:" + selectedFile);
-      if (selectedFile == null && CheckImageUrl == null) {
+      if (selectedFile == null && CheckImageUrl == false) {
         toast.error("Hãy chọn hình");
         return;
       }
@@ -277,16 +266,7 @@ export default function UserProfile() {
       console.log("No file selected");
     }
   };
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
-  };
 
-  const override: CSSProperties = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "red",
-  };
-  let [color, setColor] = useState("#ff1100");
 
   return (
     <Container>
