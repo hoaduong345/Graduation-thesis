@@ -314,11 +314,11 @@ export default function Cart() {
                      </>
                   )}
                   <DialogComfirm
-                     desc="Bạn có chắc chắn muốn xóa danh mục này không, sau khi xóa thì không thể khôi phục lại"
+                     desc="sản phẩm"
                      id={idItemCart}
                      onClose={() => closeModal(idItemCart)}
                      onSave={() => removeItemCart(idProduct)}
-                     title="Bạn Chắc Chắn!"
+                     title="Xóa sản phẩm này!"
                   />
                </div>
 
@@ -388,7 +388,7 @@ export default function Cart() {
                            <p>Mua ngay</p>
                         </Link>
                         <DialogComfirm
-                           desc="Bạn có chắc chắn muốn xóa danh mục này không, sau khi xóa thì không thể khôi phục lại"
+                           desc="toàn bộ Giỏ hàng"
                            id={idAllCart}
                            onClose={() => closeModal(idAllCart)}
                            onSave={() => removeAllCart()}

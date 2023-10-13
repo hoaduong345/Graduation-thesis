@@ -17,6 +17,7 @@ import SitebarAdmin from "../Sitebar/Sitebar";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import Loading from "../../../../Helper/Loading/Loading";
 import { categoryController } from "../../../../Controllers/CategoryController";
+import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 
 export type FormValues = {
    id: number;
@@ -26,6 +27,9 @@ export type FormValues = {
 
 function Category() {
    const idModal = "category";
+   const idComfirm = "comfirm";
+
+   const [idCate, setIdCate] = useState(0);
 
    const [categorys, setCategorys] = useState<FormValues[]>([]);
 
@@ -142,8 +146,9 @@ function Category() {
       }
    };
 
-   const remove = (id: number) => {
+   const remove = (id: number, idDialog: string) => {
       categoryController.remove(id).then(() => {
+         closeModal(idDialog);
          toast.error("Successfully");
          getList();
       });
@@ -197,7 +202,6 @@ function Category() {
          setCheckedCategory([]);
       }
    };
-   console.log(checkedCategory);
    return (
       <>
          <Container>
@@ -354,28 +358,6 @@ function Category() {
                                                       )}
                                                    />
                                                 </div>
-                                                {/* <div>
-                                                                    <label htmlFor="" className="text-sm max-xl:text-xs max-lg:text-[10px]">Chuỗi Cho Đường Dẫn Tĩnh*</label>
-                                                                    <input
-                                                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                                        placeholder="Nhập chuỗi cho đường dẫn tĩnh"
-
-                                                                    />
-                                                                </div>
-                                                                <div>
-                                                                    <label htmlFor="" className="text-sm max-xl:text-xs max-lg:text-[10px]">Mô tả Danh Mục</label>
-                                                                    <input
-                                                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                                        placeholder="Nhập mô tả danh mục"
-
-                                                                    />
-                                                                </div> */}
                                              </div>
                                           </div>
                                        </div>
@@ -434,6 +416,14 @@ function Category() {
                         </div>
                      </div>
 
+                     <DialogComfirm
+                        desc="Danh mục"
+                        id={idComfirm}
+                        onClose={() => closeModal(idComfirm)}
+                        title="Xóa danh mục"
+                        onSave={() => remove(idCate, idComfirm)}
+                     />
+
                      <div className="grid grid-cols-10">
                         {categorys.map((e) => {
                            return (
@@ -471,7 +461,14 @@ function Category() {
                                              </li>
                                              <li>
                                                 <button
-                                                   onClick={() => remove(e.id)}
+                                                   // onClick={() => remove(e.id)}
+                                                   onClick={() => {
+                                                      openModal(
+                                                         idComfirm,
+                                                         {} as FormValues
+                                                      );
+                                                      setIdCate(e.id);
+                                                   }}
                                                    className="flex items-center gap-4"
                                                 >
                                                    <RemoveCate />
