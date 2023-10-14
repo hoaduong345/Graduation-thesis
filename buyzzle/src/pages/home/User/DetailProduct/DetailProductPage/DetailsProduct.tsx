@@ -31,7 +31,7 @@ import {
   numberFormat,
   roundedNumber,
 } from "../../../../../Helper/Format";
-import { Rate, Rating } from "../../../../../Model/ProductModel";
+import { Rate, Ratee, Rating } from "../../../../../Model/ProductModel";
 import { Products } from "../../FilterPage/FiltersPage";
 import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import RatingMap from "../RatingAndComments/RatingMap";
@@ -100,7 +100,7 @@ export default function DetailsProduct() {
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
   const [editImages, setEditImages] = useState<EditImage[]>([]);
-
+  const [rateAndcomment, setRateAndcomment] = useState<Ratee>();
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (first) {
@@ -121,7 +121,7 @@ export default function DetailsProduct() {
         return detail;
       })
       .then((detail) => {
-        // setEditImages(detail.data.Produ\ctImage);
+        // setEditImages(detail.data.Pro  du\ctImage);
         setfirst(detail.data);
       })
       .catch((error) => {
@@ -177,11 +177,11 @@ export default function DetailsProduct() {
     });
   };
 
-  const [rateAndcomment, setRateAndcomment] = useState<Rate>();
   const getComment = (id: number) => {
     console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
     RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
       (res: any) => {
+        // setsecond(res);
         setRateAndcomment(res);
       }
     );
@@ -243,7 +243,11 @@ export default function DetailsProduct() {
       "🚀 ~ file: DetailsProduct.tsx:235 ~ handleRemoveRating ~ id:",
       id
     );
-    RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
+    RatingAndCommentController.RemoveRatingAndComment(id).then((res) => {
+      console.log(
+        "🚀 ~ file: DetailsProduct.tsx:249 ~ RatingAndCommentController.RemoveRatingAndComment ~ res:",
+        res
+      );
       getDetailProduct();
       getComment(id);
       RecommandProductDetailPage(id);
@@ -265,7 +269,7 @@ export default function DetailsProduct() {
   };
   console.log(
     "🚀 ~ file: DetailsProduct.tsx:550 ~ DetailsProduct ~ first?.totalRatings:",
-    first?.totalRatings
+    rateAndcomment?.totalRatings
   );
 
   return (
@@ -537,21 +541,28 @@ export default function DetailsProduct() {
                     <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
                     Previous
                   </Button>
-                  {[...new Array(first?.totalRatings)].map((item, index) => {
-                    const page = index + 1;
-                    console.log(item);
-                    return (
-                      <>
-                        <IconButton className="bg-none" {...getItemProps(page)}>
-                          <p className="ml-[-2px] text-sm">{page}</p>
-                        </IconButton>
-                      </>
-                    );
-                  })}
+                  {[...new Array(rateAndcomment?.totalRatings)].map(
+                    (item, index) => {
+                      const page = index + 1;
+                      console.log(item);
+                      return (
+                        <>
+                          <IconButton
+                            className="bg-none"
+                            {...getItemProps(page)}
+                          >
+                            <p className="ml-[-2px] text-sm">{page}</p>
+                          </IconButton>
+                        </>
+                      );
+                    }
+                  )}
                   <Button
                     variant="text"
                     className={`${
-                      first?.totalRatings ? `hidden` : "flex items-center gap-2"
+                      currentPage == rateAndcomment?.totalRatings
+                        ? "hidden"
+                        : "flex items-center gap-2"
                     }`}
                     onClick={next}
                   >

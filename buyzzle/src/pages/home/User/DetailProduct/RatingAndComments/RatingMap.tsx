@@ -10,7 +10,7 @@ import { RatingAndCommentController } from "../../../../../Controllers/Rating&Co
 import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import { currentDate } from "../../../../../Helper/Format";
 import { stars } from "../../../../../Helper/StarRating/Star";
-import { Rate, Rating } from "../../../../../Model/ProductModel";
+import { Rate, Ratee, Rating } from "../../../../../Model/ProductModel";
 import Edit from "../../../Admin/Assets/TSX/Edit";
 import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
 import Handle from "../../../Admin/Assets/TSX/bacham";
@@ -46,7 +46,7 @@ type Props = {
     data: Rating,
     idRating: number
   ) => Promise<void>;
-  rateAndcomment: Rate;
+  rateAndcomment: Ratee;
   editImages: EditImage[];
   handleRemoveRating: (id: number) => void;
   handleRemoveOnlyIMG: (id: number) => void;
@@ -133,207 +133,201 @@ export default function RatingMap(props: Props) {
 
   return (
     <div>
-      {props.rateAndcomment?.Rating.length > 0 ? (
-        props.rateAndcomment?.Rating.map((rating) => {
-          return (
-            <>
-              <div className="border-t-[1px] border-[#EA4B48] px-11 py-8">
-                {/* header comment */}
-                <div className=" justify-between flex mb-4">
-                  <div className="flex items-center gap-3">
-                    {/* hinh anh */}
-                    <div className="relative">
-                      <img
-                        className="w-10 h-10 rounded-full"
-                        src={Images.Avtcmt}
-                        alt="Avtcmt"
-                      />
-                      <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-                    </div>
-                    {/* end hinh anh */}
-                    {/* thong tin users */}
-                    <div>
-                      {/* name - period - date */}
-                      <div className="flex items-center">
-                        {/* name */}{" "}
-                        <p className="text-[#1A1A1A] text-xl font-medium">
-                          {rating.user.username}
-                        </p>
-                        {/* end name */}
-                        {/* period */}
-                        <Period /> {/* end period */}
-                        {/* date */}{" "}
-                        <p className="text-[#4C4C4C] font-normal text-sm">
-                          {currentDate(rating.createdAt)}
-                        </p>
-                        {/* end date */}
-                      </div>
-                      {/* end name - period - date */}
-                      {/* rating */}
-                      <div className="flex gap-1">
-                        <div className="rating rating-xs">
-                          {stars.map((_, index) => (
-                            <button key={index}>
-                              {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
-                              <img
-                                src={
-                                  index < rating.ratingValue
-                                    ? Images.star1
-                                    : Images.star2
-                                }
-                                alt=""
-                              />
-                            </button>
-                          ))}
-                        </div>
-                        <p className="text-[#4C4C4C] font-normal text-xs">
-                          {Math.round(rating.ratingValue)}.0
-                        </p>
-                      </div>
-                      {/* end rating */}
-                      {/* quatity */}
-                      <p className="text-[#4C4C4C] font-normal text-sm">
-                        Số lượng: {rating.product.quantity}
-                      </p>
-                      {/* end quatity */}
-                    </div>{" "}
-                    {/* end thong tin users */}
+      {props.rateAndcomment?.Rating.map((rating) => {
+        return (
+          <>
+            <div className="border-t-[1px] border-[#EA4B48] px-11 py-8">
+              {/* header comment */}
+              <div className=" justify-between flex mb-4">
+                <div className="flex items-center gap-3">
+                  {/* hinh anh */}
+                  <div className="relative">
+                    <img
+                      className="w-10 h-10 rounded-full"
+                      src={Images.Avtcmt}
+                      alt="Avtcmt"
+                    />
+                    <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                   </div>
-                  <div className="items-center">
-                    <div className="dropdown dropdown-right ">
-                      <label
-                        className="max-lg:w-[24px] max-lg:h-[24px]"
-                        tabIndex={1}
-                      >
-                        <Handle />
-                      </label>
-                      <ul
-                        tabIndex={0}
-                        className="dropdown-content menu bg-white rounded-box w-52
+                  {/* end hinh anh */}
+                  {/* thong tin users */}
+                  <div>
+                    {/* name - period - date */}
+                    <div className="flex items-center">
+                      {/* name */}{" "}
+                      <p className="text-[#1A1A1A] text-xl font-medium">
+                        {rating.user.username}
+                      </p>
+                      {/* end name */}
+                      {/* period */}
+                      <Period /> {/* end period */}
+                      {/* date */}{" "}
+                      <p className="text-[#4C4C4C] font-normal text-sm">
+                        {currentDate(rating.createdAt)}
+                      </p>
+                      {/* end date */}
+                    </div>
+                    {/* end name - period - date */}
+                    {/* rating */}
+                    <div className="flex gap-1">
+                      <div className="rating rating-xs">
+                        {stars.map((_, index) => (
+                          <button key={index}>
+                            {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                            <img
+                              src={
+                                index < rating.ratingValue
+                                  ? Images.star1
+                                  : Images.star2
+                              }
+                              alt=""
+                            />
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-[#4C4C4C] font-normal text-xs">
+                        {Math.round(rating.ratingValue)}.0
+                      </p>
+                    </div>
+                    {/* end rating */}
+                    {/* quatity */}
+                    <p className="text-[#4C4C4C] font-normal text-sm">
+                      Số lượng: {rating.product.quantity}
+                    </p>
+                    {/* end quatity */}
+                  </div>{" "}
+                  {/* end thong tin users */}
+                </div>
+                <div className="items-center">
+                  <div className="dropdown dropdown-right ">
+                    <label
+                      className="max-lg:w-[24px] max-lg:h-[24px]"
+                      tabIndex={1}
+                    >
+                      <Handle />
+                    </label>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu bg-white rounded-box w-52
                                       shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                       max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                      >
-                        <li>
-                          <button
-                            className="flex items-center gap-4"
-                            onClick={() => {
-                              openDialog(
-                                idDialogRating,
-                                rating.id,
-                                rating.comment
-                              );
-                              setidRating(rating.id);
-                            }}
-                          >
-                            <Edit />
-                            <p
-                              className="text-[#EA4B48] text-sm font-medium
+                    >
+                      <li>
+                        <button
+                          className="flex items-center gap-4"
+                          onClick={() => {
+                            openDialog(
+                              idDialogRating,
+                              rating.id,
+                              rating.comment
+                            );
+                            setidRating(rating.id);
+                          }}
+                        >
+                          <Edit />
+                          <p
+                            className="text-[#EA4B48] text-sm font-medium
                                   max-[940px]:text-xs "
-                            >
-                              Chỉnh sửa
-                            </p>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            className="flex items-center gap-4"
-                            onClick={() => props.handleRemoveRating(rating.id)}
                           >
-                            <RemoveCate />
-                            <p
-                              className="text-[#EA4B48] text-sm font-medium
+                            Chỉnh sửa
+                          </p>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="flex items-center gap-4"
+                          onClick={() => props.handleRemoveRating(rating.id)}
+                        >
+                          <RemoveCate />
+                          <p
+                            className="text-[#EA4B48] text-sm font-medium
                                    max-[940px]:text-xs "
-                            >
-                              Xóa
-                            </p>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
+                          >
+                            Xóa
+                          </p>
+                        </button>
+                      </li>
+                    </ul>
                   </div>
-                </div>
-                {/* end header comment */}
-                {/* content comment */}
-
-                <div className="border-t-[1px] border-[#E0E0E0] py-2">
-                  <p className="text-[#4C4C4C]">{rating.comment}</p>
-                  <div className=" flex flex-1 mt-2">
-                    <div className="inline-grid grid-cols-8 gap-4 relative ">
-                      {rating.CommentImage.map((img) => {
-                        return (
-                          <>
-                            <img
-                              src={img.url}
-                              alt="imgComment"
-                              className="w-20 h-20 rounded-md"
-                            />
-                          </>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* end content comment */}
-                {/* reply content comment */}
-                <div className="mx-3 my-2  flex">
-                  <div className="ml-2">
-                    <LineCMT />
-                  </div>
-                  {/* shop reply cmt */}
-                  <div className="flex items-center mt-1 ml-3 gap-3">
-                    {/* hinh anh */}
-                    <div className="relative">
-                      <CircleAvrCMT />
-                      <span className="top-0 left-5 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-                    </div>
-                    {/* end hinh anh */}
-                    {/* thong tin users */}
-                    <div>
-                      {/* name - period - date */}
-                      <div className="flex items-center">
-                        {/* name */}{" "}
-                        <p className="text-[#1A1A1A] text-base font-medium">
-                          ShopTaiNghe
-                        </p>
-                        {/* end name */}
-                        {/* period */}
-                        <Period /> {/* end period */}
-                        {/* date */}{" "}
-                        <p className="text-[#4C4C4C] text-[12px]">12-10-2023</p>
-                        {/* end date */}
-                      </div>
-                      {/* end name - period - date */}
-                      {/* quatity */}
-                      <p className="text-[#4C4C4C] text-[12px]">Số lượng: 10</p>
-                      {/* end quatity */}
-                    </div>{" "}
-                    {/* end thong tin users */}
-                  </div>
-                  {/* shop reply cmt */}
-                </div>
-                {/* end reply content comment */}
-                {/* content comment */}
-                <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7">
-                  <p className="text-[#4C4C4C]">
-                    Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm hôm
-                    nay mua lại vì hôm đi chơi bị mất. vẫn chất lg như lần trc
-                    esd15 mãi đỉnh , mà chắc do shop uy tín lên dùng rất tốt âm
-                    thanh bass trest chống âm cách tiếng onf đeo êm tai ko bị
-                    đua tai luôn chyaj bộ thể dục thoải mái nhá ae lên mua thanh
-                    anh shop tư vấn hài lòng vãi
-                  </p>
                 </div>
               </div>
+              {/* end header comment */}
+              {/* content comment */}
+
+              <div className="border-t-[1px] border-[#E0E0E0] py-2">
+                <p className="text-[#4C4C4C]">{rating.comment}</p>
+                <div className=" flex flex-1 mt-2">
+                  <div className="inline-grid grid-cols-8 gap-4 relative ">
+                    {rating.CommentImage.map((img) => {
+                      return (
+                        <>
+                          <img
+                            src={img.url}
+                            alt="imgComment"
+                            className="w-20 h-20 rounded-md"
+                          />
+                        </>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
               {/* end content comment */}
-            </>
-          );
-        })
-      ) : (
-        <>
-          <EmptyPage title="Chưa có bình luận" button="" />
-        </>
-      )}
+              {/* reply content comment */}
+              <div className="mx-3 my-2  flex">
+                <div className="ml-2">
+                  <LineCMT />
+                </div>
+                {/* shop reply cmt */}
+                <div className="flex items-center mt-1 ml-3 gap-3">
+                  {/* hinh anh */}
+                  <div className="relative">
+                    <CircleAvrCMT />
+                    <span className="top-0 left-5 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                  </div>
+                  {/* end hinh anh */}
+                  {/* thong tin users */}
+                  <div>
+                    {/* name - period - date */}
+                    <div className="flex items-center">
+                      {/* name */}{" "}
+                      <p className="text-[#1A1A1A] text-base font-medium">
+                        ShopTaiNghe
+                      </p>
+                      {/* end name */}
+                      {/* period */}
+                      <Period /> {/* end period */}
+                      {/* date */}{" "}
+                      <p className="text-[#4C4C4C] text-[12px]">12-10-2023</p>
+                      {/* end date */}
+                    </div>
+                    {/* end name - period - date */}
+                    {/* quatity */}
+                    <p className="text-[#4C4C4C] text-[12px]">Số lượng: 10</p>
+                    {/* end quatity */}
+                  </div>{" "}
+                  {/* end thong tin users */}
+                </div>
+                {/* shop reply cmt */}
+              </div>
+              {/* end reply content comment */}
+              {/* content comment */}
+              <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7">
+                <p className="text-[#4C4C4C]">
+                  Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm hôm nay
+                  mua lại vì hôm đi chơi bị mất. vẫn chất lg như lần trc esd15
+                  mãi đỉnh , mà chắc do shop uy tín lên dùng rất tốt âm thanh
+                  bass trest chống âm cách tiếng onf đeo êm tai ko bị đua tai
+                  luôn chyaj bộ thể dục thoải mái nhá ae lên mua thanh anh shop
+                  tư vấn hài lòng vãi
+                </p>
+              </div>
+            </div>
+            {/* end content comment */}
+          </>
+        );
+      })}
       <DialogModal
         id={idDialogRating}
         onClose={() => onClose(idDialogRating)}
