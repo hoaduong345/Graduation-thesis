@@ -121,7 +121,6 @@ export default function Cart() {
          }
       } else {
          setProductChecked([]);
-         localStorage.clear();
       }
    };
    const calculatePrice = () => {
