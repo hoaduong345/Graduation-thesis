@@ -307,10 +307,7 @@ export default function Cart() {
                      })
                   ) : (
                      <>
-                        <EmptyPage
-                           title="Danh Sách Giỏ hàng trống"
-                           button="Thêm Ngay"
-                        />
+                        <EmptyPage />
                      </>
                   )}
                   <DialogComfirm
