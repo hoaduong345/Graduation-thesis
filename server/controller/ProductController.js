@@ -563,6 +563,7 @@ const ProductController = {
             const userId = parseInt(req.cookies.id);
             console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
             const { productId, ratingValue, comment } = req.body;
+
             const rating = await prisma.rating.create({
                 data: {
                     idproduct: productId,
@@ -598,6 +599,11 @@ const ProductController = {
                     product: {
                         select: {
                             quantity: true,
+                        },
+                    },
+                    CommentImage: {
+                        select: {
+                            url: true,
                         },
                     },
                 },
@@ -701,9 +707,36 @@ const ProductController = {
             };
 
             const data = await prisma.commentImage.create({
-                date: newImageComment,
+                data: newImageComment,
             });
             res.status(200).json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(error.message);
+        }
+    },
+
+    deleteImageComment: async (req, res) => {
+        const ratingID = parseInt(req.params.id);
+        try {
+            const imagesToDelete = await prisma.commentImage.findMany({
+                where: {
+                    id: ratingID,
+                },
+            });
+
+            if (!imagesToDelete || imagesToDelete.length === 0) {
+                return res.status(404).json('Không có hình ảnh nào để xóa');
+            }
+
+            for (const image of imagesToDelete) {
+                await prisma.commentImage.delete({
+                    where: {
+                        id: image.id,
+                    },
+                });
+            }
+            res.status(200).json('Xóa hình ảnh thành công');
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -725,7 +758,7 @@ const ProductController = {
                 },
             });
 
-            res.status(200).json(data);
+            res.status(200).json(updateImageComment);
         } catch (error) {
             res.status(500).json(error.message);
             // dit cu m

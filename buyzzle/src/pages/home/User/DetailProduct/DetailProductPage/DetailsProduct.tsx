@@ -31,13 +31,12 @@ import {
   numberFormat,
   roundedNumber,
 } from "../../../../../Helper/Format";
-import { Rate } from "../../../../../Model/ProductModel";
+import { Rate, Rating } from "../../../../../Model/ProductModel";
 import { Products } from "../../FilterPage/FiltersPage";
 import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import RatingMap from "../RatingAndComments/RatingMap";
 import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
 import { stars } from "../../../../../Helper/StarRating/Star";
-import { Rating } from "../../../../../Model/RatingAndComment";
 import { useForm } from "react-hook-form";
 import Period from "../../../../../Assets/TSX/Period";
 import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
@@ -52,16 +51,16 @@ export interface ImgOfProduct {
   url: string;
 }
 [];
+
 export type FormValues = {
   idproduct: number;
   name: string;
   price: number;
   description: string;
-  count: number;
-  images: string;
-  quantity: number;
-  ProductImage: ImgOfProduct[];
   discount: number;
+  quantity: number;
+  count: number;
+  ProductImage: ImgOfProduct[];
   id: number;
   iduser: number;
   ratingValue: number;
@@ -93,9 +92,14 @@ const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 2 },
   { checked: false, rating: 1 },
 ];
+export interface EditImage {
+  url: string;
+  id: number;
+}
 export default function DetailsProduct() {
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
+  const [editImages, setEditImages] = useState<EditImage[]>([]);
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
@@ -117,6 +121,7 @@ export default function DetailsProduct() {
         return detail;
       })
       .then((detail) => {
+        // setEditImages(detail.data.Produ\ctImage);
         setfirst(detail.data);
       })
       .catch((error) => {
@@ -158,7 +163,6 @@ export default function DetailsProduct() {
           "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
           res
         );
-        // getDetailProduct();
         getComment(id);
         setRecommandProduct(res);
       })
@@ -172,15 +176,10 @@ export default function DetailsProduct() {
       toast.success("Thêm thành công");
     });
   };
-  // useEffect(() => {
-  //   RatingAndCommentController.getRatingAndComment(currentPage, 2).then(
-  //     (res: any) => {
-  //       setRateAndcomment(res);
-  //     }
-  //   );
-  // }, []);
+
   const [rateAndcomment, setRateAndcomment] = useState<Rate>();
   const getComment = (id: number) => {
+    console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
     RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
       (res: any) => {
         setRateAndcomment(res);
@@ -240,10 +239,35 @@ export default function DetailsProduct() {
   };
   //Xóa comment
   const handleRemoveRating = (id: number) => {
+    console.log(
+      "🚀 ~ file: DetailsProduct.tsx:235 ~ handleRemoveRating ~ id:",
+      id
+    );
     RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
+      getDetailProduct();
       getComment(id);
+      RecommandProductDetailPage(id);
     });
   };
+
+  const handleRemoveOnlyIMG = (id: number) => {
+    RatingAndCommentController.removeImagesComment(id)
+      .then((_) => {
+        getDetailProduct();
+        console.log(id);
+      })
+      .catch((err) => {
+        console.log(
+          "🚀 ~ file: EditProductMap.tsx:62 ~ imagesController.remove ~ err:",
+          err
+        );
+      });
+  };
+  console.log(
+    "🚀 ~ file: DetailsProduct.tsx:550 ~ DetailsProduct ~ first?.totalRatings:",
+    first?.totalRatings
+  );
+
   return (
     <>
       <Container>
@@ -495,14 +519,19 @@ export default function DetailsProduct() {
                 <RatingMap
                   handleEditProductRating={handleEditProductRating}
                   rateAndcomment={rateAndcomment!}
+                  editImages={editImages!}
                   handleRemoveRating={handleRemoveRating}
+                  handleRemoveOnlyIMG={handleRemoveOnlyIMG}
                 />
               </div>
               <div className="pagination">
                 <div className="flex">
                   <Button
                     variant="text"
-                    className="flex items-center gap-2"
+                    // className="flex items-center gap-2"
+                    className={`${
+                      currentPage == 1 ? `hidden` : `flex items-center gap-2`
+                    }`}
                     onClick={prev}
                   >
                     <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
@@ -521,7 +550,9 @@ export default function DetailsProduct() {
                   })}
                   <Button
                     variant="text"
-                    className="flex items-center gap-2"
+                    className={`${
+                      first?.totalRatings ? `hidden` : "flex items-center gap-2"
+                    }`}
                     onClick={next}
                   >
                     Next

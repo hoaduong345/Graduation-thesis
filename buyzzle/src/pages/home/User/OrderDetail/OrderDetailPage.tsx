@@ -8,12 +8,77 @@ import Back from "../../Admin/Assets/TSX/Back";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef, useState } from "react";
-import { Rating } from "../../../../Model/RatingAndComment";
 import { toast } from "react-toastify";
 import { RatingAndCommentController } from "../../../../Controllers/Rating&Comment";
+import { storage } from "../../../../Firebase/Config";
+import { ref, uploadBytes } from "firebase/storage";
+import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
+import Loading from "../../../../Helper/Loading/Loading";
+import UploadIMG from "../../Admin/Assets/TSX/UploadIMG";
+import { Rating } from "../../../../Model/ProductModel";
 
 export default function OrderDetailPage() {
-  const editorRef = useRef<any>(null);
+  const [url, setUrl] = useState<string[]>([]);
+  const [loadingImage, setLoadingImage] = useState(false);
+  //Add images comment
+  const delayIMG = () => {
+    const timeoutId = setTimeout(() => {
+      setLoadingImage(false);
+    }, 7000);
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  };
+  // img firebase
+  const loadImageFile = async (images: any) => {
+    for (let i = 0; i < images.length; i++) {
+      const imageRef = ref(storage, `multipleFiles/${images[i].name}`);
+
+      await uploadBytes(imageRef, images[i])
+        .then(() => {
+          setLoadingImage(true);
+          delayIMG();
+          storage
+            .ref("multipleFiles")
+            .child(images[i].name)
+            .getDownloadURL()
+
+            .then((url: any) => {
+              setUrl((prev) => prev.concat(url));
+              delayIMG();
+              return url;
+            });
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
+
+  const addImages = async (url: string, id: number) => {
+    console.log(url, id);
+
+    await RatingAndCommentController.addImagesComment(url, id).then((_) =>
+      console.log("thanh cong")
+    );
+  };
+
+  const resetImages = () => {
+    setUrl([]);
+  };
+  const loading = () => {
+    if (loadingImage) {
+      return (
+        <>
+          <div className="absolute left-[45%] top-5 z-30">
+            <Loading />
+          </div>
+        </>
+      );
+    } else {
+      setLoadingImage(false);
+    }
+  };
   const {
     control,
     handleSubmit,
@@ -24,9 +89,15 @@ export default function OrderDetailPage() {
   } = useForm<Rating>({
     mode: "all",
     defaultValues: {
+      idproduct: 1,
       comment: "",
       ratingValue: 5,
       iduser: 1,
+      CommentImage: [
+        {
+          url: "",
+        },
+      ],
     },
   });
   const idDialogRating = "dialogRating";
@@ -45,19 +116,48 @@ export default function OrderDetailPage() {
   };
   const handleRatingClick = (rating: number) => {
     setValue("ratingValue", rating);
+    setSelectedRating(rating);
     console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
+  };
+
+  const [selectedRating, setSelectedRating] = useState(0);
+
+  const ratings = [1, 2, 3, 4, 5];
+
+  const getRatingText = () => {
+    switch (selectedRating) {
+      case 1:
+        return "Rất tệ";
+      case 2:
+        return "Tệ";
+      case 3:
+        return "Bình thường";
+      case 4:
+        return "Tốt";
+      case 5:
+        return "Sản phẩm rất tốt";
+      default:
+        return "";
+    }
   };
 
   //Thêm đánh giá
   const handleAddProductRating = (id: string, data: Rating) => {
+    console.log(data, id);
     RatingAndCommentController.postRatingAndComment(data)
-      .then((_) => {
-        setValue("iduser", data.iduser);
-        console.log(
-          "🚀 ~ file: OrderDetailPage.tsx:64 ~ .then ~ data.iduser:",
-          data.iduser
-        );
+      .then(async (data) => {
+        // setValue("iduser", data.iduser);
+        // console.log(
+        //   "🚀 ~ file: OrderDetailPage.tsx:64 ~ .then ~ data.iduser:",
+        //   data.iduser
+        // );
         toast.success("Đánh giá thành công !");
+        resetImages();
+        console.log(data);
+
+        for (let i = 0; i < url.length; i++) {
+          await addImages(url[i], data.id);
+        }
         reset({});
         onClose(id);
       })
@@ -292,18 +392,26 @@ export default function OrderDetailPage() {
                                     }}
                                     render={({}) => (
                                       <>
-                                        {[1, 2, 3, 4, 5].map((rating) => (
-                                          <input
-                                            key={rating}
-                                            type="radio"
-                                            name="rating-5"
-                                            className="mask mask-star-2 bg-orange-400"
-                                            onClick={() =>
-                                              handleRatingClick(rating)
-                                            }
-                                            // ref={register}
-                                          />
-                                        ))}
+                                        <div className="flex items-center">
+                                          {ratings.map((rating) => (
+                                            <>
+                                              <input
+                                                key={rating}
+                                                type="radio"
+                                                name="rating-5"
+                                                className="mask mask-star-2 bg-orange-400"
+                                                onClick={() =>
+                                                  handleRatingClick(rating)
+                                                }
+                                              />
+                                            </>
+                                          ))}
+                                          {selectedRating > 0 && (
+                                            <p className="ml-4 text-sm">
+                                              {getRatingText()}
+                                            </p>
+                                          )}
+                                        </div>
                                       </>
                                     )}
                                   />
@@ -314,77 +422,6 @@ export default function OrderDetailPage() {
                         </div>
                         <div className=" border-b-[1px] border-[#E0E0E0] mb-4"></div>
                         <div>
-                          {/* <p>Mô tả chất lượng sản phẩm: </p> */}
-                          {/* <Editor
-                                  apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
-                                  onInit={(editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  onEditorChange={(e) => field.onChange(e)}
-                                  value={field.value}
-                                  init={{
-                                    block_formats:
-                                      "Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3",
-                                    height: 200,
-                                    width: 800,
-                                    menubar: false,
-                                    tiny_pageembed_classes: [
-                                      {
-                                        text: "Responsive - 21x9",
-                                        value: "tiny-pageembed--21by9",
-                                      },
-                                      {
-                                        text: "Responsive - 16x9",
-                                        value: "tiny-pageembed--16by9",
-                                      },
-                                      {
-                                        text: "Responsive - 4x3",
-                                        value: "tiny-pageembed--4by3",
-                                      },
-                                      {
-                                        text: "Responsive - 1x1",
-                                        value: "tiny-pageembed--1by1",
-                                      },
-                                    ],
-
-                                    plugins: [
-                                      "advlist",
-                                      "autolink",
-                                      "link",
-                                      "image",
-                                      "lists",
-                                      "charmap",
-                                      "preview",
-                                      "anchor",
-                                      "pagebreak",
-                                      "searchreplace",
-                                      "wordcount",
-                                      "visualblocks",
-                                      "visualchars",
-                                      "code",
-                                      "fullscreen",
-                                      "insertdatetime",
-                                      "media",
-                                      "p",
-                                      "h1, h2, h3, h4, h5, h6",
-                                      "div",
-                                      "address",
-                                      "pre",
-                                      "div",
-                                      "code",
-                                      "dt, dd",
-                                      "samp",
-                                      "table",
-                                      "emoticons",
-                                      "template",
-                                      "help",
-                                    ],
-                                    toolbar:
-                                      "undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons",
-                                    content_style:
-                                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                                  }}
-                                /> */}
                           <Controller
                             control={control}
                             name="comment"
@@ -413,6 +450,100 @@ export default function OrderDetailPage() {
                               </>
                             )}
                           />
+                          {/* // ảnh sản phẩm  */}
+                          <div>
+                            <p className="text-[#4C4C4C] text-base font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
+                              Thêm ảnh
+                              <span className="text-[#FF0000]">*</span>
+                            </p>
+                            {/* card */}
+                            <div
+                              className="card w-[100%] py-4 px-9 mt-2 
+                                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                            >
+                              <Controller
+                                control={control}
+                                name="CommentImage"
+                                render={({}) => (
+                                  <>
+                                    <div className="flex max-[1300px]:gap-3">
+                                      {/* form upload img */}
+                                      <div className="max-w-max items-center">
+                                        <label htmlFor="images">
+                                          <div
+                                            className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer
+                                                                 max-xl:px-4 max-[1100px]:py-4 max-[1024px]:p-2 max-[768px]:p-1"
+                                          >
+                                            <input
+                                              type="file"
+                                              // onChange={field.onChange}
+                                              onChange={(e: any) =>
+                                                loadImageFile(e.target.files)
+                                              }
+                                              id="images"
+                                              multiple
+                                              className="hidden "
+                                            />
+                                            <UploadIMG />
+                                            <div
+                                              id="images"
+                                              className="text-center mt-2"
+                                            >
+                                              <p className="text-[#5D5FEF] text-center -tracking-tighter font-bold max-[1024px]:text-xs max-[768px]:text-[10px]">
+                                                Click to upload
+                                                <p className="text-[#1A1A1A] font-normal text-sm tracking-widest max-[1024px]:text-[11px] max-[768px]:text-[10px]">
+                                                  or drag and drop
+                                                </p>
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </label>
+                                      </div>
+                                      {/* end form upload img */}
+
+                                      <div className="justify-center flex flex-1">
+                                        <div className="inline-grid grid-cols-3 gap-4 relative">
+                                          {url.map((e) => {
+                                            return (
+                                              <>
+                                                <div className="relative">
+                                                  {loading()}
+                                                  <div className="group relative">
+                                                    <img
+                                                      src={e}
+                                                      alt="imageproduct6"
+                                                      width={80}
+                                                      height={80}
+                                                      className="rounded-md"
+                                                    />
+                                                    <div
+                                                      className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+                                                                    opacity-0 transition duration-300 ease-in-out group-hover:opacity-20"
+                                                    ></div>
+                                                    <div
+                                                      className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
+                                                      onClick={() =>
+                                                        console.log(
+                                                          "an không ?"
+                                                        )
+                                                      }
+                                                    >
+                                                      <RemoveIMG />
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </>
+                                            );
+                                          })}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </>
+                                )}
+                              />
+                            </div>
+                          </div>
+                          {/* end ảnh bình luận sản phẩm  */}
                         </div>
                         <div className=" border-b-[1px] border-[#E0E0E0] mb-4"></div>
                       </>

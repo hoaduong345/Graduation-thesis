@@ -3,7 +3,6 @@ import { IconButton } from "@material-tailwind/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Search from "../../../../Assets/TSX/Search";
-import { imagesController } from "../../../../Controllers/ImagesController";
 import { productController } from "../../../../Controllers/ProductsController";
 import Container from "../../../../components/container/Container";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
@@ -150,7 +149,6 @@ export default function ListproductsAdmin() {
     setSliderPriceValues(price);
     console.log("price Range:", price);
   };
-
   return (
     <>
       <Container>
@@ -414,10 +412,7 @@ export default function ListproductsAdmin() {
                 })
               ) : (
                 <>
-                  <EmptyPage
-                    title="Danh sách sản phẩm trống"
-                    button="Thêm Ngay"
-                  />
+                  <EmptyPage />
                 </>
               )}
             </div>
