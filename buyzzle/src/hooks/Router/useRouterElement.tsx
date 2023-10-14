@@ -28,183 +28,183 @@ import User from "../../pages/home/Admin/Management/User/User";
 import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 
 export default function useRouterEmelent() {
-  const routes = useRoutes([
-    {
-      path: "/",
-      element: (
-        <MainLayout>
-          <HomePage />
-        </MainLayout>
-      ),
-    },
+   const routes = useRoutes([
+      {
+         path: "/",
+         element: (
+            <MainLayout>
+               <HomePage />
+            </MainLayout>
+         ),
+      },
 
-    {
-      path: "/userprofilepage/:username",
-      element: (
-        <MainLayout>
-          <UserProfile />
-        </MainLayout>
-      ),
-    },
+      {
+         path: "/userprofilepage/:username",
+         element: (
+            <MainLayout>
+               <UserProfile />
+            </MainLayout>
+         ),
+      },
 
-    {
-      path: "/products",
-      element: (
-        <MainLayout>
-          <ProductsPage />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "/FiltersPage/:id",
-      element: (
-        <MainLayout>
-          <FiltersPage />
-        </MainLayout>
-      ),
-    },
-    // {
-    //   path: "/FiltersPage/:text",
-    //   element: (
-    //     <MainLayout>
-    //       <FiltersPage />
-    //     </MainLayout>
-    //   ),
-    // },
+      {
+         path: "/products",
+         element: (
+            <MainLayout>
+               <ProductsPage />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "/FiltersPage/:id",
+         element: (
+            <MainLayout>
+               <FiltersPage />
+            </MainLayout>
+         ),
+      },
+      // {
+      //   path: "/FiltersPage/:text",
+      //   element: (
+      //     <MainLayout>
+      //       <FiltersPage />
+      //     </MainLayout>
+      //   ),
+      // },
 
-    {
-      path: "/register",
-      element: (
-        <RegisterLoginLayout>
-          <Register />
-        </RegisterLoginLayout>
-      ),
-    },
-    {
-      path: "/login",
-      element: (
-        <RegisterLoginLayout>
-          <Login />
-        </RegisterLoginLayout>
-      ),
-    },
+      {
+         path: "/register",
+         element: (
+            <RegisterLoginLayout>
+               <Register />
+            </RegisterLoginLayout>
+         ),
+      },
+      {
+         path: "/login",
+         element: (
+            <RegisterLoginLayout>
+               <Login />
+            </RegisterLoginLayout>
+         ),
+      },
 
-    {
-      path: "/forgotpassword",
-      element: (
-        <RegisterLoginLayout>
-          <Forgotpassword />
-        </RegisterLoginLayout>
-      ),
-    },
-    {
-      path: "detailproducts/:id",
-      element: (
-        <MainLayout>
-          <DetailsProduct />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "Cart",
-      element: (
-        <MainLayout>
-          <Cart />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "orderhistory",
-      element: (
-        <MainLayout>
-          <OrderHistory />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "checkout",
-      element: (
-        <MainLayout>
-          <CheckOut />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
-    {
-      path: path.confirmAccount,
-      element: (
-        <RegisterLoginLayout>
-          <ConfirmAccount />
-        </RegisterLoginLayout>
-      ),
-    },
-    {
-      path: "/userprofilepage/:username",
-      element: (
-        <MainLayout>
-          <UserProfile />
-        </MainLayout>
-      ),
-    },
+      {
+         path: "/forgotpassword",
+         element: (
+            <RegisterLoginLayout>
+               <Forgotpassword />
+            </RegisterLoginLayout>
+         ),
+      },
+      {
+         path: "detailproducts/:id",
+         element: (
+            <MainLayout>
+               <DetailsProduct />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "Cart",
+         element: (
+            <MainLayout>
+               <Cart />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "orderhistory",
+         element: (
+            <MainLayout>
+               <OrderHistory />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "checkout",
+         element: (
+            <MainLayout>
+               <CheckOut />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "orderdetail",
+         element: (
+            <MainLayout>
+               <OrderDetailPage />
+            </MainLayout>
+         ),
+      },
+      {
+         path: path.confirmAccount,
+         element: (
+            <RegisterLoginLayout>
+               <ConfirmAccount />
+            </RegisterLoginLayout>
+         ),
+      },
+      {
+         path: "/userprofilepage/:username",
+         element: (
+            <MainLayout>
+               <UserProfile />
+            </MainLayout>
+         ),
+      },
 
-    // AdminPages
-    {
-      path: "/admin",
-      element: <AdminLayout />,
-      children: [
-        {
-          index: true,
-          element: <Navigate to={"Addproductspage"} />,
-        },
-        {
-          path: "Addproductspage",
-          element: <Addproducts />,
-        },
+      // AdminPages
+      {
+         path: "/admin",
+         element: <AdminLayout />,
+         children: [
+            {
+               index: true,
+               element: <Navigate to={"Addproductspage"} />,
+            },
+            {
+               path: "Addproductspage",
+               element: <Addproducts />,
+            },
 
-        {
-          path: "updateproduct/:id",
-          element: <Editproducts />,
-        },
-        {
-          path: "ListproductsAdmin",
-          element: <ListproductsAdmin />,
-        },
+            {
+               path: "updateproduct/:id",
+               element: <Editproducts />,
+            },
+            {
+               path: "ListproductsAdmin",
+               element: <ListproductsAdmin />,
+            },
 
-        {
-          path: "Detailproducts/:id",
-          element: <DetailsProduct />,
-        },
-        {
-          path: "category",
-          element: <Category />,
-        },
-        {
-          path: "voucher",
-          element: <VoucherPage />,
-        },
-        {
-          path: "usersmanager",
-          element: <User />,
-        },
-      ],
-    },
+            {
+               path: "Detailproducts/:id",
+               element: <DetailsProduct />,
+            },
+            {
+               path: "category",
+               element: <Category />,
+            },
+            {
+               path: "voucher",
+               element: <VoucherPage />,
+            },
+            {
+               path: "usersmanager",
+               element: <User />,
+            },
+         ],
+      },
 
-    {
-      path: path.resetpassword,
-      element: (
-        <RegisterLoginLayout>
-          <ChangePassword />
-          <ConfirmAccount />
-        </RegisterLoginLayout>
-      ),
-    },
-  ]);
-  return routes;
+      {
+         path: path.resetpassword,
+         element: (
+            <RegisterLoginLayout>
+               <ChangePassword />
+               <ConfirmAccount />
+            </RegisterLoginLayout>
+         ),
+      },
+   ]);
+   return routes;
 }
