@@ -119,7 +119,6 @@ export default function Cart() {
       }
     } else {
       setProductChecked([]);
-      localStorage.clear();
     }
   };
   const calculatePrice = () => {
@@ -284,18 +283,15 @@ export default function Cart() {
               })
             ) : (
               <>
-                <EmptyPage
-                  title="Danh Sách Giỏ hàng trống"
-                  button="Thêm Ngay"
-                />
+                <EmptyPage />
               </>
             )}
             <DialogComfirm
-              desc="Bạn có chắc chắn muốn xóa danh mục này không, sau khi xóa thì không thể khôi phục lại"
+              desc="sản phẩm"
               id={idItemCart}
               onClose={() => closeModal(idItemCart)}
               onSave={() => removeItemCart(idProduct)}
-              title="Bạn Chắc Chắn!"
+              title="Xóa sản phẩm này!"
             />
           </div>
 
@@ -359,7 +355,7 @@ export default function Cart() {
                   <p>Mua ngay</p>
                 </Link>
                 <DialogComfirm
-                  desc="Bạn có chắc chắn muốn xóa danh mục này không, sau khi xóa thì không thể khôi phục lại"
+                  desc="toàn bộ Giỏ hàng"
                   id={idAllCart}
                   onClose={() => closeModal(idAllCart)}
                   onSave={() => removeAllCart()}
