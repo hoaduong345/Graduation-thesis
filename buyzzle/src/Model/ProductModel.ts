@@ -87,10 +87,16 @@ export interface Rating {
     ratingValue: number
     comment: string
     createdAt: string
-    updatedAt: string
-    user: User
-    product: Product
-}
+    product: {
+        quantity: number
+    }
+    user: {
+        username: string,
+    }
+    CommentImage: {
+        url: string
+    }[]
+};
 
 export interface User {
     username: string
