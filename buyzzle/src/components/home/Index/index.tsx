@@ -16,6 +16,7 @@ import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
 import VoucherIcon from "../components/Voucher/Voucher";
 import { voucherControllers } from "../../../Controllers/VoucherControllers";
 import { VoucherModel } from "../../../Model/VoucherModel";
+import { toast } from "react-toastify";
 
 export type Product = {
    id: number;
@@ -43,6 +44,10 @@ function Index() {
    const [product, setProducts] = useState<Row[]>([]);
    const [voucher, setVoucher] = useState<VoucherModel[]>([]);
 
+   const voucherLocal = localStorage.getItem("voucher");
+   const dataVoucherLocal: VoucherModel[] =
+      voucherLocal == null ? [] : JSON.parse(voucherLocal);
+
    const getCategory = async () => {
       await axios
          .get("http://localhost:5000/buyzzle/product/allcategory")
@@ -68,6 +73,25 @@ function Index() {
       getAllProducts();
       getVoucher();
    }, []);
+
+   const saveVoucherLocal = (id: number, data: VoucherModel) => {
+      const maxVoucher = dataVoucherLocal.length;
+      const index = dataVoucherLocal.findIndex((e) => e.id == id);
+      if (maxVoucher >= 5) {
+         toast.error("Lưu tối đa 5 voucher");
+      } else {
+         if (index !== -1) {
+            toast.error("Bạn đã lưu mã giảm giá này");
+         } else {
+            dataVoucherLocal.push(data);
+            localStorage.setItem(
+               "voucher",
+               JSON.stringify([...dataVoucherLocal])
+            );
+            toast.success("Thành công");
+         }
+      }
+   };
 
    return (
       <>
@@ -159,7 +183,11 @@ function Index() {
                   {voucher.map((e) => {
                      return (
                         <>
-                           <VoucherIcon props={e} key={e.id} />
+                           <VoucherIcon
+                              voucher={e}
+                              save={(id) => saveVoucherLocal(id, e)}
+                              key={e.id}
+                           />
                         </>
                      );
                   })}

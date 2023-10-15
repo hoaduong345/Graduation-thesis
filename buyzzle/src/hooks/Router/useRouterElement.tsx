@@ -26,6 +26,7 @@ import Category from "../../pages/home/Admin/Management/Category/Category";
 import Members from "../../pages/home/Admin/Assets/Icon/Members";
 import User from "../../pages/home/Admin/Management/User/User";
 import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
 
 export default function useRouterEmelent() {
    const routes = useRoutes([
@@ -106,10 +107,18 @@ export default function useRouterEmelent() {
          ),
       },
       {
-         path: "Cart",
+         path: "cart",
          element: (
             <MainLayout>
                <Cart />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "voucher",
+         element: (
+            <MainLayout>
+               <VoucherUserPage />
             </MainLayout>
          ),
       },
