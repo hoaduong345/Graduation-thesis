@@ -3,7 +3,6 @@ import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import Voucher from "../../../../Assets/TSX/Voucher";
 import Container from "../../../../components/container/Container";
-import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import PinkRight from "../../../../Assets/SVG/LetterPayment/PinkRight";
 import BlueRight from "../../../../Assets/SVG/LetterPayment/BlueRight";
 import PinkMedium from "../../../../Assets/SVG/LetterPayment/PinkMedium";
