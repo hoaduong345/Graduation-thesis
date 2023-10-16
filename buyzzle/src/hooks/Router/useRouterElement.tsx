@@ -26,6 +26,7 @@ import Category from "../../pages/home/Admin/Management/Category/Category";
 import Members from "../../pages/home/Admin/Assets/Icon/Members";
 import User from "../../pages/home/Admin/Management/User/User";
 import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+import DetailUser from "../../pages/home/Admin/DetailUser/DetailUser";
 
 
 export default function useRouterEmelent() {
@@ -190,6 +191,10 @@ export default function useRouterEmelent() {
           path: "voucher",
           element: <VoucherPage />,
         },
+        {
+          path: "detailuser",
+          element: <DetailUser />,
+       },
         {
           path: "usersmanager",
           element: <User />,
