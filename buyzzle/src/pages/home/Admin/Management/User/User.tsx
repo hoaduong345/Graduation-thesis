@@ -48,6 +48,44 @@ export default function User() {
       status: "Hoạt động",
     },
   ];
+
+
+  let status = "Hoạt động";
+  const [users, setUsers] = useState<any>({});
+  const getAllUserData = () => {
+    userController.getAllUser()
+      .then((res) => {
+        return res;
+      })
+      .then((res) => {
+
+        setUsers(res);
+        console.log("Test" + JSON.stringify(res));
+      })
+
+  }
+
+  useEffect(() => {
+    getAllUserData();
+  }, [])
+
+
+  function JumpEditUser(username: any){
+    window.location.href = `userprofilepage/${username}`;
+  }
+
+  const DeleteUser = (id: any) => {
+    userController.deleteUser(id)
+      .then((_) => {
+        toast.success("Xóa thành công !");
+        getAllUserData();
+      })
+      .catch(() => {
+        toast.error("Xóa thất bại !");
+      });
+  }
+
+
   return (
     <Container>
       <div className="grid grid-cols-5">
@@ -162,12 +200,14 @@ export default function User() {
                               className="dropdown-content menu bg-white rounded-box w-52
                                                 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                                 max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                            >
-                              <li>
-                                <button className="flex items-center gap-4">
-                                  <Edit />
-                                  <p
-                                    className="text-[#EA4B48] text-sm font-medium
+                              >
+                                <li>
+                                  <button className="flex items-center gap-4"
+                                   onClick={() => JumpEditUser(items.username)}
+                                  >
+                                    <Edit />
+                                    <p
+                                      className="text-[#EA4B48] text-sm font-medium
                                             max-[940px]:text-xs "
                                   >
                                     Sửa
