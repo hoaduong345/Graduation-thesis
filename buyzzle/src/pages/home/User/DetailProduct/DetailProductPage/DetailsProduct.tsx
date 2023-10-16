@@ -159,11 +159,7 @@ export default function DetailsProduct() {
     );
     productController
       .getProductSuggest(id)
-      .then((res:any) => {
-        console.log(
-          "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
-          res
-        );
+      .then((res: any) => {
         getComment(id);
         setRecommandProduct(res);
       })
@@ -236,9 +232,9 @@ export default function DetailsProduct() {
       });
     console.log("Sửa bình luận!");
   };
-  useEffect(()=>{
-      handleRemoveRating(Number(id))
-  },[first])
+  useEffect(() => {
+    handleRemoveRating(Number(id));
+  }, [first]);
   //Xóa comment
   const handleRemoveRating = (id: number) => {
     console.log(
@@ -247,14 +243,16 @@ export default function DetailsProduct() {
     );
     RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
       if (rateAndcomment) {
-        const removedRatings = rateAndcomment.Rating.filter((rating) => rating.id !== id);
+        const removedRatings = rateAndcomment.Rating.filter(
+          (rating) => rating.id !== id
+        );
         setRateAndcomment({
           ...rateAndcomment,
           Rating: removedRatings,
         });
-        getDetailProduct()
+        getDetailProduct();
         // RecommandProductDetailPage(id);
-        }
+      }
     });
     // getDetailProduct()
     RecommandProductDetailPage(id);
