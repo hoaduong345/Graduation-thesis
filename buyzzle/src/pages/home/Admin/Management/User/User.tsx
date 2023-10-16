@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
 import SitebarAdmin from "../../Sitebar/Sitebar";
 import Search from "../../../../../Assets/TSX/Search";
@@ -9,48 +9,11 @@ import Edit from "../../Assets/TSX/Edit";
 import Handle from "../../Assets/TSX/bacham";
 import { numberFormat } from "../../../../../Helper/Format";
 import { userController } from "../../../../../Controllers/UserController";
+import { ToastContainer, toast } from "react-toastify";
+
 
 export default function User() {
-  const active = [
-    {
-      idUser: "#1334",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-    {
-      idUser: "#1335",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-    {
-      idUser: "#1336",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Ngừng Hoạt động",
-    },
-    {
-      idUser: "#1337",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-  ];
-
-
+  
   let status = "Hoạt động";
   const [users, setUsers] = useState<any>({});
   const getAllUserData = () => {
@@ -180,7 +143,7 @@ export default function User() {
                   </th>
                 </tr>
               </thead>
-              {active.map((items) => {
+              {users.map((items: any) => {
                 return (
                   <>
                     <tbody>
