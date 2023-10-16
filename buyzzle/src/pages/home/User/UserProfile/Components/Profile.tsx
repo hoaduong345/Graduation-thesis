@@ -1,97 +1,110 @@
-import { ChangeEvent, Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
 import Sitebar from "../Sitebar/Sitebar";
-import { ChangeHandler, Controller, useForm } from "react-hook-form";
-import HidePass from "../../../../../Assets/TSX/HidePass";
-import ShowPass from "../../../../../Assets/TSX/ShowPass";
+import { Controller, useForm } from "react-hook-form";
+
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { bool, boolean } from "yup";
+
 import { userController } from "../../../../../Controllers/UserController";
-import { isDate } from "util/types";
 import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-type FormValues = {
-  id: number;
+export type FormValues = {
+
   username: string;
   name: string;
   email: string;
   sex: string;
   phonenumber: string;
   dateOfBirth: string;
-  // fullName: string,
-  // Address: string
-  UserImage: string[];
-};
 
+};
+export type FormImage = {
+
+  id: number;
+  UserImage: string[];
+
+}
 export default function UserProfile() {
   const [validUrl, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [image, setImage] = useState("");
-  const [editUser, setEditUser] = useState<FormValues>();
-  const [date, setDate] = useState("");
+  // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
 
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
-  };
+
   const [id, setId] = useState<string>("11");
   // const id: number | undefined = getID()!;
   const [sex, setSex] = useState<boolean>();
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user != null) {
-      const userData = JSON.parse(user);
-      const username = userData.username;
-      console.log("USERNAME: " + username);
-      userController.getUserWhereUsername(username).then((res) => {
-        setEditUser(res);
-        setSex(res.sex);
-        setId(res.id);
-
-        const UserImageArray = JSON.stringify(res.UserImage);
-        console.log("Hinh cua user: " + UserImageArray);
-        if (UserImageArray == "[]") {
-          console.log("Chua co hinh");
-          setCheckImageUrl(false);
-        } else {
-          const urlTaker = JSON.parse(UserImageArray);
-          setUrlThen(urlTaker[0].url);
-          console.log("ID: " + urlThen);
-          setCheckImageUrl(true);
-        }
-
-        setDate(res.dateOfBirth.substring(0, 10));
-      });
-    } else {
-      console.log("Chua Dang Nhap Dung");
-    }
-  }, []);
 
   const {
     control,
     handleSubmit,
     register,
+    reset,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
-    defaultValues: {
-      username: "" + param.username,
-      name: "" + editUser?.name,
-      email: "" + editUser?.email,
-      sex: "" + editUser?.sex,
-      dateOfBirth: "" + editUser?.dateOfBirth,
-      phonenumber: "" + editUser?.phonenumber,
-      // fullName: '',
-      // Address: ''
-    },
+
   });
+  const isDisabled = !(isValid && isDirty);
+
+
+
+  const getUserData = () => {
+    const user = localStorage.getItem("user");
+    if (user != null) {
+      const userData = JSON.parse(user);
+      const username = userData.username;
+      console.log("USERNAME1: " + username);
+      userController.getUserWhereUsername(username)
+        .then((res) => {
+          return res;
+        })
+        .then((res) => {
+          if (res.dateOfBirth == null) {
+            res.dateOfBirth = "dd/mm/yyyy";
+          } else {
+            res.dateOfBirth = (res.dateOfBirth).substring(0, 10);
+          }
+          reset({
+            username: userData.username,
+            name: res.name,
+            email: res.email,
+            sex: res.sex,
+            phonenumber: res.phonenumber,
+            dateOfBirth: res.dateOfBirth,
+          });
+          setSex(res.sex);
+          setId(res.id);
+          const UserImageArray = JSON.stringify(res.UserImage);
+          if (UserImageArray == "[]") {
+            setCheckImageUrl(false);
+          } else {
+            const urlTaker = JSON.parse(UserImageArray);
+            setUrlThen(urlTaker[0].url);
+            setCheckImageUrl(true);
+          }
+        }).catch((error) => {
+          console.log(
+            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
+            error
+          );
+        });
+    } else {
+      console.log("Chua Dang Nhap Dung");
+    }
+}
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   useEffect(() => {
     function CheckLink() {
@@ -107,34 +120,10 @@ export default function UserProfile() {
     CheckLink();
   }, [param]);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-  const [errorss, setErrors] = useState({
-    username: "",
-    password: "",
-  });
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const { name, value } = e.target;
-    // setFormData({
-    //     ...formData,
-    //     [name]: value,
-    // });
-    // if (isFormSubmitted) {
-    //     setErrors({
-    //         ...errorss,
-    //         [name]: '',
-    //     });
-    // }
-  };
+
+
 
   const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSex(JSON.parse(event.target.value));
@@ -143,6 +132,8 @@ export default function UserProfile() {
   useEffect(() => {
     loadImageFile(image);
   }, [image]);
+
+
 
   // img firebase
   const loadImageFile = async (image: any) => {
@@ -170,20 +161,47 @@ export default function UserProfile() {
       .then((response) => response.data);
   };
 
+
+  const EditImages = async (id: number, url: string) => {
+    const urlImages = {
+      iduser: id,
+      url: url,
+    };
+    await axios
+      .put(`${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`, urlImages.url)
+      .then((response) => response.data);
+
+  }
+
+
   const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
-  const onSubmit = async (formData: FormValues) => {
+  const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
-      console.log("TESTING: " + formData);
-      formData.dateOfBirth = date;
+      console.log("selectedFile:" + selectedFile);
+      if (selectedFile == null && CheckImageUrl == false) {
+        toast.error("Hãy chọn hình");
+        return;
+      }
+      // console.log("TESTING: " + formData);
       formData.sex = JSON.parse(formData.sex);
       const response = await axios.put(API, formData);
-      formData.id = parseInt(id);
+      FormImage.id = parseInt(id);
       if (response) {
-        console.log("id:" + id);
-        await addImages(formData.id, url);
+        console.log("UrlThen" + url);
+
+        if (CheckImageUrl == false) {
+          await addImages(FormImage.id, url);
+          setCheckImageUrl(true);
+        } else {
+          console.log("IDUSER:"+FormImage.id);
+          await EditImages(FormImage.id, url);
+
+        }
+
       }
 
       console.log("edit thanh cong", response);
+
 
       if (response.status === 200) {
         console.log("Edit successfully");
@@ -205,7 +223,7 @@ export default function UserProfile() {
         if (responseData.error) {
           console.log(`Lỗi2: ${responseData.error}`);
           const errorMessageUsername = responseData.error.username;
-          const errorMessageEmail = responseData.error.email;
+const errorMessageEmail = responseData.error.email;
           const errorMessagePhoneNumber = responseData.error.phonenumber;
           if (errorMessageUsername) {
             toast.warning(errorMessageUsername, {
@@ -231,9 +249,7 @@ export default function UserProfile() {
       }
     }
   };
-  const onChangeInput = (e: any) => {
-    setEditUser(e.target.value);
-  };
+
 
   const onChangeImage = (e: any) => {
     // setImage(e.target.files)
@@ -250,11 +266,13 @@ export default function UserProfile() {
     }
   };
 
+
   return (
     <Container>
       <Fragment>
         {validUrl ? (
           <body className="body-filter container mx-auto">
+
             <div>
               <div className="grid grid-cols-4 gap-4">
                 <div>
@@ -287,7 +305,7 @@ export default function UserProfile() {
                             minLength: {
                               value: 6,
                               message: "Tên sản phẩm phải lớn hơn 6 ký tự",
-                            },
+},
                           }}
                           render={({ field }) => (
                             <>
@@ -301,16 +319,15 @@ export default function UserProfile() {
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.username
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                            ${!!errors.username
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
                                 placeholder="Tên đăng nhập"
-                                value={param.username}
-                                {...register("username")}
-                                onChange={onChangeInput}
-                                // disabled
+                                value={field.value}
+                              // {...register("username")}
+                              // onChange={onChangeInput}
+                              // disabled
                               />
                               {!!errors.username && (
                                 <p className="text-red-700 mt-2">
@@ -348,16 +365,20 @@ export default function UserProfile() {
                               {/* input addNameProducts */}
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                                        rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                       ${
-                                                         !!errors.name
-                                                           ? "border-[2px] border-red-900"
-                                                           : "border-[1px] border-[#FFAAAF]"
-                                                       }`}
+rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                       ${!!errors.name
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
                                 placeholder="Tên người dùng"
-                                value={editUser?.name}
-                                {...register("name")}
-                                onChange={onChangeInput}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  const reg = /[!@#$%^&*]/;
+                                  field.onChange(value.replace(reg, ""));
+                                }}
+                                value={field.value}
+                              // {...register("name")}
+
                               />
                               {!!errors.name && (
                                 <p className="text-red-700 mt-2">
@@ -393,15 +414,19 @@ export default function UserProfile() {
                             <input
                               className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                       ${
-                                                         !!errors.email
-                                                           ? "border-[2px] border-red-900"
-                                                           : "border-[1px] border-[#FFAAAF]"
-                                                       }`}
+                                                       ${!!errors.email
+                                  ? "border-[2px] border-red-900"
+                                  : "border-[1px] border-[#FFAAAF]"
+                                }`}
                               placeholder="Email"
-                              value={editUser?.email}
-                              {...register("email")}
-                              onChange={onChangeInput}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                const reg = /[!#$%^&*]/;
+                                field.onChange(value.replace(reg, ""));
+                              }}
+                              value={field.value}
+                            // {...register("email")}
+// onChange={onChangeInput}
                             />
                             {!!errors.email && (
                               <p className="text-red-700 mt-2">
@@ -457,8 +482,8 @@ export default function UserProfile() {
                                 {...register("sex")}
                                 checked={sex === false}
                                 onChange={handleSexChange}
-                                className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
-                                            checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
+                                className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full
+checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               />
                               <div
                                 className="h-6 w-6 absolute rounded-full pointer-events-none
@@ -491,15 +516,19 @@ export default function UserProfile() {
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                       ${
-                                                         !!errors.phonenumber
-                                                           ? "border-[2px] border-red-900"
-                                                           : "border-[1px] border-[#FFAAAF]"
-                                                       }`}
+                                                       ${!!errors.phonenumber
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
                                 placeholder="Số điện thoại"
-                                value={editUser?.phonenumber}
-                                {...register("phonenumber")}
-                                onChange={onChangeInput}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  const reg = /[!@#$%^&*]/;
+                                  field.onChange(value.replace(reg, ""));
+                                }}
+                                value={field.value}
+                              // {...register("phonenumber")}
+                              // onChange={onChangeInput}
                               />
                               {!!errors.phonenumber && (
                                 <p className="text-red-700 mt-2">
@@ -514,13 +543,13 @@ export default function UserProfile() {
                     <div className="w-[100%] mt-4">
                       <Controller
                         control={control}
-                        name="dateOfBirth"
+name="dateOfBirth"
                         rules={
                           {
-                            // required: {
-                            //     value: true,
-                            //     message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
-                            // }
+                            required: {
+                              value: true,
+                              message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
+                            }
                           }
                         }
                         render={({ field }) => (
@@ -533,15 +562,15 @@ export default function UserProfile() {
                             </label>
                             <input
                               className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             ${
-                                               !!errors.phonenumber
-                                                 ? "border-[2px] border-red-900"
-                                                 : "border-[1px] border-[#FFAAAF]"
-                                             }`}
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2`}
                               type="date"
-                              value={date}
-                              onChange={handleDateChange}
+                              value={field.value}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                const reg = /[!@#$%^&*]/;
+                                field.onChange(value.replace(reg, ""));
+                              }}
+
                             />
                             {!!errors.dateOfBirth && (
                               <p className="text-red-700 mt-2">
@@ -554,14 +583,22 @@ export default function UserProfile() {
                     </div>
                     {/* button */}
                     <div
-                      className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48]`}
+                      className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
+                        ? "bg-[#aeaeae] cursor-not-allowed"
+                        : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                        }
+                         `}
                     >
                       <button
-                        onClick={handleSubmit((formData: any) => {
-                          onSubmit(formData);
+                        disabled={isDisabled}
+                        onClick={handleSubmit((formData: any, FormImage: any) => {
+                          onSubmit(formData, FormImage);
                         })}
                         className={`text-center text-base font-bold text-[#FFFFFF]
-                                        `}
+                        ${isDisabled
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                          }                `}
                       >
                         Lưu
                       </button>
@@ -574,7 +611,7 @@ export default function UserProfile() {
                     className="card py-4 px-5 col-span-2 rounded-[6px]
                         shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                   >
-                    <div className=" flex flex-col items-center my-auto">
+<div className=" flex flex-col items-center my-auto">
                       <div className="avatar online">
                         <div className="max-w-[174px] rounded-full border-[4px] border-[#2E89FF]">
                           <div className="w-[100%] h-[100%]">
@@ -639,7 +676,11 @@ export default function UserProfile() {
                   </div>
                 </div>
               </div>
-            </div>
+</div>
+
+
+
+
           </body>
         ) : (
           <Container>
@@ -694,7 +735,7 @@ export default function UserProfile() {
                     fill="#cbd5e1"
                   ></path>
                   <polygon
-                    points="316.156 523.761 318.21 397.378 403.674 241.024 318.532 377.552 319.455 320.725 378.357 207.605 319.699 305.687 319.699 305.687 321.359 203.481 384.433 113.423 321.621 187.409 322.658 0 316.138 248.096 316.674 237.861 252.547 139.704 315.646 257.508 309.671 371.654 309.493 368.625 235.565 265.329 309.269 379.328 308.522 393.603 308.388 393.818 308.449 394.99 293.29 684.589 313.544 684.589 315.974 535.005 389.496 421.285 316.156 523.761"
+points="316.156 523.761 318.21 397.378 403.674 241.024 318.532 377.552 319.455 320.725 378.357 207.605 319.699 305.687 319.699 305.687 321.359 203.481 384.433 113.423 321.621 187.409 322.658 0 316.138 248.096 316.674 237.861 252.547 139.704 315.646 257.508 309.671 371.654 309.493 368.625 235.565 265.329 309.269 379.328 308.522 393.603 308.388 393.818 308.449 394.99 293.29 684.589 313.544 684.589 315.974 535.005 389.496 421.285 316.156 523.761"
                     fill="#3f3d56"
                   ></polygon>
                   <path
@@ -753,7 +794,7 @@ export default function UserProfile() {
                     y="689.58887"
                     width="24"
                     height="43"
-                    transform="translate(-31.31452 -62.87555) rotate(0.67509)"
+transform="translate(-31.31452 -62.87555) rotate(0.67509)"
                     fill="#2f2e41"
                   ></rect>
                   <ellipse
@@ -812,7 +853,7 @@ rotate(-89.32491)"
                     width="24"
                     height="43"
                     transform="translate(-215.99457 191.86399) rotate(-17.08345)"
-                    fill="#2f2e41"
+fill="#2f2e41"
                   ></rect>
                   <rect
                     x="787.6593"
@@ -866,7 +907,7 @@ rotate(-89.32491)"
                     fill="#3f3d56"
                   ></path>
                   <path
-                    d="M875.29613,682.38411c0,55.07585-32.73985,74.3063-73.13,74.3063q-1.4035,0-2.80255-.0312c-1.87139-.04011-3.72494-.1292-5.55619-.254-36.45135-2.57979-64.77127-22.79937-64.77127-74.02113,0-53.00843,67.73872-119.89612,72.827-124.84633l.00892-.00889c.19608-.19159.29409-.28516.29409-.28516S875.29613,627.30827,875.29613,682.38411Z"
+d="M875.29613,682.38411c0,55.07585-32.73985,74.3063-73.13,74.3063q-1.4035,0-2.80255-.0312c-1.87139-.04011-3.72494-.1292-5.55619-.254-36.45135-2.57979-64.77127-22.79937-64.77127-74.02113,0-53.00843,67.73872-119.89612,72.827-124.84633l.00892-.00889c.19608-.19159.29409-.28516.29409-.28516S875.29613,627.30827,875.29613,682.38411Z"
                     transform="translate(-39.70387 -61.04208)"
                     fill="currentColor"
                   ></path>
