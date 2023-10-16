@@ -1,6 +1,7 @@
 export default function LogoVoucher() {
    return (
       <svg
+         className="flex-1"
          xmlns="http://www.w3.org/2000/svg"
          width="70"
          height="70"
