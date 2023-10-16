@@ -3,7 +3,7 @@ import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import Voucher from "../../../../Assets/TSX/Voucher";
 import Container from "../../../../components/container/Container";
-import Sitebar from "../UserProfile/Sitebar/Sitebar";
+// import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import PinkRight from "../../../../Assets/SVG/LetterPayment/PinkRight";
 import BlueRight from "../../../../Assets/SVG/LetterPayment/BlueRight";
 import PinkMedium from "../../../../Assets/SVG/LetterPayment/PinkMedium";
@@ -13,11 +13,11 @@ import BlueMediumSmall from "../../../../Assets/SVG/LetterPayment/BlueMediumSmal
 import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import Address from "../../../../Assets/SVG/LetterPayment/Address";
 import { Controller, useForm } from "react-hook-form";
-import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import { CartItem } from "../../../../Model/CartModel";
 import { userController } from "../../../../Controllers/UserController";
 import { numberFormat } from "../../../../Helper/Format";
 import { VoucherModel } from "../../../../Model/VoucherModel";
+import PaymentBtn from "./PaymentBtn";
 
 type FormValues = {
    name: string;
@@ -166,10 +166,10 @@ export default function CheckOut() {
          <Container>
             <div className="body-filter container mx-auto">
                <div className="grid grid-cols-4 gap-6">
-                  <div className="col-span-1 max-2xl:hidden">
+                  {/* <div className="col-span-1 max-2xl:hidden">
                      <Sitebar />
-                  </div>
-                  <div className="mt-9 col-span-3 max-2xl:col-span-5">
+                  </div> */}
+                  <div className="mt-9 col-span-4 max-2xl:col-span-4">
                      <h1 className="text-[32px] font-bold mb-4 max-lg:text-[28px] max-[870px]:text-2xl max-[769px]:text-xl">
                         Xác Nhận Thanh Toán
                      </h1>
@@ -773,15 +773,7 @@ export default function CheckOut() {
                                  })}
                               </div>
                            </div>
-                           <button
-                              className="justify-center gap-3 items-center text-base font-bold text-white w-full
-                             rounded-md py-[11px] hover:bg-[#ff6d65] flex mt-6
-                                transition duration-150 bg-[#EA4B48] cursor-pointer
-                                max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
-                           >
-                              <Buyzzle />
-                              <p>Mua ngay</p>
-                           </button>
+                           <PaymentBtn cartItems={listLocalCart} />
                         </div>
                      </div>
                   </div>

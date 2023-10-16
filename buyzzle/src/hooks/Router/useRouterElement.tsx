@@ -147,6 +147,14 @@ export default function useRouterEmelent() {
          ),
       },
       {
+         path: "checkout-success",
+         element: (
+            <MainLayout>
+               <OrderDetailPage />
+            </MainLayout>
+         ),
+      },
+      {
          path: path.confirmAccount,
          element: (
             <RegisterLoginLayout>
