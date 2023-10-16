@@ -165,11 +165,8 @@ export default function CheckOut() {
       <>
          <Container>
             <div className="body-filter container mx-auto">
-               <div className="grid grid-cols-4 gap-6">
-                  <div className="col-span-1 max-2xl:hidden">
-                     <Sitebar />
-                  </div>
-                  <div className="mt-9 col-span-3 max-2xl:col-span-5">
+               <div className="grid grid-cols-5 gap-6">
+                  <div className="mt-9 col-span-5 max-2xl:col-span-5">
                      <h1 className="text-[32px] font-bold mb-4 max-lg:text-[28px] max-[870px]:text-2xl max-[769px]:text-xl">
                         Xác Nhận Thanh Toán
                      </h1>
@@ -177,7 +174,7 @@ export default function CheckOut() {
                         <div className="col-span-2 flex flex-col gap-2">
                            <div className=" shadow">
                               <div className="flex gap-2">
-                                 {[1, 2, 3, 4].map((element) => {
+                                 {[1, 2, 3, 4, 5].map((element) => {
                                     return (
                                        <div
                                           key={element}
@@ -188,15 +185,7 @@ export default function CheckOut() {
                                        </div>
                                     );
                                  })}
-                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="34"
-                                    height="3"
-                                    viewBox="0 0 34 3"
-                                    fill="none"
-                                 >
-                                    <path d="M0 0H34V3H3L0 0Z" fill="#FFAAAF" />
-                                 </svg>
+                                 <PinkMediumSmall />
                               </div>
                               <div className="flex flex-col gap-3 p-[26px]">
                                  <div className="flex justify-between">
@@ -224,7 +213,7 @@ export default function CheckOut() {
                                  </div>
                               </div>
                               <div className="flex gap-2">
-                                 {[1, 2, 3, 4].map((element) => {
+                                 {[1, 2, 3, 4, 5].map((element) => {
                                     return (
                                        <div
                                           key={element}
@@ -235,15 +224,7 @@ export default function CheckOut() {
                                        </div>
                                     );
                                  })}
-                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="34"
-                                    height="8"
-                                    viewBox="0 0 34 8"
-                                    fill="none"
-                                 >
-                                    <path d="M0 0H34V8H3L0 0Z" fill="#FFAAAF" />
-                                 </svg>
+                                 <PinkMedium />
                               </div>
                            </div>
                            <div>
