@@ -84,9 +84,9 @@ export default function User() {
   }, [])
 
 
-  // function JumpEditUser(username: any){
-  //   window.location.href = `userprofilepage/${username}`;
-  // }
+  function JumpEditUser(username: any){
+    window.location.href = `userprofilepage/${username}`;
+  }
 
   const DeleteUser = (id: any) => {
     userController.deleteUser(id)
@@ -253,7 +253,7 @@ export default function User() {
                               >
                                 <li>
                                   <button className="flex items-center gap-4"
-                                  //  onClick={() => JumpEditUser(items.username)}
+                                   onClick={() => JumpEditUser(items.username)}
                                   >
                                     <Edit />
                                     <p
