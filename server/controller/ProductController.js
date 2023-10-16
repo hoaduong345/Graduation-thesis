@@ -265,7 +265,20 @@ const ProductController = {
     deleteProduct: async (req, res) => {
         try {
             const productId = parseInt(req.params.id);
-
+            const commentsToDelete = await prisma.rating.findMany({
+                where: {
+                    idproduct: productId,
+                },
+            });
+    
+         
+            for (const comment of commentsToDelete) {
+                await prisma.rating.delete({
+                    where: {
+                        id: comment.id,
+                    },
+                });
+            }
             // Xóa sản phẩm
             await prisma.product.delete({
                 where: {
@@ -278,6 +291,9 @@ const ProductController = {
                     idproduct: productId,
                 },
             });
+
+        
+           
 
             res.status(200).json('Xóa sản phẩm và hình ảnh thành công');
         } catch (error) {
@@ -350,7 +366,6 @@ const ProductController = {
         }
     },
 
-    // Xem chi tiết sản phẩm
     getProductDetail: async (req, res) => {
         try {
             const productId = parseInt(req.params.id);
@@ -384,7 +399,7 @@ const ProductController = {
                 },
             });
             if (ratings.length === 0) {
-                return res.status(200).json(0);
+                return res.status(200).json(ratings);
             }
             const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
             const averageRating = totalRating / ratings.length;
@@ -399,7 +414,6 @@ const ProductController = {
             res.status(500).json(error.message);
         }
     },
-
     // Hiện tất cả sản phẩm
     getAllProduct: async (req, res) => {
         try {
