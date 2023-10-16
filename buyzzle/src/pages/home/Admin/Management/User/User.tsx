@@ -8,6 +8,20 @@ import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Edit from "../../Assets/TSX/Edit";
 import Handle from "../../Assets/TSX/bacham";
 import { numberFormat } from "../../../../../Helper/Format";
+import { userController } from "../../../../../Controllers/UserController";
+import EmptyPage from "../../../../../Helper/Empty/EmptyPage";
+import { toast } from "react-toastify";
+
+export interface users {
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  sex: string;
+
+
+}
+
 
 export default function User() {
   const active = [

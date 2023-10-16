@@ -85,7 +85,7 @@ export default function Cart() {
   };
 
   const openModal = (id: string) => {
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
+const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
       modal.showModal();
     }
@@ -177,7 +177,7 @@ export default function Cart() {
             <p className="text-[#1A1A1A] text-base font-medium">Số Tiền</p>
           </div>
           <div className="col-span-1 flex justify-center">
-            <p className="text-[#1A1A1A] text-base font-medium">Thao Tác</p>
+<p className="text-[#1A1A1A] text-base font-medium">Thao Tác</p>
           </div>
         </div>
         <div>
@@ -235,7 +235,7 @@ export default function Cart() {
                         <div
                           className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
                           onClick={() =>
-                            minusThrottled(e.quantity, {
+minusThrottled(e.quantity, {
                               productId: e.productid,
                               cartId: e.cartid,
                             })
@@ -311,7 +311,7 @@ export default function Cart() {
                     className="checkbox checkbox-sm items-center"
                   />
                 </div>
-                <div className="flex w-[40%] text-[#1A1A1A] text-base">
+<div className="flex w-[40%] text-[#1A1A1A] text-base">
                   <p>Chọn Tất Cả</p>
                   <div className="mx-2 gap-2">
                     ({cart?.data?.item?.length ?? 0})

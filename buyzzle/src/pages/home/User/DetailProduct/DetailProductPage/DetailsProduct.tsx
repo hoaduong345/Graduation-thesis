@@ -31,7 +31,7 @@ import {
   numberFormat,
   roundedNumber,
 } from "../../../../../Helper/Format";
-import { Rate, Ratee, Rating } from "../../../../../Model/ProductModel";
+import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
 import { Products } from "../../FilterPage/FiltersPage";
 import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import RatingMap from "../RatingAndComments/RatingMap";
@@ -108,8 +108,9 @@ export default function DetailsProduct() {
     }
   }, [first]);
   const [quantity, setQuantity] = useState(1);
-  const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
+  const [recommandProduct, setRecommandProduct] = useState<Row[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [url, setUrl] = useState<string[]>([]);
 
   const { id } = useParams();
   console.log(id);
@@ -121,7 +122,7 @@ export default function DetailsProduct() {
         return detail;
       })
       .then((detail) => {
-        // setEditImages(detail.data.Pro  du\ctImage);
+        // setEditImages(detail.data);
         setfirst(detail.data);
       })
       .catch((error) => {
@@ -158,7 +159,7 @@ export default function DetailsProduct() {
     );
     productController
       .getProductSuggest(id)
-      .then((res) => {
+      .then((res:any) => {
         console.log(
           "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
           res
@@ -181,7 +182,6 @@ export default function DetailsProduct() {
     console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
     RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
       (res: any) => {
-        // setsecond(res);
         setRateAndcomment(res);
       }
     );
@@ -210,7 +210,7 @@ export default function DetailsProduct() {
     idRating: number
   ) => {
     await RatingAndCommentController.EditRatingAndComment(idRating, data)
-      .then((res) => {
+      .then(async (res) => {
         toast.success("Đánh giá thành công !");
         const _rateAndComment = rateAndcomment?.Rating.map((item) => {
           if (item.id === res.data?.id) {
@@ -230,43 +230,36 @@ export default function DetailsProduct() {
           return newRateAndcomment;
         });
         getDetailProduct();
-        // onClose(id);
       })
       .catch(() => {
         toast.error("Đánh giá thất bại !");
       });
     console.log("Sửa bình luận!");
   };
+  useEffect(()=>{
+      handleRemoveRating(Number(id))
+  },[first])
   //Xóa comment
   const handleRemoveRating = (id: number) => {
     console.log(
       "🚀 ~ file: DetailsProduct.tsx:235 ~ handleRemoveRating ~ id:",
       id
     );
-    RatingAndCommentController.RemoveRatingAndComment(id).then((res) => {
-      console.log(
-        "🚀 ~ file: DetailsProduct.tsx:249 ~ RatingAndCommentController.RemoveRatingAndComment ~ res:",
-        res
-      );
-      getDetailProduct();
-      getComment(id);
-      RecommandProductDetailPage(id);
+    RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
+      if (rateAndcomment) {
+        const removedRatings = rateAndcomment.Rating.filter((rating) => rating.id !== id);
+        setRateAndcomment({
+          ...rateAndcomment,
+          Rating: removedRatings,
+        });
+        getDetailProduct()
+        // RecommandProductDetailPage(id);
+        }
     });
+    // getDetailProduct()
+    RecommandProductDetailPage(id);
   };
 
-  const handleRemoveOnlyIMG = (id: number) => {
-    RatingAndCommentController.removeImagesComment(id)
-      .then((_) => {
-        getDetailProduct();
-        console.log(id);
-      })
-      .catch((err) => {
-        console.log(
-          "🚀 ~ file: EditProductMap.tsx:62 ~ imagesController.remove ~ err:",
-          err
-        );
-      });
-  };
   console.log(
     "🚀 ~ file: DetailsProduct.tsx:550 ~ DetailsProduct ~ first?.totalRatings:",
     rateAndcomment?.totalRatings
@@ -525,7 +518,6 @@ export default function DetailsProduct() {
                   rateAndcomment={rateAndcomment!}
                   editImages={editImages!}
                   handleRemoveRating={handleRemoveRating}
-                  handleRemoveOnlyIMG={handleRemoveOnlyIMG}
                 />
               </div>
               <div className="pagination">

@@ -14,6 +14,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { toast } from "react-toastify";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 import Loading from "../../../../Helper/Loading/Loading";
+import { numberFormat } from "../../../../Helper/Format";
 // import { v4 } from 'uuid'
 
 export type FormValues = {

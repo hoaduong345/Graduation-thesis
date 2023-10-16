@@ -2,7 +2,7 @@ import { type } from "os";
 import { Images } from "../../../Assets/TS";
 import { Product } from "../Index";
 import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
-import { numberFormat } from "../../../Helper/Format";
+import { formatSoldCount, numberFormat, roundedNumber } from "../../../Helper/Format";
 import { Link } from "react-router-dom";
 import { Rate, Row } from "../../../Model/ProductModel";
 
@@ -119,7 +119,7 @@ export default function Productss(props: Props) {
                   </button>
                 ))}
                 <span className="text-[12px] mr-[30px] ml-[4px] max-lg:text-base">
-                  {product.rate}
+                  {roundedNumber(product.rate)}.0
                 </span>
               </div>
 
@@ -129,8 +129,7 @@ export default function Productss(props: Props) {
             max-lg:text-base
             "
               >
-                Đã bán
-                <span> 300</span>
+                Đã bán {formatSoldCount(product.soldcount!)}
               </p>
             </div>
           </div>
