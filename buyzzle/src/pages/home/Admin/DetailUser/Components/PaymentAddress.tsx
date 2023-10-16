@@ -238,11 +238,11 @@ export default function PaymentAddress() {
       <Fragment>
         {validUrl ? (
           <body className="body-filter container mx-auto">
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 gap-1">
               <div>
                 <div className="col-span-1 max-2xl:hidden"></div>
               </div>
-              <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
+              <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-2 gap-4">
                 <form
                   onSubmit={handleSubmit(onSubmit)}
                   className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
@@ -250,9 +250,6 @@ export default function PaymentAddress() {
                   <span className="text-[#000] text-2xl font-normal ">
                     Địa chỉ thanh toán
                   </span>
-                  <p className="text-[#393939] text-sm font-normal">
-                    Thêm địa chỉ để dễ dàng giao hàng
-                  </p>
                   <div className="border-[1px] border-[#E0E0E0] w-full my-4 "></div>
                   <div className="flex gap-7">
                     <div className="leftAdress w-[50%]">
@@ -409,7 +406,7 @@ export default function PaymentAddress() {
                     <div className="rightAdressMap w-[46%]">
                       <iframe
                         width="100%"
-                        height="118%"
+                        height="100%"
                         title="map"
                         src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed"
                       />
@@ -417,27 +414,6 @@ export default function PaymentAddress() {
                   </div>
 
                   {/* button */}
-                  <div
-                      className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
-                        ? "bg-[#aeaeae] cursor-not-allowed"
-                        : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                        }
-                         `}
-                    >
-                      <button
-                        disabled={isDisabled}
-                        onClick={handleSubmit((formData: any) => {
-                          onSubmit(formData);
-                        })}
-                        className={`text-center text-base font-bold text-[#FFFFFF]
-                        ${isDisabled
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer"
-                          }                `}
-                      >
-                        Lưu
-                      </button>
-                    </div>
                 </form>
               </div>
             </div>

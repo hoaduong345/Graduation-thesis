@@ -1,92 +1,47 @@
-import { ChangeEvent, Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
 import { Controller, useForm } from "react-hook-form";
+
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import * as yup from "yup";
+
 import { userController } from "../../../../../Controllers/UserController";
-import { Console } from "console";
+import { appConfigUser } from "../../../../../configsEnv";
+import { storage } from "../../../../../Firebase/Config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-type FormValues = {
-  id: number;
+export type FormValues = {
+
   username: string;
-  addresstype: string;
-  address: string;
-  specificaddress: string;
+  name: string;
+  email: string;
+  sex: string;
+  phonenumber: string;
+  dateOfBirth: string;
+
 };
+export type FormImage = {
 
-export default function PaymentAddress() {
-  const [editAddress, setAddress] = useState<FormValues>();
+  id: number;
+  UserImage: string[];
+
+}
+export default function UserProfile() {
   const [validUrl, setValidUrl] = useState(false);
+  const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
-  const [selectedOption, setSelectedOption] = useState<string>("aaaaa");
-  const [id, setId] = useState<string>("11");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [image, setImage] = useState("");
+  // const [editUser, setEditUser] = useState<FormValues>();
+  const [url, setUrl] = useState<string>("");
+  const [urlThen, setUrlThen] = useState<string>("");
 
-  const provinces = [
-    "Tỉnh/Thành phố, Quận/Huyện, Phường/Xã",
-    `An Giang`,
-    "Bà Rịa - Vũng Tàu",
-    "Bạc Liêu",
-    "Bắc Giang",
-    "Bắc Kạn",
-    "Bắc Ninh",
-    "Bình Định",
-    "Bình Dương",
-    "Bình Phước",
-    "Bình Thuận",
-    "Cà Mau",
-    "Cao Bằng",
-    "Đà Nẵng",
-    "Đắk Lắk",
-    "Đắk Nông",
-    "Điện Biên",
-    "Đồng Nai",
-    "Đồng Tháp",
-    "Gia Lai",
-    "Hà Giang",
-    "Hà Nam",
-    "Hà Nội",
-    "Hà Tĩnh",
-    "Hải Dương",
-    "Hải Phòng",
-    "Hậu Giang",
-    "Hòa Bình",
-    "Hưng Yên",
-    "Khánh Hòa",
-    "Kiên Giang",
-    "Kon Tum",
-    "Lai Châu",
-    "Lâm Đồng",
-    "Lạng Sơn",
-    "Lào Cai",
-    "Long An",
-    "Nam Định",
-    "Nghệ An",
-    "Ninh Bình",
-    "Ninh Thuận",
-    "Phú Thọ",
-    "Phú Yên",
-    "Quảng Bình",
-    "Quảng Nam",
-    "Quảng Ngãi",
-    "Quảng Ninh",
-    "Quảng Trị",
-    "Sóc Trăng",
-    "Sơn La",
-    "Tây Ninh",
-    "Thái Bình",
-    "Thái Nguyên",
-    "Thanh Hóa",
-    "Thừa Thiên-Huế",
-    "Tiền Giang",
-    "TP. HCM",
-    "Trà Vinh",
-    "Tuyên Quang",
-    "Vĩnh Long",
-    "Vĩnh Phúc",
-    "Yên Bái",
-  ];
+
+  const [id, setId] = useState<string>("11");
+  // const id: number | undefined = getID()!;
+  const [sex, setSex] = useState<boolean>();
+
 
   const {
     control,
@@ -96,29 +51,11 @@ export default function PaymentAddress() {
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
-    defaultValues: {
-      addresstype: "",
-      address: "",
-      specificaddress: "",
-   },
-  });
 
+  });
   const isDisabled = !(isValid && isDirty);
 
-  const API = `http://localhost:5000/buyzzle/user/paymentaddress/${param.username}`;
 
-  useEffect(() => {
-    function CheckLink() {
-      const user = localStorage.getItem("user");
-      if (user != null) {
-        setValidUrl(true);
-        // console.log("data", data)
-      } else {
-        setValidUrl(false);
-      }
-    }
-    CheckLink();
-  }, [param]);
 
   const getUserData = () => {
     const user = localStorage.getItem("user");
@@ -126,22 +63,35 @@ export default function PaymentAddress() {
       const userData = JSON.parse(user);
       const username = userData.username;
       console.log("USERNAME1: " + username);
-      userController.getUserWhereUsername2(username)
+      userController.getUserWhereUsername(username)
         .then((res) => {
-          console.log("TEST " +JSON.stringify(res));
           return res;
         })
         .then((res) => {
+          if (res.dateOfBirth == null) {
+            res.dateOfBirth = "dd/mm/yyyy";
+          } else {
+            res.dateOfBirth = (res.dateOfBirth).substring(0, 10);
+          }
           reset({
             username: userData.username,
-            addresstype:res.addresstype,
-            address: res.address,
-            specificaddress: res.specificaddress,
+            name: res.name,
+            email: res.email,
+            sex: res.sex,
+            phonenumber: res.phonenumber,
+            dateOfBirth: res.dateOfBirth,
           });
+          setSex(res.sex);
           setId(res.id);
-          setSelectedOption(res.address);
-        })
-        .catch((error) => {
+          const UserImageArray = JSON.stringify(res.UserImage);
+          if (UserImageArray == "[]") {
+            setCheckImageUrl(false);
+          } else {
+            const urlTaker = JSON.parse(UserImageArray);
+            setUrlThen(urlTaker[0].url);
+            setCheckImageUrl(true);
+          }
+        }).catch((error) => {
           console.log(
             "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
             error
@@ -150,29 +100,110 @@ export default function PaymentAddress() {
     } else {
       console.log("Chua Dang Nhap Dung");
     }
-  };
+  }
 
   useEffect(() => {
     getUserData();
   }, []);
 
-  const sendToDatabase = async (formData: FormValues) => {
-    try {
-      const response1 = await axios.put(API, formData); // Gọi API1
+  useEffect(() => {
+    function CheckLink() {
+      const user = localStorage.getItem("user");
+      if (user != null) {
+        setValidUrl(true);
 
-      return response1;
+        // console.log("data", data)
+      } else {
+        setValidUrl(false);
+      }
+    }
+    CheckLink();
+  }, [param]);
+
+
+
+
+
+
+  const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSex(JSON.parse(event.target.value));
+  };
+
+  useEffect(() => {
+    loadImageFile(image);
+  }, [image]);
+
+
+
+  // img firebase
+  const loadImageFile = async (image: any) => {
+    try {
+      const imageRef = ref(storage, `multipleFiles/${image}`);
+
+      await uploadBytes(imageRef, image);
+
+      const url = await getDownloadURL(imageRef);
+      setUrl(url);
+      // console.log("URL IMAGE: "+url);
+      return url;
     } catch (error) {
-      throw error;
+      console.error(error);
     }
   };
 
-  const onSubmit = async (formData: FormValues) => {
-    try {
-      console.log("TESTING: " + formData);
-      const response1 = await sendToDatabase(formData);
-      console.log("edit thanh cong", response1);
+  const addImages = async (id: number, url: string) => {
+    const urlImages = {
+      iduser: id,
+      url: url,
+    };
+    await axios
+      .post(`${appConfigUser.apiUrl}/addimageuser`, urlImages)
+      .then((response) => response.data);
+  };
 
-      if (response1.status === 200) {
+
+  const EditImages = async (id: number, url: string) => {
+    const urlImages = {
+      iduser: id,
+      url: url,
+    };
+    await axios
+      .put(`${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`, urlImages.url)
+      .then((response) => response.data);
+
+  }
+
+
+  const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
+  const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
+    try {
+      console.log("selectedFile:" + selectedFile);
+      if (selectedFile == null && CheckImageUrl == false) {
+        toast.error("Hãy chọn hình");
+        return;
+      }
+      // console.log("TESTING: " + formData);
+      formData.sex = JSON.parse(formData.sex);
+      const response = await axios.put(API, formData);
+      FormImage.id = parseInt(id);
+      if (response) {
+        console.log("UrlThen" + url);
+
+        if (CheckImageUrl == false) {
+          await addImages(FormImage.id, url);
+          setCheckImageUrl(true);
+        } else {
+          console.log("CHAY");
+          await EditImages(FormImage.id, url);
+
+        }
+
+      }
+
+      console.log("edit thanh cong", response);
+
+
+      if (response.status === 200) {
         console.log("Edit successfully");
         toast.success("Cập nhật thành công", {
           position: "top-right",
@@ -192,212 +223,158 @@ export default function PaymentAddress() {
         if (responseData.error) {
           console.log(`Lỗi2: ${responseData.error}`);
           const errorMessageUsername = responseData.error.username;
-          const errorMessageAddresstype = responseData.error.addresstype;
-          const errorMessageAddress = responseData.error.address;
-          const errorMessageSpecificaddress = responseData.error.specificaddress;
+          const errorMessageEmail = responseData.error.email;
+          const errorMessagePhoneNumber = responseData.error.phonenumber;
           if (errorMessageUsername) {
             toast.warning(errorMessageUsername, {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessageAddresstype) {
-            toast.warning(errorMessageAddresstype, {
+          } else if (errorMessageEmail) {
+            toast.warning(errorMessageEmail, {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessageAddress) {
-            toast.warning(errorMessageAddress, {
+          } else if (errorMessagePhoneNumber) {
+            toast.warning(errorMessagePhoneNumber, {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessageSpecificaddress) {
-            toast.warning(errorMessageSpecificaddress, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else {
-            console.log("Lỗi không xác định từ server");
           }
         } else {
-          console.error("Lỗi gửi yêu cầu không thành công", error);
+          console.log("Lỗi không xác định từ server");
         }
+      } else {
+        console.error("Lỗi gửi yêu cầu không thành công", error);
       }
     }
   };
 
-  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(JSON.parse(event.target.value));
+
+  const onChangeImage = (e: any) => {
+    // setImage(e.target.files)
+    // setSelectedFile(e.target.files);
+    const file = e.target.files?.[0];
+    if (file) {
+      console.log(`Selected file: ${file}`);
+      setSelectedFile(file);
+      setImage(file);
+    } else {
+      setSelectedFile(null); // Reset the selectedFile state when no file is selected
+      setImage("" + null); // Reset the imageURL state
+      console.log("No file selected");
+    }
   };
 
-  const onChangeInput = (e: any) => {
-    setAddress(e.target.value);
-  };
 
   return (
     <Container>
       <Fragment>
         {validUrl ? (
           <body className="body-filter container mx-auto">
-            <div className="grid grid-cols-4 gap-4">
-              <div>
-                <div className="col-span-1 max-2xl:hidden"></div>
-              </div>
-              <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                >
-                  <span className="text-[#000] text-2xl font-normal ">
-                    Địa chỉ thanh toán
-                  </span>
-                  <p className="text-[#393939] text-sm font-normal">
-                    Thêm địa chỉ để dễ dàng giao hàng
-                  </p>
-                  <div className="border-[1px] border-[#E0E0E0] w-full my-4 "></div>
-                  <div className="flex gap-7">
-                    <div className="leftAdress w-[50%]">
-                      <div className="flex w-[100%] gap-6 justify-between">
-                        <div className="w-[55%]">
-                          <Controller
-                            control={control}
-                            name="username"
-                            rules={{
-                              required: {
-                                value: true,
-                                message:
-                                  "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                              },
-                            }}
-                            render={({ field }) => (
-                              <>
-                                <label
-                                  htmlFor="username"
-                                  className="text-[#4C4C4C] text-sm font-medium"
-                                >
-                                  Họ và tên
-                                </label>
-                                {/* input addNameProducts */}
-                                <input
-                                  className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.username
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
-                                  placeholder="Họ và tên"
-                                  value={field.value}
-                                  // {...register("username")}
-                                  // onChange={onChangeInput}
-                                />
-                                {!!errors.username && (
-                                  <p className="text-red-700 mt-2">
-                                    {errors.username.message}
-                                  </p>
-                                )}
-                              </>
-                            )}
-                          />
-                          {/* end input addNameProducts */}
-                        </div>
-                        <div className="w-[43%]">
-                          <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
-                            Loại đỉa chỉ*
-                          </p>
-                          {/* Dropdown */}
-                          <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                            <Controller
-                              name="addresstype"
-                              control={control}
-                              render={({ field }) => (
-                                <select
-                                  className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
-                                  {...field} // Sử dụng {...field} để gán giá trị và sự kiện onChange tự động
-                                >
-                                  <option value="Địa chỉ văn phòng">
-                                    Địa chỉ văn phòng
-                                  </option>
-                                  <option value="Địa chỉ công ty">
-                                    Địa chỉ công ty
-                                  </option>
-                                  <option value="Nhà riêng">Nhà riêng</option>
-                                </select>
-                              )}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                     <div className="w-[100%] mt-4">
+
+            <div>
+              <div className="grid grid-cols-4 gap-4">
+                <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-1 gap-1">
+                  <form
+                    className="card py-4 px-5 col-span-3  rounded-[6px]
+                                shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                  >
+                    <span className="text-[#000] text-2xl font-normal ">
+                      Trạng Thái Tài Khoản
+                    </span>
+                    <div className="flex w-[100%] mt-4 justify-between">
+                      <div className="w-[48%]">
                         <Controller
                           control={control}
-                          name="address"
-                          render={({ field }) => (
-                            <>
-                              <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
-                                Địa chỉ*
-                              </p>
-                              {/* Dropdown */}
-                              <div className="w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                <select
-                                  className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
-                                  value={field.value} // Sử dụng field.value thay vì selectedOption
-                                  {...register("address")}
-                                  onChange={(e) => {
-                                    const value = e.target.value;
-                                    const reg = /[!@#$%^&*]/;
-                                    field.onChange(value.replace(reg, ""));
-                                  }}
-                                >
-                                  {provinces.map((province, index) => (
-                                    <option key={index} value={province}>
-                                      {province}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </>
-                          )}
-                        />
-                      </div>
-                      <div className="w-[100%] mt-4">
-                        <Controller
-                          control={control}
-                          name="specificaddress"
+                          name="username"
                           rules={{
                             required: {
                               value: true,
                               message:
                                 "Bạn phải nhập thông tin cho trường dữ liệu này!",
                             },
+                            minLength: {
+                              value: 6,
+                              message: "Tên sản phẩm phải lớn hơn 6 ký tự",
+                            },
                           }}
                           render={({ field }) => (
                             <>
                               <label
-                                htmlFor="specificaddress"
+                                htmlFor="name"
                                 className="text-[#4C4C4C] text-sm font-medium"
                               >
-                                Địa chỉ cụ thể
+                                Tên đăng nhập
                               </label>
                               {/* input addNameProducts */}
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.specificaddress
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
-                                placeholder="Địa chỉ cụ thể"
+                                            ${!!errors.username
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
+                                placeholder="Tên đăng nhập"
+                                value={field.value}
+                              // {...register("username")}
+                              // onChange={onChangeInput}
+                              // disabled
+                              />
+                              {!!errors.username && (
+                                <p className="text-red-700 mt-2">
+                                  {errors.username.message}
+                                </p>
+                              )}
+                            </>
+                          )}
+                        />
+                        {/* end input addNameProducts */}
+                      </div>
+                      <div className="w-[48%]">
+                        <Controller
+                          control={control}
+                          name="name"
+                          rules={{
+                            required: {
+                              value: true,
+                              message:
+                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                            },
+                            minLength: {
+                              value: 6,
+                              message: "Tên người dùng phải lớn hơn 6 ký tự",
+                            },
+                          }}
+                          render={({ field }) => (
+                            <>
+                              <label
+                                htmlFor="name"
+                                className="text-[#4C4C4C] text-sm font-medium"
+                              >
+                                Tên người dùng
+                              </label>
+                              {/* input addNameProducts */}
+                              <input
+                                className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                        rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                       ${!!errors.name
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
+                                placeholder="Tên người dùng"
                                 onChange={(e) => {
                                   const value = e.target.value;
                                   const reg = /[!@#$%^&*]/;
                                   field.onChange(value.replace(reg, ""));
                                 }}
                                 value={field.value}
+                              // {...register("name")}
+
                               />
-                              {!!errors.specificaddress && (
+                              {!!errors.name && (
                                 <p className="text-red-700 mt-2">
-                                  {errors.specificaddress.message}
+                                  {errors.name.message}
                                 </p>
                               )}
                             </>
@@ -406,41 +383,49 @@ export default function PaymentAddress() {
                         {/* end input addNameProducts */}
                       </div>
                     </div>
-                    <div className="rightAdressMap w-[46%]">
-                      <iframe
-                        width="100%"
-                        height="118%"
-                        title="map"
-                        src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed"
+                    <div className="w-[100%] mt-4">
+                      <Controller
+                        control={control}
+                        name="email"
+                        rules={{
+                          required: {
+                            value: true,
+                            message:
+                              "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                          },
+                        }}
+                        render={({ field }) => (
+                          <>
+                            <label
+                              htmlFor="name"
+                              className="text-[#4C4C4C] text-sm font-medium"
+                            >
+                              Email
+                            </label>
+                            {/* input addNameProducts */}
+                            <input
+                              className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                        rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                       ${!!errors.email
+                                  ? "border-[2px] border-red-900"
+                                  : "border-[1px] border-[#FFAAAF]"
+                                }`}
+                              placeholder="Email"
+                            />
+                          </>
+                        )}
                       />
+                      {/* end input addNameProducts */}
                     </div>
-                  </div>
-
-                  {/* button */}
-                  <div
-                      className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
-                        ? "bg-[#aeaeae] cursor-not-allowed"
-                        : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                        }
-                         `}
-                    >
-                      <button
-                        disabled={isDisabled}
-                        onClick={handleSubmit((formData: any) => {
-                          onSubmit(formData);
-                        })}
-                        className={`text-center text-base font-bold text-[#FFFFFF]
-                        ${isDisabled
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer"
-                          }                `}
-                      >
-                        Lưu
-                      </button>
-                    </div>
-                </form>
+                  </form>
+                  {/* Form */}
+                </div>
               </div>
             </div>
+
+
+
+
           </body>
         ) : (
           <Container>
@@ -636,8 +621,7 @@ rotate(-89.32491)"
                     cy="716.94619"
                     rx="20"
                     ry="7.5"
-                    transform="translate(-214.42477 209.56103)
-rotate(-17.08345)"
+                    transform="translate(-214.42477 209.56103) rotate(-17.08345)"
                     fill="#2f2e41"
                   ></ellipse>
                   <circle
