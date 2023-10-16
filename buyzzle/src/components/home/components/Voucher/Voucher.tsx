@@ -34,7 +34,7 @@ export default function VoucherIcon(props: Props) {
                </p>
                <button
                   onClick={() => save(voucher.id)}
-                  className="col-span-1 copybtn bg-[#EA4B48] rounded-md"
+                  className="col-span-1 copybtn bg-[#EA4B48] hover:bg-[#b24341] rounded-md"
                >
                   Lưu
                </button>
