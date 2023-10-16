@@ -46,6 +46,8 @@ router.delete('/deleteratingcomment/:ratingId', ProductController.deleteRatingan
 
 router.post('/addimagecomment', ProductController.addImageComment);
 
+router.put('/updateimagecomment/:id', ProductController.updateImageComment);
+
 
 // router.put("/updateratingcomment/:ratingId",  MiddleWareController.verifyAuthenticate, MiddleWareRatingController.isAuthor, ProductController.updateRatingandComment);
 // router.delete("/deleteratingcomment/:userId/:ratingId", MiddleWareRatingController.isAuthenticated, MiddleWareRatingController.isAuthor, ProductController.deleteRatingandComment);

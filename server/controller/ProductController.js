@@ -266,6 +266,22 @@ const ProductController = {
         try {
             const productId = parseInt(req.params.id);
 
+            //Tìm tất cả các bình luận thuộc về sản phẩm 
+        const commentsToDelete = await prisma.rating.findMany({
+            where: {
+                idproduct: productId,
+            },
+        });
+
+            //Xóa tất cả các bình luận thuộc về sản phẩm
+        for (const comment of commentsToDelete) {
+            await prisma.rating.delete({
+                where: {
+                    id: comment.id,
+                },
+            });
+        }
+
             // Xóa sản phẩm
             await prisma.product.delete({
                 where: {
@@ -278,6 +294,8 @@ const ProductController = {
                     idproduct: productId,
                 },
             });
+
+            
 
             res.status(200).json('Xóa sản phẩm và hình ảnh thành công');
         } catch (error) {
@@ -351,7 +369,7 @@ const ProductController = {
     },
 
     // Xem chi tiết sản phẩm
-    getProductDetail: async (req, res) => {
+        getProductDetail: async (req, res) => {
         try {
             const productId = parseInt(req.params.id);
             const productDetail = await prisma.product.findFirst({
@@ -724,13 +742,15 @@ const ProductController = {
                     idcomment: parseInt(idcomment),
                 },
             });
-
-            res.status(200).json(data);
+            res.status(200).json(updateImageComment);
         } catch (error) {
             res.status(500).json(error.message);
-            // dit cu m
+        
         }
     },
+
+
+
 };
 
 module.exports = ProductController;
