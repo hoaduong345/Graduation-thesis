@@ -11,7 +11,15 @@ import { numberFormat } from "../../../../../Helper/Format";
 import { userController } from "../../../../../Controllers/UserController";
 import { ToastContainer, toast } from "react-toastify";
 
+export interface users {
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  sex: string;
 
+
+}
 export default function User() {
   
   let status = "Hoạt động";
