@@ -250,22 +250,19 @@ export default function User() {
                           scope="row"
                           className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
                         >
-                          {items.idUser}
+                          {items.id}
                         </th>
                         <td className="px-3 py-5 max-lg:py-3 justify-center">
-                          {items.userName}
+                          {items.username}
                         </td>
                         <td className="px-3 py-5 max-lg:py-3 justify-center">
-                          {items.EmailOrSđt}
+                          {items.email}
                         </td>
                         <td className="px-3 py-5 max-lg:py-3 justify-center">
-                          {items.Sex}
+                          {items.sex}
                         </td>
                         <td className="px-3 py-5 max-lg:py-3 justify-center">
-                          {items.idCart}
-                        </td>
-                        <td className="px-3 py-5 max-lg:py-3 justify-center">
-                          {numberFormat(items.totalAmount)}
+                          {numberFormat(1000)}
                         </td>
                         <td
                           className={`${
