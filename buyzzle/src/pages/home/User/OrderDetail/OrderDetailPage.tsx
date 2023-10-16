@@ -54,7 +54,19 @@ export default function OrderDetailPage() {
         });
     }
   };
-
+  const handleRemoveOnlyIMG = (id: number) => {
+    RatingAndCommentController.removeImagesComment(id)
+      .then((_) => {
+        // getDetailProduct();
+        console.log(id);
+      })
+      .catch((err) => {
+        console.log(
+          "🚀 ~ file: EditProductMap.tsx:62 ~ imagesController.remove ~ err:",
+          err
+        );
+      });
+  };
   const addImages = async (url: string, id: number) => {
     console.log(url, id);
 
@@ -522,11 +534,9 @@ export default function OrderDetailPage() {
                                                     ></div>
                                                     <div
                                                       className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
-                                                      onClick={() =>
-                                                        console.log(
-                                                          "an không ?"
-                                                        )
-                                                      }
+                                                      // onClick={() =>
+                                                      //   handleRemoveOnlyIMG(e.id)
+                                                      // }
                                                     >
                                                       <RemoveIMG />
                                                     </div>

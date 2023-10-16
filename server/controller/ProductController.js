@@ -400,7 +400,7 @@ const ProductController = {
         }
     },
 
-    // Hiện tất cả sản phẩm
+    // // Hiện tất cả sản phẩm
     getAllProduct: async (req, res) => {
         try {
             // tìm kiếm = keyword
@@ -469,9 +469,9 @@ const ProductController = {
                     },
                 },
             });
-            if (ratings.length === 0) {
-                return res.status(200).json(0);
-            }
+            // if (ratings.length === 0) {
+            //     return res.status(200).json(0);
+            // }
             // const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
             // const averageRating = totalRating / ratings.length;
             const result = await prisma.product.findMany({
@@ -527,6 +527,7 @@ const ProductController = {
             const recommendedProducts = await prisma.product.findMany({
                 include: {
                     ProductImage: true,
+                    Rating: true,
                 },
                 where: {
                     id: {
@@ -535,6 +536,11 @@ const ProductController = {
                     categoryID: categoryId,
                 },
                 take: 10,
+            });
+            recommendedProducts.map((item) => {
+                const totalRating = item.Rating.reduce((sum, rating) => sum + rating.ratingValue, 0);
+                const averageRating = totalRating / item.Rating.length;
+                item.rate = averageRating;
             });
             res.json(recommendedProducts);
         } catch (error) {
@@ -690,7 +696,7 @@ const ProductController = {
                 },
             });
 
-            res.status(200).json('Xóa đánh giá sản phẩm thành công');
+            res.status(200).json(existingRating);
         } catch (error) {
             console.error(error);
             res.status(500).json('Xóa đánh giá sản phẩm không thành công');

@@ -1,14 +1,16 @@
 import React from "react";
 import { Images } from "../../../../../Assets/TS";
-import { numberFormat } from "../../../../../Helper/Format";
+import { formatSoldCount, numberFormat, roundedNumber } from "../../../../../Helper/Format";
 import { Products } from "../../FilterPage/FiltersPage";
 import { Link } from "react-router-dom";
-import { Rate } from "../../../../../Model/ProductModel";
+import { Rate, Row } from "../../../../../Model/ProductModel";
 type Props = {
-  productRecommand: Products;
+  productRecommand: Row;
 };
 export default function DetailRecommandProduct(props: Props) {
   const { productRecommand } = props;
+  const stars = Array(5).fill(0);
+
   return (
     <>
       <Link to={`/Detailproducts/${productRecommand.id}`}>
@@ -89,23 +91,16 @@ export default function DetailRecommandProduct(props: Props) {
           "
             >
               <div>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star2} alt="" />
-                </button>
+                {stars.map((_, index) => (
+                  <button key={index}>
+                    <img
+                      src={index < productRecommand.rate ? Images.star1 : Images.star2}
+                      alt=""
+                    />
+                  </button>
+                ))}
                 <span className="text-[12px] mr-[30px] ml-[4px] max-lg:text-base">
-                  {4.2}
+                  {roundedNumber(productRecommand.rate)}.0
                 </span>
               </div>
 
@@ -115,8 +110,7 @@ export default function DetailRecommandProduct(props: Props) {
             max-lg:text-base
             "
               >
-                Đã bán
-                <span> 300</span>
+                Đã bán {formatSoldCount(productRecommand.soldcount!)}
               </p>
             </div>
           </div>
