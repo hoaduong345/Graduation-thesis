@@ -26,7 +26,7 @@ export default function OrderDetailPage() {
     defaultValues: {
       comment: "",
       ratingValue: 5,
-      iduser: 1,
+      iduser: 1,  
     },
   });
   const idDialogRating = "dialogRating";

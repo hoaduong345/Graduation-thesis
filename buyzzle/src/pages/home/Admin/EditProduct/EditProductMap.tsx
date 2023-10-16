@@ -129,14 +129,14 @@ export default function EditProductMap() {
       })
       .then((detailForm) => {
         reset({
-          name: detailForm.data.name,
-          description: detailForm.data.description,
-          price: detailForm.data.price,
-          discount: detailForm.data.discount,
-          quantity: detailForm.data.quantity,
-          categoryID: detailForm.data.categoryID,
+          name: detailForm.data.productDetail.name,
+          description: detailForm.data.productDetail.description,
+          price: detailForm.data.productDetail.price,
+          discount: detailForm.data.productDetail.discount,
+          quantity: detailForm.data.productDetail.quantity,
+          categoryID: detailForm.data.productDetail.categoryID,
         });
-        setEditImages(detailForm.data.ProductImage);
+        setEditImages(detailForm.data.productDetail.ProductImage);
       })
       .catch((error) => {
         console.log("🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:", error);
