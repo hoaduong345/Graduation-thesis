@@ -8,7 +8,7 @@ import Back from "../../Admin/Assets/TSX/Back";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef, useState } from "react";
-import { RatingComment } from "../../../../Model/RatingAndComment";
+import { Rating } from "../../../../Model/RatingAndComment";
 import { toast } from "react-toastify";
 import { RatingAndCommentController } from "../../../../Controllers/Rating&Comment";
 
@@ -21,7 +21,7 @@ export default function OrderDetailPage() {
     register,
     setValue,
     formState: { errors },
-  } = useForm<RatingComment>({
+  } = useForm<Rating>({
     mode: "all",
     defaultValues: {
       comment: "",
@@ -37,14 +37,6 @@ export default function OrderDetailPage() {
     }
   };
 
-  // const onSave = async (id: string, data: RatingComment) => {
-  //   const modal = document.getElementById(id) as HTMLDialogElement | null;
-  //   if (modal) {
-  //     handleAddProductRating(data);
-  //     console.log("first");
-  //     modal.close();
-  //   }
-  // };
   const openDialog = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
@@ -57,7 +49,7 @@ export default function OrderDetailPage() {
   };
 
   //Thêm đánh giá
-  const handleAddProductRating = (id: string, data: RatingComment) => {
+  const handleAddProductRating = (id: string, data: Rating) => {
     RatingAndCommentController.postRatingAndComment(data)
       .then((_) => {
         setValue("iduser", data.iduser);
@@ -245,18 +237,21 @@ export default function OrderDetailPage() {
                   <DialogModal
                     id={idDialogRating}
                     onClose={() => onClose(idDialogRating)}
-                    onSave={handleSubmit((data: RatingComment) => {
-                      const htmlString = data.comment;
-                      const regex = /<p>(.*?)<\/p>/;
-                      const match = htmlString.match(regex);
-                      if (match) {
-                        const extractedText = match[1];
-                        const _data: RatingComment = {
-                          ...data,
-                          comment: extractedText,
-                        };
-                        handleAddProductRating(idDialogRating, _data);
-                      }
+                    // onSave={handleSubmit((data: Rating) => {
+                    //   const htmlString = data.comment;
+                    //   const regex = /<p>(.*?)<\/p>/;
+                    //   const match = htmlString.match(regex);
+                    //   if (match) {
+                    //     const extractedText = match[1];
+                    //     const _data: Rating = {
+                    //       ...data,
+                    //       comment: extractedText,
+                    //     };
+                    //     handleAddProductRating(idDialogRating, _data);
+                    //   }
+                    // })}
+                    onSave={handleSubmit((data: Rating) => {
+                      handleAddProductRating(idDialogRating, data);
                     })}
                     title="Đánh Giá Sản Phẩm"
                     body={
@@ -320,31 +315,7 @@ export default function OrderDetailPage() {
                         <div className=" border-b-[1px] border-[#E0E0E0] mb-4"></div>
                         <div>
                           {/* <p>Mô tả chất lượng sản phẩm: </p> */}
-                          {/* <textarea
-                            id="message"
-                            rows={4}
-                            className="block p-2.5 w-full text-sm text-gray-900 outline-none
-                             border-[1px] border-[#FFAAAF] rounded-md mt-2"
-                            placeholder="Để lại bình luận..."
-                            defaultValue={""}
-                          /> */}
-                          <Controller
-                            control={control}
-                            name="comment"
-                            rules={{
-                              required: {
-                                value: true,
-                                message:
-                                  "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                              },
-                            }}
-                            render={({ field }) => (
-                              <>
-                                <p className="text-[#4C4C4C] text-base font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
-                                  Mô tả chất lượng sản phẩm
-                                  <span className="text-[#FF0000]">*</span>
-                                </p>
-                                <Editor
+                          {/* <Editor
                                   apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
                                   onInit={(editor) =>
                                     (editorRef.current = editor)
@@ -413,6 +384,31 @@ export default function OrderDetailPage() {
                                     content_style:
                                       "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                                   }}
+                                /> */}
+                          <Controller
+                            control={control}
+                            name="comment"
+                            rules={{
+                              required: {
+                                value: true,
+                                message:
+                                  "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                              },
+                            }}
+                            render={({ field }) => (
+                              <>
+                                <p className="text-[#4C4C4C] text-base font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
+                                  Mô tả chất lượng sản phẩm
+                                  <span className="text-[#FF0000]">*</span>
+                                </p>
+                                <textarea
+                                  id="message"
+                                  rows={4}
+                                  className="block p-2.5 w-full text-sm text-gray-900 outline-none
+                             border-[1px] border-[#FFAAAF] rounded-md mt-2"
+                                  placeholder="Để lại bình luận..."
+                                  defaultValue={field.value}
+                                  onChange={field.onChange}
                                 />
                               </>
                             )}

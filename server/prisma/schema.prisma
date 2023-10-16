@@ -25,6 +25,8 @@ model User {
   dateOfBirth          DateTime?
   sex                  Boolean?
   address              String?
+  addresstype          String?
+  specificaddress      String?
   refresh_token        String?
   forgotpassword_token String?   @db.VarChar(300)
   role                 Int?
@@ -123,6 +125,13 @@ model ProductImage {
   fK_propductImage Product? @relation(fields: [idproduct], references: [id], onDelete: Cascade)
 }
 
+model CommentImage {
+  id      Int @id @default(autoincrement())
+  url     String?
+  idcomment    Int?
+  fk_commentImage Rating? @relation(fields: [idcomment], references: [id], onDelete: Cascade)
+}
+
 model Rating {
   id          Int  @id @default(autoincrement())
   idproduct   Int?
@@ -133,6 +142,7 @@ model Rating {
   comment     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
+  CommentImage CommentImage[]
 }
 
 

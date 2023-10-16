@@ -17,7 +17,6 @@ import Forgotpassword from "../../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../../pages/forgotpassword/Resetpassword";
 import path from "../../contants/path";
 import Addproducts from "../../pages/home/Admin/Addproduct/Addproducts";
-import Detailproducts from "../../pages/home/User/DetailProduct/Detailproducts";
 import Cart from "../../pages/home/User/CartPage/Cart";
 import OrderHistory from "../../pages/home/User/OrderHistoryPage/OrderHistory";
 import CheckOut from "../../pages/home/User/CheckoutPage/CheckOut";
@@ -26,6 +25,7 @@ import VoucherPage from "../../pages/home/Admin/Management/Voucher/VoucherPage";
 import Category from "../../pages/home/Admin/Management/Category/Category";
 import Members from "../../pages/home/Admin/Assets/Icon/Members";
 import User from "../../pages/home/Admin/Management/User/User";
+import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 
 
 export default function useRouterEmelent() {
@@ -102,7 +102,7 @@ export default function useRouterEmelent() {
       path: "detailproducts/:id",
       element: (
         <MainLayout>
-          <Detailproducts />
+          <DetailsProduct />
         </MainLayout>
       ),
     },
@@ -180,7 +180,7 @@ export default function useRouterEmelent() {
 
         {
           path: "Detailproducts/:id",
-          element: <Detailproducts />,
+          element: <DetailsProduct />,
         },
         {
           path: "category",

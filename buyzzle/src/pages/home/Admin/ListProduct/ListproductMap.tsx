@@ -3,7 +3,7 @@ import { Products } from "../../User/FilterPage/FiltersPage";
 import Edit from "../Assets/TSX/Edit";
 import { Link } from "react-router-dom";
 import Delete from "../Assets/TSX/Delete";
-import { numberFormat } from "../../../../Helper";
+import { currentDate } from "../../../../Helper/Format";
 type Props = {
   products: Products;
   HandleXoa: (id: number) => void;
@@ -187,7 +187,7 @@ export default function ListproductMap(props: Props) {
                     <div>
                       <p className="text-xs font-medium">Ngày thêm:</p>
                       <p className="text-xs text-[#4C4C4C]">
-                        {props.products.createdAt}
+                        {currentDate(props.products.createdAt)}
                       </p>
                     </div>
                     <div>
