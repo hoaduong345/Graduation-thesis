@@ -19,7 +19,7 @@ export interface ProductDetail {
 export interface Rate {
     FlashsaleProducts: FlashsaleProduct[]
     currentPage: number
-    totalRatings: number
+    // totalRatings: number
     productDetail: ProductDetail
     rows: Row[]
     averageRating: number
@@ -87,10 +87,17 @@ export interface Rating {
     ratingValue: number
     comment: string
     createdAt: string
-    updatedAt: string
-    user: User
-    product: Product
-}
+    product: {
+        quantity: number,
+        ProductImage: ProductImage[]
+    }
+    user: {
+        username: string,
+    }
+    CommentImage: {
+        url: string
+    }[]
+};
 
 export interface User {
     username: string
@@ -98,4 +105,12 @@ export interface User {
 
 export interface Product {
     quantity: number
+}
+
+export interface Ratee {
+    currentPage: number
+    perPage: number
+    totalRatings: number
+    averageRating: number
+    Rating: Rating[]
 }

@@ -6,23 +6,25 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
-
 const UserRouter = require('./routes/UserRoutes');
 
 const OrderRouter = require('./routes/OrderRoutes');
 
-
 const ProductRoutes = require('./routes/ProductRoutes');
+const VoucherRouter = require('./routes/VoucherRoutes');
 const cookieParser = require('cookie-parser');
+const http = require('http');
+const socketIo = require('socket.io');
+
 dotenv.config();
 
 const app = express();
 
-app.listen((process.env.APP_PORT = 5000), () => {
-    console.log('Server up and running....');
-});
+// Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(morgan('common'));
 
 const whitelist = ['http://localhost:5173', 'https://www.getpostman.com', 'https://app.getpostman.com'];
 const corsOptions = {
@@ -36,20 +38,34 @@ const corsOptions = {
     credentials: true,
 };
 app.use(cors(corsOptions));
-app.use(morgan('common'));
-app.use(cookieParser());
 
 app.use(path.join(__dirname, ''), express.static(path.join(__dirname, '')));
-
 app.use(express.static(path.join(__dirname, '')));
 
+// Routes
 app.use('/buyzzle/auth', AuthRouter);
-
 app.use('/buyzzle/user', UserRouter);
-
-// sản phẩm
 app.use('/buyzzle/product', ProductRoutes);
-// CART
 app.use('/buyzzle/cart', CartRouter);
 
 app.use('/buyzzle/order', OrderRouter);
+app.use('/buyzzle/voucher', VoucherRouter);
+
+// Setup socket.io
+const server = http.createServer(app);
+const io = socketIo(server);
+io.on('connection', (socket) => {
+    console.log('Một người dùng đã kết nối');
+
+    socket.on('disconnect', () => {
+        console.log('Người dùng đã ngắt kết nối');
+    });
+
+    socket.on('send message', (message) => {
+        io.emit('receive message', message); // Gửi thông điệp tới tất cả người dùng
+    });
+});
+
+server.listen(process.env.APP_PORT || 5000, () => {
+    console.log('Server up and running on port ' + process.env.APP_PORT);
+});

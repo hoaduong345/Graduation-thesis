@@ -1,0 +1,17 @@
+pani {
+    display: inline-block;
+  }
+  
+  pani a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  pani a.active {
+    background-color: #FA541C;
+    color: white;
+  }
+  
+  pani a:hover:not(.active) {background-color: #FA541C;}

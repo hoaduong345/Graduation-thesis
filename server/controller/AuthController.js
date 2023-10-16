@@ -251,7 +251,7 @@ const AuthController = {
                     sameSite: 'strict',
                 });
                 const { password, ...others } = user;
-                return res.status(200).json({ accessToken , ...others });
+                return res.status(200).json({ accessToken, ...others });
             }
         } catch (error) {
             console.log(error.message);
@@ -403,7 +403,7 @@ const AuthController = {
     changePassword: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            const refresh_token = req.cookies.refreshToken;
+            const refresh_token = req.cookies.refreshtoken;
             const token = decode(refresh_token);
             const user = await prisma.user.findUnique({
                 where: {
@@ -433,6 +433,7 @@ const AuthController = {
             const refreshTokenPayload = {
                 email: user.email,
             };
+            console.log(refreshTokenPayload);
 
             const newRefreshToken = jwt.sign(refreshTokenPayload, process.env.JWT_REFRESH_TOKEN, {
                 expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token
@@ -455,8 +456,8 @@ const AuthController = {
     // LOG OUT
     logout: async (req, res) => {
         try {
-            const accesstoken = req.cookies.accesstoken;
-            const token = decode(accesstoken);
+            const accessToken = req.cookies.accessToken;
+            const token = decode(accessToken);
 
             const user = await prisma.user.update({
                 where: {
@@ -467,10 +468,10 @@ const AuthController = {
                 },
             });
             console.log('user', user);
-            res.clearCookie('refreshtoken');
-            res.clearCookie('accesstoken');
+            res.clearCookie('refreshToken');
+            res.clearCookie('accessToken');
             res.clearCookie('id');
-            // localStorage.clear();
+            localStorage.clear();
             res.status(200).send('Logged out successfully');
         } catch (error) {
             res.status(500).send('Logout failed');

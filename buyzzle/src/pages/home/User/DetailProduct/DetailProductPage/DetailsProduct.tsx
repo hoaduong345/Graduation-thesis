@@ -31,13 +31,12 @@ import {
   numberFormat,
   roundedNumber,
 } from "../../../../../Helper/Format";
-import { Rate } from "../../../../../Model/ProductModel";
+import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
 import { Products } from "../../FilterPage/FiltersPage";
 import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import RatingMap from "../RatingAndComments/RatingMap";
 import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
 import { stars } from "../../../../../Helper/StarRating/Star";
-import { Rating } from "../../../../../Model/RatingAndComment";
 import { useForm } from "react-hook-form";
 import Period from "../../../../../Assets/TSX/Period";
 import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
@@ -52,16 +51,16 @@ export interface ImgOfProduct {
   url: string;
 }
 [];
+
 export type FormValues = {
   idproduct: number;
   name: string;
   price: number;
   description: string;
-  count: number;
-  images: string;
-  quantity: number;
-  ProductImage: ImgOfProduct[];
   discount: number;
+  quantity: number;
+  count: number;
+  ProductImage: ImgOfProduct[];
   id: number;
   iduser: number;
   ratingValue: number;
@@ -93,10 +92,15 @@ const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 2 },
   { checked: false, rating: 1 },
 ];
+export interface EditImage {
+  url: string;
+  id: number;
+}
 export default function DetailsProduct() {
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
-
+  const [editImages, setEditImages] = useState<EditImage[]>([]);
+  const [rateAndcomment, setRateAndcomment] = useState<Ratee>();
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (first) {
@@ -104,8 +108,9 @@ export default function DetailsProduct() {
     }
   }, [first]);
   const [quantity, setQuantity] = useState(1);
-  const [recommandProduct, setRecommandProduct] = useState<Products[]>([]);
+  const [recommandProduct, setRecommandProduct] = useState<Row[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [url, setUrl] = useState<string[]>([]);
 
   const { id } = useParams();
   console.log(id);
@@ -117,6 +122,7 @@ export default function DetailsProduct() {
         return detail;
       })
       .then((detail) => {
+        // setEditImages(detail.data);
         setfirst(detail.data);
       })
       .catch((error) => {
@@ -153,12 +159,11 @@ export default function DetailsProduct() {
     );
     productController
       .getProductSuggest(id)
-      .then((res) => {
+      .then((res:any) => {
         console.log(
           "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
           res
         );
-        // getDetailProduct();
         getComment(id);
         setRecommandProduct(res);
       })
@@ -172,15 +177,9 @@ export default function DetailsProduct() {
       toast.success("Thêm thành công");
     });
   };
-  // useEffect(() => {
-  //   RatingAndCommentController.getRatingAndComment(currentPage, 2).then(
-  //     (res: any) => {
-  //       setRateAndcomment(res);
-  //     }
-  //   );
-  // }, []);
-  const [rateAndcomment, setRateAndcomment] = useState<Rate>();
+
   const getComment = (id: number) => {
+    console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
     RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
       (res: any) => {
         setRateAndcomment(res);
@@ -211,7 +210,7 @@ export default function DetailsProduct() {
     idRating: number
   ) => {
     await RatingAndCommentController.EditRatingAndComment(idRating, data)
-      .then((res) => {
+      .then(async (res) => {
         toast.success("Đánh giá thành công !");
         const _rateAndComment = rateAndcomment?.Rating.map((item) => {
           if (item.id === res.data?.id) {
@@ -231,19 +230,41 @@ export default function DetailsProduct() {
           return newRateAndcomment;
         });
         getDetailProduct();
-        // onClose(id);
       })
       .catch(() => {
         toast.error("Đánh giá thất bại !");
       });
     console.log("Sửa bình luận!");
   };
+  useEffect(()=>{
+      handleRemoveRating(Number(id))
+  },[first])
   //Xóa comment
   const handleRemoveRating = (id: number) => {
+    console.log(
+      "🚀 ~ file: DetailsProduct.tsx:235 ~ handleRemoveRating ~ id:",
+      id
+    );
     RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
-      getComment(id);
+      if (rateAndcomment) {
+        const removedRatings = rateAndcomment.Rating.filter((rating) => rating.id !== id);
+        setRateAndcomment({
+          ...rateAndcomment,
+          Rating: removedRatings,
+        });
+        getDetailProduct()
+        // RecommandProductDetailPage(id);
+        }
     });
+    // getDetailProduct()
+    RecommandProductDetailPage(id);
   };
+
+  console.log(
+    "🚀 ~ file: DetailsProduct.tsx:550 ~ DetailsProduct ~ first?.totalRatings:",
+    rateAndcomment?.totalRatings
+  );
+
   return (
     <>
       <Container>
@@ -495,6 +516,7 @@ export default function DetailsProduct() {
                 <RatingMap
                   handleEditProductRating={handleEditProductRating}
                   rateAndcomment={rateAndcomment!}
+                  editImages={editImages!}
                   handleRemoveRating={handleRemoveRating}
                 />
               </div>
@@ -502,26 +524,38 @@ export default function DetailsProduct() {
                 <div className="flex">
                   <Button
                     variant="text"
-                    className="flex items-center gap-2"
+                    // className="flex items-center gap-2"
+                    className={`${
+                      currentPage == 1 ? `hidden` : `flex items-center gap-2`
+                    }`}
                     onClick={prev}
                   >
                     <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
                     Previous
                   </Button>
-                  {[...new Array(first?.totalRatings)].map((item, index) => {
-                    const page = index + 1;
-                    console.log(item);
-                    return (
-                      <>
-                        <IconButton className="bg-none" {...getItemProps(page)}>
-                          <p className="ml-[-2px] text-sm">{page}</p>
-                        </IconButton>
-                      </>
-                    );
-                  })}
+                  {[...new Array(rateAndcomment?.totalRatings)].map(
+                    (item, index) => {
+                      const page = index + 1;
+                      console.log(item);
+                      return (
+                        <>
+                          <IconButton
+                            className="bg-none"
+                            {...getItemProps(page)}
+                          >
+                            <p className="ml-[-2px] text-sm">{page}</p>
+                          </IconButton>
+                        </>
+                      );
+                    }
+                  )}
                   <Button
                     variant="text"
-                    className="flex items-center gap-2"
+                    className={`${
+                      currentPage == rateAndcomment?.totalRatings
+                        ? "hidden"
+                        : "flex items-center gap-2"
+                    }`}
                     onClick={next}
                   >
                     Next

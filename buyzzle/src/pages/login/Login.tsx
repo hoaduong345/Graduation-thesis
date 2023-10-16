@@ -64,13 +64,18 @@ function Login() {
                 if (response.headers['content-type'] === 'application/json; charset=utf-8') {
                     const jsonString: string = JSON.stringify(response.data);
                     const jsonObject = JSON.parse(jsonString);
-    
+                    // console.log("aaaaaaaaaa"+response)
+                    // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
+                    // console.log(response);
+                    // Truy cập các giá trị trong jsonObject
+
                     const username = jsonObject.username;
-
+                    const accessToken = jsonObject.accessToken;
+                    console.log(accessToken);
                     const UserData = { username};
-
+                    const Token = {accessToken};
                     localStorage.setItem('user', JSON.stringify(UserData));
-
+                    localStorage.setItem("accessToken", JSON.stringify(Token));
                     setTimeout(() => {
                         window.location.href = "/";
                     },
@@ -141,7 +146,7 @@ function Login() {
                         <h1 className=' login-a '>ĐĂNG NHẬP</h1>
                         <div className='mb-4'>
                             <label htmlFor='email' className='login-a4 font-sans'>
-                                Tên tài khoản
+                                Email
                             </label>
                             <input
                                 type="text"
@@ -234,7 +239,7 @@ function Login() {
                         </div>
                         <div className='mt-6 text-center'>
                             <span className='text-gray-600'>Bạn chưa có tài khoản Buyzzle? </span>
-                            <a href='#' className='text-black-500 hover:underline font-bold'>
+                            <a href='/register' className='text-black-500 hover:underline font-bold'>
                                 Đăng ký
                             </a>
                         </div>
