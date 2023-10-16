@@ -7,7 +7,7 @@ import AccountStatus from "../DetailUser/Components/AccountStatus"
 export default function DetailUser() {
   return (
     <Container>
-      <div className="body-addproduct container mx-auto">
+      <div className="body-addproduct container mx-auto mb-32">
         {/* back */}
         <div className="back h-[57px] mt-[46px] ">
           <div className="flex gap-3 items-center">
@@ -26,14 +26,13 @@ export default function DetailUser() {
         </div>
         {/* end back */}
 
-        <div>
+        <div className="">
             <div className="grid grid-cols-2">
             <ProFile />
             <AccountStatus/>
             </div>
             <PaymentAddress/>
         </div>
-
       </div>
     </Container>
   );
