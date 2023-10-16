@@ -86,7 +86,7 @@ export default function RatingMap(props: Props) {
     if (modal) {
       console.log("idRating idRating", idRating);
       reset({ comment: comment });
-      modal.showModal();
+modal.showModal();
     }
   };
   const handleRatingClick = (rating: number) => {
@@ -170,7 +170,7 @@ export default function RatingMap(props: Props) {
                       {/* end name - period - date */}
                       {/* rating */}
                       <div className="flex gap-1">
-                        <div className="rating rating-xs">
+<div className="rating rating-xs">
                           {stars.map((_, index) => (
                             <button key={index}>
                               {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
@@ -235,7 +235,7 @@ export default function RatingMap(props: Props) {
                         </li>
                         <li>
                           <button
-                            className="flex items-center gap-4"
+className="flex items-center gap-4"
                             onClick={() => props.handleRemoveRating(rating.id)}
                           >
                             <RemoveCate />
@@ -304,7 +304,7 @@ export default function RatingMap(props: Props) {
                       </div>
                       {/* end name - period - date */}
                       {/* quatity */}
-                      <p className="text-[#4C4C4C] text-[12px]">Số lượng: 10</p>
+<p className="text-[#4C4C4C] text-[12px]">Số lượng: 10</p>
                       {/* end quatity */}
                     </div>{" "}
                     {/* end thong tin users */}
@@ -329,7 +329,10 @@ export default function RatingMap(props: Props) {
           );
         })
       ):(
-<EmptyPage />
+        <div>
+          {/* <EmptyPage /> */}
+          </div>
+
       )
     }
       <DialogModal
@@ -382,7 +385,7 @@ export default function RatingMap(props: Props) {
                   <div className="flex items-center justify-start gap-3 ">
                     <div className="rating rating-lg gap-3 ">
                       <Controller
-                        control={control}
+control={control}
                         name="ratingValue"
                         rules={{
                           required: {
@@ -452,7 +455,7 @@ export default function RatingMap(props: Props) {
                 <p className="text-[#4C4C4C] text-base font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
                   Thêm ảnh
                   <span className="text-[#FF0000]">*</span>
-                </p>
+</p>
                 {/* card */}
                {/* <div
                   className="card w-[100%] py-4 px-9 mt-2 
@@ -507,7 +510,7 @@ export default function RatingMap(props: Props) {
                                       className="rounded-md"
                                     />
                                     <div
-                                      className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
                                                             opacity-0 transition duration-300 ease-in-out group-hover:opacity-20"
                                     ></div>
                                     <div className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute">
@@ -553,7 +556,7 @@ export default function RatingMap(props: Props) {
                                           }
                                           // onClick={() =>
                                           //   props.handleRemoveOnlyIMG()
-                                          // }
+// }
                                         >
                                           <RemoveIMG />
                                         </div>
