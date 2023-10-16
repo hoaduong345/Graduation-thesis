@@ -38,10 +38,10 @@ model User {
 }
 
 model UserImage {
-  id           Int     @id @unique @default(autoincrement())
-  url          String?
-  iduser       Int     @unique
-  fK_UserImage User?   @relation(fields: [iduser], references: [id], onDelete: Cascade)
+  id               Int      @id @default(autoincrement()) @unique
+  url              String?
+  iduser            Int     @unique
+  fK_UserImage User? @relation(fields: [iduser], references: [id], onDelete: Cascade)
 }
 
 model Role {

@@ -162,7 +162,7 @@ const UserController = {
           username: Name,
         },
         select: {
-          id: true,
+          id: true, 
           username: true,
           address: true,
           addresstype: true,
@@ -177,6 +177,48 @@ const UserController = {
     }
   },
 
+  getAccountStatus : async(req, res) =>{
+      try{
+        const Name = req.params.username;
+
+        const AccountStatus = await prisma.user.findUnique({
+          where: {
+            username: Name,
+          },
+          select: {
+            id: true, 
+            createdAt : true
+          }
+        });
+        res.status(200).json(AccountStatus);
+      }catch(error){
+        console.error(error);
+        res.status(500).json(error.message)
+      }
+  },
+
+   AccountStatus : async (req, res) =>{
+    try {
+      const Name = req.body.username;
+
+      const updatedAccountStatus = {
+        id:req.body.id,
+        createdAt : req.body.createdAt
+      };
+
+      const update = await prisma.user.update({
+        where: {
+          username: Name,
+        },
+        data: updatedAccountStatus,
+      });
+
+      res.status(200).json(update);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error.message);
+    }
+   },
    
 
 
