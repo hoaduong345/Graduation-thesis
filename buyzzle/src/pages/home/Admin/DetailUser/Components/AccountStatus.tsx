@@ -10,6 +10,8 @@ import { userController } from "../../../../../Controllers/UserController";
 import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import InforUser from "../../Assets/TSX/InforUser";
+import { Images } from "../../../../../Assets/TS";
 
 export type FormValues = {
 
@@ -268,155 +270,55 @@ export default function UserProfile() {
 
 
   return (
-    <Container>
       <Fragment>
         {validUrl ? (
-          <body className="body-filter container mx-auto">
+          <body className="body-filter container mx-auto ">
 
             <div>
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-1 gap-1">
                   <form
-                    className="card py-4 px-5 col-span-3  rounded-[6px]
+                    className="card py-4 px-5 col-span-3 rounded-[6px] 
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                   >
+                    <div className="flex items-center justify-between">
                     <span className="text-[#000] text-2xl font-normal ">
                       Trạng Thái Tài Khoản
                     </span>
-                    <div className="flex w-[100%] mt-4 justify-between">
-                      <div className="w-[48%]">
-                        <Controller
-                          control={control}
-                          name="username"
-                          rules={{
-                            required: {
-                              value: true,
-                              message:
-                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                            },
-                            minLength: {
-                              value: 6,
-                              message: "Tên sản phẩm phải lớn hơn 6 ký tự",
-                            },
-                          }}
-                          render={({ field }) => (
-                            <>
-                              <label
-                                htmlFor="name"
-                                className="text-[#4C4C4C] text-sm font-medium"
-                              >
-                                Tên đăng nhập
-                              </label>
-                              {/* input addNameProducts */}
-                              <input
-                                className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${!!errors.username
-                                    ? "border-[2px] border-red-900"
-                                    : "border-[1px] border-[#FFAAAF]"
-                                  }`}
-                                placeholder="Tên đăng nhập"
-                                value={field.value}
-                              // {...register("username")}
-                              // onChange={onChangeInput}
-                              // disabled
-                              />
-                              {!!errors.username && (
-                                <p className="text-red-700 mt-2">
-                                  {errors.username.message}
-                                </p>
-                              )}
-                            </>
-                          )}
-                        />
-                        {/* end input addNameProducts */}
-                      </div>
-                      <div className="w-[48%]">
-                        <Controller
-                          control={control}
-                          name="name"
-                          rules={{
-                            required: {
-                              value: true,
-                              message:
-                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                            },
-                            minLength: {
-                              value: 6,
-                              message: "Tên người dùng phải lớn hơn 6 ký tự",
-                            },
-                          }}
-                          render={({ field }) => (
-                            <>
-                              <label
-                                htmlFor="name"
-                                className="text-[#4C4C4C] text-sm font-medium"
-                              >
-                                Tên người dùng
-                              </label>
-                              {/* input addNameProducts */}
-                              <input
-                                className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                                        rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                       ${!!errors.name
-                                    ? "border-[2px] border-red-900"
-                                    : "border-[1px] border-[#FFAAAF]"
-                                  }`}
-                                placeholder="Tên người dùng"
-                                onChange={(e) => {
-                                  const value = e.target.value;
-                                  const reg = /[!@#$%^&*]/;
-                                  field.onChange(value.replace(reg, ""));
-                                }}
-                                value={field.value}
-                              // {...register("name")}
-
-                              />
-                              {!!errors.name && (
-                                <p className="text-red-700 mt-2">
-                                  {errors.name.message}
-                                </p>
-                              )}
-                            </>
-                          )}
-                        />
-                        {/* end input addNameProducts */}
-                      </div>
+                    <div>
+                      <InforUser />
                     </div>
-                    <div className="w-[100%] mt-4">
-                      <Controller
-                        control={control}
-                        name="email"
-                        rules={{
-                          required: {
-                            value: true,
-                            message:
-                              "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                          },
-                        }}
-                        render={({ field }) => (
-                          <>
-                            <label
-                              htmlFor="name"
-                              className="text-[#4C4C4C] text-sm font-medium"
-                            >
-                              Email
-                            </label>
-                            {/* input addNameProducts */}
-                            <input
-                              className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                                        rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                       ${!!errors.email
-                                  ? "border-[2px] border-red-900"
-                                  : "border-[1px] border-[#FFAAAF]"
-                                }`}
-                              placeholder="Email"
+                    </div>
+                   <div className="border-[1px] border-[#E0E0E0] my-[30px]"></div>
+                   <div className="grid grid-cols-2 items-center">
+                   <div className="relative flex items-center gap-4">
+                    <div>
+                            <img
+                              className="w-[70px] h-[70px] rounded-full border-4 "
+                              src={Images.Avtcmt}
+                              alt=""
                             />
-                          </>
-                        )}
-                      />
-                      {/* end input addNameProducts */}
                     </div>
+                    <div>
+                      <p>ID: #a32223 </p>
+                      <p>● Đang Hoạt Động</p>
+                    </div>
+                    </div>
+                    {/* button */}
+                    <div
+                    className={`flex items-center w-[150px] rounded-md h-[46px] transition
+                                    duration-150  max-[1330px]:w-[280px] max-[1024px]:w-[320px]
+                                    bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer `}
+                  >
+                    <button
+                      
+                      className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px] float-right 
+                       `}
+                    >
+                      Lien he
+                    </button>
+                  </div>
+                   </div>
                   </form>
                   {/* Form */}
                 </div>
@@ -428,7 +330,6 @@ export default function UserProfile() {
 
           </body>
         ) : (
-          <Container>
             <div className="w-full h-screen flex flex-col lg:flex-row items-center justify-center space-y-16 lg:space-y-0 space-x-8 2xl:space-x-0">
               <div className="w-full lg:w-1/2 flex flex-col items-center justify-center lg:px-2 xl:px-0 text-center">
                 <p className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider text-gray-300">
@@ -680,9 +581,7 @@ rotate(-89.32491)"
                 </svg>
               </div>
             </div>
-          </Container>
         )}
       </Fragment>
-    </Container>
   );
 }

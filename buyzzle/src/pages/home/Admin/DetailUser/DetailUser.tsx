@@ -27,7 +27,7 @@ export default function DetailUser() {
         {/* end back */}
 
         <div>
-            <div className="flex justify-end">
+            <div className="grid grid-cols-2">
             <ProFile />
             <AccountStatus/>
             </div>
