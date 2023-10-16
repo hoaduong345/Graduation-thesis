@@ -430,6 +430,8 @@ const ProductController = {
             const categoryId = req.query.categoryId;
             const discount = 60;
             const productId = parseInt(req.params.id);
+            const minRating = parseInt(req.query.minRating);
+
 
             const FlashsaleProducts = await prisma.product.findMany({
                 where: {
@@ -439,8 +441,6 @@ const ProductController = {
                 },
                 take: 3,
             });
-
-            // const { minPricefind, maxPricefind } = req.query;
 
             const skip = (page - 1) * pageSize;
             const whereClause = {
@@ -457,6 +457,16 @@ const ProductController = {
                     id: parseInt(categoryId),
                 };
             }
+            // if (req.query.minRating) {
+            //     whereClause.Rating = {
+            //         some: {
+            //             ratingValue: {
+            //                 gte: parseInt(req.query.minRating),
+            //             },
+            //         },
+            //     };
+            // }
+               
 
             if (req.query.minPrice && req.query.maxPrice) {
                 whereClause.sellingPrice = {
@@ -471,9 +481,6 @@ const ProductController = {
                 };
             }
             const ratings = await prisma.rating.findMany({
-                // where: {
-                //     idproduct: productId,
-                // },
                 include: {
                     user: {
                         select: {
@@ -501,6 +508,13 @@ const ProductController = {
                     ProductImage: true,
                     fK_category: true,
                     Rating: true,
+                    // Rating: {
+                    //     where: {
+                    //         ratingValue: {
+                    //             gte: minRating,
+                    //         },
+                    //     },
+                    // },
                 },
                 where: whereClause,
                 skip,
@@ -528,6 +542,10 @@ const ProductController = {
         }
     },
 
+
+
+
+    
     getSugggestProduct: async (req, res) => {
         try {
             const productId = parseInt(req.params.id);
