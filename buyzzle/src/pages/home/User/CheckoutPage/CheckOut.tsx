@@ -3,7 +3,6 @@ import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import Voucher from "../../../../Assets/TSX/Voucher";
 import Container from "../../../../components/container/Container";
-import CheckoutSeacrch from "../../Admin/Assets/TSX/CheckoutSeacrch";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import PinkRight from "../../../../Assets/SVG/LetterPayment/PinkRight";
 import BlueRight from "../../../../Assets/SVG/LetterPayment/BlueRight";
@@ -37,6 +36,8 @@ export default function CheckOut() {
    const idModalUpdate = "my_modal_update";
 
    const [user, setUser] = useState<FormValues>({} as FormValues);
+   const [discount, setDiscount] = useState<number>(0);
+   //  const [dicount, setPriceSale] = useState<number>(0);
    const [payment, setPayment] = useState([
       {
          id: 1,
@@ -141,7 +142,6 @@ export default function CheckOut() {
             element.quantity *
             (element.product.price - element.product.sellingPrice);
       }
-
       return {
          sale,
          totalCart,
@@ -673,14 +673,19 @@ export default function CheckOut() {
                                  </div>
                               </div> */}
 
-                              <select className="outline-none w-full text-[#EA4B48] items-center border-[#FFAAAF] bg-[#fff] border-[1px] py-[8px] rounded-md max-lg:py-[4px]">
-                                 <option value="">
+                              <select
+                                 onChange={(e) => {
+                                    setDiscount(Number(e.target.value));
+                                 }}
+                                 className="outline-none w-full text-[#EA4B48] items-center border-[#FFAAAF] bg-[#fff] border-[1px] py-[8px] rounded-md max-lg:py-[4px]"
+                              >
+                                 <option value={0}>
                                     -- chọn mã giảm giá --
                                  </option>
                                  {dataVoucherLocal.map((e) => {
                                     return (
                                        <>
-                                          <option>
+                                          <option value={e.discount}>
                                              {e.code} - {e.discount}%
                                           </option>
                                        </>
@@ -699,15 +704,18 @@ export default function CheckOut() {
                               </div>
                               <div className="flex justify-between">
                                  <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
-                                    Phí vận chuyển:{" "}
+                                    Giảm{" "}
                                  </p>
                                  <div className="flex gap-1">
-                                    <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
+                                    {/* <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
                                        {numberFormat(0)}
                                     </p>
-                                    <p className="text-[#EA4B48]"> - </p>
-                                    <p className="text-sm text-[#FFAAAF] line-through max-[870px]:text-[11px]">
-                                       {numberFormat(49000)}
+                                    <p className="text-[#EA4B48]"> - </p> */}
+                                    <p className="text-sm text-[#FFAAAF] max-[870px]:text-[11px]">
+                                       {numberFormat(
+                                          calculatePrice().totalCart *
+                                             (discount / 100)
+                                       )}
                                     </p>
                                  </div>
                               </div>
@@ -716,7 +724,11 @@ export default function CheckOut() {
                                     Tổng Thanh Toán:{" "}
                                  </p>
                                  <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
-                                    {numberFormat(calculatePrice().totalCart)}
+                                    {numberFormat(
+                                       calculatePrice().totalCart -
+                                          calculatePrice().totalCart *
+                                             (discount / 100)
+                                    )}
                                  </p>
                               </div>
                            </div>
