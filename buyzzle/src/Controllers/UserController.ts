@@ -10,7 +10,6 @@ export interface ModelUser{
     id: string,
     email: string,
     username: string,
-    // password: string,
     name: string,
     phonenumber: string,
     image: string,

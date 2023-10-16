@@ -330,7 +330,7 @@ export default function Header() {
                     {user ? (
                       <a className=" flex gap-2" href={href}>
                         <div className="font-medium flex items-center justify-center">
-                          {username}
+                          {name}
                         </div>
                         {img ? (
                           <div className="relative">
