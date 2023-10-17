@@ -10,11 +10,7 @@ export default function PaymentBtn(props: Props) {
    const { cartItems } = props;
    const handleCheckout = () => {
       console.log(cartItems);
-      paymentControllers.createPayment({
-         item: cartItems,
-         subtotal: 10,
-         userId: 1,
-      });
+      paymentControllers.createPayment(cartItems);
    };
 
    return (
