@@ -456,7 +456,7 @@ const AuthController = {
     // LOG OUT
     logout: async (req, res) => {
         try {
-            const accessToken = req.cookies.accessToken;
+            const accessToken = req.cookies.accesstoken;
             const token = decode(accessToken);
 
             const user = await prisma.user.update({
@@ -468,10 +468,10 @@ const AuthController = {
                 },
             });
             console.log('user', user);
-            res.clearCookie('refreshToken');
-            res.clearCookie('accessToken');
+            res.clearCookie('refreshtoken');
+            res.clearCookie('accesstoken');
             res.clearCookie('id');
-            localStorage.clear();
+            // localStorage.clear();
             res.status(200).send('Logged out successfully');
         } catch (error) {
             res.status(500).send('Logout failed');
