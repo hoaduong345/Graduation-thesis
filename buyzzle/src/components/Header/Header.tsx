@@ -35,6 +35,7 @@ export default function Header() {
   const [isSearch, setIsSearch] = useState(false);
 
   const user = localStorage.getItem("user");
+  const [checkLogin,setCheckLogin] = useState<boolean>(false);
 
   var username;
   const [name, setName] = useState("");
@@ -48,6 +49,7 @@ export default function Header() {
       userController.getUserWhereUsername(username).then((res) => {
         // setEditUser(res)
         setName(res.name);
+        setCheckLogin(true);
         const UserImageArray = JSON.stringify(res.UserImage);
         const urlTaker = JSON.parse(UserImageArray);
         setImg(urlTaker[0].url);
@@ -327,7 +329,7 @@ export default function Header() {
                     </div>
                   </div>
                   <div className="items-center">
-                    {user ? (
+                    {checkLogin ? (
                       <a className=" flex gap-2" href={href}>
                         <div className="font-medium flex items-center justify-center">
                           {username}

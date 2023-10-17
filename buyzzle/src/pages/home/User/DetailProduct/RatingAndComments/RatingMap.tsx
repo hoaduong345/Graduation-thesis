@@ -460,7 +460,7 @@ export default function RatingMap(props: Props) {
                 <p className="text-[#4C4C4C] text-base font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
                   Thêm ảnh
                   <span className="text-[#FF0000]">*</span>
-                </p>
+</p>
                 {/* card */}
               {/* <div
                   className="card w-[100%] py-4 px-9 mt-2 
@@ -515,7 +515,7 @@ export default function RatingMap(props: Props) {
                                       className="rounded-md"
                                     />
                                     <div
-                                      className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
                                                             opacity-0 transition duration-300 ease-in-out group-hover:opacity-20"
                                     ></div>
                                     <div className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute">
@@ -561,7 +561,7 @@ export default function RatingMap(props: Props) {
                                           }
                                           // onClick={() =>
                                           //   props.handleRemoveOnlyIMG()
-                                          // }
+// }
                                         >
                                           <RemoveIMG />
                                         </div>
