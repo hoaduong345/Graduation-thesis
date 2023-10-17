@@ -2,16 +2,26 @@ import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import { paymentControllers } from "../../../../Controllers/PaymentControllers";
 import { CartItem } from "../../../../Model/CartModel";
 
-type Props = {
+export interface StripePayment {
+   userId: number;
    cartItems: CartItem[];
-};
+}
 
-export default function PaymentBtn(props: Props) {
+export default function PaymentBtn(props: StripePayment) {
    const { cartItems } = props;
    const handleCheckout = async () => {
       console.log(cartItems);
-      let result = await paymentControllers.createPayment(cartItems);
-      window.location.href = result.data.url;
+      await paymentControllers
+         .createPayment({
+            cartItems: cartItems,
+            userId: 1,
+         })
+         .then((res) => {
+            if (res.data.url) {
+               window.location.href = res.data.url;
+            }
+         })
+         .catch((err) => console.log(err.message));
    };
 
    return (

@@ -773,7 +773,7 @@ export default function CheckOut() {
                                  })}
                               </div>
                            </div>
-                           <PaymentBtn cartItems={listLocalCart} />
+                           <PaymentBtn cartItems={listLocalCart} userId={1} />
                         </div>
                      </div>
                   </div>

@@ -23,7 +23,6 @@ import CheckOut from "../../pages/home/User/CheckoutPage/CheckOut";
 import OrderDetailPage from "../../pages/home/User/OrderDetail/OrderDetailPage";
 import VoucherPage from "../../pages/home/Admin/Management/Voucher/VoucherPage";
 import Category from "../../pages/home/Admin/Management/Category/Category";
-import Members from "../../pages/home/Admin/Assets/Icon/Members";
 import User from "../../pages/home/Admin/Management/User/User";
 import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
@@ -140,14 +139,6 @@ export default function useRouterEmelent() {
       },
       {
          path: "orderdetail",
-         element: (
-            <MainLayout>
-               <OrderDetailPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "checkout-success",
          element: (
             <MainLayout>
                <OrderDetailPage />
