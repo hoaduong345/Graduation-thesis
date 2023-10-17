@@ -274,11 +274,23 @@ export default function DetailsProduct() {
         <body className="body-detail container mx-auto">
           <div className="grid gap-4 grid-cols-10 mt-24">
             <div className="col-span-4">
-              <img
+              {/* <img
                 className="w-[533px] h-[388px] object-cover"
-                src={first?.productDetail.ProductImage[selectedImageIndex]?.url}
+                src={first?.productDetail?.ProductImage[selectedImageIndex].url}
                 alt=""
-              />
+              /> */}
+              {first?.productDetail && (
+                <div>
+                  <img
+                    className="w-[533px] h-[388px] object-cover"
+                    src={
+                      first?.productDetail?.ProductImage?.[selectedImageIndex]
+                        ?.url
+                    }
+                    alt=""
+                  />
+                </div>
+              )}
             </div>
             <div>
               <div>
@@ -291,7 +303,7 @@ export default function DetailsProduct() {
                   >
                     <ArrowUp />
                   </div>
-                  {
+                  {/* {
                     // first?.ProductImage.filter( e)
                     first?.productDetail.ProductImage.slice(1, 5).map(
                       (e, index) => {
@@ -306,7 +318,38 @@ export default function DetailsProduct() {
                         );
                       }
                     )
-                  }
+                  } */}
+                  {first?.productDetail &&
+                    first.productDetail.ProductImage &&
+                    first.productDetail.ProductImage.slice(1, 5).map(
+                      (e, index) => {
+                        return (
+                          <img
+                            key={index}
+                            className="h-[88px] w-[88px]"
+                            src={e.url}
+                            alt=""
+                            onClick={() => handleImageClick(index + 1)}
+                          />
+                        );
+                      }
+                    )}
+
+                  {/* {first?.productDetail && first.productDetail.ProductImage
+                    ? first.productDetail.ProductImage.slice(1, 5).map(
+                        (e, index) => {
+                          return (
+                            <img
+                              key={index}
+                              className="h-[88px] w-[88px]"
+                              src={e.url}
+                              alt=""
+                              onClick={() => handleImageClick(index + 1)}
+                            />
+                          );
+                        }
+                      )
+                    : null} */}
                   <div
                     className="cursor-pointer absolute border-[1px] left-[20%] 
                               px-4 pb-[7.5px] pt-[8px] w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px] 
@@ -355,7 +398,12 @@ export default function DetailsProduct() {
             </div> */}
             <div className="col-span-5 ">
               <p className="text-[32px] text-[#393939] font-medium leading-9">
-                {first?.productDetail.name}
+                {/* {first?.productDetail.name} */}
+                {first?.productDetail ? (
+                  <p className="text-[32px] text-[#393939] font-medium leading-9">
+                    {first.productDetail.name}
+                  </p>
+                ) : null}
               </p>
               {/* Thống kê */}
               <div className="grid grid-cols-4 mt-8">
@@ -389,7 +437,12 @@ export default function DetailsProduct() {
                 <div className="flex ml-1 gap-2">
                   <div>
                     <p className="text-[#1A1A1A] text-base">
-                      {first?.Rating.length}
+                      {/* {first?.Rating.length} */}
+                      {first?.Rating ? (
+                        <p className="text-[#1A1A1A] text-base">
+                          {first.Rating.length}
+                        </p>
+                      ) : null}
                     </p>
                   </div>
                   <div>
@@ -400,7 +453,7 @@ export default function DetailsProduct() {
                   <div className="border-r-2 border-[#E0E0E0]"></div>
                 </div>
 
-                <div className="flex col-span-1 ml-[-38px] gap-2 items-center">
+                {/* <div className="flex col-span-1 ml-[-38px] gap-2 items-center">
                   <div>
                     <p className="text-[#1A1A1A] text-base">
                       {first?.productDetail.soldcount > 0
@@ -411,14 +464,30 @@ export default function DetailsProduct() {
                   <div>
                     <p className="text-[#4C4C4C] text-sm">Đã bán</p>
                   </div>
-                </div>
+                </div> */}
+                {first?.productDetail ? (
+                  <div className="flex col-span-1 ml-[-38px] gap-2 items-center">
+                    {first.productDetail.soldcount > 0 ? (
+                      <>
+                        <div>
+                          <p className="text-[#1A1A1A] text-base">
+                            {first.productDetail.soldcount}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-[#4C4C4C] text-sm">Đã bán</p>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
               {/* end Thống kê */}
               {/* bachground price */}
               <div className="w-[100%] bg-[#F8F8F8] rounded-md mt-6 px-6 py-[14px]">
                 <div className="flex justify-between">
                   <div>
-                    <div className="items-center flex">
+                    {/* <div className="items-center flex">
                       <p className="text-[36px] text-[#EA4B48] font-bold ">
                         {numberFormat(
                           first?.productDetail.price! -
@@ -429,12 +498,33 @@ export default function DetailsProduct() {
                       <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
                         {numberFormat(first?.productDetail.price!)}đ
                       </p>
-                    </div>
-                    <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mt-[5px]">
+                    </div> */}
+                    {first?.productDetail ? (
+                      <div className="items-center flex">
+                        <p className="text-[36px] text-[#EA4B48] font-bold ">
+                          {numberFormat(
+                            first?.productDetail.price! -
+                              first?.productDetail.price! *
+                                (first?.productDetail.discount! / 100)
+                          )}
+                        </p>
+                        <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
+                          {numberFormat(first.productDetail.price)}đ
+                        </p>
+                      </div>
+                    ) : null}
+                    {/* <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mt-[5px]">
                       <p className="text-[#EA4B48] px-[10px] py-1">
                         Giảm {first?.productDetail.discount}%
                       </p>
-                    </div>
+                    </div> */}
+                    {first?.productDetail ? (
+                      <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mt-[5px]">
+                        <p className="text-[#EA4B48] px-[10px] py-1">
+                          Giảm {first.productDetail.discount}%
+                        </p>
+                      </div>
+                    ) : null}
                   </div>
                   {/* Tăng giảm số lượng */}
                   <div className=" flex items-center ">
@@ -547,10 +637,16 @@ export default function DetailsProduct() {
       </Container>
       <div className="border-[1px] border-[#E0E0E0]"></div>
       <Container>
-        <div
+        {/* <div
           className="px-[113px] py-[78px] text-sm break-all"
           dangerouslySetInnerHTML={{
             __html: first?.productDetail.description as any,
+          }}
+        ></div> */}
+        <div
+          className="px-[113px] py-[78px] text-sm break-all"
+          dangerouslySetInnerHTML={{
+            __html: first?.productDetail?.description as any,
           }}
         ></div>
 
@@ -568,6 +664,7 @@ export default function DetailsProduct() {
                   handleRemoveRating={handleRemoveRating}
                 />
               </div>
+              {}
               <div className="pagination">
                 <div className="flex">
                   <Button
