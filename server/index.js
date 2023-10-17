@@ -44,7 +44,7 @@ app.use('/buyzzle/auth', AuthRouter);
 app.use('/buyzzle/user', UserRouter);
 app.use('/buyzzle/product', ProductRoutes);
 app.use('/buyzzle/cart', CartRouter);
-app.use('buyzzle/stripe', SripeRouter)
+app.use('/buyzzle/stripe', SripeRouter)
 // Setup socket.io
 const server = http.createServer(app);
 const io = socketIo(server);
