@@ -251,11 +251,7 @@ const UserController = {
 
       const updateImage = await prisma.userImage.update({
          where: {
-<<<<<<< HEAD
-           iduser: parseInt(iduser), 
-=======
           iduser: parseInt(iduser), 
->>>>>>> origin/nguyendev2
           },
           data: {
           url,
