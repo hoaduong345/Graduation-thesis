@@ -24,4 +24,4 @@ app.post('/create-checkout-session', async (req, res) => {
     res.redirect(303, session.url);
   });
 
-  module.exports
+  module.exports = app
