@@ -643,6 +643,7 @@ export default function DetailsProduct() {
             __html: first?.productDetail.description as any,
           }}
         ></div> */}
+        {/* // */}
         <div
           className="px-[113px] py-[78px] text-sm break-all"
           dangerouslySetInnerHTML={{
