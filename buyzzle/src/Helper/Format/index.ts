@@ -3,7 +3,7 @@ export const numberFormat = (number: number) =>
     new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number)
 
 
-export const currentDate = (date: string | Date) => {
+export const currentDate = (date: string) => {
     return moment(date).format('MMMM Do YYYY');
 }
 

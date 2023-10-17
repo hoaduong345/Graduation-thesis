@@ -14,6 +14,7 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
+import { Row } from "../../../../Model/ProductModel";
 export interface Cate {
   id: number;
   name: string;
@@ -61,7 +62,7 @@ export interface PriceRangeFilterPage {
   onChangeSlider(min: number, max: number): void;
 }
 export default function FiltersPage() {
-  const [products, setProducts] = useState<Products[]>([]);
+  const [products, setProducts] = useState<Row[]>([]);
   // Button FIlterPage
   const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
   const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);

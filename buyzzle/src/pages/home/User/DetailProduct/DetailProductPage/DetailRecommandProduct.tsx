@@ -1,6 +1,10 @@
 import React from "react";
 import { Images } from "../../../../../Assets/TS";
-import { formatSoldCount, numberFormat, roundedNumber } from "../../../../../Helper/Format";
+import {
+  formatSoldCount,
+  numberFormat,
+  roundedNumber,
+} from "../../../../../Helper/Format";
 import { Products } from "../../FilterPage/FiltersPage";
 import { Link } from "react-router-dom";
 import { Rate, Row } from "../../../../../Model/ProductModel";
@@ -10,7 +14,10 @@ type Props = {
 export default function DetailRecommandProduct(props: Props) {
   const { productRecommand } = props;
   const stars = Array(5).fill(0);
-
+  console.log(
+    "🚀 ~ file: DetailRecommandProduct.tsx:112 ~ DetailRecommandProduct ~ productRecommand.rate:",
+    productRecommand.rate
+  );
   return (
     <>
       <Link to={`/Detailproducts/${productRecommand.id}`}>
@@ -94,7 +101,11 @@ export default function DetailRecommandProduct(props: Props) {
                 {stars.map((_, index) => (
                   <button key={index}>
                     <img
-                      src={index < productRecommand.rate ? Images.star1 : Images.star2}
+                      src={
+                        index < productRecommand.rate
+                          ? Images.star1
+                          : Images.star2
+                      }
                       alt=""
                     />
                   </button>

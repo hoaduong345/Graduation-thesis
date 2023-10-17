@@ -23,4 +23,8 @@ router.put("/paymentaddress/:username", UserController.PaymentAddress);
 
 router.get("/getpaymentaddress/:username", UserController.getPaymentAddress);
 
+
+router.put("/accountstatus/:username", UserController.AccountStatus);
+
+router.get("/getaccountstatus/:username", UserController.getAccountStatus);
 module.exports = router;
