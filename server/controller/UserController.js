@@ -251,7 +251,7 @@ const UserController = {
 
       const updateImage = await prisma.userImage.update({
          where: {
-           id: parseInt(iduser), 
+           iduser: parseInt(iduser), 
           },
           data: {
           url,
