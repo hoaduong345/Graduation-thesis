@@ -52,6 +52,7 @@ type Props = {
 };
 export default function RatingMap(props: Props) {
   const [idRating, setidRating] = useState<number>(0);
+
   const [url, setUrl] = useState<string[]>([]);
   const [loadingImage, setLoadingImage] = useState(false);
   const { id } = useParams();
@@ -253,7 +254,7 @@ className="flex items-center gap-4"
                 </div>
                 {/* end header comment */}
                 {/* content comment */}
-  
+
                 <div className="border-t-[1px] border-[#E0E0E0] py-2">
                   <p className="text-[#4C4C4C]">{rating.comment}</p>
                   <div className=" flex flex-1 mt-2">
@@ -272,7 +273,7 @@ className="flex items-center gap-4"
                     </div>
                   </div>
                 </div>
-  
+
                 {/* end content comment */}
                 {/* reply content comment */}
                 <div className="mx-3 my-2  flex">
@@ -315,12 +316,12 @@ className="flex items-center gap-4"
                 {/* content comment */}
                 <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7">
                   <p className="text-[#4C4C4C]">
-                    Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm hôm nay
-                    mua lại vì hôm đi chơi bị mất. vẫn chất lg như lần trc esd15
-                    mãi đỉnh , mà chắc do shop uy tín lên dùng rất tốt âm thanh
-                    bass trest chống âm cách tiếng onf đeo êm tai ko bị đua tai
-                    luôn chyaj bộ thể dục thoải mái nhá ae lên mua thanh anh shop
-                    tư vấn hài lòng vãi
+                    Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm hôm
+                    nay mua lại vì hôm đi chơi bị mất. vẫn chất lg như lần trc
+                    esd15 mãi đỉnh , mà chắc do shop uy tín lên dùng rất tốt âm
+                    thanh bass trest chống âm cách tiếng onf đeo êm tai ko bị
+                    đua tai luôn chyaj bộ thể dục thoải mái nhá ae lên mua thanh
+                    anh shop tư vấn hài lòng vãi
                   </p>
                 </div>
               </div>
@@ -457,7 +458,7 @@ control={control}
                   <span className="text-[#FF0000]">*</span>
 </p>
                 {/* card */}
-               {/* <div
+              {/* <div
                   className="card w-[100%] py-4 px-9 mt-2 
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                 >
@@ -468,7 +469,7 @@ control={control}
                       <>
                         <div className="flex max-[1300px]:gap-3">
                           {/* form upload img */}
-                      {/*    <div className="max-w-max items-center">
+              {/*    <div className="max-w-max items-center">
                             <label htmlFor="images">
                               <div
                                 className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer
@@ -497,7 +498,7 @@ control={control}
                             </label>
                           </div>
                           {/* end form upload img */}
-                          {/* {props.editImages.map((e) => {
+              {/* {props.editImages.map((e) => {
                             return (
                               <>
                                 <div className="relative">
@@ -530,7 +531,7 @@ className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden 
                               </>
                             );
                           })} */}
-                          {/*<div className="justify-center flex flex-1">
+              {/*<div className="justify-center flex flex-1">
                             <div className="inline-grid grid-cols-3 gap-4 relative">
                               {url.map((e) => {
                                 return (

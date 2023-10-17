@@ -101,6 +101,7 @@ export default function DetailsProduct() {
   const [selectedRating, setSelectedRating] = useState(0);
   const [editImages, setEditImages] = useState<EditImage[]>([]);
   const [rateAndcomment, setRateAndcomment] = useState<Ratee>();
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (first) {
@@ -159,11 +160,7 @@ export default function DetailsProduct() {
     );
     productController
       .getProductSuggest(id)
-      .then((res:any) => {
-        console.log(
-          "🚀 ~ file: Detailproducts.tsx:85 ~ productController.getProductSuggest ~ resssssssssss:",
-          res
-        );
+      .then((res: any) => {
         getComment(id);
         setRecommandProduct(res);
       })
@@ -236,9 +233,9 @@ export default function DetailsProduct() {
       });
     console.log("Sửa bình luận!");
   };
-  useEffect(()=>{
-      handleRemoveRating(Number(id))
-  },[first])
+  useEffect(() => {
+    handleRemoveRating(Number(id));
+  }, [first]);
   //Xóa comment
   const handleRemoveRating = (id: number) => {
     console.log(
@@ -247,14 +244,16 @@ export default function DetailsProduct() {
     );
     RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
       if (rateAndcomment) {
-        const removedRatings = rateAndcomment.Rating.filter((rating) => rating.id !== id);
+        const removedRatings = rateAndcomment.Rating.filter(
+          (rating) => rating.id !== id
+        );
         setRateAndcomment({
           ...rateAndcomment,
           Rating: removedRatings,
         });
-        getDetailProduct()
+        getDetailProduct();
         // RecommandProductDetailPage(id);
-        }
+      }
     });
     // getDetailProduct()
     RecommandProductDetailPage(id);
@@ -265,6 +264,10 @@ export default function DetailsProduct() {
     rateAndcomment?.totalRatings
   );
 
+  const handleImageClick = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
   return (
     <>
       <Container>
@@ -273,7 +276,7 @@ export default function DetailsProduct() {
             <div className="col-span-4">
               <img
                 className="w-[533px] h-[388px] object-cover"
-                src={first?.productDetail.ProductImage[0].url}
+                src={first?.productDetail.ProductImage[selectedImageIndex]?.url}
                 alt=""
               />
             </div>
@@ -284,16 +287,25 @@ export default function DetailsProduct() {
                     className="cursor-pointer absolute border-[1px] left-[20%] 
                                     px-4 py-2 w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md top-[-17px] 
                                     "
+                    onClick={() => handleImageClick(selectedImageIndex - 1)}
                   >
                     <ArrowUp />
                   </div>
                   {
                     // first?.ProductImage.filter( e)
-                    first?.productDetail.ProductImage.slice(1, 5).map((e) => {
-                      return (
-                        <img className="h-[88px] w-[88px]" src={e.url} alt="" />
-                      );
-                    })
+                    first?.productDetail.ProductImage.slice(1, 5).map(
+                      (e, index) => {
+                        return (
+                          <img
+                            key={index}
+                            className="h-[88px] w-[88px]"
+                            src={e.url}
+                            alt=""
+                            onClick={() => handleImageClick(index + 1)}
+                          />
+                        );
+                      }
+                    )
                   }
                   <div
                     className="cursor-pointer absolute border-[1px] left-[20%] 
@@ -305,6 +317,42 @@ export default function DetailsProduct() {
                 </div>
               </div>
             </div>
+            {/* <div className="col-span-4">
+              <img
+                className="w-[533px] h-[388px] object-cover"
+                src={first?.productDetail.ProductImage[selectedImageIndex]?.url}
+                alt=""
+              />
+              <div>
+                <div>
+                  <div className="col-span-2 grid grid-rows-4 grid-flow-col gap-3 relative ">
+                    <div
+                      className="cursor-pointer absolute border-[1px] left-[20%] px-4 py-2 w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md top-[-17px] "
+                      onClick={() => handleImageClick(selectedImageIndex - 1)}
+                    >
+                      <ArrowUp />
+                    </div>
+                    {first?.productDetail.ProductImage.slice(1, 5).map(
+                      (e, index) => (
+                        <img
+                          key={index}
+                          className="h-[88px] w-[88px]"
+                          src={e.url}
+                          alt=""
+                          onClick={() => handleImageClick(index + 1)}
+                        />
+                      )
+                    )}
+                    <div
+                      className="cursor-pointer absolute border-[1px] left-[20%] px-4 pb-[7.5px] pt-[8px] w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px]"
+                      onClick={() => handleImageClick(selectedImageIndex + 1)}
+                    >
+                      <ArrowDown />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> */}
             <div className="col-span-5 ">
               <p className="text-[32px] text-[#393939] font-medium leading-9">
                 {first?.productDetail.name}
@@ -581,9 +629,9 @@ export default function DetailsProduct() {
                       {arrRating.map((item, index) => {
                         return (
                           <RateDetailCMT
+                            key={index}
                             checked={item.checked}
                             rating={item.rating}
-                            key={index}
                           />
                         );
                       })}
