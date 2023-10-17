@@ -1,12 +1,9 @@
 import { ChangeEvent, Fragment, useState, useEffect } from "react";
-import Container from "../../../../../components/container/Container";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import * as yup from "yup";
 import { userController } from "../../../../../Controllers/UserController";
-import { Console } from "console";
 
 type FormValues = {
   id: number;
@@ -103,7 +100,6 @@ export default function PaymentAddress() {
     },
   });
 
-  const isDisabled = !(isValid && isDirty);
 
   const API = `http://localhost:5000/buyzzle/user/paymentaddress/${param.username}`;
 
@@ -225,14 +221,6 @@ export default function PaymentAddress() {
         }
       }
     }
-  };
-
-  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(JSON.parse(event.target.value));
-  };
-
-  const onChangeInput = (e: any) => {
-    setAddress(e.target.value);
   };
 
   return (
