@@ -8,9 +8,10 @@ type Props = {
 
 export default function PaymentBtn(props: Props) {
    const { cartItems } = props;
-   const handleCheckout = () => {
+   const handleCheckout = async () => {
       console.log(cartItems);
-      paymentControllers.createPayment(cartItems);
+      let result = await paymentControllers.createPayment(cartItems);
+      window.location.href = result.data.url;
    };
 
    return (
