@@ -233,7 +233,7 @@ const ProductController = {
                 pricesale: Pricesale,
                 sellingPrice: SellingPrice,
                 discount: parseInt(discount),
-                soldcount: parseInt(soldcount),
+                soldcount: 0,
                 quantity: parseInt(quantity),
                 description,
                 status,

@@ -2,7 +2,11 @@ import { type } from "os";
 import { Images } from "../../../Assets/TS";
 import { Product } from "../Index";
 import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
-import { formatSoldCount, numberFormat, roundedNumber } from "../../../Helper/Format";
+import {
+  formatSoldCount,
+  numberFormat,
+  roundedNumber,
+} from "../../../Helper/Format";
 import { Link } from "react-router-dom";
 import { Rate, Row } from "../../../Model/ProductModel";
 
@@ -129,7 +133,10 @@ export default function Productss(props: Props) {
             max-lg:text-base
             "
               >
-                Đã bán {formatSoldCount(product.soldcount!)}
+                Đã bán{" "}
+                {product.soldcount == 0
+                  ? "0"
+                  : formatSoldCount(product.soldcount!)}
               </p>
             </div>
           </div>
