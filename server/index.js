@@ -52,7 +52,8 @@ app.use('/buyzzle/cart', CartRouter);
 app.use('/buyzzle/order', OrderRouter);
 app.use('/buyzzle/voucher', VoucherRouter);
 
-app.use('buyzzle/stripe', SripeRouter);
+// app.use('buyzzle/stripe', SripeRouter);
+app.use('/buyzzle/stripe', SripeRouter);
 // Setup socket.io
 const server = http.createServer(app);
 const io = socketIo(server);
