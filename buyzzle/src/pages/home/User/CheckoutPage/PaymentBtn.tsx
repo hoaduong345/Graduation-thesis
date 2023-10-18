@@ -34,7 +34,7 @@ export default function PaymentBtn(props: StripePayment) {
                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
          >
             <Buyzzle />
-            <p>Mua ngay</p>
+            <p>Đặt ngay</p>
          </button>
       </>
    );

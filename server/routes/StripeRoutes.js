@@ -16,7 +16,7 @@ app.post('/create-checkout-session', async (req, res) => {
                         id: item.productid,
                     },
                 },
-                unit_amount: item.total,
+                unit_amount: item.product.sellingPrice,
             },
             quantity: item.quantity,
         };
