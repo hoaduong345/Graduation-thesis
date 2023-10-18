@@ -102,6 +102,11 @@ export default function DetailsProduct() {
   const [editImages, setEditImages] = useState<EditImage[]>([]);
   const [rateAndcomment, setRateAndcomment] = useState<Ratee>();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState("descriptions"); // Mặc định là tab "App"
+
+  const handleTabClick = (tabId: string) => {
+    setActiveTab(tabId);
+  };
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (first) {
@@ -623,122 +628,156 @@ export default function DetailsProduct() {
             </div>
           </div>
           {/* end Sản phẩm của shop */}
-
-          {/* Chi tiết và đánh giá */}
-          <div className="tabs justify-center">
-            <a className="tab tab-bordered text-[#1A1A1A] uppercase text-base">
-              Chi tiết sản phẩm
-            </a>
-            <a className="tab tab-bordered text-[#1A1A1A] font-medium tab-active uppercase text-base">
-              Đánh giá
-            </a>
-          </div>
         </body>
       </Container>
-      <div className="border-[1px] border-[#E0E0E0]"></div>
       <Container>
-        {/* <div
-          className="px-[113px] py-[78px] text-sm break-all"
-          dangerouslySetInnerHTML={{
-            __html: first?.productDetail.description as any,
-          }}
-        ></div> */}
-        {/* // */}
-        <div
-          className="px-[113px] py-[78px] text-sm break-all"
-          dangerouslySetInnerHTML={{
-            __html: first?.productDetail?.description as any,
-          }}
-        ></div>
-
-        {/* <Detail /> */}
-        {/* <Rating /> */}
-        <div className="mt-5 ">
-          <div className="grid gap-4 grid-cols-3">
-            {/* Left Comment */}
-            <div className="col-span-2 ">
-              <div>
-                <RatingMap
-                  handleEditProductRating={handleEditProductRating}
-                  rateAndcomment={rateAndcomment!}
-                  editImages={editImages!}
-                  handleRemoveRating={handleRemoveRating}
-                />
-              </div>
-              {}
-              <div className="pagination">
-                <div className="flex">
-                  <Button
-                    variant="text"
-                    // className="flex items-center gap-2"
-                    className={`${
-                      currentPage == 1 ? `hidden` : `flex items-center gap-2`
-                    }`}
-                    onClick={prev}
-                  >
-                    <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
-                    Previous
-                  </Button>
-                  {[...new Array(rateAndcomment?.totalRatings)].map(
-                    (item, index) => {
-                      const page = index + 1;
-                      console.log(item);
-                      return (
-                        <>
-                          <IconButton
-                            className="bg-none"
-                            {...getItemProps(page)}
-                          >
-                            <p className="ml-[-2px] text-sm">{page}</p>
-                          </IconButton>
-                        </>
-                      );
-                    }
-                  )}
-                  <Button
-                    variant="text"
-                    className={`${
-                      currentPage == rateAndcomment?.totalRatings
-                        ? "hidden"
-                        : "flex items-center gap-2"
-                    }`}
-                    onClick={next}
-                  >
-                    Next
-                    <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-                  </Button>
+        {/* Chi tiết và đánh giá */}
+        <div className="justify-center gap-6 flex mt-10">
+          <div>
+            <a
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
+                activeTab === "descriptions"
+                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                  : ""
+              }`}
+              onClick={() => handleTabClick("descriptions")}
+              role="tab"
+              aria-selected={activeTab === "descriptions" ? "true" : "false"}
+              aria-controls="descriptions"
+            >
+              <span className="ml-1">Chi tiết sản phẩm</span>
+            </a>
+          </div>
+          <div>
+            <a
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
+                activeTab === "Rating"
+                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                  : ""
+              }`}
+              onClick={() => handleTabClick("Rating")}
+              role="tab"
+              aria-selected={activeTab === "Rating" ? "true" : "false"}
+              aria-controls="Rating"
+            >
+              <span className="ml-1">Đánh giá</span>
+            </a>
+          </div>
+        </div>
+      </Container>
+      <div className="border-[1px] border-[#E0E0E0] mt-[-2px]"></div>
+      <Container>
+        <div data-tab-content className="p-5">
+          <div
+            className={` ${
+              activeTab === "descriptions" ? "visible" : "hidden"
+            }`}
+            id="descriptions"
+            role="tabpanel"
+          >
+            <div
+              className="px-[113px] py-[78px] text-sm break-all"
+              dangerouslySetInnerHTML={{
+                __html: first?.productDetail?.description as any,
+              }}
+            ></div>
+          </div>
+          <div
+            className={` ${activeTab === "Rating" ? "visible" : "hidden"}`}
+            id="Rating"
+            role="tabpanel"
+          >
+            {/* <Rating /> */}
+            <div className="mt-5 ">
+              <div className="grid gap-4 grid-cols-3">
+                {/* Left Comment */}
+                <div className="col-span-2 ">
+                  <div>
+                    <RatingMap
+                      handleEditProductRating={handleEditProductRating}
+                      rateAndcomment={rateAndcomment!}
+                      editImages={editImages!}
+                      handleRemoveRating={handleRemoveRating}
+                    />
+                  </div>
+                  {}
+                  <div className="pagination">
+                    <div className="flex">
+                      <Button
+                        variant="text"
+                        // className="flex items-center gap-2"
+                        className={`${
+                          currentPage == 1
+                            ? `hidden`
+                            : `flex items-center gap-2`
+                        }`}
+                        onClick={prev}
+                      >
+                        <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
+                        Previous
+                      </Button>
+                      {[...new Array(rateAndcomment?.totalRatings)].map(
+                        (item, index) => {
+                          const page = index + 1;
+                          console.log(item);
+                          return (
+                            <>
+                              <IconButton
+                                className="bg-none"
+                                {...getItemProps(page)}
+                              >
+                                <p className="ml-[-2px] text-sm">{page}</p>
+                              </IconButton>
+                            </>
+                          );
+                        }
+                      )}
+                      <Button
+                        variant="text"
+                        className={`${
+                          currentPage == rateAndcomment?.totalRatings
+                            ? "hidden"
+                            : "flex items-center gap-2"
+                        }`}
+                        onClick={next}
+                      >
+                        Next
+                        <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  {/* ///////////////////////////////////////////////////// */}
                 </div>
-              </div>
-              {/* ///////////////////////////////////////////////////// */}
-            </div>
-            {/* end Left Comment */}
-            {/* Right rating */}
-            <div>
-              <div
-                className="col-span-1 w-[312px] h-auto p-4 float-right
+                {/* end Left Comment */}
+                {/* Right rating */}
+                <div>
+                  <div
+                    className="col-span-1 w-[312px] h-auto p-4 float-right
                         shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-              >
-                <div className="py-5">
-                  <p className="text-[#1A1A1A] text-xl text-center font-medium">
-                    Tìm Kiếm
-                  </p>
-                  <div className="rate flex justify-center mt-3">
-                    <div className="mt-3">
-                      {arrRating.map((item, index) => {
-                        return (
-                          <RateDetailCMT
-                            key={index}
-                            checked={item.checked}
-                            rating={item.rating}
-                          />
-                        );
-                      })}
+                  >
+                    <div className="py-5">
+                      <p className="text-[#1A1A1A] text-xl text-center font-medium">
+                        Tìm Kiếm
+                      </p>
+                      <div className="rate flex justify-center mt-3">
+                        <div className="mt-3">
+                          {arrRating.map((item, index) => {
+                            return (
+                              <RateDetailCMT
+                                key={index}
+                                checked={item.checked}
+                                rating={item.rating}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+                {/* end Right rating */}
               </div>
             </div>
-            {/* end Right rating */}
           </div>
         </div>
       </Container>
