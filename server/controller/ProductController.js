@@ -373,7 +373,7 @@ const ProductController = {
         try {
             const productId = parseInt(req.params.id);
             const productDetail = await prisma.product.findFirst({
-                include: {
+                include: {  
                     ProductImage: true,
                 },
                 where: {
@@ -401,17 +401,20 @@ const ProductController = {
                     },
                 },
             });
-            if (ratings.length === 0) {
-                return res.status(200).json(0);
+            if (ratings && ratings.length > 0) {
+                const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
+                const averageRating = totalRating / ratings.length;
+                const resultProduct = {
+                    averageRating: averageRating,
+                    Rating: ratings,
+                    productDetail: productDetail,
+                };
+                res.status(200).json(resultProduct);
+                
+            } else {
+                res.status(200).json( 'Không có đánh giá cho sản phẩm này.' );
+                
             }
-            const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
-            const averageRating = totalRating / ratings.length;
-            const resultProduct = {
-                averageRating: averageRating,
-                Rating: ratings,
-                productDetail: productDetail,
-            };
-            res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -430,7 +433,9 @@ const ProductController = {
             const categoryId = req.query.categoryId;
             const discount = 60;
             const productId = parseInt(req.params.id);
-
+           
+            const starRating = req.query.starRating;
+            
             const FlashsaleProducts = await prisma.product.findMany({
                 where: {
                     discount: {
@@ -439,8 +444,6 @@ const ProductController = {
                 },
                 take: 3,
             });
-
-            // const { minPricefind, maxPricefind } = req.query;
 
             const skip = (page - 1) * pageSize;
             const whereClause = {
@@ -457,7 +460,7 @@ const ProductController = {
                     id: parseInt(categoryId),
                 };
             }
-
+           
             if (req.query.minPrice && req.query.maxPrice) {
                 whereClause.sellingPrice = {
                     gte: parseInt(req.query.minPrice),
@@ -471,9 +474,6 @@ const ProductController = {
                 };
             }
             const ratings = await prisma.rating.findMany({
-                // where: {
-                //     idproduct: productId,
-                // },
                 include: {
                     user: {
                         select: {
@@ -486,12 +486,11 @@ const ProductController = {
                         },
                     },
                 },
+                where: {
+                    ratingValue: parseInt(starRating), // Lọc theo đánh giá sao cố định.
+                },
             });
-            // if (ratings.length === 0) {
-            //     return res.status(200).json(0);
-            // }
-            // const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
-            // const averageRating = totalRating / ratings.length;
+            
             const result = await prisma.product.findMany({
                 orderBy: {
                     sellingPrice: sortByPrice,
@@ -501,6 +500,7 @@ const ProductController = {
                     ProductImage: true,
                     fK_category: true,
                     Rating: true,
+                   
                 },
                 where: whereClause,
                 skip,
@@ -528,6 +528,10 @@ const ProductController = {
         }
     },
 
+
+
+
+    
     getSugggestProduct: async (req, res) => {
         try {
             const productId = parseInt(req.params.id);
