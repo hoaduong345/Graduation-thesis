@@ -37,11 +37,18 @@ export default function CheckOut() {
 
    const [user, setUser] = useState<FormValues>({} as FormValues);
    const [discount, setDiscount] = useState<number>(0);
+   const [isChecked, setIsChecked] = useState(0);
    const [payment, setPayment] = useState([
       {
          id: 1,
          icon: Images.visa,
          title: "Thanh toán bằng thẻ tín dụng",
+         color: "#9c9c9c",
+      },
+      {
+         id: 2,
+         icon: Images.nhanHang,
+         title: "Thanh toán khi nhận hàng",
          color: "#9c9c9c",
       },
       // {
@@ -56,12 +63,6 @@ export default function CheckOut() {
       //    title: "Thanh toán bằng ví Zalopay",
       //    color: "#9c9c9c",
       // },
-      {
-         id: 4,
-         icon: Images.nhanHang,
-         title: "Thanh toán khi nhận hàng",
-         color: "#9c9c9c",
-      },
    ]);
 
    const localCart = sessionStorage.getItem("cartBuyzzle");
@@ -726,9 +727,10 @@ export default function CheckOut() {
                                                 className="max-lg:w-[10px]"
                                                 name="choose"
                                                 type="radio"
-                                                onChange={() =>
-                                                   paymentChecked(element.id)
-                                                }
+                                                onChange={() => {
+                                                   paymentChecked(element.id);
+                                                   setIsChecked(element.id);
+                                                }}
                                              />
                                              <div className="w-6">
                                                 <img
@@ -751,7 +753,10 @@ export default function CheckOut() {
                                  })}
                               </div>
                            </div>
-                           <PaymentBtn cartItems={listLocalCart} userId={1} />
+                           <PaymentBtn
+                              cartItems={listLocalCart}
+                              isCheckedPayment={isChecked}
+                           />
                         </div>
                      </div>
                   </div>

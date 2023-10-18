@@ -2,32 +2,42 @@ import { useState } from "react";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import { paymentControllers } from "../../../../Controllers/PaymentControllers";
 import { CartItem } from "../../../../Model/CartModel";
+import { toast } from "react-toastify";
 
 export interface StripePayment {
-   userId: number;
    cartItems: CartItem[];
+   isCheckedPayment: number;
 }
 
 export default function PaymentBtn(props: StripePayment) {
-   const { cartItems } = props;
+   const { cartItems, isCheckedPayment } = props;
 
    const [loading, setLoading] = useState(false);
 
    const handleCheckout = async () => {
-      setLoading(true);
-      setTimeout(async () => {
-         await paymentControllers
-            .createPayment({
-               cartItems: cartItems,
-               userId: 1,
-            })
-            .then((res) => {
-               if (res.data.url) {
-                  window.location.href = res.data.url;
-               }
-            })
-            .catch((err) => console.log(err.message));
-      }, 2000);
+      if (isCheckedPayment == 1) {
+         setLoading(true);
+         setTimeout(async () => {
+            await paymentControllers
+               .createPayment({
+                  cartItems: cartItems,
+                  isCheckedPayment: 0,
+               })
+               .then((res) => {
+                  if (res.data.url) {
+                     window.location.href = res.data.url;
+                  }
+               })
+               .catch((err) => console.log(err.message));
+         }, 1500);
+      } else if (isCheckedPayment == 2) {
+         setLoading(true);
+         setTimeout(async () => {
+            window.location.href = "/orderdetail";
+         }, 1500);
+      } else {
+         toast.warn("Chưa chọn Phương thức thanh toán");
+      }
    };
 
    const handleLoading = () => {

@@ -24,6 +24,8 @@ export default function OrderDetailPage() {
    const [url, setUrl] = useState<string[]>([]);
    const [loadingImage, setLoadingImage] = useState(false);
 
+   const [idSP, setIdSP] = useState(0);
+
    const [user, setUser] = useState<UserModel>({} as UserModel);
 
    const localCart = sessionStorage.getItem("cartBuyzzle");
@@ -162,7 +164,12 @@ export default function OrderDetailPage() {
 
    //Thêm đánh giá
    const handleAddProductRating = (id: string, data: Rating) => {
-      console.log(data, id);
+      const _data = {
+         idproduct: idSP,
+         ratingValue: data.ratingValue,
+         comment: data.comment,
+      };
+      console.log(_data);
       RatingAndCommentController.postRatingAndComment(data)
          .then(async (data) => {
             // setValue("iduser", data.iduser);
@@ -365,9 +372,10 @@ export default function OrderDetailPage() {
                                     <div className="col-span-1 flex mx-auto items-center">
                                        <button
                                           className="bg-[#EA4B48] rounded-md font-medium"
-                                          onClick={() =>
-                                             openDialog(idDialogRating)
-                                          }
+                                          onClick={() => {
+                                             openDialog(idDialogRating);
+                                             setIdSP(e.product.id);
+                                          }}
                                        >
                                           <p className="px-4 py-2 text-white">
                                              Đánh giá
