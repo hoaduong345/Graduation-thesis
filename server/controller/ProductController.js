@@ -436,10 +436,9 @@ const ProductController = {
             const sortByPrice = req.query.sortByPrice;
             const sortByDateCreate = req.query.sortByDateCreate;
             const categoryId = req.query.categoryId;
+            const rating = req.query.rating;
             const discount = 60;
-            const productId = parseInt(req.params.id);
-
-            const starRating = req.query.starRating;
+            const productid = parseInt(req.params.id);
 
             const FlashsaleProducts = await prisma.product.findMany({
                 where: {
@@ -466,6 +465,12 @@ const ProductController = {
                 };
             }
 
+            if (rating) {
+                whereClause.rate = {
+                    gte: parseInt(rating),
+                };
+            }
+
             if (req.query.minPrice && req.query.maxPrice) {
                 whereClause.sellingPrice = {
                     gte: parseInt(req.query.minPrice),
@@ -478,6 +483,7 @@ const ProductController = {
                     lte: parseInt(req.query.maxQuantity),
                 };
             }
+
             const ratings = await prisma.rating.findMany({
                 include: {
                     user: {
@@ -490,9 +496,6 @@ const ProductController = {
                             quantity: true,
                         },
                     },
-                },
-                where: {
-                    ratingValue: parseInt(starRating), // Lọc theo đánh giá sao cố định.
                 },
             });
 
@@ -511,10 +514,24 @@ const ProductController = {
                 take: pageSize,
             });
 
-            result.map((item) => {
-                const totalRating = item.Rating.reduce((sum, rating) => sum + rating.ratingValue, 0);
-                const averageRating = totalRating / item.Rating.length;
-                item.rate = averageRating;
+            result.forEach(async (product) => {
+                const totalRating = product.Rating.reduce((sum, rating) => sum + rating.ratingValue, 0);
+                const averageRating = totalRating / product.Rating.length;
+
+                const productId = product.id;
+
+                if (productId) {
+                    await prisma.product.update({
+                        where: {
+                            id: productId,
+                        },
+                        data: {
+                            rate: averageRating,
+                        },
+                    });
+                } else {
+                    console.error('k co id');
+                }
             });
 
             const resultProduct = {
