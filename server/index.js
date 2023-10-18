@@ -12,6 +12,7 @@ const OrderRouter = require('./routes/OrderRoutes');
 
 const ProductRoutes = require('./routes/ProductRoutes');
 const VoucherRouter = require('./routes/VoucherRoutes');
+const SripeRouter = require('./routes/StripeRoutes');
 const cookieParser = require('cookie-parser');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -51,6 +52,8 @@ app.use('/buyzzle/cart', CartRouter);
 app.use('/buyzzle/order', OrderRouter);
 app.use('/buyzzle/voucher', VoucherRouter);
 
+// app.use('buyzzle/stripe', SripeRouter);
+app.use('/buyzzle/stripe', SripeRouter);
 // Setup socket.io
 const server = http.createServer(app);
 const io = socketIo(server);
