@@ -3,7 +3,9 @@ const app = express();
 const stripe = require('stripe')('sk_test_51O0ahrIKIIhc6ETSN0E3p8O9RiVBg4AnNoQCwtvdNZuYq3yc1K8TwG5rcYSKPOuJJKDIzj3aXEvx4Zv71nKlfLvS00JFCLvX5t')
 
 app.post('/create-checkout-session', async (req, res) => {
+  
   const line_items = req.body.cartItems.map(item => {
+    
     return{
       price_data: {
         currency: 'usd',
