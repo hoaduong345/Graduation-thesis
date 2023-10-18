@@ -180,7 +180,6 @@ export default function ChangePassword() {
                           </>
                         )}
                       />
-                      {/* </div> */}
                       <div className="flex w-[100%] justify-between  mt-4">
                         <Controller
                           control={control}
@@ -289,7 +288,6 @@ export default function ChangePassword() {
                           )}
                         />
                       </div>
-                      {/* button */}
                       <div className="flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] mt-5">
                         <button
                           className={`text-center text-base font-bold text-[#FFFFFF]`}
