@@ -37,22 +37,27 @@ export default function CheckOut() {
 
    const [user, setUser] = useState<FormValues>({} as FormValues);
    const [discount, setDiscount] = useState<number>(0);
-   //  const [dicount, setPriceSale] = useState<number>(0);
    const [payment, setPayment] = useState([
       {
          id: 1,
-         icon: Images.momo,
-         title: "Thanh toán bằng ví Momo",
+         icon: Images.visa,
+         title: "Thanh toán bằng thẻ tín dụng",
          color: "#9c9c9c",
       },
+      // {
+      //    id: 2,
+      //    icon: Images.momo,
+      //    title: "Thanh toán bằng ví Momo",
+      //    color: "#9c9c9c",
+      // },
+      // {
+      //    id: 3,
+      //    icon: Images.zalo,
+      //    title: "Thanh toán bằng ví Zalopay",
+      //    color: "#9c9c9c",
+      // },
       {
-         id: 2,
-         icon: Images.zalo,
-         title: "Thanh toán bằng ví Zalopay",
-         color: "#9c9c9c",
-      },
-      {
-         id: 3,
+         id: 4,
          icon: Images.nhanHang,
          title: "Thanh toán khi nhận hàng",
          color: "#9c9c9c",
@@ -70,6 +75,7 @@ export default function CheckOut() {
    const localUsername = localStorage.getItem("user");
    const userLocal: User =
       localUsername == null ? "" : JSON.parse(localUsername);
+
    useEffect(() => {
       getUser();
    }, []);
@@ -134,18 +140,11 @@ export default function CheckOut() {
 
    const calculatePrice = () => {
       let totalCart = 0;
-      let sale = 0;
       for (let i = 0; i < listLocalCart.length; i++) {
          const element = listLocalCart[i];
          totalCart += element.quantity * element.product.sellingPrice;
-         sale +=
-            element.quantity *
-            (element.product.price - element.product.sellingPrice);
       }
-      return {
-         sale,
-         totalCart,
-      };
+      return totalCart;
    };
 
    const paymentChecked = (id: number) => {
@@ -680,7 +679,7 @@ export default function CheckOut() {
                                     Tổng Giá Sản Phẩm:{" "}
                                  </p>
                                  <p className="text-base text-[#EA4B48] max-[870px]:text-[11px]">
-                                    {numberFormat(calculatePrice().totalCart)}
+                                    {numberFormat(calculatePrice())}
                                  </p>
                               </div>
                               <div className="flex justify-between">
@@ -694,8 +693,7 @@ export default function CheckOut() {
                                     <p className="text-[#EA4B48]"> - </p> */}
                                     <p className="text-sm text-[#FFAAAF] max-[870px]:text-[11px]">
                                        {numberFormat(
-                                          calculatePrice().totalCart *
-                                             (discount / 100)
+                                          calculatePrice() * (discount / 100)
                                        )}
                                     </p>
                                  </div>
@@ -706,9 +704,8 @@ export default function CheckOut() {
                                  </p>
                                  <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
                                     {numberFormat(
-                                       calculatePrice().totalCart -
-                                          calculatePrice().totalCart *
-                                             (discount / 100)
+                                       calculatePrice() -
+                                          calculatePrice() * (discount / 100)
                                     )}
                                  </p>
                               </div>
