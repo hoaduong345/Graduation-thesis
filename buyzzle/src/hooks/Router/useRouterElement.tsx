@@ -191,7 +191,7 @@ export default function useRouterEmelent() {
           element: <VoucherPage />,
         },
         {
-          path: "detailuser",
+          path: "detailuser/:username",
           element: <DetailUser />,
         },
         {
