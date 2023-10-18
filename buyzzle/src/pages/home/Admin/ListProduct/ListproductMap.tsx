@@ -3,7 +3,9 @@ import { Products } from "../../User/FilterPage/FiltersPage";
 import Edit from "../Assets/TSX/Edit";
 import { Link } from "react-router-dom";
 import Delete from "../Assets/TSX/Delete";
-import { currentDate } from "../../../../Helper/Format";
+import { currentDate, roundedNumber } from "../../../../Helper/Format";
+import { stars } from "../../../../Helper/StarRating/Star";
+import { Images } from "../../../../Assets/TS";
 type Props = {
   products: Products;
   HandleXoa: (id: number) => void;
@@ -107,36 +109,24 @@ export default function ListproductMap(props: Props) {
             </div>
             {/* end so luong đã bán ra */}
             {/* rating  */}
-            <div className="rating max-2xl:ml-5 max-xl:ml-1 max-lg:invisible">
-              <div className="flex items-center justify-start gap-3 max-xl:gap-1 ">
+            <div>
+              <div className="flex items-center justify-start gap-2 ">
                 <div className="rating rating-xs">
-                  <input
-                    type="radio"
-                    name="rating-5"
-                    className="mask mask-star-2 bg-orange-400"
-                  />
-                  <input
-                    type="radio"
-                    name="rating-5"
-                    className="mask mask-star-2 bg-orange-400"
-                  />
-                  <input
-                    type="radio"
-                    name="rating-5"
-                    className="mask mask-star-2 bg-orange-400"
-                  />
-                  <input
-                    type="radio"
-                    name="rating-5"
-                    className="mask mask-star-2 bg-orange-400"
-                  />
-                  <input
-                    type="radio"
-                    name="rating-5"
-                    className="mask mask-star-2 bg-orange-400"
-                  />
+                  {stars.map((_, index) => (
+                    <button key={index}>
+                      {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                      <img
+                        src={
+                          index < products.rate ? Images.star1 : Images.star2
+                        }
+                        alt=""
+                      />
+                    </button>
+                  ))}
                 </div>
-                <p className="max-xl:text-xs">4.0</p>
+                <p className="text-[#EA4B48] text-sm">
+                  {roundedNumber(products.rate)}.0
+                </p>
               </div>
             </div>
           </div>

@@ -483,6 +483,12 @@ const ProductController = {
                     lte: parseInt(req.query.maxQuantity),
                 };
             }
+            if (req.query.minPurchase && req.query.maxPurchase) {
+                whereClause.soldcount = {
+                    gte: parseInt(req.query.minPurchase),
+                    lte: parseInt(req.query.maxPurchase),
+                };
+            }
 
             const ratings = await prisma.rating.findMany({
                 include: {
@@ -503,6 +509,7 @@ const ProductController = {
                 orderBy: {
                     sellingPrice: sortByPrice,
                     createdAt: sortByDateCreate,
+                    soldcount: 'desc',
                 },
                 include: {
                     ProductImage: true,
@@ -548,7 +555,34 @@ const ProductController = {
             res.status(500).json(error.message);
         }
     },
-
+    getProductAvailability: async (req, res) => {
+        try {
+            const inStockProducts = await prisma.product.findMany({
+                where: {
+                    soldcount: { lt: 5 }, // soldCount nho hon 5 va dong thoi quantity phai lon hon 0 => san pham con hang
+                    quantity: { gt: 0 },
+                },
+            });
+            res.status(200).json(inStockProducts);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Lỗi khi lấy sản phẩm còn hàng.' });
+        }
+    },
+    getProductSoldOut: async (req, res) => {
+        try {
+            const outOfStockProducts = await prisma.product.findMany({
+                where: {
+                    soldcount: { gte: 100 }, // soldCount lon hon 0 va dong thoi quantity phai nho hon 5 => san pham con hang
+                    quantity: { lte: 5 },
+                },
+            });
+            res.json(outOfStockProducts);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Lỗi khi lấy sản phẩm hết hàng.' });
+        }
+    },
     getSugggestProduct: async (req, res) => {
         try {
             const productId = parseInt(req.params.id);

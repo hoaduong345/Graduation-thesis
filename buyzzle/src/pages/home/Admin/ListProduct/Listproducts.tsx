@@ -33,6 +33,11 @@ export default function ListproductsAdmin() {
   >([0, 10000]);
   const debouncedInputValueQuantity = useDebounce(sliderQuantityValues, 400); // Debounce for 300 milliseconds
 
+  const [sliderPurchaseValues, setSliderPurchaseValues] = useState<
+    [number, number]
+  >([0, 10000]);
+  const debouncedInputValuePurchase = useDebounce(sliderPurchaseValues, 400); // Debounce for 300 milliseconds
+
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -117,9 +122,25 @@ export default function ListproductsAdmin() {
 
   // Slider Price SiteBarFilterPages and Slider Quantity SiteBarFilterPages
   useEffect(() => {
-    handleFilter(debouncedInputValuePrice, debouncedInputValueQuantity);
-  }, [debouncedInputValuePrice, debouncedInputValueQuantity]);
-  const handleFilter = async (priceRange: any, quantityRange: any) => {
+    handleFilter(
+      debouncedInputValuePrice,
+      debouncedInputValueQuantity,
+      debouncedInputValuePurchase
+    );
+  }, [
+    debouncedInputValuePrice,
+    debouncedInputValueQuantity,
+    debouncedInputValuePurchase,
+  ]);
+  const handleFilter = async (
+    priceRange: any,
+    quantityRange: any,
+    purchase: any
+  ) => {
+    console.log(
+      "🚀 ~ file: Listproducts.tsx:140 ~ ListproductsAdmin ~ purchase:",
+      purchase
+    );
     console.log(
       "🚀 ~ file: Listproducts.tsx:131 ~ handleFilter ~ quantityRange:",
       quantityRange
@@ -127,13 +148,15 @@ export default function ListproductsAdmin() {
     console.log("debouncedInputValue", priceRange);
 
     await productController
-      .getFilterProductbyPriceAndQuantityWithinRangePagination(
+      .getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination(
         priceRange[0],
         priceRange[1],
         currentPage,
         5,
         quantityRange[0],
-        quantityRange[1]
+        quantityRange[1],
+        purchase[0],
+        purchase[1]
       )
       .then((res: any) => {
         setProducts(res);
@@ -148,6 +171,11 @@ export default function ListproductsAdmin() {
   const handlePriceRangeChange = (price: [number, number]) => {
     setSliderPriceValues(price);
     console.log("price Range:", price);
+  };
+
+  const handlePurchaseRangeChange = (purchase: [number, number]) => {
+    setSliderPurchaseValues(purchase);
+    console.log("price Range:", purchase);
   };
   return (
     <>
@@ -335,10 +363,12 @@ export default function ListproductsAdmin() {
 
             {isShown && (
               <FilterListproduct
+                valuePurchase={sliderPurchaseValues}
                 valueQuantity={sliderQuantityValues}
                 valuePrice={sliderPriceValues}
                 onQuantityRangeChange={handleQuantityRangeChange}
                 onPriceRangeChange={handlePriceRangeChange}
+                onPurchaseRangeChange={handlePurchaseRangeChange}
               />
             )}
 
@@ -412,7 +442,7 @@ export default function ListproductsAdmin() {
                 })
               ) : (
                 <>
-                  <EmptyPage />
+                  <p>gio hang trong</p>
                 </>
               )}
             </div>

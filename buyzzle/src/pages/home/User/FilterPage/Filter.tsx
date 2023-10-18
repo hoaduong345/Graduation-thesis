@@ -82,7 +82,7 @@ const Filter = (props: Props) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 items-center gap-3 max-lg:mt-1">
+          <div className="flex items-center gap-3 max-lg:mt-1">
             <p
               className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through
           max-2xl:text-[9px]
@@ -92,7 +92,7 @@ const Filter = (props: Props) => {
               {numberFormat(product.price)}
             </p>
             <p
-              className="text-[16px] text-[#865546] col-span-2 font-bold 
+              className="text-[16px] text-[#865546] col-span-2  font-bold 
           max-2xl:text-sm
           max-lg:text-2xl
             "
@@ -103,7 +103,7 @@ const Filter = (props: Props) => {
 
           {/* rating  */}
           <div>
-            <div className="flex items-center justify-start gap-2 ">
+            <div className="flex items-center justify-start gap-1">
               <div className="rating rating-xs">
                 {stars.map((_, index) => (
                   <button key={index}>
@@ -125,7 +125,7 @@ const Filter = (props: Props) => {
             max-lg:text-base
             "
               >
-                Đã bán {roundedNumber(props.starsnumber)}.0
+                Đã bán {formatSoldCount(product.soldcount!)}
               </p>
             </div>
           </div>

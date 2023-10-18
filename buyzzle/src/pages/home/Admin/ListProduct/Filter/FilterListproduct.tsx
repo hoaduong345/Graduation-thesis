@@ -20,12 +20,14 @@ export default function FilterListproduct({
   valuePrice: value,
   onPriceRangeChange,
   onQuantityRangeChange,
+  onPurchaseRangeChange,
 }: SliderComponentProps) {
   const [price, setPrice] = useState(false);
   const [purchase, setPurchase] = useState(false);
   const [quantity, setPQuantity] = useState(false);
-  const [rangePriceValue, setRangePriceValue] = useState([5000000, 30000000]);
+  const [rangePriceValue, setRangePriceValue] = useState([50000, 300000]);
   const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
+  const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
   const handleSliderChangePrice = (price: [number, number]) => {
     console.log(
       "🚀 ~ file: FilterListproduct.tsx:29 ~ handleSliderChangePrice ~ price:",
@@ -41,6 +43,14 @@ export default function FilterListproduct({
     );
     setRangeQuantityValue(quantity);
     onQuantityRangeChange(quantity);
+  };
+  const handleSliderChangeBoughtQuantity = (quantity: [number, number]) => {
+    console.log(
+      "🚀 ~ file: FilterListproduct.tsx:34 ~ handleSliderChangeQuantity ~ quantity:",
+      quantity
+    );
+    setRangePurchaseValue(quantity);
+    onPurchaseRangeChange(quantity);
   };
   return (
     <div
@@ -66,7 +76,7 @@ export default function FilterListproduct({
             <div className="slider">
               <Slider
                 min={1000}
-                max={1000000000}
+                max={10000000}
                 step={1}
                 pushable={false}
                 value={rangePriceValue}
@@ -128,12 +138,12 @@ export default function FilterListproduct({
             </p>
             <Slider
               min={0}
-              max={100}
+              max={100000}
               trackStyle={{
                 backgroundColor: "#EA4B48",
               }}
               handleStyle={{ border: "1px solid red" }}
-              onChange={(e) => console.log(e)}
+              onChange={(e: any) => handleSliderChangeBoughtQuantity(e)}
               range
             />
             <div className="flex justify-start gap-2">
@@ -151,7 +161,7 @@ export default function FilterListproduct({
                                  purchase ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
                                } `}
               >
-                100 - 1000
+                {rangePurchaseValue[0]} - {rangePurchaseValue[1]}
               </p>
             </div>
           </div>
