@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -7,7 +6,7 @@ import Plus from "../../../../Assets/TSX/Plus";
 import Search from "../../../../Assets/TSX/Search";
 import { storage } from "../../../../Firebase/Config";
 import Container from "../../../../components/container/Container";
-import Delete from "../Assets/TSX/Delete";
+// import Delete from "../Assets/TSX/Delete";
 import Download from "../Assets/TSX/Download";
 import Edit from "../Assets/TSX/Edit";
 import Line from "../Assets/TSX/Line";
@@ -17,8 +16,10 @@ import Handle from "../Assets/TSX/bacham";
 import SitebarAdmin from "../Sitebar/Sitebar";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import Loading from "../../../../Helper/Loading/Loading";
+import { categoryController } from "../../../../Controllers/CategoryController";
+import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 
-type FormValues = {
+export type FormValues = {
    id: number;
    name: string;
    image: string;
@@ -26,12 +27,19 @@ type FormValues = {
 
 function Category() {
    const idModal = "category";
+   const idComfirm = "comfirm";
+
+   const [idCate, setIdCate] = useState(0);
 
    const [categorys, setCategorys] = useState<FormValues[]>([]);
 
    const [loading, setLoading] = useState(false);
 
    const [url, setUrl] = useState<string>();
+
+   const [checkedCategory, setCheckedCategory] = useState<FormValues[]>([]);
+
+   var checkAll: boolean = checkedCategory.length === categorys?.length;
 
    // img firebase
    const loadImageFile = async (images: any) => {
@@ -118,62 +126,34 @@ function Category() {
       }
       closeModal(id);
       if (data.id != 0) {
-         axios
-            .put(
-               `http://localhost:5000/buyzzle/product/updatecategory/${data.id}`,
-               {
-                  name: data.name,
-                  image: url,
-               }
-            )
-            .then((response) => {
-               return response;
-            })
-            .then((data) => {
-               toast.success("Cập nhật thành công!!");
-               console.log(data);
-               getList();
-               setnull();
-            })
-            .catch((error) => {
-               console.error("Error:", error);
-            });
-      } else {
-         axios
-            .post("http://localhost:5000/buyzzle/product/addcategory", {
+         categoryController
+            .update(data.id, {
+               id: data.id,
                name: data.name,
                image: url,
             })
-            .then((response) => {
-               return response;
-            })
-            .then((data) => {
-               toast.success("Thêm thành công!!");
-               console.log(data);
+            .then(() => {
+               toast.success("Cập nhật thành công!!");
                getList();
                setnull();
-            })
-            .catch((error) => {
-               console.error("Error:", error);
-               // Xử lý lỗi nếu có
+            });
+      } else {
+         categoryController
+            .create({ id: data.id, name: data.name, image: url })
+            .then(() => {
+               toast.success("Thêm thành công!!");
+               getList();
+               setnull();
             });
       }
    };
 
-   const remove = (id: number) => {
-      axios
-         .delete(`http://localhost:5000/buyzzle/product/deletecategory/${id}`)
-         .then((response) => {
-            return response;
-         })
-         .then(() => {
-            toast.error("Successfully");
-            getList();
-         })
-         .catch((error) => {
-            console.error("Error:", error);
-            alert(error);
-         });
+   const remove = (id: number, idDialog: string) => {
+      categoryController.remove(id).then(() => {
+         closeModal(idDialog);
+         toast.error("Successfully");
+         getList();
+      });
    };
 
    useEffect(() => {
@@ -181,18 +161,10 @@ function Category() {
    }, []);
 
    const getList = () => {
-      fetch("http://localhost:5000/buyzzle/product/allcategory")
-         .then((data) => {
-            const bien = data.json();
-            return bien;
-         })
-         .then((data) => {
-            closeModal("");
-            setCategorys(data);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
+      categoryController.getAll().then((res) => {
+         closeModal("");
+         setCategorys(res.data);
+      });
    };
    const openModal = (id: string, data: FormValues) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
@@ -216,6 +188,22 @@ function Category() {
       setUrl("");
    };
 
+   const handleChecked = (checked: boolean, data: FormValues) => {
+      if (checked) {
+         setCheckedCategory((prev) => [...prev, data]);
+      } else {
+         const cloneCate = [...checkedCategory];
+         const cloneCates = cloneCate.filter((e) => e.id !== data.id);
+         setCheckedCategory(cloneCates);
+      }
+   };
+   const handleCheckedAll = (checked: boolean) => {
+      if (checked) {
+         setCheckedCategory(categorys);
+      } else {
+         setCheckedCategory([]);
+      }
+   };
    return (
       <>
          <Container>
@@ -257,7 +245,15 @@ function Category() {
 
                      <div className="grid grid-cols-10 items-center">
                         <div className="col-span-1 py-[15px] pl-[35px]">
-                           <Delete />
+                           {/* <Delete /> */}
+                           <input
+                              checked={checkAll}
+                              className="checkbox checkbox-sm items-center"
+                              type="checkbox"
+                              onChange={(e) =>
+                                 handleCheckedAll(e.target.checked)
+                              }
+                           />
                         </div>
                         <div className="col-span-2">
                            <Line />
@@ -366,28 +362,6 @@ function Category() {
                                                       )}
                                                    />
                                                 </div>
-                                                {/* <div>
-                                                                    <label htmlFor="" className="text-sm max-xl:text-xs max-lg:text-[10px]">Chuỗi Cho Đường Dẫn Tĩnh*</label>
-                                                                    <input
-                                                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                                        placeholder="Nhập chuỗi cho đường dẫn tĩnh"
-
-                                                                    />
-                                                                </div>
-                                                                <div>
-                                                                    <label htmlFor="" className="text-sm max-xl:text-xs max-lg:text-[10px]">Mô tả Danh Mục</label>
-                                                                    <input
-                                                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                                        placeholder="Nhập mô tả danh mục"
-
-                                                                    />
-                                                                </div> */}
                                              </div>
                                           </div>
                                        </div>
@@ -446,11 +420,22 @@ function Category() {
                         </div>
                      </div>
 
+                     <DialogComfirm
+                        desc="Danh mục"
+                        id={idComfirm}
+                        onClose={() => closeModal(idComfirm)}
+                        title="Xóa danh mục"
+                        onSave={() => remove(idCate, idComfirm)}
+                     />
+
                      <div className="grid grid-cols-10">
                         {categorys.map((e) => {
                            return (
                               <>
-                                 <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between px-6">
+                                 <div
+                                    key={e.id}
+                                    className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between px-6"
+                                 >
                                     <div className=" flex gap-[20px] max-lg:gap-2">
                                        <button>
                                           <Plus />
@@ -480,7 +465,13 @@ function Category() {
                                              </li>
                                              <li>
                                                 <button
-                                                   onClick={() => remove(e.id)}
+                                                   onClick={() => {
+                                                      openModal(
+                                                         idComfirm,
+                                                         {} as FormValues
+                                                      );
+                                                      setIdCate(e.id);
+                                                   }}
                                                    className="flex items-center gap-4"
                                                 >
                                                    <RemoveCate />
@@ -491,7 +482,17 @@ function Category() {
                                              </li>
                                           </ul>
                                        </div>
-                                       <input type="checkbox" />
+                                       <input
+                                          className="checkbox checkbox-sm items-center"
+                                          type="checkbox"
+                                          checked={checkedCategory.includes(e)}
+                                          onChange={(element) =>
+                                             handleChecked(
+                                                element.target.checked,
+                                                e
+                                             )
+                                          }
+                                       />
                                     </div>
                                     <div>
                                        <img

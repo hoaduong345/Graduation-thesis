@@ -1,7 +1,6 @@
 import axios from "axios"
-import { Products } from "../pages/home/User/FilterPage/FiltersPage"
-import { FormValues } from "../pages/home/Admin/Addproduct/Addproducts"
-import { async } from "@firebase/util"
+import { FormValues } from "../pages/home/Admin/Category/Category"
+
 
 export const appConfig = {
     apiUrl: import.meta.env.VITE_BACKEND_URL || ''
@@ -31,6 +30,11 @@ class CategoryController {
     }
     getAll = async () => {
         return await axios.get(`${appConfig.apiUrl}/allcategory`)
+    }
+    create = async (data: FormValues): Promise<FormValues> => {
+        return await axios.post(`${appConfig.apiUrl}/addcategory`, data).then((res) => {
+            return res.data as FormValues
+        })
     }
 }
 

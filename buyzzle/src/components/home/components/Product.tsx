@@ -2,15 +2,18 @@ import { type } from "os";
 import { Images } from "../../../Assets/TS";
 import { Product } from "../Index";
 import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
-import { numberFormat } from "../../../Helper";
+import { formatSoldCount, numberFormat, roundedNumber } from "../../../Helper/Format";
 import { Link } from "react-router-dom";
+import { Rate, Row } from "../../../Model/ProductModel";
 
 export type Props = {
-  product: Product;
+  product: Row;
 };
 
 export default function Productss(props: Props) {
   const { product } = props;
+  // Tạo một mảng với đủ số lượng sao (5 sao) mà bạn muốn hiển thị
+  const stars = Array(5).fill(0);
   return (
     <>
       <Link to={`/Detailproducts/${product.id}`}>
@@ -89,7 +92,7 @@ export default function Productss(props: Props) {
                 {numberFormat(product.price)}
               </p>
               <p
-className="text-[16px] text-[#865546] col-span-2 font-bold 
+                className="text-[16px] text-[#865546] col-span-2 font-bold 
           max-2xl:text-sm
           max-lg:text-2xl
             "
@@ -106,23 +109,17 @@ className="text-[16px] text-[#865546] col-span-2 font-bold
           "
             >
               <div>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star1} alt="" />
-                </button>
-                <button>
-                  <img src={Images.star2} alt="" />
-                </button>
+                {stars.map((_, index) => (
+                  <button key={index}>
+                    {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                    <img
+                      src={index < product.rate ? Images.star1 : Images.star2}
+                      alt=""
+                    />
+                  </button>
+                ))}
                 <span className="text-[12px] mr-[30px] ml-[4px] max-lg:text-base">
-                  {4.2}
+                  {roundedNumber(product.rate)}.0
                 </span>
               </div>
 
@@ -132,8 +129,7 @@ className="text-[16px] text-[#865546] col-span-2 font-bold
             max-lg:text-base
             "
               >
-                Đã bán
-                <span> 300</span>
+                Đã bán {formatSoldCount(product.soldcount!)}
               </p>
             </div>
           </div>

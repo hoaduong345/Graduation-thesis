@@ -7,8 +7,12 @@ const bodyParser = require('body-parser');
 const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
+
+const OrderRouter = require('./routes/OrderRoutes');
+
 const ProductRoutes = require('./routes/ProductRoutes');
-const SripeRouter = require("./routes/StripeRoutes")
+const VoucherRouter = require('./routes/VoucherRoutes');
+const SripeRouter = require('./routes/StripeRoutes');
 const cookieParser = require('cookie-parser');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -44,7 +48,12 @@ app.use('/buyzzle/auth', AuthRouter);
 app.use('/buyzzle/user', UserRouter);
 app.use('/buyzzle/product', ProductRoutes);
 app.use('/buyzzle/cart', CartRouter);
-app.use('/buyzzle/stripe', SripeRouter)
+
+app.use('/buyzzle/order', OrderRouter);
+app.use('/buyzzle/voucher', VoucherRouter);
+
+// app.use('buyzzle/stripe', SripeRouter);
+app.use('/buyzzle/stripe', SripeRouter);
 // Setup socket.io
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -60,7 +69,6 @@ io.on('connection', (socket) => {
     });
 });
 
-
 server.listen(process.env.APP_PORT || 5000, () => {
-    console.log('Server up and running on port ' + (process.env.APP_PORT));
+    console.log('Server up and running on port ' + process.env.APP_PORT);
 });

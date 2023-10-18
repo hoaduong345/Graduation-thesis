@@ -3,7 +3,6 @@ import { IconButton } from "@material-tailwind/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Search from "../../../../Assets/TSX/Search";
-import { imagesController } from "../../../../Controllers/ImagesController";
 import { productController } from "../../../../Controllers/ProductsController";
 import Container from "../../../../components/container/Container";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
@@ -291,6 +290,7 @@ export default function ListproductsAdmin() {
                     max-xl:font-medium
                     max-lg:text-xs
                     "
+                        // onClick={(e) => getData(e)}
                       >
                         Xuất excel
                       </button>
@@ -412,10 +412,7 @@ export default function ListproductsAdmin() {
                 })
               ) : (
                 <>
-                  <EmptyPage
-                    title="Danh sách sản phẩm trống"
-                    button="Thêm Ngay"
-                  />
+                  <EmptyPage />
                 </>
               )}
             </div>

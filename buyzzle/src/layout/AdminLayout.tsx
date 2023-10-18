@@ -1,18 +1,15 @@
-import { Outlet } from "react-router-dom"
-import Footer from "../components/Footer/Footer"
-import Header from "../components/Header/Header"
+import { Outlet } from "react-router-dom";
+import HeaderAdmin from "../components/Header/HeaderAdmin";
+import Footer from "../components/Footer/Footer";
 
-
-interface Props {
-}
-function AdminLayout(props: Props) {
-  return (
-    <div >
-      <Header />
-        <Outlet />
-      <Footer />
-    </div>
-  )
+function AdminLayout() {
+   return (
+      <div>
+         <HeaderAdmin />
+         <Outlet />
+         <Footer />
+      </div>
+   );
 }
 
-export default AdminLayout
+export default AdminLayout;

@@ -1,9 +1,14 @@
 import { Products } from "./FiltersPage";
 import { Images } from "../../../../Assets/TS";
 import { Link } from "react-router-dom";
-import { numberFormat } from "../../../../Helper";
+import {
+  formatSoldCount,
+  numberFormat,
+  roundedNumber,
+} from "../../../../Helper/Format";
+import { Row } from "../../../../Model/ProductModel";
 type Props = {
-  product: Products;
+  product: Row;
 };
 const Filter = (props: Props) => {
   const { product } = props;
@@ -116,7 +121,7 @@ const Filter = (props: Props) => {
                 <img src={Images.star2} alt="" />
               </button>
               <span className="text-[12px] mr-[30px] ml-[4px] max-lg:text-base">
-                {4.2}
+                {roundedNumber(product.rate)}.0
               </span>
             </div>
 
@@ -126,8 +131,7 @@ const Filter = (props: Props) => {
             max-lg:text-base
             "
             >
-              Đã bán
-              <span> 300</span>
+              Đã bán {formatSoldCount(product.soldcount!)}
             </p>
           </div>
         </div>

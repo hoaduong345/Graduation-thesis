@@ -9,10 +9,17 @@ import RemoveCate from "../Assets/TSX/RemoveCate";
 import Handle from "../Assets/TSX/bacham";
 import SitebarAdmin from "../Sitebar/Sitebar";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
+import { useEffect, useState } from "react";
+import { voucherControllers } from "../../../../Controllers/VoucherControllers";
+import { VoucherModel } from "../../../../Model/VoucherModel";
+import { toast } from "react-toastify";
+import "./voucher.css";
+import moment from "moment";
+import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 
 type FormValues = {
-   voucherType: string;
-   name: string;
+   id: number;
+   discount: number;
    startDate: string;
    endDate: string;
    quantity: number;
@@ -21,6 +28,28 @@ type FormValues = {
 
 export default function VoucherPage() {
    const idModal = "voucher";
+   const idRemove = "removeVoucher";
+
+   const [voucher, setVoucher] = useState<VoucherModel[]>([]);
+   const [idVoucher, setIdVoucher] = useState<number | undefined>(0);
+   const currentDate = (date: Date) => {
+      return moment(date).format("L");
+   };
+   useEffect(() => {
+      getVoucher();
+   }, []);
+
+   const getVoucher = async () => {
+      await voucherControllers.get(1).then((res) => {
+         setVoucher(res.data);
+      });
+   };
+
+   const onRemoveVoucher = async (id: number | undefined) => {
+      await voucherControllers.remove(id);
+      getVoucher();
+      closeModal(idRemove);
+   };
 
    const {
       control,
@@ -31,8 +60,8 @@ export default function VoucherPage() {
    } = useForm<FormValues>({
       mode: "all",
       defaultValues: {
-         voucherType: "",
-         name: "",
+         id: 0,
+         discount: 1,
          quantity: 1,
          voucherCode: "",
          startDate: "",
@@ -40,9 +69,10 @@ export default function VoucherPage() {
       },
    });
 
-   const openModal = async (id: string) => {
+   const openModal = async (id: string, data: FormValues) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
+         reset(data);
          modal.showModal();
       }
    };
@@ -51,25 +81,45 @@ export default function VoucherPage() {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          clearErrors();
+         reset({});
          modal.close();
       }
    };
 
    const saveModal = (data: FormValues) => {
-      const dataForm = {
-         voucherType: data.voucherType,
-         name: data.name,
-         quantity: data.quantity,
-         voucherCode: data.voucherCode,
-         startDate: data.startDate,
-         endDate: data.endDate,
+      const dataForm: VoucherModel = {
+         id: Number(data.id),
+         discount: Number(data.discount),
+         quantity: Number(data.quantity),
+         code: data.voucherCode,
+         startDay: new Date(data.startDate),
+         endDay: new Date(data.endDate),
       };
 
-      reset({});
+      closeModal(idModal);
+      if (data.id == 0) {
+         voucherControllers.add(dataForm).then(() => {
+            getVoucher();
+            toast.success("Thành Công");
+         });
+      } else {
+         voucherControllers.update(dataForm.id, dataForm).then(() => {
+            getVoucher();
+            toast.success("Thành Công");
+         });
+      }
 
-      console.log(dataForm);
+      reset({});
    };
 
+   // const handlePageClick = async (event: any) => {
+   //    const newOffset = (event.selected % total) + 1;
+
+   //    await voucherControllers.get(newOffset).then((res) => {
+   //       setVoucher(res.data);
+   //    });
+   // };
+   //.
    return (
       <>
          <Container>
@@ -109,19 +159,16 @@ export default function VoucherPage() {
                         </div>
                      </div>
 
-                     <div className="grid grid-cols-6">
+                     <div className="grid grid-cols-5">
                         <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
                            <Delete />
                            <p className="max-[940px]:text-sm">Xóa</p>
                         </div>
                         <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
-                           <p>Loại Voucher</p>
-                        </div>
-                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
-                           <p>Tên Voucher</p>
-                        </div>
-                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                            <p>Mã Voucher</p>
+                        </div>
+                        <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                           <p>Giảm Giá</p>
                         </div>
                         <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                            <p>Thời Gian</p>
@@ -139,7 +186,9 @@ export default function VoucherPage() {
                            <div className="col-span-1"></div>
                            <div className="col-span-6">
                               <button
-                                 onClick={() => openModal(idModal)}
+                                 onClick={() =>
+                                    openModal(idModal, { id: 0 } as FormValues)
+                                 }
                                  className="flex gap-3 items-center "
                               >
                                  <Plus />
@@ -156,27 +205,37 @@ export default function VoucherPage() {
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
                                                 <Controller
+                                                   name="voucherCode"
                                                    control={control}
-                                                   name="voucherType"
                                                    rules={{
                                                       required: {
                                                          value: true,
                                                          message:
-                                                            "Vui lòng chọn",
+                                                            "Không để trống",
+                                                      },
+                                                      maxLength: {
+                                                         value: 20,
+                                                         message:
+                                                            "Nhiều nhất 20 ký tự",
                                                       },
                                                    }}
                                                    render={({ field }) => (
                                                       <>
                                                          <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
-                                                            Loại Voucher*
+                                                            Mã Voucher*
                                                          </label>
 
-                                                         <select
-                                                            name=""
-                                                            id=""
+                                                         <input
+                                                            className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                                            placeholder="Nhập mã voucher"
+                                                            name="name"
                                                             value={field.value}
                                                             onChange={(e) => {
-                                                               const reg = /[]/;
+                                                               const reg =
+                                                                  /[!@#$%^& ]/;
                                                                const value =
                                                                   e.target
                                                                      .value;
@@ -187,33 +246,12 @@ export default function VoucherPage() {
                                                                   )
                                                                );
                                                             }}
-                                                            className={`focus:outline-none border-[1px] text-center text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                         >
-                                                            <option
-                                                               value=""
-                                                               className="text-[#718096]"
-                                                            >
-                                                               {" "}
-                                                               -- Chọn loại giảm
-                                                               giá --
-                                                            </option>
-
-                                                            <option>GPS</option>
-                                                            <option>
-                                                               GPRS
-                                                            </option>
-                                                            <option>
-                                                               GssRS
-                                                            </option>
-                                                         </select>
-                                                         {errors.voucherType && (
+                                                         />
+                                                         {errors.voucherCode && (
                                                             <p className="text-[11px] text-red-700 mt-2">
                                                                {
                                                                   errors
-                                                                     .voucherType
+                                                                     .voucherCode
                                                                      .message
                                                                }
                                                             </p>
@@ -331,46 +369,42 @@ export default function VoucherPage() {
                                              </div>
                                           </div>
                                        </div>
-
+                                       {/* sda */}
                                        <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
                                           <div className="col-span-2">
                                              <div className="flex flex-col gap-1">
                                                 <Controller
-                                                   name="name"
                                                    control={control}
+                                                   name="discount"
                                                    rules={{
                                                       required: {
                                                          value: true,
                                                          message:
-                                                            "Không để trống",
-                                                      },
-                                                      minLength: {
-                                                         value: 4,
-                                                         message:
-                                                            "Ít nhất 4 ký tự",
+                                                            "Vui lòng chọn",
                                                       },
                                                       maxLength: {
-                                                         value: 20,
+                                                         value: 2,
                                                          message:
-                                                            "Ít hơn 20 ký tự",
+                                                            "Nhỏ hơn 100%",
                                                       },
                                                    }}
                                                    render={({ field }) => (
                                                       <>
                                                          <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
-                                                            Tên Voucher*
+                                                            Giảm Giá (%)*
                                                          </label>
-
                                                          <input
                                                             className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                                            placeholder="Nhập tiêu đề cho mã giảm giá này"
+                                                            placeholder="Nhập % giảm giá"
+                                                            type="number"
+                                                            name="name"
                                                             value={field.value}
                                                             onChange={(e) => {
                                                                const reg =
-                                                                  /[!@#$%^&]/;
+                                                                  /[a-zA-Z!@#$e]/;
                                                                const value =
                                                                   e.target
                                                                      .value;
@@ -382,10 +416,12 @@ export default function VoucherPage() {
                                                                );
                                                             }}
                                                          />
-                                                         {errors.name && (
+
+                                                         {errors.discount && (
                                                             <p className="text-[11px] text-red-700 mt-2">
                                                                {
-                                                                  errors.name
+                                                                  errors
+                                                                     .discount
                                                                      .message
                                                                }
                                                             </p>
@@ -451,92 +487,6 @@ export default function VoucherPage() {
                                              </div>
                                           </div>
                                        </div>
-
-                                       <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
-                                          <div className="col-span-2">
-                                             <div className="flex flex-col gap-1">
-                                                <Controller
-                                                   name="voucherCode"
-                                                   control={control}
-                                                   rules={{
-                                                      required: {
-                                                         value: true,
-                                                         message:
-                                                            "Không để trống",
-                                                      },
-                                                      maxLength: {
-                                                         value: 20,
-                                                         message:
-                                                            "Nhiều nhất 20 ký tự",
-                                                      },
-                                                   }}
-                                                   render={({ field }) => (
-                                                      <>
-                                                         <label className="text-sm text-[#4C4C4C] max-xl:text-xs max-lg:text-[10px]">
-                                                            Mã Voucher*
-                                                         </label>
-
-                                                         <input
-                                                            className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                            placeholder="Nhập mã voucher"
-                                                            name="name"
-                                                            value={field.value}
-                                                            onChange={(e) => {
-                                                               const reg =
-                                                                  /[!@#$%^&]/;
-                                                               const value =
-                                                                  e.target
-                                                                     .value;
-                                                               field.onChange(
-                                                                  value.replace(
-                                                                     reg,
-                                                                     ""
-                                                                  )
-                                                               );
-                                                            }}
-                                                         />
-                                                         {errors.voucherCode && (
-                                                            <p className="text-[11px] text-red-700 mt-2">
-                                                               {
-                                                                  errors
-                                                                     .voucherCode
-                                                                     .message
-                                                               }
-                                                            </p>
-                                                         )}
-                                                      </>
-                                                   )}
-                                                />
-                                             </div>
-                                          </div>
-                                       </div>
-
-                                       {/* <div className="flex gap-2 items-center justify-end">
-                                          <button
-                                             onClick={handleSubmit(
-                                                (data: any) => {
-                                                   postVoucher(data);
-                                                }
-                                             )}
-                                             className="text-base font-bold flex gap-3 px-[50px] py-3 border-[#EA4B48] items-center rounded-md border-[1px]
-                                             max-lg:text-sm max-lg:py-[10px] max-lg:px-8 max-lg:gap-2
-                                             max-[940px]:text-[13px] max-[940px]:py-[6px] max-[940px]:px-7 "
-                                          >
-                                             <AddCateBtn />
-                                             Xác Nhận
-                                          </button>
-                                          <button
-                                             className="py-3 px-8 text-white text-base bg-[#EA4B48] rounded-md
-                                             max-lg:text-sm
-                                             max-[940px]:text-[13px] max-[940px]:py-2 max-[940px]:px-4"
-                                             onClick={closeModal}
-                                          >
-                                             Hủy
-                                          </button>
-                                       </div> */}
                                     </>
                                  }
                                  id={idModal}
@@ -549,91 +499,119 @@ export default function VoucherPage() {
                            </div>
                         </div>
 
-                        <div className="grid grid-cols-6 border-t-[1px] py-7">
-                           <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
-                              <div className="dropdown dropdown-left">
-                                 <label tabIndex={0}>
-                                    <Handle />
-                                 </label>
-                                 <ul
-                                    tabIndex={0}
-                                    className="dropdown-content menu bg-white rounded-box w-52
+                        {voucher.map((e) => {
+                           return (
+                              <>
+                                 <div className="grid grid-cols-5 border-t-[1px] py-7">
+                                    <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
+                                       <div className="dropdown dropdown-left">
+                                          <label tabIndex={0}>
+                                             <Handle />
+                                          </label>
+                                          <ul
+                                             tabIndex={0}
+                                             className="dropdown-content menu bg-white rounded-box w-52
                                                 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                                 max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                                 >
-                                    <li>
-                                       <button
-                                          onClick={() => openModal(idModal)}
-                                          className="flex items-center gap-4"
-                                       >
-                                          <Edit />
-                                          <p
-                                             className="text-[#EA4B48] text-sm font-medium
+                                          >
+                                             <li>
+                                                <button
+                                                   onClick={() =>
+                                                      openModal(idModal, {
+                                                         id: e.id,
+                                                         discount: e.discount,
+                                                         startDate:
+                                                            e.startDay.toString(),
+                                                         endDate:
+                                                            e.endDay.toString(),
+                                                         quantity: e.quantity,
+                                                         voucherCode: e.code,
+                                                      })
+                                                   }
+                                                   className="flex items-center gap-4"
+                                                >
+                                                   <Edit />
+                                                   <p
+                                                      className="text-[#EA4B48] text-sm font-medium
                                             max-[940px]:text-xs "
-                                          >
-                                             Sửa
-                                          </p>
-                                       </button>
-                                    </li>
-                                    <li>
-                                       <button className="flex items-center gap-4">
-                                          <RemoveCate />
-                                          <p
-                                             className="text-[#EA4B48] text-sm font-medium
+                                                   >
+                                                      Sửa
+                                                   </p>
+                                                </button>
+                                             </li>
+                                             <li>
+                                                <button
+                                                   onClick={() => {
+                                                      openModal(
+                                                         idRemove,
+                                                         {} as FormValues
+                                                      );
+                                                      setIdVoucher(e.id);
+                                                   }}
+                                                   className="flex items-center gap-4"
+                                                >
+                                                   <RemoveCate />
+                                                   <p
+                                                      className="text-[#EA4B48] text-sm font-medium
                                              max-[940px]:text-xs "
-                                          >
-                                             Xóa
-                                          </p>
-                                       </button>
-                                    </li>
-                                 </ul>
-                              </div>
-                              <input
-                                 type="checkbox"
-                                 className="w-5 h-5 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                              />
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A] 
+                                                   >
+                                                      Xóa
+                                                   </p>
+                                                </button>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                       <input
+                                          type="checkbox"
+                                          className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                                       />
+                                    </div>
+
+                                    <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                                       <p
+                                          className="font-medium text-base text-[#EA4B48]
+                                 max-[940px]:text-xs "
+                                       >
+                                          {e.code}
+                                       </p>
+                                    </div>
+                                    <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                                       <p
+                                          className="font-medium text-base text-[#1A1A1A] 
                                     max-[940px]:text-xs "
-                              >
-                                 GPS
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
-                                 max-[940px]:text-xs "
-                              >
-                                 Thiết Bị Điện Tử
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#EA4B48]
-                                 max-[940px]:text-xs "
-                              >
-                                 THANGDZ
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
+                                       >
+                                          {e.discount ?? "FREE SHIP"}%
+                                       </p>
+                                    </div>
+                                    <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                                       <p
+                                          className="font-medium text-base text-[#1A1A1A]
                                 max-[940px]:text-xs "
-                              >
-                                 12/11/23 - 20/11/23
-                              </p>
-                           </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
-                              <p
-                                 className="font-medium text-base text-[#1A1A1A]
+                                       >
+                                          {currentDate(e.startDay)} -{" "}
+                                          {currentDate(e.endDay)}
+                                       </p>
+                                    </div>
+                                    <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                                       <p
+                                          className="font-medium text-base text-[#1A1A1A]
                                  max-[940px]:text-xs "
-                              >
-                                 10/1000
-                              </p>
-                           </div>
-                        </div>
+                                       >
+                                          0/{e.quantity}
+                                       </p>
+                                    </div>
+                                 </div>
+                              </>
+                           );
+                        })}
+
+                        <DialogComfirm
+                           desc="voucher"
+                           onClose={() => closeModal(idRemove)}
+                           title="Xóa voucher này"
+                           onSave={() => onRemoveVoucher(idVoucher)}
+                           id={idRemove}
+                        />
                      </div>
                   </div>
                </div>
