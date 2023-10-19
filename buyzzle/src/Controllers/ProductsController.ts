@@ -62,8 +62,8 @@ class ProductController {
             return res.data as Products[]
         })
     }
-    getFilterProductbyPriceAndQuantityWithinRangePagination = async (minPrice: number, maxPrice: number, page: number, pageSize: number, minQuantity: number, maxQuantity: number,): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&pageSize=${pageSize}&minQuantity=${minQuantity}&maxQuantity=${maxQuantity}`).then((res) => {
+    getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination = async (minPrice: number, maxPrice: number, page: number, pageSize: number, minQuantity: number, maxQuantity: number,minPurchase:number,maxPurchase:number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&pageSize=${pageSize}&minQuantity=${minQuantity}&maxQuantity=${maxQuantity}&minPurchase=${minPurchase}&maxPurchase=${maxPurchase}`).then((res) => {
             return res.data as Products[]
         })
     }
@@ -83,6 +83,22 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getProductSoldOut = async (soldOut: string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts/${soldOut}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getProductAvailability = async (availability:string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts/${availability}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getProductInStockAndSoldOut = async (inStockOrsoldOut:string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?availabilityType=${inStockOrsoldOut}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+   
 }
 
 export const productController = new ProductController()
