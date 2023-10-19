@@ -44,23 +44,6 @@ export default function VoucherIcon(props: Props) {
                </div>
             </div>
          </div>
-         {/* <div className="relative p-6 rounded-md bg-gradient-to-br from-pink-500 to-purple-600 text-white">
-            <div className="absolute top-0 left-0 h-6 w-6 bg-yellow-300 rounded-tl-lg" />
-            <div className="absolute top-0 right-0 h-6 w-6 bg-yellow-300 rounded-tr-lg" />
-            <div className="absolute bottom-0 left-0 h-6 w-6 bg-yellow-300 rounded-bl-lg" />
-            <div className="absolute bottom-0 right-0 h-6 w-6 bg-yellow-300 rounded-br-lg" />
-            <div className="border-2 border-dashed border-yellow-300 my-6" />
-            <div className="flex items-center justify-between">
-               <div className="text-2xl font-bold">Mã Giảm Giá</div>
-               <div className="text-4xl font-bold">50% OFF</div>
-            </div>
-            <div className="mt-4">
-               <p>
-                  Sử dụng mã "50OFF" khi thanh toán để nhận giảm giá 50% cho đơn
-                  hàng của bạn.
-               </p>
-            </div>
-         </div> */}
       </>
    );
 }
