@@ -10,9 +10,6 @@ import { toast } from "react-toastify";
 import VoucherManageItem from "../../../../Assets/TSX/VoucherManageItem";
 
 export default function VoucherHomePage() {
-   // { props }: { props: VoucherModel }
-   // const { voucher, save } = props;
-
    const [voucher, setVoucher] = useState<VoucherModel[]>([]);
 
    const voucherLocal = localStorage.getItem("voucher");
@@ -70,7 +67,7 @@ export default function VoucherHomePage() {
                {voucher.map((e) => {
                   return (
                      <>
-                        <div className="col-span-1 relative">
+                        <div className="col-span-1 relative ">
                            <VoucherManageItem />
 
                            <div className="absolute left-[8%] top-[17%] flex flex-col gap-3 items-center">
@@ -95,7 +92,7 @@ export default function VoucherHomePage() {
                            </div>
 
                            <div className="absolute right-[10%] top-[17%] flex flex-col items-center gap-1">
-                              <p className="text-white font-bold text-xl">
+                              <p className="text-white font-bold text-xl blinking-text">
                                  BUYZZLE
                               </p>
                               <LogoVoucher />
