@@ -600,9 +600,9 @@ const ProductController = {
                 whereClause.rate = {
                     gte: parseInt(rating),
                 };
-            }
-
-            if (req.query.minPrice && req.query.maxPrice) {
+              }
+           
+            if (req.query.minPrice && req.query.maxPrice) { 
                 whereClause.sellingPrice = {
                     gte: parseInt(req.query.minPrice),
                     lte: parseInt(req.query.maxPrice),
@@ -843,11 +843,19 @@ const ProductController = {
             const productId = parseInt(req.params.productId);
             const page = parseInt(req.query.page) || 1;
             const perPage = parseInt(req.query.perPage) || 40;
-
+            const selectedRatingValue = parseInt(req.query.selectedRatingValue);
+    
+            const whereClause = {
+                idproduct: productId,
+            };
+    
+         
+            if (!isNaN(selectedRatingValue)) {
+                whereClause.ratingValue = selectedRatingValue;
+            }
+    
             const ratings = await prisma.rating.findMany({
-                where: {
-                    idproduct: productId,
-                },
+                where: whereClause,
                 include: {
                     user: {
                         select: {
@@ -868,19 +876,19 @@ const ProductController = {
                 skip: (page - 1) * perPage,
                 take: perPage,
             });
-
+    
             if (ratings.length === 0) {
                 return res.status(200).json(0);
             }
+    
             // Lấy số lượng tổng cộng của đánh giá cho sản phẩm
             const totalRatings = await prisma.rating.count({
-                where: {
-                    idproduct: productId,
-                },
+                where: whereClause,
             });
+    
             const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
             const averageRating = totalRating / totalRatings;
-
+    
             const resultProduct = {
                 currentPage: page,
                 perPage: perPage,
@@ -888,13 +896,14 @@ const ProductController = {
                 averageRating: averageRating,
                 Rating: ratings,
             };
-
+    
             res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    
 
     updateRatingandComment: async (req, res) => {
         try {
