@@ -21,6 +21,7 @@ import TW from "../../../Admin/Assets/TSX/TW";
 import { productController } from "../../../../../Controllers/ProductsController";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
+
 import {
   ModelCart,
   cartControllers,
@@ -84,6 +85,7 @@ export type Product = {
 export interface RatingStarDetail {
   checked: boolean;
   rating: number;
+  onChangeFilter?(rating: number): void;
 }
 const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 5 },
@@ -157,6 +159,21 @@ export default function DetailsProduct() {
       setQuantity(quantity - 1);
     }
   };
+  const getCommentWhereRating = (idproduct: any, rating: any) =>{
+    RatingAndCommentController
+    .getCommentWhereRating(idproduct, rating)
+    .then((res: any)=>{
+      setRateAndcomment(res);
+    }).catch((err) => {
+      console.log(err);
+    });
+
+  }
+  const HandleGetCommentWhereRating = (rating: any) =>{
+    const idproduct = id;
+    console.log("IDDDDDDDDDDDD:"+id);
+    getCommentWhereRating(idproduct, rating);
+  }
 
   const RecommandProductDetailPage = (id: number) => {
     console.log(
@@ -767,6 +784,10 @@ export default function DetailsProduct() {
                                 key={index}
                                 checked={item.checked}
                                 rating={item.rating}
+                                onChangeFilter={(rating) => {
+                                  console.log("Ratting:"+rating)
+                                  HandleGetCommentWhereRating(rating);
+                                }}
                               />
                             );
                           })}

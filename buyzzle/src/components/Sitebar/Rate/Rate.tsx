@@ -16,7 +16,7 @@ export default function Rate(props: RatingStar) {
           checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
           onChange={(e) => {
             // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
-            props.onChangeFilter?.(props.rating.toString());
+            props.onChangeFilter?.(props.rating);
           }}
           
           />

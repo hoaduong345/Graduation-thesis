@@ -216,6 +216,13 @@ export default function ListproductsAdmin() {
       })
       .catch((err) => console.log(err));
   };
+  const getProductWhereRating =async (rate: any) => {
+    await productController
+    .getProductWhereRatting(rate)
+    .then((res)=>{
+      setProducts(res);
+    }).catch((err) => console.log(err));
+  }
   return (
     <>
       <Container>
@@ -402,6 +409,7 @@ export default function ListproductsAdmin() {
 
             {isShown && (
               <FilterListproduct
+                onRateChange={getProductWhereRating}
                 valuePurchase={sliderPurchaseValues}
                 valueQuantity={sliderQuantityValues}
                 valuePrice={sliderPriceValues}

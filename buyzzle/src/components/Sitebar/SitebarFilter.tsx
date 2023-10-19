@@ -20,7 +20,7 @@ export interface RatingStar {
   checked: boolean;
   rating: number;
 
-  onChangeFilter?(tittle: string): void;
+  onChangeFilter?(rating: number): void;
 }
 
 const arrRating: RatingStar[] = [

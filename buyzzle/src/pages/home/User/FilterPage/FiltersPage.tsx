@@ -223,7 +223,13 @@ export default function FiltersPage() {
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
-              onRateChange={(e:any)=> getProductsWhereRating(e)}
+              onRateChange={(e: any) => getProductsWhereRating(e)} onPurchaseRangeChange={function (value: [number, number]): void {
+                throw new Error("Function not implemented.");
+              } } oninStock={function (availability: boolean): void {
+                throw new Error("Function not implemented.");
+              } } onSoldOut={function (soldOut: boolean): void {
+                throw new Error("Function not implemented.");
+              } }        
             />
           </div>
           {/* content-right-filter */}
