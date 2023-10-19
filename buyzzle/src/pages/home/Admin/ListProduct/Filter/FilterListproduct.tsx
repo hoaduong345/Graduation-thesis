@@ -205,6 +205,7 @@ export default function FilterListproduct({
                   type="checkbox"
                   className="w-4 h-4 accent-[#EA4B48] max-xl:w-[14px] max-xl:h-[14px] max-[900px]:w-3 max-[900px]:h-3"
                   onChange={(e) => handleClickSoldOut(e.target.checked)}
+                  checked={soldOut} // Đặt trạng thái checked của checkbox dựa trên biến soldOut
                 />
                 <p className="text-sm font-bold text-[#EA4B48] max-xl:text-[13px]">
                   Hết Hàng
