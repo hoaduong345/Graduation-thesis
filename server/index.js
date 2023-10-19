@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
-
+const InvoiceRouter = require('./routes/InvoiceRoutes')
 const OrderRouter = require('./routes/OrderRoutes');
 
 const ProductRoutes = require('./routes/ProductRoutes');
@@ -51,7 +51,7 @@ app.use('/buyzzle/cart', CartRouter);
 
 app.use('/buyzzle/order', OrderRouter);
 app.use('/buyzzle/voucher', VoucherRouter);
-
+app.use('/buyzzle/invoice', InvoiceRouter)
 // app.use('buyzzle/stripe', SripeRouter);
 app.use('/buyzzle/stripe', SripeRouter);
 // Setup socket.io

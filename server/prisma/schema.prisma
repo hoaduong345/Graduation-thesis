@@ -35,13 +35,14 @@ model User {
   UserImage            UserImage[]
   Rating               Rating[]
   // roleId               Role? @relation(fields: [id], references: [id])
+  invoices                 Invoice[]
 }
 
 model UserImage {
-  id               Int      @id @default(autoincrement()) @unique
-  url              String?
-  iduser            Int     @unique
-  fK_UserImage User? @relation(fields: [iduser], references: [id], onDelete: Cascade)
+  id           Int     @id @default(autoincrement())
+  url          String?
+  iduser       Int?
+  fK_UserImage User?   @relation(fields: [iduser], references: [id], onDelete: Cascade)
 }
 
 model Role {
@@ -101,6 +102,7 @@ model Cart {
   userId   Int
   item     ItemCart[]
   subtotal Int
+  invoices InvoiceDetails[]
 }
 
 model ItemCart {
@@ -178,4 +180,20 @@ model Voucher {
   endDay    DateTime?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
+}
+
+model Invoice {
+  id     Int  @id @default(autoincrement())
+  iduser Int
+  user   User @relation(fields: [iduser], references: [id])
+  invoiceDetails InvoiceDetails[]
+}
+
+model InvoiceDetails {
+  id Int @id @default(autoincrement())
+  invoice Invoice @relation(fields: [idInvoice], references: [id])
+  idInvoice Int
+  cart Cart @relation(fields: [cartId], references: [id])
+  cartId Int
+  
 }
