@@ -1,9 +1,10 @@
-export default function LogoVoucherBuyzzle() {
+export default function VoucherManage() {
    return (
       <svg
          xmlns="http://www.w3.org/2000/svg"
-         className="w-[145px] h-[145px]"
-         viewBox="0 0 155 140"
+         width="80"
+         height="80"
+         viewBox="0 0 160 160"
          fill="none"
       >
          <path

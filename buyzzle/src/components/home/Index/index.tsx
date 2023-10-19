@@ -47,7 +47,7 @@ interface VoucherBanner {
 
 const listVoucherBanner: VoucherBanner[] = [
    {
-      pathName: "",
+      pathName: "/voucher",
       icon: <LogoVoucherBuyzzle />,
       title: "BUYZZLE",
    },
@@ -62,11 +62,6 @@ function Index() {
    useScroll();
    const [categoty, setCategory] = useState<Cate[]>([]);
    const [product, setProducts] = useState<Row[]>([]);
-   // const [voucher, setVoucher] = useState<VoucherModel[]>([]);
-
-   // const voucherLocal = localStorage.getItem("voucher");
-   // const dataVoucherLocal: VoucherModel[] =
-   //    voucherLocal == null ? [] : JSON.parse(voucherLocal);
 
    const getCategory = async () => {
       await axios
@@ -83,35 +78,11 @@ function Index() {
          setProducts(res.rows);
       });
    };
-   // const getVoucher = async () => {
-   //    await voucherControllers.get(1).then((res) => {
-   //       setVoucher(res.data);
-   //    });
-   // };
+
    useEffect(() => {
       getCategory();
       getAllProducts();
-      // getVoucher();
    }, []);
-
-   // const saveVoucherLocal = (id: number, data: VoucherModel) => {
-   //    const maxVoucher = dataVoucherLocal.length;
-   //    const index = dataVoucherLocal.findIndex((e) => e.id == id);
-   //    if (maxVoucher >= 5) {
-   //       toast.error("Lưu tối đa 5 voucher");
-   //    } else {
-   //       if (index !== -1) {
-   //          toast.error("Bạn đã lưu mã giảm giá này");
-   //       } else {
-   //          dataVoucherLocal.push(data);
-   //          localStorage.setItem(
-   //             "voucher",
-   //             JSON.stringify([...dataVoucherLocal])
-   //          );
-   //          toast.success("Thành công");
-   //       }
-   //    }
-   // };
 
    return (
       <>

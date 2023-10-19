@@ -27,6 +27,7 @@ import User from "../../pages/home/Admin/Management/User/User";
 import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 import DetailUser from "../../pages/home/Admin/DetailUser/DetailUser";
 import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
+import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 export default function useRouterEmelent() {
    const routes = useRoutes([
       {
@@ -115,6 +116,14 @@ export default function useRouterEmelent() {
       },
       {
          path: "voucher",
+         element: (
+            <MainLayout>
+               <VoucherHomePage />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "uservoucherstorage",
          element: (
             <MainLayout>
                <VoucherUserPage />
