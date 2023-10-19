@@ -471,7 +471,7 @@ const ProductController = {
                 };
               }
            
-            if (req.query.minPrice && req.query.maxPrice) {
+            if (req.query.minPrice && req.query.maxPrice) { 
                 whereClause.sellingPrice = {
                     gte: parseInt(req.query.minPrice),
                     lte: parseInt(req.query.maxPrice),
@@ -639,10 +639,12 @@ const ProductController = {
             const productId = parseInt(req.params.productId);
             const page = parseInt(req.query.page) || 1;
             const perPage = parseInt(req.query.perPage) || 40;
+            const selectedRatingValue = parseInt(req.query.selectedRatingValue);
 
             const ratings = await prisma.rating.findMany({
                 where: {
                     idproduct: productId,
+                    ratingValue: selectedRatingValue,
                 },
                 include: {
                     user: {
