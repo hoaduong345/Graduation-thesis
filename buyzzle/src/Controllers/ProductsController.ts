@@ -83,6 +83,22 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getProductSoldOut = async (soldOut: string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts/${soldOut}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getProductAvailability = async (availability:string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts/${availability}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+    getProductInStockAndSoldOut = async (inStockOrsoldOut:string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?availabilityType=${inStockOrsoldOut}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
+   
 }
 
 export const productController = new ProductController()
