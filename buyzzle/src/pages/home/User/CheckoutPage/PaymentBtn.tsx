@@ -6,11 +6,12 @@ import { toast } from "react-toastify";
 
 export interface StripePayment {
    cartItems: CartItem[];
+   discount: number;
    isCheckedPayment: number;
 }
 
 export default function PaymentBtn(props: StripePayment) {
-   const { cartItems, isCheckedPayment } = props;
+   const { cartItems, isCheckedPayment, discount } = props;
 
    const [loading, setLoading] = useState(false);
 
@@ -22,6 +23,7 @@ export default function PaymentBtn(props: StripePayment) {
                .createPayment({
                   cartItems: cartItems,
                   isCheckedPayment: 0,
+                  discount: discount,
                })
                .then((res) => {
                   if (res.data.url) {

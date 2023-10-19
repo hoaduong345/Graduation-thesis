@@ -756,6 +756,7 @@ export default function CheckOut() {
                            <PaymentBtn
                               cartItems={listLocalCart}
                               isCheckedPayment={isChecked}
+                              discount={discount}
                            />
                         </div>
                      </div>
