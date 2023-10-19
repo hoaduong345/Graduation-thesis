@@ -14,7 +14,10 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
-import { Row } from "../../../../Model/ProductModel";
+import { Rate, Row } from "../../../../Model/ProductModel";
+import axios from "axios";
+import { appConfig } from "../../../../configsEnv";
+import { roundedNumber } from "../../../../Helper/Format";
 export interface Cate {
   id: number;
   name: string;
@@ -72,6 +75,8 @@ export interface RatingStar {
 
 export default function FiltersPage() {
   const [products, setProducts] = useState<Row[]>([]);
+  const [stars, setStars] = useState<Rate>();
+  const [starsnumber, setStarsnumber] = useState(0);
   // Button FIlterPage
   const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
   const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
@@ -93,6 +98,17 @@ export default function FiltersPage() {
     "🚀 ~ file: FiltersPage.tsx:79 ~ FiltersPage ~ text:",
     keywordSearch
   );
+
+  // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
+  useEffect(() => {
+    if (stars) {
+      setStarsnumber(roundedNumber(stars.averageRating));
+      console.log(
+        "🚀 ~ file: FiltersPage.tsx:99 ~ useEffect ~ stars.averageRating:",
+        stars.averageRating
+      );
+    }
+  }, [stars]);
 
   const handleActiveBTNLowToHighClick = () => {
     productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
@@ -140,6 +156,11 @@ export default function FiltersPage() {
   const getData = () => {
     productController.getList("", idCate).then((res: any) => {
       console.log(res);
+      setStars(res.data);
+      console.log(
+        "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
+        res.data
+      );
       setProducts(res.rows);
     });
   };
@@ -365,7 +386,7 @@ export default function FiltersPage() {
 
             <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
               {products?.map((items) => {
-                return <Filter product={items} />;
+                return <Filter starsnumber={starsnumber} product={items} />;
               })}
             </div>
             {/* <div

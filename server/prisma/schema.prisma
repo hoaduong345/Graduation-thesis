@@ -69,7 +69,7 @@ model Product {
   pricesale    Int?
   sellingPrice Int?
   discount     Int?
-  soldcount    Int?
+  soldcount    Int?           @default(0)
   quantity     Int?
   description  String?        @db.VarChar(15000)
   status       String?
