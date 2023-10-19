@@ -92,11 +92,11 @@ export default function ListproductsAdmin() {
     setSearch(e.target.value);
   };
   const getItemProps = (index: number) =>
-    ({
-      variant: currentPage === index ? "filled" : "text",
-      color: "gray",
-      onClick: () => setCurrentPage(index),
-    } as any);
+  ({
+    variant: currentPage === index ? "filled" : "text",
+    color: "gray",
+    onClick: () => setCurrentPage(index),
+  } as any);
   const next = () => {
     if (currentPage === 999) return;
 
@@ -290,7 +290,7 @@ export default function ListproductsAdmin() {
                     max-xl:font-medium
                     max-lg:text-xs
                     "
-                        // onClick={(e) => getData(e)}
+                      // onClick={(e) => getData(e)}
                       >
                         Xuất excel
                       </button>

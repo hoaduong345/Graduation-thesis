@@ -61,6 +61,15 @@ export interface PriceRangeFilterPage {
   // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
   onChangeSlider(min: number, max: number): void;
 }
+
+export interface RatingStar {
+  checked: boolean;
+  rating: number;
+
+  onChangeFilter(tittle: string): void;
+}
+
+
 export default function FiltersPage() {
   const [products, setProducts] = useState<Row[]>([]);
   // Button FIlterPage
@@ -159,7 +168,18 @@ export default function FiltersPage() {
     console.log("value", price);
     setSliderValues(price);
   }
-
+  const getProductsWhereRating = (rate: any) => {
+    productController
+      .getProductWhereRatting(rate)
+      .then((res: any) => {
+        // const [product, setProducts] = useState<Row[]>([]);
+        console.log("Ratting fillter" + res);
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   const getSearchDataName = () => {
     productController
       .getSearchAndPaginationProduct(keywordSearch.slice(13).toString())
@@ -172,6 +192,7 @@ export default function FiltersPage() {
       });
   };
 
+
   return (
     <Container>
       <body className="body-filter container mx-auto">
@@ -181,6 +202,7 @@ export default function FiltersPage() {
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
+              onRateChange={(e:any)=> getProductsWhereRating(e)}
             />
           </div>
           {/* content-right-filter */}
