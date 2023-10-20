@@ -1,21 +1,23 @@
 import { Images } from "../../../Assets/TS";
+import Arrow from "../../../Assets/TSX/arrow";
 import Container from "../../container/Container";
 import Category from "../components/Category";
-import Arrow from "../../../Assets/TSX/arrow";
 
-import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
-import Progess from "../components/progess";
-import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { ReactNode, useEffect, useState } from "react";
 import { productController } from "../../../Controllers/ProductsController";
-import Productss from "../components/Product";
-import { ImgOfProduct } from "../../../pages/home/User/FilterPage/FiltersPage";
-import { ThemeContext } from "../../../hooks/Context/ThemeContextProvider";
+import { Row } from "../../../Model/ProductModel";
 import { useScroll } from "../../../hooks/Scroll/useScrollPages";
+import { ImgOfProduct } from "../../../pages/home/User/FilterPage/FiltersPage";
 import { Cate } from "../components/Category";
-import useDebounce from "../../../useDebounceHook/useDebounce";
-import { Rate, Row } from "../../../Model/ProductModel";
+import Productss from "../components/Product";
+import Progess from "../components/progess";
+import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
+import SanVoucher from "../../../Assets/TSX/SanVoucher";
+import VoucherBuyzzle from "../../../Assets/TSX/VoucherBuyzzle";
+import { Link } from "react-router-dom";
+import LogoVoucherBuyzzle from "../../../Assets/TSX/LogoVoucherBuyzzle";
+import LogoVoucherFreeship from "../../../Assets/TSX/LogoVoucherFreeship";
 
 export type Product = {
   id: number;
@@ -36,6 +38,25 @@ export type FlashSaleList = {
   price: number;
   daBan: number;
 };
+
+interface VoucherBanner {
+  pathName: string;
+  icon: ReactNode;
+  title: string;
+}
+
+const listVoucherBanner: VoucherBanner[] = [
+  {
+    pathName: "/voucher",
+    icon: <LogoVoucherBuyzzle />,
+    title: "BUYZZLE",
+  },
+  {
+    pathName: "",
+    icon: <LogoVoucherFreeship />,
+    title: "FREESHIP",
+  },
+];
 
 function Index() {
   useScroll();
@@ -119,21 +140,55 @@ function Index() {
             {categoty.map((e) => {
               return <Category id={e.id} image={e.image} name={e.name} />;
             })}
-
-            {/* <Category img={Images.Category1} title="Thiết bị điện gia dụng" />
-            <Category img={Images.Category2} title="Giày dép da" />
-            <Category img={Images.Category3} title="Đồng hồ" />
-            <Category img={Images.Category4} title="Máy ảnh" />
-            <Category img={Images.Category5} title="Thời trang nam" />
-            <Category img={Images.Category6} title="Thiết bị điện tử" />
-
-            <Category img={Images.Category7} title="Phụ kiện trang sức nữ" />
-            <Category img={Images.Category8} title="Túi ví nữ" />
-            <Category img={Images.Category9} title="Giày dép nữ" />
-            <Category img={Images.Category10} title="Sức khỏe" />
-            <Category img={Images.Category11} title="Sắc đẹp" />
-            <Category img={Images.Category12} title="Nhà cửa đời sống" /> */}
           </div>
+        </div>
+
+        <div className="container mt-[90px]">
+          <div className="flex justify-center mb-10">
+            <SanVoucher />
+          </div>
+
+          <div className="flex justify-center gap-[24px]">
+            {listVoucherBanner.map((e) => {
+              return (
+                <>
+                  <Link
+                    to={e.pathName}
+                    className="max-w-[420px] scale-95 duration-300 hover:scale-100 relative"
+                  >
+                    <VoucherBuyzzle />
+                    <div className="absolute left-[7%] top-[29%]">
+                      <div className="flex flex-col gap-1 items-center">
+                        <p className="font-bold text-2xl text-[#4C4C4C]">
+                          VOUCHER
+                        </p>
+                        <p className="font-bold text-[32px] text-[#4C4C4C]">
+                          {e.title}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="absolute bottom-[13%] right-[5%]">
+                      {e.icon}
+                    </div>
+                  </Link>
+                </>
+              );
+            })}
+          </div>
+
+          {/* <div className="grid grid-cols-4 gap-[27px]">
+                  {voucher.map((e) => {
+                     return (
+                        <>
+                           <VoucherIcon
+                              voucher={e}
+                              save={(id) => saveVoucherLocal(id, e)}
+                              key={e.id}
+                           />
+                        </>
+                     );
+                  })}
+               </div> */}
         </div>
 
         <div className="container my-[60px] ">
