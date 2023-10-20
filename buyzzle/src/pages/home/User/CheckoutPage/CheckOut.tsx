@@ -729,9 +729,14 @@ export default function CheckOut() {
                                                 className={`max-lg:text-[10px] ${
                                                    selectedPaymentMethod ===
                                                    element.type
-                                                      ? "text-[#393939]"
+                                                      ? "inherit"
                                                       : "text-[#9c9c9c]"
-                                                }`}
+                                                } cursor-pointer`}
+                                                onClick={() => {
+                                                   setSelectedPaymentMethod(
+                                                      element.type
+                                                   );
+                                                }}
                                              >
                                                 {element.title}
                                              </p>

@@ -15,13 +15,15 @@ import { Images } from "../../../../../Assets/TS";
 import Contact from "../../Assets/TSX/Contact";
 import { currentDate, numberFormat } from "../../../../../Helper/Format";
 
+
+export interface userStatus {
+  id: number;
+  createdAt: string;
+}
+
 export type FormValues = {
-  username: string;
-  name: string;
-  email: string;
-  sex: string;
-  phonenumber: string;
-  dateOfBirth: string;
+  id: number;
+  createdAt: string;
 };
 export type FormImage = {
   id: number;
@@ -36,7 +38,7 @@ export default function UserProfile() {
   // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
-
+  const [name, setName] = useState<string>("");
   const [id, setId] = useState<string>("11");
   // const id: number | undefined = getID()!;
   const [sex, setSex] = useState<boolean>();
@@ -64,21 +66,7 @@ export default function UserProfile() {
           return res;
         })
         .then((res) => {
-          if (res.dateOfBirth == null) {
-            res.dateOfBirth = "dd/mm/yyyy";
-          } else {
-            res.dateOfBirth = res.dateOfBirth.substring(0, 10);
-          }
-          reset({
-            username: userData.username,
-            name: res.name,
-            email: res.email,
-            sex: res.sex,
-            phonenumber: res.phonenumber,
-            dateOfBirth: res.dateOfBirth,
-          });
-          setSex(res.sex);
-          setId(res.id);
+          setName(res.name);
           const UserImageArray = JSON.stringify(res.UserImage);
           if (UserImageArray == "[]") {
             setCheckImageUrl(false);
@@ -86,6 +74,7 @@ export default function UserProfile() {
             const urlTaker = JSON.parse(UserImageArray);
             setUrlThen(urlTaker[0].url);
             setCheckImageUrl(true);
+            // console.log(urlThen);
           }
         })
         .catch((error) => {
@@ -101,6 +90,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     getUserData();
+    getUserStatus();
   }, []);
 
   useEffect(() => {
@@ -117,9 +107,7 @@ export default function UserProfile() {
     CheckLink();
   }, [param]);
 
-  const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSex(JSON.parse(event.target.value));
-  };
+
 
   useEffect(() => {
     loadImageFile(image);
@@ -141,116 +129,37 @@ export default function UserProfile() {
     }
   };
 
-  const addImages = async (id: number, url: string) => {
-    const urlImages = {
-      iduser: id,
-      url: url,
-    };
-    await axios
-      .post(`${appConfigUser.apiUrl}/addimageuser`, urlImages)
-      .then((response) => response.data);
-  };
-
-  const EditImages = async (id: number, url: string) => {
-    const urlImages = {
-      iduser: id,
-      url: url,
-    };
-    await axios
-      .put(
-        `${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`,
-        urlImages.url
-      )
-      .then((response) => response.data);
-  };
-
-  const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
-  const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
-    try {
-      console.log("selectedFile:" + selectedFile);
-      if (selectedFile == null && CheckImageUrl == false) {
-        toast.error("Hãy chọn hình");
-        return;
-      }
-      // console.log("TESTING: " + formData);
-      formData.sex = JSON.parse(formData.sex);
-      const response = await axios.put(API, formData);
-      FormImage.id = parseInt(id);
-      if (response) {
-        console.log("UrlThen" + url);
-
-        if (CheckImageUrl == false) {
-          await addImages(FormImage.id, url);
-          setCheckImageUrl(true);
-        } else {
-          console.log("CHAY");
-          await EditImages(FormImage.id, url);
-        }
-      }
-
-      console.log("edit thanh cong", response);
-
-      if (response.status === 200) {
-        console.log("Edit successfully");
-        toast.success("Cập nhật thành công", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      } else {
-        console.log("Sign-in Failed!");
-        toast.warning("Sign-in failed", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      if (axios.isAxiosError(error) && error.response) {
-        const responseData = error.response.data;
-        if (responseData.error) {
-          console.log(`Lỗi2: ${responseData.error}`);
-          const errorMessageUsername = responseData.error.username;
-          const errorMessageEmail = responseData.error.email;
-          const errorMessagePhoneNumber = responseData.error.phonenumber;
-          if (errorMessageUsername) {
-            toast.warning(errorMessageUsername, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageEmail) {
-            toast.warning(errorMessageEmail, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessagePhoneNumber) {
-            toast.warning(errorMessagePhoneNumber, {
-              position: "top-right",
-              autoClose: 5000,
-            });
+  const getUserStatus = () => {
+    const user = param.username;
+    if (user != null) {
+      console.log("USERNAME1: " + user);
+      userController.getStatusUser(user)
+        .then((res) => {
+          return res;
+        })
+        .then((res) => {
+          if (res.createdAt == null) {
+            res.createdAt = "dd/mm/yyyy";
+          } else {
+            var createdAt = (res.createdAt).substring(0, 10);
+            console.log(createdAt)
+            var datearray = createdAt.split("-");
+            res.createdAt = datearray[2] + '-' + datearray[1] + '-' + datearray[0];
           }
-        } else {
-          console.log("Lỗi không xác định từ server");
-        }
-      } else {
-        console.error("Lỗi gửi yêu cầu không thành công", error);
-      }
+          reset({
+            id: res.id,
+            createdAt: res.createdAt
+          });
+          // console.log( res.createdAt);
+        }).catch((error) => {
+          console.log(
+            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
+            error
+          );
+        });
+      console.log("Chua Dang Nhap Dung");
     }
-  };
-
-  const onChangeImage = (e: any) => {
-    // setImage(e.target.files)
-    // setSelectedFile(e.target.files);
-    const file = e.target.files?.[0];
-    if (file) {
-      console.log(`Selected file: ${file}`);
-      setSelectedFile(file);
-      setImage(file);
-    } else {
-      setSelectedFile(null); // Reset the selectedFile state when no file is selected
-      setImage("" + null); // Reset the imageURL state
-      console.log("No file selected");
-    }
-  };
+  }
 
   return (
     <>
@@ -269,16 +178,28 @@ export default function UserProfile() {
         <div className="border-[1px] border-[#E0E0E0] my-[30px]"></div>
         <div className="grid grid-cols-3 items-center">
           <div className="flex items-center gap-4 col-span-2">
+            {CheckImageUrl ? (
+              <div>
+                <img
+                  className="w-[70px] h-[70px] rounded-full border-4"
+                  src={urlThen}
+                  alt=""
+                />
+              </div>
+            ) : (
+              <div>
+                <div className="w-[70px] h-[70px] rounded-full border-4  flex items-center justify-center bg-red-500">
+                  <p className="text-2xl text-stone-50">
+                    {name.substring(0, 1).toUpperCase()}
+                  </p>
+                </div>
+              </div>
+            )}
             <div>
-              <img
-                className="w-[70px] h-[70px] rounded-full border-4"
-                src={Images.Avtcmt}
-                alt=""
-              />
-            </div>
-            <div>
-              <p>ID: #a32223</p>
-              <p>● Đang Hoạt Động</p>
+
+              <p>Tên: {name}</p>
+
+              <p className="text-[#12b004]">● Đang Hoạt Động</p>
             </div>
           </div>
 
@@ -310,14 +231,23 @@ export default function UserProfile() {
                   className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                  border-[1px] border-[#FFAAAF] `}
                 >
-                  <input
-                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
-                                                                            max-xl:text-sm  max-lg:text-[13px]"
-                    placeholder="#a32223"
+                  <Controller
+                    control={control}
+                    name="id"
+                    render={({ field }) => (
+                      <>
+                        <input
+                          className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
+                                                                            max-xl:text-sm  max-lg:text-[13px] cursor-not-allowed"
+                          placeholder="#a32223"
+                          value={field.value}
+                          disabled={true}
+                        />
+                      </>
+                    )}
                   />
-                  <p className="text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px]  max-lg:text-[13px]">
-                    VNĐ
-                  </p>
+
+
                 </div>
               </div>
 
@@ -329,12 +259,23 @@ export default function UserProfile() {
                   className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                 border-[1px] border-[#FFAAAF] `}
                 >
-                  <input
-                    className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
-                                                                            max-xl:text-sm max-lg:text-[13px]"
-                    placeholder={"20/10/2020"}
-                    maxLength={3}
+                  <Controller
+                    control={control}
+                    name="createdAt"
+                    render={({ field }) => (
+                      <>
+                        <input
+                          className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
+                                                                            max-xl:text-sm max-lg:text-[13px] cursor-not-allowed"
+                          placeholder={"20/10/2020"}
+                          maxLength={3}
+                          value={field.value}
+                          disabled={true}
+                        />
+                      </>
+                    )}
                   />
+
                 </div>
               </div>
 

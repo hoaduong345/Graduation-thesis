@@ -2,6 +2,7 @@ import axios from "axios";
 import { FormValues } from "../pages/home/Admin/Addproduct/Addproducts";
 // import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 import { users } from "../pages/home/Admin/Management/User/User";
+import { userStatus } from "../pages/home/Admin/DetailUser/Components/AccountStatus";
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_USER_URL || "",
 };
@@ -51,6 +52,12 @@ class UserController {
         return res.data;
       });
   };
+  getStatusUser =async (username: string| undefined) => {
+    return await axios.get(`${appConfig.apiUrl}/getaccountstatus/${username}`).then((res) => {
+      return res.data;
+    });
+  }
+
 }
 
 export const userController = new UserController();

@@ -34,32 +34,37 @@ model User {
   cart                 Cart[]
   UserImage            UserImage[]
   Rating               Rating[]
+  deletedAt            DateTime?
+
   // roleId               Role? @relation(fields: [id], references: [id])
-  invoices                 Invoice[]
+  invoices Invoice[]
 }
 
 model UserImage {
-  id           Int     @id @default(autoincrement())
+  id           Int       @id @unique @default(autoincrement())
   url          String?
-  iduser       Int?
-  fK_UserImage User?   @relation(fields: [iduser], references: [id], onDelete: Cascade)
+  iduser       Int       @unique
+  fK_UserImage User?     @relation(fields: [iduser], references: [id], onDelete: Cascade)
+  deletedAt    DateTime?
 }
 
 model Role {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String?
   createdAt DateTime
   updatedAt DateTime
   User      User[]
+  deletedAt DateTime?
 }
 
 model Token {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   userid       Int
-  fk_userTOken User     @relation(fields: [userid], references: [id])
+  fk_userTOken User      @relation(fields: [userid], references: [id])
   token        String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
+  deletedAt    DateTime?
 }
 
 model Product {
@@ -70,12 +75,13 @@ model Product {
   pricesale    Int?
   sellingPrice Int?
   discount     Int?
-  soldcount    Int?
+  soldcount    Int?           @default(0)
   quantity     Int?
   description  String?        @db.VarChar(15000)
   status       String?
   date         DateTime?      @default(now())
   // productId    Int?
+  deletedAt    DateTime?
   createdAt    DateTime?      @default(now())
   updatedAt    DateTime?      @default(now())
   categoryID   Int?
@@ -94,15 +100,17 @@ model Category {
   createdAt DateTime? @default(now())
   image     String?
   products  Product[]
+  deletedAt DateTime?
 }
 
 model Cart {
-  id       Int        @id @default(autoincrement())
-  user     User       @relation(fields: [userId], references: [id])
-  userId   Int
-  item     ItemCart[]
-  subtotal Int
-  invoices InvoiceDetails[]
+  id        Int              @id @default(autoincrement())
+  user      User             @relation(fields: [userId], references: [id])
+  userId    Int
+  item      ItemCart[]
+  subtotal  Int
+  invoices  InvoiceDetails[]
+  deletedAt DateTime?
 }
 
 model ItemCart {
@@ -116,20 +124,23 @@ model ItemCart {
   total      Int?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @default(now())
+  deletedAt  DateTime?
 }
 
 model ProductImage {
-  id               Int      @id @default(autoincrement())
+  id               Int       @id @default(autoincrement())
   url              String?
   idproduct        Int?
-  fK_propductImage Product? @relation(fields: [idproduct], references: [id], onDelete: Cascade)
+  fK_propductImage Product?  @relation(fields: [idproduct], references: [id], onDelete: Cascade)
+  deletedAt        DateTime?
 }
 
 model CommentImage {
-  id              Int     @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   url             String?
   idcomment       Int?
-  fk_commentImage Rating? @relation(fields: [idcomment], references: [id], onDelete: Cascade)
+  fk_commentImage Rating?   @relation(fields: [idcomment], references: [id], onDelete: Cascade)
+  deletedAt       DateTime?
 }
 
 model Rating {
@@ -143,6 +154,7 @@ model Rating {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
   CommentImage CommentImage[]
+  deletedAt    DateTime?
 }
 
 model Order {
@@ -157,6 +169,7 @@ model Order {
   createdAt   DateTime?     @default(now())
   updatedAt   DateTime?     @default(now())
   OrderDetail OrderDetail[]
+  deletedAt   DateTime?
 }
 
 model OrderDetail {
@@ -169,6 +182,7 @@ model OrderDetail {
   updatedAt       DateTime? @default(now())
   fK_order        Order?    @relation(fields: [orderId], references: [id])
   fK_productOrder Product?  @relation(fields: [productId], references: [id])
+  deletedAt       DateTime?
 }
 
 model Voucher {
@@ -180,20 +194,20 @@ model Voucher {
   endDay    DateTime?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
+  deletedAt DateTime?
 }
 
 model Invoice {
-  id     Int  @id @default(autoincrement())
-  iduser Int
-  user   User @relation(fields: [iduser], references: [id])
+  id             Int              @id @default(autoincrement())
+  iduser         Int
+  user           User             @relation(fields: [iduser], references: [id])
   invoiceDetails InvoiceDetails[]
 }
 
 model InvoiceDetails {
-  id Int @id @default(autoincrement())
-  invoice Invoice @relation(fields: [idInvoice], references: [id])
+  id        Int     @id @default(autoincrement())
+  invoice   Invoice @relation(fields: [idInvoice], references: [id])
   idInvoice Int
-  cart Cart @relation(fields: [cartId], references: [id])
-  cartId Int
-  
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    Int
 }

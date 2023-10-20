@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { RatingStar } from "../SitebarFilter";
 // type Props = {
 //   onChange: (rating: number, checked: boolean) => void;
@@ -16,8 +16,9 @@ export default function Rate(props: RatingStar) {
         {[1, 2, 3, 4, 5].map((item) => {
           return (
             <svg
-              className={`w-4 h-4 ${props.rating >= item ? `text-yellow-300` : `text-black`
-                }`}
+              className={`w-4 h-4 ${
+                props.rating >= item ? `text-yellow-300` : `text-black`
+              }`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"

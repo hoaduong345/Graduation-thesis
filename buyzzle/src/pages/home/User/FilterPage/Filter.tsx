@@ -6,9 +6,11 @@ import {
   numberFormat,
   roundedNumber,
 } from "../../../../Helper/Format";
-import { Row } from "../../../../Model/ProductModel";
+import { Rate, Row } from "../../../../Model/ProductModel";
+import { stars } from "../../../../Helper/StarRating/Star";
 type Props = {
   product: Row;
+  starsnumber: number;
 };
 const Filter = (props: Props) => {
   const { product } = props;
@@ -80,7 +82,7 @@ const Filter = (props: Props) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 items-center gap-3 max-lg:mt-1">
+          <div className="flex items-center gap-3 max-lg:mt-1">
             <p
               className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through
           max-2xl:text-[9px]
@@ -90,7 +92,7 @@ const Filter = (props: Props) => {
               {numberFormat(product.price)}
             </p>
             <p
-              className="text-[16px] text-[#865546] col-span-2 font-bold 
+              className="text-[16px] text-[#865546] col-span-2  font-bold 
           max-2xl:text-sm
           max-lg:text-2xl
             "
@@ -99,40 +101,33 @@ const Filter = (props: Props) => {
             </p>
           </div>
 
-          <div
-            className="flex justify-between max-2xl:items-center
-          max-lg:mt-2
-          "
-          >
-            <div>
-              <button>
-                <img src={Images.star1} alt="" />
-              </button>
-              <button>
-                <img src={Images.star1} alt="" />
-              </button>
-              <button>
-                <img src={Images.star1} alt="" />
-              </button>
-              <button>
-                <img src={Images.star1} alt="" />
-              </button>
-              <button>
-                <img src={Images.star2} alt="" />
-              </button>
+          {/* rating  */}
+          <div>
+            <div className="flex items-center justify-start gap-1">
+              <div className="rating rating-xs">
+                {stars.map((_, index) => (
+                  <button key={index}>
+                    {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                    <img
+                      src={index < product.rate ? Images.star1 : Images.star2}
+                      alt=""
+                    />
+                  </button>
+                ))}
+              </div>
+
               <span className="text-[12px] mr-[30px] ml-[4px] max-lg:text-base">
                 {roundedNumber(product.rate)}.0
               </span>
-            </div>
-
-            <p
-              className="text-[12px] text-[#4c4c4c] font-medium
+              <p
+                className="text-[12px] text-[#4c4c4c] font-medium
             max-2xl:text-[10px]
             max-lg:text-base
             "
-            >
-              Đã bán {formatSoldCount(product.soldcount!)}
-            </p>
+              >
+                Đã bán {formatSoldCount(product.soldcount!)}
+              </p>
+            </div>
           </div>
         </div>
       </div>
