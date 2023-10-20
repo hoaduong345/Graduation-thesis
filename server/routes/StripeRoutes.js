@@ -33,7 +33,6 @@ app.post('/create-checkout-session', async (req, res) => {
             quantity: item.quantity,
         };
     });
-
     const coupon = await stripe.coupons.create({
         percent_off: discount == 0 ? 0.01 : discount,
         duration: 'once',
@@ -41,7 +40,7 @@ app.post('/create-checkout-session', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         line_items,
         mode: 'payment',
-        discounts: [{ coupon: coupon.id }],
+        discounts: discount == 0 ? [] : [{ coupon: coupon.id }],
         success_url: 'http://localhost:5173/orderdetail',
         cancel_url: 'http://localhost:5173/cart',
     });
