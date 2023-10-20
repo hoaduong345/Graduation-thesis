@@ -688,14 +688,20 @@ export default function CheckOut() {
                                     Giảm{" "}
                                  </p>
                                  <div className="flex gap-1">
-                                    {/* <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
-                                       {numberFormat(0)}
-                                    </p>
-                                    <p className="text-[#EA4B48]"> - </p> */}
                                     <p className="text-sm text-[#FFAAAF] max-[870px]:text-[11px]">
                                        {numberFormat(
                                           calculatePrice() * (discount / 100)
                                        )}
+                                    </p>
+                                 </div>
+                              </div>
+                              <div className="flex justify-between">
+                                 <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
+                                    Phí vận chuyển{" "}
+                                 </p>
+                                 <div className="flex gap-1">
+                                    <p className="text-sm text-[#EA4B48] max-[870px]:text-[12px]">
+                                       {numberFormat(30000)}
                                     </p>
                                  </div>
                               </div>
@@ -706,7 +712,8 @@ export default function CheckOut() {
                                  <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
                                     {numberFormat(
                                        calculatePrice() -
-                                          calculatePrice() * (discount / 100)
+                                          calculatePrice() * (discount / 100) +
+                                          30000
                                     )}
                                  </p>
                               </div>

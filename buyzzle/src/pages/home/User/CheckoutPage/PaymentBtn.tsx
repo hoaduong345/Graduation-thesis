@@ -31,7 +31,7 @@ export default function PaymentBtn(props: StripePayment) {
                   }
                })
                .catch((err) => console.log(err.message));
-         }, 1500);
+         }, 1000);
       } else if (isCheckedPayment == 2) {
          setLoading(true);
          setTimeout(async () => {

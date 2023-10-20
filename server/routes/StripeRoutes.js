@@ -37,10 +37,19 @@ app.post('/create-checkout-session', async (req, res) => {
         percent_off: discount == 0 ? 0.01 : discount,
         duration: 'once',
     });
+    const shippingRate = await stripe.shippingRates.create({
+        display_name: 'Ground shipping',
+        type: 'fixed_amount',
+        fixed_amount: {
+            amount: 30000,
+            currency: 'vnd',
+        },
+    });
     const session = await stripe.checkout.sessions.create({
         line_items,
         mode: 'payment',
         discounts: discount == 0 ? [] : [{ coupon: coupon.id }],
+        shipping_options: [{ shipping_rate: shippingRate.id }],
         success_url: 'http://localhost:5173/orderdetail',
         cancel_url: 'http://localhost:5173/cart',
     });
