@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { IonIcon } from "@ionic/react";
 import { Button, IconButton } from "@material-tailwind/react";
-import { download, generateCsv, mkConfig } from "export-to-csv"; //Xuat excel
+import { download, generateCsv } from "export-to-csv"; //Xuat excel
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Search from "../../../../Assets/TSX/Search";
@@ -15,10 +15,10 @@ import StatisticalAdmin from "../Assets/TSX/statistical";
 import SitebarAdmin from "../Sitebar/Sitebar";
 import FilterListproduct from "./Filter/FilterListproduct";
 import ListproductMap from "./ListproductMap";
+import { csvConfig } from "../../../../Helper/Export/Excel";
 export default function ListproductsAdmin() {
   const [products, setProducts] = useState<any>([]);
   // Xuat excel
-  const csvConfig = mkConfig({ useKeysAsHeaders: true });
   const [search, setSearch] = useState("");
   const debouncedInputValueSearch = useDebounce(search, 400); // Debounce for 300 milliseconds
 
