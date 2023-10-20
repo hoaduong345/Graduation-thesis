@@ -3,7 +3,6 @@ import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import Voucher from "../../../../Assets/TSX/Voucher";
 import Container from "../../../../components/container/Container";
-// import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import PinkRight from "../../../../Assets/SVG/LetterPayment/PinkRight";
 import BlueRight from "../../../../Assets/SVG/LetterPayment/BlueRight";
 import PinkMedium from "../../../../Assets/SVG/LetterPayment/PinkMedium";
@@ -31,6 +30,21 @@ interface User {
    username: string;
 }
 
+const paymentMethods = [
+   {
+      id: 1,
+      icon: Images.visa,
+      title: "Thanh toán bằng thẻ tín dụng",
+      color: "#9c9c9c",
+   },
+   {
+      id: 2,
+      icon: Images.nhanHang,
+      title: "Thanh toán khi nhận hàng",
+      color: "#9c9c9c",
+   },
+];
+
 export default function CheckOut() {
    const idModal = "checkout";
    const idModalUpdate = "my_modal_update";
@@ -38,6 +52,8 @@ export default function CheckOut() {
    const [user, setUser] = useState<FormValues>({} as FormValues);
    const [discount, setDiscount] = useState<number>(0);
    const [isChecked, setIsChecked] = useState(0);
+   const [selectedPaymentMethod, setSetselectedPaymentMethod] = useState(1);
+
    const [payment, setPayment] = useState([
       {
          id: 1,
@@ -723,7 +739,7 @@ export default function CheckOut() {
                                  Phương Thức Thanh Toán
                               </h4>
                               <div className="flex flex-col gap-[10px]">
-                                 {payment.map((element) => {
+                                 {payment.map((element, index) => {
                                     return (
                                        <>
                                           <div
@@ -734,9 +750,13 @@ export default function CheckOut() {
                                                 className="max-lg:w-[10px]"
                                                 name="choose"
                                                 type="radio"
-                                                onChange={() => {
+                                                value={selectedPaymentMethod}
+                                                onChange={(e) => {
                                                    paymentChecked(element.id);
                                                    setIsChecked(element.id);
+                                                   setSetselectedPaymentMethod(
+                                                      element.id
+                                                   );
                                                 }}
                                              />
                                              <div className="w-6">
