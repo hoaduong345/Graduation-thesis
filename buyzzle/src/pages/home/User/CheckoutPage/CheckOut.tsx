@@ -30,18 +30,27 @@ interface User {
    username: string;
 }
 
-const paymentMethods = [
+export type PaymentMethod = "stripe" | "cash";
+
+interface PaymentModel {
+   id: number;
+   icon: string;
+   title: string;
+   type: PaymentMethod;
+}
+
+const paymentMethods: PaymentModel[] = [
    {
       id: 1,
       icon: Images.visa,
       title: "Thanh toán bằng thẻ tín dụng",
-      color: "#9c9c9c",
+      type: "stripe",
    },
    {
       id: 2,
       icon: Images.nhanHang,
       title: "Thanh toán khi nhận hàng",
-      color: "#9c9c9c",
+      type: "cash",
    },
 ];
 
@@ -51,35 +60,8 @@ export default function CheckOut() {
 
    const [user, setUser] = useState<FormValues>({} as FormValues);
    const [discount, setDiscount] = useState<number>(0);
-   const [isChecked, setIsChecked] = useState(0);
-   const [selectedPaymentMethod, setSetselectedPaymentMethod] = useState(1);
-
-   const [payment, setPayment] = useState([
-      {
-         id: 1,
-         icon: Images.visa,
-         title: "Thanh toán bằng thẻ tín dụng",
-         color: "#9c9c9c",
-      },
-      {
-         id: 2,
-         icon: Images.nhanHang,
-         title: "Thanh toán khi nhận hàng",
-         color: "#9c9c9c",
-      },
-      // {
-      //    id: 2,
-      //    icon: Images.momo,
-      //    title: "Thanh toán bằng ví Momo",
-      //    color: "#9c9c9c",
-      // },
-      // {
-      //    id: 3,
-      //    icon: Images.zalo,
-      //    title: "Thanh toán bằng ví Zalopay",
-      //    color: "#9c9c9c",
-      // },
-   ]);
+   const [selectedPaymentMethod, setSelectedPaymentMethod] =
+      useState<PaymentMethod>("stripe");
 
    const localCart = sessionStorage.getItem("cartBuyzzle");
    const listLocalCart: CartItem[] =
@@ -162,19 +144,6 @@ export default function CheckOut() {
          totalCart += element.quantity * element.product.sellingPrice;
       }
       return totalCart;
-   };
-
-   const paymentChecked = (id: number) => {
-      const updatedItems = payment.map((item) => {
-         if (item.id === id) {
-            return { ...item, color: "#393939" };
-         } else {
-            return { ...item, color: "#9c9c9c" };
-         }
-         return item;
-      });
-
-      setPayment(updatedItems);
    };
 
    return (
@@ -658,18 +627,6 @@ export default function CheckOut() {
                            </div>
                            <div className="flex gap-3 items-center">
                               <Voucher />
-                              {/* <div className="flex w-full items-center border-[#FFAAAF] border-[1px] py-[8px] rounded-md max-lg:py-[4px]">
-                                 <input
-                                    className="outline-none w-full pl-3"
-                                    type="text"
-                                    placeholder="Nhập mã giảm giá"
-                                 />
-
-                                 <div className="mx-3">
-                                    <CheckoutSeacrch />
-                                 </div>
-                              </div> */}
-
                               <select
                                  onChange={(e) => {
                                     setDiscount(Number(e.target.value));
@@ -739,7 +696,7 @@ export default function CheckOut() {
                                  Phương Thức Thanh Toán
                               </h4>
                               <div className="flex flex-col gap-[10px]">
-                                 {payment.map((element, index) => {
+                                 {paymentMethods.map((element) => {
                                     return (
                                        <>
                                           <div
@@ -750,12 +707,14 @@ export default function CheckOut() {
                                                 className="max-lg:w-[10px]"
                                                 name="choose"
                                                 type="radio"
-                                                value={selectedPaymentMethod}
-                                                onChange={(e) => {
-                                                   paymentChecked(element.id);
-                                                   setIsChecked(element.id);
-                                                   setSetselectedPaymentMethod(
-                                                      element.id
+                                                value={element.type}
+                                                checked={
+                                                   selectedPaymentMethod ===
+                                                   element.type
+                                                }
+                                                onChange={() => {
+                                                   setSelectedPaymentMethod(
+                                                      element.type
                                                    );
                                                 }}
                                              />
@@ -767,10 +726,12 @@ export default function CheckOut() {
                                                 />
                                              </div>
                                              <p
-                                                className="max-lg:text-[10px]"
-                                                style={{
-                                                   color: `${element.color}`,
-                                                }}
+                                                className={`max-lg:text-[10px] ${
+                                                   selectedPaymentMethod ===
+                                                   element.type
+                                                      ? "text-[#393939]"
+                                                      : "text-[#9c9c9c]"
+                                                }`}
                                              >
                                                 {element.title}
                                              </p>
@@ -782,7 +743,7 @@ export default function CheckOut() {
                            </div>
                            <PaymentBtn
                               cartItems={listLocalCart}
-                              isCheckedPayment={isChecked}
+                              isCheckedPayment={selectedPaymentMethod}
                               discount={discount}
                            />
                         </div>
