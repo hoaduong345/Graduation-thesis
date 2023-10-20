@@ -179,6 +179,142 @@ export default function useRouterEmelent() {
             </MainLayout>
          ),
       },
+      {
+         path: "/forgotpassword",
+         element: (
+            <RegisterLoginLayout>
+               <Forgotpassword />
+            </RegisterLoginLayout>
+         ),
+      },
+      {
+         path: "detailproducts/:id",
+         element: (
+            <MainLayout>
+               <DetailsProduct />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "Cart",
+         element: (
+            <MainLayout>
+               <Cart />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "orderhistory",
+         element: (
+            <MainLayout>
+               <OrderHistory />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "checkout",
+         element: (
+            <MainLayout>
+               <CheckOut />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "orderdetail",
+         element: (
+            <MainLayout>
+               <OrderDetailPage />
+            </MainLayout>
+         ),
+      },
+      {
+         path: path.confirmAccount,
+         element: (
+            <RegisterLoginLayout>
+               <ConfirmAccount />
+            </RegisterLoginLayout>
+         ),
+      },
+      {
+         path: "/userprofilepage/:username",
+         element: (
+            <MainLayout>
+               <UserProfile />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "/forgotpassword",
+         element: (
+            <RegisterLoginLayout>
+               <Forgotpassword />
+            </RegisterLoginLayout>
+         ),
+      },
+      {
+         path: "detailproducts/:id",
+         element: (
+            <MainLayout>
+               <DetailsProduct />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "cart",
+         element: (
+            <MainLayout>
+               <Cart />
+            </MainLayout>
+         ),
+      },
+      // {
+      //   path: "voucher",
+      //   element: (
+      //     <MainLayout>
+      //       <VoucherUserPage />
+      //     </MainLayout>
+      //   ),
+      // },
+      {
+         path: "orderhistory",
+         element: (
+            <MainLayout>
+               <OrderHistory />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "checkout",
+         element: (
+            <MainLayout>
+               <CheckOut />
+            </MainLayout>
+         ),
+      },
+      {
+         path: "orderdetail",
+         element: (
+            <MainLayout>
+               <OrderDetailPage />
+            </MainLayout>
+         ),
+      },
+      {
+         path: path.confirmAccount,
+         element: (
+            <RegisterLoginLayout>
+               <ConfirmAccount />
+            </RegisterLoginLayout>
+         ),
+      },
+      {
+         path: "/userprofilepage/:username",
+         element: (
+            <MainLayout>
+               <UserProfile />
+            </MainLayout>
+         ),
+      },
 
       // AdminPages
       {
@@ -216,7 +352,7 @@ export default function useRouterEmelent() {
                element: <VoucherPage />,
             },
             {
-               path: "detailuser",
+               path: "detailuser/:username",
                element: <DetailUser />,
             },
             {

@@ -20,12 +20,18 @@ export default function FilterListproduct({
   valuePrice: value,
   onPriceRangeChange,
   onQuantityRangeChange,
+  onPurchaseRangeChange,
+  oninStock,
+  onSoldOut,
 }: SliderComponentProps) {
   const [price, setPrice] = useState(false);
   const [purchase, setPurchase] = useState(false);
   const [quantity, setPQuantity] = useState(false);
-  const [rangePriceValue, setRangePriceValue] = useState([5000000, 30000000]);
+  const [rangePriceValue, setRangePriceValue] = useState([50000, 300000]);
   const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
+  const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
+  const [availability, setAvailability] = useState<boolean>(false);
+  const [soldOut, setSoldOut] = useState<boolean>(false);
   const handleSliderChangePrice = (price: [number, number]) => {
     console.log(
       "🚀 ~ file: FilterListproduct.tsx:29 ~ handleSliderChangePrice ~ price:",
@@ -42,6 +48,25 @@ export default function FilterListproduct({
     setRangeQuantityValue(quantity);
     onQuantityRangeChange(quantity);
   };
+  const handleSliderChangeBoughtQuantity = (quantity: [number, number]) => {
+    console.log(
+      "🚀 ~ file: FilterListproduct.tsx:34 ~ handleSliderChangeQuantity ~ quantity:",
+      quantity
+    );
+    setRangePurchaseValue(quantity);
+    onPurchaseRangeChange(quantity);
+  };
+  const handleClickAvailability = (Availability: boolean) => {
+    console.log(Availability);
+    setAvailability(!availability);
+    oninStock(Availability);
+  };
+  const handleClickSoldOut = (SoldOut: boolean) => {
+    console.log(SoldOut);
+    setSoldOut(!soldOut);
+    onSoldOut(SoldOut);
+  };
+
   return (
     <div
       className="p-7 shadow mt-3 flex flex-col gap-9 relative 
@@ -66,7 +91,7 @@ export default function FilterListproduct({
             <div className="slider">
               <Slider
                 min={1000}
-                max={1000000000}
+                max={10000000}
                 step={1}
                 pushable={false}
                 value={rangePriceValue}
@@ -128,12 +153,12 @@ export default function FilterListproduct({
             </p>
             <Slider
               min={0}
-              max={100}
+              max={100000}
               trackStyle={{
                 backgroundColor: "#EA4B48",
               }}
               handleStyle={{ border: "1px solid red" }}
-              onChange={(e) => console.log(e)}
+              onChange={(e: any) => handleSliderChangeBoughtQuantity(e)}
               range
             />
             <div className="flex justify-start gap-2">
@@ -151,7 +176,7 @@ export default function FilterListproduct({
                                  purchase ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
                                } `}
               >
-                100 - 1000
+                {rangePurchaseValue[0]} - {rangePurchaseValue[1]}
               </p>
             </div>
           </div>
@@ -166,6 +191,8 @@ export default function FilterListproduct({
                   id="default-checkbox"
                   type="checkbox"
                   className="w-4 h-4 accent-[#EA4B48] max-xl:w-[14px] max-xl:h-[14px] max-[900px]:w-3 max-[900px]:h-3"
+                  // onClick={(e: any) => handleClickAvailability(e)}
+                  onChange={(e) => handleClickAvailability(e.target.checked)}
                 />
                 <p className="text-sm font-bold text-[#00B207] max-xl:text-[13px] max-[900px]:text-xs">
                   Còn Hàng
@@ -177,6 +204,8 @@ export default function FilterListproduct({
                   id="default-checkbox"
                   type="checkbox"
                   className="w-4 h-4 accent-[#EA4B48] max-xl:w-[14px] max-xl:h-[14px] max-[900px]:w-3 max-[900px]:h-3"
+                  onChange={(e) => handleClickSoldOut(e.target.checked)}
+                  checked={soldOut} // Đặt trạng thái checked của checkbox dựa trên biến soldOut
                 />
                 <p className="text-sm font-bold text-[#EA4B48] max-xl:text-[13px]">
                   Hết Hàng
