@@ -109,8 +109,8 @@ model Cart {
   userId    Int
   item      ItemCart[]
   subtotal  Int
-  deletedAt DateTime?
   invoices  InvoiceDetails[]
+  deletedAt DateTime?
 }
 
 model ItemCart {

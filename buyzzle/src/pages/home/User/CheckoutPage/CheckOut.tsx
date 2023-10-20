@@ -3,7 +3,6 @@ import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import Voucher from "../../../../Assets/TSX/Voucher";
 import Container from "../../../../components/container/Container";
-// import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import PinkRight from "../../../../Assets/SVG/LetterPayment/PinkRight";
 import BlueRight from "../../../../Assets/SVG/LetterPayment/BlueRight";
 import PinkMedium from "../../../../Assets/SVG/LetterPayment/PinkMedium";
@@ -31,39 +30,38 @@ interface User {
    username: string;
 }
 
+export type PaymentMethod = "stripe" | "cash";
+
+interface PaymentModel {
+   id: number;
+   icon: string;
+   title: string;
+   type: PaymentMethod;
+}
+
+const paymentMethods: PaymentModel[] = [
+   {
+      id: 1,
+      icon: Images.visa,
+      title: "Thanh toán bằng thẻ tín dụng",
+      type: "stripe",
+   },
+   {
+      id: 2,
+      icon: Images.nhanHang,
+      title: "Thanh toán khi nhận hàng",
+      type: "cash",
+   },
+];
+
 export default function CheckOut() {
    const idModal = "checkout";
    const idModalUpdate = "my_modal_update";
 
    const [user, setUser] = useState<FormValues>({} as FormValues);
    const [discount, setDiscount] = useState<number>(0);
-   const [isChecked, setIsChecked] = useState(0);
-   const [payment, setPayment] = useState([
-      {
-         id: 1,
-         icon: Images.visa,
-         title: "Thanh toán bằng thẻ tín dụng",
-         color: "#9c9c9c",
-      },
-      {
-         id: 2,
-         icon: Images.nhanHang,
-         title: "Thanh toán khi nhận hàng",
-         color: "#9c9c9c",
-      },
-      // {
-      //    id: 2,
-      //    icon: Images.momo,
-      //    title: "Thanh toán bằng ví Momo",
-      //    color: "#9c9c9c",
-      // },
-      // {
-      //    id: 3,
-      //    icon: Images.zalo,
-      //    title: "Thanh toán bằng ví Zalopay",
-      //    color: "#9c9c9c",
-      // },
-   ]);
+   const [selectedPaymentMethod, setSelectedPaymentMethod] =
+      useState<PaymentMethod>("stripe");
 
    const localCart = sessionStorage.getItem("cartBuyzzle");
    const listLocalCart: CartItem[] =
@@ -146,19 +144,6 @@ export default function CheckOut() {
          totalCart += element.quantity * element.product.sellingPrice;
       }
       return totalCart;
-   };
-
-   const paymentChecked = (id: number) => {
-      const updatedItems = payment.map((item) => {
-         if (item.id === id) {
-            return { ...item, color: "#393939" };
-         } else {
-            return { ...item, color: "#9c9c9c" };
-         }
-         return item;
-      });
-
-      setPayment(updatedItems);
    };
 
    return (
@@ -642,18 +627,6 @@ export default function CheckOut() {
                            </div>
                            <div className="flex gap-3 items-center">
                               <Voucher />
-                              {/* <div className="flex w-full items-center border-[#FFAAAF] border-[1px] py-[8px] rounded-md max-lg:py-[4px]">
-                                 <input
-                                    className="outline-none w-full pl-3"
-                                    type="text"
-                                    placeholder="Nhập mã giảm giá"
-                                 />
-
-                                 <div className="mx-3">
-                                    <CheckoutSeacrch />
-                                 </div>
-                              </div> */}
-
                               <select
                                  onChange={(e) => {
                                     setDiscount(Number(e.target.value));
@@ -688,14 +661,20 @@ export default function CheckOut() {
                                     Giảm{" "}
                                  </p>
                                  <div className="flex gap-1">
-                                    {/* <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
-                                       {numberFormat(0)}
-                                    </p>
-                                    <p className="text-[#EA4B48]"> - </p> */}
                                     <p className="text-sm text-[#FFAAAF] max-[870px]:text-[11px]">
                                        {numberFormat(
                                           calculatePrice() * (discount / 100)
                                        )}
+                                    </p>
+                                 </div>
+                              </div>
+                              <div className="flex justify-between">
+                                 <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
+                                    Phí vận chuyển{" "}
+                                 </p>
+                                 <div className="flex gap-1">
+                                    <p className="text-sm text-[#EA4B48] max-[870px]:text-[12px]">
+                                       {numberFormat(30000)}
                                     </p>
                                  </div>
                               </div>
@@ -706,7 +685,8 @@ export default function CheckOut() {
                                  <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
                                     {numberFormat(
                                        calculatePrice() -
-                                          calculatePrice() * (discount / 100)
+                                          calculatePrice() * (discount / 100) +
+                                          30000
                                     )}
                                  </p>
                               </div>
@@ -716,7 +696,7 @@ export default function CheckOut() {
                                  Phương Thức Thanh Toán
                               </h4>
                               <div className="flex flex-col gap-[10px]">
-                                 {payment.map((element) => {
+                                 {paymentMethods.map((element) => {
                                     return (
                                        <>
                                           <div
@@ -727,9 +707,15 @@ export default function CheckOut() {
                                                 className="max-lg:w-[10px]"
                                                 name="choose"
                                                 type="radio"
+                                                value={element.type}
+                                                checked={
+                                                   selectedPaymentMethod ===
+                                                   element.type
+                                                }
                                                 onChange={() => {
-                                                   paymentChecked(element.id);
-                                                   setIsChecked(element.id);
+                                                   setSelectedPaymentMethod(
+                                                      element.type
+                                                   );
                                                 }}
                                              />
                                              <div className="w-6">
@@ -740,9 +726,16 @@ export default function CheckOut() {
                                                 />
                                              </div>
                                              <p
-                                                className="max-lg:text-[10px]"
-                                                style={{
-                                                   color: `${element.color}`,
+                                                className={`max-lg:text-[10px] ${
+                                                   selectedPaymentMethod ===
+                                                   element.type
+                                                      ? "inherit"
+                                                      : "text-[#9c9c9c]"
+                                                } cursor-pointer`}
+                                                onClick={() => {
+                                                   setSelectedPaymentMethod(
+                                                      element.type
+                                                   );
                                                 }}
                                              >
                                                 {element.title}
@@ -755,7 +748,8 @@ export default function CheckOut() {
                            </div>
                            <PaymentBtn
                               cartItems={listLocalCart}
-                              isCheckedPayment={isChecked}
+                              isCheckedPayment={selectedPaymentMethod}
+                              discount={discount}
                            />
                         </div>
                      </div>

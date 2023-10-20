@@ -19,7 +19,7 @@ export const formatSoldCount = (soldcount: number) => {
   }
   return soldcount.toString(); // Trả về số như bình thường
 }
-export const formatDate = (date: Date) => {
-    return moment(date).format('DD/MM');
-}
 
+export const formatDate = (date: Date) => {
+  return moment(date).format('DD/MM');
+}

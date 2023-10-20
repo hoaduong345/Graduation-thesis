@@ -11,9 +11,9 @@ export default function StepperPage() {
          setDelivered(true);
          setTimeout(() => {
             setSuccessfulDelivery(true);
-         }, 2000);
-      }, 2000);
-   }, 2000);
+         }, 20000);
+      }, 10000);
+   }, 5000);
 
    return (
       <>
