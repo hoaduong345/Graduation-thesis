@@ -34,7 +34,7 @@ app.post('/create-checkout-session', async (req, res) => {
         };
     });
     const coupon = await stripe.coupons.create({
-        percent_off: discount == 0 ? 0.01 : discount,
+        percent_off: discount || 1,
         duration: 'once',
     });
     const shippingRate = await stripe.shippingRates.create({
@@ -48,7 +48,7 @@ app.post('/create-checkout-session', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         line_items,
         mode: 'payment',
-        discounts: discount == 0 ? [] : [{ coupon: coupon.id }],
+        discounts: !discount ? [] : [{ coupon: coupon.id }],
         shipping_options: [{ shipping_rate: shippingRate.id }],
         success_url: 'http://localhost:5173/orderdetail',
         cancel_url: 'http://localhost:5173/cart',
