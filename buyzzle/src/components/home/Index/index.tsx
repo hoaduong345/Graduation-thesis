@@ -4,7 +4,7 @@ import Container from "../../container/Container";
 import Category from "../components/Category";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { productController } from "../../../Controllers/ProductsController";
 import { Row } from "../../../Model/ProductModel";
 import { useScroll } from "../../../hooks/Scroll/useScrollPages";
@@ -13,10 +13,11 @@ import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import Progess from "../components/progess";
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
-import VoucherIcon from "../components/Voucher/Voucher";
-import { voucherControllers } from "../../../Controllers/VoucherControllers";
-import { VoucherModel } from "../../../Model/VoucherModel";
-import { toast } from "react-toastify";
+import SanVoucher from "../../../Assets/TSX/SanVoucher";
+import VoucherBuyzzle from "../../../Assets/TSX/VoucherBuyzzle";
+import { Link } from "react-router-dom";
+import LogoVoucherBuyzzle from "../../../Assets/TSX/LogoVoucherBuyzzle";
+import LogoVoucherFreeship from "../../../Assets/TSX/LogoVoucherFreeship";
 
 export type Product = {
    id: number;
@@ -38,15 +39,29 @@ export type FlashSaleList = {
    daBan: number;
 };
 
+interface VoucherBanner {
+   pathName: string;
+   icon: ReactNode;
+   title: string;
+}
+
+const listVoucherBanner: VoucherBanner[] = [
+   {
+      pathName: "/voucher",
+      icon: <LogoVoucherBuyzzle />,
+      title: "BUYZZLE",
+   },
+   {
+      pathName: "",
+      icon: <LogoVoucherFreeship />,
+      title: "FREESHIP",
+   },
+];
+
 function Index() {
    useScroll();
    const [categoty, setCategory] = useState<Cate[]>([]);
    const [product, setProducts] = useState<Row[]>([]);
-   const [voucher, setVoucher] = useState<VoucherModel[]>([]);
-
-   const voucherLocal = localStorage.getItem("voucher");
-   const dataVoucherLocal: VoucherModel[] =
-      voucherLocal == null ? [] : JSON.parse(voucherLocal);
 
    const getCategory = async () => {
       await axios
@@ -63,35 +78,11 @@ function Index() {
          setProducts(res.rows);
       });
    };
-   const getVoucher = async () => {
-      await voucherControllers.get(1).then((res) => {
-         setVoucher(res.data);
-      });
-   };
+
    useEffect(() => {
       getCategory();
       getAllProducts();
-      getVoucher();
    }, []);
-
-   const saveVoucherLocal = (id: number, data: VoucherModel) => {
-      const maxVoucher = dataVoucherLocal.length;
-      const index = dataVoucherLocal.findIndex((e) => e.id == id);
-      if (maxVoucher >= 5) {
-         toast.error("Lưu tối đa 5 voucher");
-      } else {
-         if (index !== -1) {
-            toast.error("Bạn đã lưu mã giảm giá này");
-         } else {
-            dataVoucherLocal.push(data);
-            localStorage.setItem(
-               "voucher",
-               JSON.stringify([...dataVoucherLocal])
-            );
-            toast.success("Thành công");
-         }
-      }
-   };
 
    return (
       <>
@@ -158,6 +149,54 @@ function Index() {
                </div>
             </div>
 
+            <div className="container mt-[90px]">
+               <div className="flex justify-center mb-10">
+                  <SanVoucher />
+               </div>
+
+               <div className="flex justify-center gap-[24px]">
+                  {listVoucherBanner.map((e) => {
+                     return (
+                        <>
+                           <Link
+                              to={e.pathName}
+                              className="max-w-[420px] scale-95 duration-300 hover:scale-100 relative"
+                           >
+                              <VoucherBuyzzle />
+                              <div className="absolute left-[7%] top-[29%]">
+                                 <div className="flex flex-col gap-1 items-center">
+                                    <p className="font-bold text-2xl text-[#4C4C4C]">
+                                       VOUCHER
+                                    </p>
+                                    <p className="font-bold text-[32px] text-[#4C4C4C]">
+                                       {e.title}
+                                    </p>
+                                 </div>
+                              </div>
+                              <div className="absolute bottom-[13%] right-[5%]">
+                                 {e.icon}
+                              </div>
+                           </Link>
+                        </>
+                     );
+                  })}
+               </div>
+
+               {/* <div className="grid grid-cols-4 gap-[27px]">
+                  {voucher.map((e) => {
+                     return (
+                        <>
+                           <VoucherIcon
+                              voucher={e}
+                              save={(id) => saveVoucherLocal(id, e)}
+                              key={e.id}
+                           />
+                        </>
+                     );
+                  })}
+               </div> */}
+            </div>
+
             <div className="container my-[60px] ">
                <div className="flex justify-center">
                   <img src={Images.textMom} alt="" />
@@ -172,25 +211,6 @@ function Index() {
                   <div className="max-w-[420px] scale-95 mt-[100px] duration-300 hover:scale-100">
                      <img src={Images.imgMom3} alt="" />
                   </div>
-               </div>
-            </div>
-            <div className="container my-[60px]">
-               <h1 className="text-2xl font-bold mb-[15px] text-[#ffaaaf]">
-                  VOUCHER HOT:{" "}
-               </h1>
-
-               <div className="grid grid-cols-4 gap-[27px]">
-                  {voucher.map((e) => {
-                     return (
-                        <>
-                           <VoucherIcon
-                              voucher={e}
-                              save={(id) => saveVoucherLocal(id, e)}
-                              key={e.id}
-                           />
-                        </>
-                     );
-                  })}
                </div>
             </div>
 

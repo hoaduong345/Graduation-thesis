@@ -70,7 +70,7 @@ export default function DetailRecommandProduct(props: Props) {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 items-center gap-3 max-lg:mt-1">
+            <div className="flex items-center gap-3 max-lg:mt-1">
               <p
                 className="text-xs text-[rgba(0,0,0,.26)] col-span-1 line-through
           max-2xl:text-[9px]

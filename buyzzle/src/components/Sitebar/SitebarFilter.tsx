@@ -70,9 +70,16 @@ arrBtnSug.push(
 //   onChangeFilters(title: string): void;
 // };
 export interface SliderComponentProps {
-  valuePrice?: [number, number];
   onPriceRangeChange: (value: [number, number]) => void;
   onQuantityRangeChange: (value: [number, number]) => void;
+  onPurchaseRangeChange: (value: [number, number]) => void;
+  oninStock: (availability: boolean) => void;
+  onSoldOut: (soldOut: boolean) => void;
+
+  valueSoldOut?: boolean;
+  valueinStock?: boolean;
+  valuePrice?: [number, number];
+  valuePurchase?: [number, number];
   valueQuantity?: [number, number];
 }
 export default function SitebarFilter({

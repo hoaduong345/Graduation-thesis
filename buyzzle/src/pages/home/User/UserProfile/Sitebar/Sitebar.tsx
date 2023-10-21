@@ -34,7 +34,7 @@ const listSitebar: SitebarUser[] = [
    },
    {
       icon: <Voucher />,
-      pathName: "/voucher",
+      pathName: "/uservoucherstorage",
       title: "Voucher",
    },
    {
@@ -53,16 +53,18 @@ const listSitebar: SitebarUser[] = [
       title: "Cài đặt",
    },
 ];
-
+const instance = axios.create({
+   withCredentials: true,
+});
 export default function Sitebar() {
    const { pathname } = useLocation();
 
    const API = "http://localhost:5000/buyzzle/auth/logout";
-   function LogOut() {
+   async function LogOut() {
       try {
-         const reponse = axios.post(API);
-         localStorage.removeItem("user");
+         const reponse = await instance.post(API);
          console.log(reponse);
+         localStorage.removeItem("user");
          window.location.href = "/";
       } catch (error) {
          console.log(error);

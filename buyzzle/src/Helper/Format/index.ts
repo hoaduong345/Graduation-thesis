@@ -10,7 +10,9 @@ export const currentDate = (date: string) => {
 export const roundedNumber = (number: number) => Math.round(number);
 
 export const formatSoldCount = (soldcount: number) => {
-  if (soldcount >= 1000) {
+  if (soldcount === 0) {
+    return ''; // Trả về chuỗi rỗng khi soldcount bằng 0
+  } else if (soldcount >= 1000) {
     // Số đã đạt 1000 hoặc hơn
     const kCount = Math.floor(soldcount / 1000);
     return kCount + 'k';

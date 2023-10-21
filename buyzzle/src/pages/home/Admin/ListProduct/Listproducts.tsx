@@ -1,5 +1,7 @@
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { IonIcon } from "@ionic/react";
-import { IconButton } from "@material-tailwind/react";
+import { Button, IconButton } from "@material-tailwind/react";
+import { download, generateCsv } from "export-to-csv"; //Xuat excel
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Search from "../../../../Assets/TSX/Search";
@@ -11,14 +13,12 @@ import Filter from "../Assets/TSX/Filter";
 import PlusSquare from "../Assets/TSX/PlusSquare";
 import StatisticalAdmin from "../Assets/TSX/statistical";
 import SitebarAdmin from "../Sitebar/Sitebar";
-import ListproductMap from "./ListproductMap";
-import { Button } from "@material-tailwind/react";
-import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import FilterListproduct from "./Filter/FilterListproduct";
-import EmptyPage from "../../../../Helper/Empty/EmptyPage";
+import ListproductMap from "./ListproductMap";
+import { csvConfig } from "../../../../Helper/Export/Excel";
 export default function ListproductsAdmin() {
-  const [products, setProducts] = useState<any>({});
-
+  const [products, setProducts] = useState<any>([]);
+  // Xuat excel
   const [search, setSearch] = useState("");
   const debouncedInputValueSearch = useDebounce(search, 400); // Debounce for 300 milliseconds
 
@@ -32,6 +32,15 @@ export default function ListproductsAdmin() {
     [number, number]
   >([0, 10000]);
   const debouncedInputValueQuantity = useDebounce(sliderQuantityValues, 400); // Debounce for 300 milliseconds
+
+  const [sliderPurchaseValues, setSliderPurchaseValues] = useState<
+    [number, number]
+  >([0, 10000]);
+  const debouncedInputValuePurchase = useDebounce(sliderPurchaseValues, 400); // Debounce for 300 milliseconds
+
+  const [inStock, setinStock] = useState<any>(false);
+  const [soldOut, setSoldOut] = useState<any>(false);
+  const [showAllProducts, setShowAllProducts] = useState(false);
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,6 +96,7 @@ export default function ListproductsAdmin() {
       modal.close();
     }
   };
+  // console.log(products.rows);
 
   const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -117,9 +127,25 @@ export default function ListproductsAdmin() {
 
   // Slider Price SiteBarFilterPages and Slider Quantity SiteBarFilterPages
   useEffect(() => {
-    handleFilter(debouncedInputValuePrice, debouncedInputValueQuantity);
-  }, [debouncedInputValuePrice, debouncedInputValueQuantity]);
-  const handleFilter = async (priceRange: any, quantityRange: any) => {
+    handleFilter(
+      debouncedInputValuePrice,
+      debouncedInputValueQuantity,
+      debouncedInputValuePurchase
+    );
+  }, [
+    debouncedInputValuePrice,
+    debouncedInputValueQuantity,
+    debouncedInputValuePurchase,
+  ]);
+  const handleFilter = async (
+    priceRange: any,
+    quantityRange: any,
+    purchase: any
+  ) => {
+    console.log(
+      "🚀 ~ file: Listproducts.tsx:140 ~ ListproductsAdmin ~ purchase:",
+      purchase
+    );
     console.log(
       "🚀 ~ file: Listproducts.tsx:131 ~ handleFilter ~ quantityRange:",
       quantityRange
@@ -127,13 +153,15 @@ export default function ListproductsAdmin() {
     console.log("debouncedInputValue", priceRange);
 
     await productController
-      .getFilterProductbyPriceAndQuantityWithinRangePagination(
+      .getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination(
         priceRange[0],
         priceRange[1],
         currentPage,
         5,
         quantityRange[0],
-        quantityRange[1]
+        quantityRange[1],
+        purchase[0],
+        purchase[1]
       )
       .then((res: any) => {
         setProducts(res);
@@ -149,6 +177,67 @@ export default function ListproductsAdmin() {
     setSliderPriceValues(price);
     console.log("price Range:", price);
   };
+
+  const handlePurchaseRangeChange = (purchase: [number, number]) => {
+    setSliderPurchaseValues(purchase);
+    console.log("price Range:", purchase);
+  };
+  // Hàm gọi API để lấy tất cả sản phẩm
+  const getProductAll = async () => {
+    await productController
+      .getSearchAndPaginationProduct("", 1, 2)
+      .then((res) => {
+        setProducts(res);
+        console.log("Lấy tất cả sản phẩm:", res);
+      })
+      .catch((err) => console.log(err));
+  };
+  useEffect(() => {
+    getProductAll();
+  }, []);
+  // check con hang API
+  const handleClickinStock = () => {
+    setinStock(!inStock); // Đảo ngược giá trị của biến inStock
+    if (!inStock) {
+      checkedinStock();
+      setSoldOut(false);
+      setShowAllProducts(false); // Đặt hiển thị tất cả sản phẩm thành false
+    } else {
+      getProductAll();
+      setShowAllProducts(true); // Đặt hiển thị tất cả sản phẩm thành true
+    }
+  };
+  const checkedinStock = async () => {
+    await productController
+      .getProductInStockAndSoldOut("inStock")
+      .then((res) => {
+        setProducts(res);
+        console.log("🚀 ~ file: Listproducts.tsx:197 ~ .then ~ res:", res);
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleClickSoldOut = () => {
+    setSoldOut(!soldOut); // Đảo ngược giá trị của biến soldOut
+    if (!soldOut) {
+      checkedSoldOut();
+      setinStock(false);
+      setShowAllProducts(false); // Đặt hiển thị tất cả sản phẩm thành false
+    } else {
+      getProductAll();
+      setShowAllProducts(true); // Đặt hiển thị tất cả sản phẩm thành true
+    }
+  };
+  // check het hang API
+  const checkedSoldOut = async () => {
+    await productController
+      .getProductInStockAndSoldOut("soldOut")
+      .then((res) => {
+        setProducts(res);
+        console.log("🚀 ~ file: Listproducts.tsx:197 ~ .then ~ res:", res);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <Container>
@@ -290,8 +379,12 @@ export default function ListproductsAdmin() {
                     max-xl:font-medium
                     max-lg:text-xs
                     "
-                        // onClick={(e) => getData(e)}
+                        onClick={() => {
+                          const csv = generateCsv(csvConfig)(products.rows); // Xuat excel
+                          download(csvConfig)(csv);
+                        }}
                       >
+                        {" "}
                         Xuất excel
                       </button>
                     </div>
@@ -335,10 +428,16 @@ export default function ListproductsAdmin() {
 
             {isShown && (
               <FilterListproduct
+                valuePurchase={sliderPurchaseValues}
                 valueQuantity={sliderQuantityValues}
                 valuePrice={sliderPriceValues}
+                valueinStock={inStock}
+                valueSoldOut={soldOut}
+                onSoldOut={handleClickSoldOut}
+                oninStock={handleClickinStock}
                 onQuantityRangeChange={handleQuantityRangeChange}
                 onPriceRangeChange={handlePriceRangeChange}
+                onPurchaseRangeChange={handlePurchaseRangeChange}
               />
             )}
 
@@ -404,6 +503,7 @@ export default function ListproductsAdmin() {
                   return (
                     <>
                       <ListproductMap
+                        soldOut={soldOut}
                         HandleXoa={handleRemove}
                         products={items}
                       />
@@ -412,7 +512,7 @@ export default function ListproductsAdmin() {
                 })
               ) : (
                 <>
-                  <EmptyPage />
+                  <p>gio hang trong</p>
                 </>
               )}
             </div>
@@ -421,12 +521,15 @@ export default function ListproductsAdmin() {
               <div className="flex">
                 <Button
                   variant="text"
-                  className="flex items-center gap-2"
+                  // className="flex items-center gap-2"
+                  className={`${
+                    currentPage == 1 ? `hidden` : `flex items-center gap-2`
+                  }`}
                   onClick={prev}
                 >
                   <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
                 </Button>
-                {[...new Array(products.totalPage)].map((item, index) => {
+                {[...new Array(products?.totalPage)].map((item, index) => {
                   const page = index + 1;
                   console.log(item);
                   return (
@@ -439,7 +542,11 @@ export default function ListproductsAdmin() {
                 })}
                 <Button
                   variant="text"
-                  className="flex items-center gap-2"
+                  className={`${
+                    currentPage == products?.totalPage
+                      ? "hidden"
+                      : "flex items-center gap-2"
+                  }`}
                   onClick={next}
                 >
                   Next
