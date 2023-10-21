@@ -3,66 +3,88 @@ const prisma = new PrismaClient();
 
 const StatisticsController = {
     getStatictics: async (req, res) => {
-        try {
-            // Lấy ngày hiện tại
-            const currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0); // Đặt giờ, phút, giây, và mili giây về 00:00:00.000
+        //     try {
+        //         const allOrderDetails = await prisma.orderDetail.findMany({
+        //             include: {
+        //                 fK_productOrder: {
+        //                     select: {
+        //                         id: true,
+        //                         name: true,
+        //                         price: true,
+        //                     },
+        //                 },
+        //             },
+        //         });
 
-            // Lấy danh sách đơn hàng trong ngày
-            const orders = await prisma.order.findMany({
-                where: {
-                    AND: [
-                        {
-                            createdAt: {
-                                gte: currentDate, // Lớn hơn hoặc bằng ngày bắt đầu ngày hiện tại
-                            },
-                        },
-                        {
-                            createdAt: {
-                                lt: new Date(currentDate.getTime() + 24 * 60 * 60 * 1000), // Nhỏ hơn ngày kết thúc ngày hiện tại
-                            },
-                        },
-                    ],
-                },
+        //         const productStats = {};
+
+        //         allOrderDetails.forEach((orderDetail) => {
+        //             const product = orderDetail.fK_productOrder;
+        //             const createdAt = orderDetail.createdAt.toDateString(); // Lấy ngày tạo đơn hàng
+
+        //             if (!productStats[createdAt]) {
+        //                 productStats[createdAt] = [];
+        //             }
+
+        //             productStats[createdAt].push({
+        //                 id: product.id,
+        //                 name: product.name,
+        //                 price: product.price,
+        //             });
+        //         });
+
+        //         res.json(productStats);
+        //     } catch (error) {
+        //         console.error('Error:', error);
+        //         res.status(500).json({ error: 'An error occurred while fetching product stats.' });
+        //     }
+        // },
+        try {
+            const allOrderDetails = await prisma.orderDetail.findMany({
                 include: {
-                    OrderDetail: {
-                        include: {
-                            Product: true,
+                    fK_productOrder: {
+                        select: {
+                            id: true,
+                            name: true,
+                            price: true,
                         },
                     },
                 },
             });
 
-            // Tính tổng doanh thu
-            let totalRevenue = 0;
             const productStats = {};
 
-            for (const order of orders) {
-                for (const orderDetail of order.OrderDetail) {
-                    const product = orderDetail.Product;
-                    const revenue = orderDetail.price * orderDetail.quantity;
-                    totalRevenue += revenue;
+            allOrderDetails.forEach((orderDetail) => {
+                const product = orderDetail.fK_productOrder;
+                const createdAt = orderDetail.createdAt.toDateString(); // Lấy ngày tạo đơn hàng
 
-                    if (productStats[product.id]) {
-                        productStats[product.id].revenue += revenue;
-                        productStats[product.id].quantity += orderDetail.quantity;
-                    } else {
-                        productStats[product.id] = {
-                            name: product.name,
-                            revenue,
-                            quantity: orderDetail.quantity,
-                        };
-                    }
+                if (!productStats[createdAt]) {
+                    productStats[createdAt] = [];
                 }
-            }
 
-            res.status(200).json({
-                totalRevenue,
-                productStats,
+                // Kiểm tra xem sản phẩm đã tồn tại trong thông tin thống kê chưa
+                const existingProduct = productStats[createdAt].find((item) => item.id === product.id);
+
+                if (existingProduct) {
+                    // Nếu sản phẩm đã tồn tại, cập nhật số lượng và tổng tiền
+                    existingProduct.quantity++;
+                    existingProduct.totalPrice += product.price;
+                } else {
+                    // Nếu sản phẩm chưa tồn tại, thêm sản phẩm vào thông tin thống kê
+                    productStats[createdAt].push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: 1,
+                        totalPrice: product.price,
+                    });
+                }
             });
+
+            res.json(productStats);
         } catch (error) {
             console.error('Error:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
+            res.status(500).json({ error: 'An error occurred while fetching product stats.' });
         }
     },
 };
