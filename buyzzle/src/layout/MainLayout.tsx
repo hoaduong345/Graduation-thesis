@@ -3,14 +3,14 @@ import Header from "../components/Header/Header"
 
 
 interface Props {
-    children?: React.ReactNode
-  }
-function MainLayout({children} : Props) {
+  children?: React.ReactNode
+}
+function MainLayout({ children }: Props) {
   return (
-    <div className='inline-flex flex-col h-screen w-full'>
-        <Header />
-        {children}
-        <Footer />
+    <div >
+      <Header />
+      {children}
+      <Footer />
     </div>
   )
 }

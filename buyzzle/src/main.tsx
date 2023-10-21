@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { CookiesProvider } from "react-cookie";
+import ThemeContextProvider from "./hooks/Context/ThemeContextProvider.tsx";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -15,7 +16,8 @@ const queryClient = new QueryClient({
   },
 });
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <ThemeContextProvider>
+    {/* <React.StrictMode> */}
     <CookiesProvider>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
@@ -24,5 +26,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </QueryClientProvider>
       </BrowserRouter>
     </CookiesProvider>
-  </React.StrictMode>
+    {/* </React.StrictMode> */}
+  </ThemeContextProvider>
 );
