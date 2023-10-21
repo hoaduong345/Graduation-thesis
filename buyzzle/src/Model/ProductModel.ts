@@ -86,7 +86,6 @@ export interface Rating {
     iduser: number
     ratingValue: number
     comment: string
-    createdAt: string
     product: {
         quantity: number,
         ProductImage: ProductImage[]

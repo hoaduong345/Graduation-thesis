@@ -66,7 +66,8 @@ model User {
   deletedAt            DateTime?
 
   // roleId               Role? @relation(fields: [id], references: [id])
-  Order Order[]
+  Order    Order[]
+  invoices Invoice[]
 }
 
 model UserImage {
@@ -157,11 +158,12 @@ model Category {
 }
 
 model Cart {
-  id        Int        @id @default(autoincrement())
-  user      User       @relation(fields: [userId], references: [id])
+  id        Int              @id @default(autoincrement())
+  user      User             @relation(fields: [userId], references: [id])
   userId    Int
   item      ItemCart[]
   subtotal  Int
+  invoices  InvoiceDetails[]
   deletedAt DateTime?
 }
 
@@ -278,4 +280,19 @@ model Voucher {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
   deletedAt DateTime?
+}
+
+model Invoice {
+  id             Int              @id @default(autoincrement())
+  iduser         Int
+  user           User             @relation(fields: [iduser], references: [id])
+  invoiceDetails InvoiceDetails[]
+}
+
+model InvoiceDetails {
+  id        Int     @id @default(autoincrement())
+  invoice   Invoice @relation(fields: [idInvoice], references: [id])
+  idInvoice Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    Int
 }

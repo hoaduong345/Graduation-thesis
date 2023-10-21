@@ -34,13 +34,18 @@ const UserController = {
                     },
                 });
             }
-            await prisma.user.delete({
-                where: {
-                    id: registerId,
-                },
-            });
-
-            res.status(200).json('Xóa User thành công');
+            if (existingUser) {
+                await prisma.user.update({
+                    where: {
+                        id: registerId,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                });
+                return res.status(200).json('Xóa User thành công');
+            }
+            return res.status(402).json('Xóa User that bai');
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -78,6 +83,9 @@ const UserController = {
         try {
             const UserId = req.params.username;
 
+            const whereClause = {
+                deletedAt: null,
+            };
             const userWithImage = await prisma.user.findUnique({
                 include: {
                     UserImage: true,
@@ -101,6 +109,9 @@ const UserController = {
                     dateOfBirth: true,
                 },
             });
+            const allUsers = await prisma.user.findMany({
+                where: whereClause,
+            });
 
             if (!userWithImage || !userWithoutImage) {
                 return res.status(404).json({ error: 'Không tìm thấy người dùng' });
@@ -110,6 +121,7 @@ const UserController = {
             const user = {
                 ...userWithoutImage,
                 UserImage: userWithImage.UserImage,
+                allUsers: allUsers,
             };
 
             res.status(200).json(user);
