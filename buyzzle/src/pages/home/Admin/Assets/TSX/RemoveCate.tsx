@@ -1,7 +1,7 @@
 export default function RemoveCate() {
   return (
     <svg
-      className="max-[940px]:w-4 cursor-pointer"
+      className="max-[940px]:w-4"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"

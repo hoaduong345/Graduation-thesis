@@ -8,6 +8,10 @@ import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Calendar from "../../Assets/TSX/calendar";
 import Print from "../../Assets/TSX/print";
 import SitebarAdmin from "../../Sitebar/Sitebar";
+import { formatDate, numberFormat } from "../../../../../Helper/Format";
+import Buyzzle from "../../../../../Assets/TSX/Buyzzle";
+import Detail from "../../Assets/Icon/detail";
+import Excel from "../../Assets/TSX/excel";
 interface productInfor {
   image: string;
   name: string;
@@ -19,6 +23,7 @@ interface cardItemsInfor {
   price: number;
   time: Date;
   orderCode: string;
+  products: productInfor[];
 }
 export default function OrderManagement() {
   const [open, setOpen] = useState(false);
@@ -106,23 +111,140 @@ export default function OrderManagement() {
     }
   }
 
-  const products: productInfor[] = [
+  const cardData: cardItemsInfor[] = [
+    // Danh sách các đơn hàng (cardItemsInfor)
     {
-      image: Images.imageproduct2,
-      name: "San pham 1",
-      quantity: 4,
+      idOrder: "order1",
+      status: "Chưa thanh toán",
+      price: 5000000,
+      time: new Date("2023-10-22T10:00:00Z"),
+      orderCode: "ORD123",
+      products: [
+        {
+          image: Images.imageproduct1,
+          name: "San pham 3",
+          quantity: 8,
+        },
+        {
+          image: Images.imageproduct3,
+          name: "San pham 3",
+          quantity: 8,
+        },
+        {
+          image: Images.imageproduct2,
+          name: "San pham 2",
+          quantity: 12,
+        },
+        {
+          image: Images.imageproduct1,
+          name: "San pham 3",
+          quantity: 8,
+        },
+      ],
     },
     {
-      image: Images.imageproduct3,
-      name: "San pham 2",
-      quantity: 12,
+      idOrder: "order2",
+      status: "Đang giao hàng",
+      price: 2500000,
+      time: new Date("2023-10-21T15:30:00Z"),
+      orderCode: "ORD124",
+      products: [
+        {
+          image: Images.imageproduct4,
+          name: "San pham 2",
+          quantity: 12,
+        },
+        {
+          image: Images.imageproduct5,
+          name: "San pham 1",
+          quantity: 4,
+        },
+      ],
     },
     {
-      image: Images.imageproduct3,
-      name: "San pham 3",
-      quantity: 8,
+      idOrder: "order3",
+      status: "Đã giao hàng",
+      price: 8000000,
+      time: new Date("2023-10-20T09:15:00Z"),
+      orderCode: "ORD125",
+      products: [
+        {
+          image: Images.imageproduct3,
+          name: "San pham 1",
+          quantity: 4,
+        },
+        {
+          image: Images.imageproduct6,
+          name: "San pham 2",
+          quantity: 12,
+        },
+        {
+          image: Images.imageproduct1,
+          name: "San pham 1",
+          quantity: 4,
+        },
+        {
+          image: Images.imageproduct4,
+          name: "San pham 2",
+          quantity: 12,
+        },
+        {
+          image: Images.imageproduct2,
+          name: "San pham 1",
+          quantity: 4,
+        },
+        {
+          image: Images.imageproduct5,
+          name: "San pham 2",
+          quantity: 12,
+        },
+      ],
+    },
+    {
+      idOrder: "order4",
+      status: "Chưa thanh toán",
+      price: 3500000,
+      time: new Date("2023-10-19T14:20:00Z"),
+      orderCode: "ORD126",
+      products: [
+        {
+          image: Images.imageproduct1,
+          name: "San pham 2",
+          quantity: 12,
+        },
+        {
+          image: Images.imageproduct2,
+          name: "San pham 3",
+          quantity: 8,
+        },
+        {
+          image: Images.imageproduct4,
+          name: "San pham 3",
+          quantity: 8,
+        },
+      ],
+    },
+    {
+      idOrder: "order5",
+      status: "Đã giao hàng",
+      price: 6000000,
+      time: new Date("2023-10-18T11:45:00Z"),
+      orderCode: "ORD127",
+      products: [
+        {
+          image: Images.imageproduct6,
+          name: "San pham 3",
+          quantity: 8,
+        },
+        {
+          image: Images.imageproduct5,
+          name: "San pham 3",
+          quantity: 8,
+        },
+      ],
     },
   ];
+
   return (
     <Container>
       <div
@@ -228,113 +350,144 @@ export default function OrderManagement() {
             </div>
             {/* end checkBox */}
             <div className="col-span-1 flex items-center gap-4 justify-end">
-              <div className="border-[#EA4B48] border-[1px] p-3 rounded-md">
+              <div className="border-[#EA4B48] border-[1px] p-3 rounded-md hover:bg-[#ffe0e0] cursor-pointer">
                 <RemoveCate />
               </div>
-              <div className="border-[#4C4C4C] border-[1px] p-3 rounded-md">
-                <Print />
+              <div className="border-[#107C41] border-[1px] p-3 rounded-md hover:bg-[#d7fee1] cursor-pointer">
+                <Excel />
               </div>
             </div>
           </div>
           {/* end checkBox and Printf*/}
-          {/* card */}
-          <div
-            className="p-10
-          shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-          >
-            <div className="justify-between flex ">
-              <div className="col-span-2 flex items-center gap-4">
-                <input
-                  className="checkbox checkbox-sm items-center"
-                  type="checkbox"
-                />
-                <div className="flex items-center gap-1">
-                  <p className="text-[#4C4C4C] font-bold text-base">
-                    Đơn hàng:{" "}
-                  </p>
-                  <p className="text-[#1A1A1A] font-bold text-base mr-3">
-                    #1A22
-                  </p>
-                  <div className="badge badge-xs badge-accent py-3 px-3">
-                    <p className="font-bold text-xs text-white ">
-                      Nhận thanh toán
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-span-2">
-                <p className="text-[#EA4B48] text-2xl font-bold">₫231.000 </p>
-              </div>
-            </div>
-            <div className="mx-9">
-              <div className="my-2 flex items-center gap-2">
-                {/* calendarIcon */}
-                <div>
-                  <Calendar />
-                </div>
-                {/* end calendarIcon */}
-                <div className="flex">
-                  <p className="text-[#4C4C4C] font-bold text-sm">
-                    14/10/2024 lúc 11:20 PM
-                  </p>
-                  <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-[#4C4C4C] font-bold text-sm">
-                      Mã vận đơn:
-                    </p>
-                    <p className="text-[#EA4B48] font-bold text-sm">null</p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center mt-5 gap-5">
-                {/* Select box */}
-                <div className="relative h-10 w-[142px] min-w-[200px]">
-                  <select className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
-                    <option value="brazil">Chờ xác nhận</option>
-                    <option value="bucharest">Bucharest</option>
-                    <option value="london">London</option>
-                    <option value="washington">Washington</option>
-                  </select>
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Trạng thái
-                  </label>
-                </div>
-                {/* end Select box  */}
-                <div className="badge badge-xs badge-error py-3 px-5">
-                  <p className="font-bold text-xs text-white ">Mới</p>
-                </div>
-              </div>
-              {products.map((items) => {
-                return (
-                  <>
-                    {/* San pham */}
-                    <div className="grid grid-cols-5 py-[16px] items-center">
-                      <div className="col-span-2 text-sm flex gap-4 items-center">
-                        <img
-                          className="w-[50px] h-[50px] object-contain"
-                          src={items.image}
-                          alt=""
+          <div className="flex flex-col space-y-4">
+            {cardData.map((itemsCard) => {
+              return (
+                <>
+                  {/* card */}
+                  <div
+                    className="p-10 group relative 
+shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                  >
+                    <div className="justify-between flex ">
+                      <div className="col-span-2 flex items-center gap-4">
+                        <input
+                          className="checkbox checkbox-sm items-center"
+                          type="checkbox"
                         />
-                        <div>
-                          <p className="text-sm font-bold text-[#393939] max-[870px]:text-[13px]">
-                            {items.name}
+                        <div className="flex items-center gap-1">
+                          <p className="text-[#4C4C4C] font-bold text-base">
+                            Đơn hàng:{" "}
                           </p>
-                          <p className="text-xs text-[#1A1A1A] max-[870px]:text-[13px]">
-                            SL:{" "}
-                            <span className="text-[#4C4C4C]">
-                              x{items.quantity}
-                            </span>
+                          <p className="text-[#1A1A1A] font-bold text-base mr-3">
+                            {itemsCard.idOrder}
                           </p>
+                          <div className="badge badge-xs badge-accent py-3 px-3">
+                            <p className="font-bold text-xs text-white ">
+                              {itemsCard.status}
+                            </p>
+                          </div>
                         </div>
                       </div>
+                      <div className="col-span-2">
+                        <p className="text-[#EA4B48] text-2xl font-bold">
+                          {numberFormat(itemsCard.price)}
+                        </p>
+                      </div>
                     </div>
-                    {/* end San pham */}
-                  </>
-                );
-              })}
-            </div>
+                    <div className="mx-9">
+                      <div className="my-2 flex items-center gap-2">
+                        {/* calendarIcon */}
+                        <div>
+                          <Calendar />
+                        </div>
+                        {/* end calendarIcon */}
+                        <div className="flex">
+                          <p className="text-[#4C4C4C] font-bold text-sm">
+                            {formatDate(itemsCard.time)}
+                          </p>
+                          <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
+                          <div className="flex items-center gap-2">
+                            <p className="text-[#4C4C4C] font-bold text-sm">
+                              Mã vận đơn:
+                            </p>
+                            <p className="text-[#EA4B48] font-bold text-sm">
+                              {itemsCard.orderCode}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center mt-5 gap-5">
+                        {/* Select box */}
+                        <div className="relative h-10 w-[142px] min-w-[200px]">
+                          <select className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
+                            <option value="brazil">Chờ xác nhận</option>
+                            <option value="bucharest">Bucharest</option>
+                            <option value="london">London</option>
+                            <option value="washington">Washington</option>
+                          </select>
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            Trạng thái
+                          </label>
+                        </div>
+                        {/* end Select box  */}
+                        <div className="badge badge-xs badge-error py-3 px-5">
+                          <p className="font-bold text-xs text-white ">Mới</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 mt-4 ">
+                        {itemsCard.products.map((items) => {
+                          return (
+                            <>
+                              {/* San pham */}
+                              <div
+                                className="py-[16px] items-center"
+                                key={items.name}
+                              >
+                                <div className="col-span-2 text-sm flex gap-4 items-center">
+                                  {items.image && (
+                                    <img
+                                      className="w-[50px] h-[50px] object-contain"
+                                      src={items.image}
+                                      alt=""
+                                    />
+                                  )}
+                                  <div>
+                                    <p className="text-sm font-bold text-[#393939] max-[870px]:text-[13px]">
+                                      {items.name}
+                                    </p>
+                                    <p className="text-xs text-[#1A1A1A] max-[870px]:text-[13px]">
+                                      SL:{" "}
+                                      <span className="text-[#4C4C4C]">
+                                        x{items.quantity}
+                                      </span>
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              {/* end San pham */}
+                            </>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <div className="group-hover:opacity-100 flex absolute top-1/3 transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
+                      <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
+                        <Print />
+                        <p>Print</p>
+                      </button>
+                      <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
+                        <p>Cập nhật</p>
+                      </button>
+                      <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
+                        <p>Xem chi tiết</p>
+                      </button>
+                    </div>
+                  </div>
+                  {/* end card */}
+                </>
+              );
+            })}
           </div>
-          {/* end card */}
         </div>
       </div>
     </Container>
