@@ -1,5 +1,8 @@
-// const OrderController = require("../controller/OrderController");
+const express = require('express');
+const app = express();
+const OrderController = require('../controller/OrderController');
 
-const router = require('express').Router();
+app.post('/', OrderController.createOrder);
+app.get('/', OrderController.getOrderDetails);
 
-module.exports = router;
+module.exports = app;
