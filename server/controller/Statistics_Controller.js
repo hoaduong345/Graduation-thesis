@@ -5,15 +5,20 @@ const StatisticsController = {
     getStatictics: async (req, res) => {
         try {
             const { date } = req.query; // Ngày cần thống kê (ví dụ: '2023-10-01')
-            // Chuyển ngày thành dạng Date object
             const selectedDate = new Date(date);
 
-            // Tính ngày đầu và ngày cuối tháng từ ngày đã chọn
+            // Tính ngày đầu và cuối tháng từ ngày đã chọn
             const firstDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
             const lastDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
-
-            // Truy vấn cơ sở dữ liệu để lấy tất cả OrderDetails trong khoảng thời gian đã chọn
-            const allOrderDetails = await prisma.orderDetail.findMany({
+            // Tạo một đối tượng để lưu trữ số lượng sản phẩm ban đầu
+            let initialProductQuantities = prisma.product.findMany({
+                where: {
+                    quantity: true,
+                },
+            });
+            // const initialProductQuantities = {};
+            // Truy vấn cơ sở dữ liệu để lấy các chi tiết đơn hàng trong tháng, kết hợp với thông tin sản phẩm và khách hàng
+            const orderDetails = await prisma.orderDetail.findMany({
                 where: {
                     createdAt: {
                         gte: firstDayOfMonth,
@@ -21,77 +26,68 @@ const StatisticsController = {
                     },
                 },
                 include: {
-                    fK_productOrder: true, // Lấy thông tin sản phẩm
+                    fK_order: {
+                        select: {
+                            customerId: true,
+                            customer: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+                    fK_productOrder: {
+                        select: {
+                            name: true,
+                            quantity: true,
+                            createdAt: true,
+                        },
+                    },
                 },
             });
 
-            // Khởi tạo đối tượng thống kê
-            const productStats = {};
+            // Tính tổng doanh thu, tổng số lượng sản phẩm đã bán và thông tin thêm từ sản phẩm
+            let totalRevenue = 0;
+            let totalQuantitySold = 0;
+            let productsInfo = {};
 
-            // Lặp qua danh sách OrderDetails và tính toán thông tin thống kê
-            allOrderDetails.forEach((orderDetail) => {
-                const product = orderDetail.fK_productOrder;
-                const createdAt = orderDetail.createdAt.toDateString(); // Lấy ngày tạo đơn hàng
+            orderDetails.forEach((orderDetail) => {
+                totalRevenue += orderDetail.price * orderDetail.quantity;
 
-                if (!productStats[createdAt]) {
-                    productStats[createdAt] = [];
-                }
+                // Lấy thông tin sản phẩm từ trường include
+                const productInfo = orderDetail.fK_productOrder;
 
-                // Kiểm tra xem sản phẩm đã tồn tại trong thông tin thống kê chưa
-                const existingProduct = productStats[createdAt].find((item) => item.id === product.id);
+                if (productInfo) {
+                    const productId = orderDetail.productId; // Lấy ID sản phẩm
 
-                if (existingProduct) {
-                    // Nếu sản phẩm đã tồn tại, cập nhật số lượng, tổng tiền và số lượng sản phẩm
-                    existingProduct.quantity++;
-                    existingProduct.totalPrice += product.sellingPrice;
-                    existingProduct.totalQuantity += 1;
-                } else {
-                    // Nếu sản phẩm chưa tồn tại, thêm sản phẩm vào thông tin thống kê
-                    productStats[createdAt].push({
-                        id: product.id,
-                        name: product.name,
-                        sellingPrice: product.sellingPrice,
-                        quantity: 1,
-                        totalPrice: product.sellingPrice,
-                        totalQuantity: 1,
-                    });
+                    // Kiểm tra xem sản phẩm đã được thêm vào danh sách sản phẩm ban đầu chưa
+                    if (!initialProductQuantities[productId]) {
+                        initialProductQuantities[productId] = productInfo.quantity;
+                    }
+
+                    totalQuantitySold += orderDetail.quantity;
+                    // Tính toán totalQuantityBought dựa trên số lượng sản phẩm ban đầu trừ đi số lượng đã bán
+
+                    productsInfo[productId] = {
+                        name: productInfo.name,
+                        // totalQuantityBought: initialProductQuantities[productId] - totalQuantitySold,
+                        createdAt: productInfo.createdAt,
+                    };
                 }
             });
 
-            res.json(productStats);
+            res.json({
+                totalRevenue, // Tổng doanh thu trong tháng
+                totalQuantitySold, // Tổng số lượng đã bán trong tháng
+                productsInfo, // Thông tin sản phẩm (số lượng còn lại, ngày sản phẩm được mua trong tháng, tên sản phẩm)
+            });
         } catch (error) {
-            console.error('Error:', error);
-            res.status(500).json({ error: 'An error occurred while fetching product stats.' });
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } finally {
+            await prisma.$disconnect();
         }
     },
-    //     try {
-    //         const { date } = req.query; // Ngày cần thống kê (ví dụ: '2023-10-01')
-    //         // Chuyển ngày thành dạng Date object
-    //         const selectedDate = new Date(date);
-
-    //         // Tính ngày đầu và ngày cuối tháng từ ngày đã chọn
-    //         const firstDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-    //         const lastDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
-
-    //         // Truy vấn cơ sở dữ liệu để thống kê sản phẩm
-    //         const sales = await prisma.$queryRaw`
-    // SELECT p.name AS productName,
-    //        SUM(od.quantity) AS quantitySold,
-    //        SUM(od.price) AS totalRevenue,
-    //        od.createdAt AS saleDate,
-    //        (p.quantity - SUM(od.quantity)) AS remainingQuantity
-    // FROM OrderDetail od
-    // JOIN Product p ON od.productId = p.id
-    // WHERE od.createdAt >= ${firstDayOfMonth} AND od.createdAt <= ${lastDayOfMonth}
-    // GROUP BY p.name, od.createdAt, p.quantity
-    // ORDER BY od.createdAt`;
-
-    //         res.json(sales);
-    //     } catch (error) {
-    //         console.error(error);
-    //         res.status(500).json({ error: 'Internal Server Error' });
-    //     }
-    // },
 };
 
 module.exports = StatisticsController;
