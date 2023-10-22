@@ -29,6 +29,7 @@ import DetailUser from "../../pages/home/Admin/DetailUser/DetailUser";
 import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
 import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
+import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -578,6 +579,10 @@ export default function useRouterEmelent() {
         {
           path: "detailuser/:username",
           element: <DetailUser />,
+        },
+        {
+          path: "ordermanagement",
+          element: <OrderManagement />,
         },
         {
           path: "usersmanager",
