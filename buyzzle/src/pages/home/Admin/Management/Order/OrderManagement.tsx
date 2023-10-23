@@ -1,17 +1,15 @@
 import { IonIcon } from "@ionic/react";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { Images } from "../../../../../Assets/TS";
 import Search from "../../../../../Assets/TSX/Search";
+import { formatDate, numberFormat } from "../../../../../Helper/Format";
 import Container from "../../../../../components/container/Container";
 import Filter from "../../Assets/TSX/Filter";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Calendar from "../../Assets/TSX/calendar";
+import Excel from "../../Assets/TSX/excel";
 import Print from "../../Assets/TSX/print";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import { formatDate, numberFormat } from "../../../../../Helper/Format";
-import Buyzzle from "../../../../../Assets/TSX/Buyzzle";
-import Detail from "../../Assets/Icon/detail";
-import Excel from "../../Assets/TSX/excel";
 interface productInfor {
   image: string;
   name: string;
@@ -53,7 +51,7 @@ export default function OrderManagement() {
       badgeNum: (
         <div className="badge badge-xs badge-error badge-outline py-2">100</div>
       ),
-      active: false, // Thêm trường active
+      active: true, // Thêm trường active
     },
     {
       id: 2,
@@ -88,6 +86,10 @@ export default function OrderManagement() {
   const handleClick = (id: number) => {
     const updatedButtons = changeButton.map((btn) => {
       if (btn.id === id) {
+        console.log(
+          "🚀 ~ file: OrderManagement.tsx:91 ~ updatedButtons ~ btn.id:",
+          btn.id
+        );
         return { ...btn, active: true };
       } else {
         return { ...btn, active: false };
@@ -284,12 +286,14 @@ export default function OrderManagement() {
             {changeButton.map((btnItems) => {
               return (
                 <button
-                  className={`bg-white btn ${
-                    btnItems.active
-                      ? `border-[${getBorderColor(btnItems.id)}]  border-[1px]`
-                      : ""
-                  }`}
-                  style={{ backgroundColor: "white" }} // Đặt màu nền mặc định
+                  className={`bg-white btn`}
+                  style={{
+                    backgroundColor: "white",
+                    borderColor: btnItems.active
+                      ? getBorderColor(btnItems.id)
+                      : "",
+                    borderWidth: btnItems.active ? "1px" : "",
+                  }}
                   onClick={() => handleClick(btnItems.id)}
                 >
                   {btnItems.text}
@@ -420,10 +424,10 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                         {/* Select box */}
                         <div className="relative h-10 w-[142px] min-w-[200px]">
                           <select className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
-                            <option value="brazil">Chờ xác nhận</option>
-                            <option value="bucharest">Bucharest</option>
-                            <option value="london">London</option>
-                            <option value="washington">Washington</option>
+                            <option value="pending">Chờ xác nhận</option>
+                            <option value="in-transit">Đang vận chuyển</option>
+                            <option value="delivered">Đã giao hàng</option>
+                            <option value="cancelled">Đã hủy</option>
                           </select>
                           <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
                             Trạng thái
