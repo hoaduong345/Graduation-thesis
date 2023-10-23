@@ -7,9 +7,7 @@ const bodyParser = require('body-parser');
 const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
-
-const OrderRouter = require('./routes/OrderRoutes');
-
+const ChatRouter = require('./routes/ChatRoutes');
 const ProductRoutes = require('./routes/ProductRoutes');
 const VoucherRouter = require('./routes/VoucherRoutes');
 const cookieParser = require('cookie-parser');
@@ -47,13 +45,18 @@ app.use('/buyzzle/auth', AuthRouter);
 app.use('/buyzzle/user', UserRouter);
 app.use('/buyzzle/product', ProductRoutes);
 app.use('/buyzzle/cart', CartRouter);
+app.use('/buyzzle/chat', ChatRouter);
 
-app.use('/buyzzle/order', OrderRouter);
+
 app.use('/buyzzle/voucher', VoucherRouter);
 
 // Setup socket.io
+// const chatController = require('./controller/ChatController')(io);
 const server = http.createServer(app);
 const io = socketIo(server);
+
+// const chatController = require('./controller/ChatController')(io);
+
 io.on('connection', (socket) => {
     console.log('Một người dùng đã kết nối');
 
@@ -62,7 +65,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('send message', (message) => {
-        io.emit('receive message', message); // Gửi thông điệp tới tất cả người dùng
+        io.emit('receive message', message); 
     });
 });
 

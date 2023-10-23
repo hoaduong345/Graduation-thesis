@@ -35,6 +35,8 @@ model User {
   UserImage            UserImage[]
   Rating               Rating[]
   // roleId               Role? @relation(fields: [id], references: [id])
+  sender Message[]   @relation("Sender")
+  receiver Message[]   @relation("Receiver")
 }
 
 model UserImage {
@@ -178,4 +180,23 @@ model Voucher {
   endDay    DateTime?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
+}
+
+
+model Admin {
+  id       Int      @id @default(autoincrement())
+  username String?
+  password String?
+  // sentMessages ChatMessage[]@relation("SentMessagess")
+  // receivedMessages ChatMessage[] @relation("ReceivedMessagess")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  content   String
+  sender    User     @relation("Sender", fields: [senderId], references: [id])
+  senderId  Int
+  receiver  User     @relation("Receiver", fields: [receiverId], references: [id])
+  receiverId Int
+  createdAt DateTime @default(now())
 }
