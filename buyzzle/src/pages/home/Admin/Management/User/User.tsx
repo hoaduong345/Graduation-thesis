@@ -249,7 +249,7 @@ export default function User() {
                                       className="text-[#EA4B48] text-sm font-medium
                                             max-[940px]:text-xs "
                                     >
-                                      Sửa
+                                      Xem chi tiết
                                     </p>
                                   </button>
                                 </li>
