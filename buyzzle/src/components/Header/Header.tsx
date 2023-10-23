@@ -23,11 +23,13 @@ import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import Container from "../container/Container";
 import { userController } from "../../Controllers/UserController";
+import CartCount from "../Context/CartCount/CartCount";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
   const [text, setText] = useState("");
+
   const dataInputHeaderSearch = useContext(ThemeContext);
   const dataSearchBodyIndexFromHeader = useContext(ThemeContext);
   const [productSearch, setProductSearch] = useState<Products[]>([]);
@@ -105,6 +107,7 @@ export default function Header() {
         });
     }
   }, [debouncedInputValue]);
+
   return (
     <>
       <header className="Header">
@@ -319,15 +322,7 @@ export default function Header() {
                 </dialog> */}
 
                 <div className="items-center flex relative gap-2">
-                  <div className="items-center flex pr-11 max-[769px]:pr-[10px]">
-                    <Shoppingcart />
-                    <div className="absolute">
-                      <Ellips />
-                      <span className="text-white font-bold absolute top-[-21px] ml-[30px] text-xs max-xl:text-[9px] max-xl:absolute max-xl:mr-[100px]">
-                        1
-                      </span>
-                    </div>
-                  </div>
+                  <CartCount />
                   <div className="items-center">
                     {checkLogin ? (
                       <a className=" flex gap-2" href={href}>
