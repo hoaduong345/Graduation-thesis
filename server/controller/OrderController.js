@@ -21,7 +21,7 @@ const OderController = {
                             userId,
                             OrderDetail: {
                                 create: {
-                                    productId: cartItem.productId,
+                                    productId: cartItem.productid,
                                 },
                             },
                         },
@@ -36,10 +36,10 @@ const OderController = {
                             OrderDetail: {
                                 upsert: {
                                     where: {
-                                        productId: cartItem.productId,
+                                        productId: cartItem.productid,
                                     },
                                     create: {
-                                        productId: cartItem.productId,
+                                        productId: cartItem.productid,
                                     },
                                 },
                             },
