@@ -47,13 +47,6 @@ app.post('/create-checkout-session', async (req, res) => {
             currency: 'vnd',
         },
     });
-    // const paymentIntent = await stripe.paymentIntents.create({
-    //     amount: 1099,
-    //     currency: 'vnd',
-    //     payment_method_types: ['card'],
-    //     description: 'Buyzzle cảm Bạn đã mua hàng!',
-    //     receipt_email: 'I.override.your.customer.email.settings@example.com',
-    // });
     const session = await stripe.checkout.sessions.create({
         line_items,
         mode: 'payment',
