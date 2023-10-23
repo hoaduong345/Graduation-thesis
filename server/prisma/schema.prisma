@@ -199,8 +199,8 @@ model Invoice {
 
 model InvoiceDetails {
   id        Int     @id @default(autoincrement())
-  invoice   Invoice @relation(fields: [idInvoice], references: [id])
   idInvoice Int
-  cart      Cart    @relation(fields: [cartId], references: [id])
   cartId    Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  invoice   Invoice @relation(fields: [idInvoice], references: [id])
 }

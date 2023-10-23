@@ -19,7 +19,6 @@ const InvoiceController = {
                     },
                 },
             });
-
             res.status(200).send(newInvoice);
         } catch (error) {
             console.log('error', error);

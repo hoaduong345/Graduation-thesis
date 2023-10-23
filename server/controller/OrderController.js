@@ -6,46 +6,53 @@ const OderController = {
         try {
             const userId = parseInt(req.cookies.id);
             const cartItems = req.body.cartItems;
-            const order = await prisma.order.findFirst({
-                where: {
-                    userId: userId,
-                },
-            });
-            if (!order) {
-                order = await prisma.order.create({
-                    data: {
-                        userId,
-                        OrderDetail: {
-                            create: {
-                                productId: cartItems.producid,
-                            },
-                        },
+            const orders = [];
+
+            for (const cartItem of cartItems) {
+                let order = await prisma.order.findFirst({
+                    where: {
+                        userId: userId,
                     },
-                    include: { OrderDetail: true },
                 });
-                return res.status(200).json(order);
-            }
-            const updateOrder = await prisma.order.update({
-                where: {
-                    userId: userId,
-                },
-                data: {
-                    OrderDetail: {
-                        upsert: {
-                            where: {
-                                productId: cartItems.producid,
-                            },
-                            create: {
-                                productId: cartItems.producid,
+
+                if (!order) {
+                    order = await prisma.order.create({
+                        data: {
+                            userId,
+                            OrderDetail: {
+                                create: {
+                                    productId: cartItem.productId,
+                                },
                             },
                         },
-                    },
-                },
-            });
-            res.status(200).json(updateOrder);
+                        include: { OrderDetail: true },
+                    });
+                } else {
+                    const updateOrder = await prisma.order.update({
+                        where: {
+                            userId: userId,
+                        },
+                        data: {
+                            OrderDetail: {
+                                upsert: {
+                                    where: {
+                                        productId: cartItem.productId,
+                                    },
+                                    create: {
+                                        productId: cartItem.productId,
+                                    },
+                                },
+                            },
+                        },
+                    });
+                    orders.push(updateOrder);
+                }
+            }
+
+            res.status(200).json(orders);
         } catch (error) {
             console.log(error);
-            res.status(404).json('Add order to db failed');
+            res.status(404).json('Add orders to the database failed');
         }
     },
 
@@ -68,10 +75,10 @@ const OderController = {
                     },
                 },
             });
-            res.status(200).json(order)
+            res.status(200).json(order);
         } catch (error) {
-            console.log("error", error)
-            res.status(404).send("Get order failed")
+            console.log('error', error);
+            res.status(404).send('Get order failed');
         }
     },
 };
