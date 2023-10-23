@@ -10,7 +10,6 @@ const CartController = {
 
             const productId = parseInt(prodId);
             const quantity = parseInt(qty || 1); // default to 1 if not provided
-
             let cart = await CartController.findCart(userId, productId);
 
             if (!cart) {
@@ -247,7 +246,6 @@ const CartController = {
             });
 
             if (!cartItem) throw new Error('Item not found in cart.');
-            
 
             await prisma.itemCart.update({
                 where: { id: cartItem.id },

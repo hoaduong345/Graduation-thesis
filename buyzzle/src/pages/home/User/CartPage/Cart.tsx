@@ -11,11 +11,11 @@ import {
 } from "../../../../Controllers/CartControllers";
 import { CartItem, CartModel } from "../../../../Model/CartModel";
 import useThrottle from "@rooks/use-throttle";
-import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { Link } from "react-router-dom";
 import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 import { numberFormat } from "../../../../Helper/Format";
 import { toast } from "react-toastify";
+import { Images } from "../../../../Assets/TS";
 export default function Cart() {
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
@@ -311,7 +311,11 @@ export default function Cart() {
                      })
                   ) : (
                      <>
-                        <EmptyPage />
+                        <img
+                           className="object-contain w-full h-full"
+                           src={Images.EmptyPage}
+                           alt=""
+                        />
                      </>
                   )}
                   <DialogComfirm
