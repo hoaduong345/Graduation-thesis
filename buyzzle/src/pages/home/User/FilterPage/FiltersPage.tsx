@@ -14,6 +14,10 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
+import { Rate, Row } from "../../../../Model/ProductModel";
+import axios from "axios";
+import { appConfig } from "../../../../configsEnv";
+import { roundedNumber } from "../../../../Helper/Format";
 export interface Cate {
   id: number;
   name: string;
@@ -60,8 +64,19 @@ export interface PriceRangeFilterPage {
   // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
   onChangeSlider(min: number, max: number): void;
 }
+
+export interface RatingStar {
+  checked: boolean;
+  rating: number;
+
+  onChangeFilter(tittle: string): void;
+}
+
+
 export default function FiltersPage() {
-  const [products, setProducts] = useState<Products[]>([]);
+  const [products, setProducts] = useState<Row[]>([]);
+  const [stars, setStars] = useState<Rate>();
+  const [starsnumber, setStarsnumber] = useState(0);
   // Button FIlterPage
   const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
   const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
@@ -83,6 +98,17 @@ export default function FiltersPage() {
     "🚀 ~ file: FiltersPage.tsx:79 ~ FiltersPage ~ text:",
     keywordSearch
   );
+
+  // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
+  useEffect(() => {
+    if (stars) {
+      setStarsnumber(roundedNumber(stars.averageRating));
+      console.log(
+        "🚀 ~ file: FiltersPage.tsx:99 ~ useEffect ~ stars.averageRating:",
+        stars.averageRating
+      );
+    }
+  }, [stars]);
 
   const handleActiveBTNLowToHighClick = () => {
     productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
@@ -130,6 +156,11 @@ export default function FiltersPage() {
   const getData = () => {
     productController.getList("", idCate).then((res: any) => {
       console.log(res);
+      setStars(res.data);
+      console.log(
+        "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
+        res.data
+      );
       setProducts(res.rows);
     });
   };
@@ -158,7 +189,18 @@ export default function FiltersPage() {
     console.log("value", price);
     setSliderValues(price);
   }
-
+  const getProductsWhereRating = (rate: any) => {
+    productController
+      .getProductWhereRatting(rate)
+      .then((res: any) => {
+        // const [product, setProducts] = useState<Row[]>([]);
+        console.log("Ratting fillter" + res);
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   const getSearchDataName = () => {
     productController
       .getSearchAndPaginationProduct(keywordSearch.slice(13).toString())
@@ -171,6 +213,7 @@ export default function FiltersPage() {
       });
   };
 
+
   return (
     <Container>
       <body className="body-filter container mx-auto">
@@ -180,6 +223,13 @@ export default function FiltersPage() {
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
+              onRateChange={(e: any) => getProductsWhereRating(e)} onPurchaseRangeChange={function (value: [number, number]): void {
+                throw new Error("Function not implemented.");
+              } } oninStock={function (availability: boolean): void {
+                throw new Error("Function not implemented.");
+              } } onSoldOut={function (soldOut: boolean): void {
+                throw new Error("Function not implemented.");
+              } }        
             />
           </div>
           {/* content-right-filter */}
@@ -342,7 +392,7 @@ export default function FiltersPage() {
 
             <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
               {products?.map((items) => {
-                return <Filter product={items} />;
+                return <Filter starsnumber={starsnumber} product={items} />;
               })}
             </div>
             {/* <div

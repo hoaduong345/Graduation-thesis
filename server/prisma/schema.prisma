@@ -38,10 +38,10 @@ model User {
 }
 
 model UserImage {
-  id               Int      @id @default(autoincrement()) @unique
-  url              String?
-  iduser            Int     @unique
-  fK_UserImage User? @relation(fields: [iduser], references: [id], onDelete: Cascade)
+  id           Int     @id @unique @default(autoincrement())
+  url          String?
+  iduser       Int     @unique
+  fK_UserImage User?   @relation(fields: [iduser], references: [id], onDelete: Cascade)
 }
 
 model Role {
@@ -69,7 +69,7 @@ model Product {
   pricesale    Int?
   sellingPrice Int?
   discount     Int?
-  soldcount    Int?
+  soldcount    Int?           @default(0)
   quantity     Int?
   description  String?        @db.VarChar(15000)
   status       String?

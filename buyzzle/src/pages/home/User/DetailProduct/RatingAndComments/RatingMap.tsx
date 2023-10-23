@@ -52,6 +52,7 @@ type Props = {
 };
 export default function RatingMap(props: Props) {
   const [idRating, setidRating] = useState<number>(0);
+
   const [url, setUrl] = useState<string[]>([]);
   const [loadingImage, setLoadingImage] = useState(false);
   const { id } = useParams();
@@ -86,7 +87,7 @@ export default function RatingMap(props: Props) {
     if (modal) {
       console.log("idRating idRating", idRating);
       reset({ comment: comment });
-modal.showModal();
+      modal.showModal();
     }
   };
   const handleRatingClick = (rating: number) => {
@@ -132,209 +133,213 @@ modal.showModal();
 
   return (
     <div>
-      {props.rateAndcomment?.Rating.length > 0 ? (
-        props.rateAndcomment?.Rating.map((rating) => {
-          return (
-            <>
-              <div className="border-t-[1px] border-[#EA4B48] px-11 py-8">
-                {/* header comment */}
-                <div className=" justify-between flex mb-4">
-                  <div className="flex items-center gap-3">
-                    {/* hinh anh */}
-                    <div className="relative">
-                      <img
-                        className="w-10 h-10 rounded-full"
-                        src={Images.Avtcmt}
-                        alt="Avtcmt"
-                      />
-                      <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-                    </div>
-                    {/* end hinh anh */}
-                    {/* thong tin users */}
-                    <div>
-                      {/* name - period - date */}
-                      <div className="flex items-center">
-                        {/* name */}{" "}
-                        <p className="text-[#1A1A1A] text-xl font-medium">
-                          {rating.user.username}
-                        </p>
-                        {/* end name */}
-                        {/* period */}
-                        <Period /> {/* end period */}
-                        {/* date */}{" "}
-                        <p className="text-[#4C4C4C] font-normal text-sm">
-                          {currentDate(rating.createdAt)}
-                        </p>
-                        {/* end date */}
+      {props.rateAndcomment?.Rating ? (
+        props.rateAndcomment.Rating.length > 0 ? (
+          props.rateAndcomment?.Rating.map((rating) => {
+            return (
+              <>
+                <div className="border-t-[1px] border-[#EA4B48] px-11 py-8">
+                  {/* header comment */}
+                  <div className=" justify-between flex mb-4">
+                    <div className="flex items-center gap-3">
+                      {/* hinh anh */}
+                      <div className="relative">
+                        <img
+                          className="w-10 h-10 rounded-full"
+                          src={Images.Avtcmt}
+                          alt="Avtcmt"
+                        />
+                        <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                       </div>
-                      {/* end name - period - date */}
-                      {/* rating */}
-                      <div className="flex gap-1">
-<div className="rating rating-xs">
-                          {stars.map((_, index) => (
-                            <button key={index}>
-                              {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
-                              <img
-                                src={
-                                  index < rating.ratingValue
-                                    ? Images.star1
-                                    : Images.star2
-                                }
-                                alt=""
-                              />
-                            </button>
-                          ))}
+                      {/* end hinh anh */}
+                      {/* thong tin users */}
+                      <div>
+                        {/* name - period - date */}
+                        <div className="flex items-center">
+                          {/* name */}{" "}
+                          <p className="text-[#1A1A1A] text-xl font-medium">
+                            {rating.user.username}
+                          </p>
+                          {/* end name */}
+                          {/* period */}
+                          <Period /> {/* end period */}
+                          {/* date */}{" "}
+                          <p className="text-[#4C4C4C] font-normal text-sm">
+                            {currentDate(rating.createdAt)}
+                          </p>
+                          {/* end date */}
                         </div>
-                        <p className="text-[#4C4C4C] font-normal text-xs">
-                          {roundedNumber(rating.ratingValue)}.0
+                        {/* end name - period - date */}
+                        {/* rating */}
+                        <div className="flex gap-1">
+                          <div className="rating rating-xs">
+                            {stars.map((_, index) => (
+                              <button key={index}>
+                                {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                                <img
+                                  src={
+                                    index < rating.ratingValue
+                                      ? Images.star1
+                                      : Images.star2
+                                  }
+                                  alt=""
+                                />
+                              </button>
+                            ))}
+                          </div>
+                          <p className="text-[#4C4C4C] font-normal text-xs">
+                            {roundedNumber(rating.ratingValue)}.0
+                          </p>
+                        </div>
+                        {/* end rating */}
+                        {/* quatity */}
+                        <p className="text-[#4C4C4C] font-normal text-sm">
+                          Số lượng: {rating.product.quantity}
                         </p>
-                      </div>
-                      {/* end rating */}
-                      {/* quatity */}
-                      <p className="text-[#4C4C4C] font-normal text-sm">
-                        Số lượng: {rating.product.quantity}
-                      </p>
-                      {/* end quatity */}
-                    </div>{" "}
-                    {/* end thong tin users */}
-                  </div>
-                  <div className="items-center">
-                    <div className="dropdown dropdown-right ">
-                      <label
-                        className="max-lg:w-[24px] max-lg:h-[24px]"
-                        tabIndex={1}
-                      >
-                        <Handle />
-                      </label>
-                      <ul
-                        tabIndex={0}
-                        className="dropdown-content menu bg-white rounded-box w-52
-                                        shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                        max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                      >
-                        <li>
-                          <button
-                            className="flex items-center gap-4"
-                            onClick={() => {
-                              openDialog(
-                                idDialogRating,
-                                rating.id,
-                                rating.comment
-                              );
-                              setidRating(rating.id);
-                            }}
-                          >
-                            <Edit />
-                            <p
-                              className="text-[#EA4B48] text-sm font-medium
-                                    max-[940px]:text-xs "
+                        {/* end quatity */}
+                      </div>{" "}
+                      {/* end thong tin users */}
+                    </div>
+                    <div className="items-center">
+                      <div className="dropdown dropdown-right ">
+                        <label
+                          className="max-lg:w-[24px] max-lg:h-[24px]"
+                          tabIndex={1}
+                        >
+                          <Handle />
+                        </label>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content menu bg-white rounded-box w-52
+                                    shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                    max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                        >
+                          <li>
+                            <button
+                              className="flex items-center gap-4"
+                              onClick={() => {
+                                openDialog(
+                                  idDialogRating,
+                                  rating.id,
+                                  rating.comment
+                                );
+                                setidRating(rating.id);
+                              }}
                             >
-                              Chỉnh sửa
-                            </p>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-className="flex items-center gap-4"
-                            onClick={() => props.handleRemoveRating(rating.id)}
-                          >
-                            <RemoveCate />
-                            <p
-                              className="text-[#EA4B48] text-sm font-medium
-                                     max-[940px]:text-xs "
+                              <Edit />
+                              <p
+                                className="text-[#EA4B48] text-sm font-medium
+                                max-[940px]:text-xs "
+                              >
+                                Chỉnh sửa
+                              </p>
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              className="flex items-center gap-4"
+                              onClick={() =>
+                                props.handleRemoveRating(rating.id)
+                              }
                             >
-                              Xóa
-                            </p>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                {/* end header comment */}
-                {/* content comment */}
-  
-                <div className="border-t-[1px] border-[#E0E0E0] py-2">
-                  <p className="text-[#4C4C4C]">{rating.comment}</p>
-                  <div className=" flex flex-1 mt-2">
-                    <div className="inline-grid grid-cols-8 gap-4 relative ">
-                      {rating.CommentImage.map((img) => {
-                        return (
-                          <>
-                            <img
-                              src={img.url}
-                              alt="imgComment"
-                              className="w-20 h-20 rounded-md"
-                            />
-                          </>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-  
-                {/* end content comment */}
-                {/* reply content comment */}
-                <div className="mx-3 my-2  flex">
-                  <div className="ml-2">
-                    <LineCMT />
-                  </div>
-                  {/* shop reply cmt */}
-                  <div className="flex items-center mt-1 ml-3 gap-3">
-                    {/* hinh anh */}
-                    <div className="relative">
-                      <CircleAvrCMT />
-                      <span className="top-0 left-5 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-                    </div>
-                    {/* end hinh anh */}
-                    {/* thong tin users */}
-                    <div>
-                      {/* name - period - date */}
-                      <div className="flex items-center">
-                        {/* name */}{" "}
-                        <p className="text-[#1A1A1A] text-base font-medium">
-                          ShopTaiNghe
-                        </p>
-                        {/* end name */}
-                        {/* period */}
-                        <Period /> {/* end period */}
-                        {/* date */}{" "}
-                        <p className="text-[#4C4C4C] text-[12px]">12-10-2023</p>
-                        {/* end date */}
+                              <RemoveCate />
+                              <p
+                                className="text-[#EA4B48] text-sm font-medium
+                                 max-[940px]:text-xs "
+                              >
+                                Xóa
+                              </p>
+                            </button>
+                          </li>
+                        </ul>
                       </div>
-                      {/* end name - period - date */}
-                      {/* quatity */}
-<p className="text-[#4C4C4C] text-[12px]">Số lượng: 10</p>
-                      {/* end quatity */}
-                    </div>{" "}
-                    {/* end thong tin users */}
+                    </div>
                   </div>
-                  {/* shop reply cmt */}
-                </div>
-                {/* end reply content comment */}
-                {/* content comment */}
-                <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7">
-                  <p className="text-[#4C4C4C]">
-                    Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm hôm nay
-                    mua lại vì hôm đi chơi bị mất. vẫn chất lg như lần trc esd15
-                    mãi đỉnh , mà chắc do shop uy tín lên dùng rất tốt âm thanh
-                    bass trest chống âm cách tiếng onf đeo êm tai ko bị đua tai
-                    luôn chyaj bộ thể dục thoải mái nhá ae lên mua thanh anh shop
-                    tư vấn hài lòng vãi
-                  </p>
-                </div>
-              </div>
-              {/* end content comment */}
-            </>
-          );
-        })
-      ):(
-        <div>
-          {/* <EmptyPage /> */}
-          </div>
+                  {/* end header comment */}
+                  {/* content comment */}
 
-      )
-    }
+                  <div className="border-t-[1px] border-[#E0E0E0] py-2">
+                    <p className="text-[#4C4C4C]">{rating.comment}</p>
+                    <div className=" flex flex-1 mt-2">
+                      <div className="inline-grid grid-cols-8 gap-4 relative ">
+                        {rating.CommentImage.map((img) => {
+                          return (
+                            <>
+                              <img
+                                src={img.url}
+                                alt="imgComment"
+                                className="w-20 h-20 rounded-md"
+                              />
+                            </>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* end content comment */}
+                  {/* reply content comment */}
+                  <div className="mx-3 my-2  flex">
+                    <div className="ml-2">
+                      <LineCMT />
+                    </div>
+                    {/* shop reply cmt */}
+                    <div className="flex items-center mt-1 ml-3 gap-3">
+                      {/* hinh anh */}
+                      <div className="relative">
+                        <CircleAvrCMT />
+                        <span className="top-0 left-5 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                      </div>
+                      {/* end hinh anh */}
+                      {/* thong tin users */}
+                      <div>
+                        {/* name - period - date */}
+                        <div className="flex items-center">
+                          {/* name */}{" "}
+                          <p className="text-[#1A1A1A] text-base font-medium">
+                            ShopTaiNghe
+                          </p>
+                          {/* end name */}
+                          {/* period */}
+                          <Period /> {/* end period */}
+                          {/* date */}{" "}
+                          <p className="text-[#4C4C4C] text-[12px]">
+                            12-10-2023
+                          </p>
+                          {/* end date */}
+                        </div>
+                        {/* end name - period - date */}
+                        {/* quatity */}
+                        <p className="text-[#4C4C4C] text-[12px]">
+                          Số lượng: 10
+                        </p>
+                        {/* end quatity */}
+                      </div>{" "}
+                      {/* end thong tin users */}
+                    </div>
+                    {/* shop reply cmt */}
+                  </div>
+                  {/* end reply content comment */}
+                  {/* content comment */}
+                  <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7">
+                    <p className="text-[#4C4C4C]">
+                      Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm hôm
+                      nay mua lại vì hôm đi chơi bị mất. vẫn chất lg như lần trc
+                      esd15 mãi đỉnh , mà chắc do shop uy tín lên dùng rất tốt
+                      âm thanh bass trest chống âm cách tiếng onf đeo êm tai ko
+                      bị đua tai luôn chyaj bộ thể dục thoải mái nhá ae lên mua
+                      thanh anh shop tư vấn hài lòng vãi
+                    </p>
+                  </div>
+                </div>
+                {/* end content comment */}
+              </>
+            );
+          })
+        ) : (
+          <p>trong</p>
+        )
+      ) : null}
       <DialogModal
         id={idDialogRating}
         onClose={() => onClose(idDialogRating)}
@@ -385,7 +390,7 @@ className="flex items-center gap-4"
                   <div className="flex items-center justify-start gap-3 ">
                     <div className="rating rating-lg gap-3 ">
                       <Controller
-control={control}
+                        control={control}
                         name="ratingValue"
                         rules={{
                           required: {
@@ -455,9 +460,9 @@ control={control}
                 <p className="text-[#4C4C4C] text-base font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
                   Thêm ảnh
                   <span className="text-[#FF0000]">*</span>
-</p>
+                </p>
                 {/* card */}
-               {/* <div
+              {/* <div
                   className="card w-[100%] py-4 px-9 mt-2 
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                 >
@@ -468,7 +473,7 @@ control={control}
                       <>
                         <div className="flex max-[1300px]:gap-3">
                           {/* form upload img */}
-                      {/*    <div className="max-w-max items-center">
+              {/*    <div className="max-w-max items-center">
                             <label htmlFor="images">
                               <div
                                 className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer
@@ -497,7 +502,7 @@ control={control}
                             </label>
                           </div>
                           {/* end form upload img */}
-                          {/* {props.editImages.map((e) => {
+              {/* {props.editImages.map((e) => {
                             return (
                               <>
                                 <div className="relative">
@@ -510,7 +515,7 @@ control={control}
                                       className="rounded-md"
                                     />
                                     <div
-className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
+                                      className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
                                                             opacity-0 transition duration-300 ease-in-out group-hover:opacity-20"
                                     ></div>
                                     <div className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute">
@@ -530,7 +535,7 @@ className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden 
                               </>
                             );
                           })} */}
-                          {/*<div className="justify-center flex flex-1">
+              {/*<div className="justify-center flex flex-1">
                             <div className="inline-grid grid-cols-3 gap-4 relative">
                               {url.map((e) => {
                                 return (
@@ -556,7 +561,7 @@ className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden 
                                           }
                                           // onClick={() =>
                                           //   props.handleRemoveOnlyIMG()
-// }
+                                          // }
                                         >
                                           <RemoveIMG />
                                         </div>

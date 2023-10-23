@@ -33,6 +33,14 @@ export default function ListproductsAdmin() {
   >([0, 10000]);
   const debouncedInputValueQuantity = useDebounce(sliderQuantityValues, 400); // Debounce for 300 milliseconds
 
+  const [sliderPurchaseValues, setSliderPurchaseValues] = useState<
+    [number, number]
+  >([0, 10000]);
+  const debouncedInputValuePurchase = useDebounce(sliderPurchaseValues, 400); // Debounce for 300 milliseconds
+
+  const [inStock, setinStock] = useState<any>(false);
+  const [soldOut, setSoldOut] = useState<any>(false);
+
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -92,11 +100,11 @@ export default function ListproductsAdmin() {
     setSearch(e.target.value);
   };
   const getItemProps = (index: number) =>
-    ({
-      variant: currentPage === index ? "filled" : "text",
-      color: "gray",
-      onClick: () => setCurrentPage(index),
-    } as any);
+  ({
+    variant: currentPage === index ? "filled" : "text",
+    color: "gray",
+    onClick: () => setCurrentPage(index),
+  } as any);
   const next = () => {
     if (currentPage === 999) return;
 
@@ -117,9 +125,25 @@ export default function ListproductsAdmin() {
 
   // Slider Price SiteBarFilterPages and Slider Quantity SiteBarFilterPages
   useEffect(() => {
-    handleFilter(debouncedInputValuePrice, debouncedInputValueQuantity);
-  }, [debouncedInputValuePrice, debouncedInputValueQuantity]);
-  const handleFilter = async (priceRange: any, quantityRange: any) => {
+    handleFilter(
+      debouncedInputValuePrice,
+      debouncedInputValueQuantity,
+      debouncedInputValuePurchase
+    );
+  }, [
+    debouncedInputValuePrice,
+    debouncedInputValueQuantity,
+    debouncedInputValuePurchase,
+  ]);
+  const handleFilter = async (
+    priceRange: any,
+    quantityRange: any,
+    purchase: any
+  ) => {
+    console.log(
+      "🚀 ~ file: Listproducts.tsx:140 ~ ListproductsAdmin ~ purchase:",
+      purchase
+    );
     console.log(
       "🚀 ~ file: Listproducts.tsx:131 ~ handleFilter ~ quantityRange:",
       quantityRange
@@ -127,13 +151,15 @@ export default function ListproductsAdmin() {
     console.log("debouncedInputValue", priceRange);
 
     await productController
-      .getFilterProductbyPriceAndQuantityWithinRangePagination(
+      .getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination(
         priceRange[0],
         priceRange[1],
         currentPage,
         5,
         quantityRange[0],
-        quantityRange[1]
+        quantityRange[1],
+        purchase[0],
+        purchase[1]
       )
       .then((res: any) => {
         setProducts(res);
@@ -149,6 +175,54 @@ export default function ListproductsAdmin() {
     setSliderPriceValues(price);
     console.log("price Range:", price);
   };
+
+  const handlePurchaseRangeChange = (purchase: [number, number]) => {
+    setSliderPurchaseValues(purchase);
+    console.log("price Range:", purchase);
+  };
+  // check con hang API
+  const handleClickinStock = () => {
+    checkedinStock();
+  };
+  const checkedinStock = async () => {
+    await productController
+      .getProductInStockAndSoldOut("inStock")
+      .then((res) => {
+        if (!inStock) {
+          setinStock(true);
+          setProducts(res);
+          console.log("🚀 ~ file: Listproducts.tsx:197 ~ .then ~ res:", res);
+        } else {
+          setinStock(false);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleClickSoldOut = () => {
+    checkedSoldOut();
+  };
+  // check het hang API
+  const checkedSoldOut = async () => {
+    await productController
+      .getProductInStockAndSoldOut("soldOut")
+      .then((res) => {
+        if (!soldOut) {
+          setSoldOut(true);
+          setProducts(res);
+          console.log("🚀 ~ file: Listproducts.tsx:197 ~ .then ~ res:", res);
+        } else {
+          setSoldOut(false);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  const getProductWhereRating =async (rate: any) => {
+    await productController
+    .getProductWhereRatting(rate)
+    .then((res)=>{
+      setProducts(res);
+    }).catch((err) => console.log(err));
+  }
   return (
     <>
       <Container>
@@ -290,7 +364,7 @@ export default function ListproductsAdmin() {
                     max-xl:font-medium
                     max-lg:text-xs
                     "
-                        // onClick={(e) => getData(e)}
+                      // onClick={(e) => getData(e)}
                       >
                         Xuất excel
                       </button>
@@ -335,10 +409,17 @@ export default function ListproductsAdmin() {
 
             {isShown && (
               <FilterListproduct
+                onRateChange={getProductWhereRating}
+                valuePurchase={sliderPurchaseValues}
                 valueQuantity={sliderQuantityValues}
                 valuePrice={sliderPriceValues}
+                valueinStock={inStock}
+                valueSoldOut={soldOut}
+                onSoldOut={handleClickSoldOut}
+                oninStock={handleClickinStock}
                 onQuantityRangeChange={handleQuantityRangeChange}
                 onPriceRangeChange={handlePriceRangeChange}
+                onPurchaseRangeChange={handlePurchaseRangeChange}
               />
             )}
 
@@ -404,6 +485,7 @@ export default function ListproductsAdmin() {
                   return (
                     <>
                       <ListproductMap
+                        soldOut={soldOut}
                         HandleXoa={handleRemove}
                         products={items}
                       />
@@ -412,7 +494,7 @@ export default function ListproductsAdmin() {
                 })
               ) : (
                 <>
-                  <EmptyPage />
+                  <p>gio hang trong</p>
                 </>
               )}
             </div>
@@ -421,12 +503,15 @@ export default function ListproductsAdmin() {
               <div className="flex">
                 <Button
                   variant="text"
-                  className="flex items-center gap-2"
+                  // className="flex items-center gap-2"
+                  className={`${
+                    currentPage == 1 ? `hidden` : `flex items-center gap-2`
+                  }`}
                   onClick={prev}
                 >
                   <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
                 </Button>
-                {[...new Array(products.totalPage)].map((item, index) => {
+                {[...new Array(products?.totalPage)].map((item, index) => {
                   const page = index + 1;
                   console.log(item);
                   return (
@@ -439,7 +524,11 @@ export default function ListproductsAdmin() {
                 })}
                 <Button
                   variant="text"
-                  className="flex items-center gap-2"
+                  className={`${
+                    currentPage == products?.totalPage
+                      ? "hidden"
+                      : "flex items-center gap-2"
+                  }`}
                   onClick={next}
                 >
                   Next

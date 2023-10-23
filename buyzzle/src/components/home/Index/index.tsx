@@ -47,7 +47,7 @@ function Index() {
       .get("http://localhost:5000/buyzzle/product/allcategory")
       .then((response) => response.data)
       .then((data) => {
-        console.log("🚀 ~ file: index.tsx:50 ~ .then ~ data:", data)
+        console.log("🚀 ~ file: index.tsx:50 ~ .then ~ data:", data);
         setCategory(data);
       })
       .catch((err) => console.log(err));
@@ -55,7 +55,10 @@ function Index() {
 
   const getAllProducts = () => {
     productController.getAllProducts().then((res: any) => {
-      console.log("🚀 ~ file: index.tsx:58 ~ productController.getAllProducts ~ res:", res)
+      console.log(
+        "🚀 ~ file: index.tsx:58 ~ productController.getAllProducts ~ res:",
+        res
+      );
       setProducts(res.rows);
     });
   };

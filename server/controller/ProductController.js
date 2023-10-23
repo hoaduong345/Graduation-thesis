@@ -233,7 +233,7 @@ const ProductController = {
                 pricesale: Pricesale,
                 sellingPrice: SellingPrice,
                 discount: parseInt(discount),
-                soldcount: parseInt(soldcount),
+                soldcount: 0,
                 quantity: parseInt(quantity),
                 description,
                 status,
@@ -264,39 +264,46 @@ const ProductController = {
     // xóa sản phẩm
     deleteProduct: async (req, res) => {
         try {
-            const productId = parseInt(req.params.id);
+            const id = parseInt(req.params.id);
+            console.log(id);
 
-            //Tìm tất cả các bình luận thuộc về sản phẩm 
-        const commentsToDelete = await prisma.rating.findMany({
-            where: {
-                idproduct: productId,
-            },
-        });
+            //Tìm tất cả các bình luận thuộc về sản phẩm
+            const commentsToDelete = await prisma.rating.findMany({
+                where: {
+                    idproduct: id,
+                },
+            });
 
             //Xóa tất cả các bình luận thuộc về sản phẩm
-        for (const comment of commentsToDelete) {
-            await prisma.rating.delete({
+            for (const comment of commentsToDelete) {
+                await prisma.rating.delete({
+                    where: {
+                        id: comment.id,
+                    },
+                });
+            }
+
+            // Tìm tất cả các hình ảnh thuộc về sản phẩm
+            const productImagesToDelete = await prisma.productImage.findMany({
                 where: {
-                    id: comment.id,
+                    id: id,
                 },
             });
-        }
 
-            // Xóa sản phẩm
+            // Xóa tất cả các hình ảnh thuộc về sản phẩm
+            for (const productImage of productImagesToDelete) {
+                await prisma.productImage.delete({
+                    where: {
+                        id: productImage.id,
+                    },
+                });
+            }
+            // // Xóa sản phẩm
             await prisma.product.delete({
                 where: {
-                    id: productId,
+                    id: id,
                 },
             });
-
-            await prisma.productImage.deleteMany({
-                where: {
-                    idproduct: productId,
-                },
-            });
-
-            
-
             res.status(200).json('Xóa sản phẩm và hình ảnh thành công');
         } catch (error) {
             console.error(error);
@@ -369,7 +376,7 @@ const ProductController = {
     },
 
     // Xem chi tiết sản phẩm
-        getProductDetail: async (req, res) => {
+    getProductDetail: async (req, res) => {
         try {
             const productId = parseInt(req.params.id);
             const productDetail = await prisma.product.findFirst({
@@ -401,17 +408,18 @@ const ProductController = {
                     },
                 },
             });
-            if (ratings.length === 0) {
-                return res.status(200).json(0);
+            if (ratings && ratings.length > 0) {
+                const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
+                const averageRating = totalRating / ratings.length;
+                const resultProduct = {
+                    averageRating: averageRating,
+                    Rating: ratings,
+                    productDetail: productDetail,
+                };
+                res.status(200).json(resultProduct);
+            } else {
+                res.status(200).json('Không có đánh giá cho sản phẩm này.');
             }
-            const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
-            const averageRating = totalRating / ratings.length;
-            const resultProduct = {
-                averageRating: averageRating,
-                Rating: ratings,
-                productDetail: productDetail,
-            };
-            res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -419,6 +427,136 @@ const ProductController = {
     },
 
     // // Hiện tất cả sản phẩm
+
+    // getAllProduct: async (req, res) => {
+    //     try {
+    //         // tìm kiếm = keyword
+    //         const keyword = req.query.keyword;
+    //         const page = parseInt(req.query.page) || 1;
+    //         const pageSize = parseInt(req.query.pageSize) || 40;
+    //         const sortByPrice = req.query.sortByPrice;
+    //         const sortByDateCreate = req.query.sortByDateCreate;
+    //         const categoryId = req.query.categoryId;
+    //         const rating = req.query.rating;
+    //         const discount = 60;
+    //         const productid = parseInt(req.params.id);
+
+    //         const FlashsaleProducts = await prisma.product.findMany({
+    //             where: {
+    //                 discount: {
+    //                     gt: discount,
+    //                 },
+    //             },
+    //             take: 3,
+    //         });
+
+    //         const skip = (page - 1) * pageSize;
+    //         const whereClause = {
+    //             name: {
+    //                 contains: keyword,
+    //             },
+    //         };
+    //         const totalProduct = await prisma.product.findMany({
+    //             where: whereClause,
+    //         });
+
+    //         if (categoryId) {
+    //             whereClause.fK_category = {
+    //                 id: parseInt(categoryId),
+    //             };
+    //         }
+
+    //         if (rating) {
+    //             whereClause.rate = {
+    //                 gte: parseInt(rating),
+    //             };
+    //         }
+
+    //         if (req.query.minPrice && req.query.maxPrice) {
+    //             whereClause.sellingPrice = {
+    //                 gte: parseInt(req.query.minPrice),
+    //                 lte: parseInt(req.query.maxPrice),
+    //             };
+    //         }
+    //         if (req.query.minQuantity && req.query.maxQuantity) {
+    //             whereClause.quantity = {
+    //                 gte: parseInt(req.query.minQuantity),
+    //                 lte: parseInt(req.query.maxQuantity),
+    //             };
+    //         }
+    //         if (req.query.minPurchase && req.query.maxPurchase) {
+    //             whereClause.soldcount = {
+    //                 gte: parseInt(req.query.minPurchase),
+    //                 lte: parseInt(req.query.maxPurchase),
+    //             };
+    //         }
+
+    //         const ratings = await prisma.rating.findMany({
+    //             include: {
+    //                 user: {
+    //                     select: {
+    //                         username: true,
+    //                     },
+    //                 },
+    //                 product: {
+    //                     select: {
+    //                         quantity: true,
+    //                     },
+    //                 },
+    //             },
+    //         });
+
+    //         const result = await prisma.product.findMany({
+    //             orderBy: {
+    //                 sellingPrice: sortByPrice,
+    //                 createdAt: sortByDateCreate,
+    //                 soldcount: 'desc',
+    //             },
+    //             include: {
+    //                 ProductImage: true,
+    //                 fK_category: true,
+    //                 Rating: true,
+    //             },
+    //             where: whereClause,
+    //             skip,
+    //             take: pageSize,
+    //         });
+
+    //         result.forEach(async (product) => {
+    //             const totalRating = product.Rating.reduce((sum, rating) => sum + rating.ratingValue, 0);
+    //             const averageRating = totalRating / product.Rating.length;
+
+    //             const productId = product.id;
+
+    //             if (productId) {
+    //                 await prisma.product.update({
+    //                     where: {
+    //                         id: productId,
+    //                     },
+    //                     data: {
+    //                         rate: averageRating,
+    //                     },
+    //                 });
+    //             } else {
+    //                 console.error('k co id');
+    //             }
+    //         });
+
+    //         const resultProduct = {
+    //             FlashsaleProducts: FlashsaleProducts,
+    //             currentPage: page,
+    //             totalPage: Math.ceil(totalProduct.length / pageSize),
+    //             rows: result,
+    //             // averageRating: averageRating,
+    //             Rating: ratings,
+    //         };
+    //         res.status(200).json(resultProduct);
+    //     } catch (error) {
+    //         console.error(error);
+    //         res.status(500).json(error.message);
+    //     }
+    // },
+
     getAllProduct: async (req, res) => {
         try {
             // tìm kiếm = keyword
@@ -428,8 +566,10 @@ const ProductController = {
             const sortByPrice = req.query.sortByPrice;
             const sortByDateCreate = req.query.sortByDateCreate;
             const categoryId = req.query.categoryId;
+            const rating = req.query.rating;
             const discount = 60;
-            const productId = parseInt(req.params.id);
+            const productid = parseInt(req.params.id);
+            const availabilityType = req.query.availabilityType; // Thêm tham số availabilityType
 
             const FlashsaleProducts = await prisma.product.findMany({
                 where: {
@@ -439,8 +579,6 @@ const ProductController = {
                 },
                 take: 3,
             });
-
-            // const { minPricefind, maxPricefind } = req.query;
 
             const skip = (page - 1) * pageSize;
             const whereClause = {
@@ -458,7 +596,13 @@ const ProductController = {
                 };
             }
 
-            if (req.query.minPrice && req.query.maxPrice) {
+            if (rating) {
+                whereClause.rate = {
+                    gte: parseInt(rating),
+                };
+              }
+           
+            if (req.query.minPrice && req.query.maxPrice) { 
                 whereClause.sellingPrice = {
                     gte: parseInt(req.query.minPrice),
                     lte: parseInt(req.query.maxPrice),
@@ -470,10 +614,14 @@ const ProductController = {
                     lte: parseInt(req.query.maxQuantity),
                 };
             }
+            if (req.query.minPurchase && req.query.maxPurchase) {
+                whereClause.soldcount = {
+                    gte: parseInt(req.query.minPurchase),
+                    lte: parseInt(req.query.maxPurchase),
+                };
+            }
+
             const ratings = await prisma.rating.findMany({
-                // where: {
-                //     idproduct: productId,
-                // },
                 include: {
                     user: {
                         select: {
@@ -487,15 +635,12 @@ const ProductController = {
                     },
                 },
             });
-            // if (ratings.length === 0) {
-            //     return res.status(200).json(0);
-            // }
-            // const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
-            // const averageRating = totalRating / ratings.length;
+
             const result = await prisma.product.findMany({
                 orderBy: {
                     sellingPrice: sortByPrice,
                     createdAt: sortByDateCreate,
+                    soldcount: 'desc',
                 },
                 include: {
                     ProductImage: true,
@@ -507,27 +652,117 @@ const ProductController = {
                 take: pageSize,
             });
 
-            result.map((item) => {
-                const totalRating = item.Rating.reduce((sum, rating) => sum + rating.ratingValue, 0);
-                const averageRating = totalRating / item.Rating.length;
-                item.rate = averageRating;
+            result.forEach(async (product) => {
+                const totalRating = product.Rating.reduce((sum, rating) => sum + rating.ratingValue, 0);
+                const averageRating = totalRating / product.Rating.length;
+
+                const productId = product.id;
+
+                if (productId) {
+                    await prisma.product.update({
+                        where: {
+                            id: productId,
+                        },
+                        data: {
+                            rate: averageRating,
+                        },
+                    });
+                } else {
+                    console.error('k co id');
+                }
             });
 
-            const resultProduct = {
-                FlashsaleProducts: FlashsaleProducts,
-                currentPage: page,
-                totalPage: Math.ceil(totalProduct.length / pageSize),
-                rows: result,
-                // averageRating: averageRating,
-                Rating: ratings,
-            };
-            res.status(200).json(resultProduct);
+            if (availabilityType === 'inStock') {
+                const inStockProducts = await prisma.product.findMany({
+                    where: {
+                        soldcount: { lt: 5 },
+                        quantity: { gt: 0 },
+                    },
+                    include: {
+                        ProductImage: true,
+                        fK_category: true,
+                        Rating: true,
+                    },
+                });
+                // Trả về sản phẩm còn hàng
+                res.status(200).json({
+                    rows: inStockProducts,
+                });
+            } else if (availabilityType === 'soldOut') {
+                const outOfStockProducts = await prisma.product.findMany({
+                    where: {
+                        soldcount: { gte: 100 },
+                        quantity: { lte: 5 },
+                    },
+                    include: {
+                        ProductImage: true,
+                        fK_category: true,
+                        Rating: true,
+                    },
+                });
+                // Trả về sản phẩm hết hàng
+                res.status(200).json({
+                    rows: outOfStockProducts,
+                });
+            } else {
+                // Trả về tất cả sản phẩm nếu availabilityType không được xác định
+                const resultProduct = {
+                    FlashsaleProducts: FlashsaleProducts,
+                    currentPage: page,
+                    totalPage: Math.ceil(totalProduct.length / pageSize),
+                    rows: result,
+                    Rating: ratings,
+                };
+                res.status(200).json(resultProduct);
+            }
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
 
+    getProductAvailability: async (req, res) => {
+        try {
+            const inStockProducts = await prisma.product.findMany({
+                where: {
+                    soldcount: { lt: 5 }, // soldCount nho hon 5 va dong thoi quantity phai lon hon 0 => san pham con hang
+                    quantity: { gt: 0 },
+                },
+                include: {
+                    ProductImage: true,
+                    fK_category: true,
+                    Rating: true,
+                },
+            });
+            res.status(200).json({
+                rows: inStockProducts,
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Lỗi khi lấy sản phẩm còn hàng.' });
+        }
+    },
+    getProductSoldOut: async (req, res) => {
+        try {
+            const outOfStockProducts = await prisma.product.findMany({
+                where: {
+                    soldcount: { gte: 100 }, // soldCount lon hon 0 va dong thoi quantity phai nho hon 5 => san pham con hang
+                    quantity: { lte: 5 },
+                },
+                include: {
+                    ProductImage: true,
+                    fK_category: true,
+                    Rating: true,
+                },
+            });
+            res.json({
+                rows: outOfStockProducts,
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Lỗi khi lấy sản phẩm hết hàng.' });
+        }
+    },
     getSugggestProduct: async (req, res) => {
         try {
             const productId = parseInt(req.params.id);
@@ -608,11 +843,19 @@ const ProductController = {
             const productId = parseInt(req.params.productId);
             const page = parseInt(req.query.page) || 1;
             const perPage = parseInt(req.query.perPage) || 40;
-
+            const selectedRatingValue = parseInt(req.query.selectedRatingValue);
+    
+            const whereClause = {
+                idproduct: productId,
+            };
+    
+         
+            if (!isNaN(selectedRatingValue)) {
+                whereClause.ratingValue = selectedRatingValue;
+            }
+    
             const ratings = await prisma.rating.findMany({
-                where: {
-                    idproduct: productId,
-                },
+                where: whereClause,
                 include: {
                     user: {
                         select: {
@@ -633,19 +876,19 @@ const ProductController = {
                 skip: (page - 1) * perPage,
                 take: perPage,
             });
-
+    
             if (ratings.length === 0) {
                 return res.status(200).json(0);
             }
+    
             // Lấy số lượng tổng cộng của đánh giá cho sản phẩm
             const totalRatings = await prisma.rating.count({
-                where: {
-                    idproduct: productId,
-                },
+                where: whereClause,
             });
+    
             const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
             const averageRating = totalRating / totalRatings;
-
+    
             const resultProduct = {
                 currentPage: page,
                 perPage: perPage,
@@ -653,13 +896,14 @@ const ProductController = {
                 averageRating: averageRating,
                 Rating: ratings,
             };
-
+    
             res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    
 
     updateRatingandComment: async (req, res) => {
         try {
@@ -783,12 +1027,8 @@ const ProductController = {
             res.status(200).json(updateImageComment);
         } catch (error) {
             res.status(500).json(error.message);
-        
         }
     },
-
-
-
 };
 
 module.exports = ProductController;
