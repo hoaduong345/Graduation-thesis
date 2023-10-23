@@ -35,7 +35,7 @@ export default function Header() {
   const [isSearch, setIsSearch] = useState(false);
 
   const user = localStorage.getItem("user");
-  const [checkLogin,setCheckLogin] = useState<boolean>(false);
+  const [checkLogin, setCheckLogin] = useState<boolean>(false);
 
   var username;
   const [name, setName] = useState("");
@@ -382,6 +382,9 @@ export default function Header() {
                 </li>
                 <li>
                   <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
+                </li>
+                <li>
+                  <a href="/admin/ordermanagement">ordermanagement</a>
                 </li>
                 <li>
                   <Link to="/orderhistory">orderhistory</Link>

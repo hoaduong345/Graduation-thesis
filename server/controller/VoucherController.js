@@ -11,7 +11,9 @@ const VoucherController = {
             const limit = 100;
 
             const startIndex = (pageCurr - 1) * limit;
-
+            const whereClause = {
+                deletedAt: null,
+            };
             const totalProduct = (await prisma.voucher.findMany()).length;
 
             const products = await prisma.voucher.findMany({
@@ -20,6 +22,7 @@ const VoucherController = {
                 //         contains: keyword || '',
                 //     },
                 // },
+                where: whereClause,
                 skip: startIndex,
                 take: limit,
             });
@@ -66,14 +69,23 @@ const VoucherController = {
     remove: async (req, res) => {
         try {
             const voucherId = parseInt(req.params.id);
-
-            await prisma.voucher.delete({
+            const voucherFind = await prisma.voucher.findFirst({
                 where: {
                     id: voucherId,
                 },
             });
-
-            res.status(200).json('thành công');
+            if (voucherFind) {
+                await prisma.voucher.update({
+                    where: {
+                        id: voucherId,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                });
+                return res.status(200).json('thành công');
+            }
+            return res.status(402).json('that bai');
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
