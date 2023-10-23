@@ -84,9 +84,9 @@ export default function User() {
   const DeleteUser = (id: any) => {
     userController
       .deleteUser(id)
-      .then((_) => {
+      .then((res) => {
         toast.success("Xóa thành công !");
-        console.log("123");
+        console.log("res:"+res);
         getAllUserData();
       })
       .catch(() => {
