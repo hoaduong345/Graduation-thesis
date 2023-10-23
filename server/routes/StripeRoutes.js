@@ -5,6 +5,7 @@ const stripe = require('stripe')(
 );
 
 app.post('/create-checkout-session', async (req, res) => {
+   try {
     const cartItems = req.body.cartItems;
     const discount = req.body.discount;
 
@@ -54,6 +55,9 @@ app.post('/create-checkout-session', async (req, res) => {
         cancel_url: 'http://localhost:5173/cart',
     });
     res.send({ url: session.url });
+   } catch (error) {
+    console.log("Cannot check-out",error)
+   }
 });
 
 module.exports = app;
