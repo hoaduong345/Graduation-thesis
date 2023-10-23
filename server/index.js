@@ -7,9 +7,13 @@ const bodyParser = require('body-parser');
 const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
-const ChatRouter = require('./routes/ChatRoutes');
+const InvoiceRouter = require('./routes/InvoiceRoutes');
+// const OrderRouter = require('./routes/OrderRoutes');
+const StatisticsRouter = require('./routes/Statistics_Router');
+
 const ProductRoutes = require('./routes/ProductRoutes');
 const VoucherRouter = require('./routes/VoucherRoutes');
+const SripeRouter = require('./routes/StripeRoutes');
 const cookieParser = require('cookie-parser');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -49,7 +53,11 @@ app.use('/buyzzle/chat', ChatRouter);
 
 
 app.use('/buyzzle/voucher', VoucherRouter);
+app.use('/buyzzle/statistics', StatisticsRouter);
 
+app.use('/buyzzle/invoice', InvoiceRouter);
+// app.use('buyzzle/stripe', SripeRouter);
+app.use('/buyzzle/stripe', SripeRouter);
 // Setup socket.io
 // const chatController = require('./controller/ChatController')(io);
 const server = http.createServer(app);

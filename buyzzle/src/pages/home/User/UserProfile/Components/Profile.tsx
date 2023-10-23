@@ -269,7 +269,7 @@ const errorMessageEmail = responseData.error.email;
 
   return (
     <Container>
-      <Fragment>
+
         {validUrl ? (
           <body className="body-filter container mx-auto">
 
@@ -937,7 +937,7 @@ d="M875.29613,682.38411c0,55.07585-32.73985,74.3063-73.13,74.3063q-1.4035,0-2.80
             </div>
           </Container>
         )}
-      </Fragment>
+ 
     </Container>
   );
 }

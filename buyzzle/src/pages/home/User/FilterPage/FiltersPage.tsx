@@ -14,7 +14,10 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
-import { Row } from "../../../../Model/ProductModel";
+import { Rate, Row } from "../../../../Model/ProductModel";
+import axios from "axios";
+import { appConfig } from "../../../../configsEnv";
+import { roundedNumber } from "../../../../Helper/Format";
 export interface Cate {
   id: number;
   name: string;
@@ -63,6 +66,8 @@ export interface PriceRangeFilterPage {
 }
 export default function FiltersPage() {
   const [products, setProducts] = useState<Row[]>([]);
+  const [stars, setStars] = useState<Rate>();
+  const [starsnumber, setStarsnumber] = useState(0);
   // Button FIlterPage
   const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
   const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
@@ -75,42 +80,60 @@ export default function FiltersPage() {
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
 
-  const { id } = useParams();
-  const idCate = Number(id);
-  console.log("🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:", idCate);
+  const { id: nameCate } = useParams();
+  const cateName = String(nameCate);
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:",
+    cateName
+  );
   const { pathname } = useLocation();
-  const keywordSearch = String(pathname);
+  const keywordSearch = decodeURIComponent(pathname);
   console.log(
     "🚀 ~ file: FiltersPage.tsx:79 ~ FiltersPage ~ text:",
     keywordSearch
   );
 
-  const handleActiveBTNLowToHighClick = () => {
-    productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
+  // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
+  useEffect(() => {
+    if (stars) {
+      setStarsnumber(roundedNumber(stars.averageRating));
       console.log(
-        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-        res
+        "🚀 ~ file: FiltersPage.tsx:99 ~ useEffect ~ stars.averageRating:",
+        stars.averageRating
       );
-      setActiveBtnLowToHigh(false);
-      setActiveBtnHighToLow(true);
-      setProducts(res.rows);
-    });
+    }
+  }, [stars]);
+
+  const handleActiveBTNLowToHighClick = () => {
+    productController
+      .getSortProductbyPrice("asc", cateName)
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+          res
+        );
+        setActiveBtnLowToHigh(false);
+        setActiveBtnHighToLow(true);
+        setProducts(res.rows);
+      });
   };
   const handleActiveBTNHighToLowClick = () => {
-    productController.getSortProductbyPrice("desc", idCate).then((res: any) => {
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-        res
-      );
-      setActiveBtnLowToHigh(true);
-      setActiveBtnHighToLow(false);
-      setProducts(res.rows);
-    });
+    productController
+      .getSortProductbyPrice("desc", cateName)
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+          res
+        );
+        setActiveBtnLowToHigh(true);
+        setActiveBtnHighToLow(false);
+        setProducts(res.rows);
+      });
   };
   const handleActiveBTNLatestCreationDate = () => {
     setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
     productController
-      .getSortProductbyDateCreate("desc", idCate)
+      .getSortProductbyDateCreate("desc", cateName)
       .then((res: any) => {
         setProducts(res.rows);
       });
@@ -123,14 +146,19 @@ export default function FiltersPage() {
   }, [keywordSearch]);
 
   useEffect(() => {
-    if (id) {
+    if (nameCate) {
       getData();
     }
-  }, [id]);
+  }, [nameCate]);
 
   const getData = () => {
-    productController.getList("", idCate).then((res: any) => {
+    productController.getList("", cateName).then((res: any) => {
       console.log(res);
+      setStars(res.data);
+      console.log(
+        "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
+        res.data
+      );
       setProducts(res.rows);
     });
   };
@@ -149,7 +177,7 @@ export default function FiltersPage() {
       .getFilterProductWithinRangeIDCategory(
         debouncedInputValue[0],
         debouncedInputValue[1],
-        idCate
+        cateName
       )
       .then((res: any) => {
         setProducts(res.rows);
@@ -178,6 +206,9 @@ export default function FiltersPage() {
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
             <SitebarFilter
+              onPurchaseRangeChange={() => console.log("")}
+              onSoldOut={() => console.log("")}
+              oninStock={() => console.log("")}
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
@@ -341,9 +372,9 @@ export default function FiltersPage() {
               <p>KẾT QUẢ TÌM KIẾM VỚI: {keywordSearch.slice(13)}</p>
             </div>
 
-            <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
+            <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
               {products?.map((items) => {
-                return <Filter product={items} />;
+                return <Filter starsnumber={starsnumber} product={items} />;
               })}
             </div>
             {/* <div
