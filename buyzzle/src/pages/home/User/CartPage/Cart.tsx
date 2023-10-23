@@ -1,36 +1,54 @@
-import { useEffect, useState } from "react";
-import Container from "../../../../components/container/Container";
-import Plus from "../../../../Assets/TSX/Plus";
-import Minus from "../../../../Assets/TSX/Minus";
-import Delete from "../../Admin/Assets/TSX/Delete";
-import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
+import useThrottle from "@rooks/use-throttle";
+import { Link } from "react-router-dom";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
+import Minus from "../../../../Assets/TSX/Minus";
+import Plus from "../../../../Assets/TSX/Plus";
 import {
   UpdateCart,
   cartControllers,
 } from "../../../../Controllers/CartControllers";
-import { CartItem, CartModel } from "../../../../Model/CartModel";
-import useThrottle from "@rooks/use-throttle";
-import EmptyPage from "../../../../Helper/Empty/EmptyPage";
-import { Link } from "react-router-dom";
 import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
+import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { numberFormat } from "../../../../Helper/Format";
-import { toast } from "react-toastify";
+import { CartItem } from "../../../../Model/CartModel";
+import Container from "../../../../components/container/Container";
 import { useCart } from "../../../../hooks/Cart/CartContextProvider";
+import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
+import Delete from "../../Admin/Assets/TSX/Delete";
 export default function Cart() {
-  const [cart, setCart] = useState<CartModel>({} as CartModel);
-
-  const { carts, setIdProduct, removeItemCart, idProduct } = useCart();
-
-  console.log("🚀 ~ file: Cart.tsx:27 ~ Cart ~ carts in cart page:", carts);
-
-  const [productChecked, setProductChecked] = useState<CartItem[]>([]);
+  const {
+    carts,
+    getCart,
+    setIdProduct,
+    idProduct,
+    cart,
+    productChecked,
+    setProductChecked,
+    buynow,
+    setCart,
+    openModal,
+    closeModal,
+  } = useCart();
   const idItemCart = "confirmCart";
   const idAllCart = "confirmAllCart";
+  console.log("🚀 ~ file: Cart.tsx:27 ~ Cart ~ carts in cart page:", carts);
+  const removeItemCart = (id: number) => {
+    cartControllers.removeItemCart(idProduct).then(() => {
+      getCart();
+      closeModal(idItemCart);
+      const _productChecked = [...productChecked];
+      const Product = _productChecked.filter((item) => item.productid !== id);
+      setProductChecked(Product);
+    });
+  };
+  const removeAllCart = () => {
+    cartControllers.removeAllCart().then(() => {
+      getCart();
+      setProductChecked([]);
+      closeModal(idAllCart);
+    });
+  };
 
-  var checkAll: boolean =
-    productChecked.length === cart?.data?.item?.length &&
-    cart?.data?.item?.length !== 0;
   const handleIncreaseQuantity = (data: UpdateCart) => {
     cartControllers.increaseCart(data).then((res) => {
       setCart(res);
@@ -62,38 +80,11 @@ export default function Cart() {
 
   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 1000);
   const [minusThrottled] = useThrottle(handleDecreaseQuantity, 1000);
+  //check box
 
-  const getCart = () => {
-    cartControllers.getCart().then((res) => {
-      setCart(res);
-    });
-  };
-  useEffect(() => {
-    getCart();
-  }, []);
-
-  // asdasd
-  const removeAllCart = () => {
-    cartControllers.removeAllCart().then(() => {
-      getCart();
-      setProductChecked([]);
-      closeModal(idAllCart);
-    });
-  };
-
-  const openModal = (id: string) => {
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.showModal();
-    }
-  };
-
-  const closeModal = (id: string) => {
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
-    }
-  };
+  var checkAll: boolean =
+    productChecked.length === cart?.data?.item?.length &&
+    cart?.data?.item?.length !== 0;
 
   // 2 array : 1 array cart, 1 array cart checked
   const handleChecked = (checked: boolean, item: CartItem) => {
@@ -139,14 +130,6 @@ export default function Cart() {
       (el) => el.productid == item.productid
     );
     return _check !== -1;
-  };
-
-  const buynow = () => {
-    if (productChecked.length == 0) {
-      toast.warn("Chưa chọn sản phẩm");
-    } else {
-      sessionStorage.setItem("cartBuyzzle", JSON.stringify(productChecked));
-    }
   };
   return (
     <Container>

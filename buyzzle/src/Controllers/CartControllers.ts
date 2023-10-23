@@ -6,7 +6,7 @@ const appConfig = {
 }
 
 export interface ModelCart {
-    id?:number,
+    // id?: number,
     productId: number,
     quantity: number,
 }

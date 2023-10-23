@@ -10,20 +10,18 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Bell from "../../Assets/TSX/Bell";
 import Chevron_down from "../../Assets/TSX/Chevron-down";
-import Ellips from "../../Assets/TSX/Ellips";
 import Globe from "../../Assets/TSX/Globe";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
 import Map from "../../Assets/TSX/Map";
 import Search from "../../Assets/TSX/Search";
-import Shoppingcart from "../../Assets/TSX/Shopping-cart";
 import Headphones from "../../Assets/TSX/headphones";
 import { productController } from "../../Controllers/ProductsController";
+import { userController } from "../../Controllers/UserController";
 import { ThemeContext } from "../../hooks/Context/ThemeContextProvider";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
-import Container from "../container/Container";
-import { userController } from "../../Controllers/UserController";
 import CartCount from "../Context/CartCount/CartCount";
+import Container from "../container/Container";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
