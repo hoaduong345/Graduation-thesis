@@ -11,7 +11,6 @@ import {
 } from "../../../../Controllers/CartControllers";
 import { CartItem, CartModel } from "../../../../Model/CartModel";
 import useThrottle from "@rooks/use-throttle";
-import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { Link } from "react-router-dom";
 import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 import { numberFormat } from "../../../../Helper/Format";
