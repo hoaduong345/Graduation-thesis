@@ -50,13 +50,13 @@ app.use('/buyzzle/user', UserRouter);
 app.use('/buyzzle/product', ProductRoutes);
 app.use('/buyzzle/cart', CartRouter);
 
-app.use('/buyzzle/order', OrderRouter);
 app.use('/buyzzle/voucher', VoucherRouter);
 app.use('/buyzzle/statistics', StatisticsRouter);
 
 app.use('/buyzzle/invoice', InvoiceRouter);
 // app.use('buyzzle/stripe', SripeRouter);
 app.use('/buyzzle/stripe', SripeRouter);
+app.use('/buyzzle/order', OrderRouter)
 // Setup socket.io
 const server = http.createServer(app);
 const io = socketIo(server);

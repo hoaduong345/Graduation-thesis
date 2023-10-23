@@ -64,7 +64,6 @@ model User {
   UserImage            UserImage[]
   Rating               Rating[]
   deletedAt            DateTime?
-
   // roleId               Role? @relation(fields: [id], references: [id])
   Order    Order[]
   invoices Invoice[]
@@ -242,32 +241,26 @@ model Rating {
 // }
 model Order {
   id          Int           @id @default(autoincrement())
-  customerId  Int?
-  customer    User?         @relation(fields: [customerId], references: [id])
+  userId      Int?
   status      String?
   totalPrice  Int?
   coupon      String?
   createdAt   DateTime?     @default(now())
   updatedAt   DateTime?     @default(now())
-  OrderDetail OrderDetail[]
   deletedAt   DateTime?
-  // name        String?
-  // fullName    String?
-  // phone       Int?
-  // address     String?
+  OrderDetail OrderDetail[]
+  User        User?         @relation(fields: [userId], references: [id])
 }
 
 model OrderDetail {
-  id              Int       @id @default(autoincrement())
-  productId       Int?
-  orderId         Int?
-  price           Int?
-  quantity        Int?
-  createdAt       DateTime? @default(now())
-  updatedAt       DateTime? @default(now())
-  fK_order        Order?    @relation(fields: [orderId], references: [id])
-  fK_productOrder Product?  @relation(fields: [productId], references: [id])
-  deletedAt       DateTime?
+  id           Int       @id @default(autoincrement())
+  orderId      Int
+  productId    Int
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+  deletedAt    DateTime?
+  order        Order?    @relation(fields: [orderId], references: [id])
+  productOrder Product?  @relation(fields: [productId], references: [id])
 }
 
 model Voucher {
@@ -291,8 +284,8 @@ model Invoice {
 
 model InvoiceDetails {
   id        Int     @id @default(autoincrement())
-  invoice   Invoice @relation(fields: [idInvoice], references: [id])
   idInvoice Int
-  cart      Cart    @relation(fields: [cartId], references: [id])
   cartId    Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  invoice   Invoice @relation(fields: [idInvoice], references: [id])
 }
