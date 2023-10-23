@@ -80,11 +80,14 @@ export default function FiltersPage() {
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
 
-  const { id } = useParams();
-  const idCate = Number(id);
-  console.log("🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:", idCate);
+  const { id: nameCate } = useParams();
+  const cateName = String(nameCate);
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:",
+    cateName
+  );
   const { pathname } = useLocation();
-  const keywordSearch = String(pathname);
+  const keywordSearch = decodeURIComponent(pathname);
   console.log(
     "🚀 ~ file: FiltersPage.tsx:79 ~ FiltersPage ~ text:",
     keywordSearch
@@ -102,31 +105,35 @@ export default function FiltersPage() {
   }, [stars]);
 
   const handleActiveBTNLowToHighClick = () => {
-    productController.getSortProductbyPrice("asc", idCate).then((res: any) => {
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-        res
-      );
-      setActiveBtnLowToHigh(false);
-      setActiveBtnHighToLow(true);
-      setProducts(res.rows);
-    });
+    productController
+      .getSortProductbyPrice("asc", cateName)
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+          res
+        );
+        setActiveBtnLowToHigh(false);
+        setActiveBtnHighToLow(true);
+        setProducts(res.rows);
+      });
   };
   const handleActiveBTNHighToLowClick = () => {
-    productController.getSortProductbyPrice("desc", idCate).then((res: any) => {
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-        res
-      );
-      setActiveBtnLowToHigh(true);
-      setActiveBtnHighToLow(false);
-      setProducts(res.rows);
-    });
+    productController
+      .getSortProductbyPrice("desc", cateName)
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+          res
+        );
+        setActiveBtnLowToHigh(true);
+        setActiveBtnHighToLow(false);
+        setProducts(res.rows);
+      });
   };
   const handleActiveBTNLatestCreationDate = () => {
     setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
     productController
-      .getSortProductbyDateCreate("desc", idCate)
+      .getSortProductbyDateCreate("desc", cateName)
       .then((res: any) => {
         setProducts(res.rows);
       });
@@ -139,13 +146,13 @@ export default function FiltersPage() {
   }, [keywordSearch]);
 
   useEffect(() => {
-    if (id) {
+    if (nameCate) {
       getData();
     }
-  }, [id]);
+  }, [nameCate]);
 
   const getData = () => {
-    productController.getList("", idCate).then((res: any) => {
+    productController.getList("", cateName).then((res: any) => {
       console.log(res);
       setStars(res.data);
       console.log(
@@ -170,7 +177,7 @@ export default function FiltersPage() {
       .getFilterProductWithinRangeIDCategory(
         debouncedInputValue[0],
         debouncedInputValue[1],
-        idCate
+        cateName
       )
       .then((res: any) => {
         setProducts(res.rows);
@@ -199,6 +206,9 @@ export default function FiltersPage() {
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
             <SitebarFilter
+              onPurchaseRangeChange={() => console.log("")}
+              onSoldOut={() => console.log("")}
+              oninStock={() => console.log("")}
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
@@ -362,7 +372,7 @@ export default function FiltersPage() {
               <p>KẾT QUẢ TÌM KIẾM VỚI: {keywordSearch.slice(13)}</p>
             </div>
 
-            <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
+            <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
               {products?.map((items) => {
                 return <Filter starsnumber={starsnumber} product={items} />;
               })}
