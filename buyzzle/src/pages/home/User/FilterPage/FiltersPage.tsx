@@ -21,6 +21,7 @@ import { Rate, Row } from "../../../../Model/ProductModel";
 import axios from "axios";
 import { appConfig } from "../../../../configsEnv";
 import { roundedNumber } from "../../../../Helper/Format";
+import { useSearch } from "../../../../hooks/Search/SearchContextProvider";
 export interface Cate {
   id: number;
   name: string;
@@ -68,6 +69,7 @@ export interface PriceRangeFilterPage {
   onChangeSlider(min: number, max: number): void;
 }
 export default function FiltersPage() {
+  const { favoriteFruit } = useSearch();
   const [products, setProducts] = useState<Row[]>([]);
   const [stars, setStars] = useState<Rate>();
   const [starsnumber, setStarsnumber] = useState(0);
@@ -87,9 +89,6 @@ export default function FiltersPage() {
 
   const { pathname } = useLocation();
   const keywordSearch = decodeURIComponent(pathname);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  console.warn(searchParams.get("age"));
 
   useEffect(() => {
     if (debouncedInputValue) {
@@ -150,15 +149,15 @@ export default function FiltersPage() {
   };
 
   useEffect(() => {
-    if (keywordSearch) {
+    if (favoriteFruit) {
       getData();
       getSearchDataName();
     }
-  }, [keywordSearch]);
+  }, [favoriteFruit]);
 
   const getData = () => {
     productController
-      .getAllProductsSearch(keywordSearch.slice(13).toString())
+      .getAllProductsSearch(favoriteFruit?.toString())
       .then((res: any) => {
         console.log(res);
         setStars(res.data);
@@ -168,7 +167,7 @@ export default function FiltersPage() {
   };
   const getSearchDataName = () => {
     productController
-      .getSearchAndPaginationProduct(keywordSearch.slice(13).toString())
+      .getSearchAndPaginationProduct(favoriteFruit?.toString())
       .then((res: any) => {
         console.log(res);
         setProducts(res.rows);
@@ -189,7 +188,7 @@ export default function FiltersPage() {
 
     await productController
       .getFilterProductWithinRangeIDCategory(
-        keywordSearch.slice(13).toString(),
+        favoriteFruit?.toString(),
         debouncedInputValue[0],
         debouncedInputValue[1]
       )
@@ -370,7 +369,7 @@ export default function FiltersPage() {
               <SlidesFilter />
             </div>
             <div>
-              <p>KẾT QUẢ TÌM KIẾM VỚI: {keywordSearch.slice(13)}</p>
+              <p>KẾT QUẢ TÌM KIẾM VỚI: {favoriteFruit?.toString()}</p>
             </div>
 
             <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">

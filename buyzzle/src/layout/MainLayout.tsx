@@ -13,15 +13,15 @@ function MainLayout({ children }: Props) {
   const cartCtx = useCartContext();
   const searchCtx = useSearchContext();
   return (
-    <SearchContext.Provider value={searchCtx}>
-      <CartContext.Provider value={cartCtx}>
-        <div>
+    <CartContext.Provider value={cartCtx}>
+      <div>
+        <SearchContext.Provider value={searchCtx}>
           <Header />
           {children}
           <Footer />
-        </div>
-      </CartContext.Provider>
-    </SearchContext.Provider>
+        </SearchContext.Provider>
+      </div>
+    </CartContext.Provider>
   );
 }
 

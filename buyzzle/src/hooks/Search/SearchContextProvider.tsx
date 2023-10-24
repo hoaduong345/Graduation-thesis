@@ -6,7 +6,11 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import { productController } from "../../Controllers/ProductsController";
 import useDebounce from "../../useDebounceHook/useDebounce";
@@ -15,20 +19,19 @@ export default function useSearchContext() {
   const [data, setData] = useState("");
   const [isSearch, setIsSearch] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  //   const [text, setText] = useState("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setData(e.target.value);
   };
 
   const navigate = useNavigate();
+  // using UseSearchParams
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchValue = searchParams.get("keyword");
+  setSearchParams(createSearchParams({ keyword: data }));
 
   const [productSearch, setProductSearch] = useState<Products[]>([]);
   const debouncedInputValue = useDebounce(data, 500);
-  console.log(
-    "🚀 ~ file: SearchContextProvider.tsx:28 ~ useSearchContext ~ debouncedInputValue:",
-    debouncedInputValue
-  );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setData(e.target.value);
@@ -39,8 +42,9 @@ export default function useSearchContext() {
     setShowSuggestions(false);
   };
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key == "Enter") {
-      navigate(`/FiltersPage/${data}`);
+    if (e.key === "Enter") {
+      setSearchParams("");
+      navigate(`/FiltersPage/`);
       setShowSuggestions(false);
     }
   };
@@ -52,9 +56,9 @@ export default function useSearchContext() {
 
   useEffect(() => {
     getSearhvalue(debouncedInputValue);
-    if (data != "") {
+    if (searchValue != "") {
       productController
-        .getAllProductsSearch(data?.toString())
+        .getAllProductsSearch(searchValue?.toString())
         .then((res: any) => {
           setProductSearch(res.rows);
         });
@@ -75,7 +79,7 @@ export default function useSearchContext() {
     setIsSearch,
     setShowSuggestions,
     navigate,
-    // text,
+    favoriteFruit: searchValue,
   };
 }
 
