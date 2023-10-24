@@ -65,6 +65,8 @@ model User {
   Rating               Rating[]
   deletedAt            DateTime?
   // roleId               Role? @relation(fields: [id], references: [id])
+  sender Message[]   @relation("Sender")
+  receiver Message[]   @relation("Receiver")
   Order    Order[]
   invoices Invoice[]
 }
@@ -210,35 +212,7 @@ model Rating {
   deletedAt    DateTime?
 }
 
-// model Order {
-//   id          Int           @id @default(autoincrement())
-//   name        String?
-//   fullName    String?
-//   phone       Int?
-//   address     String?
-//   status      String?
-//   totalPrice  Int?
-//   coupon      String?
-//   createdAt   DateTime?     @default(now())
-//   updatedAt   DateTime?     @default(now())
-//   OrderDetail OrderDetail[]
-//   deletedAt   DateTime?
-//   User        User?         @relation(fields: [userId], references: [id])
-//   userId      Int?
-// }
 
-// model OrderDetail {
-//   id              Int       @id @default(autoincrement())
-//   productId       Int?
-//   orderId         Int?
-//   price           Int?
-//   quantity        Int?
-//   createdAt       DateTime? @default(now())
-//   updatedAt       DateTime? @default(now())
-//   fK_order        Order?    @relation(fields: [orderId], references: [id])
-//   fK_productOrder Product?  @relation(fields: [productId], references: [id])
-//   deletedAt       DateTime?
-// }
 model Order {
   id          Int           @id @default(autoincrement())
   userId      Int?
@@ -288,4 +262,23 @@ model InvoiceDetails {
   cartId    Int
   cart      Cart    @relation(fields: [cartId], references: [id])
   invoice   Invoice @relation(fields: [idInvoice], references: [id])
+}
+
+
+model Admin {
+  id       Int      @id @default(autoincrement())
+  email String?
+  password String?
+  // sentMessages ChatMessage[]@relation("SentMessagess")
+  // receivedMessages ChatMessage[] @relation("ReceivedMessagess")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  content   String
+  sender    User     @relation("Sender", fields: [senderId], references: [id])
+  senderId  Int
+  receiver  User     @relation("Receiver", fields: [receiverId], references: [id])
+  receiverId Int
+  createdAt DateTime @default(now())
 }
