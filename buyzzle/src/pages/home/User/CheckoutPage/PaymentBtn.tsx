@@ -3,7 +3,8 @@ import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import { paymentControllers } from "../../../../Controllers/PaymentControllers";
 import { CartItem } from "../../../../Model/CartModel";
 import { PaymentMethod } from "./CheckOut";
-import axios from "axios";
+import { OrderItems } from "../../../../Model/OrderModel";
+import { orderControllers } from "../../../../Controllers/OrderControllers";
 
 export interface StripePayment {
    cartItems: CartItem[];
@@ -35,22 +36,33 @@ export default function PaymentBtn(props: StripePayment) {
                .catch((err) => console.log(err.message));
          }, 1000);
       } else if (method == "cash") {
+         let item: OrderItems[] = [];
+
+         cartItems?.map(async (e) => {
+            item.push({
+               productId: e.productid,
+               name: e.product.name,
+               image: e.product.ProductImage[0].url,
+               price: e.product.sellingPrice,
+               quantity: e.quantity,
+               total: e.product.sellingPrice * e.quantity,
+            });
+         });
+
+         let order = {
+            iduser: Number(idUser),
+            cartItems: item,
+            amount_subtotal: 1,
+            shipping: 30000,
+            discount: 1,
+            amount_total: 1,
+         };
+
          setLoading(true);
-         await axios
-            .post(
-               "http://localhost:5000/buyzzle/order",
-               {
-                  cartItems: cartItems,
-               },
-               {
-                  headers: {
-                     "Access-Control-Allow-Origin": "*",
-                  },
-                  withCredentials: true,
-               }
-            )
+         await orderControllers
+            .create(order)
             .then(() => {
-               window.location.href = "/orderdetail";
+               window.location.href = "/orderhistory";
             })
             .finally(() => {
                setLoading(false);

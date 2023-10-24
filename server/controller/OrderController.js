@@ -5,7 +5,6 @@ const OderController = {
     createOrder: async (req, res) => {
         try {
             const orderData = req.body.order;
-            console.log(orderData);
 
             const order = await prisma.order.create({
                 data: {
@@ -37,23 +36,33 @@ const OderController = {
         }
     },
 
-    getOrderDetails: async (req, res) => {
+    getOrderUser: async (req, res) => {
         try {
             const userid = parseInt(req.cookies.id);
-            const order = await prisma.order.findFirst({
+            const order = await prisma.order.findMany({
                 where: {
                     userId: userid,
                 },
                 include: {
-                    OrderDetail: {
-                        include: {
-                            productOrder: {
-                                include: {
-                                    ProductImage: true,
-                                },
-                            },
-                        },
-                    },
+                    OrderDetail: true,
+                },
+            });
+            res.status(200).json(order);
+        } catch (error) {
+            console.log('error', error);
+            res.status(404).send('Get order failed');
+        }
+    },
+
+    getOrderDetails: async (req, res) => {
+        try {
+            const id = parseInt(req.params.id);
+            const order = await prisma.order.findFirst({
+                where: {
+                    id: id,
+                },
+                include: {
+                    OrderDetail: true,
                 },
             });
             res.status(200).json(order);

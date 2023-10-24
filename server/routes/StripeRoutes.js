@@ -62,7 +62,7 @@ app.post('/create-checkout-session', async (req, res) => {
             invoice_creation: {
                 enabled: true,
             },
-            success_url: 'http://localhost:5173/orderdetail',
+            success_url: 'http://localhost:5173/orderhistory',
             cancel_url: 'http://localhost:5173/cart',
         });
         res.send({ url: session.url });
@@ -114,16 +114,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                 const iduser = await stripe.customers.retrieve(event.data.object.customer);
                 const orderItems = await getCartItems(line_items, event.data.object, iduser.metadata.idUser);
                 await axios
-                    .post(
-                        'http://localhost:5000/buyzzle/order',
-                        { order: orderItems },
-                        {
-                            headers: {
-                                'Access-Control-Allow-Origin': '*',
-                            },
-                            withCredentials: true,
-                        }
-                    )
+                    .post('http://localhost:5000/buyzzle/order', { order: orderItems })
                     .then(() => console.log('order succssess'))
                     .catch((err) => console.log(err));
                 break;
