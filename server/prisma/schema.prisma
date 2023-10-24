@@ -213,35 +213,7 @@ model Rating {
   deletedAt    DateTime?
 }
 
-// model Order {
-//   id          Int           @id @default(autoincrement())
-//   name        String?
-//   fullName    String?
-//   phone       Int?
-//   address     String?
-//   status      String?
-//   totalPrice  Int?
-//   coupon      String?
-//   createdAt   DateTime?     @default(now())
-//   updatedAt   DateTime?     @default(now())
-//   OrderDetail OrderDetail[]
-//   deletedAt   DateTime?
-//   User        User?         @relation(fields: [userId], references: [id])
-//   userId      Int?
-// }
 
-// model OrderDetail {
-//   id              Int       @id @default(autoincrement())
-//   productId       Int?
-//   orderId         Int?
-//   price           Int?
-//   quantity        Int?
-//   createdAt       DateTime? @default(now())
-//   updatedAt       DateTime? @default(now())
-//   fK_order        Order?    @relation(fields: [orderId], references: [id])
-//   fK_productOrder Product?  @relation(fields: [productId], references: [id])
-//   deletedAt       DateTime?
-// }
 model Order {
   id          Int           @id @default(autoincrement())
   customerId  Int?
@@ -302,7 +274,7 @@ model InvoiceDetails {
 
 model Admin {
   id       Int      @id @default(autoincrement())
-  username String?
+  email String?
   password String?
   // sentMessages ChatMessage[]@relation("SentMessagess")
   // receivedMessages ChatMessage[] @relation("ReceivedMessagess")
