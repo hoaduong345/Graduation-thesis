@@ -1,15 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ModelCart, cartControllers } from "../../Controllers/CartControllers";
-import { CartItem, CartModel, CartProduct } from "../../Model/CartModel";
+import { CartItem, CartProduct } from "../../Model/CartModel";
 
 export default function useCartContext() {
   const [loading, setLoading] = useState(true);
   const [idProduct, setIdProduct] = useState(0);
   const [productChecked, setProductChecked] = useState<CartItem[]>([]);
-  const [cart, setCart] = useState<CartModel>({} as CartModel);
   const [carts, setCarts] = useState<CartProduct>({} as CartProduct);
-
   const addProduct = (productId: number, productQuantities: number) => {
     const data: ModelCart = {
       productId: productId,
@@ -19,7 +17,6 @@ export default function useCartContext() {
       .addCart(data)
       .then((res) => {
         setCarts(res.data);
-        setTimeout(() => setLoading(false), 2000);
       })
       .finally(() => {
         toast.success("Thêm thành công");
@@ -30,14 +27,16 @@ export default function useCartContext() {
     setLoading(true);
     cartControllers
       .getCart()
-      .then((res) => setCarts(res.data))
+      .then((res) => {
+        setCarts(res.data);
+      })
       .finally(() => setLoading(false));
   };
   useEffect(() => {
     getCart();
   }, []);
 
-  const buynow = () => {
+  const handleBuyNow = () => {
     if (productChecked.length == 0) {
       toast.warn("Chưa chọn sản phẩm");
     } else {
@@ -61,7 +60,24 @@ export default function useCartContext() {
       modal.close();
     }
   };
-
+  const idItemCart = "confirmCart";
+  const idAllCart = "confirmAllCart";
+  const removeItemCart = (id: number) => {
+    cartControllers.removeItemCart(idProduct).then(() => {
+      getCart();
+      closeModal(idItemCart);
+      const _productChecked = [...productChecked];
+      const Product = _productChecked.filter((item) => item.productid !== id);
+      setProductChecked(Product);
+    });
+  };
+  const removeAllCart = () => {
+    cartControllers.removeAllCart().then(() => {
+      getCart();
+      setProductChecked([]);
+      closeModal(idAllCart);
+    });
+  };
   return {
     carts,
     setCarts,
@@ -71,13 +87,15 @@ export default function useCartContext() {
     getCart,
     setIdProduct,
     idProduct,
-    cart,
     productChecked,
     setProductChecked,
-    buynow,
-    setCart,
+    handleBuyNow,
     openModal,
     closeModal,
+    removeItemCart,
+    removeAllCart,
+    idItemCart,
+    idAllCart,
   };
 }
 type CartContextType = ReturnType<typeof useCartContext>;

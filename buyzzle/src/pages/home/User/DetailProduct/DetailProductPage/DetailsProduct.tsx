@@ -85,24 +85,11 @@ export interface EditImage {
   id: number;
 }
 export default function DetailsProduct() {
-  // context Detail Product
-  const contextDetail = useContext(ThemeContext);
-
-  if (!contextDetail) {
-    return null; // Xử lý trường hợp context không tồn tại
-  }
-
-  const { cart, addToCart } = contextDetail;
-
   const { carts, addProduct } = useCart();
   console.log(
     "🚀 ~ file: DetailsProduct.tsx:112 ~ DetailsProduct ~ carts 123:",
     carts
   );
-
-  const handleAddToCartContext = (product: ModelCart) => {
-    addToCart(product);
-  };
 
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -179,13 +166,6 @@ export default function DetailsProduct() {
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const addCart = (data: ModelCart) => {
-    cartControllers.addCart(data).then(() => {
-      handleAddToCartContext(data);
-      toast.success("Thêm thành công");
-    });
   };
 
   const getComment = (id: number) => {

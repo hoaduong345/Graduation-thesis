@@ -18,40 +18,24 @@ import Delete from "../../Admin/Assets/TSX/Delete";
 export default function Cart() {
   const {
     carts,
+    setCarts,
     getCart,
     setIdProduct,
     idProduct,
-    cart,
     productChecked,
     setProductChecked,
-    buynow,
-    setCart,
+    handleBuyNow,
     openModal,
     closeModal,
+    removeItemCart,
+    removeAllCart,
+    idItemCart,
+    idAllCart,
   } = useCart();
-  const idItemCart = "confirmCart";
-  const idAllCart = "confirmAllCart";
-  console.log("🚀 ~ file: Cart.tsx:27 ~ Cart ~ carts in cart page:", carts);
-  const removeItemCart = (id: number) => {
-    cartControllers.removeItemCart(idProduct).then(() => {
-      getCart();
-      closeModal(idItemCart);
-      const _productChecked = [...productChecked];
-      const Product = _productChecked.filter((item) => item.productid !== id);
-      setProductChecked(Product);
-    });
-  };
-  const removeAllCart = () => {
-    cartControllers.removeAllCart().then(() => {
-      getCart();
-      setProductChecked([]);
-      closeModal(idAllCart);
-    });
-  };
 
   const handleIncreaseQuantity = (data: UpdateCart) => {
     cartControllers.increaseCart(data).then((res) => {
-      setCart(res);
+      setCarts(res.data);
     });
     const indexProduct = productChecked.findIndex(
       (item) => item.productid === data.productId
@@ -64,7 +48,7 @@ export default function Cart() {
   const handleDecreaseQuantity = (quantity: number, data: UpdateCart) => {
     if (quantity > 1) {
       cartControllers.decreaseCart(data).then((res) => {
-        setCart(res);
+        setCarts(res.data);
       });
       const indexProduct = productChecked.findIndex(
         (item) => item.productid === data.productId
@@ -78,13 +62,12 @@ export default function Cart() {
     }
   };
 
-  const [plusThrottled] = useThrottle(handleIncreaseQuantity, 1000);
-  const [minusThrottled] = useThrottle(handleDecreaseQuantity, 1000);
+  const [plusThrottled] = useThrottle(handleIncreaseQuantity, 500);
+  const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
   //check box
 
   var checkAll: boolean =
-    productChecked.length === cart?.data?.item?.length &&
-    cart?.data?.item?.length !== 0;
+    !!carts.item?.length && productChecked.length === carts.item?.length;
 
   // 2 array : 1 array cart, 1 array cart checked
   const handleChecked = (checked: boolean, item: CartItem) => {
@@ -102,8 +85,8 @@ export default function Cart() {
 
   const handleCheckedAll = (checked: boolean) => {
     if (checked) {
-      if (cart?.data.item) {
-        setProductChecked(cart?.data.item);
+      if (carts.item) {
+        setProductChecked(carts.item);
       }
     } else {
       setProductChecked([]);
@@ -297,9 +280,7 @@ export default function Cart() {
                 </div>
                 <div className="flex w-[40%] text-[#1A1A1A] text-base">
                   <p>Chọn Tất Cả</p>
-                  <div className="mx-2 gap-2">
-                    ({cart?.data?.item?.length ?? 0})
-                  </div>
+                  <div className="mx-2 gap-2">({carts.item?.length ?? 0})</div>
                 </div>
                 <div
                   className="rounded-full shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]
@@ -330,7 +311,7 @@ export default function Cart() {
                 </div>
                 <Link
                   to={`${productChecked.length == 0 ? "" : "/checkout"}`}
-                  onClick={buynow}
+                  onClick={handleBuyNow}
                   className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 
                                 transition duration-150 bg-[#EA4B48] cursor-pointer"
