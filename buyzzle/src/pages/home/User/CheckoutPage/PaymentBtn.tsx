@@ -57,16 +57,12 @@ export default function PaymentBtn(props: StripePayment) {
             discount: 1,
             amount_total: 1,
          };
-
          setLoading(true);
-         await orderControllers
-            .create(order)
-            .then(() => {
+         setTimeout(async () => {
+            await orderControllers.create(order).then(() => {
                window.location.href = "/orderhistory";
-            })
-            .finally(() => {
-               setLoading(false);
             });
+         }, 5000);
       }
    };
 
