@@ -1,13 +1,6 @@
 /* eslint-disable no-var */
-
-import {
-  ChangeEvent,
-  KeyboardEvent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { KeyboardEvent, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Bell from "../../Assets/TSX/Bell";
 import Chevron_down from "../../Assets/TSX/Chevron-down";
 import Globe from "../../Assets/TSX/Globe";
@@ -15,24 +8,25 @@ import LogoWeb from "../../Assets/TSX/LogoWeb";
 import Map from "../../Assets/TSX/Map";
 import Search from "../../Assets/TSX/Search";
 import Headphones from "../../Assets/TSX/headphones";
-import { productController } from "../../Controllers/ProductsController";
 import { userController } from "../../Controllers/UserController";
-import { ThemeContext } from "../../hooks/Context/ThemeContextProvider";
-import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
-import useDebounce from "../../useDebounceHook/useDebounce";
+import { useSearch } from "../../hooks/Search/SearchContextProvider";
 import CartCount from "../Context/CartCount/CartCount";
 import Container from "../container/Container";
 
 export default function Header() {
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const navigate = useNavigate();
-  const [text, setText] = useState("");
-
-  const dataInputHeaderSearch = useContext(ThemeContext);
-  const dataSearchBodyIndexFromHeader = useContext(ThemeContext);
-  const [productSearch, setProductSearch] = useState<Products[]>([]);
-  const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
-  const [isSearch, setIsSearch] = useState(false);
+  const {
+    data,
+    handleKeyPress,
+    hideSuggestions,
+    handleChange,
+    productSearch,
+    showSuggestions,
+    isSearch,
+    setIsSearch,
+    setShowSuggestions,
+    navigate,
+    // text,
+  } = useSearch();
 
   const user = localStorage.getItem("user");
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
@@ -47,7 +41,6 @@ export default function Header() {
       const username = userData.username;
       console.log("USERNAME: " + username);
       userController.getUserWhereUsername(username).then((res) => {
-        // setEditUser(res)
         setName(res.name);
         setCheckLogin(true);
         const UserImageArray = JSON.stringify(res.UserImage);
@@ -62,49 +55,10 @@ export default function Header() {
 
   if (user != null) {
     username = JSON.parse(user).username;
-    // img = JSON.parse(user).img;
-    // name = JSON.parse(user).name;
-
-    // console.log(name.substring(0, 1));
-    // console.log("USER: " + name, img);
   } else {
     console.log("Chua dang nhap");
   }
   const href = `/userprofilepage/${username}`;
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dataInputHeaderSearch?.onChange(e);
-    setShowSuggestions(true);
-    setText(e.target.value);
-  };
-  // Function to hide suggestions
-  const hideSuggestions = () => {
-    setShowSuggestions(false);
-  };
-  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key == "Enter") {
-      navigate(`/FiltersPage/${text}`);
-      setShowSuggestions(false);
-    }
-  };
-  const getSearhvalue = (value: any) => {
-    productController
-      .getAllProductsSearch(debouncedInputValue?.data.toString())
-      .then((res: any) => {
-        setProductSearch(res.rows);
-      });
-  };
-
-  useEffect(() => {
-    getSearhvalue(debouncedInputValue);
-    if (dataSearchBodyIndexFromHeader?.data != "") {
-      productController
-        .getAllProductsSearch(dataSearchBodyIndexFromHeader?.data.toString())
-        .then((res: any) => {
-          setProductSearch(res.rows);
-        });
-    }
-  }, [debouncedInputValue]);
 
   return (
     <>
@@ -241,62 +195,8 @@ export default function Header() {
                               Từ khóa
                             </h1>
                             <p className="text-base cursor-default p-1 pl-2 font-normal">
-                              {text == "" ? "" : `"${text}"`}
+                              {data == "" ? "" : `"${data}"`}
                             </p>
-                            {/* <div className="grid grid-cols-3 gap-4 py-3  w-[98%] mx-auto">
-                              {productSearch.slice(0, 6).map((itemsSearch) => {
-                                return (
-                                  <>
-                                    <div
-                                      className="flex items-center gap-1 h-12
-                                hover:rounded-md duration-200
-                                hover:shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                                    >
-                                      <div>
-                                        <img
-                                          src={itemsSearch.ProductImage[0].url}
-                                          alt="ProductImage"
-                                          className="w-14 h-12"
-                                        />
-                                      </div>
-                                      <div
-                                        className="text-base cursor-default p-1 pl-2  font-normal w-full"
-                                        onClick={(e) => {
-                                          setShowSuggestions(false);
-                                          navigate(
-                                            `/Detailproducts/${itemsSearch.id}`
-                                          );
-                                          hideSuggestions();
-                                        }}
-                                        onMouseOver={() => {
-                                          setIsSearch(true);
-                                        }}
-                                        onMouseLeave={() => {
-                                          setIsSearch(false);
-                                        }}
-                                      >
-                                        <div className="text-[14px] ">
-                                          {itemsSearch.name &&
-                                          itemsSearch.name.length > 21 ? (
-`${itemsSearch.name.substring(
-                                              0,
-                                              21
-                                            )}...`
-                                          ) : itemsSearch.name ? (
-                                            itemsSearch.name
-                                          ) : (
-                                            <p>Không có sản phẩm</p>
-                                          )}
-                                        </div>
-                                        <p className="text-gray-600 text-xs">
-                                          SL: {itemsSearch.quantity}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </>
-                                );
-                              })}
-                            </div> */}
                           </div>
                         </div>
                       </>
@@ -312,12 +212,6 @@ export default function Header() {
                     </div>
                   </div>
                 </div>
-                {/* <dialog id="my_modal_3" className="max-2xl:modal ">
-                  <div className="relative bg-white h-40 w-72">
-                    sádsadssadasdsd sádsadssad asdsd sádsadssadasdsds ádsa
-                    dssadasdsd
-                  </div>
-                </dialog> */}
 
                 <div className="items-center flex relative gap-2">
                   <CartCount />

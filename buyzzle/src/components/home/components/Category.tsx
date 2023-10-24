@@ -9,7 +9,7 @@ export type Cate = {
 export default function Category(props: Cate) {
   return (
     <>
-      <Link to={`/FiltersPage/${props.name}`}>
+      <Link to={`/FiltersPage/${props.id}`}>
         <div
           className="max-w-[200px] max-lg:max-w-[90%] border-2 border-solid 
         hover:bg-[#f4f4f4] border-[#E0E0E0] py-[16px] px-[17.5px] rounded-lg text-center
