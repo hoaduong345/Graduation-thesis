@@ -7,141 +7,131 @@ const stripe = require('stripe')(
 );
 
 app.post('/create-checkout-session', async (req, res) => {
-   try {
-    const cartItems = req.body.cartItems;
-    const discount = req.body.discount;
+    try {
+        const cartItems = req.body.cartItems;
+        const discount = req.body.discount;
 
-    const initialTotal = cartItems.reduce((total, item) => {
-        return total + item.product.sellingPrice * item.quantity;
-    }, 0);
+        const initialTotal = cartItems.reduce((total, item) => {
+            return total + item.product.sellingPrice * item.quantity;
+        }, 0);
 
-    let finalTotal = initialTotal;
-    if (discount != 0) {
-        finalTotal = initialTotal * (discount / 100);
-    }
+        let finalTotal = initialTotal;
+        if (discount != 0) {
+            finalTotal = initialTotal * (discount / 100);
+        }
 
-    const line_items = cartItems.map((item) => {
-        return {
-            price_data: {
-                currency: 'vnd',
-                product_data: {
-                    name: item.product.name,
-                    images: [item.product.ProductImage[0].url],
-                    metadata: {
-                        id: item.productid,
+        const line_items = cartItems.map((item) => {
+            return {
+                price_data: {
+                    currency: 'vnd',
+                    product_data: {
+                        name: item.product.name,
+                        images: [item.product.ProductImage[0].url],
+                        metadata: {
+                            productId: item.productid,
+                        },
                     },
+                    unit_amount: item.product.sellingPrice,
                 },
-                unit_amount: item.product.sellingPrice,
+                quantity: item.quantity,
+            };
+        });
+        const customer = await stripe.customers.create({
+            metadata: {
+                idUser: req.body.idUser,
             },
-            quantity: item.quantity,
-        };
-    });
-    const coupon = await stripe.coupons.create({
-        percent_off: discount || 1,
-        duration: 'once',
-    });
-    const shippingRate = await stripe.shippingRates.create({
-        display_name: 'Ground shipping',
-        type: 'fixed_amount',
-        fixed_amount: {
-            amount: 30000,
-            currency: 'vnd',
-        },
-    });
-    const session = await stripe.checkout.sessions.create({
-        line_items,
-        mode: 'payment',
-        discounts: !discount ? [] : [{ coupon: coupon.id }],
-        shipping_options: [{ shipping_rate: shippingRate.id }],
-        invoice_creation: {
-            enabled: true,
-        },
-        success_url: 'http://localhost:5173/orderdetail',
-        cancel_url: 'http://localhost:5173/cart',
-    });
-    res.send({ url: session.url });
-   } catch (error) {
-    console.log("Cannot check-out",error)
-   }
+        });
+        const coupon = await stripe.coupons.create({
+            percent_off: discount || 1,
+            duration: 'once',
+        });
+        const shippingRate = await stripe.shippingRates.create({
+            display_name: 'Ground shipping',
+            type: 'fixed_amount',
+            fixed_amount: {
+                amount: 30000,
+                currency: 'vnd',
+            },
+        });
+        const session = await stripe.checkout.sessions.create({
+            line_items,
+            mode: 'payment',
+            customer: customer.id,
+            discounts: !discount ? [] : [{ coupon: coupon.id }],
+            shipping_options: [{ shipping_rate: shippingRate.id }],
+            invoice_creation: {
+                enabled: true,
+            },
+            success_url: 'http://localhost:5173/orderdetail',
+            cancel_url: 'http://localhost:5173/cart',
+        });
+        res.send({ url: session.url });
+    } catch (error) {
+        console.log('Cannot check-out', error);
+    }
 });
 
-const fulfillOrder = (session) => {
-    // TODO: fill me in
-    console.log('Fulfilling order', session);
-};
+const getCartItems = async (line_items, object, iduser) => {
+    return new Promise((resolve, reject) => {
+        let cartItems = [];
+        let order = {
+            iduser: parseInt(iduser),
+            cartItems,
+            amount_subtotal: object.amount_subtotal,
+            shipping: object.total_details.amount_shipping,
+            discount: object.total_details.amount_discount,
+            amount_total: object.amount_total,
+        };
+        line_items?.data?.map(async (element) => {
+            const product = await stripe.products.retrieve(element.price.product);
+            const id = parseInt(product.metadata.productId);
 
-const createOrder = (session) => {
-    console.log('Creating order', session);
-    axios.post('http://localhost:5000/buyzzle/invoice', session);
-};
+            cartItems.push({
+                productid: id,
+                name: product.name,
+                image: product.images[0],
+                price: element.price.unit_amount,
+                quantity: element.quantity,
+                total: element.price.unit_amount * element.quantity,
+            });
 
-const emailCustomerAboutFailedPayment = (session) => {
-    // TODO: fill me in
-    console.log('Emailing customer', session);
+            if (cartItems.length === line_items?.data.length) {
+                resolve(order);
+            }
+        });
+    });
 };
 
 const endpointSecret = 'whsec_552c5c038fb79b6ce04ee2655ed10451defd99c0c1195f27953833dbb4d1d032';
 
 app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (request, response) => {
-    const payload = request.body;
-    const sig = request.headers['stripe-signature'];
-
-    let event;
-
     try {
-        event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
-    } catch (err) {
-        return response.status(400).send(`Webhook Error: ${err.message}`);
-    }
+        const event = request.body;
 
-    // Xử lý sự kiện Payment.session.completed
-    if (event.type === 'checkout.session.completed') {
-        // Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
-        const sessionWithLineItems = await stripe.checkout.sessions.retrieve(event.data.object.id, {
-            expand: ['line_items'],
-        });
-        const lineItems = sessionWithLineItems.line_items;
-        console.log(lineItems);
-        // Fulfill the purchase...
-        fulfillOrder(lineItems);
-    }
-    switch (event.type) {
-        case 'checkout.session.completed': {
-            const session = event.data.object;
-            console.log(session);
-            // Lưu đơn hàng vào cơ sở dữ liệu của bạn, được đánh dấu là 'đang chờ thanh toán'
-            // createOrder(session);
-
-            // Kiểm tra xem đơn hàng đã được thanh toán chưa (ví dụ: thanh toán bằng thẻ)
-            //
-            // Thanh toán thông báo bị trì hoãn sẽ có trạng thái `chưa thanh toán`, như
-            // tài khoản bạn vẫn đang đợi tiền được chuyển từ tài khoản của khách hàng.
-            // if (session.payment_status === 'paid') {
-            //     fulfillOrder(session);
-            // }
-
-            break;
+        switch (event.type) {
+            case 'checkout.session.completed':
+                const line_items = await stripe.checkout.sessions.listLineItems(event.data.object.id);
+                const iduser = await stripe.customers.retrieve(event.data.object.customer);
+                const orderItems = await getCartItems(line_items, event.data.object, iduser.metadata.idUser);
+                await axios
+                    .post(
+                        'http://localhost:5000/buyzzle/order',
+                        { order: orderItems },
+                        {
+                            headers: {
+                                'Access-Control-Allow-Origin': '*',
+                            },
+                            withCredentials: true,
+                        }
+                    )
+                    .then(() => console.log('order succssess'))
+                    .catch((err) => console.log(err));
+                break;
         }
-
-        case 'checkout.session.async_payment_succeeded': {
-            const session = event.data.object;
-
-            // Thực hiện việc mua hàng...
-            fulfillOrder(session);
-
-            break;
-        }
-
-        case 'checkout.session.async_payment_failed': {
-            const session = event.data.object;
-
-            // Gửi email cho khách hàng yêu cầu họ thử lại đơn hàng
-            emailCustomerAboutFailedPayment(session);
-
-            break;
-        }
+        response.json({ received: true });
+    } catch (error) {
+        console.log(error);
     }
-    response.status(200).end();
 });
 
 module.exports = app;

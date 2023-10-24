@@ -8,48 +8,36 @@ import axios from "axios";
 export interface StripePayment {
    cartItems: CartItem[];
    discount: number;
-   isCheckedPayment: PaymentMethod;
+   method: PaymentMethod;
+   idUser: number;
 }
 
 export default function PaymentBtn(props: StripePayment) {
-   const { cartItems, isCheckedPayment, discount } = props;
+   const { cartItems, method, discount, idUser } = props;
    const [loading, setLoading] = useState(false);
 
    const handleCheckout = async () => {
-      if (isCheckedPayment == "stripe") {
+      if (method == "stripe") {
          setLoading(true);
          setTimeout(async () => {
             await paymentControllers
                .createPayment({
                   cartItems: cartItems,
-                  isCheckedPayment: "stripe",
+                  method: "stripe",
                   discount: discount,
+                  idUser: Number(idUser),
                })
                .then((res) => {
                   if (res.data.url) {
                      window.location.href = res.data.url;
                   }
                })
-               // .then(() => {
-               //    axios.post(
-               //       "http://localhost:5000/buyzzle/invoice",
-               //       {
-               //          cartItems: cartItems,
-               //       },
-               //       {
-               //          headers: {
-               //             "Access-Control-Allow-Origin": "*",
-               //          },
-               //          withCredentials: true,
-               //       }
-               //    );
-               // })
                .catch((err) => console.log(err.message));
          }, 1000);
-      } else if (isCheckedPayment == "cash") {
+      } else if (method == "cash") {
          setLoading(true);
-         setTimeout(async () => {
-            await axios.post(
+         await axios
+            .post(
                "http://localhost:5000/buyzzle/order",
                {
                   cartItems: cartItems,
@@ -60,9 +48,13 @@ export default function PaymentBtn(props: StripePayment) {
                   },
                   withCredentials: true,
                }
-            );
-            window.location.href = "/orderdetail";
-         }, 1500);
+            )
+            .then(() => {
+               window.location.href = "/orderdetail";
+            })
+            .finally(() => {
+               setLoading(false);
+            });
       }
    };
 

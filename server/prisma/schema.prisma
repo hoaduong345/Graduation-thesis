@@ -65,8 +65,8 @@ model User {
   Rating               Rating[]
   deletedAt            DateTime?
   // roleId               Role? @relation(fields: [id], references: [id])
-  Order    Order[]
-  invoices Invoice[]
+  Order                Order[]
+  invoices             Invoice[]
 }
 
 model UserImage {
@@ -243,8 +243,10 @@ model Order {
   id          Int           @id @default(autoincrement())
   userId      Int?
   status      String?
-  totalPrice  Int?
-  coupon      String?
+  subtotal    Int?
+  shipping    Int?
+  discount    Int?
+  amountTotal Int?
   createdAt   DateTime?     @default(now())
   updatedAt   DateTime?     @default(now())
   deletedAt   DateTime?
@@ -254,8 +256,13 @@ model Order {
 
 model OrderDetail {
   id           Int       @id @default(autoincrement())
-  orderId      Int
-  productId    Int
+  orderId      Int?
+  productId    Int?
+  name         String?
+  image        String?
+  price        Int?
+  quantity     Int?
+  total        Int?
   createdAt    DateTime? @default(now())
   updatedAt    DateTime? @default(now())
   deletedAt    DateTime?

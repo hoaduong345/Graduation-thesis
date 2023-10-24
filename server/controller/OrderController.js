@@ -4,52 +4,33 @@ const prisma = new PrismaClient();
 const OderController = {
     createOrder: async (req, res) => {
         try {
-            const userId = parseInt(req.cookies.id);
-            const cartItems = req.body.cartItems;
-            const orders = [];
+            const orderData = req.body.order;
+            console.log(orderData);
 
-            for (const cartItem of cartItems) {
-                let order = await prisma.order.findFirst({
-                    where: {
-                        userId: userId,
+            const order = await prisma.order.create({
+                data: {
+                    userId: orderData.iduser,
+                    subtotal: orderData.amount_subtotal,
+                    shipping: orderData.shipping,
+                    discount: orderData.discount,
+                    amountTotal: orderData.amount_total,
+                },
+            });
+            orderData.cartItems.map(async (e) => {
+                await prisma.orderDetail.create({
+                    data: {
+                        orderId: order.id,
+                        productId: e.productid,
+                        name: e.name,
+                        image: e.image,
+                        price: e.price,
+                        quantity: e.quantity,
+                        total: e.total,
                     },
                 });
+            });
 
-                if (!order) {
-                    order = await prisma.order.create({
-                        data: {
-                            userId,
-                            OrderDetail: {
-                                create: {
-                                    productId: cartItem.productid,
-                                },
-                            },
-                        },
-                        include: { OrderDetail: true },
-                    });
-                } else {
-                    const updateOrder = await prisma.order.update({
-                        where: {
-                            userId: userId,
-                        },
-                        data: {
-                            OrderDetail: {
-                                upsert: {
-                                    where: {
-                                        productId: cartItem.productid,
-                                    },
-                                    create: {
-                                        productId: cartItem.productid,
-                                    },
-                                },
-                            },
-                        },
-                    });
-                    orders.push(updateOrder);
-                }
-            }
-
-            res.status(200).json(orders);
+            res.status(200).json(order ?? {});
         } catch (error) {
             console.log(error);
             res.status(404).json('Add orders to the database failed');
