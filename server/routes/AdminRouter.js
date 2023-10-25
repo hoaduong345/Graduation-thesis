@@ -42,7 +42,8 @@ const checkAdminAuthentication = async (req, res, next) => {
 
 
 router.post("/login", checkAdminAuthentication, (req, res) => {
-      // res.redirect("/admin/dashboard"); 
+  // res.send(adminEmail);
+      // res.redirect("/admin/ListproductsAdmin"); 
   res.send("login admin tc");
 });
 
