@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import { Images } from "../../../../Assets/TS";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
@@ -58,6 +59,8 @@ export interface PriceRangeFilterPage {
   onChangeSlider(min: number, max: number): void;
 }
 export default function FiltersPage() {
+  const { id } = useParams();
+
   const {
     searchValue,
     handleSliderChange,
