@@ -7,17 +7,17 @@ const prisma = new PrismaClient();
 
 
 const checkAdminAuthentication = async (req, res, next) => {
-  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminUsername = process.env.ADMIN_USERNAME;
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  if (email === adminEmail && password === adminPassword) {
+  if (username === adminUsername && password === adminPassword) {
     // login = env
     next();
   } else {
     try {
       const admin = await prisma.admin.findFirst({
-        where: { email },
+        where: { username },
       });
 
       if (admin) {
@@ -51,8 +51,12 @@ router.post("/login", checkAdminAuthentication, (req, res) => {
 router.get("/getalladmin", AdminController.getAllAdmins);
 router.post("/addadmin", AdminController.createAdmin);
 router.delete("/deleteadmin/:id", AdminController.deleteAdmin);
-router.put("/updateadmin/:id", AdminController.updateAdmin);
 router.post("/changepassword/:id", AdminController.ChangePassword);
 
+router.put("/adminprofile/:username", AdminController.AdminProfile);
+
+router.get("/chitietadmin/:username", AdminController.getAdmin);
+
+router.post("/addimageadmin", AdminController.addImageAdmin);
 
 module.exports = router;
