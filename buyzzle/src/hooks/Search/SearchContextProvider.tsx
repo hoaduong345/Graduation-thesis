@@ -49,11 +49,7 @@ export default function useSearchContext() {
 
   //////////////////////////////////////////////////////////IndexPages////////////////////////////////////////////////////////////////////////
   const [categoty, setCategory] = useState<Cate[]>([]);
-  const idsWithExampleName = categoty.filter((cate) => cate.id);
-  console.log(
-    "🚀 ~ file: SearchContextProvider.tsx:53 ~ useSearchContext ~ idsWithExampleName:",
-    idsWithExampleName
-  );
+
   const [idaCate, setidaCate] = useState(0);
   const getIdCate = () => {
     const id = localStorage.getItem("cateId");
@@ -93,6 +89,7 @@ export default function useSearchContext() {
   const searchValue = searchParams.get("keyword");
   const cateId = searchParams.get("cateId");
   const urlSliderValues = searchParams.get("sliderValues");
+  const debouncedSearchParams = useDebounce(searchParams, 2000);
 
   const decodedData = decodeURIComponent(data);
   // Remove diacritics from Vietnamese characters
@@ -112,14 +109,17 @@ export default function useSearchContext() {
   }, [urlSliderValues]);
 
   useEffect(() => {
-    setSearchParams(
-      createSearchParams({
-        keyword: cleanedData,
-        categoryID: categoryID,
-        sliderValues: `${sliderValues[0]},${sliderValues[1]}`,
-      })
-    );
-  }, [sliderValues, cleanedData, categoryID]);
+    if (debouncedSearchParams) {
+      setSearchParams(
+        createSearchParams({
+          keyword: cleanedData,
+          categoryID: categoryID,
+          min: sliderValues[0].toString(),
+          max: sliderValues[1].toString(),
+        })
+      );
+    }
+  }, [sliderValues, cleanedData, categoryID, debouncedSearchParams]);
 
   const [productSearch, setProductSearch] = useState<Products[]>([]);
   const debouncedInputValue = useDebounce(data, 500);
@@ -142,6 +142,14 @@ export default function useSearchContext() {
   // Event handler for Enter key press
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      setSearchParams(
+        createSearchParams({
+          keyword: cleanedData,
+          categoryID: categoryID,
+          min: sliderValues[0].toString(),
+          max: sliderValues[1].toString(),
+        })
+      );
       clearAndNavigate();
     }
   };
@@ -259,7 +267,8 @@ export default function useSearchContext() {
   function handleSliderChange(price: [number, number]): void {
     setSliderValues(price);
   }
-
+  const name = localStorage.getItem("cateName");
+  const nameCate = JSON.parse(name!);
   //////////////////////////////////////////////////////////IndexPages////////////////////////////////////////////////////////////////////////
 
   const getCategory = async () => {
@@ -313,6 +322,7 @@ export default function useSearchContext() {
     starsnumber,
     products,
     sliderValues,
+    nameCate,
     /////////////////////IndexPages////////////////////
     categoty,
     categoryID,
