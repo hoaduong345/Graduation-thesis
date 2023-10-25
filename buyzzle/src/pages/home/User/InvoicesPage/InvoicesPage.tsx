@@ -42,9 +42,7 @@ export default function InvoicesPage() {
                <div className="grid grid-cols-2 items-center mt-8">
                   <div>
                      <p className="font-bold text-gray-800">Gửi đến:</p>
-                     <p className="text-gray-500">
-                        12 Nguyễn Chí Thanh, Tân An,Buôn Ma Thuột, Đắk Lắk
-                     </p>
+                     <p className="text-gray-500">{invoice?.User?.address}</p>
                      <p className="text-gray-500">{invoice.User?.email}</p>
                   </div>
                   <div className="text-right">
@@ -201,7 +199,7 @@ export default function InvoicesPage() {
                            >
                               Giảm giá
                            </th>
-                           <td className="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0">
+                           <td className="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0 line-through">
                               {numberFormat(invoice.discount)}
                            </td>
                         </tr>

@@ -1,26 +1,24 @@
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
+import { orderControllers } from "../../../../Controllers/OrderControllers";
 import { RatingAndCommentController } from "../../../../Controllers/Rating&Comment";
 import { storage } from "../../../../Firebase/Config";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
+import { numberFormat } from "../../../../Helper/Format";
 import Loading from "../../../../Helper/Loading/Loading";
 import StepperPage from "../../../../Helper/Stepper/StepperPage";
-import { Rating, User } from "../../../../Model/ProductModel";
+import { OrderModel } from "../../../../Model/OrderModel";
+import { Rating } from "../../../../Model/ProductModel";
 import Container from "../../../../components/container/Container";
 import Back from "../../Admin/Assets/TSX/Back";
 import UploadIMG from "../../Admin/Assets/TSX/UploadIMG";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
-import { userController } from "../../../../Controllers/UserController";
-import { UserModel } from "../../../../Model/UserModel";
-import { numberFormat } from "../../../../Helper/Format";
-import { Link, useParams } from "react-router-dom";
-import { orderControllers } from "../../../../Controllers/OrderControllers";
-import { OrderModel } from "../../../../Model/OrderModel";
 
 export default function OrderDetailPage() {
    const { id } = useParams();
@@ -35,24 +33,9 @@ export default function OrderDetailPage() {
 
    const [idSP, setIdSP] = useState(0);
 
-   const [user, setUser] = useState<UserModel>({} as UserModel);
-
-   const localUsername = localStorage.getItem("user");
-   const userLocal: User =
-      localUsername == null ? "" : JSON.parse(localUsername);
-
    useEffect(() => {
-      getUser();
       getOrderDetails();
    }, []);
-
-   const getUser = async () => {
-      await userController
-         .getUserWhereUsername(userLocal.username)
-         .then((res) => {
-            setUser(res);
-         });
-   };
 
    const getOrderDetails = async () => {
       await orderControllers.getDetails(idOrder).then((res) => {
@@ -204,15 +187,6 @@ export default function OrderDetailPage() {
          });
    };
 
-   // const calculatePrice = () => {
-   // let totalCart = 0;
-   // for (let i = 0; i < listLocalCart.length; i++) {
-   //    const element = listLocalCart[i];
-   //    totalCart += element.quantity * element.product.sellingPrice;
-   // }
-   // return totalCart;
-   // };
-
    return (
       <Container>
          <div className="body-filter container mx-auto">
@@ -253,10 +227,10 @@ export default function OrderDetailPage() {
                               <div>
                                  <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
                                     <span className="font-bold">
-                                       {user.name}, {user.phonenumber}{" "}
+                                       {orderDetails?.User?.name},{" "}
+                                       {orderDetails?.User?.phonenumber}{" "}
                                     </span>{" "}
-                                    12 Nguyễn Chí Thanh, Phường Tân An, Thành
-                                    Phố Buôn Ma Thuột, Đắk Lắk
+                                    {orderDetails?.User?.address}
                                  </p>
                               </div>
                            </div>
@@ -284,7 +258,7 @@ export default function OrderDetailPage() {
                                        ID ĐƠN HÀNG
                                     </p>
                                     <p className="max-xl:text-sm max-[870px]:text-xs">
-                                       #A{orderDetails.id}V
+                                       #000{orderDetails.id}
                                     </p>
                                  </div>
                                  <div className="border-r-[1px] border-[#FFAAAF] h-[25px] my-auto"></div>

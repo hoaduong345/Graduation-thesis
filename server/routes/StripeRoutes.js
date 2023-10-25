@@ -117,7 +117,12 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                 const orderItems = await getCartItems(line_items, event.data.object, iduser.metadata);
                 await axios
                     .post('http://localhost:5000/buyzzle/order', { order: orderItems })
-                    .then(() => console.log('order succssess'))
+                    .then(() => {
+                        console.log('order succssess');
+                        // orderItems.cartItems.map((e) => {
+                        //     return axios.delete(`http://localhost:5000/buyzzle/cart/${e.productId}`);
+                        // });
+                    })
                     .catch((err) => console.log(err));
                 break;
         }

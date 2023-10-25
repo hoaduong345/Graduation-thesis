@@ -47,6 +47,9 @@ const OderController = {
                 include: {
                     OrderDetail: true,
                 },
+                orderBy: {
+                    id: 'desc',
+                },
             });
             res.status(200).json(order);
         } catch (error) {

@@ -5,6 +5,7 @@ import { CartItem } from "../../../../Model/CartModel";
 import { PaymentMethod } from "./CheckOut";
 import { OrderItems } from "../../../../Model/OrderModel";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
+import { cartControllers } from "../../../../Controllers/CartControllers";
 
 export interface StripePayment {
    cartItems: CartItem[];
@@ -33,12 +34,15 @@ export default function PaymentBtn(props: StripePayment) {
                      window.location.href = res.data.url;
                   }
                })
+               .then(() => sessionStorage.removeItem("cartBuyzzle"))
                .catch((err) => console.log(err.message));
          }, 1000);
       } else if (method == "cash") {
          let item: OrderItems[] = [];
+         let subtotal = 0;
 
          cartItems?.map(async (e) => {
+            subtotal += e.product.sellingPrice * e.quantity;
             item.push({
                productId: e.product.id,
                name: e.product.name,
@@ -53,17 +57,25 @@ export default function PaymentBtn(props: StripePayment) {
             iduser: Number(idUser),
             method: "Thanh toán khi nhận hàng",
             cartItems: item,
-            amount_subtotal: 1,
+            amount_subtotal: subtotal,
             shipping: 30000,
-            discount: 1,
-            amount_total: 1,
+            discount: subtotal * (discount / 100),
+            amount_total: subtotal - subtotal * (discount / 100) + 30000,
          };
          setLoading(true);
          setTimeout(async () => {
-            await orderControllers.create(order).then(() => {
-               window.location.href = "/orderhistory";
-            });
-         }, 5000);
+            await orderControllers
+               .create(order)
+               .then(() => {
+                  window.location.href = "/orderhistory";
+                  sessionStorage.removeItem("cartBuyzzle");
+               })
+               .then(() => {
+                  order.cartItems.map((e) => {
+                     cartControllers.removeItemCart(e.productId);
+                  });
+               });
+         }, 3000);
       }
    };
 
