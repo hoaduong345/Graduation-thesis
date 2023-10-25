@@ -9,6 +9,7 @@ import {
 import {
   createSearchParams,
   useNavigate,
+  useParams,
   useSearchParams,
 } from "react-router-dom";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
@@ -48,8 +49,39 @@ export default function useSearchContext() {
 
   //////////////////////////////////////////////////////////IndexPages////////////////////////////////////////////////////////////////////////
   const [categoty, setCategory] = useState<Cate[]>([]);
+  const idsWithExampleName = categoty.filter((cate) => cate.id);
+  console.log(
+    "🚀 ~ file: SearchContextProvider.tsx:53 ~ useSearchContext ~ idsWithExampleName:",
+    idsWithExampleName
+  );
+  const [idaCate, setidaCate] = useState(0);
+  const getIdCate = () => {
+    const id = localStorage.getItem("cateId");
+    const idCate = JSON.parse(id!);
+    getProductWithinIdCate(idCate);
+    setidaCate(idCate);
+  };
+  useEffect(() => {
+    getIdCate();
+  }, []);
 
-  const [product, setProduct] = useState<Row[]>([]);
+  const getProductWithinIdCate = async (id: number) => {
+    console.log(
+      "🚀 ~ file: SearchContextProvider.tsx:265 ~ getProductWithinIdCate ~ id:",
+      id
+    );
+    await productController
+      .getProductWithIdCate(id)
+      .then((res: any) => {
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(
+          "🚀 ~ file: SearchContextProvider.tsx:266 ~ productController.getProductWithIdCate ~ err:",
+          err
+        );
+      });
+  };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -69,8 +101,7 @@ export default function useSearchContext() {
   }
   // Remove special characters and diacritics
   const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
-  const idCate = Number(cateId);
-  const categoryID = idCate.toString();
+  const categoryID = idaCate.toString();
 
   useEffect(() => {
     // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
@@ -80,7 +111,6 @@ export default function useSearchContext() {
     }
   }, [urlSliderValues]);
 
-  // Xử lý thay đổi giá trị slider và cập nhật URL
   useEffect(() => {
     setSearchParams(
       createSearchParams({
@@ -104,7 +134,8 @@ export default function useSearchContext() {
   };
   // Function to clear cleanedString and navigate
   const clearAndNavigate = () => {
-    navigate(`/FiltersPage`);
+    setSearchParams("");
+    navigate(`/FiltersPage?keyword=${cleanedData}`);
     setShowSuggestions(false);
   };
 
@@ -132,24 +163,6 @@ export default function useSearchContext() {
   }, [debouncedInputValue]);
 
   //////////////////////////////////////////////////////////filtersPage////////////////////////////////////////////////////////////////////////
-
-  useEffect(() => {
-    if (debouncedInputValueSlider) {
-      getProductSearchAndCategory({});
-    }
-  }, [debouncedInputValueSlider]);
-  const getProductSearchAndCategory = async (data: ModelProducts) => {
-    await productController
-      .getList(data)
-      .then((res: any) => {
-        setProducts(res.rows);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (stars) {
       setStarsnumber(roundedNumber(stars.averageRating));
@@ -160,20 +173,22 @@ export default function useSearchContext() {
     }
   }, [stars]);
 
-  const handleActiveBTNLowToHighClick = () => {
-    productController.getSortProductbyPrice("asc", cateId!).then((res: any) => {
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-        res
-      );
-      setActiveBtnLowToHigh(false);
-      setActiveBtnHighToLow(true);
-      setProducts(res.rows);
-    });
+  const handleActiveBTNLowToHighClick = async () => {
+    await productController
+      .getSortProductbyPrice("asc", idaCate)
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+          res
+        );
+        setActiveBtnLowToHigh(false);
+        setActiveBtnHighToLow(true);
+        setProducts(res.rows);
+      });
   };
-  const handleActiveBTNHighToLowClick = () => {
-    productController
-      .getSortProductbyPrice("desc", cateId!)
+  const handleActiveBTNHighToLowClick = async () => {
+    await productController
+      .getSortProductbyPrice("desc", idaCate)
       .then((res: any) => {
         console.log(
           "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
@@ -184,10 +199,10 @@ export default function useSearchContext() {
         setProducts(res.rows);
       });
   };
-  const handleActiveBTNLatestCreationDate = () => {
+  const handleActiveBTNLatestCreationDate = async () => {
     setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
-    productController
-      .getSortProductbyDateCreate("desc", cateId!)
+    await productController
+      .getSortProductbyDateCreate("desc", idaCate)
       .then((res: any) => {
         setProducts(res.rows);
       });
@@ -200,8 +215,8 @@ export default function useSearchContext() {
     }
   }, [searchValue]);
 
-  const getData = () => {
-    productController
+  const getData = async () => {
+    await productController
       .getAllProductsSearch(searchValue?.toString())
       .then((res: any) => {
         console.log(res);
@@ -210,8 +225,8 @@ export default function useSearchContext() {
         setProducts(res.rows);
       });
   };
-  const getSearchDataName = () => {
-    productController
+  const getSearchDataName = async () => {
+    await productController
       .getSearchAndPaginationProduct(searchValue?.toString())
       .then((res: any) => {
         console.log(res);
@@ -247,19 +262,19 @@ export default function useSearchContext() {
 
   //////////////////////////////////////////////////////////IndexPages////////////////////////////////////////////////////////////////////////
 
-  const getCategory = () => {
-    axios
+  const getCategory = async () => {
+    await axios
       .get("http://localhost:5000/buyzzle/product/allcategory")
       .then((response) => response.data)
       .then((data) => {
-        console.log("🚀 ~ file: index.tsx:50 ~ .then ~ data:", data);
+        console.log("🚀 ~ file: index.tsx:50 ~ .then ~ data:", data.id);
         setCategory(data);
       })
       .catch((err) => console.log(err));
   };
 
-  const getAllProducts = () => {
-    productController.getAllProducts().then((res: any) => {
+  const getAllProducts = async () => {
+    await productController.getAllProducts().then((res: any) => {
       console.log(
         "🚀 ~ file: index.tsx:58 ~ productController.getAllProducts ~ res:",
         res
@@ -300,8 +315,6 @@ export default function useSearchContext() {
     sliderValues,
     /////////////////////IndexPages////////////////////
     categoty,
-    product,
-    setProduct,
     categoryID,
   };
 }

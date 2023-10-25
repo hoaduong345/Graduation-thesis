@@ -18,6 +18,11 @@ class ProductController {
             return res.data as Products[]
         })
     }
+    getProductWithIdCate = async (id:number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?categoryId=${id}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
     getNameCate = async ( nameCate:string,min?: number, max?: number): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?categoryName=${nameCate}&minPrice=${min}&maxPrice=${max}`).then((res) => {
             return res.data as Products[]
@@ -38,12 +43,12 @@ class ProductController {
             return res.data as Products[]
         })
     }
-    getSortProductbyPrice = async (key: string, idCate:string): Promise<Products[]> => {
+    getSortProductbyPrice = async (key: string, idCate:number): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?sortByPrice=${key}&categoryId=${idCate}`).then((res) => {
             return res.data as Products[]
         })
     }
-    getSortProductbyDateCreate = async (key: string, idCate:string): Promise<Products[]> => {
+    getSortProductbyDateCreate = async (key: string, idCate:number): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?sortByDateCreate=${key}&categoryId=${idCate}`).then((res) => {
             return res.data as Products[]
         })

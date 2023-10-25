@@ -59,7 +59,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/FiltersPage",
+      path: "/FiltersPage/",
       element: (
         <MainLayout>
           <FiltersPage />

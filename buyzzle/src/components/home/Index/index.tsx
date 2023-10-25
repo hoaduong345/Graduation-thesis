@@ -61,7 +61,7 @@ const listVoucherBanner: VoucherBanner[] = [
 
 function Index() {
   useScroll();
-  const { categoty, product, categoryID } = useSearch();
+  const { categoty, products } = useSearch();
   return (
     <>
       <Container>
@@ -112,7 +112,7 @@ function Index() {
           {/* <div className="flex flex-wrap gap-[35px] justify-center"> */}
           <div className="grid grid-cols-6 gap-[35px] justify-center">
             {categoty.map((e) => {
-              return <Category id={categoryID} image={e.image} name={e.name} />;
+              return <Category id={e.id} image={e.image} name={e.name} />;
             })}
           </div>
         </div>
@@ -510,7 +510,7 @@ function Index() {
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
 
           <div className="flex flex-wrap gap-3 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
-            {product?.map((product) => {
+            {products?.map((product) => {
               return <Productss product={product} />;
             })}
           </div>
