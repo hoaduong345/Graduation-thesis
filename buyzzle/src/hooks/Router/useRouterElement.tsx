@@ -381,7 +381,7 @@ export default function useRouterEmelent() {
          ),
       },
       {
-         path: "invoice",
+         path: "invoice/:id",
          element: (
             <MainLayout>
                <InvoicesPage />

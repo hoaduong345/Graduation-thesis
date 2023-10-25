@@ -1,3 +1,5 @@
+import { UserModel } from "./UserModel";
+
 export interface OrderModel {
     id: number,
     iduser: number,
@@ -8,6 +10,7 @@ export interface OrderModel {
     paymentMethod: string,
     createdAt: string,
     status: string;
+    User: UserModel
     OrderDetail: OrderItems[]
 }
 export interface OrderItems {

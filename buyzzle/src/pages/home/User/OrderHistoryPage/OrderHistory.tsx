@@ -2,7 +2,7 @@ import { IonIcon } from "@ionic/react";
 import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
-import QuantityHistory from "../../../../Assets/TSX/QuantityHistory";
+// import QuantityHistory from "../../../../Assets/TSX/QuantityHistory";
 import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
@@ -76,7 +76,7 @@ export default function OrderHistory() {
             {/* Table history order */}
             <div className="flex-col mt-9 col-span-3 max-2xl:col-span-5">
                <h1 className="text-[32px] font-bold mb-4 max-lg:text-[28px] max-[870px]:text-2xl max-[769px]:text-xl">
-                  Đơn Hàng
+                  Danh Sách Đơn Hàng
                </h1>
                <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                   <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8 max-lg:text-xs">
@@ -99,39 +99,41 @@ export default function OrderHistory() {
                            order.map((e) => {
                               return (
                                  <>
-                                    <Accordion open={open === 1}>
+                                    <Accordion open={open === e.id}>
                                        <div
                                           className="w-full bg-black"
-                                          onClick={() => handleOpen(1)}
+                                          onClick={() => handleOpen(e.id)}
                                        >
                                           <div className="text-sm bg-black ">
                                              <div className="border-b dark:border-neutral-500 bg-white px-4">
                                                 <div className="cursor-pointer flex items-center py-4 w-full justify-start">
                                                    <div className="w-[5%]">
-                                                      {open ? (
+                                                      {open === e.id ? (
                                                          <ArrowDown />
                                                       ) : (
                                                          <ArrowNextHistory />
                                                       )}
                                                    </div>
                                                    <div className="w-[24%]">
-                                                      #{e.id}
+                                                      #ID: 000{e.id}
                                                    </div>
                                                    <div className="w-[20%]">
                                                       {currentDate(e.createdAt)}
                                                    </div>
-                                                   <div className="w-[22%]">
+                                                   <div className="w-[22%] text-center">
                                                       {numberFormat(e.subtotal)}{" "}
                                                       ({e.OrderDetail.length}{" "}
                                                       SP)
                                                    </div>
-                                                   <div className="w-[22%] ml-1">
-                                                      {e.status}
+                                                   <div className="w-[16%] text-center">
+                                                      {/* {e.status} */}
+                                                      Dang giao hang
                                                    </div>
                                                    <Link
                                                       to={`/orderdetail/${e.id}`}
+                                                      className="text-[#EA4B48] hover:text-[#ea4b48ad] text-center w-[13%]"
                                                    >
-                                                      Chi tiết
+                                                      Xem chi tiết
                                                    </Link>
                                                 </div>
                                              </div>
@@ -153,7 +155,14 @@ export default function OrderHistory() {
                                                    <th className=" px-6 py-2 w-[14%] font-normal">
                                                       Tổng
                                                    </th>
-                                                   <th className=" px-6 py-2 w-[14%] font-normal"></th>
+                                                   <th className=" px-6 py-2 w-[14%] font-normal">
+                                                      <Link
+                                                         to={`/invoice/${e.id}`}
+                                                         className="text-[#EA4B48]"
+                                                      >
+                                                         Invoice
+                                                      </Link>
+                                                   </th>
                                                 </tr>
                                              </thead>
                                              <tbody>

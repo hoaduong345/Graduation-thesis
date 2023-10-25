@@ -64,6 +64,7 @@ const OderController = {
                 },
                 include: {
                     OrderDetail: true,
+                    User: true,
                 },
             });
             res.status(200).json(order);

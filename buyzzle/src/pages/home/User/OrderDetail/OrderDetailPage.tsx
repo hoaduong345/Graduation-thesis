@@ -18,7 +18,7 @@ import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { userController } from "../../../../Controllers/UserController";
 import { UserModel } from "../../../../Model/UserModel";
 import { numberFormat } from "../../../../Helper/Format";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
 import { OrderModel } from "../../../../Model/OrderModel";
 
@@ -224,9 +224,11 @@ export default function OrderDetailPage() {
                <div className="col-span-3 max-2xl:col-span-5">
                   <div className="back h-[57px] mt-[46px] ">
                      <div className="flex gap-3 items-center">
-                        <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
-                           <Back />
-                        </div>
+                        <Link to={"/orderhistory"}>
+                           <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
+                              <Back />
+                           </div>
+                        </Link>
                         <div>
                            <p className="font-normal text-sm max-xl:text-xs max-lg:text-[10px]">
                               Quay lại danh sách đơn hàng
