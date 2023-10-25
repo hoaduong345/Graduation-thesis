@@ -77,6 +77,14 @@ export const Images = {
   zalo: "../src/Assets/PNG/Logo-ZaloPay.png",
   nhanHang: "../src/Assets/PNG/nhanhang.png",
   detailHover: "../src/Assets/PNG/Line 56.png",
-  visa: "../src/Assets/PNG/294654_visa_icon.png",
+  viettelpost: "../src/Assets/JPG/VTPost.jpg",
+  ghn: "../src/Assets/PNG/GHN.png",
+  bestex: "../src/Assets/PNG/bestex.png",
+  GHTK: "../src/Assets/PNG/GHTK.png",
+  ninjavan: "../src/Assets/PNG/ninjavan.png",
+  JT: "../src/Assets/PNG/J&T.png",
+  vnpost: "../src/Assets/PNG/vnpost.png",
+  momo2: "../src/Assets/PNG/momo2.png",
+  zalopay: "../src/Assets/PNG/zalopay.png"
 };
 

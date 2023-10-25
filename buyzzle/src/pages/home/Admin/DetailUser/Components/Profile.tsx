@@ -116,7 +116,6 @@ export default function UserProfile() {
 
 
       <body className="body-filter container mx-auto">
-
         <div>
           <div className="grid grid-cols-1 gap-1">
             <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-1 gap-1">

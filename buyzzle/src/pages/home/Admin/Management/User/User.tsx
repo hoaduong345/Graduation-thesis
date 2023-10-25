@@ -17,10 +17,7 @@ export interface users {
   name: string;
   email: string;
   sex: string;
-
-
 }
-
 
 export default function User() {
   const active = [
@@ -62,42 +59,40 @@ export default function User() {
     },
   ];
 
-
   let status = "Hoạt động";
   const [users, setUsers] = useState<any>({});
   const getAllUserData = () => {
-    userController.getAllUser()
+    userController
+      .getAllUser()
       .then((res) => {
         return res;
       })
       .then((res) => {
-
         setUsers(res);
         console.log("Test" + JSON.stringify(res));
-      })
-
-  }
+      });
+  };
 
   useEffect(() => {
     getAllUserData();
-  }, [])
+  }, []);
 
-
-  function JumpEditUser(username: any){
+  function JumpEditUser(username: any) {
     window.location.href = `detailuser/${username}`;
   }
 
   const DeleteUser = (id: any) => {
-    userController.deleteUser(id)
-      .then((_) => {
+    userController
+      .deleteUser(id)
+      .then((res) => {
         toast.success("Xóa thành công !");
+        console.log("res:"+res);
         getAllUserData();
       })
       .catch(() => {
         toast.error("Xóa thất bại !");
       });
-  }
-
+  };
 
   return (
     <Container>
@@ -141,7 +136,6 @@ export default function User() {
             <table className="w-full text-left ">
               <thead className="text-base text-[#4C4C4C] border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-[11px]">
                 <tr>
-                 
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
@@ -188,19 +182,16 @@ export default function User() {
                 </tr>
               </thead>
 
-
               {users?.length > 0 ? (
                 users?.map((items: any) => {
                   return (
                     <>
                       <tbody>
                         <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-                          
                           <th
                             scope="row"
                             className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
                           >
-
                             {items.id}
                           </th>
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
@@ -210,22 +201,20 @@ export default function User() {
                             {items.email}
                           </td>
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.sex ? (
-                              items.sex = "Nam"
-                            ) : (
-                              items.sex = "Nữ"
-                            )}
+                            {items.sex
+                              ? (items.sex = "Nam")
+                              : (items.sex = "Nữ")}
                           </td>
-                        
+
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
                             3999999
-
                           </td>
                           <td
-                            className={`${status == "Hoạt động"
-                              ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                              : "text-[#FF8A00] "
-                              }`}
+                            className={`${
+                              status == "Hoạt động"
+                                ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
+                                : "text-[#FF8A00] "
+                            }`}
                           >
                             Hoạt động
                           </td>
@@ -233,7 +222,7 @@ export default function User() {
                             scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
-                             <input
+                            <input
                               type="checkbox"
                               className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
                             />
@@ -251,20 +240,24 @@ export default function User() {
                                                 max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
                               >
                                 <li>
-                                  <button className="flex items-center gap-4"
-                                   onClick={() => JumpEditUser(items.username)}
+                                  <button
+                                    className="flex items-center gap-4"
+                                    onClick={() => JumpEditUser(items.username)}
                                   >
                                     <Edit />
                                     <p
                                       className="text-[#EA4B48] text-sm font-medium
                                             max-[940px]:text-xs "
                                     >
-                                      Sửa
+                                      Xem chi tiết
                                     </p>
                                   </button>
                                 </li>
                                 <li>
-                                  <button onClick={() => (DeleteUser(items.id))} className="flex items-center gap-4">
+                                  <button
+                                    onClick={() => DeleteUser(items.id)}
+                                    className="flex items-center gap-4"
+                                  >
                                     <RemoveCate />
                                     <p
                                       className="text-[#EA4B48] text-sm font-medium
@@ -276,7 +269,6 @@ export default function User() {
                                 </li>
                               </ul>
                             </div>
-                           
                           </th>
                         </tr>
                       </tbody>
@@ -285,98 +277,82 @@ export default function User() {
                 })
               ) : (
                 <>
-                <tbody>
-                        <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-                          
-                          <th
-                            scope="row"
-                            className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                          >
+                  <tbody>
+                    <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
+                      <th
+                        scope="row"
+                        className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
+                      ></th>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
 
-                       
-                          </th>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                   
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                        
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                          
-                          </td>
-                        
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            3999999
-
-                          </td>
-                          <td
-                            className={`${status == "Hoạt động"
-                              ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                              : "text-[#FF8A00] "
-                              }`}
+                      <td className="px-3 py-5 max-lg:py-3 justify-center">
+                        3999999
+                      </td>
+                      <td
+                        className={`${
+                          status == "Hoạt động"
+                            ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
+                            : "text-[#FF8A00] "
+                        }`}
+                      >
+                        Hoạt động
+                      </td>
+                      <th
+                        scope="row"
+                        className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
+                      >
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                        />
+                        <div className="dropdown dropdown-right ">
+                          <label
+                            className="max-lg:w-[24px] max-lg:h-[24px]"
+                            tabIndex={1}
                           >
-                            Hoạt động
-                          </td>
-                          <th
-                            scope="row"
-                            className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                          >
-                             <input
-                              type="checkbox"
-                              className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                            />
-                            <div className="dropdown dropdown-right ">
-                              <label
-                                className="max-lg:w-[24px] max-lg:h-[24px]"
-                                tabIndex={1}
-                              >
-                                <Handle />
-                              </label>
-                              <ul
-                                tabIndex={0}
-                                className="dropdown-content menu bg-white rounded-box w-52
+                            <Handle />
+                          </label>
+                          <ul
+                            tabIndex={0}
+                            className="dropdown-content menu bg-white rounded-box w-52
                                                 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                                 max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                              >
-                                <li>
-                                  <button className="flex items-center gap-4"
-                             
-                                  >
-                                    <Edit />
-                                    <p
-                                      className="text-[#EA4B48] text-sm font-medium
+                          >
+                            <li>
+                              <button className="flex items-center gap-4">
+                                <Edit />
+                                <p
+                                  className="text-[#EA4B48] text-sm font-medium
                                             max-[940px]:text-xs "
-                                    >
-                                      Sửa
-                                    </p>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button className="flex items-center gap-4">
-                                    <RemoveCate />
-                                    <p
-                                      className="text-[#EA4B48] text-sm font-medium
+                                >
+                                  Sửa
+                                </p>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="flex items-center gap-4">
+                                <RemoveCate />
+                                <p
+                                  className="text-[#EA4B48] text-sm font-medium
                                              max-[940px]:text-xs "
-                                    >
-                                      Xóa
-                                    </p>
-                                  </button>
-                                </li>
-                              </ul>
-                            </div>
-                           
-                          </th>
-                        </tr>
-                      </tbody>
+                                >
+                                  Xóa
+                                </p>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </th>
+                    </tr>
+                  </tbody>
                   <EmptyPage
                     title="Danh sách sản phẩm trống"
                     button="Thêm Ngay"
                   />
                 </>
               )}
-
-
-
             </table>
           </div>
         </div>

@@ -286,9 +286,9 @@ export default function OrderManagement() {
             {changeButton.map((btnItems) => {
               return (
                 <button
-                  className={`bg-white btn`}
+                  className={`bg-white btn `}
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: "white ",
                     borderColor: btnItems.active
                       ? getBorderColor(btnItems.id)
                       : "",
@@ -354,10 +354,10 @@ export default function OrderManagement() {
             </div>
             {/* end checkBox */}
             <div className="col-span-1 flex items-center gap-4 justify-end">
-              <div className="border-[#EA4B48] border-[1px] p-3 rounded-md hover:bg-[#ffe0e0] cursor-pointer">
+              <div className="border-[#EA4B48] border-[1px] p-3 rounded-md hover:bg-[#ffe0e0] cursor-pointer transition-all duration-150">
                 <RemoveCate />
               </div>
-              <div className="border-[#107C41] border-[1px] p-3 rounded-md hover:bg-[#d7fee1] cursor-pointer">
+              <div className="border-[#107C41] border-[1px] p-3 rounded-md hover:bg-[#d7fee1] cursor-pointer transition-all duration-150">
                 <Excel />
               </div>
             </div>

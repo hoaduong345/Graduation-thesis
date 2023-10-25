@@ -8,7 +8,7 @@ const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
 const InvoiceRouter = require('./routes/InvoiceRoutes');
-// const OrderRouter = require('./routes/OrderRoutes');
+const OrderRouter = require('./routes/OrderRoutes');
 const StatisticsRouter = require('./routes/Statistics_Router');
 
 const ProductRoutes = require('./routes/ProductRoutes');
@@ -60,6 +60,7 @@ app.use('/buyzzle/statistics', StatisticsRouter);
 app.use('/buyzzle/invoice', InvoiceRouter);
 // app.use('buyzzle/stripe', SripeRouter);
 app.use('/buyzzle/stripe', SripeRouter);
+app.use('/buyzzle/order', OrderRouter)
 
 app.use("/admin", AdminRouter);
 

@@ -99,6 +99,11 @@ class ProductController {
         })
     }
    
+    getProductWhereRatting = async (rate: number): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?rating=${rate}`).then((res) => {
+            return res.data as Products[]
+        })
+    }
 }
 
 export const productController = new ProductController()

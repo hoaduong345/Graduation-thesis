@@ -30,6 +30,7 @@ import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
 import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
+import LoginAdmin from "../../pages/home/Admin/LoginAdmin/AdminLogin";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -580,6 +581,14 @@ export default function useRouterEmelent() {
           path: "detailuser/:username",
           element: <DetailUser />,
         },
+
+        // {
+        //   path: "loginadmin",
+        //   element:
+        //   <RegisterLoginLayout>
+        //     <LoginAdmin />
+        //     </RegisterLoginLayout>,
+        // },
         {
           path: "ordermanagement",
           element: <OrderManagement />,
@@ -589,8 +598,21 @@ export default function useRouterEmelent() {
           element: <User />,
         },
       ],
+      
     },
-
+    {
+      path: "/admin",
+      children: [
+        {
+          path: "loginadmin",
+          element: (
+            <RegisterLoginLayout>
+              <LoginAdmin />
+            </RegisterLoginLayout>
+          ),
+        },
+      ],
+    },
     {
       path: path.resetpassword,
       element: (

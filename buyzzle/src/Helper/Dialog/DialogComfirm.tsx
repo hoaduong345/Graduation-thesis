@@ -16,14 +16,6 @@ export default function DialogComfirm(props: Props) {
       <>
          <dialog id={id} className="modal">
             <div className="modal-box">
-               <form method="dialog">
-                  <button
-                     onClick={() => onClose()}
-                     className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                  >
-                     ✕
-                  </button>
-               </form>
                <div className="pb-4 mb-5 ">
                   <div className="flex-col flex gap-2 justify-center items-center">
                      <ComfirmIcon />

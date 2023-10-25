@@ -1,28 +1,16 @@
-import { ChangeEvent, Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
-import Sitebar from "../Sitebar/Sitebar";
-import { ChangeHandler, Controller, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import HidePass from "../../../../../Assets/TSX/HidePass";
 import ShowPass from "../../../../../Assets/TSX/ShowPass";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { bool, boolean } from "yup";
-import { userController } from "../../../../../Controllers/UserController";
-import { isDate } from "util/types";
 
 type FormValues = {
-  username: string;
-  name: string;
-  email: string;
-  sex: string;
-  phonenumber: number;
-  dateOfBirth: string;
   oldPassword: string;
   newPassword: string;
   confirmNewPassword: string;
-  // fullName: string,
-  // Address: string
 };
 
 export default function ChangePassword() {
@@ -83,21 +71,6 @@ export default function ChangePassword() {
     setShowPassword3(!showPassword3);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData2({
-      ...formData2,
-      [name]: value,
-    });
-
-    if (isFormSubmitted) {
-      setErrors({
-        ...errorss,
-        [name]: "",
-      });
-    }
-  };
-
   const API2 = "http://localhost:5000/buyzzle/auth/changepassword";
   const onSubmit2 = async (formData: FormValues) => {
     try {
@@ -124,28 +97,12 @@ export default function ChangePassword() {
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
-        if (responseData.error) {
-          console.log(`Lỗi2: ${responseData.error}`);
-          const errorMessageoldPassword = responseData.error.oldPassword;
-          const errorMessagenewPassword = responseData.error.newPassword;
-          const errorMessageconfirmNewPassword =
-            responseData.error.confirmNewPassword;
-          if (errorMessageoldPassword) {
-            toast.warning(errorMessageoldPassword, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessagenewPassword) {
-            toast.warning(errorMessagenewPassword, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageconfirmNewPassword) {
-            toast.warning(errorMessageconfirmNewPassword, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          }
+        if (responseData) {
+          console.log(`Lỗi2: ${responseData}`);
+          toast.warning(responseData, {
+            position: "top-right",
+            autoClose: 5000,
+          });
         } else {
           console.log("Lỗi không xác định từ server");
         }
@@ -175,7 +132,6 @@ export default function ChangePassword() {
                     </span>
                     <div className="border-[1px] border-[#E0E0E0] w-full my-4 "></div>
                     <div className="w-[100%]">
-                      {/* <div className='w-[100%]'> */}
                       <Controller
                         control={control}
                         name="oldPassword"
@@ -198,7 +154,6 @@ export default function ChangePassword() {
                             >
                               Mật khẩu hiện tại
                             </label>
-                            {/* input addNameProducts */}
                             <div className="relative w-full items-center">
                               <button
                                 type="button"
@@ -224,7 +179,6 @@ export default function ChangePassword() {
                           </>
                         )}
                       />
-                      {/* </div> */}
                       <div className="flex w-[100%] justify-between  mt-4">
                         <Controller
                           control={control}
@@ -242,7 +196,6 @@ export default function ChangePassword() {
                           }}
                           render={({ field }) => (
                             <>
-                              {/* input addNameProducts */}
                               <div className="w-[48%]">
                                 <label
                                   htmlFor="name"
@@ -296,7 +249,6 @@ export default function ChangePassword() {
                           }}
                           render={({ field }) => (
                             <>
-                              {/* input addNameProducts */}
                               <div className="w-[48%]">
                                 <label
                                   htmlFor="name"
@@ -335,7 +287,6 @@ export default function ChangePassword() {
                           )}
                         />
                       </div>
-                      {/* button */}
                       <div className="flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] mt-5">
                         <button
                           className={`text-center text-base font-bold text-[#FFFFFF]`}

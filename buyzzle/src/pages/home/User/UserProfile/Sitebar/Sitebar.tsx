@@ -30,7 +30,7 @@ const listSitebar: SitebarUser[] = [
   {
     icon: <HistoryBought />,
     pathName: "/orderhistory",
-    title: "Lịch sử mua hàng",
+    title: <p>Lịch sử đơn hàng</p>,
   },
   {
     icon: <Voucher />,
@@ -84,8 +84,8 @@ export default function Sitebar() {
                         hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4
                          ${
                            e.pathName == pathname
-                             ? `bg-[#FFEAE9] rounded-md`
-                             : `bg-white`
+                             ? `bg-[#FFEAE9] rounded-md text-[#EA4B48]`
+                             : `bg-white text-[#7A828A]`
                          }   `}
               >
                 {e.icon}
