@@ -56,7 +56,12 @@ export type Props = {
   maxPrice: number;
   onChangeSlider(min: number, max: number): void;
 };
+export interface RatingStar {
+  checked: boolean;
+  rating: number;
 
+  onChangeFilter(tittle: string): void;
+}
 export interface PriceRangeFilterPage {
   minPrice: number;
   maxPrice: number;
@@ -200,18 +205,36 @@ export default function FiltersPage() {
       });
   };
 
+  const getProductsWhereRating = (rate: any) => {
+    productController
+      .getProductWhereRatting(rate)
+      .then((res: any) => {
+        // const [product, setProducts] = useState<Row[]>([]);
+        console.log("Ratting fillter" + res);
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  
   return (
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
             <SitebarFilter
-              onPurchaseRangeChange={() => console.log("")}
-              onSoldOut={() => console.log("")}
-              oninStock={() => console.log("")}
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
+              onRateChange={(e: any) => getProductsWhereRating(e)} onPurchaseRangeChange={function (value: [number, number]): void {
+                throw new Error("Function not implemented.");
+              } } oninStock={function (availability: boolean): void {
+                throw new Error("Function not implemented.");
+              } } onSoldOut={function (soldOut: boolean): void {
+                throw new Error("Function not implemented.");
+              } }        
             />
           </div>
           {/* content-right-filter */}
@@ -372,7 +395,7 @@ export default function FiltersPage() {
               <p>KẾT QUẢ TÌM KIẾM VỚI: {keywordSearch.slice(13)}</p>
             </div>
 
-            <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
+            <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
               {products?.map((items) => {
                 return <Filter starsnumber={starsnumber} product={items} />;
               })}
