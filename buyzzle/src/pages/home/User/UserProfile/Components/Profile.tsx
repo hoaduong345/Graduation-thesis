@@ -161,7 +161,7 @@ export default function UserProfile() {
   // img firebase
   const loadImageFile = async (image: any) => {
     try {
-      const imageRef = ref(storage, `multipleFiles/${image}`);
+      const imageRef = ref(storage, `imageUrl/${image}`);
 
       await uploadBytes(imageRef, image);
 
