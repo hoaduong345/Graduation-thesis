@@ -177,6 +177,14 @@ const AdminController = {
     }
   },
 
+  updateImageAdmin : async ( req, res) =>{
+      try{
+
+      }catch(error){
+        
+      }
+  },
+
   
 };
 
