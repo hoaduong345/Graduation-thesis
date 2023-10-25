@@ -24,7 +24,7 @@ export default function PaymentBtn(props: StripePayment) {
             await paymentControllers
                .createPayment({
                   cartItems: cartItems,
-                  method: "stripe",
+                  method: method,
                   discount: discount,
                   idUser: Number(idUser),
                })
@@ -40,7 +40,7 @@ export default function PaymentBtn(props: StripePayment) {
 
          cartItems?.map(async (e) => {
             item.push({
-               productId: e.productid,
+               productId: e.product.id,
                name: e.product.name,
                image: e.product.ProductImage[0].url,
                price: e.product.sellingPrice,
@@ -51,6 +51,7 @@ export default function PaymentBtn(props: StripePayment) {
 
          let order = {
             iduser: Number(idUser),
+            method: "Thanh toán khi nhận hàng",
             cartItems: item,
             amount_subtotal: 1,
             shipping: 30000,

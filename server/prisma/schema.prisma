@@ -240,18 +240,19 @@ model Rating {
 //   deletedAt       DateTime?
 // }
 model Order {
-  id          Int           @id @default(autoincrement())
-  userId      Int?
-  status      String?
-  subtotal    Int?
-  shipping    Int?
-  discount    Int?
-  amountTotal Int?
-  createdAt   DateTime?     @default(now())
-  updatedAt   DateTime?     @default(now())
-  deletedAt   DateTime?
-  OrderDetail OrderDetail[]
-  User        User?         @relation(fields: [userId], references: [id])
+  id            Int           @id @default(autoincrement())
+  userId        Int?
+  status        String?
+  subtotal      Int?
+  shipping      Int?
+  discount      Int?
+  amountTotal   Int?
+  paymentMethod String?
+  createdAt     DateTime?     @default(now())
+  updatedAt     DateTime?     @default(now())
+  deletedAt     DateTime?
+  OrderDetail   OrderDetail[]
+  User          User?         @relation(fields: [userId], references: [id])
 }
 
 model OrderDetail {

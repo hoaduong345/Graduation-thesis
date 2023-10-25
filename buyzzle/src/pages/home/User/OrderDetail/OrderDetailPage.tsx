@@ -274,7 +274,7 @@ export default function OrderDetailPage() {
                            </div>
                         </div>
 
-                        <div className="w-[40%] max-lg:w-[45%] flex flex-col gap-7 p-[20px] border-[#6C6C6C40] border-[1px] rounded-md">
+                        <div className="w-[40%] max-lg:w-[45%] flex flex-col gap-5 p-[20px] border-[#6C6C6C40] border-[1px] rounded-md">
                            <div className="">
                               <div className="flex gap-5 max-xl:gap-3 max-lg:gap-0">
                                  <div>
@@ -282,7 +282,7 @@ export default function OrderDetailPage() {
                                        ID ĐƠN HÀNG
                                     </p>
                                     <p className="max-xl:text-sm max-[870px]:text-xs">
-                                       #A23V
+                                       #A{orderDetails.id}V
                                     </p>
                                  </div>
                                  <div className="border-r-[1px] border-[#FFAAAF] h-[25px] my-auto"></div>
@@ -291,7 +291,7 @@ export default function OrderDetailPage() {
                                        PHƯƠNG THỨC THANH TOÁN
                                     </p>
                                     <p className="max-xl:text-sm max-[870px]:text-xs">
-                                       Thẻ tín dụng
+                                       {orderDetails.paymentMethod}
                                     </p>
                                  </div>
                               </div>
@@ -302,7 +302,7 @@ export default function OrderDetailPage() {
                                  Tổng Giá Sản Phẩm:{" "}
                               </p>
                               <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
-                                 {/* {numberFormat(calculatePrice())} */}
+                                 {numberFormat(orderDetails.subtotal)}
                               </p>
                            </div>
                            <div className="flex justify-between border-t-[1px] pt-2">
@@ -311,16 +311,26 @@ export default function OrderDetailPage() {
                               </p>
                               <div className="flex gap-1">
                                  <p className="text-sm text-[#FFAAAF] line-through max-[870px]:text-[11px]">
-                                    {numberFormat(0)}
+                                    {numberFormat(orderDetails.discount)}
                                  </p>
                               </div>
                            </div>
                            <div className="flex justify-between border-t-[1px] pt-2">
                               <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
-                                 Tổng Phí:{" "}
+                                 Phí Giao Hàng:{" "}
+                              </p>
+                              <div className="flex gap-1">
+                                 <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
+                                    {numberFormat(orderDetails.shipping)}
+                                 </p>
+                              </div>
+                           </div>
+                           <div className="flex justify-between border-t-[1px] pt-2">
+                              <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
+                                 Tổng Thanh Toán:{" "}
                               </p>
                               <p className="text-xl text-[#EA4B48] font-semibold max-[870px]:text-sm">
-                                 {/* {numberFormat(calculatePrice())} */}
+                                 {numberFormat(orderDetails.amountTotal)}
                               </p>
                            </div>
                         </div>

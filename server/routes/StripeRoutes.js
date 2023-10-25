@@ -39,6 +39,7 @@ app.post('/create-checkout-session', async (req, res) => {
         const customer = await stripe.customers.create({
             metadata: {
                 idUser: req.body.idUser,
+                paymentMethod: req.body.method,
             },
         });
         const coupon = await stripe.coupons.create({
@@ -71,23 +72,24 @@ app.post('/create-checkout-session', async (req, res) => {
     }
 });
 
-const getCartItems = async (line_items, object, iduser) => {
+const getCartItems = async (line_items, object, metadata) => {
     return new Promise((resolve, reject) => {
         let cartItems = [];
         let order = {
-            iduser: parseInt(iduser),
+            iduser: parseInt(metadata.idUser),
             cartItems,
             amount_subtotal: object.amount_subtotal,
             shipping: object.total_details.amount_shipping,
             discount: object.total_details.amount_discount,
             amount_total: object.amount_total,
+            method: 'Thẻ tín dụng',
         };
         line_items?.data?.map(async (element) => {
             const product = await stripe.products.retrieve(element.price.product);
             const id = parseInt(product.metadata.productId);
 
             cartItems.push({
-                productid: id,
+                productId: id,
                 name: product.name,
                 image: product.images[0],
                 price: element.price.unit_amount,
@@ -112,7 +114,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
             case 'checkout.session.completed':
                 const line_items = await stripe.checkout.sessions.listLineItems(event.data.object.id);
                 const iduser = await stripe.customers.retrieve(event.data.object.customer);
-                const orderItems = await getCartItems(line_items, event.data.object, iduser.metadata.idUser);
+                const orderItems = await getCartItems(line_items, event.data.object, iduser.metadata);
                 await axios
                     .post('http://localhost:5000/buyzzle/order', { order: orderItems })
                     .then(() => console.log('order succssess'))

@@ -13,13 +13,14 @@ const OderController = {
                     shipping: orderData.shipping,
                     discount: orderData.discount,
                     amountTotal: orderData.amount_total,
+                    paymentMethod: orderData.method,
                 },
             });
             orderData.cartItems.map(async (e) => {
                 await prisma.orderDetail.create({
                     data: {
                         orderId: order.id,
-                        productId: e.productid,
+                        productId: e.productId,
                         name: e.name,
                         image: e.image,
                         price: e.price,

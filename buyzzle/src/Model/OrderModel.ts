@@ -5,6 +5,7 @@ export interface OrderModel {
     shipping: number,
     discount: number,
     amountTotal: number,
+    paymentMethod: string,
     createdAt: string,
     status: string;
     OrderDetail: OrderItems[]
