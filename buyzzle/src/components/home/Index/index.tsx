@@ -18,6 +18,7 @@ import VoucherBuyzzle from "../../../Assets/TSX/VoucherBuyzzle";
 import { Link } from "react-router-dom";
 import LogoVoucherBuyzzle from "../../../Assets/TSX/LogoVoucherBuyzzle";
 import LogoVoucherFreeship from "../../../Assets/TSX/LogoVoucherFreeship";
+import { useSearch } from "../../../hooks/Search/SearchContextProvider";
 
 export type Product = {
   id: number;
@@ -60,34 +61,7 @@ const listVoucherBanner: VoucherBanner[] = [
 
 function Index() {
   useScroll();
-  const [categoty, setCategory] = useState<Cate[]>([]);
-  const [product, setProducts] = useState<Row[]>([]);
-
-  const getCategory = () => {
-    axios
-      .get("http://localhost:5000/buyzzle/product/allcategory")
-      .then((response) => response.data)
-      .then((data) => {
-        console.log("🚀 ~ file: index.tsx:50 ~ .then ~ data:", data);
-        setCategory(data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getAllProducts = () => {
-    productController.getAllProducts().then((res: any) => {
-      console.log(
-        "🚀 ~ file: index.tsx:58 ~ productController.getAllProducts ~ res:",
-        res
-      );
-      setProducts(res.rows);
-    });
-  };
-  useEffect(() => {
-    getCategory();
-    getAllProducts();
-  }, []);
-
+  const { categoty, product, categoryID } = useSearch();
   return (
     <>
       <Container>
@@ -138,7 +112,7 @@ function Index() {
           {/* <div className="flex flex-wrap gap-[35px] justify-center"> */}
           <div className="grid grid-cols-6 gap-[35px] justify-center">
             {categoty.map((e) => {
-              return <Category id={e.id} image={e.image} name={e.name} />;
+              return <Category id={categoryID} image={e.image} name={e.name} />;
             })}
           </div>
         </div>
