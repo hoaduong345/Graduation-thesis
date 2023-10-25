@@ -4,9 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import * as yup from "yup";
 import { userController } from "../../../../../Controllers/UserController";
-import { Console } from "console";
 
 type FormValues = {
   id: number;
@@ -112,7 +110,6 @@ export default function PaymentAddress() {
       const user = localStorage.getItem("user");
       if (user != null) {
         setValidUrl(true);
-        // console.log("data", data)
       } else {
         setValidUrl(false);
       }
@@ -158,8 +155,7 @@ export default function PaymentAddress() {
 
   const sendToDatabase = async (formData: FormValues) => {
     try {
-      const response1 = await axios.put(API, formData); // Gọi API1
-
+      const response1 = await axios.put(API, formData);
       return response1;
     } catch (error) {
       throw error;
@@ -171,7 +167,6 @@ export default function PaymentAddress() {
       console.log("TESTING: " + formData);
       const response1 = await sendToDatabase(formData);
       console.log("edit thanh cong", response1);
-
       if (response1.status === 200) {
         console.log("Edit successfully");
         toast.success("Cập nhật thành công", {
@@ -189,48 +184,19 @@ export default function PaymentAddress() {
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-        if (responseData.error) {
-          console.log(`Lỗi2: ${responseData.error}`);
-          const errorMessageUsername = responseData.error.username;
-          const errorMessageAddresstype = responseData.error.addresstype;
-          const errorMessageAddress = responseData.error.address;
-          const errorMessageSpecificaddress = responseData.error.specificaddress;
-          if (errorMessageUsername) {
-            toast.warning(errorMessageUsername, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageAddresstype) {
-            toast.warning(errorMessageAddresstype, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageAddress) {
-            toast.warning(errorMessageAddress, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageSpecificaddress) {
-            toast.warning(errorMessageSpecificaddress, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else {
-            console.log("Lỗi không xác định từ server");
-          }
+        if (responseData) {
+          console.log(`Lỗi2: ${responseData}`);
+          toast.warning(responseData, {
+            position: "top-right",
+            autoClose: 5000,
+          });
         } else {
-          console.error("Lỗi gửi yêu cầu không thành công", error);
+          console.log("Lỗi không xác định từ server");
         }
+      } else {
+        console.error("Lỗi gửi yêu cầu không thành công", error);
       }
     }
-  };
-
-  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(JSON.parse(event.target.value));
-  };
-
-  const onChangeInput = (e: any) => {
-    setAddress(e.target.value);
   };
 
   return (
@@ -287,8 +253,6 @@ export default function PaymentAddress() {
                                             }`}
                                   placeholder="Họ và tên"
                                   value={field.value}
-                                  // {...register("username")}
-                                  // onChange={onChangeInput}
                                 />
                                 {!!errors.username && (
                                   <p className="text-red-700 mt-2">
@@ -298,13 +262,11 @@ export default function PaymentAddress() {
                               </>
                             )}
                           />
-                          {/* end input addNameProducts */}
                         </div>
                         <div className="w-[43%]">
                           <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
                             Loại đỉa chỉ*
                           </p>
-                          {/* Dropdown */}
                           <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                             <Controller
                               name="addresstype"
@@ -312,8 +274,7 @@ export default function PaymentAddress() {
                               render={({ field }) => (
                                 <select
                                   className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
-                                  {...field} // Sử dụng {...field} để gán giá trị và sự kiện onChange tự động
-                                >
+                                  {...field}>
                                   <option value="Địa chỉ văn phòng">
                                     Địa chỉ văn phòng
                                   </option>
@@ -336,11 +297,10 @@ export default function PaymentAddress() {
                               <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
                                 Địa chỉ*
                               </p>
-                              {/* Dropdown */}
                               <div className="w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                 <select
                                   className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
-                                  value={field.value} // Sử dụng field.value thay vì selectedOption
+                                  value={field.value}
                                   {...register("address")}
                                   onChange={(e) => {
                                     const value = e.target.value;
@@ -378,7 +338,6 @@ export default function PaymentAddress() {
                               >
                                 Địa chỉ cụ thể
                               </label>
-                              {/* input addNameProducts */}
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
@@ -403,7 +362,6 @@ export default function PaymentAddress() {
                             </>
                           )}
                         />
-                        {/* end input addNameProducts */}
                       </div>
                     </div>
                     <div className="rightAdressMap w-[46%]">
@@ -415,8 +373,6 @@ export default function PaymentAddress() {
                       />
                     </div>
                   </div>
-
-                  {/* button */}
                   <div
                       className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
                         ? "bg-[#aeaeae] cursor-not-allowed"
