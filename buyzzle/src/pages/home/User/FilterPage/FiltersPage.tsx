@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
 import { Images } from "../../../../Assets/TS";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
@@ -7,17 +5,12 @@ import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 import Series from "../../../../Assets/TSX/Series";
 import StepsLogo from "../../../../Assets/TSX/StepsLogo";
-import { productController } from "../../../../Controllers/ProductsController";
 import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
 import Container from "../../../../components/container/Container";
 import SlidesFilter from "../../../../components/home/components/slides/SlidesFilter/SlidesFilter";
+import { useSearch } from "../../../../hooks/Search/SearchContextProvider";
 import "../../../css/filter.css";
 import Filter from "./Filter";
-import useDebounce from "../../../../useDebounceHook/useDebounce";
-import { Rate, Row } from "../../../../Model/ProductModel";
-import axios from "axios";
-import { appConfig } from "../../../../configsEnv";
-import { roundedNumber } from "../../../../Helper/Format";
 export interface Cate {
   id: number;
   name: string;
@@ -65,140 +58,19 @@ export interface PriceRangeFilterPage {
   onChangeSlider(min: number, max: number): void;
 }
 export default function FiltersPage() {
-  const [products, setProducts] = useState<Row[]>([]);
-  const [stars, setStars] = useState<Rate>();
-  const [starsnumber, setStarsnumber] = useState(0);
-  // Button FIlterPage
-  const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
-  const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
-  const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
-    useState(true);
-
-  // Slider Price SiteBarFilterPages
-  const [sliderValues, setSliderValues] = useState<[number, number]>([
-    0, 10000000000,
-  ]);
-  const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
-
-  const { id: nameCate } = useParams();
-  const cateName = String(nameCate);
-  console.log(
-    "🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:",
-    cateName
-  );
-  const { pathname } = useLocation();
-  const keywordSearch = decodeURIComponent(pathname);
-  console.log(
-    "🚀 ~ file: FiltersPage.tsx:79 ~ FiltersPage ~ text:",
-    keywordSearch
-  );
-
-  // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
-  useEffect(() => {
-    if (stars) {
-      setStarsnumber(roundedNumber(stars.averageRating));
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:99 ~ useEffect ~ stars.averageRating:",
-        stars.averageRating
-      );
-    }
-  }, [stars]);
-
-  const handleActiveBTNLowToHighClick = () => {
-    productController
-      .getSortProductbyPrice("asc", cateName)
-      .then((res: any) => {
-        console.log(
-          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-          res
-        );
-        setActiveBtnLowToHigh(false);
-        setActiveBtnHighToLow(true);
-        setProducts(res.rows);
-      });
-  };
-  const handleActiveBTNHighToLowClick = () => {
-    productController
-      .getSortProductbyPrice("desc", cateName)
-      .then((res: any) => {
-        console.log(
-          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-          res
-        );
-        setActiveBtnLowToHigh(true);
-        setActiveBtnHighToLow(false);
-        setProducts(res.rows);
-      });
-  };
-  const handleActiveBTNLatestCreationDate = () => {
-    setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
-    productController
-      .getSortProductbyDateCreate("desc", cateName)
-      .then((res: any) => {
-        setProducts(res.rows);
-      });
-  };
-
-  useEffect(() => {
-    if (keywordSearch) {
-      getSearchDataName();
-    }
-  }, [keywordSearch]);
-
-  useEffect(() => {
-    if (nameCate) {
-      getData();
-    }
-  }, [nameCate]);
-
-  const getData = () => {
-    productController.getList("", cateName).then((res: any) => {
-      console.log(res);
-      setStars(res.data);
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
-        res.data
-      );
-      setProducts(res.rows);
-    });
-  };
-
-  // Slider Price SiteBarFilterPages
-  useEffect(() => {
-    if (debouncedInputValue) {
-      handleFilter(debouncedInputValue);
-    }
-  }, [debouncedInputValue]);
-
-  const handleFilter = async (debouncedInputValue: any) => {
-    console.log(debouncedInputValue);
-
-    await productController
-      .getFilterProductWithinRangeIDCategory(
-        debouncedInputValue[0],
-        debouncedInputValue[1],
-        cateName
-      )
-      .then((res: any) => {
-        setProducts(res.rows);
-      });
-  };
-  function handleSliderChange(price: [number, number]): void {
-    console.log("value", price);
-    setSliderValues(price);
-  }
-
-  const getSearchDataName = () => {
-    productController
-      .getSearchAndPaginationProduct(keywordSearch.slice(13).toString())
-      .then((res: any) => {
-        console.log(res);
-        setProducts(res.rows);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const {
+    searchValue,
+    handleSliderChange,
+    handleActiveBTNLatestCreationDate,
+    handleActiveBTNHighToLowClick,
+    handleActiveBTNLowToHighClick,
+    activeBtnLatestCreationDate,
+    activeBtnHighToLow,
+    activeBtnLowToHigh,
+    starsnumber,
+    products,
+    sliderValues,
+  } = useSearch();
 
   return (
     <Container>
@@ -369,7 +241,7 @@ export default function FiltersPage() {
               <SlidesFilter />
             </div>
             <div>
-              <p>KẾT QUẢ TÌM KIẾM VỚI: {keywordSearch.slice(13)}</p>
+              <p>KẾT QUẢ TÌM KIẾM VỚI: {searchValue?.toString()}</p>
             </div>
 
             <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">

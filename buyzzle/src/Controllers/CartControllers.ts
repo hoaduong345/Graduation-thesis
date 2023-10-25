@@ -1,11 +1,12 @@
-import axios from "axios"
-import { CartModel } from "../Model/CartModel"
+import axios from "axios";
+import { CartModel } from "../Model/CartModel";
 
 const appConfig = {
     apiUrl: import.meta.env.VITE_BACKEND_CART_URL || ''
 }
 
 export interface ModelCart {
+    // id?: number,
     productId: number,
     quantity: number,
 }
@@ -14,7 +15,7 @@ export interface UpdateCart {
     cartId: number
 }
 class CartControllers {
-    addCart = async (data: ModelCart): Promise<ModelCart> => {
+    addCart = async (data: ModelCart): Promise<CartModel> => {
         return await axios.post(`${appConfig.apiUrl}`, data, {
             headers: {
                 "Access-Control-Allow-Origin": "*"
