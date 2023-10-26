@@ -1,5 +1,11 @@
 import { UserModel } from "./UserModel";
 
+export interface OrderPanigation {
+    data: OrderModel[],
+    page: number,
+    pageSize: number,
+    totalPage: number
+}
 export interface OrderModel {
     id: number,
     iduser: number,
@@ -8,7 +14,7 @@ export interface OrderModel {
     discount: number,
     amountTotal: number,
     paymentMethod: string,
-    createdAt: string,
+    createdAt: Date,
     status: string;
     User: UserModel
     OrderDetail: OrderItems[]
