@@ -268,6 +268,9 @@ export default function Header() {
                   <Link to="/admin/usersmanager">usersmanagerAdmin</Link>
                 </li>
                 <li>
+                  <a href="/admin/statisticsPage">thongke</a>
+                </li>
+                <li>
                   <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
                 </li>
                 <li>
@@ -282,6 +285,7 @@ export default function Header() {
                 <li>
                   <a href="/orderdetail">orderdetail</a>
                 </li>
+
                 {/*  <li>
                   <a href="#">Sữa Baby</a>
                 </li> */}
