@@ -118,10 +118,12 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                 await axios
                     .post('http://localhost:5000/buyzzle/order', { order: orderItems })
                     .then(() => {
-                        console.log('order succssess');
-                        // orderItems.cartItems.map((e) => {
-                        //     return axios.delete(`http://localhost:5000/buyzzle/cart/${e.productId}`);
-                        // });
+                        orderItems.cartItems.map((e) => {
+                            return axios.post(`http://localhost:5000/buyzzle/cart/removeOnStripe/${e.productId}`, {
+                                userId: parseInt(iduser.metadata.idUser),
+                                productId: e.productId,
+                            });
+                        });
                     })
                     .catch((err) => console.log(err));
                 break;
