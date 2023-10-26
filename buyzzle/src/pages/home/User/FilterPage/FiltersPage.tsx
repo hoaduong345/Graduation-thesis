@@ -12,6 +12,7 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import { useSearch } from "../../../../hooks/Search/SearchContextProvider";
 import "../../../css/filter.css";
 import Filter from "./Filter";
+import Lightbulb from "../../../../Assets/TSX/Light-bulb";
 export interface Cate {
   id: number;
   name: string;
@@ -73,6 +74,7 @@ export default function FiltersPage() {
     starsnumber,
     products,
     sliderValues,
+    nameCate,
   } = useSearch();
 
   return (
@@ -243,8 +245,23 @@ export default function FiltersPage() {
             <div className="banner-filter max-w-[970px] my-5 max-2xl:max-w-[1150px] max-2xl:mx-auto">
               <SlidesFilter />
             </div>
-            <div>
-              <p>KẾT QUẢ TÌM KIẾM VỚI: {searchValue?.toString()}</p>
+            <div className="text-xl">
+              {searchValue ? (
+                <div className="flex gap-2 items-center">
+                  <Lightbulb />
+                  <p className="group text-[#7A828A]">KẾT QUẢ TÌM KIẾM VỚI: </p>
+                  <span className="font-semibold group-hover:text-current">
+                    '{searchValue?.toString()}'
+                  </span>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <p className="group text-[#7A828A]"> DANH MỤC: </p>
+                  <span className="font-semibold group-hover:text-current">
+                    '{nameCate}'
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
