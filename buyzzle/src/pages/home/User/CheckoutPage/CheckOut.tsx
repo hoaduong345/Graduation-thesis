@@ -75,6 +75,9 @@ export default function CheckOut() {
    const userLocal: User =
       localUsername == null ? "" : JSON.parse(localUsername);
 
+   const id = localStorage.getItem("idUser");
+   const idUser = id == null ? 0 : JSON.parse(id);
+
    useEffect(() => {
       getUser();
    }, []);
@@ -747,8 +750,9 @@ export default function CheckOut() {
                               </div>
                            </div>
                            <PaymentBtn
+                              idUser={idUser}
                               cartItems={listLocalCart}
-                              isCheckedPayment={selectedPaymentMethod}
+                              method={selectedPaymentMethod}
                               discount={discount}
                            />
                         </div>

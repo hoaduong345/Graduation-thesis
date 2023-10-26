@@ -10,7 +10,6 @@ const CartController = {
 
             const productId = parseInt(prodId);
             const quantity = parseInt(qty || 1); // default to 1 if not provided
-
             let cart = await CartController.findCart(userId, productId);
 
             if (!cart) {
@@ -144,6 +143,48 @@ const CartController = {
             res.status(404).send('Delete item failed');
         }
     },
+    // DELETE ITEMCART FROM STRIPE
+    removeItemcartStripe: async (req, res) => {
+        try {
+            const userId = parseInt(req.body.userId);
+            const productId = parseInt(req.body.productId);
+            const cart = await prisma.cart.findFirst({
+                where: {
+                    userId: userId,
+                },
+            });
+            if (!cart) {
+                return res.send('Cart is not valid');
+            }
+            const cartItem = await prisma.itemCart.findFirst({
+                where: {
+                    cartid: cart.id,
+                    productid: productId,
+                },
+            });
+            if (!cartItem) {
+                return res.send('Product not found in the cart');
+            }
+            await prisma.itemCart.delete({
+                where: {
+                    id: cartItem.id,
+                },
+            });
+            const newSubtotal = cart.subtotal - cartItem.total;
+
+            await prisma.cart.update({
+                where: {
+                    id: cart.id,
+                },
+                data: {
+                    subtotal: newSubtotal,
+                },
+            });
+            res.status(200).send('Delete item successfully');
+        } catch (error) {
+            res.status(404).send('failed Delete item');
+        }
+    },
     // DELETE ALL ITEM ON CART
     deleteAllItemOnCart: async (req, res) => {
         try {
@@ -247,7 +288,6 @@ const CartController = {
             });
 
             if (!cartItem) throw new Error('Item not found in cart.');
-            
 
             await prisma.itemCart.update({
                 where: { id: cartItem.id },

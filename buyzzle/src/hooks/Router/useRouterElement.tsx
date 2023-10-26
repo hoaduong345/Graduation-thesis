@@ -205,7 +205,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "orderdetail",
+      path: "orderdetail/:id",
       element: (
         <MainLayout>
           <OrderDetailPage />
@@ -381,7 +381,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "invoice",
+      path: "invoice/:id",
       element: (
         <MainLayout>
           <InvoicesPage />

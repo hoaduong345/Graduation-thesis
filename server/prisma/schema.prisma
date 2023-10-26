@@ -64,10 +64,9 @@ model User {
   UserImage            UserImage[]
   Rating               Rating[]
   deletedAt            DateTime?
-
   // roleId               Role? @relation(fields: [id], references: [id])
-  Order    Order[]
-  invoices Invoice[]
+  Order                Order[]
+  invoices             Invoice[]
 }
 
 model UserImage {
@@ -241,33 +240,35 @@ model Rating {
 //   deletedAt       DateTime?
 // }
 model Order {
-  id          Int           @id @default(autoincrement())
-  customerId  Int?
-  customer    User?         @relation(fields: [customerId], references: [id])
-  status      String?
-  totalPrice  Int?
-  coupon      String?
-  createdAt   DateTime?     @default(now())
-  updatedAt   DateTime?     @default(now())
-  OrderDetail OrderDetail[]
-  deletedAt   DateTime?
-  // name        String?
-  // fullName    String?
-  // phone       Int?
-  // address     String?
+  id            Int           @id @default(autoincrement())
+  userId        Int?
+  status        String?
+  subtotal      Int?
+  shipping      Int?
+  discount      Int?
+  amountTotal   Int?
+  paymentMethod String?
+  createdAt     DateTime?     @default(now())
+  updatedAt     DateTime?     @default(now())
+  deletedAt     DateTime?
+  OrderDetail   OrderDetail[]
+  User          User?         @relation(fields: [userId], references: [id])
 }
 
 model OrderDetail {
-  id              Int       @id @default(autoincrement())
-  productId       Int?
-  orderId         Int?
-  price           Int?
-  quantity        Int?
-  createdAt       DateTime? @default(now())
-  updatedAt       DateTime? @default(now())
-  fK_order        Order?    @relation(fields: [orderId], references: [id])
-  fK_productOrder Product?  @relation(fields: [productId], references: [id])
-  deletedAt       DateTime?
+  id           Int       @id @default(autoincrement())
+  orderId      Int?
+  productId    Int?
+  name         String?
+  image        String?
+  price        Int?
+  quantity     Int?
+  total        Int?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+  deletedAt    DateTime?
+  order        Order?    @relation(fields: [orderId], references: [id])
+  productOrder Product?  @relation(fields: [productId], references: [id])
 }
 
 model Voucher {
@@ -291,8 +292,8 @@ model Invoice {
 
 model InvoiceDetails {
   id        Int     @id @default(autoincrement())
-  invoice   Invoice @relation(fields: [idInvoice], references: [id])
   idInvoice Int
-  cart      Cart    @relation(fields: [cartId], references: [id])
   cartId    Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  invoice   Invoice @relation(fields: [idInvoice], references: [id])
 }
