@@ -8,7 +8,7 @@ export interface OrderModel {
     discount: number,
     amountTotal: number,
     paymentMethod: string,
-    createdAt: string,
+    createdAt: Date,
     status: string;
     User: UserModel
     OrderDetail: OrderItems[]

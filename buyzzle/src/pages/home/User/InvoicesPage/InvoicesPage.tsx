@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LogoWeb from "../../../../Assets/TSX/LogoWeb";
 import Container from "../../../../components/container/Container";
-import { numberFormat } from "../../../../Helper/Format";
+import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
 import { useParams } from "react-router-dom";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
 import { OrderModel } from "../../../../Model/OrderModel";
@@ -60,7 +60,7 @@ export default function InvoicesPage() {
                         <br />
                         Ngày đặt:{" "}
                         <span className="text-gray-500">
-                           {invoice.createdAt}
+                           {formatDateYYYY(invoice.createdAt)}
                         </span>
                      </p>
                   </div>

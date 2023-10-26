@@ -58,6 +58,37 @@ const OderController = {
         }
     },
 
+    getOrderAdmin: async (req, res) => {
+        try {
+            const page = parseInt(req.query.page)
+            const limit = 2;
+            const startIndex = (page - 1) * limit;
+            const totalOrder = (await prisma.order.findMany()).length;
+
+            const orders = await prisma.order.findMany({
+                skip: startIndex,
+                take: limit,
+                include: {
+                    OrderDetail: true,
+                    User: true
+                },
+                orderBy: {
+                    id: 'desc',
+                },
+            });
+
+            const results = {
+                page: page,
+                pageSize: limit,
+                totalPage: totalOrder / limit,
+                data: orders,
+            };
+            res.status(200).json(results);
+        } catch (error) {
+            res.status(404).json('error.message', error.message)
+        }
+    },
+
     getOrderDetails: async (req, res) => {
         try {
             const id = parseInt(req.params.id);
