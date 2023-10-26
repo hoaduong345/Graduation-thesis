@@ -1,7 +1,10 @@
 import { IonIcon } from "@ionic/react";
 import { useEffect, useState } from "react";
+import ResponsivePagination from "react-responsive-pagination";
 import Search from "../../../../../Assets/TSX/Search";
+import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDate, numberFormat } from "../../../../../Helper/Format";
+import { OrderPanigation } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
 import Filter from "../../Assets/TSX/Filter";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
@@ -9,12 +12,12 @@ import Calendar from "../../Assets/TSX/calendar";
 import Excel from "../../Assets/TSX/excel";
 import Print from "../../Assets/TSX/print";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import { orderControllers } from "../../../../../Controllers/OrderControllers";
-import { OrderModel } from "../../../../../Model/OrderModel";
 
 export default function OrderManagement() {
-   const [order, setOrder] = useState<OrderModel[]>([]);
+   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
+   const [currentPage, setCurrentPage] = useState<number>(1);
 
+   // const [currentPage, setCurrentPage] = useState<number>(1);
    const [open, setOpen] = useState(false);
 
    const openModal = () => {
@@ -109,14 +112,14 @@ export default function OrderManagement() {
    }
 
    const getOrder = async () => {
-      await orderControllers.getAdmin(3).then((res) => {
-         setOrder(res.data);
+      await orderControllers.getAdmin(currentPage).then((res) => {
+         setOrder(res);
       });
    };
 
    useEffect(() => {
       getOrder();
-   }, []);
+   }, [currentPage]);
 
    return (
       <Container>
@@ -235,7 +238,7 @@ export default function OrderManagement() {
                </div>
                {/* end checkBox and Printf*/}
                <div className="flex flex-col space-y-4">
-                  {order?.map((e) => {
+                  {order?.data?.map((e) => {
                      return (
                         <>
                            {/* card */}
@@ -374,6 +377,12 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                         </>
                      );
                   })}
+                  <ResponsivePagination
+                     current={currentPage}
+                     total={order.totalPage}
+                     onPageChange={setCurrentPage}
+                     maxWidth={500}
+                  />
                </div>
             </div>
          </div>

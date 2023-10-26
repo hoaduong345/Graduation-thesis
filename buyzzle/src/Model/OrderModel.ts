@@ -1,5 +1,11 @@
 import { UserModel } from "./UserModel";
 
+export interface OrderPanigation {
+    data: OrderModel[],
+    page: number,
+    pageSize: number,
+    totalPage: number
+}
 export interface OrderModel {
     id: number,
     iduser: number,

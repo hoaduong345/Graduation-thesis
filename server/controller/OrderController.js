@@ -61,7 +61,7 @@ const OderController = {
     getOrderAdmin: async (req, res) => {
         try {
             const page = parseInt(req.query.page)
-            const limit = 2;
+            const limit = 4;
             const startIndex = (page - 1) * limit;
             const totalOrder = (await prisma.order.findMany()).length;
 
@@ -80,7 +80,7 @@ const OderController = {
             const results = {
                 page: page,
                 pageSize: limit,
-                totalPage: totalOrder / limit,
+                totalPage: Math.ceil(totalOrder / limit),
                 data: orders,
             };
             res.status(200).json(results);
