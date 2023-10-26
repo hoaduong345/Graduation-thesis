@@ -50,31 +50,6 @@ const arrCBCategory: CheckboxCategory[] = [
   { checkedCB: false, title: "Thời trang trẻ em", quantity: 32 },
   { checkedCB: false, title: "Thời Trang Nữ", quantity: 232 },
 ];
-
-export interface ButtonSuggest {
-  name: string;
-}
-const arrBtnSug: ButtonSuggest[] = [
-  {
-    name: "Áo Cổ điển",
-  },
-];
-arrBtnSug.push(
-  {
-    name: "Áo Bra",
-  },
-  {
-    name: "Áo",
-  },
-  {
-    name: "Áo Cổ điển",
-  }
-);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// export type Props = {
-//   onChangeFilters(title: string): void;
-// };
 export interface SliderComponentProps {
   onPriceRangeChange: (value: [number, number]) => void;
   onQuantityRangeChange: (value: [number, number]) => void;
