@@ -31,6 +31,7 @@ import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
 import LoginAdmin from "../../pages/home/Admin/LoginAdmin/AdminLogin";
+import AdminProfile from "../../pages/home/Admin/AdminProfile/UserProfile";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -554,6 +555,10 @@ export default function useRouterEmelent() {
         {
           path: "Addproductspage",
           element: <Addproducts />,
+        },
+        {
+          path: "adminprofile/:username",
+          element: <AdminProfile />,
         },
 
         {
