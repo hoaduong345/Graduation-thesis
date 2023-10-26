@@ -99,7 +99,6 @@ export default function useSearchContext() {
   // Remove special characters and diacritics
   const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
   const categoryID = idaCate.toString();
-
   useEffect(() => {
     // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
     if (urlSliderValues) {
@@ -134,7 +133,6 @@ export default function useSearchContext() {
   };
   // Function to clear cleanedString and navigate
   const clearAndNavigate = () => {
-    setSearchParams("");
     navigate(`/FiltersPage?keyword=${cleanedData}`);
     setShowSuggestions(false);
   };
