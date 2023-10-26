@@ -269,8 +269,22 @@ model Admin {
   id       Int      @id @default(autoincrement())
   email String?
   password String?
+  username String? @unique
+  name     String?
+  sex      Boolean?
+  phonenumber String?
+  dateofbirth DateTime?
+  AdminImage AdminImage[]
   // sentMessages ChatMessage[]@relation("SentMessagess")
   // receivedMessages ChatMessage[] @relation("ReceivedMessagess")
+}
+
+model AdminImage {
+  id              Int       @id @default(autoincrement())
+  url             String?
+  idadmin       Int?
+  fk_adminImage Admin?   @relation(fields: [idadmin], references: [id], onDelete: Cascade)
+  deletedAt       DateTime?
 }
 
 model Message {

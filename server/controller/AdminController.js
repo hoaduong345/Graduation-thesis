@@ -15,14 +15,14 @@ const AdminController = {
 
   // add
   createAdmin: async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
   
     try {
       const saltRounds = 10; 
       const hashedPassword = await bcrypt.hash(password, saltRounds);
       const newAdmin = await prisma.admin.create({
         data: {
-          email,
+          username,
           password: hashedPassword,
         },
       });
@@ -43,43 +43,6 @@ const AdminController = {
       res.json("xoa tc");
     } catch (error) {
       res.status(500).json("loi");
-    }
-  },
-
-  //  sửa
-  updateAdmin: async (req, res) => {
-    const adminId = parseInt(req.params.id);
-    const { email, password } = req.body;
-    try {
-      const admin = await prisma.admin.findUnique({
-        where: { id: adminId },
-      });
-      if (!admin) {
-        res.status(404).json("Không tìm thấy tài khoản admin");
-        return;
-      }
-      let hashedPassword = password;
-      if (admin.password) {
-        const passwordMatch = await bcrypt.compare(password, admin.password);
-        if (passwordMatch) {
-          hashedPassword = admin.password;
-        } else {
-          const saltRounds = 10; 
-          hashedPassword = await bcrypt.hash(password, saltRounds);
-        }
-      }
-      // Cập nhật thông tin tài khoản admin
-      const updatedAdmin = await prisma.admin.update({
-        where: { id: adminId },
-        data: {
-          email,
-          password: hashedPassword,
-        },
-      });
-  
-      res.json(updatedAdmin);
-    } catch (error) {
-      res.status(500).json("Có lỗi xảy ra khi cập nhật tài khoản admin");
     }
   },
 
@@ -127,6 +90,101 @@ const AdminController = {
       res.status(500).json("Có lỗi xảy ra khi thay đổi mật khẩu");
     }
   },
+
+  AdminProfile : async(req, res) => {
+    try{
+      const adminUsername = req.body.username;
+
+      const updateAdmin = {
+                email: req.body.email,
+                username: req.body.username,
+                name: req.body.name,
+                phonenumber: req.body.phonenumber,
+                sex: req.body.sex,
+                dateofbirth: new Date(req.body.dateofbirth),
+      };
+
+      const updateAdminResponse = await prisma.admin.update({
+            where:{
+              username : adminUsername,
+            },
+            data : updateAdmin,
+      });
+      res.status(200).json(updateAdminResponse);
+    }catch(error){
+      console.log(error);
+      res.status(500).json({ error: "Có lỗi xảy ra khi cập nhật hồ sơ admin.", message: error.message });
+    }
+  },
+
+  getAdmin: async (req, res) => {
+    try {
+      const adminUsername = req.params.username;
+  
+      // Tìm thông tin người dùng có ảnh
+      const adminWithImage = await prisma.admin.findUnique({
+        where: {
+          username: adminUsername,
+        },
+        include: {
+          AdminImage: true,
+        },
+      });
+  //ss
+      // Tìm thông tin người dùng không có ảnh
+      const adminWithoutImage = await prisma.admin.findUnique({
+        where: {
+          username: adminUsername,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phonenumber: true,
+          sex: true,
+          dateofbirth: true, 
+        },
+      });
+  
+      if (!adminWithImage || !adminWithoutImage) {
+        return res.status(404).json({ error: 'Không tìm thấy người dùng' });
+      }
+  
+      res.status(200).json({ adminWithImage });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Đã xảy ra lỗi khi truy xuất dữ liệu', message: error.message });
+    }
+  },
+  
+
+  addImageAdmin : async ( req, res) => {
+    try{
+          const { url, idadmin} = req.body
+
+          const newImageAdmin = {
+            url,
+            idadmin : parseInt(idadmin),
+          };
+
+          const data = await prisma.adminImage.create({
+              data : newImageAdmin,
+          });
+          res.status(200).json('Them hinh thanh cong');
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error.message);
+    }
+  },
+
+  updateImageAdmin : async ( req, res) =>{
+      try{
+
+      }catch(error){
+        
+      }
+  },
+
   
 };
 
