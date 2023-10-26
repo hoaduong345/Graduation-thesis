@@ -59,5 +59,6 @@ router.put("/adminprofile/:username", AdminController.AdminProfile);
 router.get("/chitietadmin/:username", AdminController.getAdmin);
 
 router.post("/addimageadmin", AdminController.addImageAdmin);
+//ss
 
 module.exports = router;

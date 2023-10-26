@@ -130,7 +130,7 @@ const AdminController = {
           AdminImage: true,
         },
       });
-  
+  //ss
       // Tìm thông tin người dùng không có ảnh
       const adminWithoutImage = await prisma.admin.findUnique({
         where: {
