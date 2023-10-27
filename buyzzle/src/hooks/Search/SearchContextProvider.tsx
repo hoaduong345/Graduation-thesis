@@ -52,10 +52,10 @@ export default function useSearchContext() {
 
   const [idaCate, setidaCate] = useState(0);
   const getIdCate = () => {
-    const id = localStorage.getItem("cateId");
-    const idCate = JSON.parse(id!);
-    getProductWithinIdCate(idCate);
-    setidaCate(idCate);
+    // const id = localStorage.getItem("cateId");
+    // const idCate = JSON.parse(id!);
+    // getProductWithinIdCate(idCate);
+    // setidaCate(idCate);
   };
   useEffect(() => {
     getIdCate();

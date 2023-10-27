@@ -21,6 +21,7 @@ import ArrowFall from "../../../../Assets/TSX/ArrowFall";
 import { useSpring, animated } from "react-spring";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
 import { Statistics, hotProducts } from "../../../../Model/StatsModels";
+import { formatSoldCount, numberFormat } from "../../../../Helper/Format";
 ChartJS.register(
   ArcElement,
   Tooltip,
@@ -34,7 +35,7 @@ ChartJS.register(
 );
 // chart\
 
-export const optionsChartLine = {
+const optionsChartLine = {
   responsive: true,
   plugins: {
     legend: {
@@ -42,67 +43,8 @@ export const optionsChartLine = {
     },
   },
 };
-const labelsLine = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-];
 
-export const dataChartLine = {
-  labels: labelsLine,
-  datasets: [
-    {
-      label: "Thiết bị điện tử",
-      data: [800, 30, 750, 80, 650, 75, 90],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Đồ gia dụng",
-      data: [100, 200, 20, 150, 820, 180, 130],
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-
-    {
-      label: "Khác",
-      data: [10, 20, 20, 140, 610, 180, 180],
-      borderColor: "#95A4FC",
-      backgroundColor: "#cad2ff",
-    },
-  ],
-};
-
-const labelsVertical = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-];
-
-export const dataChartVertical = {
-  labels: labelsVertical,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [800, 30, 70, 80, 650, 75, 900],
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: [100, 200, 20, 150, 820, 180, 930],
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
-};
-export const optionsChartVertical = {
+const optionsChartVertical = {
   responsive: true,
   plugins: {
     legend: {
@@ -135,15 +77,27 @@ export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const numberStast = () => {
+  const totalRevenue = stats.totalRevenue;
+  const totalQuantitySold = stats.totalQuantitySold;
+  const revenueGrowthPercentage = stats.revenueGrowthPercentage;
+  const quantitySoldComparisonPercentage =
+    stats.quantitySoldComparisonPercentage;
+
+  const numberStast = (n: number) => {
     const { number } = useSpring({
       from: { number: 0 },
-      number: 1000,
-      delay: 300,
-      config: { mass: 1, tension: 130, friction: 114 },
+      number: n,
+      delay: 0,
+      config: { mass: 1, tension: 1030, friction: 114 },
     });
     return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
   };
+  const animatedtotalRevenue = numberStast(totalRevenue);
+  const animatedtotalQuantitySold = numberStast(totalQuantitySold);
+  const animatedrevenueGrowthPercentage = numberStast(revenueGrowthPercentage);
+  const animatedquantitySoldComparisonPercentage = numberStast(
+    quantitySoldComparisonPercentage
+  );
   const [open, setOpen] = useState(false);
 
   const openModal = () => {
@@ -230,9 +184,9 @@ export default function StatisticsPage() {
     },
   ]);
   // ================================ API ================================
-  // useEffect(()=>{
-
-  // })
+  // useEffect(() => {
+  //   getproductHot();
+  // }, []);
   const getproductHot = async () => {
     await statsControllers
       .getListHotProduct("2023/10", currentPage, 3)
@@ -248,6 +202,7 @@ export default function StatisticsPage() {
       onClick: () => setCurrentPage(index),
     } as any);
   // const next = () => {
+
   //   if (currentPage === 999) return;
 
   //   setCurrentPage(currentPage + 1);
@@ -258,6 +213,69 @@ export default function StatisticsPage() {
 
   //   setCurrentPage(currentPage - 1);
   // };
+
+  // chart
+
+  const labelsLine = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+  ];
+
+  const dataChartLine = {
+    labels: labelsLine,
+    datasets: [
+      {
+        label: "Thiết bị điện tử",
+        data: [800, 30, 750, 80, 650, 75, 90],
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+      {
+        label: "Đồ gia dụng",
+        data: [100, 200, 20, 150, 820, 180, 130],
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
+
+      {
+        label: "Khác",
+        data: [10, 20, 20, 140, 610, 180, 180],
+        borderColor: "#95A4FC",
+        backgroundColor: "#cad2ff",
+      },
+    ],
+  };
+
+  const labelsVertical = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+  ];
+
+  const dataChartVertical = {
+    labels: labelsVertical,
+    datasets: [
+      {
+        label: "Dataset 1",
+        data: [800, 30, 70, 80, 650, 75, 900],
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+      {
+        label: "Dataset 2",
+        data: [100, 200, 20, 150, 820, 180, 930],
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
+    ],
+  };
   return (
     <>
       <Container>
@@ -324,9 +342,7 @@ export default function StatisticsPage() {
                   <p className="text-[#1C1C1C] font-semibold">Truy cập trang</p>
                   <div className="items-center grid grid-cols-3">
                     <div className="col-span-2">
-                      <p className="text-[#1C1C1C] font-semibold text-xl">
-                        {numberStast()}
-                      </p>
+                      <p className="text-[#1C1C1C] font-semibold text-xl"></p>
                     </div>
                     <div className="col-span-1 flex gap-1">
                       <p className="text-[#00B207] font-semibold text-xs">
@@ -372,11 +388,13 @@ export default function StatisticsPage() {
                   <p className="text-[#1C1C1C] font-semibold">Lượt mua hàng</p>
                   <div className="items-center grid grid-cols-3">
                     <div className="col-span-2">
-                      <p className="text-[#1C1C1C] font-semibold text-xl">1K</p>
+                      <p className="text-[#1C1C1C] font-semibold text-xl">
+                        {animatedtotalQuantitySold}
+                      </p>
                     </div>
                     <div className="col-span-1 flex gap-1">
                       <p className="text-[#00B207] font-semibold text-xs">
-                        +18.01%
+                        {animatedquantitySoldComparisonPercentage}
                       </p>
                       <ArrowRise />
                     </div>
@@ -391,15 +409,15 @@ export default function StatisticsPage() {
                 {/* Truy cập trang */}
                 <div className=" flex flex-col gap-3">
                   <p className="text-[#1C1C1C] font-semibold">Doanh thu</p>
-                  <div className="items-center grid grid-cols-4">
+                  <div className="items-center justify-between grid grid-cols-4">
                     <div className="col-span-2">
                       <p className="text-[#1C1C1C] font-semibold text-xl">
-                        2,30K
+                        {animatedtotalRevenue}
                       </p>
                     </div>
-                    <div className="col-end-6 flex gap-1">
-                      <p className="text-[#EA4B48] font-semibold text-xs">
-                        -8.01%
+                    <div className="col-end-6 flex gap-1 justify-between">
+                      <p className="text-[#EA4B48] font-semibold text-xs ">
+                        {animatedrevenueGrowthPercentage}
                       </p>
                       <ArrowFall />
                     </div>
