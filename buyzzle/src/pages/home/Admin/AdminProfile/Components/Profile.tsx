@@ -7,8 +7,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
-import { userController } from "../../../../../Controllers/UserController";
-import { appConfigUser } from "../../../../../configsEnv";
+import { adminController } from "../../../../../Controllers/AdminControllder";
+import { appConfigAdmin, appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { replace } from "lodash";
@@ -21,7 +21,7 @@ export type FormValues = {
   email: string;
   sex: string;
   phonenumber: string;
-  dateOfBirth: string;
+  dateofbirth: string;
 
 };
 export type FormImage = {
@@ -30,7 +30,7 @@ export type FormImage = {
   UserImage: string[];
 
 }
-export default function UserProfile() {
+export default function Profile() {
   const [validUrl, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
@@ -60,57 +60,46 @@ export default function UserProfile() {
 
 
 
-  const getUserData = () => {
+  const getAdminData = () => {
     const user = localStorage.getItem("user");
+    console.log("USERNAME1: " + user)
     if (user != null) {
       const userData = JSON.parse(user);
       const username = userData.username;
       console.log("USERNAME1: " + username);
-      userController.getUserWhereUsername(username)
+      adminController.getAdminWhereUsername(username)
         .then((res) => {
           console.log(JSON.stringify(res));
           return res;
           
         })
         .then((res) => {
-          if (res.dateOfBirth == null) {
-            res.dateOfBirth = "dd/mm/yyyy";
+          if (res.adminWithImage.dateofbirth == null) {
+            res.adminWithImage.dateofbirth = "dd/mm/yyyy";
           } else {
-            res.dateOfBirth = (res.dateOfBirth).substring(0, 10);
+            res.adminWithImage.dateofbirth = (res.adminWithImage.dateofbirth).substring(0, 10);
           }
-          
-          let Bruh = res.email;
-          Bruh = Bruh.replace(res.email[3], "*")
-          Bruh = Bruh.replace(res.email[4], "*")
-          Bruh = Bruh.replace(res.email[5], "*")
-          let emailDef = Bruh;
-          // console.log(emailDef);
-          setEmailThen(res.email);
+         
+          // // console.log(emailDef);
+          // setEmailThen(res.adminWithImage.email);
 
-          let Bruh2 = res.phonenumber;
-          Bruh2 = Bruh2.replace(res.phonenumber[0], "*")
-          Bruh2 = Bruh2.replace(res.phonenumber[1], "*")
-          Bruh2 = Bruh2.replace(res.phonenumber[2], "*")
-          Bruh2 = Bruh2.replace(res.phonenumber[3], "*")
-          Bruh2 = Bruh2.replace(res.phonenumber[4], "*")
-          Bruh2 = Bruh2.replace(res.phonenumber[5], "*")
-          Bruh2 = Bruh2.replace(res.phonenumber[6], "*")
-          let phonenumberDef = Bruh2;
-          // console.log("aaaa"+res.email[1]);
-          setSdtThen(res.phonenumber);
+          console.log( res.adminWithImage.dateofbirth);
+      
+          // // console.log("aaaa"+res.email[1]);
+          // setSdtThen(res.adminWithImage.phonenumber);
 
 
           reset({
             username: userData.username,
-            name: res.name,
-            email: emailDef,
-            sex: res.sex,
-            phonenumber: phonenumberDef,
-            dateOfBirth: res.dateOfBirth,
+            name: res.adminWithImage.name,
+            email: res.adminWithImage.email,
+            sex: res.adminWithImage.sex,
+            phonenumber: res.adminWithImage.phonenumber,
+            dateofbirth: res.adminWithImage.dateofbirth,
           });
-          setSex(res.sex);
-          setId(res.id);
-          const UserImageArray = JSON.stringify(res.UserImage);
+          setSex(res.adminWithImage.sex);
+          setId(res.adminWithImage.id);
+          const UserImageArray = JSON.stringify(res.adminWithImage.AdminImage);
           if (UserImageArray == "[]") {
             setCheckImageUrl(false);
           } else {
@@ -153,7 +142,8 @@ export default function UserProfile() {
 
   useEffect(() => {
     loadImageFile(image);
-    getUserData();
+    console.log("cccccccccccc");
+    getAdminData();
   }, [image]);
 
 
@@ -176,11 +166,12 @@ export default function UserProfile() {
 
   const addImages = async (id: number, url: string) => {
     const urlImages = {
-      iduser: id,
       url: url,
+      idadmin: id,
+      
     };
     await axios
-      .post(`${appConfigUser.apiUrl}/addimageuser`, urlImages)
+      .post(`${appConfigAdmin.apiUrl}/addimageadmin`, urlImages)
       .then((response) => response.data);
   };
 
@@ -197,7 +188,7 @@ export default function UserProfile() {
   }
 
 
-  const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
+  const API = `http://localhost:5000/admin/adminprofile/${param.username}`;
   const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
       console.log("selectedFile:" + selectedFile);
@@ -207,8 +198,6 @@ export default function UserProfile() {
       }
       // console.log("TESTING: " + formData);
       formData.sex = JSON.parse(formData.sex);
-      formData.email = emailThen;
-      formData.phonenumber = sdtThen;
       const response = await axios.put(API, formData);
       FormImage.id = parseInt(id);
       if (response) {
@@ -573,7 +562,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     <div className="w-[100%] mt-4">
                       <Controller
                         control={control}
-                        name="dateOfBirth"
+                        name="dateofbirth"
                         rules={
                           {
                             required: {
@@ -602,9 +591,9 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               }}
 
                             />
-                            {!!errors.dateOfBirth && (
+                            {!!errors.dateofbirth && (
                               <p className="text-red-700 mt-2">
-                                {errors.dateOfBirth.message}
+                                {errors.dateofbirth.message}
                               </p>
                             )}
                           </>
