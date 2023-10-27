@@ -157,14 +157,7 @@ export default function OrderHistory() {
                                                    <th className=" px-6 py-2 w-[14%] font-normal">
                                                       Tổng
                                                    </th>
-                                                   <th className=" px-6 py-2 w-[14%] font-normal">
-                                                      <Link
-                                                         to={`/invoice/${e.id}`}
-                                                         className="text-[#EA4B48]"
-                                                      >
-                                                         Invoice
-                                                      </Link>
-                                                   </th>
+                                                   <th className=" px-6 py-2 w-[14%] font-normal"></th>
                                                 </tr>
                                              </thead>
                                              <tbody>

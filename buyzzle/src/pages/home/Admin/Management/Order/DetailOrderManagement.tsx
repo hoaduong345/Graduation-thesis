@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
 import Orderbuyzzle from "../../../../../Assets/TSX/Orderbuyzzle";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
@@ -14,6 +14,7 @@ import SitebarAdmin from "../../Sitebar/Sitebar";
 import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
 import Map from "../../../../../Assets/TSX/Map";
 import Paymethod from "../../Assets/TSX/Paymethod";
+import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
 
 export default function DetailOrderManagement() {
    const { id } = useParams();
@@ -63,15 +64,23 @@ export default function DetailOrderManagement() {
                         </div>
                      </div>
                      <div className="flex gap-2 items-center">
-                        <button
-                           className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C]
-                             rounded-md py-[8px] px-3 flex
-                                transition duration-150 cursor-pointer border-[#E0E0E0] border-[1px]
-                                max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
-                        >
-                           <PrintOrder />
-                           <p>Print</p>
-                        </button>
+                        {order.invoice == "true" ? (
+                           <>
+                              <Link to={`/invoice/${order.id}`}>
+                                 <button
+                                    className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C]
+                                 rounded-md py-[8px] px-3 flex
+                                 transition duration-150 cursor-pointer border-[#E0E0E0] border-[1px]
+                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
+                                 >
+                                    <PrintOrder />
+                                    <p>Print</p>
+                                 </button>
+                              </Link>
+                           </>
+                        ) : (
+                           <></>
+                        )}
 
                         <button
                            className="justify-center gap-3 items-center text-sm font-bold text-white
@@ -278,6 +287,25 @@ export default function DetailOrderManagement() {
                                        <p className="text-[#4C4C4C] text-sm">
                                           {order?.User?.address}
                                        </p>
+                                    </div>
+                                 </div>
+
+                                 <div className="flex flex-col gap-1">
+                                    <div className="flex gap-2 items-center text-[#4C4C4C] font-medium text-sm">
+                                       <NoteOrderAdmin />
+                                       <p>Ghi chú</p>
+                                    </div>
+                                    <div className="pl-2 border-l-[1px] border-[#FFAAAF] font-semibold">
+                                       {order?.note == "" ||
+                                       order?.note == null ? (
+                                          <p className="text-[#1A1A1A] text-sm">
+                                             Không có
+                                          </p>
+                                       ) : (
+                                          <p className="text-[#1A1A1A] text-sm">
+                                             {order?.note}
+                                          </p>
+                                       )}
                                     </div>
                                  </div>
                               </div>

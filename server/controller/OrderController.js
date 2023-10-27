@@ -14,6 +14,8 @@ const OderController = {
                     discount: orderData.discount,
                     amountTotal: orderData.amount_total,
                     paymentMethod: orderData.method,
+                    note: orderData.note,
+                    invoice: orderData.invoice.toString()
                 },
             });
             orderData.cartItems.map(async (e) => {
