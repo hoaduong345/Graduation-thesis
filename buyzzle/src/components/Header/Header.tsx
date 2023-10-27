@@ -156,15 +156,15 @@ export default function Header() {
                 <div className="items-center flex flex-1 max-w-[755px] max-2xl:ml-10 max-xl:max-w-[700px] max-xl:ml-5">
                   <div
                     className="Search-input-headerCenter items-center flex w-[90%]
-                      py-[6px] px-[6px] border-[2px] border-[#FFAAAF] rounded-lg
-                      max-xl:py-[1px]" 
+                   py-[6px] px-[6px] border-[2px] border-[#FFAAAF] rounded-lg
+                   max-xl:py-[1px]"
                   >
                     <div className="mb-2">
                       <Search />
                     </div>
                     <input
-                      className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:max-w-[210px] max-lg:p-[0] max-md:max-w-[190px]
-                        max-[426px]:text-[6px]  max-[426px]:p-[0] "
+                      className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm
+                      max-[426px]:text-[6px]  max-[426px]:p-[0]"
                       placeholder="Tìm kiếm..."
                       onKeyDown={handleKeyPress}
                       onChange={(e) => handleChange(e)}
@@ -184,8 +184,8 @@ export default function Header() {
                                   <>
                                     <div
                                       className="flex items-center gap-1 h-12
-                                  hover:rounded-md duration-200
-                                  hover:shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                                hover:rounded-md duration-200
+                                hover:shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                                     >
                                       <div>
                                         <img
@@ -213,7 +213,7 @@ export default function Header() {
                                       >
                                         <div className="text-[14px] ">
                                           {itemsSearch.name &&
-                                            itemsSearch.name.length > 17 ? (
+                                          itemsSearch.name.length > 17 ? (
                                             `${itemsSearch.name.substring(
                                               0,
                                               17
@@ -243,59 +243,59 @@ export default function Header() {
                               {text == "" ? "" : `"${text}"`}
                             </p>
                             {/* <div className="grid grid-cols-3 gap-4 py-3  w-[98%] mx-auto">
-                                {productSearch.slice(0, 6).map((itemsSearch) => {
-                                  return (
-                                    <>
-                                      <div
-                                        className="flex items-center gap-1 h-12
-                                  hover:rounded-md duration-200
-                                  hover:shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                                      >
-                                        <div>
-                                          <img
-                                            src={itemsSearch.ProductImage[0].url}
-                                            alt="ProductImage"
-                                            className="w-14 h-12"
-                                          />
-                                        </div>
-                                        <div
-                                          className="text-base cursor-default p-1 pl-2  font-normal w-full"
-                                          onClick={(e) => {
-                                            setShowSuggestions(false);
-                                            navigate(
-                                              `/Detailproducts/${itemsSearch.id}`
-                                            );
-                                            hideSuggestions();
-                                          }}
-                                          onMouseOver={() => {
-                                            setIsSearch(true);
-                                          }}
-                                          onMouseLeave={() => {
-                                            setIsSearch(false);
-                                          }}
-                                        >
-                                          <div className="text-[14px] ">
-                                            {itemsSearch.name &&
-                                            itemsSearch.name.length > 21 ? (
-  `${itemsSearch.name.substring(
-                                                0,
-                                                21
-                                              )}...`
-                                            ) : itemsSearch.name ? (
-                                              itemsSearch.name
-                                            ) : (
-                                              <p>Không có sản phẩm</p>
-                                            )}
-                                          </div>
-                                          <p className="text-gray-600 text-xs">
-                                            SL: {itemsSearch.quantity}
-                                          </p>
-                                        </div>
+                              {productSearch.slice(0, 6).map((itemsSearch) => {
+                                return (
+                                  <>
+                                    <div
+                                      className="flex items-center gap-1 h-12
+                                hover:rounded-md duration-200
+                                hover:shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                                    >
+                                      <div>
+                                        <img
+                                          src={itemsSearch.ProductImage[0].url}
+                                          alt="ProductImage"
+                                          className="w-14 h-12"
+                                        />
                                       </div>
-                                    </>
-                                  );
-                                })}
-                              </div> */}
+                                      <div
+                                        className="text-base cursor-default p-1 pl-2  font-normal w-full"
+                                        onClick={(e) => {
+                                          setShowSuggestions(false);
+                                          navigate(
+                                            `/Detailproducts/${itemsSearch.id}`
+                                          );
+                                          hideSuggestions();
+                                        }}
+                                        onMouseOver={() => {
+                                          setIsSearch(true);
+                                        }}
+                                        onMouseLeave={() => {
+                                          setIsSearch(false);
+                                        }}
+                                      >
+                                        <div className="text-[14px] ">
+                                          {itemsSearch.name &&
+                                          itemsSearch.name.length > 21 ? (
+`${itemsSearch.name.substring(
+                                              0,
+                                              21
+                                            )}...`
+                                          ) : itemsSearch.name ? (
+                                            itemsSearch.name
+                                          ) : (
+                                            <p>Không có sản phẩm</p>
+                                          )}
+                                        </div>
+                                        <p className="text-gray-600 text-xs">
+                                          SL: {itemsSearch.quantity}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </>
+                                );
+                              })}
+                            </div> */}
                           </div>
                         </div>
                       </>
@@ -303,8 +303,8 @@ export default function Header() {
                     <div className="flex items-center">
                       <button
                         className="btn-search bg-[#FFEAE9] p-[7px] rounded-lg font-bold text-[#1A1A1A] 
-                        w-[135px] max-xl:max-w-[70px] max-xl:text-[11px] max-xl:p-[4px] border
-                        max-lg:ml-[0px] max-md:ml-[0px] max-[426px]:text-[6px] max-[426px]:max-w-[40px]  max-[426px]:hidden"
+                      w-[135px] max-xl:max-w-[70px] max-xl:text-[11px] max-xl:p-[4px] border
+                      max-[426px]:text-[6px] max-[426px]:max-w-[40px]  max-[426px]:hidden"
                       >
                         Tìm kiếm
                       </button>
@@ -312,11 +312,11 @@ export default function Header() {
                   </div>
                 </div>
                 {/* <dialog id="my_modal_3" className="max-2xl:modal ">
-                    <div className="relative bg-white h-40 w-72">
-                      sádsadssadasdsd sádsadssad asdsd sádsadssadasdsds ádsa
-                      dssadasdsd
-                    </div>
-                  </dialog> */}
+                  <div className="relative bg-white h-40 w-72">
+                    sádsadssadasdsd sádsadssad asdsd sádsadssadasdsds ádsa
+                    dssadasdsd
+                  </div>
+                </dialog> */}
 
                 <div className="items-center flex relative gap-2">
                   <div className="items-center flex pr-11 max-[769px]:pr-[10px]">
@@ -367,8 +367,7 @@ export default function Header() {
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
             <div className="container mx-auto">
-              <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px] max-xl:text-[11px] 
-                        max-lg:text-[9px]  max-md:text-[8px] ">
+              <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
                 <li>
                   <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link>
                 </li>
@@ -385,6 +384,9 @@ export default function Header() {
                   <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
                 </li>
                 <li>
+                  <a href="/admin/ordermanagement">ordermanagement</a>
+                </li>
+                <li>
                   <Link to="/orderhistory">orderhistory</Link>
                 </li>
                 <li>
@@ -394,8 +396,8 @@ export default function Header() {
                   <a href="/orderdetail">orderdetail</a>
                 </li>
                 {/*  <li>
-                    <a href="#">Sữa Baby</a>
-                  </li> */}
+                  <a href="#">Sữa Baby</a>
+                </li> */}
               </ul>
             </div>
           </Container>

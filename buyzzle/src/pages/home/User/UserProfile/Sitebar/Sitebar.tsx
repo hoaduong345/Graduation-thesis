@@ -34,7 +34,7 @@ const listSitebar: SitebarUser[] = [
   },
   {
     icon: <Voucher />,
-    pathName: "",
+    pathName: "/uservoucherstorage",
     title: "Voucher",
   },
   {

@@ -1,10 +1,10 @@
 import moment from 'moment';
 export const numberFormat = (number: number) =>
-    new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number)
+  new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number)
 
 
 export const currentDate = (date: string) => {
-    return moment(date).format('MMMM Do YYYY');
+  return moment(date).format('MMMM Do YYYY');
 }
 
 export const roundedNumber = (number: number) => Math.round(number);
@@ -19,7 +19,7 @@ export const formatSoldCount = (soldcount: number) => {
   }
   return soldcount.toString(); // Trả về số như bình thường
 }
-export const formatDate = (date: Date) => {
-    return moment(date).format('DD/MM');
-}
 
+export const formatDate = (date: Date) => {
+  return moment(date).format('DD/MM');
+}

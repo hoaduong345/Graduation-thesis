@@ -12,15 +12,11 @@ import {
   Products,
 } from "../../pages/home/User/FilterPage/FiltersPage";
 import { numberFormat } from "../../Helper/Format";
-import { productController } from "../../Controllers/ProductsController";
-import { Row } from "../../Model/ProductModel";
 
 // rati star
 export interface RatingStar {
   checked: boolean;
   rating: number;
-
-  onChangeFilter?(rating: number): void;
 }
 
 const arrRating: RatingStar[] = [
@@ -69,11 +65,13 @@ arrBtnSug.push(
   }
 );
 
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// export type Props = {
+//   onChangeFilters(title: string): void;
+// };
 export interface SliderComponentProps {
   onPriceRangeChange: (value: [number, number]) => void;
   onQuantityRangeChange: (value: [number, number]) => void;
-  onRateChange: (value: number) => void;
   onPurchaseRangeChange: (value: [number, number]) => void;
   oninStock: (availability: boolean) => void;
   onSoldOut: (soldOut: boolean) => void;
@@ -84,11 +82,9 @@ export interface SliderComponentProps {
   valuePurchase?: [number, number];
   valueQuantity?: [number, number];
 }
-
 export default function SitebarFilter({
   valuePrice,
   onPriceRangeChange,
-  onRateChange,
 }: SliderComponentProps) {
   const [rangeValue, setRangeValue] = useState([5000, 300000]);
   const handleSliderChange = (price: [number, number]) => {
@@ -96,14 +92,6 @@ export default function SitebarFilter({
     setRangeValue(price);
     onPriceRangeChange(price);
   };
-
-  const [rating, setRating] = useState(1);
-  const handleRateChange = (rate: number) => {
-    console.log("Rating:", rate);
-    setRating(rate);
-    onRateChange(rate);
-  };
-
 
   return (
     <>
@@ -126,11 +114,11 @@ export default function SitebarFilter({
                 quantity={item.quantity}
                 title={item.title}
                 key={index}
-              // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
-              // onChangeFilter={(title) => {
-              //   console.log("SiteFilterPages: " + title);
-              //   props.onChangeFilters?.(title);
-              // }}
+                // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
+                // onChangeFilter={(title) => {
+                //   console.log("SiteFilterPages: " + title);
+                //   props.onChangeFilters?.(title);
+                // }}
               />
             );
           })}
@@ -163,10 +151,10 @@ export default function SitebarFilter({
             // value={rangeValue}
             // onChange={() => onSliderChange}
             range
-          // onChange={(e) => {
-          //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
-          //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
-          // }}
+            // onChange={(e) => {
+            //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
+            //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
+            // }}
           />
           <div className="flex mt-[20px] justify-start gap-2 ">
             <p className="max-w-max">Giá: </p>
@@ -187,18 +175,10 @@ export default function SitebarFilter({
           </a>
         </div>
         <div className="rate flex">
-          <div className="mt-3" >
-            {arrRating.map((item, index, ) => {
+          <div className="mt-3">
+            {arrRating.map((item, index) => {
               return (
-                <Rate
-                  checked={item.checked}
-                  rating={item.rating}
-                  key={index}
-                  onChangeFilter={(rating) => {
-                    const ratingNum: number = Number(rating);
-                    onRateChange(ratingNum)
-                  }}
-                />
+                <Rate checked={item.checked} rating={item.rating} key={index} />
               );
             })}
           </div>

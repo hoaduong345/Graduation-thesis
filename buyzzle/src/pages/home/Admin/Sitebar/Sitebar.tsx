@@ -45,7 +45,7 @@ const listSitebar: SitebarAdmin[] = [
    {
       title: "Thành Viên",
       icon: <Members />,
-      pathName: "",
+      pathName: "/admin/usersmanager",
    },
 
    {

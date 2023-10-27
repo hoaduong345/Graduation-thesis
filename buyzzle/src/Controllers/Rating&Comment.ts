@@ -56,15 +56,7 @@ class RatingAndComment {
             }, withCredentials: true
         })
     }
-    getCommentWhereRating = async (idproduct: number, rating: number): Promise<Rate> =>{
-        return await axios.get(`${appConfig.apiUrl}/ratingcomment/${idproduct}?selectedRatingValue=${rating}`,{
-            headers: {
-                "Access-Control-Allow-Origin": "*"
-            }, withCredentials: true
-        }).then((res) => {
-            return res.data as Rate
-        })
-    }
+
 }
 
 export const RatingAndCommentController = new RatingAndComment()

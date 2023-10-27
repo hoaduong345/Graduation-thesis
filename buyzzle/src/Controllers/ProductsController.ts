@@ -22,8 +22,8 @@ export interface ModelProducts {
 };
 
 class ProductController {
-    getList = async (name: string | undefined, id: number): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&categoryId=${id}`).then((res) => {
+    getList = async (name: string | undefined, nameCate:string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&categoryName=${nameCate}`).then((res) => {
             return res.data as Products[]
         })
     }
@@ -47,18 +47,18 @@ class ProductController {
             return res.data as Products[]
         })
     }
-    getSortProductbyPrice = async (key: string, id: number): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?sortByPrice=${key}&categoryId=${id}`).then((res) => {
+    getSortProductbyPrice = async (key: string, nameCate:string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?sortByPrice=${key}&categoryName=${nameCate}`).then((res) => {
             return res.data as Products[]
         })
     }
-    getSortProductbyDateCreate = async (key: string, id: number): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?sortByDateCreate=${key}&categoryId=${id}`).then((res) => {
+    getSortProductbyDateCreate = async (key: string, nameCate:string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?sortByDateCreate=${key}&categoryName=${nameCate}`).then((res) => {
             return res.data as Products[]
         })
     }
-    getFilterProductWithinRangeIDCategory = async (min: number, max: number, id: number): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryId=${id}`).then((res) => {
+    getFilterProductWithinRangeIDCategory = async (min: number, max: number, nameCate:string): Promise<Products[]> => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryName=${nameCate}`).then((res) => {
             return res.data as Products[]
         })
     }
@@ -83,11 +83,6 @@ class ProductController {
             return res.data as Products[]
         })
     }
-    getProductWhereRatting = async (rate: number): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?rating=${rate}`).then((res) => {
-            return res.data as Products[]
-        })
-    }
     getProductSoldOut = async (soldOut: string): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts/${soldOut}`).then((res) => {
             return res.data as Products[]
@@ -98,7 +93,7 @@ class ProductController {
             return res.data as Products[]
         })
     }
-    getProductInStockAndSoldOut = async (inStockOrsoldOut:string): Promise<Products[]> => {
+    getProductInStockAndSoldOut = async (inStockOrsoldOut?:string): Promise<Products[]> => {
         return await axios.get(`${appConfig.apiUrl}/allproducts?availabilityType=${inStockOrsoldOut}`).then((res) => {
             return res.data as Products[]
         })

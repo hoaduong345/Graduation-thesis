@@ -1,5 +1,4 @@
 const { PrismaClient } = require('@prisma/client');
-
 const prisma = new PrismaClient();
 
 const multer = require('multer');
@@ -59,20 +58,23 @@ const ProductController = {
     deleteCategory: async (req, res) => {
         try {
             const categoryId = parseInt(req.params.id);
-            const existingCategory = await prisma.category.findUnique({
+            const existingCategory = await prisma.category.findFirst({
                 where: {
                     id: categoryId,
                 },
             });
-            if (!existingCategory) {
-                return res.status(404).json('Danh mục không tồn tại');
+            if (existingCategory) {
+                await prisma.category.update({
+                    where: {
+                        id: categoryId,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                });
+                return res.status(200).json('Xóa danh mục thành công');
             }
-            await prisma.category.delete({
-                where: {
-                    id: categoryId,
-                },
-            });
-            res.status(200).json('Xóa danh mục thành công');
+            return res.status(404).json('Danh mục không tồn tại');
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -116,7 +118,12 @@ const ProductController = {
     // get all data category
     getAllCategory: async (req, res) => {
         try {
-            const AllCategory = await prisma.category.findMany();
+            const whereClause = {
+                deletedAt: null,
+            };
+            const AllCategory = await prisma.category.findMany({
+                where: whereClause,
+            });
             res.status(200).json(AllCategory);
         } catch (error) {
             console.error(error);
@@ -265,46 +272,25 @@ const ProductController = {
     deleteProduct: async (req, res) => {
         try {
             const id = parseInt(req.params.id);
-            console.log(id);
-
-            //Tìm tất cả các bình luận thuộc về sản phẩm
-            const commentsToDelete = await prisma.rating.findMany({
-                where: {
-                    idproduct: id,
-                },
-            });
-
-            //Xóa tất cả các bình luận thuộc về sản phẩm
-            for (const comment of commentsToDelete) {
-                await prisma.rating.delete({
-                    where: {
-                        id: comment.id,
-                    },
-                });
-            }
-
-            // Tìm tất cả các hình ảnh thuộc về sản phẩm
-            const productImagesToDelete = await prisma.productImage.findMany({
+            const productToDelete = await prisma.product.findFirst({
                 where: {
                     id: id,
                 },
             });
-
-            // Xóa tất cả các hình ảnh thuộc về sản phẩm
-            for (const productImage of productImagesToDelete) {
-                await prisma.productImage.delete({
+            console.log('🚀 ~ file: ProductController.js:329 ~ deleteProduct: ~ productToDelete:', productToDelete);
+            if (productToDelete) {
+                await prisma.product.update({
                     where: {
-                        id: productImage.id,
+                        id: id,
+                    },
+                    data: {
+                        deletedAt: new Date(),
                     },
                 });
+                return res.status(200).json('Xóa sản phẩm và hình ảnh thành công');
             }
-            // // Xóa sản phẩm
-            await prisma.product.delete({
-                where: {
-                    id: id,
-                },
-            });
-            res.status(200).json('Xóa sản phẩm và hình ảnh thành công');
+
+            return res.status(402).json('San pham khong ton tai');
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -426,137 +412,6 @@ const ProductController = {
         }
     },
 
-    // // Hiện tất cả sản phẩm
-
-    // getAllProduct: async (req, res) => {
-    //     try {
-    //         // tìm kiếm = keyword
-    //         const keyword = req.query.keyword;
-    //         const page = parseInt(req.query.page) || 1;
-    //         const pageSize = parseInt(req.query.pageSize) || 40;
-    //         const sortByPrice = req.query.sortByPrice;
-    //         const sortByDateCreate = req.query.sortByDateCreate;
-    //         const categoryId = req.query.categoryId;
-    //         const rating = req.query.rating;
-    //         const discount = 60;
-    //         const productid = parseInt(req.params.id);
-
-    //         const FlashsaleProducts = await prisma.product.findMany({
-    //             where: {
-    //                 discount: {
-    //                     gt: discount,
-    //                 },
-    //             },
-    //             take: 3,
-    //         });
-
-    //         const skip = (page - 1) * pageSize;
-    //         const whereClause = {
-    //             name: {
-    //                 contains: keyword,
-    //             },
-    //         };
-    //         const totalProduct = await prisma.product.findMany({
-    //             where: whereClause,
-    //         });
-
-    //         if (categoryId) {
-    //             whereClause.fK_category = {
-    //                 id: parseInt(categoryId),
-    //             };
-    //         }
-
-    //         if (rating) {
-    //             whereClause.rate = {
-    //                 gte: parseInt(rating),
-    //             };
-    //         }
-
-    //         if (req.query.minPrice && req.query.maxPrice) {
-    //             whereClause.sellingPrice = {
-    //                 gte: parseInt(req.query.minPrice),
-    //                 lte: parseInt(req.query.maxPrice),
-    //             };
-    //         }
-    //         if (req.query.minQuantity && req.query.maxQuantity) {
-    //             whereClause.quantity = {
-    //                 gte: parseInt(req.query.minQuantity),
-    //                 lte: parseInt(req.query.maxQuantity),
-    //             };
-    //         }
-    //         if (req.query.minPurchase && req.query.maxPurchase) {
-    //             whereClause.soldcount = {
-    //                 gte: parseInt(req.query.minPurchase),
-    //                 lte: parseInt(req.query.maxPurchase),
-    //             };
-    //         }
-
-    //         const ratings = await prisma.rating.findMany({
-    //             include: {
-    //                 user: {
-    //                     select: {
-    //                         username: true,
-    //                     },
-    //                 },
-    //                 product: {
-    //                     select: {
-    //                         quantity: true,
-    //                     },
-    //                 },
-    //             },
-    //         });
-
-    //         const result = await prisma.product.findMany({
-    //             orderBy: {
-    //                 sellingPrice: sortByPrice,
-    //                 createdAt: sortByDateCreate,
-    //                 soldcount: 'desc',
-    //             },
-    //             include: {
-    //                 ProductImage: true,
-    //                 fK_category: true,
-    //                 Rating: true,
-    //             },
-    //             where: whereClause,
-    //             skip,
-    //             take: pageSize,
-    //         });
-
-    //         result.forEach(async (product) => {
-    //             const totalRating = product.Rating.reduce((sum, rating) => sum + rating.ratingValue, 0);
-    //             const averageRating = totalRating / product.Rating.length;
-
-    //             const productId = product.id;
-
-    //             if (productId) {
-    //                 await prisma.product.update({
-    //                     where: {
-    //                         id: productId,
-    //                     },
-    //                     data: {
-    //                         rate: averageRating,
-    //                     },
-    //                 });
-    //             } else {
-    //                 console.error('k co id');
-    //             }
-    //         });
-
-    //         const resultProduct = {
-    //             FlashsaleProducts: FlashsaleProducts,
-    //             currentPage: page,
-    //             totalPage: Math.ceil(totalProduct.length / pageSize),
-    //             rows: result,
-    //             // averageRating: averageRating,
-    //             Rating: ratings,
-    //         };
-    //         res.status(200).json(resultProduct);
-    //     } catch (error) {
-    //         console.error(error);
-    //         res.status(500).json(error.message);
-    //     }
-    // },
-
     getAllProduct: async (req, res) => {
         try {
             // tìm kiếm = keyword
@@ -566,6 +421,7 @@ const ProductController = {
             const sortByPrice = req.query.sortByPrice;
             const sortByDateCreate = req.query.sortByDateCreate;
             const categoryId = req.query.categoryId;
+            const categoryName = req.query.categoryName;
             const rating = req.query.rating;
             const discount = 60;
             const productid = parseInt(req.params.id);
@@ -585,6 +441,7 @@ const ProductController = {
                 name: {
                     contains: keyword,
                 },
+                deletedAt: null,
             };
             const totalProduct = await prisma.product.findMany({
                 where: whereClause,
@@ -595,14 +452,19 @@ const ProductController = {
                     id: parseInt(categoryId),
                 };
             }
+            if (categoryName) {
+                whereClause.fK_category = {
+                    name: categoryName,
+                };
+            }
 
             if (rating) {
                 whereClause.rate = {
                     gte: parseInt(rating),
                 };
-              }
-           
-            if (req.query.minPrice && req.query.maxPrice) { 
+            }
+
+            if (req.query.minPrice && req.query.maxPrice) {
                 whereClause.sellingPrice = {
                     gte: parseInt(req.query.minPrice),
                     lte: parseInt(req.query.maxPrice),
@@ -637,11 +499,7 @@ const ProductController = {
             });
 
             const result = await prisma.product.findMany({
-                orderBy: {
-                    sellingPrice: sortByPrice,
-                    createdAt: sortByDateCreate,
-                    soldcount: 'desc',
-                },
+                orderBy: [{ sellingPrice: sortByPrice }, { createdAt: sortByDateCreate }, { soldcount: 'desc' }],
                 include: {
                     ProductImage: true,
                     fK_category: true,
@@ -843,19 +701,11 @@ const ProductController = {
             const productId = parseInt(req.params.productId);
             const page = parseInt(req.query.page) || 1;
             const perPage = parseInt(req.query.perPage) || 40;
-            const selectedRatingValue = parseInt(req.query.selectedRatingValue);
-    
-            const whereClause = {
-                idproduct: productId,
-            };
-    
-         
-            if (!isNaN(selectedRatingValue)) {
-                whereClause.ratingValue = selectedRatingValue;
-            }
-    
+
             const ratings = await prisma.rating.findMany({
-                where: whereClause,
+                where: {
+                    idproduct: productId,
+                },
                 include: {
                     user: {
                         select: {
@@ -876,19 +726,19 @@ const ProductController = {
                 skip: (page - 1) * perPage,
                 take: perPage,
             });
-    
+
             if (ratings.length === 0) {
                 return res.status(200).json(0);
             }
-    
             // Lấy số lượng tổng cộng của đánh giá cho sản phẩm
             const totalRatings = await prisma.rating.count({
-                where: whereClause,
+                where: {
+                    idproduct: productId,
+                },
             });
-    
             const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
             const averageRating = totalRating / totalRatings;
-    
+
             const resultProduct = {
                 currentPage: page,
                 perPage: perPage,
@@ -896,14 +746,13 @@ const ProductController = {
                 averageRating: averageRating,
                 Rating: ratings,
             };
-    
+
             res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
-    
 
     updateRatingandComment: async (req, res) => {
         try {

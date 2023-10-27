@@ -23,7 +23,6 @@ export default function FilterListproduct({
   onPurchaseRangeChange,
   oninStock,
   onSoldOut,
-  onRateChange,
 }: SliderComponentProps) {
   const [price, setPrice] = useState(false);
   const [purchase, setPurchase] = useState(false);
@@ -33,7 +32,6 @@ export default function FilterListproduct({
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
   const [availability, setAvailability] = useState<boolean>(false);
   const [soldOut, setSoldOut] = useState<boolean>(false);
-  const [rating, setRating] = useState(1);
   const handleSliderChangePrice = (price: [number, number]) => {
     console.log(
       "🚀 ~ file: FilterListproduct.tsx:29 ~ handleSliderChangePrice ~ price:",
@@ -69,11 +67,6 @@ export default function FilterListproduct({
     onSoldOut(SoldOut);
   };
 
-  const handleRateChange = (rate: number) => {
-    console.log("Rating:", rate);
-    setRating(rate);
-    onRateChange(rate);
-  };
   return (
     <div
       className="p-7 shadow mt-3 flex flex-col gap-9 relative 
@@ -212,6 +205,7 @@ export default function FilterListproduct({
                   type="checkbox"
                   className="w-4 h-4 accent-[#EA4B48] max-xl:w-[14px] max-xl:h-[14px] max-[900px]:w-3 max-[900px]:h-3"
                   onChange={(e) => handleClickSoldOut(e.target.checked)}
+                  checked={soldOut} // Đặt trạng thái checked của checkbox dựa trên biến soldOut
                 />
                 <p className="text-sm font-bold text-[#EA4B48] max-xl:text-[13px]">
                   Hết Hàng
@@ -287,11 +281,7 @@ export default function FilterListproduct({
 
       <div className="grid grid-cols-5 gap-1">
         {arrRating.map((e) => {
-          return <FilterRateMap rating={e.rating} checked={e.checked} 
-          onChangeFilter={(rating) => {
-            handleRateChange(rating)
-          }}
-          />;
+          return <FilterRateMap rating={e.rating} checked={e.checked} />;
         })}
       </div>
     </div>
