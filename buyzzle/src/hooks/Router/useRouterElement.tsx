@@ -590,7 +590,7 @@ export default function useRouterEmelent() {
           //       path: ":id",
           //       element: <DetailOrderManagement />,
           //    },
-          // ],
+          // ],////
         },
         {
           path: "ordermanagement/:id",
