@@ -1,6 +1,7 @@
 import { IonIcon } from "@ionic/react";
 import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
+import { useNavigate } from "react-router-dom";
 import Search from "../../../../../Assets/TSX/Search";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDate, numberFormat } from "../../../../../Helper/Format";
@@ -120,6 +121,8 @@ export default function OrderManagement() {
    useEffect(() => {
       getOrder();
    }, [currentPage]);
+
+   const navigate = useNavigate();
 
    return (
       <Container>
@@ -368,7 +371,12 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                  <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
                                     <p>Cập nhật</p>
                                  </button>
-                                 <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
+                                 <button
+                                    className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex"
+                                    onClick={() => {
+                                       navigate(`${e.id}`);
+                                    }}
+                                 >
                                     <p>Xem chi tiết</p>
                                  </button>
                               </div>
