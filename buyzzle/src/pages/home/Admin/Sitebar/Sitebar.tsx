@@ -25,7 +25,7 @@ const listSitebar: SitebarAdmin[] = [
   {
     title: "Thống Kê",
     icon: <Statistical />,
-    pathName: "",
+    pathName: "/admin/statisticsPage",
   },
   {
     title: "Sản Phẩm",
@@ -38,21 +38,16 @@ const listSitebar: SitebarAdmin[] = [
     pathName: "/admin/category",
   },
   {
-    title: "Sự Kiện",
-    icon: <EventIcon />,
-    pathName: "",
-  },
-  {
-    title: "Thành Viên",
+    title: "Người dùng",
     icon: <Members />,
     pathName: "/admin/usersmanager",
   },
 
-  {
-    title: "Khuyễn Mãi",
-    icon: <SalesIcon />,
-    pathName: "",
-  },
+  // {
+  //   title: "Khuyễn Mãi",
+  //   icon: <SalesIcon />,
+  //   pathName: "",
+  // },
   {
     title: "Mã Giảm Giá",
     icon: <VouchersIcon />,
@@ -68,16 +63,16 @@ const listSitebar: SitebarAdmin[] = [
     icon: <MessagesIcon />,
     pathName: "",
   },
-  {
-    title: "Cài Đặt",
-    icon: <SettingsIcon />,
-    pathName: "",
-  },
+  // {
+  //   title: "Cài Đặt",
+  //   icon: <SettingsIcon />,
+  //   pathName: "",
+  // },
 ];
 export default function SitebarAdmin() {
   const { pathname } = useLocation();
   const loadBorder = (index: number) => {
-    if ((index + 1) % 2 == 0) {
+    if ((index + 1) % 3 == 0) {
       return (
         <p className="border-dashed border-t-2 solid #E8E8EA w-[100%]"></p>
       );
