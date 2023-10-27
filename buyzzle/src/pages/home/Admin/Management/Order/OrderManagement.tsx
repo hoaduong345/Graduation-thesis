@@ -7,8 +7,6 @@ import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDate, numberFormat } from "../../../../../Helper/Format";
 import { OrderPanigation } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
-import Filter from "../../Assets/TSX/Filter";
-import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Calendar from "../../Assets/TSX/calendar";
 import Excel from "../../Assets/TSX/excel";
 import Print from "../../Assets/TSX/print";
