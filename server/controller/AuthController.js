@@ -217,9 +217,7 @@ const AuthController = {
                     // await SendEmail(user.email, 'Verify email', url);
                     console.log('login: ~ url:', url);
                 }
-                return res.status(400).send({
-                    message: 'An email has sent to your email, please check that',
-                });
+                return res.status(404).json('An email has sent to your email, please check that');
             }
 
             if (user.email && validPassword) {
