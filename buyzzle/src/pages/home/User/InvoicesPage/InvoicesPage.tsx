@@ -1,7 +1,36 @@
+import { useEffect, useState } from "react";
 import LogoWeb from "../../../../Assets/TSX/LogoWeb";
 import Container from "../../../../components/container/Container";
+import axios from "axios";
+import { CartItem, CartProduct } from "../../../../Model/CartModel";
+import { numberFormat } from "../../../../Helper/Format";
+
+interface Invoice {
+   cart: CartProduct;
+   item: CartItem[];
+}
 
 export default function InvoicesPage() {
+   const [invoice, setInvoice] = useState({} as Invoice);
+
+   useEffect(() => {
+      getInvoice();
+   }, []);
+
+   const getInvoice = () => {
+      axios
+         .get("http://localhost:5000/buyzzle/order", {
+            headers: {
+               "Access-Control-Allow-Origin": "*",
+            },
+            withCredentials: true,
+         })
+         .then((res) => {
+            setInvoice(res.data.data[0].invoiceDetails[0].cart);
+         });
+   };
+   console.log(invoice.item);
+
    return (
       <>
          <Container>
@@ -80,26 +109,32 @@ export default function InvoicesPage() {
                         </tr>
                      </thead>
                      <tbody>
-                        <tr className="border-b border-gray-200">
-                           <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                              <div className="font-medium text-gray-900">
-                                 E-commerce Platform
-                              </div>
-                              <div className="mt-1 truncate text-gray-500">
-                                 Laravel based e-commerce platform.
-                              </div>
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              500.0
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              $100.00
-                           </td>
-                           <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
-                              $5,000.00
-                           </td>
-                        </tr>
-                        <tr className="border-b border-gray-200">
+                        {invoice?.item?.map((e) => {
+                           return (
+                              <>
+                                 <tr className="border-b border-gray-200">
+                                    <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
+                                       <div className="font-medium text-gray-900">
+                                          {e.product.name}
+                                       </div>
+                                       <div className="mt-1 truncate text-gray-500">
+                                          {e.product.description}
+                                       </div>
+                                    </td>
+                                    <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
+                                       {e.quantity}
+                                    </td>
+                                    <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
+                                       {numberFormat(e.product.sellingPrice)}
+                                    </td>
+                                    <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
+                                       {numberFormat(e.total)}
+                                    </td>
+                                 </tr>
+                              </>
+                           );
+                        })}
+                        {/* <tr className="border-b border-gray-200">
                            <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
                               <div className="font-medium text-gray-900">
                                  Frontend Design
@@ -136,7 +171,7 @@ export default function InvoicesPage() {
                            <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
                               $500.00
                            </td>
-                        </tr>
+                        </tr> */}
                      </tbody>
                      <tfoot>
                         <tr>

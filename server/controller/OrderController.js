@@ -1,86 +1,104 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-const OderController = {
-    createOrder: async (req, res) => {
-        try {
-            const userId = parseInt(req.cookies.id);
-            const cartItems = req.body.cartItems;
-            const orders = [];
+const OrderController = {
+  createOrder: async (req, res) => {
+    try {
+      const userId = parseInt(req.cookies.id);
+      console.log("userId", userId);
+      const cartItems = req.body.cartItems;
+      const orders = [];
 
-            for (const cartItem of cartItems) {
-                let order = await prisma.order.findFirst({
-                    where: {
-                        userId: userId,
-                    },
-                });
+      // Find the existing order for the user
+      const order = await findUserOrder(userId);
 
-                if (!order) {
-                    order = await prisma.order.create({
-                        data: {
-                            userId,
-                            OrderDetail: {
-                                create: {
-                                    productId: cartItem.productId,
-                                },
-                            },
-                        },
-                        include: { OrderDetail: true },
-                    });
-                } else {
-                    const updateOrder = await prisma.order.update({
-                        where: {
-                            userId: userId,
-                        },
-                        data: {
-                            OrderDetail: {
-                                upsert: {
-                                    where: {
-                                        productId: cartItem.productId,
-                                    },
-                                    create: {
-                                        productId: cartItem.productId,
-                                    },
-                                },
-                            },
-                        },
-                    });
-                    orders.push(updateOrder);
-                }
-            }
-
-            res.status(200).json(orders);
-        } catch (error) {
-            console.log(error);
-            res.status(404).json('Add orders to the database failed');
+      for (const cartItem of cartItems) {
+        if (!order) {
+          const newOrder = await createNewOrder(userId, cartItem.product.id);
+          orders.push(newOrder);
+        } else {
+          await createOrderDetailIfNotExists(order.id, cartItem.product.id);
         }
-    },
+      }
 
-    getOrderDetails: async (req, res) => {
-        try {
-            const userid = parseInt(req.cookies.id);
-            const order = await prisma.order.findFirst({
-                where: {
-                    userId: userid,
-                },
-                include: {
-                    OrderDetail: {
-                        include: {
-                            productOrder: {
-                                include: {
-                                    ProductImage: true,
-                                },
-                            },
-                        },
-                    },
-                },
-            });
-            res.status(200).json(order);
-        } catch (error) {
-            console.log('error', error);
-            res.status(404).send('Get order failed');
-        }
-    },
+      res.status(200).json(orders);
+    } catch (error) {
+      handleOrderCreationError(error, res);
+    }
+  },
+
+  getOrderDetails: async (req, res) => {
+    try {
+      const userId = parseInt(req.cookies.id);
+      const order = await findUserOrder(userId, true);
+      res.status(200).json(order);
+    } catch (error) {
+      handleOrderDetailError(error, res);
+    }
+  },
 };
 
-module.exports = OderController;
+async function findUserOrder(userId, includeDetails = false) {
+  return prisma.order.findFirst({
+    where: {
+      userId: userId,
+    },
+    include: includeDetails
+      ? {
+          OrderDetail: {
+            include: {
+              productOrder: {
+                include: {
+                  ProductImage: true,
+                },
+              },
+            },
+          },
+        }
+      : {},
+  });
+}
+
+async function createNewOrder(userId, productId) {
+  return prisma.order.create({
+    data: {
+      userId,
+      OrderDetail: {
+        create: {
+          productId,
+        },
+      },
+    },
+    include: { OrderDetail: true },
+  });
+}
+
+async function createOrderDetailIfNotExists(orderId, productId) {
+  const existingOrderDetail = await prisma.orderDetail.findFirst({
+    where: {
+      orderId,
+      productId,
+    },
+  });
+
+  if (!existingOrderDetail) {
+    await prisma.orderDetail.create({
+      data: {
+        orderId,
+        productId,
+      },
+    });
+  }
+}
+
+function handleOrderCreationError(error, res) {
+  console.error(error);
+  res.status(500).json({ error: 'Add orders to the database failed' });
+}
+
+function handleOrderDetailError(error, res) {
+  console.error('error', error);
+  res.status(404).send('Get order failed');
+}
+
+module.exports = OrderController;

@@ -1,13 +1,11 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
 import {
   formatSoldCount,
   numberFormat,
   roundedNumber,
 } from "../../../../../Helper/Format";
-import { Products } from "../../FilterPage/FiltersPage";
-import { Link } from "react-router-dom";
-import { Rate, Row } from "../../../../../Model/ProductModel";
+import { Row } from "../../../../../Model/ProductModel";
 type Props = {
   productRecommand: Row;
 };

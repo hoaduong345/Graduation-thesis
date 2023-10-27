@@ -30,25 +30,37 @@ export default function PaymentBtn(props: StripePayment) {
                      window.location.href = res.data.url;
                   }
                })
-               .then(() => {
-                  axios.post(
-                     "http://localhost:5000/buyzzle/invoice",
-                     {
-                        cartItems: cartItems,
-                     },
-                     {
-                        headers: {
-                           "Access-Control-Allow-Origin": "*",
-                        },
-                        withCredentials: true,
-                     }
-                  );
-               })
+               // .then(() => {
+               //    axios.post(
+               //       "http://localhost:5000/buyzzle/invoice",
+               //       {
+               //          cartItems: cartItems,
+               //       },
+               //       {
+               //          headers: {
+               //             "Access-Control-Allow-Origin": "*",
+               //          },
+               //          withCredentials: true,
+               //       }
+               //    );
+               // })
                .catch((err) => console.log(err.message));
          }, 1000);
       } else if (isCheckedPayment == "cash") {
          setLoading(true);
          setTimeout(async () => {
+            await axios.post(
+               "http://localhost:5000/buyzzle/order",
+               {
+                  cartItems: cartItems,
+               },
+               {
+                  headers: {
+                     "Access-Control-Allow-Origin": "*",
+                  },
+                  withCredentials: true,
+               }
+            );
             window.location.href = "/orderdetail";
          }, 1500);
       }

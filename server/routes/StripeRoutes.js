@@ -3,7 +3,7 @@ const axios = require('axios');
 const app = express();
 const bodyParser = require('body-parser');
 const stripe = require('stripe')(
-    'sk_test_51O0ahrIKIIhc6ETSN0E3p8O9RiVBg4AnNoQCwtvdNZuYq3yc1K8TwG5rcYSKPOuJJKDIzj3aXEvx4Zv71nKlfLvS00JFCLvX5t'
+    'sk_test_51O1l6rKkoUZ1lXyFytV0ahVe1qc5GMonf289XGJlLaVxCwDwwSRZrMt30c7pWqmlxTMx5L5OhcsYnguuFDdiNJUY00ictvC17Y'
 );
 
 app.post('/create-checkout-session', async (req, res) => {
@@ -48,11 +48,21 @@ app.post('/create-checkout-session', async (req, res) => {
             currency: 'vnd',
         },
     });
+    // const paymentIntent = await stripe.paymentIntents.create({
+    //     amount: 1099,
+    //     currency: 'vnd',
+    //     payment_method_types: ['card'],
+    //     description: 'Buyzzle cảm Bạn đã mua hàng!',
+    //     receipt_email: 'I.override.your.customer.email.settings@example.com',
+    // });
     const session = await stripe.checkout.sessions.create({
         line_items,
         mode: 'payment',
         discounts: !discount ? [] : [{ coupon: coupon.id }],
         shipping_options: [{ shipping_rate: shippingRate.id }],
+        invoice_creation: {
+            enabled: true,
+        },
         success_url: 'http://localhost:5173/orderdetail',
         cancel_url: 'http://localhost:5173/cart',
     });
