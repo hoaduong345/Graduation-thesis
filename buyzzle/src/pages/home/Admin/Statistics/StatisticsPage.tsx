@@ -6,103 +6,96 @@ import ArrowRise from "../../../../Assets/TSX/ArrowRise";
 
 import {
   Chart as ChartJS,
+  BarElement,
+  ArcElement,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
-  ArcElement,
   Tooltip,
   Legend,
 } from "chart.js";
-import { Pie, Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import ArrowFall from "../../../../Assets/TSX/ArrowFall";
-import { number } from "yup";
+import { useSpring, animated } from "react-spring";
 ChartJS.register(
   ArcElement,
   Tooltip,
   CategoryScale,
   LinearScale,
+  PointElement,
+  LineElement,
   BarElement,
   Title,
   Legend
 );
-
 // chart\
 
-export const optionsChartCircle = {
-  canvas: {
-    plugin: {
-      legend: {
-        position: "center" as const,
-      },
-    },
-  },
-  relative: true,
+export const optionsChartLine = {
+  responsive: true,
   plugins: {
     legend: {
-      position: "right" as const,
-      labels: {
-        color: "rgb(255, 99, 132)",
-        font: {
-          size: 15,
-        },
-      },
-    },
-    scales: {
-      r: {
-        ticks: {
-          backdropPadding: {
-            x: 10,
-          },
-        },
-      },
-    },
-    title: {
-      display: true,
-      text: "Top loại sản phẩm",
-      font: {
-        size: 20,
-      },
+      position: "bottom" as const,
     },
   },
 };
-export const dataChartCircle = {
-  labels: ["Thiết bị điện tử", "Đồ gia dụng", "Thực phẩm", "Khác"],
+const labelsLine = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+];
+
+export const dataChartLine = {
+  labels: labelsLine,
   datasets: [
     {
-      label: "# of Votes",
-      data: [38.6, 22.5, 30.8, 8.1],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-      ],
-      borderWidth: 2 /* change this */,
-      hoverOffset: 4,
+      label: "Thiết bị điện tử",
+      data: [800, 30, 750, 80, 650, 75, 90],
+      borderColor: "rgb(255, 99, 132)",
+      backgroundColor: "rgba(255, 99, 132, 0.5)",
+    },
+    {
+      label: "Đồ gia dụng",
+      data: [100, 200, 20, 150, 820, 180, 130],
+      borderColor: "rgb(53, 162, 235)",
+      backgroundColor: "rgba(53, 162, 235, 0.5)",
+    },
+
+    {
+      label: "Khác",
+      data: [10, 20, 20, 140, 610, 180, 180],
+      borderColor: "#95A4FC",
+      backgroundColor: "#cad2ff",
     },
   ],
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const labelsVertical = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+];
 
 export const dataChartVertical = {
-  labels,
+  labels: labelsVertical,
   datasets: [
     {
       label: "Dataset 1",
-      data: labels.map(() => [0, 200], 1000),
+      data: [800, 30, 70, 80, 650, 75, 900],
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
     {
       label: "Dataset 2",
-      data: labels.map(() => [0, 500], 1000),
+      data: [100, 200, 20, 150, 820, 180, 930],
       backgroundColor: "rgba(53, 162, 235, 0.5)",
     },
   ],
@@ -111,7 +104,7 @@ export const optionsChartVertical = {
   responsive: true,
   plugins: {
     legend: {
-      position: "top" as const,
+      position: "bottom" as const,
     },
     title: {
       display: true,
@@ -123,7 +116,24 @@ export const optionsChartVertical = {
   },
 };
 
+interface topProductsStats {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  revenue: number;
+}
+
 export default function StatisticsPage() {
+  const numberStast = () => {
+    const { number } = useSpring({
+      from: { number: 0 },
+      number: 1000,
+      delay: 300,
+      config: { mass: 1, tension: 130, friction: 114 },
+    });
+    return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
+  };
   const [open, setOpen] = useState(false);
 
   const openModal = () => {
@@ -143,7 +153,57 @@ export default function StatisticsPage() {
       modal.close();
     }
   };
-
+  const [statsProduct, setStatsProduct] = useState<topProductsStats[]>([
+    {
+      id: 1,
+      name: "Sản phẩm A",
+      price: 29.99,
+      quantity: 50,
+      revenue: 1499.5,
+    },
+    {
+      id: 2,
+      name: "Sản phẩm B",
+      price: 14.99,
+      quantity: 30,
+      revenue: 449.7,
+    },
+    {
+      id: 3,
+      name: "Sản phẩm C",
+      price: 49.99,
+      quantity: 20,
+      revenue: 999.8,
+    },
+    {
+      id: 4,
+      name: "Sản phẩm D",
+      price: 39.99,
+      quantity: 10,
+      revenue: 399.9,
+    },
+    {
+      id: 5,
+      name: "Sản phẩm E",
+      price: 19.99,
+      quantity: 40,
+      revenue: 799.6,
+    },
+    {
+      id: 6,
+      name: "Sản phẩm F",
+      price: 59.99,
+      quantity: 15,
+      revenue: 899.85,
+    },
+    {
+      id: 7,
+      name: "Sản phẩm G",
+      price: 24.99,
+      quantity: 25,
+      revenue: 624.75,
+    },
+  ]);
   return (
     <>
       <Container>
@@ -200,7 +260,7 @@ export default function StatisticsPage() {
                   <div className="items-center grid grid-cols-3">
                     <div className="col-span-2">
                       <p className="text-[#1C1C1C] font-semibold text-xl">
-                        721K
+                        {numberStast()}
                       </p>
                     </div>
                     <div className="col-span-1 flex gap-1">
@@ -285,10 +345,14 @@ export default function StatisticsPage() {
                 {/* end so lieu */}
               </div>
             </div>
+            {/* stats */}
             <div className="grid grid-cols-2 gap-3 mt-3">
-              <div className="bg-[#F7F9FB] rounded-2xl col-span-1">
-                <div className="w-[480px] h-[480px]">
-                  <Pie options={optionsChartCircle} data={dataChartCircle} />{" "}
+              <div className="bg-[#F7F9FB] rounded-2xl p-6 col-span-1">
+                <p className="text-xl font-bold text-[#6E6E6E] text-center w-full mx-auto content-center">
+                  Top loại sản phẩm
+                </p>
+                <div>
+                  <Line options={optionsChartLine} data={dataChartLine} />{" "}
                 </div>
               </div>
 
@@ -299,6 +363,68 @@ export default function StatisticsPage() {
                     data={dataChartVertical}
                   />
                 </div>
+              </div>
+            </div>
+            <div className="bg-[#F7F9FB] p-6 mt-3 rounded-2xl">
+              <p className="text-[#1C1C1C] font-semibold">Top sản phẩm</p>
+              {/* table */}
+              <div className="flex flex-col">
+                <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                    <div className="overflow-hidden">
+                      <table className="min-w-full text-left text-sm font-light">
+                        <thead className="border-b border-[#c7c7c7] font-medium ">
+                          <tr>
+                            <th scope="col" className="px-3 py-2"></th>
+                            <th scope="col" className="px-3 py-2">
+                              Tên
+                            </th>
+                            <th scope="col" className="px-3 py-2">
+                              Giá
+                            </th>
+                            <th scope="col" className="px-3 py-2">
+                              Số lượng
+                            </th>
+                            <th scope="col" className="px-3 py-2">
+                              Doanh thu
+                            </th>
+                          </tr>
+                        </thead>
+                        {statsProduct.map((items) => {
+                          return (
+                            <>
+                              <tbody>
+                                <tr className="transition duration-300 rounded-2xl ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-[#f0f0f0] ">
+                                  <td className="whitespace-nowrap px-3 py-2 font-normal">
+                                    {items.id}
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-2">
+                                    {items.name}
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-2">
+                                    {items.price}
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-2">
+                                    {items.quantity}
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-2">
+                                    {items.revenue}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </>
+                          );
+                        })}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* see more */}
+              <div className="mt-3">
+                <p className="text-[#5D5FEF] text-sm cursor-pointer hover:text-[#4648cc] duration-200">
+                  Xem thêm...
+                </p>
               </div>
             </div>
           </div>
