@@ -4,6 +4,12 @@ const prisma = new PrismaClient();
 const StatisticsController = {
     getStatictics: async (req, res) => {
         try {
+            // Thêm thông số skip và take để phân trang
+            const page = parseInt(req.query.page) || 1;
+            const pageSize = parseInt(req.query.pageSize) || 40;
+            const skip = (page - 1) * pageSize; // Số lượng sản phẩm được bỏ qua (trang đầu tiên)
+            const take = pageSize; // Số lượng sản phẩm được lấy
+
             const { date } = req.query; // Ngày cần thống kê (ví dụ: '2023-10-01')
             const selectedDate = new Date(date);
 
@@ -109,6 +115,8 @@ const StatisticsController = {
                 orderBy: {
                     quantity: 'desc',
                 },
+                skip, // Bỏ qua sản phẩm
+                take, // Lấy số lượng sản phẩ
             });
 
             res.status(200).json({

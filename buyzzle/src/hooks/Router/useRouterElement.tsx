@@ -30,8 +30,8 @@ import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
 import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
-import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
+import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -590,7 +590,7 @@ export default function useRouterEmelent() {
           //       path: ":id",
           //       element: <DetailOrderManagement />,
           //    },
-          // ],
+          // ],////
         },
         {
           path: "ordermanagement/:id",

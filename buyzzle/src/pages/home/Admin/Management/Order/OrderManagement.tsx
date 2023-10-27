@@ -202,15 +202,12 @@ export default function OrderManagement() {
                </div>
                {/* end card search */}
                {/* checkBox and Printf */}
-               <div className="col-span-2 flex items-center gap-4 justify-end">
-                  <button
-                     className="justify-center gap-3 items-center text-base font-bold text-white
-                             rounded-md py-[11px] hover:bg-[#ff6d65] flex mt-6
-                                transition duration-150 bg-[#EA4B48] cursor-pointer
-                                max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
-                  >
-                     Excel
-                  </button>
+               <div className="grid grid-cols-2 items-center py-4 px-10">
+                  <div className="col-span-2 flex items-center gap-4 justify-end">
+                     <div className="border-[#107C41] border-[1px] p-3 rounded-md hover:bg-[#d7fee1] cursor-pointer transition-all duration-150">
+                        <Excel />
+                     </div>
+                  </div>
                </div>
                {/* end checkBox and Printf*/}
                <div className="flex flex-col space-y-4">
