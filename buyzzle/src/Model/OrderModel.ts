@@ -16,6 +16,8 @@ export interface OrderModel {
     paymentMethod: string,
     createdAt: Date,
     status: string;
+    invoice: string,
+    note: string,
     User: UserModel
     OrderDetail: OrderItems[]
 }

@@ -243,6 +243,8 @@ model Order {
   id            Int           @id @default(autoincrement())
   userId        Int?
   status        String?
+  note          String?
+  invoice       String?
   subtotal      Int?
   shipping      Int?
   discount      Int?
