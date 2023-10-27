@@ -1,7 +1,7 @@
 import { IonIcon } from "@ionic/react";
 import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Search from "../../../../../Assets/TSX/Search";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDate, numberFormat } from "../../../../../Helper/Format";
@@ -198,46 +198,19 @@ export default function OrderManagement() {
                            placeholder="Tìm kiếm..."
                         />
                      </div>
-                     <div>
-                        <div
-                           className={`flex items-center w-[112px] rounded-md h-[46px] hover:bg-[#ffeeed]
-                    transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer
-                    max-xl:w-[125px]
-                    max-xl:h-[40px]
-                    max-[885px]:h-[35px]
-                    bg-[#FFF]
-                    text-center text-base font-bold text-[#EA4B48] 
-                     max-xl:font-medium max-lg:text-xs max-[885px]:w-[102px]`}
-                        >
-                           <div className={`stroke-[#EA4B48]`}>
-                              <Filter />
-                           </div>
-                           <button>Bộ lọc</button>
-                        </div>
-                     </div>
                   </div>
                </div>
                {/* end card search */}
                {/* checkBox and Printf */}
-               <div className="grid grid-cols-2 items-center py-4 px-10">
-                  {/* checkBox */}
-                  <div className="col-span-1 flex gap-3">
-                     {/* <Delete /> */}
-                     <input
-                        className="checkbox checkbox-sm items-center"
-                        type="checkbox"
-                     />
-                     <p>Chọn tất cả</p>
-                  </div>
-                  {/* end checkBox */}
-                  <div className="col-span-1 flex items-center gap-4 justify-end">
-                     <div className="border-[#EA4B48] border-[1px] p-3 rounded-md hover:bg-[#ffe0e0] cursor-pointer transition-all duration-150">
-                        <RemoveCate />
-                     </div>
-                     <div className="border-[#107C41] border-[1px] p-3 rounded-md hover:bg-[#d7fee1] cursor-pointer transition-all duration-150">
-                        <Excel />
-                     </div>
-                  </div>
+               <div className="col-span-2 flex items-center gap-4 justify-end">
+                  <button
+                     className="justify-center gap-3 items-center text-base font-bold text-white
+                             rounded-md py-[11px] hover:bg-[#ff6d65] flex mt-6
+                                transition duration-150 bg-[#EA4B48] cursor-pointer
+                                max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
+                  >
+                     Excel
+                  </button>
                </div>
                {/* end checkBox and Printf*/}
                <div className="flex flex-col space-y-4">
@@ -251,10 +224,6 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                            >
                               <div className="justify-between flex ">
                                  <div className="col-span-2 flex items-center gap-4">
-                                    <input
-                                       className="checkbox checkbox-sm items-center"
-                                       type="checkbox"
-                                    />
                                     <div className="flex items-center gap-1">
                                        <p className="text-[#4C4C4C] font-bold text-base">
                                           Đơn hàng:{" "}
@@ -277,7 +246,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                     </p>
                                  </div>
                               </div>
-                              <div className="mx-9">
+                              <div className="">
                                  <div className="my-2 flex items-center gap-2">
                                     {/* calendarIcon */}
                                     <div>
@@ -366,10 +335,12 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                               <div className="group-hover:opacity-100 flex absolute top-1/3 transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
                                  {e.invoice == "true" ? (
                                     <>
-                                       <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
-                                          <Print />
-                                          <p>Print</p>
-                                       </button>
+                                       <Link to={`/invoice/${e.id}`}>
+                                          <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
+                                             <Print />
+                                             <p>Print</p>
+                                          </button>
+                                       </Link>
                                     </>
                                  ) : (
                                     <></>

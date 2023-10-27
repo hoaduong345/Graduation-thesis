@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
 import Orderbuyzzle from "../../../../../Assets/TSX/Orderbuyzzle";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
@@ -66,15 +66,17 @@ export default function DetailOrderManagement() {
                      <div className="flex gap-2 items-center">
                         {order.invoice == "true" ? (
                            <>
-                              <button
-                                 className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C]
-                             rounded-md py-[8px] px-3 flex
-                                transition duration-150 cursor-pointer border-[#E0E0E0] border-[1px]
-                                max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
-                              >
-                                 <PrintOrder />
-                                 <p>Print</p>
-                              </button>
+                              <Link to={`/invoice/${order.id}`}>
+                                 <button
+                                    className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C]
+                                 rounded-md py-[8px] px-3 flex
+                                 transition duration-150 cursor-pointer border-[#E0E0E0] border-[1px]
+                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
+                                 >
+                                    <PrintOrder />
+                                    <p>Print</p>
+                                 </button>
+                              </Link>
                            </>
                         ) : (
                            <></>
@@ -294,7 +296,8 @@ export default function DetailOrderManagement() {
                                        <p>Ghi chú</p>
                                     </div>
                                     <div className="pl-2 border-l-[1px] border-[#FFAAAF] font-semibold">
-                                       {order?.note == "" ? (
+                                       {order?.note == "" ||
+                                       order?.note == null ? (
                                           <p className="text-[#1A1A1A] text-sm">
                                              Không có
                                           </p>
