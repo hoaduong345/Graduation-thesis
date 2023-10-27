@@ -23,3 +23,7 @@ export const formatSoldCount = (soldcount: number) => {
 export const formatDate = (date: Date) => {
   return moment(date).format('DD/MM');
 }
+
+export const formatDateYYYY = (date: Date) => {
+  return moment(date).format('MMMM Do YYYY');
+}

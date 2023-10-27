@@ -3,14 +3,14 @@ import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
 // import QuantityHistory from "../../../../Assets/TSX/QuantityHistory";
+import { Link } from "react-router-dom";
+import { orderControllers } from "../../../../Controllers/OrderControllers";
+import EmptyPage from "../../../../Helper/Empty/EmptyPage";
+import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
+import { OrderModel } from "../../../../Model/OrderModel";
 import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
-import { orderControllers } from "../../../../Controllers/OrderControllers";
-import { OrderModel } from "../../../../Model/OrderModel";
-import { currentDate, numberFormat } from "../../../../Helper/Format";
-import { Link } from "react-router-dom";
-import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 export default function OrderHistory() {
    const [order, setOrder] = useState<OrderModel[]>([]);
 
@@ -40,7 +40,7 @@ export default function OrderHistory() {
    }, []);
 
    const getOrder = async () => {
-      await orderControllers.get().then((res) => {
+      await orderControllers.getUser().then((res) => {
          setOrder(res.data);
       });
    };
@@ -118,7 +118,9 @@ export default function OrderHistory() {
                                                       #ID: 000{e.id}
                                                    </div>
                                                    <div className="w-[20%]">
-                                                      {currentDate(e.createdAt)}
+                                                      {formatDateYYYY(
+                                                         e.createdAt
+                                                      )}
                                                    </div>
                                                    <div className="w-[22%] text-center">
                                                       {numberFormat(e.subtotal)}{" "}
@@ -155,14 +157,7 @@ export default function OrderHistory() {
                                                    <th className=" px-6 py-2 w-[14%] font-normal">
                                                       Tổng
                                                    </th>
-                                                   <th className=" px-6 py-2 w-[14%] font-normal">
-                                                      <Link
-                                                         to={`/invoice/${e.id}`}
-                                                         className="text-[#EA4B48]"
-                                                      >
-                                                         Invoice
-                                                      </Link>
-                                                   </th>
+                                                   <th className=" px-6 py-2 w-[14%] font-normal"></th>
                                                 </tr>
                                              </thead>
                                              <tbody>
