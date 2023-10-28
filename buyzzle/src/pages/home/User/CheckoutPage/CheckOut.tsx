@@ -673,7 +673,8 @@ export default function CheckOut() {
                                     Giảm{" "}
                                  </p>
                                  <div className="flex gap-1">
-                                    <p className="text-sm text-[#FFAAAF] max-[870px]:text-[11px]">
+                                    <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
+                                       -
                                        {numberFormat(
                                           calculatePrice() * (discount / 100)
                                        )}
@@ -702,18 +703,6 @@ export default function CheckOut() {
                                     )}
                                  </p>
                               </div>
-                           </div>
-
-                           <div className="flex items-center gap-2">
-                              <input
-                                 className="w-[14px] h-[14px]"
-                                 type="checkbox"
-                                 checked={invoice}
-                                 onChange={(e) => setInvoice(e.target.checked)}
-                              />
-                              <p className="text-[15px] text-[#9c9c9c] max-[870px]:text-[13px]">
-                                 Xuất hóa đơn
-                              </p>
                            </div>
 
                            <div className="flex flex-col gap-4">
@@ -770,6 +759,23 @@ export default function CheckOut() {
                                     );
                                  })}
                               </div>
+                           </div>
+
+                           <div className="flex items-center gap-3">
+                              <input
+                                 className="w-[14px] h-[14px]"
+                                 type="checkbox"
+                                 checked={invoice}
+                                 onChange={(e) => setInvoice(e.target.checked)}
+                              />
+                              <p
+                                 className={`text-[15px] max-[870px]:text-[13px] cursor-pointer ${
+                                    invoice ? `inherit` : `text-[#9c9c9c]`
+                                 }`}
+                                 onClick={() => setInvoice(!invoice)}
+                              >
+                                 Xuất hóa đơn
+                              </p>
                            </div>
 
                            <PaymentBtn
