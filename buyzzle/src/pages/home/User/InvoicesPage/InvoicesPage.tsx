@@ -1,14 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LogoWeb from "../../../../Assets/TSX/LogoWeb";
 import Container from "../../../../components/container/Container";
 import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
 import { useParams } from "react-router-dom";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
 import { OrderModel } from "../../../../Model/OrderModel";
+import { useReactToPrint } from "react-to-print";
+import PrintOrder from "../../Admin/Assets/TSX/PrintOrder";
 
 export default function InvoicesPage() {
+   const handlePrint = useReactToPrint({
+      content: () => componentRef.current,
+   });
    const { id } = useParams();
    const idOrder = Number(id);
+   const componentRef: any = useRef();
 
    const [invoice, setInvoice] = useState<OrderModel>({} as OrderModel);
 
@@ -25,7 +31,10 @@ export default function InvoicesPage() {
    return (
       <>
          <Container>
-            <div className="max-w-3xl mx-auto p-6 bg-white rounded border-[1px] shadow-sm my-6">
+            <div
+               className="max-w-3xl mx-auto p-6 bg-white rounded border-[1px] shadow-sm my-6"
+               ref={componentRef}
+            >
                <div className="grid grid-cols-2 items-center">
                   <div>
                      <LogoWeb />
@@ -127,44 +136,6 @@ export default function InvoicesPage() {
                               </>
                            );
                         })}
-                        {/* <tr className="border-b border-gray-200">
-                           <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                              <div className="font-medium text-gray-900">
-                                 Frontend Design
-                              </div>
-                              <div className="mt-1 truncate text-gray-500">
-                                 Frontend design using Vue.js and Tailwind CSS.
-                              </div>
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              500.0
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              $100.00
-                           </td>
-                           <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
-                              $5,000.00
-                           </td>
-                        </tr>
-                        <tr className="border-b border-gray-200">
-                           <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                              <div className="font-medium text-gray-900">
-                                 Shop SEO
-                              </div>
-                              <div className="mt-1 truncate text-gray-500">
-                                 Website SEO and Social Media marketing.
-                              </div>
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              50.0
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              $100.00
-                           </td>
-                           <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
-                              $500.00
-                           </td>
-                        </tr> */}
                      </tbody>
                      <tfoot>
                         <tr>
@@ -246,6 +217,18 @@ export default function InvoicesPage() {
                <div className="border-t-2 pt-4 text-xs text-gray-500 text-center mt-16">
                   Cảm ơn bạn đã mua hàng
                </div>
+            </div>
+            <div className="flex justify-center">
+               <button
+                  onClick={handlePrint}
+                  className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C]
+                                 rounded-md py-[8px] px-3 flex
+                                 transition duration-150 cursor-pointer border-[#E0E0E0] border-[1px]
+                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
+               >
+                  <PrintOrder />
+                  <p>Print</p>
+               </button>
             </div>
          </Container>
       </>

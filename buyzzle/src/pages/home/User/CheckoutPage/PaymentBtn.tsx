@@ -113,7 +113,7 @@ export default function PaymentBtn(props: StripePayment) {
          <button
             onClick={() => handleCheckout()}
             className="justify-center gap-3 items-center text-base font-bold text-white w-full
-                             rounded-md py-[11px] hover:bg-[#ff6d65] flex mt-6
+                             rounded-md py-[11px] hover:bg-[#ff6d65] flex mt-1
                                 transition duration-150 bg-[#EA4B48] cursor-pointer
                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
          >
