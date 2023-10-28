@@ -357,7 +357,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                               <div className="group-hover:opacity-100 flex absolute top-[50%] transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
                                  {e.invoice == "true" ? (
                                     <>
-                                       <Link to={`/invoice/${e.id}`}>
+                                       <Link to={`/admin/invoice/${e.id}`}>
                                           <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
                                              <Print />
                                              <p>Print</p>
