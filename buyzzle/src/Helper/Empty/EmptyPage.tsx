@@ -1,6 +1,6 @@
 interface EmptyModel {
-  title: string;
-  button: string;
+  title?: string;
+  button?: string;
 }
 
 export default function EmptyPage(props: EmptyModel) {

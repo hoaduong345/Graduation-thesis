@@ -30,6 +30,8 @@ import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
 import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
+import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
+import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 import LoginAdmin from "../../pages/home/Admin/LoginAdmin/AdminLogin";
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -60,7 +62,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/FiltersPage/:id",
+      path: "/FiltersPage/",
       element: (
         <MainLayout>
           <FiltersPage />
@@ -206,7 +208,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "orderdetail",
+      path: "orderdetail/:id",
       element: (
         <MainLayout>
           <OrderDetailPage />
@@ -382,7 +384,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "invoice",
+      path: "invoice/:id",
       element: (
         <MainLayout>
           <InvoicesPage />
@@ -592,10 +594,24 @@ export default function useRouterEmelent() {
         {
           path: "ordermanagement",
           element: <OrderManagement />,
+          // children: [
+          //    {
+          //       path: ":id",
+          //       element: <DetailOrderManagement />,
+          //    },
+          // ],////
+        },
+        {
+          path: "ordermanagement/:id",
+          element: <DetailOrderManagement />,
         },
         {
           path: "usersmanager",
           element: <User />,
+        },
+        {
+          path: "statisticspage",
+          element: <StatisticsPage />,
         },
       ],
       
