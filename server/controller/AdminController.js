@@ -15,7 +15,7 @@ const AdminController = {
 
   // add
   createAdmin: async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password , email, name , sex, phonenumber, dateofbirth } = req.body;
   
     try {
       const saltRounds = 10; 
@@ -24,11 +24,17 @@ const AdminController = {
         data: {
           username,
           password: hashedPassword,
+          email,
+          name,
+          sex,
+          dateofbirth : new Date(),
+          phonenumber
         },
       });
   
       res.json(newAdmin);
     } catch (error) {
+      console.log("loi" + error);
       res.status(500).json("Lỗi");
     }
   },
