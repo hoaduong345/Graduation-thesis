@@ -123,7 +123,9 @@ export default function OrderHistory() {
                                                       )}
                                                    </div>
                                                    <div className="w-[22%] text-center">
-                                                      {numberFormat(e.subtotal)}{" "}
+                                                      {numberFormat(
+                                                         e.amountTotal
+                                                      )}{" "}
                                                       ({e.OrderDetail.length}{" "}
                                                       SP)
                                                    </div>

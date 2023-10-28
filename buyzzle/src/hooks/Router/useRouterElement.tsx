@@ -294,14 +294,7 @@ export default function useRouterEmelent() {
             </MainLayout>
          ),
       },
-      {
-         path: "invoice",
-         element: (
-            <MainLayout>
-               <InvoicesPage />
-            </MainLayout>
-         ),
-      },
+
       {
          path: path.confirmAccount,
          element: (
@@ -379,14 +372,6 @@ export default function useRouterEmelent() {
          element: (
             <MainLayout>
                <OrderDetailPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "invoice/:id",
-         element: (
-            <MainLayout>
-               <InvoicesPage />
             </MainLayout>
          ),
       },
@@ -585,12 +570,6 @@ export default function useRouterEmelent() {
             {
                path: "ordermanagement",
                element: <OrderManagement />,
-               // children: [
-               //    {
-               //       path: ":id",
-               //       element: <DetailOrderManagement />,
-               //    },
-               // ],
             },
             {
                path: "ordermanagement/:id",
@@ -603,6 +582,10 @@ export default function useRouterEmelent() {
             {
                path: "statisticspage",
                element: <StatisticsPage />,
+            },
+            {
+               path: "invoice/:id",
+               element: <InvoicesPage />,
             },
          ],
       },

@@ -66,7 +66,7 @@ export default function DetailOrderManagement() {
                      <div className="flex gap-2 items-center">
                         {order.invoice == "true" ? (
                            <>
-                              <Link to={`/invoice/${order.id}`}>
+                              <Link to={`/admin/invoice/${order.id}`}>
                                  <button
                                     className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C]
                                  rounded-md py-[8px] px-3 flex

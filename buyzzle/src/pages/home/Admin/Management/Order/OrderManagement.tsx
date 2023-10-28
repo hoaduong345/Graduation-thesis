@@ -7,8 +7,6 @@ import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDate, numberFormat } from "../../../../../Helper/Format";
 import { OrderPanigation } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
-import Filter from "../../Assets/TSX/Filter";
-import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Calendar from "../../Assets/TSX/calendar";
 import Excel from "../../Assets/TSX/excel";
 import Print from "../../Assets/TSX/print";
@@ -204,9 +202,6 @@ export default function OrderManagement() {
                {/* checkBox and Printf */}
                <div className="grid grid-cols-2 items-center py-4 px-10">
                   <div className="col-span-2 flex items-center gap-4 justify-end">
-                     <div className="border-[#EA4B48] border-[1px] p-3 rounded-md hover:bg-[#ffe0e0] cursor-pointer transition-all duration-150">
-                        <RemoveCate />
-                     </div>
                      <div className="border-[#107C41] border-[1px] p-3 rounded-md hover:bg-[#d7fee1] cursor-pointer transition-all duration-150">
                         <Excel />
                      </div>
@@ -223,7 +218,7 @@ export default function OrderManagement() {
 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                            >
                               <div className="justify-between flex ">
-                                 <div className="col-span-2 flex items-center gap-4">
+                                 <div className="col-span-2 flex items-center">
                                     <div className="flex items-center gap-1">
                                        <p className="text-[#4C4C4C] font-bold text-base">
                                           Đơn hàng:{" "}
@@ -231,13 +226,14 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                        <p className="text-[#1A1A1A] font-bold text-base mr-3">
                                           #000{e.id}
                                        </p>
-                                       <div className="badge badge-xs badge-accent py-3 px-3">
-                                          <p className="font-bold text-xs text-white ">
-                                             {e.paymentMethod == "Thẻ tín dụng"
-                                                ? "Đã thanh toán"
-                                                : "Chưa thanh toán"}
-                                          </p>
-                                       </div>
+                                    </div>
+                                    <div className="flex items-center gap-1 border-l-2 border-[#4C4C4C] pl-2">
+                                       <p className="text-[#4C4C4C] font-bold text-base">
+                                          Khách Hàng:{" "}
+                                       </p>
+                                       <p className="text-[#1A1A1A] font-bold text-base mr-3">
+                                          {e.User.name}
+                                       </p>
                                     </div>
                                  </div>
                                  <div className="col-span-2">
@@ -247,26 +243,52 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                  </div>
                               </div>
                               <div className="">
-                                 <div className="my-2 flex items-center gap-2">
-                                    {/* calendarIcon */}
-                                    <div>
-                                       <Calendar />
-                                    </div>
-                                    {/* end calendarIcon */}
-                                    <div className="flex">
-                                       <p className="text-[#4C4C4C] font-bold text-sm">
-                                          {formatDate(e.createdAt)}
-                                       </p>
-                                       <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
-                                       <div className="flex items-center gap-2">
+                                 <div className="my-2 flex justify-between items-center gap-2">
+                                    <div className="flex items-center">
+                                       {/* calendarIcon */}
+                                       <div>
+                                          <Calendar />
+                                       </div>
+                                       {/* end calendarIcon */}
+                                       <div className="flex">
                                           <p className="text-[#4C4C4C] font-bold text-sm">
-                                             Mã vận đơn:
+                                             {formatDate(e.createdAt)}
                                           </p>
-                                          <p className="text-[#EA4B48] font-bold text-sm">
-                                             SPXR24
-                                          </p>
+                                          <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
+                                          <div className="badge badge-xs badge-accent text-center py-2 px-3">
+                                             <p className="font-bold text-xs text-white">
+                                                {e.paymentMethod ==
+                                                "Thẻ tín dụng"
+                                                   ? "Đã thanh toán"
+                                                   : "Chưa thanh toán"}
+                                             </p>
+                                          </div>
+                                          <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
+                                          <div className="flex items-center gap-2">
+                                             <p className="text-[#4C4C4C] font-bold text-sm">
+                                                Mã vận đơn:
+                                             </p>
+                                             <p className="text-[#EA4B48] font-bold text-sm">
+                                                SPXR24
+                                             </p>
+                                          </div>
                                        </div>
                                     </div>
+
+                                    {e.invoice == "true" ? (
+                                       <>
+                                          <div className="flex justify-end items-center gap-2">
+                                             <p className="text-[#4C4C4C] font-bold text-sm">
+                                                Yêu cầu:
+                                             </p>
+                                             <p className="text-[#EA4B48] font-bold text-sm">
+                                                In Hóa đơn
+                                             </p>
+                                          </div>
+                                       </>
+                                    ) : (
+                                       <></>
+                                    )}
                                  </div>
                                  <div className="flex items-center mt-5 gap-5">
                                     {/* Select box */}
@@ -332,10 +354,10 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                     })}
                                  </div>
                               </div>
-                              <div className="group-hover:opacity-100 flex absolute top-1/3 transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
-                                 {e.invoice == "true" ? (
+                              <div className="group-hover:opacity-100 flex absolute top-[50%] transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
+                                 {/* {e.invoice == "true" ? (
                                     <>
-                                       <Link to={`/invoice/${e.id}`}>
+                                       <Link to={`/admin/invoice/${e.id}`}>
                                           <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
                                              <Print />
                                              <p>Print</p>
@@ -344,7 +366,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                     </>
                                  ) : (
                                     <></>
-                                 )}
+                                 )} */}
                                  <button
                                     className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex"
                                     onClick={() => {
