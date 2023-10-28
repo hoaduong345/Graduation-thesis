@@ -1,27 +1,26 @@
 import { IonIcon } from "@ionic/react";
-import { ReactNode, useEffect, useState } from "react";
+import { useState } from "react";
+import ArrowRise from "../../../../Assets/TSX/ArrowRise";
 import Container from "../../../../components/container/Container";
 import SitebarAdmin from "../Sitebar/Sitebar";
-import ArrowRise from "../../../../Assets/TSX/ArrowRise";
 
 import {
-  Chart as ChartJS,
-  BarElement,
   ArcElement,
+  BarElement,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LineElement,
   LinearScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
 import { Bar, Line } from "react-chartjs-2";
+import { animated, useSpring } from "react-spring";
 import ArrowFall from "../../../../Assets/TSX/ArrowFall";
-import { useSpring, animated } from "react-spring";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
-import { Statistics, hotProducts } from "../../../../Model/StatsModels";
-import { formatSoldCount, numberFormat } from "../../../../Helper/Format";
+import { Statistics } from "../../../../Model/StatsModels";
 ChartJS.register(
   ArcElement,
   Tooltip,
@@ -33,8 +32,6 @@ ChartJS.register(
   Title,
   Legend
 );
-// chart\
-
 const optionsChartLine = {
   responsive: true,
   plugins: {
@@ -43,7 +40,6 @@ const optionsChartLine = {
     },
   },
 };
-
 const optionsChartVertical = {
   responsive: true,
   plugins: {
@@ -59,7 +55,6 @@ const optionsChartVertical = {
     },
   },
 };
-
 interface topProductsStats {
   id: number;
   name: string;
@@ -77,12 +72,6 @@ export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalRevenue = stats.totalRevenue;
-  const totalQuantitySold = stats.totalQuantitySold;
-  const revenueGrowthPercentage = stats.revenueGrowthPercentage;
-  const quantitySoldComparisonPercentage =
-    stats.quantitySoldComparisonPercentage;
-
   const numberStast = (n: number) => {
     const { number } = useSpring({
       from: { number: 0 },
@@ -92,12 +81,7 @@ export default function StatisticsPage() {
     });
     return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
   };
-  const animatedtotalRevenue = numberStast(totalRevenue);
-  const animatedtotalQuantitySold = numberStast(totalQuantitySold);
-  const animatedrevenueGrowthPercentage = numberStast(revenueGrowthPercentage);
-  const animatedquantitySoldComparisonPercentage = numberStast(
-    quantitySoldComparisonPercentage
-  );
+
   const [open, setOpen] = useState(false);
 
   const openModal = () => {
@@ -180,20 +164,28 @@ export default function StatisticsPage() {
     },
     {
       id: 3,
+      nameTime: "15 ngày trước",
+    },
+    {
+      id: 4,
       nameTime: "30 ngày trước",
     },
   ]);
   // ================================ API ================================
-  // useEffect(() => {
-  //   getproductHot();
-  // }, []);
-  const getproductHot = async () => {
+
+  const getProductStats = async () => {
     await statsControllers
-      .getListHotProduct("2023/10", currentPage, 3)
+      .getStats({
+        startDate: "2023/9/1",
+        endDate: "2023/9/30",
+        page: currentPage,
+        pageSize: 2,
+      })
       .then((res: any) => {
         setStats(res);
       });
   };
+  // ================================ PANGINATION ================================
 
   const getItemProps = (index: number) =>
     ({
@@ -201,6 +193,9 @@ export default function StatisticsPage() {
       color: "gray",
       onClick: () => setCurrentPage(index),
     } as any);
+
+  // ================================ CHART ================================
+
   // const next = () => {
 
   //   if (currentPage === 999) return;
@@ -319,7 +314,7 @@ export default function StatisticsPage() {
                  transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200
                   empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 
                   disabled:bg-blue-gray-50"
-                  onChange={() => getproductHot()}
+                  onChange={() => getProductStats()}
                 >
                   {selectStats.map((itemsSelect) => {
                     return (
@@ -342,7 +337,9 @@ export default function StatisticsPage() {
                   <p className="text-[#1C1C1C] font-semibold">Truy cập trang</p>
                   <div className="items-center grid grid-cols-3">
                     <div className="col-span-2">
-                      <p className="text-[#1C1C1C] font-semibold text-xl"></p>
+                      <p className="text-[#1C1C1C] font-semibold text-xl">
+                        {numberStast(99999)}
+                      </p>
                     </div>
                     <div className="col-span-1 flex gap-1">
                       <p className="text-[#00B207] font-semibold text-xs">
@@ -365,8 +362,8 @@ export default function StatisticsPage() {
                   </p>
                   <div className="items-center grid grid-cols-5">
                     <div className="col-span-4">
-                      <p className="text-[#1C1C1C] font-semibold text-xl">
-                        12 giờ 30 phut
+                      <p className="text-[#1C1C1C] font-semibold text-base gap-1 flex">
+                        {numberStast(39)} giờ {numberStast(90)} phut
                       </p>
                     </div>
                     <div className="col-end-6 flex gap-1">
@@ -384,17 +381,21 @@ export default function StatisticsPage() {
 
               <div className="col-span-1 inline-flex items-center gap-1.5 p-6 rounded-2xl font-medium bg-blue-100 text-blue-800">
                 {/* Truy cập trang */}
-                <div className=" flex flex-col gap-3">
-                  <p className="text-[#1C1C1C] font-semibold">Lượt mua hàng</p>
-                  <div className="items-center grid grid-cols-3">
+                <div className=" flex flex-col gap-3 justify-between w-full">
+                  <div>
+                    <p className="text-[#1C1C1C] font-semibold">
+                      Lượt mua hàng
+                    </p>
+                  </div>
+                  <div className="items-center grid grid-cols-4">
                     <div className="col-span-2">
                       <p className="text-[#1C1C1C] font-semibold text-xl">
-                        {animatedtotalQuantitySold}
+                        {numberStast(99999)}
                       </p>
                     </div>
-                    <div className="col-span-1 flex gap-1">
+                    <div className="col-end-6 flex gap-1">
                       <p className="text-[#00B207] font-semibold text-xs">
-                        {animatedquantitySoldComparisonPercentage}
+                        1,23
                       </p>
                       <ArrowRise />
                     </div>
@@ -406,26 +407,24 @@ export default function StatisticsPage() {
               </div>
 
               <div className="col-span-1 inline-flex items-center gap-1.5 p-6 rounded-2xl font-medium bg-[#E5ECF6] text-blue-800">
-                {/* Truy cập trang */}
-                <div className=" flex flex-col gap-3">
-                  <p className="text-[#1C1C1C] font-semibold">Doanh thu</p>
-                  <div className="items-center justify-between grid grid-cols-4">
+                <div className=" flex flex-col gap-3 justify-between w-full">
+                  <div>
+                    <p className="text-[#1C1C1C] font-semibold">Doanh thu</p>
+                  </div>
+                  <div className="items-center grid grid-cols-4">
                     <div className="col-span-2">
                       <p className="text-[#1C1C1C] font-semibold text-xl">
-                        {animatedtotalRevenue}
+                        {numberStast(61312)}
                       </p>
                     </div>
-                    <div className="col-end-6 flex gap-1 justify-between">
+                    <div className="col-end-6 flex gap-1 ">
                       <p className="text-[#EA4B48] font-semibold text-xs ">
-                        {animatedrevenueGrowthPercentage}
+                        0.5
                       </p>
                       <ArrowFall />
                     </div>
                   </div>
                 </div>
-                {/* end Truy cập trang */}
-                {/* so lieu */}
-                {/* end so lieu */}
               </div>
             </div>
             {/* stats */}
@@ -473,7 +472,7 @@ export default function StatisticsPage() {
                             </th>
                           </tr>
                         </thead>
-                        {stats.hotProducts?.map((items) => {
+                        {stats.hotProductsInRange?.map((items) => {
                           return (
                             <>
                               <tbody>
@@ -491,7 +490,7 @@ export default function StatisticsPage() {
                                     {items.quantity}
                                   </td>
                                   <td className="whitespace-nowrap px-3 py-2">
-                                    {stats.totalRevenue}
+                                    {stats.totalRevenueToday}
                                   </td>
                                 </tr>
                               </tbody>
