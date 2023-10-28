@@ -244,7 +244,10 @@ export default function OrderDetailPage() {
                               </div>
                               <div>
                                  <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
-                                    Giao vào giờ hành chính từ thứ 2 - 6{" "}
+                                    {orderDetails?.note == "" ||
+                                    orderDetails?.note == null
+                                       ? "Không có"
+                                       : orderDetails?.note}{" "}
                                  </p>
                               </div>
                            </div>
