@@ -5,7 +5,7 @@ export const appConfig = {
     apiUrl: import.meta.env.VITE_BACKEND_URL || ''
 }
 class RatingAndComment {
-    postRatingAndComment = async (data: Rating) => {
+    postRatingAndComment = async (data: any) => {
         return await axios.post(`${appConfig.apiUrl}/rating`, data, {
             headers: {
                 "Access-Control-Allow-Origin": "*"
