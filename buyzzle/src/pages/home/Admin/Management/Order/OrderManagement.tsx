@@ -1,7 +1,7 @@
 import { IonIcon } from "@ionic/react";
 import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Search from "../../../../../Assets/TSX/Search";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDate, numberFormat } from "../../../../../Helper/Format";
@@ -9,14 +9,12 @@ import { OrderPanigation } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
 import Calendar from "../../Assets/TSX/calendar";
 import Excel from "../../Assets/TSX/excel";
-import Print from "../../Assets/TSX/print";
 import SitebarAdmin from "../../Sitebar/Sitebar";
 
 export default function OrderManagement() {
    const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
    const [currentPage, setCurrentPage] = useState<number>(1);
 
-   // const [currentPage, setCurrentPage] = useState<number>(1);
    const [open, setOpen] = useState(false);
 
    const openModal = () => {
@@ -36,46 +34,29 @@ export default function OrderManagement() {
          modal.close();
       }
    };
-
+   console.log(
+      "🚀 ~ file: OrderManagement.tsx:39 ~ OrderManagement ~ order?.totalOrder;:",
+      order?.totalOrder
+   );
    const [changeButton, setChangeButton] = useState([
       {
          id: 1,
          text: "Tất cả",
-         badgeNum: (
-            <div className="badge badge-xs badge-error badge-outline py-2">
-               100
-            </div>
-         ),
          active: true, // Thêm trường active
       },
       {
          id: 2,
          text: "Mới",
-         badgeNum: (
-            <div className="badge badge-xs badge-info badge-outline py-2">
-               100
-            </div>
-         ),
          active: false, // Thêm trường active
       },
       {
          id: 3,
          text: "Chờ xác nhận",
-         badgeNum: (
-            <div className="badge badge-xs badge-secondary badge-outline py-2">
-               100
-            </div>
-         ),
          active: false, // Thêm trường active
       },
       {
          id: 4,
          text: "Đã giao cho ĐVVC",
-         badgeNum: (
-            <div className="badge badge-xs badge-accent badge-outline py-2">
-               100
-            </div>
-         ),
          active: false, // Thêm trường active
       },
    ]);
@@ -172,7 +153,26 @@ export default function OrderManagement() {
                            onClick={() => handleClick(btnItems.id)}
                         >
                            {btnItems.text}
-                           <div>{btnItems.badgeNum}</div>
+                           {btnItems.id == 1 && (
+                              <div className="badge badge-xs badge-error badge-outline py-2">
+                                 {order?.totalOrder}
+                              </div>
+                           )}
+                           {btnItems.id == 2 && (
+                              <div className="badge badge-xs badge-info badge-outline py-2">
+                                 0
+                              </div>
+                           )}
+                           {btnItems.id == 3 && (
+                              <div className="badge badge-xs badge-secondary badge-outline py-2">
+                                 0
+                              </div>
+                           )}
+                           {btnItems.id == 4 && (
+                              <div className="badge badge-xs badge-accent badge-outline py-2">
+                                 0
+                              </div>
+                           )}
                         </button>
                      );
                   })}
@@ -202,7 +202,7 @@ export default function OrderManagement() {
                {/* checkBox and Printf */}
                <div className="grid grid-cols-2 items-center py-4 px-10">
                   <div className="col-span-2 flex items-center gap-4 justify-end">
-                     <div className="border-[#107C41] border-[1px] p-3 rounded-md hover:bg-[#d7fee1] cursor-pointer transition-all duration-150">
+                     <div className="hidden border-[#107C41] border-[1px] p-3 rounded-md hover:bg-[#d7fee1] cursor-pointer transition-all duration-150">
                         <Excel />
                      </div>
                   </div>
