@@ -22,11 +22,13 @@ export type FormValues = {
    id: number;
    name: string;
    image: string;
+   nameCateLv2: string;
 };
 
 function Category() {
    const idModal = "category";
    const idComfirm = "comfirm";
+   const cateLv2 = "cateLv2";
 
    const [idCate, setIdCate] = useState(0);
 
@@ -115,6 +117,7 @@ function Category() {
          name: "",
          id: 0,
          image: "",
+         nameCateLv2: "",
       },
    });
 
@@ -202,6 +205,10 @@ function Category() {
       } else {
          setCheckedCategory([]);
       }
+   };
+
+   const createCateLv2 = () => {
+      console.log("first");
    };
    return (
       <>
@@ -427,6 +434,63 @@ function Category() {
                         onSave={() => remove(idCate, idComfirm)}
                      />
 
+                     {/* <DialogModal
+                        id={cateLv2}
+                        title="DANH MỤC CON"
+                        body={
+                           <>
+                              <Controller
+                                 name="nameCateLv2"
+                                 control={control}
+                                 rules={{
+                                    required: {
+                                       value: true,
+                                       message: "Không để trống",
+                                    },
+                                    minLength: {
+                                       value: 4,
+                                       message: "Ít nhất 4 ký tự",
+                                    },
+                                    maxLength: {
+                                       value: 25,
+                                       message: "Nhiều nhất 25 kí tự",
+                                    },
+                                 }}
+                                 render={({ field }) => (
+                                    <>
+                                       <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                          Tiêu Đề Danh Mục Con*
+                                       </label>
+                                       <input
+                                          className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                          placeholder="Nhập tiêu đề danh mục con"
+                                          value={field.value}
+                                          onChange={(e) => {
+                                             const reg = /[!@#$%^&]/;
+                                             const value = e.target.value;
+                                             field.onChange(
+                                                value.replace(reg, "")
+                                             );
+                                          }}
+                                          name="name"
+                                       />
+                                       {errors.name && (
+                                          <p className="text-[11px] text-red-700 mt-2">
+                                             {errors.name.message}
+                                          </p>
+                                       )}
+                                    </>
+                                 )}
+                              />
+                           </>
+                        }
+                        onClose={() => closeModal(cateLv2)}
+                        onSave={() => createCateLv2()}
+                     /> */}
+
                      <div className="grid grid-cols-10">
                         {categorys.map((e) => {
                            return (
@@ -436,10 +500,16 @@ function Category() {
                                     className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between px-6"
                                  >
                                     <div className=" flex gap-[20px] max-lg:gap-2">
-                                       <button>
+                                       <button
+                                          onClick={() =>
+                                             openModal(cateLv2, {
+                                                id: e.id,
+                                             } as FormValues)
+                                          }
+                                       >
                                           <Plus />
                                        </button>
-                                       <div className="dropdown dropdown-left">
+                                       <div className="dropdown dropdown-left cursor-pointer">
                                           <label tabIndex={0}>
                                              <Handle />
                                           </label>
