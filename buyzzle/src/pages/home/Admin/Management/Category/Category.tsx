@@ -171,7 +171,7 @@ function Category() {
    const openModal = (id: string, data: FormValues) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
-         reset({ name: data.name, id: data.id });
+         reset({ name: data.name, id: data.id, nameCateLv2: data.nameCateLv2 });
          setUrl(data.image);
          modal.showModal();
       }
@@ -207,8 +207,8 @@ function Category() {
       }
    };
 
-   const createCateLv2 = () => {
-      console.log("first");
+   const createCateLv2 = (data: FormValues) => {
+      console.log(data);
    };
    return (
       <>
@@ -272,9 +272,7 @@ function Category() {
                         </div>
                         <div className="flex gap-[72px] col-span-2  max-lg:gap-[30px]">
                            <Line />
-                           <p className="pt-[12px] text-[16px] max-lg:text-sm">
-                              Trạng thái
-                           </p>
+                           <p className="pt-[12px] text-[16px] max-lg:text-sm"></p>
                         </div>
                      </div>
 
@@ -434,7 +432,7 @@ function Category() {
                         onSave={() => remove(idCate, idComfirm)}
                      />
 
-                     {/* <DialogModal
+                     {/* <DialogModalChild
                         id={cateLv2}
                         title="DANH MỤC CON"
                         body={
@@ -475,11 +473,11 @@ function Category() {
                                                 value.replace(reg, "")
                                              );
                                           }}
-                                          name="name"
+                                          name="nameCateLv2"
                                        />
-                                       {errors.name && (
+                                       {errors.nameCateLv2 && (
                                           <p className="text-[11px] text-red-700 mt-2">
-                                             {errors.name.message}
+                                             {errors.nameCateLv2.message}
                                           </p>
                                        )}
                                     </>
@@ -488,7 +486,9 @@ function Category() {
                            </>
                         }
                         onClose={() => closeModal(cateLv2)}
-                        onSave={() => createCateLv2()}
+                        onSave={handleSubmit((data: any) => {
+                           createCateLv2(data);
+                        })}
                      /> */}
 
                      <div className="grid grid-cols-10">
@@ -577,21 +577,7 @@ function Category() {
                                     </p>
                                  </div>
                                  <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
-                                    <div className="flex text-center w-[37%] justify-start items-center gap-5 py-[25px] pl-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
-                                       <h3 className="font-semibold max-lg:text-sm">
-                                          Ẩn
-                                       </h3>
-
-                                       <div className="form-control ">
-                                          <input
-                                             type="checkbox"
-                                             className="toggle toggle-error max-lg:toggle-xs"
-                                          />
-                                       </div>
-                                       <h3 className="font-semibold max-lg:text-sm">
-                                          Hiện
-                                       </h3>
-                                    </div>
+                                    <div className="flex text-center w-[37%] justify-start items-center gap-5 py-[25px] pl-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2"></div>
                                  </div>
                               </>
                            );
