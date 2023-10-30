@@ -4,17 +4,16 @@ import Back from "../Assets/TSX/Back";
 // import ArrowDown from '../../../Assets/TSX/ArrowDown'
 import UploadIMG from "../Assets/TSX/UploadIMG";
 // import { Images } from '../../../Assets/TS'
-import axios from "axios";
-import { useForm, Controller } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { storage } from "../../../../Firebase/Config";
-import { ref, uploadBytes } from "firebase/storage";
-import { appConfig } from "../../../../configsEnv";
 import { Editor } from "@tinymce/tinymce-react";
+import axios from "axios";
+import { ref, uploadBytes } from "firebase/storage";
+import { Controller, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
+import { storage } from "../../../../Firebase/Config";
 import Loading from "../../../../Helper/Loading/Loading";
-import { numberFormat } from "../../../../Helper/Format";
+import { appConfig } from "../../../../configsEnv";
 // import { v4 } from 'uuid'
 
 export type FormValues = {
@@ -172,7 +171,9 @@ export default function Addproducts() {
             <div className="back h-[57px] mt-[46px] ">
                <div className="flex gap-3 items-center">
                   <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
-                     <Back />
+                     <Link to={"/admin/ListproductsAdmin"}>
+                        <Back />
+                     </Link>
                   </div>
                   <div>
                      <p className="font-normal text-sm max-xl:text-xs max-lg:text-[10px]">
@@ -380,7 +381,7 @@ export default function Addproducts() {
                               className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer
                                             max-[1330px]:w-[160px] max-[1024px]:w-[190px]"
                            >
-                              <Link to="/">
+                              <Link to="/admin/ListproductsAdmin">
                                  <button className="text-center text-base font-bold text-[#1A1A1A] max-xl:text-sm max-lg:text-[13px]">
                                     Hủy bỏ
                                  </button>
