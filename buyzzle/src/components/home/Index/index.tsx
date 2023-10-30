@@ -1,7 +1,6 @@
 import { Images } from "../../../Assets/TS";
 import Container from "../../container/Container";
 import Category from "../components/Category";
-
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import LogoVoucherBuyzzle from "../../../Assets/TSX/LogoVoucherBuyzzle";
@@ -211,7 +210,7 @@ function Index() {
                   <div className="max-w[444px]">
                      <img src={Images.chooseUs2} alt="" />
                   </div>
-                  <div className="flex-col max-w-[536px] max-[769px]:max-w-[700px]">
+                  <div className="flex flex-col justify-center max-w-[536px] max-[769px]:max-w-[700px]">
                      <div className="max-w-[317px] pb-[26px]">
                         <span className="text-[40px] font-bold">
                            100% sản phẩm{" "}
