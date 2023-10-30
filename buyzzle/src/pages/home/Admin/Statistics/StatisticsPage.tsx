@@ -83,7 +83,11 @@ export default function StatisticsPage() {
       delay: 0,
       config: { mass: 1, tension: 1030, friction: 114 },
     });
-    return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
+    return (
+      <animated.div>
+        {number.to((n) => numberFormat(n).toString())}
+      </animated.div>
+    );
   };
 
   const [open, setOpen] = useState(false);
