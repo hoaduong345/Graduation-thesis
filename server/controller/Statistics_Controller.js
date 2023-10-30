@@ -14,6 +14,13 @@ const StatisticsController = {
             const take = pageSize; // Số lượng sản phẩm được lấy
 
             const currentDate = new Date();
+            const yesterday = new Date(currentDate);
+            yesterday.setHours(23, 59, 59, 999);
+            yesterday.setDate(currentDate.getDate() - 1);
+            const oneWeekAgo = new Date(yesterday);
+            oneWeekAgo.setHours(0, 0, 0, 0);
+            oneWeekAgo.setDate(yesterday.getDate() - 7);
+
             const startOfDay = new Date(currentDate);
             startOfDay.setHours(0, 0, 0, 0);
             const endOfDay = new Date(currentDate);
@@ -567,66 +574,75 @@ const StatisticsController = {
                     },
                 },
             });
-            // Truy vấn cơ sở dữ liệu để lấy danh sách sản phẩm được đặt hàng trong ngày hiện tại
-            const products = await prisma.product.findMany({
-                where: {
-                    createdAt: {
-                        gte: startOfDay,
-                        lte: endOfDay,
+
+            const categoryStatsByDay = {};
+            console.log(yesterday);
+            for (let date = yesterday; date >= oneWeekAgo; date.setDate(date.getDate() - 1)) {
+                const startDate = new Date(date);
+                const endDate = date;
+                startDate.setHours(0);
+                startDate.setMinutes(0);
+                startDate.setSeconds(0);
+
+                const categories = await prisma.category.findMany({
+                    include: {
+                        products: {
+                            where: {
+                                date: {
+                                    gte: startDate, // Ngày bắt đầu là 7 ngày trước ngày hôm qua
+                                    lte: endDate, // Ngày kết thúc là ngày hôm qua
+                                },
+                            },
+                        },
                     },
-                },
-                include: {
-                    fK_category: true, // Bao gồm thông tin về danh mục
-                },
-            });
+                });
 
-            // Tạo một đối tượng đếm số lượng sản phẩm trong từng danh mục
-            const categoryCounts = {};
+                const topCategories = categories.map((category) => {
+                    return {
+                        category: category,
+                        totalSoldCount: category.products.reduce(
+                            (total, product) => total + (product.soldcount || 0),
+                            0
+                        ),
+                    };
+                });
 
-            // Tính toán số lượng sản phẩm được mua trong từng danh mục
-            products.forEach((product) => {
-                const categoryName = product.fK_category.name;
-                if (categoryCounts[categoryName]) {
-                    categoryCounts[categoryName]++;
-                } else {
-                    categoryCounts[categoryName] = 1;
-                }
-            });
+                // Sắp xếp danh mục theo số sản phẩm đã bán giảm dần
+                topCategories.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
 
-            // Sắp xếp danh mục theo số lượng sản phẩm được mua giảm dần
-            const sortedCategoriesToday = Object.keys(categoryCounts).sort(
-                (a, b) => categoryCounts[b] - categoryCounts[a]
-            );
+                // Lưu kết quả vào categoryStatsByDay dựa trên ngày tương ứng
+                categoryStatsByDay[date.toISOString().split('T')[0]] = topCategories;
+            }
 
             res.status(200).json({
-                totalRevenueCurrentMonth,
-                totalQuantityCurrentMonth: totalQuantityCurrentMonth._sum.quantity,
-                purchaseOrShoppingCurrentMonth: totalOrdersCurrentMonth,
-                revenuePercentageCurrent: revenuePercentageCurrent.toFixed(1), // phan tram doanh thu trong thang hien tai so voi ngay hien tai
-                productSoldPercentageCurrent: productSoldPercentageCurrent.toFixed(1), // phan tram so luong san pham ban ra trong thang hien tai so voi ngay hien tai
-                productDetailsCurrentMonth: Object.values(productDetailsDictionary),
-                hotProductsCurrent: topProductsCurrent, // Danh sách sản phẩm hot (lượng mua cao nhất trong 30 ngày trước)
+                // totalRevenueCurrentMonth,
+                // totalQuantityCurrentMonth: totalQuantityCurrentMonth._sum.quantity,
+                // purchaseOrShoppingCurrentMonth: totalOrdersCurrentMonth,
+                // revenuePercentageCurrent: revenuePercentageCurrent.toFixed(1), // phan tram doanh thu trong thang hien tai so voi ngay hien tai
+                // productSoldPercentageCurrent: productSoldPercentageCurrent.toFixed(1), // phan tram so luong san pham ban ra trong thang hien tai so voi ngay hien tai
+                // productDetailsCurrentMonth: Object.values(productDetailsDictionary),
+                // hotProductsCurrent: topProductsCurrent, // Danh sách sản phẩm hot (lượng mua cao nhất trong 30 ngày trước)
 
-                totalRevenueLast7Days,
-                totalQuantitySoldLast7Days: totalQuantitySoldLast7Days._sum.quantity,
-                purchaseOrShoppingLast7Days: totalOrdersLast7Days,
-                revenuePercentageLast7Days: revenuePercentageLast7Days.toFixed(1),
-                productSoldPercentageLast7Days: productSoldPercentageLast7Days.toFixed(1),
-                hotProductLast7days: topProductsLast7Days,
+                // totalRevenueLast7Days,
+                // totalQuantitySoldLast7Days: totalQuantitySoldLast7Days._sum.quantity,
+                // purchaseOrShoppingLast7Days: totalOrdersLast7Days,
+                // revenuePercentageLast7Days: revenuePercentageLast7Days.toFixed(1),
+                // productSoldPercentageLast7Days: productSoldPercentageLast7Days.toFixed(1),
+                // hotProductLast7days: topProductsLast7Days,
 
-                totalRevenueLast15Days,
-                totalQuantitySoldLast15Days: totalQuantitySoldLast15Days._sum.quantity,
-                purchaseOrShoppingLast15Days: totalOrdersLast15Days,
-                revenuePercentageLast15Days: revenuePercentageLast15Days.toFixed(1),
-                productSoldPercentageLast15Days: productSoldPercentageLast15Days.toFixed(1),
-                hotProductLast15days: topProductsLast15Days,
+                // totalRevenueLast15Days,
+                // totalQuantitySoldLast15Days: totalQuantitySoldLast15Days._sum.quantity,
+                // purchaseOrShoppingLast15Days: totalOrdersLast15Days,
+                // revenuePercentageLast15Days: revenuePercentageLast15Days.toFixed(1),
+                // productSoldPercentageLast15Days: productSoldPercentageLast15Days.toFixed(1),
+                // hotProductLast15days: topProductsLast15Days,
 
-                totalRevenueLast30Days,
-                totalQuantitySoldLast30Days: totalQuantitySoldLast30Days._sum.quantity,
-                purchaseOrShoppingLast30Days: totalOrdersLast30Days,
-                revenuePercentageLast30Days: revenuePercentageLast30Days.toFixed(1),
-                productSoldPercentageLast30Days: productSoldPercentageLast30Days.toFixed(1),
-                hotProductLast30days: topProductsLast30Days,
+                // totalRevenueLast30Days,
+                // totalQuantitySoldLast30Days: totalQuantitySoldLast30Days._sum.quantity,
+                // purchaseOrShoppingLast30Days: totalOrdersLast30Days,
+                // revenuePercentageLast30Days: revenuePercentageLast30Days.toFixed(1),
+                // productSoldPercentageLast30Days: productSoldPercentageLast30Days.toFixed(1),
+                // hotProductLast30days: topProductsLast30Days,
 
                 totalRevenueInRange,
                 totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
@@ -635,13 +651,13 @@ const StatisticsController = {
                 productSoldPercentageInRange: productSoldPercentageInRange.toFixed(1),
                 hotProductsInRange: topProductsInRange,
 
-                totalRevenueToday, // Tổng doanh thu trong ngày hôm nay
-                totalQuantity: totalQuantityInToday._sum.quantity, // Số lượng tung sản phẩm đã bán trong ngày hôm nay
-                purchaseOrShoppingInToday: totalOrdersInToday, // tong luot mua hang trong ngay hien tai
-                revenuePercentageToday: revenuePercentageToday.toFixed(1), // phan tram doanh thu trong ngay hien tai so voi thang hien tai
-                productSoldPercentageToday: productSoldPercentageToday.toFixed(1), // phan tram so luong san pham ban ra trong ngay hien tai so voi thang hien tai
-                hotProductsInToday: topProductsInToday,
-                topCategoriesToDisplay: sortedCategoriesToday,
+                // totalRevenueToday, // Tổng doanh thu trong ngày hôm nay
+                // totalQuantity: totalQuantityInToday._sum.quantity, // Số lượng tung sản phẩm đã bán trong ngày hôm nay
+                // purchaseOrShoppingInToday: totalOrdersInToday, // tong luot mua hang trong ngay hien tai
+                // revenuePercentageToday: revenuePercentageToday.toFixed(1), // phan tram doanh thu trong ngay hien tai so voi thang hien tai
+                // productSoldPercentageToday: productSoldPercentageToday.toFixed(1), // phan tram so luong san pham ban ra trong ngay hien tai so voi thang hien tai
+                // hotProductsInToday: topProductsInToday,
+                // sortedCategoriesToday: categoryStatsByDay,
             });
         } catch (error) {
             console.error(error);

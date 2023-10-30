@@ -236,20 +236,20 @@ export default function StatisticsPage() {
     datasets: [
       {
         label: "Thiết bị điện tử",
-        data: [800, 30, 750, 80, 650, 75, 90],
+        data: [170, 30, 50, 130, 250],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
         label: "Đồ gia dụng",
-        data: [100, 200, 20, 150, 820, 180, 130],
+        data: [100, 200, 120, 120],
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
 
       {
         label: "Khác",
-        data: [10, 20, 20, 140, 610, 180, 180],
+        data: [10, 120, 20, 40],
         borderColor: "#95A4FC",
         backgroundColor: "#cad2ff",
       },
