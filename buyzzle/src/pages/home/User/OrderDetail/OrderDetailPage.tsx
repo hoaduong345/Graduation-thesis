@@ -54,7 +54,7 @@ export default function OrderDetailPage() {
    };
    // img firebase
    const loadImageFile = async (images: any) => {
-      for (let i = 0; i < images.length; i++) {
+      for (let i = 0; i < 6; i++) {
          const imageRef = ref(storage, `multipleFiles/${images[i].name}`);
 
          await uploadBytes(imageRef, images[i])
