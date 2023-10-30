@@ -1,7 +1,16 @@
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import React, { useState } from "react";
+import ArrowUp from "../../Assets/TSX/ArrowUp";
+import Rate from "./Rate/Rate";
 import { Images } from "../../Assets/TS";
+import Checkbox from "./Checkbox/Checkbox";
+import ButtonSuggestt from "./ButtonSuggest/ButtonSuggest";
+import { title } from "process";
+import { useState } from "react";
+import {
+  PriceRangeFilterPage,
+  Products,
+} from "../../pages/home/User/FilterPage/FiltersPage";
 import { numberFormat } from "../../Helper/Format";
 import { productController } from "../../Controllers/ProductsController";
 import { Row } from "../../Model/ProductModel";
@@ -99,7 +108,7 @@ export default function SitebarFilter({
   return (
     <>
       <div className="content-left-filter mt-[34px] h-max p-4 ">
-        <Accordion className="w-full" allowMultiple>
+        <div className="flex items-center justify-between">
           <h2 className="txt-filter font-bold text-[#1A1A1A] text-[20px]">
             BỘ LỌC TÌM KIẾM
           </h2>
@@ -165,12 +174,16 @@ export default function SitebarFilter({
               {numberFormat(rangeValue[0])} - {numberFormat(rangeValue[1])}
             </p>
           </div>
+        </div>
+
+        {/* border 1px  */}
+        <div className="border-[1px] border-[#E6E6E6] my-[22px]" />
+        <div className="flex items-center justify-between">
+          <h2 className="txt-filter font-bold text-[#1A1A1A] text-[20px]">
+            Đánh giá
+          </h2>
           <a href="#">
-            <img
-              className="mt-[12px] cursor-pointer opacity-100 hover:opacity-80 transition duration-200 hover:ease-in"
-              src={Images.Advertise}
-              alt="Advertise"
-            />
+            <ArrowUp />
           </a>
         </div>
         <div className="rate flex">

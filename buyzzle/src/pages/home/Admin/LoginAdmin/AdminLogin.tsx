@@ -21,9 +21,8 @@ function LoginAdmin() {
     };
 
     const validationSchema = yup.object().shape({
-        email: yup
+        username: yup
             .string()
-            .email('Email không hợp lệ')
             .required('Vui lòng nhập email'),
 
         password: yup
@@ -146,19 +145,19 @@ function LoginAdmin() {
                         <h1 className=' login-a text-[40px]'>ĐĂNG NHẬP ADMIN</h1>
                         <div className='mb-4'>
                             <label htmlFor='email' className='login-a4 font-sans'>
-                                Email
+                                Username
                             </label>
                             <input
                                 type="text"
-                                id="email"
+                                id="username"
                                 // value={formData.email}
                                 className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                 placeholder="Email"
-                                {...register("email")}
+                                {...register("username")}
                             />
-                            {errors.email && (
+                            {errors.username && (
                                 <span className="text-red-500 text-sm">
-                                    {errors.email.message}
+                                    {errors.username.message}
                                 </span>
                             )}
                         </div>
