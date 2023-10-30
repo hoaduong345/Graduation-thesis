@@ -31,7 +31,7 @@ import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
 import LoginAdmin from "../../pages/home/Admin/LoginAdmin/AdminLogin";
-import AdminProfile from "../../pages/home/Admin/AdminProfile/UserProfile";
+import AdminProfile from "../../pages/home/Admin/AdminProfile/AdminProfile";
 import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
 import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 export default function useRouterEmelent() {

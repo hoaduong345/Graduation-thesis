@@ -29,23 +29,7 @@ class AdminController {
       });
   };
 
-  getAllUser = async () => {
-    return await axios.get(`${appConfig.apiUrl}/alluser`).then((res) => {
-      return res.data as users[];
-    });
-  };
-  deleteUser = async (id: number) => {
-    return await axios
-      .delete(`${appConfig.apiUrl}/deleteregister/${id}`)
-      .then((res) => {
-        return res.data;
-      });
-  };
-  getStatusUser =async (username: string| undefined) => {
-    return await axios.get(`${appConfig.apiUrl}/getaccountstatus/${username}`).then((res) => {
-      return res.data;
-    });
-  }
+  
 
 }
 

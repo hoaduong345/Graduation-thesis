@@ -6,12 +6,12 @@ import Container from "../../../../components/container/Container"
 export default function AdminProfile() {
 
     return (
-        <Container>
+     
         <div>
             <Profile />
             <Changepassword />
         </div>
-        </Container>
+     
     )
 }
 
