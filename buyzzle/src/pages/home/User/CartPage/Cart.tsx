@@ -311,7 +311,6 @@ export default function Cart() {
                      })
                   ) : (
                      <>
-                        <EmptyPage />
                      </>
                   )}
                   <DialogComfirm

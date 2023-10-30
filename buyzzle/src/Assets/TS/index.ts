@@ -85,6 +85,7 @@ export const Images = {
   JT: "../src/Assets/PNG/J&T.png",
   vnpost: "../src/Assets/PNG/vnpost.png",
   momo2: "../src/Assets/PNG/momo2.png",
-  zalopay: "../src/Assets/PNG/zalopay.png"
+  zalopay: "../src/Assets/PNG/zalopay.png",
+  visa: "../src/Assets/SVG/visa.svg",
 };
 
