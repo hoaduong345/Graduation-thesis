@@ -48,7 +48,7 @@ export default function DetailOrderManagement() {
                            <h2 className="txt-filter font-bold text-[#4C4C4C] text-3xl max-2xl:text-2xl">
                               ĐƠN HÀNG{" "}
                               <span className="text-[#1A1A1A]">
-                                 #000{order.id}
+                                 #00{order.id}
                               </span>
                            </h2>
                         </div>

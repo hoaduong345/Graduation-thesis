@@ -361,14 +361,16 @@ export default function ListproductsAdmin() {
                    "
                               >
                                  <StatisticalAdmin />
-                                 <button
-                                    className="text-center text-base font-bold text-[#EA4B48] 
-                    max-xl:font-medium
-                    max-lg:text-xs
-                    "
-                                 >
-                                    Thống kê
-                                 </button>
+                                 <Link to={"/admin/statisticsPage"}>
+                                    <button
+                                       className="text-center text-base font-bold text-[#EA4B48] 
+                                    max-xl:font-medium
+                                    max-lg:text-xs
+                                    "
+                                    >
+                                       Thống kê
+                                    </button>
+                                 </Link>
                               </div>
                            </div>
 
@@ -454,8 +456,8 @@ export default function ListproductsAdmin() {
                      />
                   )}
 
-                  <div className="w-[100%] mt-6 items-center flex">
-                     <div className="w-[10%] text-center">
+                  <div className="grid grid-cols-10 mt-6 items-center">
+                     <div className="col-span-1 text-center">
                         <input
                            id="default-checkbox"
                            type="checkbox"
@@ -466,7 +468,7 @@ export default function ListproductsAdmin() {
                            }
                         />
                      </div>
-                     <div className="w-[35%] text-center max-lg:w-[40%]">
+                     <div className="col-span-3 text-center max-lg:w-[40%]">
                         <h3
                            className="text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
@@ -477,7 +479,7 @@ export default function ListproductsAdmin() {
                            THÔNG TIN
                         </h3>
                      </div>
-                     <div className="w-[45%] flex justify-between">
+                     <div className="col-span-2 flex justify-center">
                         <h3
                            className="text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
@@ -485,27 +487,36 @@ export default function ListproductsAdmin() {
                 max-lg:text-[10px]
                 "
                         >
-                           SỐ LƯỢNG
+                           GIÁ
                         </h3>
+                     </div>
+
+                     <div className="col-span-1">
                         <h3
-                           className="text-[#1A1A1A] text-sm font-semibold leading-4
+                           className="flex justify-center text-[#1A1A1A] text-sm font-semibold leading-4 
                 max-xl:text-[13px]
                 max-lg:invisible
                 "
                         >
-                           TÌNH TRẠNG
+                           SỐ LƯỢNG
                         </h3>
+                     </div>
+
+                     <div className="col-span-1">
                         <h3
-                           className="text-[#1A1A1A] text-sm font-semibold leading-4
+                           className="flex justify-center text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
                 max-lg:text-[10px]
                 max-[940px]:truncate
                 "
                         >
-                           SỐ LƯỢNG ĐÃ BÁN
+                           KHO
                         </h3>
+                     </div>
+
+                     <div className="col-span-1">
                         <h3
-                           className="text-[#1A1A1A] text-sm font-semibold leading-4
+                           className="flex justify-center text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
                 max-lg:invisible
                 "
@@ -513,6 +524,8 @@ export default function ListproductsAdmin() {
                            ĐÁNH GIÁ
                         </h3>
                      </div>
+
+                     <div className="col-span-1"></div>
                   </div>
                   <div className="mb-6">
                      {products?.rows?.length > 0 ? (

@@ -3,7 +3,11 @@ import { Products } from "../../User/FilterPage/FiltersPage";
 import Edit from "../Assets/TSX/Edit";
 import { Link } from "react-router-dom";
 import Delete from "../Assets/TSX/Delete";
-import { currentDate, roundedNumber } from "../../../../Helper/Format";
+import {
+   currentDate,
+   numberFormat,
+   roundedNumber,
+} from "../../../../Helper/Format";
 import { stars } from "../../../../Helper/StarRating/Star";
 import { Images } from "../../../../Assets/TS";
 type Props = {
@@ -274,9 +278,9 @@ export default function ListproductMap(props: Props) {
             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                >
                   {/* infor in card */}
-                  <div className="w-[100%] flex items-center">
+                  <div className="items-center grid grid-cols-10">
                      {/* checkbox */}
-                     <div className=" w-[10%] text-center">
+                     <div className="text-center col-span-1">
                         <input
                            id="default-checkbox"
                            type="checkbox"
@@ -290,7 +294,7 @@ export default function ListproductMap(props: Props) {
                      {/* end checkbox */}
 
                      {/* InforProduct */}
-                     <div className="InforProduct w-[35%] max-[850px]:w-[50%] flex items-center">
+                     <div className="InforProduct col-span-3 flex items-center">
                         <div>
                            <img
                               className="w-[70px] h-[70px] object-contain rounded-md"
@@ -319,65 +323,56 @@ export default function ListproductMap(props: Props) {
                         </div>
                      </div>
                      {/* end InforProduct */}
-                     <div className="w-[49%] items-center flex">
+
+                     <div className="col-span-2 flex justify-center font-semibold max-xl:font-medium max-xl:text-xs max-xl:mr-14 max-lg:ml-4">
+                        <p>{numberFormat(products.sellingPrice)}</p>
+                     </div>
+
+                     <div className="col-span-1 justify-center flex">
                         {/* remaining amount ( số lượng còn lại ) */}
-                        <div className="quantity w-[18%] max-lg:w-[35%]">
-                           <span className="text-[#1A1A1A] text-sm font-semibold ml-3 leading-4 max-xl:text-xs max-xl:ml-6  max-lg:ml-20">
-                              {products.quantity}
-                           </span>
-                        </div>
+                        <span className="text-[#1A1A1A] text-sm font-semibold leading-4 max-xl:text-xs max-xl:ml-6  max-lg:ml-20">
+                           {products.quantity}
+                        </span>
                         {/* end  remaining amount ( số lượng còn lại )  */}
-                        <div className="flex text-center w-[37%] justify-start gap-5 max-xl:gap-2 max-xl:ml-6 max-lg:invisible">
-                           <h3 className="text-[#4C4C4C] font-semibold max-xl:font-medium max-xl:text-xs">
-                              Ẩn
-                           </h3>
-                           {/* Swich */}
-                           <div className="form-control">
-                              <input
-                                 type="checkbox"
-                                 className="toggle toggle-error max-xl:toggle-sm"
-                              />
-                           </div>
-                           {/* end  Swich */}
-                           <h3 className="text-[#5D5FEF] font-semibold max-xl:font-medium max-xl:text-xs">
-                              Đăng
-                           </h3>
-                        </div>
+
                         {/* so luong đã bán ra */}
-                        <div>
-                           <h3 className="mr-24 font-semibold max-xl:font-medium max-xl:text-xs max-xl:mr-14 max-lg:ml-4">
-                              10K
-                           </h3>
-                        </div>
+
                         {/* end so luong đã bán ra */}
                         {/* rating  */}
-                        <div>
-                           <div className="flex items-center justify-start gap-2 ">
-                              <div className="rating rating-xs">
-                                 {stars.map((_, index) => (
-                                    <button key={index}>
-                                       {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
-                                       <img
-                                          src={
-                                             index < products.rate
-                                                ? Images.star1
-                                                : Images.star2
-                                          }
-                                          alt=""
-                                       />
-                                    </button>
-                                 ))}
-                              </div>
-                              <p className="text-[#EA4B48] text-sm">
-                                 {roundedNumber(products.rate)}.0
-                              </p>
+                     </div>
+
+                     <div className="col-span-1 justify-center flex">
+                        <h3 className="font-semibold max-xl:font-medium max-xl:text-xs max-xl:mr-14 max-lg:ml-4">
+                           100
+                        </h3>
+                     </div>
+
+                     <div className="col-span-1 justify-center flex">
+                        <div className="flex items-center justify-start gap-2 ">
+                           <div className="rating rating-xs">
+                              {stars.map((_, index) => (
+                                 <button key={index}>
+                                    {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
+                                    <img
+                                       src={
+                                          index < products.rate
+                                             ? Images.star1
+                                             : Images.star2
+                                       }
+                                       alt=""
+                                    />
+                                 </button>
+                              ))}
                            </div>
+                           <p className="text-[#EA4B48] text-sm">
+                              {roundedNumber(products.rate)}.0
+                           </p>
                         </div>
                      </div>
+
                      <div
-                        className="flex w-[52px] justify-start gap-3
-          max-xl:gap-2
-          "
+                        className="flex justify-center gap-3 max-xl:gap-2
+                           col-span-1"
                      >
                         <Link to={`/admin/updateproduct/${props.products.id}`}>
                            <Edit />
