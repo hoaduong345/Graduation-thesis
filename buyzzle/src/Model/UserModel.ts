@@ -4,4 +4,5 @@ export interface UserModel {
     typeAddress: string;
     currentAddress: string;
     phonenumber: number;
+    email: string
 }

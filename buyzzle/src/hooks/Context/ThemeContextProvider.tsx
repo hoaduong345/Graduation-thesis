@@ -1,7 +1,7 @@
-import React, { ChangeEvent, ReactNode, createContext, useState } from "react";
+import { ChangeEvent, ReactNode, createContext, useState } from "react";
 type ThemeContextType = {
   data: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void; // Cập nhật thông tin dữ liệu khác
 };
 type ThemeContextProviderProps = {
   children: ReactNode;
@@ -14,9 +14,11 @@ export default function ThemeContextProvider({
   children,
 }: ThemeContextProviderProps) {
   const [data, setData] = useState("");
+
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setData(e.target.value);
   };
+
   const key: ThemeContextType = {
     data,
     onChange,

@@ -1,40 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LogoWeb from "../../../../Assets/TSX/LogoWeb";
 import Container from "../../../../components/container/Container";
-import axios from "axios";
-import { CartItem, CartProduct } from "../../../../Model/CartModel";
-import { numberFormat } from "../../../../Helper/Format";
-
-interface Invoice {
-   cart: CartProduct;
-   item: CartItem[];
-}
+import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
+import { useParams } from "react-router-dom";
+import { orderControllers } from "../../../../Controllers/OrderControllers";
+import { OrderModel } from "../../../../Model/OrderModel";
+import { useReactToPrint } from "react-to-print";
+import PrintOrder from "../../Admin/Assets/TSX/PrintOrder";
 
 export default function InvoicesPage() {
-   const [invoice, setInvoice] = useState({} as Invoice);
+   const handlePrint = useReactToPrint({
+      content: () => componentRef.current,
+   });
+   const { id } = useParams();
+   const idOrder = Number(id);
+   const componentRef: any = useRef();
+
+   const [invoice, setInvoice] = useState<OrderModel>({} as OrderModel);
 
    useEffect(() => {
       getInvoice();
    }, []);
 
-   const getInvoice = () => {
-      axios
-         .get("http://localhost:5000/buyzzle/order", {
-            headers: {
-               "Access-Control-Allow-Origin": "*",
-            },
-            withCredentials: true,
-         })
-         .then((res) => {
-            setInvoice(res.data.data[0].invoiceDetails[0].cart);
-         });
+   const getInvoice = async () => {
+      await orderControllers.getDetails(idOrder).then((res) => {
+         setInvoice(res);
+      });
    };
-   console.log(invoice.item);
 
    return (
       <>
          <Container>
-            <div className="max-w-3xl mx-auto p-6 bg-white rounded border-[1px] shadow-sm my-6">
+            <div
+               className="max-w-3xl mx-auto p-6 bg-white rounded border-[1px] shadow-sm my-6"
+               ref={componentRef}
+            >
                <div className="grid grid-cols-2 items-center">
                   <div>
                      <LogoWeb />
@@ -42,33 +42,35 @@ export default function InvoicesPage() {
                   <div className="text-right">
                      <p>Buyzzle Inc.</p>
                      <p className="text-gray-500 text-sm">sales@buyzzle.com</p>
-                     <p className="text-gray-500 text-sm mt-1">+84-442341232</p>
-                     <p className="text-gray-500 text-sm mt-1">
+                     <p className="text-gray-500 text-sm mt-1">+84-123456789</p>
+                     {/* <p className="text-gray-500 text-sm mt-1">
                         VAT: 8657671212
-                     </p>
+                     </p> */}
                   </div>
                </div>
                <div className="grid grid-cols-2 items-center mt-8">
                   <div>
-                     <p className="font-bold text-gray-800">Bill to :</p>
-                     <p className="text-gray-500">
-                        Laravel LLC.
-                        <br />
-                        102, San-Fransico, CA, USA
-                     </p>
-                     <p className="text-gray-500">info@laravel.com</p>
+                     <p className="font-bold text-gray-800">Gửi đến:</p>
+                     <p className="text-gray-500">{invoice?.User?.address}</p>
+                     <p className="text-gray-500">{invoice.User?.email}</p>
                   </div>
                   <div className="text-right">
                      <p className="">
-                        Invoice number:
-                        <span className="text-gray-500">INV-2023786123</span>
+                        Khách hàng:{" "}
+                        <span className="text-gray-500">
+                           {invoice.User?.name}
+                        </span>
                      </p>
                      <p>
-                        Invoice date:{" "}
-                        <span className="text-gray-500">03/07/2023</span>
+                        SĐT:{" "}
+                        <span className="text-gray-500">
+                           {invoice.User?.phonenumber}
+                        </span>
                         <br />
-                        Due date:
-                        <span className="text-gray-500">31/07/2023</span>
+                        Ngày đặt:{" "}
+                        <span className="text-gray-500">
+                           {formatDateYYYY(invoice.createdAt)}
+                        </span>
                      </p>
                   </div>
                </div>
@@ -109,23 +111,23 @@ export default function InvoicesPage() {
                         </tr>
                      </thead>
                      <tbody>
-                        {invoice?.item?.map((e) => {
+                        {invoice?.OrderDetail?.map((e) => {
                            return (
                               <>
                                  <tr className="border-b border-gray-200">
                                     <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
                                        <div className="font-medium text-gray-900">
-                                          {e.product.name}
+                                          {e.name}
                                        </div>
                                        <div className="mt-1 truncate text-gray-500">
-                                          {e.product.description}
+                                          {}
                                        </div>
                                     </td>
                                     <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
                                        {e.quantity}
                                     </td>
                                     <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                                       {numberFormat(e.product.sellingPrice)}
+                                       {numberFormat(e.price)}
                                     </td>
                                     <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
                                        {numberFormat(e.total)}
@@ -134,44 +136,6 @@ export default function InvoicesPage() {
                               </>
                            );
                         })}
-                        {/* <tr className="border-b border-gray-200">
-                           <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                              <div className="font-medium text-gray-900">
-                                 Frontend Design
-                              </div>
-                              <div className="mt-1 truncate text-gray-500">
-                                 Frontend design using Vue.js and Tailwind CSS.
-                              </div>
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              500.0
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              $100.00
-                           </td>
-                           <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
-                              $5,000.00
-                           </td>
-                        </tr>
-                        <tr className="border-b border-gray-200">
-                           <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                              <div className="font-medium text-gray-900">
-                                 Shop SEO
-                              </div>
-                              <div className="mt-1 truncate text-gray-500">
-                                 Website SEO and Social Media marketing.
-                              </div>
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              50.0
-                           </td>
-                           <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
-                              $100.00
-                           </td>
-                           <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
-                              $500.00
-                           </td>
-                        </tr> */}
                      </tbody>
                      <tfoot>
                         <tr>
@@ -180,16 +144,16 @@ export default function InvoicesPage() {
                               colSpan={3}
                               className="hidden pl-4 pr-3 pt-6 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                            >
-                              Subtotal
+                              Tổng tiền hàng
                            </th>
                            <th
                               scope="row"
                               className="pl-6 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:hidden"
                            >
-                              Subtotal
+                              Tổng tiền hàng
                            </th>
                            <td className="pl-3 pr-6 pt-6 text-right text-sm text-gray-500 sm:pr-0">
-                              $10,500.00
+                              {numberFormat(invoice.subtotal)}
                            </td>
                         </tr>
                         <tr>
@@ -198,16 +162,16 @@ export default function InvoicesPage() {
                               colSpan={3}
                               className="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                            >
-                              Tax
+                              Giảm giá
                            </th>
                            <th
                               scope="row"
                               className="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
                            >
-                              Tax
+                              Giảm giá
                            </th>
                            <td className="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0">
-                              $1,050.00
+                              -{numberFormat(invoice.discount)}
                            </td>
                         </tr>
                         <tr>
@@ -216,16 +180,16 @@ export default function InvoicesPage() {
                               colSpan={3}
                               className="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                            >
-                              Discount
+                              Phí giao hàng
                            </th>
                            <th
                               scope="row"
                               className="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
                            >
-                              Discount
+                              Phí giao hàng
                            </th>
                            <td className="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0">
-                              - 10%
+                              {numberFormat(invoice.shipping)}
                            </td>
                         </tr>
                         <tr>
@@ -234,25 +198,37 @@ export default function InvoicesPage() {
                               colSpan={3}
                               className="hidden pl-4 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell sm:pl-0"
                            >
-                              Total
+                              Tổng thanh toán
                            </th>
                            <th
                               scope="row"
                               className="pl-6 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden"
                            >
-                              Total
+                              Tổng thanh toán
                            </th>
                            <td className="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-0">
-                              $11,550.00
+                              {numberFormat(invoice.amountTotal)}
                            </td>
                         </tr>
                      </tfoot>
                   </table>
                </div>
                {/*  Footer  */}
-               <div className="border-t-2 pt-4 text-xs text-gray-500 text-center mt-16">
+               <div className="border-t-2 pt-4 text-base text-gray-500 text-center mt-16">
                   Cảm ơn bạn đã mua hàng
                </div>
+            </div>
+            <div className="flex justify-center">
+               <button
+                  onClick={handlePrint}
+                  className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C]
+                                 rounded-md py-[8px] px-3 flex
+                                 transition duration-150 cursor-pointer border-[#E0E0E0] border-[1px]
+                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
+               >
+                  <PrintOrder />
+                  <p>Print</p>
+               </button>
             </div>
          </Container>
       </>

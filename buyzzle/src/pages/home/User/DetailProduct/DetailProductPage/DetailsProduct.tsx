@@ -1,16 +1,30 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
 import Container from "../../../../../components/container/Container";
 import { appConfig } from "../../../../../configsEnv";
 
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { Button, IconButton } from "@material-tailwind/react";
+import { toast } from "react-toastify";
 import ArrowDown from "../../../../../Assets/TSX/ArrowDown";
-import ArrowNext from "../../../../../Assets/TSX/ArrowNext";
-import ArrowPrev from "../../../../../Assets/TSX/ArrowPrev";
 import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
 import Minus from "../../../../../Assets/TSX/Minus";
 import Plus from "../../../../../Assets/TSX/Plus";
+import {
+  ModelCart,
+  cartControllers,
+} from "../../../../../Controllers/CartControllers";
+import { productController } from "../../../../../Controllers/ProductsController";
+import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
+import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
+import { stars } from "../../../../../Helper/StarRating/Star";
+import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
+import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
+import { useCart } from "../../../../../hooks/Cart/CartContextProvider";
+import { ThemeContext } from "../../../../../hooks/Context/ThemeContextProvider";
+import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import Cart from "../../../Admin/Assets/TSX/Cart";
 import FB from "../../../Admin/Assets/TSX/FB";
 import Insta from "../../../Admin/Assets/TSX/Insta";
@@ -36,17 +50,7 @@ import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
 import { Products } from "../../FilterPage/FiltersPage";
 import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import RatingMap from "../RatingAndComments/RatingMap";
-import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
-import { stars } from "../../../../../Helper/StarRating/Star";
-import { useForm } from "react-hook-form";
-import Period from "../../../../../Assets/TSX/Period";
-import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
-import LineCMT from "../../../../../Assets/TSX/LineCMT";
-import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
-import Edit from "../../../Admin/Assets/TSX/Edit";
-import Handle from "../../../Admin/Assets/TSX/bacham";
-import { Button, IconButton } from "@material-tailwind/react";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import DetailRecommandProduct from "./DetailRecommandProduct";
 
 export interface ImgOfProduct {
   url: string;
@@ -99,6 +103,12 @@ export interface EditImage {
   id: number;
 }
 export default function DetailsProduct() {
+  const { carts, addProduct } = useCart();
+  console.log(
+    "🚀 ~ file: DetailsProduct.tsx:112 ~ DetailsProduct ~ carts 123:",
+    carts
+  );
+
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
   const [editImages, setEditImages] = useState<EditImage[]>([]);
@@ -189,12 +199,6 @@ export default function DetailsProduct() {
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const addCart = (data: ModelCart) => {
-    cartControllers.addCart(data).then(() => {
-      toast.success("Thêm thành công");
-    });
   };
 
   const getComment = (id: number) => {
@@ -596,12 +600,15 @@ export default function DetailsProduct() {
                 </div>
                 <div className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
                   <button
-                    onClick={() =>
-                      addCart({
-                        productId: Number(id),
-                        quantity: quantity,
-                      })
-                    }
+                    onClick={() => {
+                      // addCart({
+                      //   id: Number(id),
+                      //   productId: Number(id),
+                      //   quantity: quantity,
+                      // })
+
+                      addProduct(Number(id), quantity);
+                    }}
                     className="text-center text-base font-bold text-[#4C4C4C] "
                   >
                     Thêm Vào Giỏ Hàng

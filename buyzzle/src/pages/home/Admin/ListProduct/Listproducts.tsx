@@ -1,8 +1,7 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { IonIcon } from "@ionic/react";
-import { Button, IconButton } from "@material-tailwind/react";
 import { download, generateCsv } from "export-to-csv"; //Xuat excel
 import { ChangeEvent, useEffect, useState } from "react";
+import ResponsivePagination from "react-responsive-pagination";
 import { toast } from "react-toastify";
 import Search from "../../../../Assets/TSX/Search";
 import { productController } from "../../../../Controllers/ProductsController";
@@ -16,6 +15,7 @@ import StatisticalAdmin from "../Assets/TSX/statistical";
 import SitebarAdmin from "../Sitebar/Sitebar";
 import FilterListproduct from "./Filter/FilterListproduct";
 import ListproductMap from "./ListproductMap";
+
 export default function ListproductsAdmin() {
   const [products, setProducts] = useState<any>([]);
   // Xuat excel
@@ -100,23 +100,6 @@ export default function ListproductsAdmin() {
 
   const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-  };
-  const getItemProps = (index: number) =>
-    ({
-      variant: currentPage === index ? "filled" : "text",
-      color: "gray",
-      onClick: () => setCurrentPage(index),
-    } as any);
-  const next = () => {
-    if (currentPage === 999) return;
-
-    setCurrentPage(currentPage + 1);
-  };
-
-  const prev = () => {
-    if (currentPage === 1) return;
-
-    setCurrentPage(currentPage - 1);
   };
 
   const [isShown, setIsShown] = useState(false);
@@ -497,7 +480,7 @@ export default function ListproductsAdmin() {
                 </h3>
               </div>
             </div>
-            <div>
+            <div className="mb-6">
               {products?.rows?.length > 0 ? (
                 products?.rows?.map((items: any) => {
                   return (
@@ -516,44 +499,63 @@ export default function ListproductsAdmin() {
                 </>
               )}
             </div>
+            <ResponsivePagination
+              current={currentPage}
+              total={products?.totalPage}
+              onPageChange={setCurrentPage}
+              maxWidth={500}
+            />
             {/* <Pagination postPer={postPerPage} totalPosts={products.length} /> */}
-            <div className="pagination">
-              <div className="flex">
-                <Button
-                  variant="text"
-                  // className="flex items-center gap-2"
-                  className={`${
-                    currentPage == 1 ? `hidden` : `flex items-center gap-2`
-                  }`}
-                  onClick={prev}
-                >
-                  <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
-                </Button>
-                {[...new Array(products?.totalPage)].map((item, index) => {
-                  const page = index + 1;
-                  console.log(item);
-                  return (
-                    <>
-                      <IconButton className="bg-none" {...getItemProps(page)}>
-                        <p className="ml-[-2px] text-sm">{page}</p>
-                      </IconButton>
-                    </>
-                  );
-                })}
-                <Button
-                  variant="text"
-                  className={`${
-                    currentPage == products?.totalPage
-                      ? "hidden"
-                      : "flex items-center gap-2"
-                  }`}
-                  onClick={next}
-                >
-                  Next
-                  <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+            {/* <div className="pagination">
+                     <div className="flex">
+                        <Button
+                           variant="text"
+                           // className="flex items-center gap-2"
+                           className={`${
+                              currentPage == 1
+                                 ? `hidden`
+                                 : `flex items-center gap-2`
+                           }`}
+                           onClick={prev}
+                        >
+                           <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
+                           Previous
+                        </Button>
+                        {[...new Array(products?.totalPage)].map(
+                           (item, index) => {
+                              const page = index + 1;
+                              console.log(item);
+                              return (
+                                 <>
+                                    <IconButton
+                                       className="bg-none"
+                                       {...getItemProps(page)}
+                                    >
+                                       <p className="ml-[-2px] text-sm">
+                                          {page}
+                                       </p>
+                                    </IconButton>
+                                 </>
+                              );
+                           }
+                        )}
+                        <Button
+                           variant="text"
+                           className={`${
+                              currentPage == products?.totalPage
+                                 ? "hidden"
+                                 : "flex items-center gap-2"
+                           }`}
+                           onClick={next}
+                        >
+                           Next
+                           <ArrowRightIcon
+                              strokeWidth={2}
+                              className="h-4 w-4"
+                           />
+                        </Button>
+                     </div>
+                  </div> */}
           </div>
         </div>
       </Container>

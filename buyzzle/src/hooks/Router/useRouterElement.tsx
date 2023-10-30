@@ -32,6 +32,8 @@ import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
 import LoginAdmin from "../../pages/home/Admin/LoginAdmin/AdminLogin";
 import AdminProfile from "../../pages/home/Admin/AdminProfile/UserProfile";
+import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
+import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -61,7 +63,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/FiltersPage/:id",
+      path: "/FiltersPage/",
       element: (
         <MainLayout>
           <FiltersPage />
@@ -207,7 +209,7 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "orderdetail",
+      path: "orderdetail/:id",
       element: (
         <MainLayout>
           <OrderDetailPage />
@@ -294,14 +296,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "invoice",
-      element: (
-        <MainLayout>
-          <InvoicesPage />
-        </MainLayout>
-      ),
-    },
+
     {
       path: path.confirmAccount,
       element: (
@@ -379,14 +374,6 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "invoice",
-      element: (
-        <MainLayout>
-          <InvoicesPage />
         </MainLayout>
       ),
     },
@@ -599,8 +586,20 @@ export default function useRouterEmelent() {
           element: <OrderManagement />,
         },
         {
+          path: "ordermanagement/:id",
+          element: <DetailOrderManagement />,
+        },
+        {
           path: "usersmanager",
           element: <User />,
+        },
+        {
+          path: "statisticspage",
+          element: <StatisticsPage />,
+        },
+        {
+          path: "invoice/:id",
+          element: <InvoicesPage />,
         },
       ],
       

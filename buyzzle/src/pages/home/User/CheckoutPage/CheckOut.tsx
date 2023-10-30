@@ -62,6 +62,8 @@ export default function CheckOut() {
    const [discount, setDiscount] = useState<number>(0);
    const [selectedPaymentMethod, setSelectedPaymentMethod] =
       useState<PaymentMethod>("stripe");
+   const [note, setNote] = useState("");
+   const [invoice, setInvoice] = useState(false);
 
    const localCart = sessionStorage.getItem("cartBuyzzle");
    const listLocalCart: CartItem[] =
@@ -74,6 +76,9 @@ export default function CheckOut() {
    const localUsername = localStorage.getItem("user");
    const userLocal: User =
       localUsername == null ? "" : JSON.parse(localUsername);
+
+   const id = localStorage.getItem("idUser");
+   const idUser = id == null ? 0 : JSON.parse(id);
 
    useEffect(() => {
       getUser();
@@ -611,20 +616,26 @@ export default function CheckOut() {
                                  <PinkRight />
                               </div>
                            </div>
-                           <div className="flex flex-col gap-2">
-                              <p className="text-sm font-medium text-[#1A1A1A] max-[870px]:text-[13px]">
-                                 Ghi chú cho (
-                                 <span className="text-[#7A828A]">
-                                    Người gửi
-                                 </span>
-                                 ):{" "}
-                              </p>
-                              <textarea
-                                 className="w-full h-28 outline-0 border-[1px] border-[#FFAAAF] rounded-md p-3
+
+                           <div className="flex flex-col gap-4">
+                              <div className="flex flex-col gap-2">
+                                 <p className="text-sm text-[#1A1A1A] max-[870px]:text-[13px]">
+                                    Ghi chú (
+                                    <span className="text-[#7A828A]">
+                                       Cho người bán hàng
+                                    </span>
+                                    ):{" "}
+                                 </p>
+                                 <textarea
+                                    className="w-full h-28 outline-0 border-[1px] border-[#FFAAAF] rounded-md p-3
                                                     max-lg:text-[10px]"
-                                 placeholder="Nhập ghi chú cho người gửi hàng."
-                              />
+                                    placeholder="Nhập ghi chú cho người bán hàng."
+                                    value={note}
+                                    onChange={(e) => setNote(e.target.value)}
+                                 />
+                              </div>
                            </div>
+
                            <div className="flex gap-3 items-center">
                               <Voucher />
                               <select
@@ -634,7 +645,7 @@ export default function CheckOut() {
                                  className="outline-none w-full text-[#EA4B48] items-center border-[#FFAAAF] bg-[#fff] border-[1px] py-[8px] rounded-md max-lg:py-[4px]"
                               >
                                  <option value={0}>
-                                    -- chọn mã giảm giá --
+                                    -- Chọn mã giảm giá --
                                  </option>
                                  {dataVoucherLocal.map((e) => {
                                     return (
@@ -647,6 +658,7 @@ export default function CheckOut() {
                                  })}
                               </select>
                            </div>
+
                            <div className="flex flex-col gap-[18px]">
                               <div className="flex justify-between">
                                  <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
@@ -661,7 +673,8 @@ export default function CheckOut() {
                                     Giảm{" "}
                                  </p>
                                  <div className="flex gap-1">
-                                    <p className="text-sm text-[#FFAAAF] max-[870px]:text-[11px]">
+                                    <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
+                                       -
                                        {numberFormat(
                                           calculatePrice() * (discount / 100)
                                        )}
@@ -691,6 +704,7 @@ export default function CheckOut() {
                                  </p>
                               </div>
                            </div>
+
                            <div className="flex flex-col gap-4">
                               <h4 className="text-base text-[#4C4C4C] font-bold max-[870px]:text-[13px]">
                                  Phương Thức Thanh Toán
@@ -746,10 +760,31 @@ export default function CheckOut() {
                                  })}
                               </div>
                            </div>
+
+                           <div className="flex items-center gap-3">
+                              <input
+                                 className="w-[14px] h-[14px]"
+                                 type="checkbox"
+                                 checked={invoice}
+                                 onChange={(e) => setInvoice(e.target.checked)}
+                              />
+                              <p
+                                 className={`text-[15px] max-[870px]:text-[13px] cursor-pointer ${
+                                    invoice ? `inherit` : `text-[#9c9c9c]`
+                                 }`}
+                                 onClick={() => setInvoice(!invoice)}
+                              >
+                                 Xuất hóa đơn
+                              </p>
+                           </div>
+
                            <PaymentBtn
+                              idUser={idUser}
                               cartItems={listLocalCart}
-                              isCheckedPayment={selectedPaymentMethod}
+                              method={selectedPaymentMethod}
                               discount={discount}
+                              note={note}
+                              invoice={invoice}
                            />
                         </div>
                      </div>

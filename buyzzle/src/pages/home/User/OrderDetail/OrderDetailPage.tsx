@@ -1,51 +1,46 @@
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
+import { orderControllers } from "../../../../Controllers/OrderControllers";
 import { RatingAndCommentController } from "../../../../Controllers/Rating&Comment";
 import { storage } from "../../../../Firebase/Config";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
+import { numberFormat } from "../../../../Helper/Format";
 import Loading from "../../../../Helper/Loading/Loading";
 import StepperPage from "../../../../Helper/Stepper/StepperPage";
-import { Rating, User } from "../../../../Model/ProductModel";
+import { OrderModel } from "../../../../Model/OrderModel";
+import { Rating } from "../../../../Model/ProductModel";
 import Container from "../../../../components/container/Container";
 import Back from "../../Admin/Assets/TSX/Back";
 import UploadIMG from "../../Admin/Assets/TSX/UploadIMG";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
-import { userController } from "../../../../Controllers/UserController";
-import { UserModel } from "../../../../Model/UserModel";
-import { CartItem } from "../../../../Model/CartModel";
-import { numberFormat } from "../../../../Helper/Format";
 
 export default function OrderDetailPage() {
+   const { id } = useParams();
+   const idOrder = Number(id);
+
+   const [orderDetails, setOrderDetails] = useState<OrderModel>(
+      {} as OrderModel
+   );
+
    const [url, setUrl] = useState<string[]>([]);
    const [loadingImage, setLoadingImage] = useState(false);
 
    const [idSP, setIdSP] = useState(0);
 
-   const [user, setUser] = useState<UserModel>({} as UserModel);
-
-   const localCart = sessionStorage.getItem("cartBuyzzle");
-   const listLocalCart: CartItem[] =
-      localCart == null ? [] : JSON.parse(localCart);
-
-   const localUsername = localStorage.getItem("user");
-   const userLocal: User =
-      localUsername == null ? "" : JSON.parse(localUsername);
-
    useEffect(() => {
-      getUser();
+      getOrderDetails();
    }, []);
 
-   const getUser = async () => {
-      await userController
-         .getUserWhereUsername(userLocal.username)
-         .then((res) => {
-            setUser(res);
-         });
+   const getOrderDetails = async () => {
+      await orderControllers.getDetails(idOrder).then((res) => {
+         setOrderDetails(res);
+      });
    };
 
    //Add images comment
@@ -192,15 +187,6 @@ export default function OrderDetailPage() {
          });
    };
 
-   const calculatePrice = () => {
-      let totalCart = 0;
-      for (let i = 0; i < listLocalCart.length; i++) {
-         const element = listLocalCart[i];
-         totalCart += element.quantity * element.product.sellingPrice;
-      }
-      return totalCart;
-   };
-
    return (
       <Container>
          <div className="body-filter container mx-auto">
@@ -212,9 +198,11 @@ export default function OrderDetailPage() {
                <div className="col-span-3 max-2xl:col-span-5">
                   <div className="back h-[57px] mt-[46px] ">
                      <div className="flex gap-3 items-center">
-                        <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
-                           <Back />
-                        </div>
+                        <Link to={"/orderhistory"}>
+                           <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
+                              <Back />
+                           </div>
+                        </Link>
                         <div>
                            <p className="font-normal text-sm max-xl:text-xs max-lg:text-[10px]">
                               Quay lại danh sách đơn hàng
@@ -239,10 +227,10 @@ export default function OrderDetailPage() {
                               <div>
                                  <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
                                     <span className="font-bold">
-                                       {user.name}, {user.phonenumber}{" "}
+                                       {orderDetails?.User?.name},{" "}
+                                       {orderDetails?.User?.phonenumber}{" "}
                                     </span>{" "}
-                                    12 Nguyễn Chí Thanh, Phường Tân An, Thành
-                                    Phố Buôn Ma Thuột, Đắk Lắk
+                                    {orderDetails?.User?.address}
                                  </p>
                               </div>
                            </div>
@@ -256,13 +244,16 @@ export default function OrderDetailPage() {
                               </div>
                               <div>
                                  <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
-                                    Giao vào giờ hành chính từ thứ 2 - 6{" "}
+                                    {orderDetails?.note == "" ||
+                                    orderDetails?.note == null
+                                       ? "Không có"
+                                       : orderDetails?.note}{" "}
                                  </p>
                               </div>
                            </div>
                         </div>
 
-                        <div className="w-[40%] max-lg:w-[45%] flex flex-col gap-7 p-[20px] border-[#6C6C6C40] border-[1px] rounded-md">
+                        <div className="w-[40%] max-lg:w-[45%] flex flex-col gap-5 p-[20px] border-[#6C6C6C40] border-[1px] rounded-md">
                            <div className="">
                               <div className="flex gap-5 max-xl:gap-3 max-lg:gap-0">
                                  <div>
@@ -270,7 +261,7 @@ export default function OrderDetailPage() {
                                        ID ĐƠN HÀNG
                                     </p>
                                     <p className="max-xl:text-sm max-[870px]:text-xs">
-                                       #A23V
+                                       #000{orderDetails.id}
                                     </p>
                                  </div>
                                  <div className="border-r-[1px] border-[#FFAAAF] h-[25px] my-auto"></div>
@@ -279,7 +270,7 @@ export default function OrderDetailPage() {
                                        PHƯƠNG THỨC THANH TOÁN
                                     </p>
                                     <p className="max-xl:text-sm max-[870px]:text-xs">
-                                       Thẻ tín dụng
+                                       {orderDetails.paymentMethod}
                                     </p>
                                  </div>
                               </div>
@@ -290,7 +281,7 @@ export default function OrderDetailPage() {
                                  Tổng Giá Sản Phẩm:{" "}
                               </p>
                               <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
-                                 {numberFormat(calculatePrice())}
+                                 {numberFormat(orderDetails.subtotal)}
                               </p>
                            </div>
                            <div className="flex justify-between border-t-[1px] pt-2">
@@ -299,16 +290,26 @@ export default function OrderDetailPage() {
                               </p>
                               <div className="flex gap-1">
                                  <p className="text-sm text-[#FFAAAF] line-through max-[870px]:text-[11px]">
-                                    {numberFormat(0)}
+                                    {numberFormat(orderDetails.discount)}
                                  </p>
                               </div>
                            </div>
                            <div className="flex justify-between border-t-[1px] pt-2">
                               <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
-                                 Tổng Phí:{" "}
+                                 Phí Giao Hàng:{" "}
+                              </p>
+                              <div className="flex gap-1">
+                                 <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
+                                    {numberFormat(orderDetails.shipping)}
+                                 </p>
+                              </div>
+                           </div>
+                           <div className="flex justify-between border-t-[1px] pt-2">
+                              <p className="text-sm text-[#393939] max-[870px]:text-[11px]">
+                                 Tổng Thanh Toán:{" "}
                               </p>
                               <p className="text-xl text-[#EA4B48] font-semibold max-[870px]:text-sm">
-                                 {numberFormat(calculatePrice())}
+                                 {numberFormat(orderDetails.amountTotal)}
                               </p>
                            </div>
                         </div>
@@ -332,19 +333,19 @@ export default function OrderDetailPage() {
                               THAO TÁC
                            </h4>
                         </div>
-                        {listLocalCart.map((e) => {
+                        {orderDetails?.OrderDetail?.map((e) => {
                            return (
                               <>
                                  <div className="grid grid-cols-5 px-[26px] py-[16px] items-center bg-[#FFFFFF] shadow">
                                     <div className="col-span-2 text-sm flex gap-4 items-center">
                                        <img
                                           className="w-[70px] h-[70px] object-contain"
-                                          src={e.product.ProductImage[0].url}
+                                          src={e.image}
                                           alt=""
                                        />
                                        <div>
                                           <p className="text-base text-[#393939] max-[870px]:text-[13px]">
-                                             {e.product.name}
+                                             {e.name}
                                           </p>
                                           <p className="text-sm text-[#1A1A1A] max-[870px]:text-[13px]">
                                              SL:{" "}
@@ -356,17 +357,15 @@ export default function OrderDetailPage() {
                                     </div>
                                     <div className="col-span-1 flex gap-2 justify-around items-center">
                                        <p className="font-medium text-[#7A828A] text-sm line-through max-[870px]:text-[13px]">
-                                          {numberFormat(e.product.price)}
+                                          {numberFormat(e.price)}
                                        </p>
                                        <p className="font-medium text-[#1A1A1A] text-base max-[870px]:text-[13px]">
-                                          {numberFormat(e.product.sellingPrice)}
+                                          {numberFormat(e.price)}
                                        </p>
                                     </div>
                                     <div>
                                        <p className="font-medium text-[#EA4B48] text-base text-center max-[870px]:text-[13px]">
-                                          {numberFormat(
-                                             e.quantity * e.product.sellingPrice
-                                          )}
+                                          {numberFormat(e.total)}
                                        </p>
                                     </div>
                                     <div className="col-span-1 flex mx-auto items-center">
@@ -374,7 +373,7 @@ export default function OrderDetailPage() {
                                           className="bg-[#EA4B48] rounded-md font-medium"
                                           onClick={() => {
                                              openDialog(idDialogRating);
-                                             setIdSP(e.product.id);
+                                             setIdSP(e.productId);
                                           }}
                                        >
                                           <p className="px-4 py-2 text-white">

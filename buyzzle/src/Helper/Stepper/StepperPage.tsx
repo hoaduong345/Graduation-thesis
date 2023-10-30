@@ -11,9 +11,9 @@ export default function StepperPage() {
          setDelivered(true);
          setTimeout(() => {
             setSuccessfulDelivery(true);
-         }, 20000);
-      }, 10000);
-   }, 5000);
+         }, 30000);
+      }, 90000);
+   }, 5000000);
 
    return (
       <>
@@ -25,11 +25,10 @@ export default function StepperPage() {
                */}
          <ol className="flex items-center w-full px-20">
             <li
-               className={`flex w-full items-center  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block ${
-                  deliveredToCarrier
-                     ? `dark:after:border-[#EA4B48]`
-                     : `dark:after:border-gray-200`
-               }`}
+               className={`flex w-full items-center  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block ${deliveredToCarrier
+                  ? `dark:after:border-[#EA4B48]`
+                  : `dark:after:border-gray-200`
+                  }`}
             >
                <span className="flex items-center justify-center w-10 h-10  rounded-full lg:h-12 lg:w-12 dark:bg-[#EA4B48] shrink-0">
                   <svg
@@ -51,53 +50,41 @@ export default function StepperPage() {
             </li>
 
             <li
-               className={`flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block ${
-                  delivered
-                     ? `dark:after:border-[#EA4B48]`
-                     : `dark:after:border-gray-200`
-               }`}
+               className={`flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block ${delivered
+                  ? `dark:after:border-[#EA4B48]`
+                  : `dark:after:border-gray-200`
+                  }`}
             >
                <span
-                  className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 ${
-                     deliveredToCarrier
-                        ? `dark:bg-[#EA4B48] bg-gray-100`
-                        : `border-dashed border-2 border-[#EA4B48]`
-                  }`}
-               >
-                  <svg
-                     className={`w-4 h-4 text-red-900 lg:w-5 lg:h-5 ${
-                        deliveredToCarrier
-                           ? `dark:text-gray-100`
-                           : `dark:text-[#EA4B48]`
+                  className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 ${deliveredToCarrier
+                     ? `dark:bg-[#EA4B48] bg-gray-100`
+                     : `border-dashed border-2 border-[#EA4B48]`
                      }`}
-                     aria-hidden="true"
-                     xmlns="http://www.w3.org/2000/svg"
-                     fill="currentColor"
-                     viewBox="0 0 20 16"
-                  >
-                     <path d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z" />
+               >
+                  <svg className={`w-4 h-4 text-red-900 lg:w-5 lg:h-5 ${deliveredToCarrier
+                     ? `dark:text-gray-100`
+                     : `dark:text-[#EA4B48]`
+                     }`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                     <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
                   </svg>
                </span>
             </li>
 
             <li
-               className={`flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block ${
-                  successfulDelivery
-                     ? `dark:after:border-[#EA4B48]`
-                     : `dark:after:border-gray-200`
-               }`}
+               className={`flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block ${successfulDelivery
+                  ? `dark:after:border-[#EA4B48]`
+                  : `dark:after:border-gray-200`
+                  }`}
             >
                <span
-                  className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0  ${
-                     delivered
-                        ? `dark:bg-[#EA4B48] bg-gray-100`
-                        : `border-dashed border-2 border-[#EA4B48]`
-                  }`}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0  ${delivered
+                     ? `dark:bg-[#EA4B48] bg-gray-100`
+                     : `border-dashed border-2 border-[#EA4B48]`
+                     }`}
                >
                   <svg
-                     className={`w-4 h-4 text-gray-500 lg:w-5 lg:h-5 ${
-                        delivered ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
-                     }`}
+                     className={`w-4 h-4 text-gray-500 lg:w-5 lg:h-5 ${delivered ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
+                        }`}
                      aria-hidden="true"
                      xmlns="http://www.w3.org/2000/svg"
                      fill="currentColor"
@@ -110,18 +97,16 @@ export default function StepperPage() {
 
             <li className="flex items-center">
                <span
-                  className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 ${
-                     successfulDelivery
-                        ? `dark:bg-[#EA4B48] bg-gray-100`
-                        : ` border-dashed border-2 border-[#EA4B48]`
-                  }`}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 ${successfulDelivery
+                     ? `dark:bg-[#EA4B48] bg-gray-100`
+                     : ` border-dashed border-2 border-[#EA4B48]`
+                     }`}
                >
                   <svg
-                     className={`w-4 h-4  lg:w-5 lg:h-5 ${
-                        successfulDelivery
-                           ? `dark:text-gray-100`
-                           : `dark:text-[#EA4B48]`
-                     }`}
+                     className={`w-4 h-4  lg:w-5 lg:h-5 ${successfulDelivery
+                        ? `dark:text-gray-100`
+                        : `dark:text-[#EA4B48]`
+                        }`}
                      aria-hidden="true"
                      xmlns="http://www.w3.org/2000/svg"
                      fill="currentColor"
@@ -135,33 +120,24 @@ export default function StepperPage() {
          <div className="w-[100%] mt-3 flex">
             <p className={`text-[#EA4B48] w-[23%] text-center`}>Đặt hàng</p>
             <p
-               className={`${
-                  deliveredToCarrier ? `text-[#EA4B48]` : `text-[#e0e0e0]`
-               } w-[27%] text-center`}
+               className={`${deliveredToCarrier ? `text-[#EA4B48]` : `text-[#e0e0e0]`
+                  } w-[27%] text-center`}
             >
                Giao cho ĐVVT
             </p>
             <p
-               className={`${
-                  delivered ? `text-[#EA4B48]` : `text-[#e0e0e0]`
-               } w-[25%] text-center`}
+               className={`${delivered ? `text-[#EA4B48]` : `text-[#e0e0e0]`
+                  } w-[25%] text-center`}
             >
                Đang giao hàng
             </p>
             <p
-               className={`${
-                  successfulDelivery ? `text-[#EA4B48]` : `text-[#e0e0e0]`
-               } w-[25%] text-center`}
+               className={`${successfulDelivery ? `text-[#EA4B48]` : `text-[#e0e0e0]`
+                  } w-[25%] text-center`}
             >
                Giao hàng thành công
             </p>
          </div>
-         {/* <ul className="steps">
-            <li className="step step-primary max-lg:text-xs">Đặt hàng</li>
-            <li className="step step-primary max-lg:text-xs">Giao hàng ĐVVC</li>
-            <li className="step max-lg:text-xs">Đang giao hàng</li>
-            <li className="step max-lg:text-xs">Giao hàng thành công</li>
-         </ul> */}
       </>
    );
 }
