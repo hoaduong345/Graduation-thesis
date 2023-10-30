@@ -18,6 +18,8 @@ import {
   AccordionItem,
   AccordionPanel,
 } from "@chakra-ui/react"
+// } from "@chakra-ui/react"
+// } from "@chakra-ui/react";
 
 // rati star
 export interface RatingStar {

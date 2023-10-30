@@ -15,7 +15,7 @@ export default function Category(props: Cate) {
         <Link to={`/FiltersPage?CategoryId=${props.id}`}>
           <div
             onClick={() => {
-              localStorage.setItem("cateId", JSON.stringify(props.id));
+              // localStorage.setItem("cateId", JSON.stringify(props.id));
               localStorage.setItem("cateName", JSON.stringify(props.name));
             }}
             className="max-w-[200px] max-lg:max-w-[90%] border-2 border-solid 
