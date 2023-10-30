@@ -10,11 +10,11 @@ type Props = {
    products: Products;
    soldOut: boolean;
    HandleXoa: (id: number) => void;
+   handleChecked: (checked: boolean, id: number) => void;
+   checked: (id: number) => boolean;
 };
 export default function ListproductMap(props: Props) {
-   const { products } = props;
-
-   const [productChecked, setProductChecked] = useState<number[]>([]);
+   const { products, handleChecked, checked } = props;
 
    const handleRemove = (id: number) => {
       props.HandleXoa(id);
@@ -28,23 +28,6 @@ export default function ListproductMap(props: Props) {
 
    const handleMouseOut = () => {
       setIsHovering(false);
-   };
-
-   const handleChecked = (checked: boolean, item: number) => {
-      if (checked) {
-         setProductChecked((prev) => [...prev, item]);
-      } else {
-         let cloneProduct = [...productChecked];
-         let products = cloneProduct.filter((e) => {
-            return e !== item;
-         });
-         setProductChecked(products);
-      }
-   };
-
-   const checked = (item: number) => {
-      const _check = productChecked.findIndex((el) => el == item);
-      return _check !== -1;
    };
 
    return (

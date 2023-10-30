@@ -39,7 +39,7 @@ class ProductController {
         })
     }
     getSearchAndPaginationProduct = async (name?: string | undefined, page?: number, pageSize?: number): Promise<Products[]> => {
-        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&page=${page}`).then((res) => {
+        return await axios.get(`${appConfig.apiUrl}/allproducts?keyword=${name}&page=${page}&pageSize=${pageSize}`).then((res) => {
             return res.data as Products[]
         })
     }

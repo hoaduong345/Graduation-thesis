@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 
 export default function ListproductsAdmin() {
    const [products, setProducts] = useState<any>([]);
+   const [productChecked, setProductChecked] = useState<number[]>([]);
    // Xuat excel
    const [search, setSearch] = useState("");
    const debouncedInputValueSearch = useDebounce(search, 400); // Debounce for 300 milliseconds
@@ -60,9 +61,8 @@ export default function ListproductsAdmin() {
 
    const getData = (value: any) => {
       productController
-         .getSearchAndPaginationProduct(value.toString(), 1, 2)
+         .getSearchAndPaginationProduct(value.toString(), currentPage, 2)
          .then((res: any) => {
-            console.log(res);
             setProducts(res);
          });
    };
@@ -126,22 +126,12 @@ export default function ListproductsAdmin() {
       quantityRange: any,
       purchase: any
    ) => {
-      console.log(
-         "🚀 ~ file: Listproducts.tsx:140 ~ ListproductsAdmin ~ purchase:",
-         purchase
-      );
-      console.log(
-         "🚀 ~ file: Listproducts.tsx:131 ~ handleFilter ~ quantityRange:",
-         quantityRange
-      );
-      console.log("debouncedInputValue", priceRange);
-
       await productController
          .getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination(
             priceRange[0],
             priceRange[1],
             currentPage,
-            5,
+            2,
             quantityRange[0],
             quantityRange[1],
             purchase[0],
@@ -167,18 +157,17 @@ export default function ListproductsAdmin() {
       console.log("price Range:", purchase);
    };
    // Hàm gọi API để lấy tất cả sản phẩm
-   const getProductAll = async () => {
-      await productController
-         .getSearchAndPaginationProduct("", 1, 2)
-         .then((res) => {
-            setProducts(res);
-            console.log("Lấy tất cả sản phẩm:", res);
-         })
-         .catch((err) => console.log(err));
-   };
-   useEffect(() => {
-      getProductAll();
-   }, []);
+   // const getProductAll = async () => {
+   //    await productController
+   //       .getSearchAndPaginationProduct("", currentPage, 2)
+   //       .then((res) => {
+   //          setProducts(res);
+   //       })
+   //       .catch((err) => console.log(err));
+   // };
+   // useEffect(() => {
+   //    getProductAll();
+   // }, []);
    // check con hang API
    const handleClickinStock = () => {
       setinStock(!inStock); // Đảo ngược giá trị của biến inStock
@@ -187,7 +176,7 @@ export default function ListproductsAdmin() {
          setSoldOut(false);
          setShowAllProducts(false); // Đặt hiển thị tất cả sản phẩm thành false
       } else {
-         getProductAll();
+         getData(debouncedInputValueSearch);
          setShowAllProducts(true); // Đặt hiển thị tất cả sản phẩm thành true
       }
    };
@@ -207,7 +196,7 @@ export default function ListproductsAdmin() {
          setinStock(false);
          setShowAllProducts(false); // Đặt hiển thị tất cả sản phẩm thành false
       } else {
-         getProductAll();
+         getData(debouncedInputValueSearch);
          setShowAllProducts(true); // Đặt hiển thị tất cả sản phẩm thành true
       }
    };
@@ -220,6 +209,40 @@ export default function ListproductsAdmin() {
             console.log("🚀 ~ file: Listproducts.tsx:197 ~ .then ~ res:", res);
          })
          .catch((err) => console.log(err));
+   };
+
+   var checkAll: boolean =
+      !!products.rows?.length &&
+      productChecked.length === products.rows?.length;
+
+   const handleChecked = (checked: boolean, id: number) => {
+      if (checked) {
+         setProductChecked((prev) => [...prev, id]);
+      } else {
+         let cloneProduct = [...productChecked];
+         let products = cloneProduct.filter((e) => {
+            return e !== id;
+         });
+         setProductChecked(products);
+      }
+   };
+
+   const checked = (id: number) => {
+      const _check = productChecked.findIndex((el) => el == id);
+      return _check !== -1;
+   };
+
+   const handleCheckedAll = (checkedAll: boolean) => {
+      if (checkedAll) {
+         if (products.rows) {
+            setProductChecked(products.rows);
+            products?.row?.map((ele: any) => {
+               checked(ele.id);
+            });
+         }
+      } else {
+         setProductChecked([]);
+      }
    };
 
    return (
@@ -437,6 +460,10 @@ export default function ListproductsAdmin() {
                            id="default-checkbox"
                            type="checkbox"
                            className="checkbox checkbox-sm items-center"
+                           checked={checkAll}
+                           onChange={(element) =>
+                              handleCheckedAll(element.target.checked)
+                           }
                         />
                      </div>
                      <div className="w-[35%] text-center max-lg:w-[40%]">
@@ -496,6 +523,11 @@ export default function ListproductsAdmin() {
                                     soldOut={soldOut}
                                     HandleXoa={handleRemove}
                                     products={items}
+                                    handleChecked={(
+                                       checked: boolean,
+                                       id: number
+                                    ) => handleChecked(checked, id)}
+                                    checked={(id: number) => checked(id)}
                                  />
                               </>
                            );
