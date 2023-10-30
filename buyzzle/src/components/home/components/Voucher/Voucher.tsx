@@ -11,6 +11,7 @@ import VoucherManageItem from "../../../../Assets/TSX/VoucherManageItem";
 
 export default function VoucherHomePage() {
    const [voucher, setVoucher] = useState<VoucherModel[]>([]);
+   const [save, setSave] = useState<string>("Lưu");
 
    const voucherLocal = localStorage.getItem("voucher");
    const dataVoucherLocal: VoucherModel[] =
@@ -33,6 +34,7 @@ export default function VoucherHomePage() {
       } else {
          if (index !== -1) {
             toast.warning("Bạn đã lưu mã giảm giá này");
+            setSave("Đã lưu");
          } else {
             dataVoucherLocal.push(data);
             localStorage.setItem(
@@ -82,7 +84,7 @@ export default function VoucherHomePage() {
                                     onClick={() => saveVoucherLocal(e)}
                                     className="py-1 px-5 rounded text-white font-bold bg-[#F7755F] hover:bg-[#ec8f7f] text-base"
                                  >
-                                    Lưu
+                                    {save}
                                  </button>
                                  <p className="text-sm font-medium text-[#EA4B48]">
                                     {formatDate(e.startDay)} -{" "}

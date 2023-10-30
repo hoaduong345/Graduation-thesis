@@ -675,10 +675,10 @@ const ProductController = {
         try {
             const userId = parseInt(req.cookies.id);
             console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
-            const { productId, ratingValue, comment } = req.body;
+            const { idproduct, ratingValue, comment } = req.body;
             const rating = await prisma.rating.create({
                 data: {
-                    idproduct: productId,
+                    idproduct,
                     iduser: userId,
                     ratingValue,
                     comment,
