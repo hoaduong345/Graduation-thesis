@@ -83,11 +83,7 @@ export default function StatisticsPage() {
       delay: 0,
       config: { mass: 1, tension: 1030, friction: 114 },
     });
-    return (
-      <animated.div>
-        {number.to((n) => numberFormat(n).toString())}
-      </animated.div>
-    );
+    return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
   };
 
   const [open, setOpen] = useState(false);
@@ -229,13 +225,10 @@ export default function StatisticsPage() {
   // chart
 
   const labelsLine = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
+    "Hôm nay",
+    "7 ngày trước",
+    "15 ngày trước",
+    "30 ngày trước",
   ];
 
   const dataChartLine = {
@@ -485,7 +478,7 @@ export default function StatisticsPage() {
                       </div>
                       <div className="col-end-6 flex gap-1 ">
                         <p className="text-[#EA4B48] font-semibold text-xs ">
-                          {stats.revenuePercentageToday}
+                          {numberStast(parseInt(stats.revenuePercentageToday))}
                         </p>
                         <ArrowFall />
                       </div>
@@ -500,7 +493,9 @@ export default function StatisticsPage() {
                       </div>
                       <div className="col-end-6 flex gap-1 ">
                         <p className="text-[#EA4B48] font-semibold text-xs ">
-                          {stats.revenuePercentageLast7Days}
+                          {numberStast(
+                            parseInt(stats.revenuePercentageLast7Days)
+                          )}
                         </p>
                         <ArrowFall />
                       </div>
@@ -515,7 +510,9 @@ export default function StatisticsPage() {
                       </div>
                       <div className="col-end-6 flex gap-1 ">
                         <p className="text-[#EA4B48] font-semibold text-xs ">
-                          {stats.revenuePercentageLast15Days}
+                          {numberStast(
+                            parseInt(stats.revenuePercentageLast15Days)
+                          )}
                         </p>
                         <ArrowFall />
                       </div>
@@ -530,7 +527,9 @@ export default function StatisticsPage() {
                       </div>
                       <div className="col-end-6 flex gap-1 ">
                         <p className="text-[#EA4B48] font-semibold text-xs ">
-                          {stats.revenuePercentageLast30Days}
+                          {numberStast(
+                            parseInt(stats.revenuePercentageLast30Days)
+                          )}
                         </p>
                         <ArrowFall />
                       </div>

@@ -567,6 +567,36 @@ const StatisticsController = {
                     },
                 },
             });
+            // Truy vấn cơ sở dữ liệu để lấy danh sách sản phẩm được đặt hàng trong ngày hiện tại
+            const products = await prisma.product.findMany({
+                where: {
+                    createdAt: {
+                        gte: startOfDay,
+                        lte: endOfDay,
+                    },
+                },
+                include: {
+                    fK_category: true, // Bao gồm thông tin về danh mục
+                },
+            });
+
+            // Tạo một đối tượng đếm số lượng sản phẩm trong từng danh mục
+            const categoryCounts = {};
+
+            // Tính toán số lượng sản phẩm được mua trong từng danh mục
+            products.forEach((product) => {
+                const categoryName = product.fK_category.name;
+                if (categoryCounts[categoryName]) {
+                    categoryCounts[categoryName]++;
+                } else {
+                    categoryCounts[categoryName] = 1;
+                }
+            });
+
+            // Sắp xếp danh mục theo số lượng sản phẩm được mua giảm dần
+            const sortedCategoriesToday = Object.keys(categoryCounts).sort(
+                (a, b) => categoryCounts[b] - categoryCounts[a]
+            );
 
             res.status(200).json({
                 totalRevenueCurrentMonth,
@@ -611,6 +641,7 @@ const StatisticsController = {
                 revenuePercentageToday: revenuePercentageToday.toFixed(1), // phan tram doanh thu trong ngay hien tai so voi thang hien tai
                 productSoldPercentageToday: productSoldPercentageToday.toFixed(1), // phan tram so luong san pham ban ra trong ngay hien tai so voi thang hien tai
                 hotProductsInToday: topProductsInToday,
+                topCategoriesToDisplay: sortedCategoriesToday,
             });
         } catch (error) {
             console.error(error);
