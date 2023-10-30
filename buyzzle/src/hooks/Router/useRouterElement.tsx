@@ -31,6 +31,7 @@ import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
 import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
+import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
 export default function useRouterEmelent() {
    const routes = useRoutes([
       {
@@ -93,439 +94,439 @@ export default function useRouterEmelent() {
          ),
       },
 
-      {
-         path: "/forgotpassword",
-         element: (
-            <RegisterLoginLayout>
-               <Forgotpassword />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "detailproducts/:id",
-         element: (
-            <MainLayout>
-               <DetailsProduct />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "Cart",
-         element: (
-            <MainLayout>
-               <Cart />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderhistory",
-         element: (
-            <MainLayout>
-               <OrderHistory />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "checkout",
-         element: (
-            <MainLayout>
-               <CheckOut />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderdetail",
-         element: (
-            <MainLayout>
-               <OrderDetailPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: path.confirmAccount,
-         element: (
-            <RegisterLoginLayout>
-               <ConfirmAccount />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "/userprofilepage/:username",
-         element: (
-            <MainLayout>
-               <UserProfile />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "/forgotpassword",
-         element: (
-            <RegisterLoginLayout>
-               <Forgotpassword />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "detailproducts/:id",
-         element: (
-            <MainLayout>
-               <DetailsProduct />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "cart",
-         element: (
-            <MainLayout>
-               <Cart />
-            </MainLayout>
-         ),
-      },
-      // {
-      //   path: "voucher",
-      //   element: (
-      //     <MainLayout>
-      //       <VoucherUserPage />
-      //     </MainLayout>
-      //   ),
-      // },
-      {
-         path: "orderhistory",
-         element: (
-            <MainLayout>
-               <OrderHistory />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "checkout",
-         element: (
-            <MainLayout>
-               <CheckOut />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderdetail/:id",
-         element: (
-            <MainLayout>
-               <OrderDetailPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: path.confirmAccount,
-         element: (
-            <RegisterLoginLayout>
-               <ConfirmAccount />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "/userprofilepage/:username",
-         element: (
-            <MainLayout>
-               <UserProfile />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "/forgotpassword",
-         element: (
-            <RegisterLoginLayout>
-               <Forgotpassword />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "detailproducts/:id",
-         element: (
-            <MainLayout>
-               <DetailsProduct />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "Cart",
-         element: (
-            <MainLayout>
-               <Cart />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "voucher",
-         element: (
-            <MainLayout>
-               <VoucherHomePage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "uservoucherstorage",
-         element: (
-            <MainLayout>
-               <VoucherUserPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderhistory",
-         element: (
-            <MainLayout>
-               <OrderHistory />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "checkout",
-         element: (
-            <MainLayout>
-               <CheckOut />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderdetail",
-         element: (
-            <MainLayout>
-               <OrderDetailPage />
-            </MainLayout>
-         ),
-      },
+    {
+      path: "/forgotpassword",
+      element: (
+        <RegisterLoginLayout>
+          <Forgotpassword />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "detailproducts/:id",
+      element: (
+        <MainLayout>
+          <DetailsProduct />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "Cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderhistory",
+      element: (
+        <MainLayout>
+          <OrderHistory />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "checkout",
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderdetail",
+      element: (
+        <MainLayout>
+          <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: path.confirmAccount,
+      element: (
+        <RegisterLoginLayout>
+          <ConfirmAccount />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/forgotpassword",
+      element: (
+        <RegisterLoginLayout>
+          <Forgotpassword />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "detailproducts/:id",
+      element: (
+        <MainLayout>
+          <DetailsProduct />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
+      ),
+    },
+    // {
+    //   path: "voucher",
+    //   element: (
+    //     <MainLayout>
+    //       <VoucherUserPage />
+    //     </MainLayout>
+    //   ),
+    // },
+    {
+      path: "orderhistory",
+      element: (
+        <MainLayout>
+          <OrderHistory />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "checkout",
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderdetail/:id",
+      element: (
+        <MainLayout>
+          <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: path.confirmAccount,
+      element: (
+        <RegisterLoginLayout>
+          <ConfirmAccount />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/forgotpassword",
+      element: (
+        <RegisterLoginLayout>
+          <Forgotpassword />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "detailproducts/:id",
+      element: (
+        <MainLayout>
+          <DetailsProduct />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "Cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "voucher",
+      element: (
+        <MainLayout>
+          <VoucherHomePage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "uservoucherstorage",
+      element: (
+        <MainLayout>
+          <VoucherUserPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderhistory",
+      element: (
+        <MainLayout>
+          <OrderHistory />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "checkout",
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderdetail",
+      element: (
+        <MainLayout>
+          <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
 
-      {
-         path: path.confirmAccount,
-         element: (
-            <RegisterLoginLayout>
-               <ConfirmAccount />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "/userprofilepage/:username",
-         element: (
-            <MainLayout>
-               <UserProfile />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "/forgotpassword",
-         element: (
-            <RegisterLoginLayout>
-               <Forgotpassword />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "detailproducts/:id",
-         element: (
-            <MainLayout>
-               <DetailsProduct />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "Cart",
-         element: (
-            <MainLayout>
-               <Cart />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "voucher",
-         element: (
-            <MainLayout>
-               <VoucherHomePage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "uservoucherstorage",
-         element: (
-            <MainLayout>
-               <VoucherUserPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderhistory",
-         element: (
-            <MainLayout>
-               <OrderHistory />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "checkout",
-         element: (
-            <MainLayout>
-               <CheckOut />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderdetail",
-         element: (
-            <MainLayout>
-               <OrderDetailPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: path.confirmAccount,
-         element: (
-            <RegisterLoginLayout>
-               <ConfirmAccount />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "/userprofilepage/:username",
-         element: (
-            <MainLayout>
-               <UserProfile />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "/forgotpassword",
-         element: (
-            <RegisterLoginLayout>
-               <Forgotpassword />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "detailproducts/:id",
-         element: (
-            <MainLayout>
-               <DetailsProduct />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "Cart",
-         element: (
-            <MainLayout>
-               <Cart />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderhistory",
-         element: (
-            <MainLayout>
-               <OrderHistory />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "checkout",
-         element: (
-            <MainLayout>
-               <CheckOut />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderdetail",
-         element: (
-            <MainLayout>
-               <OrderDetailPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: path.confirmAccount,
-         element: (
-            <RegisterLoginLayout>
-               <ConfirmAccount />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "/userprofilepage/:username",
-         element: (
-            <MainLayout>
-               <UserProfile />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "/forgotpassword",
-         element: (
-            <RegisterLoginLayout>
-               <Forgotpassword />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "detailproducts/:id",
-         element: (
-            <MainLayout>
-               <DetailsProduct />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "cart",
-         element: (
-            <MainLayout>
-               <Cart />
-            </MainLayout>
-         ),
-      },
-      // {
-      //   path: "voucher",
-      //   element: (
-      //     <MainLayout>
-      //       <VoucherUserPage />
-      //     </MainLayout>
-      //   ),
-      // },
-      {
-         path: "orderhistory",
-         element: (
-            <MainLayout>
-               <OrderHistory />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "checkout",
-         element: (
-            <MainLayout>
-               <CheckOut />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "orderdetail",
-         element: (
-            <MainLayout>
-               <OrderDetailPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: path.confirmAccount,
-         element: (
-            <RegisterLoginLayout>
-               <ConfirmAccount />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "/userprofilepage/:username",
-         element: (
-            <MainLayout>
-               <UserProfile />
-            </MainLayout>
-         ),
-      },
+    {
+      path: path.confirmAccount,
+      element: (
+        <RegisterLoginLayout>
+          <ConfirmAccount />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/forgotpassword",
+      element: (
+        <RegisterLoginLayout>
+          <Forgotpassword />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "detailproducts/:id",
+      element: (
+        <MainLayout>
+          <DetailsProduct />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "Cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "voucher",
+      element: (
+        <MainLayout>
+          <VoucherHomePage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "uservoucherstorage",
+      element: (
+        <MainLayout>
+          <VoucherUserPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderhistory",
+      element: (
+        <MainLayout>
+          <OrderHistory />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "checkout",
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderdetail",
+      element: (
+        <MainLayout>
+          <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: path.confirmAccount,
+      element: (
+        <RegisterLoginLayout>
+          <ConfirmAccount />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/forgotpassword",
+      element: (
+        <RegisterLoginLayout>
+          <Forgotpassword />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "detailproducts/:id",
+      element: (
+        <MainLayout>
+          <DetailsProduct />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "Cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderhistory",
+      element: (
+        <MainLayout>
+          <OrderHistory />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "checkout",
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderdetail",
+      element: (
+        <MainLayout>
+          <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: path.confirmAccount,
+      element: (
+        <RegisterLoginLayout>
+          <ConfirmAccount />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/forgotpassword",
+      element: (
+        <RegisterLoginLayout>
+          <Forgotpassword />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "detailproducts/:id",
+      element: (
+        <MainLayout>
+          <DetailsProduct />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "cart",
+      element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>
+      ),
+    },
+    // {
+    //   path: "voucher",
+    //   element: (
+    //     <MainLayout>
+    //       <VoucherUserPage />
+    //     </MainLayout>
+    //   ),
+    // },
+    {
+      path: "orderhistory",
+      element: (
+        <MainLayout>
+          <OrderHistory />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "checkout",
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "orderdetail",
+      element: (
+        <MainLayout>
+          <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: path.confirmAccount,
+      element: (
+        <RegisterLoginLayout>
+          <ConfirmAccount />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
 
       // AdminPages
       {
@@ -550,40 +551,44 @@ export default function useRouterEmelent() {
                element: <ListproductsAdmin />,
             },
 
-            {
-               path: "Detailproducts/:id",
-               element: <DetailsProduct />,
-            },
-            {
-               path: "category",
-               element: <Category />,
-            },
-            {
-               path: "voucher",
-               element: <VoucherPage />,
-            },
-            {
-               path: "detailuser/:username",
-               element: <DetailUser />,
-            },
-            {
-               path: "ordermanagement",
-               element: <OrderManagement />,
-            },
-            {
-               path: "ordermanagement/:id",
-               element: <DetailOrderManagement />,
-            },
-            {
-               path: "usersmanager",
-               element: <User />,
-            },
-            {
-               path: "invoice/:id",
-               element: <InvoicesPage />,
-            },
-         ],
-      },
+        {
+          path: "Detailproducts/:id",
+          element: <DetailsProduct />,
+        },
+        {
+          path: "category",
+          element: <Category />,
+        },
+        {
+          path: "voucher",
+          element: <VoucherPage />,
+        },
+        {
+          path: "detailuser/:username",
+          element: <DetailUser />,
+        },
+        {
+          path: "ordermanagement",
+          element: <OrderManagement />,
+        },
+        {
+          path: "ordermanagement/:id",
+          element: <DetailOrderManagement />,
+        },
+        {
+          path: "usersmanager",
+          element: <User />,
+        },
+        {
+          path: "statisticspage",
+          element: <StatisticsPage />,
+        },
+        {
+          path: "invoice/:id",
+          element: <InvoicesPage />,
+        },
+      ],
+    },
 
       {
          path: path.resetpassword,

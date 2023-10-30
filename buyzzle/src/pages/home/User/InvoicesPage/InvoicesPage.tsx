@@ -170,8 +170,8 @@ export default function InvoicesPage() {
                            >
                               Giảm giá
                            </th>
-                           <td className="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0 line-through">
-                              {numberFormat(invoice.discount)}
+                           <td className="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0">
+                              -{numberFormat(invoice.discount)}
                            </td>
                         </tr>
                         <tr>
@@ -214,7 +214,7 @@ export default function InvoicesPage() {
                   </table>
                </div>
                {/*  Footer  */}
-               <div className="border-t-2 pt-4 text-xs text-gray-500 text-center mt-16">
+               <div className="border-t-2 pt-4 text-base text-gray-500 text-center mt-16">
                   Cảm ơn bạn đã mua hàng
                </div>
             </div>
