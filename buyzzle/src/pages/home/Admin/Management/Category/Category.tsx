@@ -28,12 +28,21 @@ export type FormValues = {
    image: string;
 };
 
+export type FormValuesCateLv2 = {
+   id: number;
+   name: string;
+   image: string;
+};
+
 function Category() {
-   const idModal = "category";
+   const idModalCateLv1 = "categorLv1";
+   const idModalCateLv2 = "categoryLv2";
    const idRemoveCategory = "comfirm";
    const idRemoveCates = "comfirmCates";
 
    const [idCate, setIdCate] = useState(0);
+
+   const [indexCate, setIndexCate] = useState(0);
 
    const [categorys, setCategorys] = useState<FormValues[]>([]);
 
@@ -43,7 +52,12 @@ function Category() {
 
    const [checkedCategory, setCheckedCategory] = useState<FormValues[]>([]);
 
-   var checkAll: boolean = checkedCategory.length === categorys?.length;
+   var checkAll: boolean =
+      categorys?.length > 0
+         ? checkedCategory.length === categorys?.length
+         : false;
+
+   const [nameCateLv2, setNameCateLv2] = useState<string>("");
 
    // img firebase
    const loadImageFile = async (images: any) => {
@@ -140,6 +154,7 @@ function Category() {
                toast.success("Cập nhật thành công!!");
                getList();
                setnull();
+               setCheckedCategory([]);
             });
       } else {
          categoryController
@@ -148,31 +163,48 @@ function Category() {
                toast.success("Thêm thành công!!");
                getList();
                setnull();
+               setCheckedCategory([]);
             });
       }
    };
 
    const remove = (id: number, idDialog: string) => {
-      categoryController.remove(id).then(() => {
-         closeModal(idDialog);
-         toast.error("Successfully");
-         getList();
-      });
+      categoryController
+         .remove(id)
+         .then(() => {
+            closeModal(idDialog);
+            toast.error("Successfully");
+            getList();
+         })
+         .then(() => {
+            setCheckedCategory([]);
+         });
    };
 
    const removeCates = (cate: FormValues[], idDialog: string) => {
       let successMessageDisplayed = false;
 
       cate.map((e, index) => {
-         categoryController.remove(e.id).then(() => {
-            if (index === cate.length - 1 && !successMessageDisplayed) {
-               toast.success("Thành công");
-               successMessageDisplayed = true;
-            }
-            closeModal(idDialog);
-            getList();
-         });
+         categoryController
+            .remove(e.id)
+            .then(() => {
+               if (index === cate.length - 1 && !successMessageDisplayed) {
+                  toast.success("Thành công");
+                  successMessageDisplayed = true;
+               }
+               closeModal(idDialog);
+               getList();
+            })
+            .then(() => {
+               setCheckedCategory([]);
+            });
       });
+   };
+
+   const createCateLv2 = (data: string, idCate: number) => {
+      console.log(data, idCate);
+      closeModal(idModalCateLv2);
+      setNameCateLv2("");
    };
 
    useEffect(() => {
@@ -199,6 +231,7 @@ function Category() {
       if (modal) {
          clearErrors();
          await setnull();
+         setNameCateLv2("");
          modal.close();
       }
    };
@@ -223,6 +256,7 @@ function Category() {
          setCheckedCategory([]);
       }
    };
+
    return (
       <>
          <Container>
@@ -246,7 +280,9 @@ function Category() {
                            <button
                               className="flex gap-3"
                               onClick={() =>
-                                 openModal(idModal, { id: 0 } as FormValues)
+                                 openModal(idModalCateLv1, {
+                                    id: 0,
+                                 } as FormValues)
                               }
                            >
                               <PlusSquare />
@@ -257,10 +293,10 @@ function Category() {
                         </div>
 
                         <DialogModal
-                           id={idModal}
-                           onClose={() => closeModal(idModal)}
+                           id={idModalCateLv1}
+                           onClose={() => closeModal(idModalCateLv1)}
                            onSave={handleSubmit((data: any) => {
-                              saveModal(idModal, data);
+                              saveModal(idModalCateLv1, data);
                            })}
                            title="Danh Mục Sản Phẩm"
                            body={
@@ -459,8 +495,34 @@ function Category() {
                         }
                      />
 
+                     <DialogModal
+                        id={idModalCateLv2}
+                        title={categorys[indexCate]?.name}
+                        onClose={() => closeModal(idModalCateLv2)}
+                        onSave={() => createCateLv2(nameCateLv2, idCate)}
+                        body={
+                           <>
+                              <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                 Tiêu Đề Danh Mục con*
+                              </label>
+                              <input
+                                 className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                 placeholder="Nhập tiêu đề danh mục con"
+                                 required
+                                 value={nameCateLv2}
+                                 onChange={(e) =>
+                                    setNameCateLv2(e.target.value)
+                                 }
+                              />
+                           </>
+                        }
+                     />
+
                      <div className="grid grid-cols-10">
-                        {categorys.map((e) => {
+                        {categorys.map((e, index) => {
                            return (
                               <>
                                  <div
@@ -495,7 +557,16 @@ function Category() {
                                  </div>
                                  <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
                                     <div className="flex text-center justify-end items-center gap-5 py-[25px] px-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
-                                       <button>
+                                       <button
+                                          onClick={() => {
+                                             openModal(
+                                                idModalCateLv2,
+                                                {} as FormValues
+                                             );
+                                             setIdCate(e.id);
+                                             setIndexCate(index);
+                                          }}
+                                       >
                                           <Plus />
                                        </button>
 
@@ -512,7 +583,10 @@ function Category() {
                                              <li>
                                                 <button
                                                    onClick={() =>
-                                                      openModal(idModal, e)
+                                                      openModal(
+                                                         idModalCateLv1,
+                                                         e
+                                                      )
                                                    }
                                                    className="flex items-center gap-4"
                                                 >

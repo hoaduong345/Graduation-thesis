@@ -16,6 +16,7 @@ import SitebarAdmin from "../../Sitebar/Sitebar";
 import PlusSquare from "../../Assets/TSX/PlusSquare";
 import { csvConfig } from "../../../../../Helper/Export/Excel";
 import { download, generateCsv } from "export-to-csv";
+import Delete from "../../Assets/TSX/Delete";
 type FormValues = {
    id: number;
    discount: number;
@@ -28,9 +29,15 @@ type FormValues = {
 export default function VoucherPage() {
    const idModal = "voucher";
    const idRemove = "removeVoucher";
+   const idRemoveVouchers = "removeVouchers";
 
    const [vouchers, setVoucher] = useState<VoucherModel[]>([]);
    const [idVoucher, setIdVoucher] = useState<number | undefined>(0);
+   const [checkedVoucher, setCheckedVoucher] = useState<VoucherModel[]>([]);
+
+   var checkAll: boolean =
+      vouchers?.length > 0 ? checkedVoucher.length === vouchers?.length : false;
+
    const currentDate = (date: Date) => {
       return moment(date).format("L");
    };
@@ -48,6 +55,27 @@ export default function VoucherPage() {
       await voucherControllers.remove(id);
       getVoucher();
       closeModal(idRemove);
+      setCheckedVoucher([]);
+   };
+
+   const removeVouchers = (data: VoucherModel[], idModal: string) => {
+      let successMessageDisplayed = false;
+
+      data.map((e, index) => {
+         voucherControllers
+            .remove(e.id)
+            .then(() => {
+               if (index === data.length - 1 && !successMessageDisplayed) {
+                  toast.success("Thành công");
+                  successMessageDisplayed = true;
+               }
+               closeModal(idModal);
+               getVoucher();
+            })
+            .then(() => {
+               setCheckedVoucher([]);
+            });
+      });
    };
 
    const {
@@ -100,15 +128,34 @@ export default function VoucherPage() {
          voucherControllers.add(dataForm).then(() => {
             getVoucher();
             toast.success("Thành Công");
+            setCheckedVoucher([]);
          });
       } else {
          voucherControllers.update(dataForm.id, dataForm).then(() => {
             getVoucher();
             toast.success("Thành Công");
+            setCheckedVoucher([]);
          });
       }
 
       reset({});
+   };
+
+   const handleChecked = (checked: boolean, data: VoucherModel) => {
+      if (checked) {
+         setCheckedVoucher((prev) => [...prev, data]);
+      } else {
+         const cloneVoucher = [...checkedVoucher];
+         const cloneVouchers = cloneVoucher.filter((e) => e.id !== data.id);
+         setCheckedVoucher(cloneVouchers);
+      }
+   };
+   const handleCheckedAll = (checked: boolean) => {
+      if (checked) {
+         setCheckedVoucher(vouchers);
+      } else {
+         setCheckedVoucher([]);
+      }
    };
 
    return (
@@ -462,8 +509,11 @@ export default function VoucherPage() {
                      <div className="">
                         <div className="grid grid-cols-7 pb-7">
                            <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
-                              {/* <Delete /> */}
                               <input
+                                 checked={checkAll}
+                                 onChange={(e) =>
+                                    handleCheckedAll(e.target.checked)
+                                 }
                                  type="checkbox"
                                  className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
                               />
@@ -483,8 +533,31 @@ export default function VoucherPage() {
                                  <span className="max-[940px]:hidden"> SL</span>
                               </p>
                            </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm"></div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                              <p
+                                 onClick={() =>
+                                    checkedVoucher.length > 0
+                                       ? openModal(
+                                            idRemoveVouchers,
+                                            {} as FormValues
+                                         )
+                                       : toast.warn("Chưa chọn Voucher để xóa")
+                                 }
+                              >
+                                 <Delete />
+                              </p>
+                           </div>
                         </div>
+
+                        <DialogComfirm
+                           id={idRemoveVouchers}
+                           desc="Các voucher này"
+                           title="Các voucher này"
+                           onClose={() => closeModal(idRemoveVouchers)}
+                           onSave={() => {
+                              removeVouchers(checkedVoucher, idRemoveVouchers);
+                           }}
+                        />
 
                         <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                            {vouchers.map((e) => {
@@ -495,6 +568,15 @@ export default function VoucherPage() {
                                           <input
                                              type="checkbox"
                                              className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                                             checked={checkedVoucher.includes(
+                                                e
+                                             )}
+                                             onChange={(element) =>
+                                                handleChecked(
+                                                   element.target.checked,
+                                                   e
+                                                )
+                                             }
                                           />
                                        </div>
 
