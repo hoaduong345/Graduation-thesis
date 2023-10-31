@@ -82,6 +82,7 @@ export default function VoucherPage() {
       control,
       handleSubmit,
       reset,
+      watch,
       clearErrors,
       formState: { errors },
    } = useForm<FormValues>({
@@ -223,7 +224,7 @@ export default function VoucherPage() {
                            <DialogModal
                               body={
                                  <>
-                                    <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
+                                    <div className="grid grid-cols-4 mb-5 gap-5 max-[940px]:gap-2">
                                        <div className="col-span-2">
                                           <div className="flex flex-col gap-1">
                                              <Controller
@@ -268,7 +269,7 @@ export default function VoucherPage() {
                                                          }}
                                                       />
                                                       {errors.voucherCode && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors
                                                                   .voucherCode
@@ -294,9 +295,13 @@ export default function VoucherPage() {
                                                    validate: (date: string) => {
                                                       const valid = moment(
                                                          date
-                                                      ).isAfter(new Date());
-                                                      return valid == false
-                                                         ? "Ngày hôm nay trở đi"
+                                                      ).isBefore(
+                                                         moment()
+                                                            .subtract(1, "days")
+                                                            .toDate()
+                                                      );
+                                                      return valid == true
+                                                         ? "Thời gian không hợp lệ"
                                                          : undefined;
                                                    },
                                                 }}
@@ -327,7 +332,7 @@ export default function VoucherPage() {
                                                          }}
                                                       />
                                                       {errors.startDate && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors.startDate
                                                                   .message
@@ -349,14 +354,16 @@ export default function VoucherPage() {
                                                       value: true,
                                                       message: "Hãy chọn ngày",
                                                    },
-                                                   // validate: (date: string) => {
-                                                   //    const valid = moment(
-                                                   //       date
-                                                   //    ).isBefore(new Date());
-                                                   //    return valid == false
-                                                   //       ? "Lớn hơn ngày bắt đầu"
-                                                   //       : undefined;
-                                                   // },
+                                                   validate: (date: string) => {
+                                                      const valid = moment(
+                                                         date
+                                                      ).isBefore(
+                                                         watch("startDate")
+                                                      );
+                                                      return valid == true
+                                                         ? "Thời gian không hợp lệ"
+                                                         : undefined;
+                                                   },
                                                 }}
                                                 render={({ field }) => (
                                                    <>
@@ -386,7 +393,7 @@ export default function VoucherPage() {
                                                          }}
                                                       />
                                                       {errors.endDate && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors.endDate
                                                                   .message
@@ -399,7 +406,7 @@ export default function VoucherPage() {
                                           </div>
                                        </div>
                                     </div>
-                                    {/* sda */}
+
                                     <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
                                        <div className="col-span-2">
                                           <div className="flex flex-col gap-1">
@@ -423,7 +430,7 @@ export default function VoucherPage() {
                                                       </label>
                                                       <input
                                                          className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%]
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                                          placeholder="Nhập % giảm giá"
@@ -445,7 +452,7 @@ export default function VoucherPage() {
                                                       />
 
                                                       {errors.discount && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors.discount
                                                                   .message
@@ -476,7 +483,7 @@ export default function VoucherPage() {
 
                                                       <input
                                                          className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%]
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                                          placeholder="Nhập số lượng voucher"
@@ -497,7 +504,7 @@ export default function VoucherPage() {
                                                          }}
                                                       />
                                                       {errors.quantity && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors.quantity
                                                                   .message
