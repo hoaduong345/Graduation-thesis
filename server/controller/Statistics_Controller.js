@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { prototype } = require('events');
 const prisma = new PrismaClient();
 
 const StatisticsController = {
@@ -578,12 +579,11 @@ const StatisticsController = {
             const categoryStatsByDay = {};
             console.log(yesterday);
             for (let date = yesterday; date >= oneWeekAgo; date.setDate(date.getDate() - 1)) {
+                console.log('🚀 ~ file: Statistics_Controller.js:581 ~ getStatictics: ~ date:', date);
                 const startDate = new Date(date);
                 const endDate = date;
-                startDate.setHours(0);
-                startDate.setMinutes(0);
-                startDate.setSeconds(0);
-
+                startDate.setHours(0, 0, 0, 0); // Đặt giờ, phút, giây và mili giây thành 0:00:00.000
+                endDate.setHours(23, 59, 59, 999); // Đặt giờ, phút, giây và mili giây thành 23:59:59.999
                 const categories = await prisma.category.findMany({
                     include: {
                         products: {
@@ -596,7 +596,6 @@ const StatisticsController = {
                         },
                     },
                 });
-
                 const topCategories = categories.map((category) => {
                     return {
                         category: category,

@@ -20,7 +20,7 @@ import { Bar, Line } from "react-chartjs-2";
 import { animated, useSpring } from "react-spring";
 import ArrowFall from "../../../../Assets/TSX/ArrowFall";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
-import { Statistics } from "../../../../Model/StatsModels";
+import { Category, Statistics } from "../../../../Model/StatsModels";
 import { numberFormat } from "../../../../Helper/Format";
 ChartJS.register(
   ArcElement,
@@ -71,6 +71,7 @@ interface selectStats {
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
+  const [cate, setCate] = useState<Category>();
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState("2023/4/1");
   const [endDate, setEndDate] = useState("2023/4/30");
@@ -225,17 +226,20 @@ export default function StatisticsPage() {
   // chart
 
   const labelsLine = [
-    "Hôm nay",
-    "7 ngày trước",
-    "15 ngày trước",
-    "30 ngày trước",
+    "Ngày hôm qua",
+    "1 ngày trước",
+    "2 ngày trước",
+    "3 ngày trước",
+    "4 ngày trước",
+    "5 ngày trước",
+    "6 ngày trước",
   ];
 
   const dataChartLine = {
     labels: labelsLine,
     datasets: [
       {
-        label: "Thiết bị điện tử",
+        label: `${cate?.name}`,
         data: [170, 30, 50, 130, 250],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
