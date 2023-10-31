@@ -22,6 +22,11 @@ import ArrowFall from "../../../../Assets/TSX/ArrowFall";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
 import { Category, Statistics } from "../../../../Model/StatsModels";
 import { numberFormat } from "../../../../Helper/Format";
+import {
+  FilterDate,
+  ValueDate,
+  dataFilter,
+} from "../../../../Helper/Date/DataHelper";
 ChartJS.register(
   ArcElement,
   Tooltip,
@@ -73,8 +78,6 @@ export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
   const [cate, setCate] = useState<Category>();
   const [currentPage, setCurrentPage] = useState(1);
-  const [startDate, setStartDate] = useState("2023/4/1");
-  const [endDate, setEndDate] = useState("2023/4/30");
   const [selectedOption, setSelectedOption] = useState<number>(1); // Mặc định chọn "Hôm nay"
 
   const numberStast = (n: number) => {
@@ -106,98 +109,45 @@ export default function StatisticsPage() {
       modal.close();
     }
   };
-  const [statsProduct, setStatsProduct] = useState<topProductsStats[]>([
-    {
-      id: 1,
-      name: "Sản phẩm A",
-      price: 29.99,
-      quantity: 50,
-      revenue: 1499.5,
-    },
-    {
-      id: 2,
-      name: "Sản phẩm B",
-      price: 14.99,
-      quantity: 30,
-      revenue: 449.7,
-    },
-    {
-      id: 3,
-      name: "Sản phẩm C",
-      price: 49.99,
-      quantity: 20,
-      revenue: 999.8,
-    },
-    {
-      id: 4,
-      name: "Sản phẩm D",
-      price: 39.99,
-      quantity: 10,
-      revenue: 399.9,
-    },
-    {
-      id: 5,
-      name: "Sản phẩm E",
-      price: 19.99,
-      quantity: 40,
-      revenue: 799.6,
-    },
-    {
-      id: 6,
-      name: "Sản phẩm F",
-      price: 59.99,
-      quantity: 15,
-      revenue: 899.85,
-    },
-    {
-      id: 7,
-      name: "Sản phẩm G",
-      price: 24.99,
-      quantity: 25,
-      revenue: 624.75,
-    },
-  ]);
 
-  const [selectStats, setselectStats] = useState<selectStats[]>([
-    {
-      id: 1,
-      nameTime: "Hôm nay",
-    },
-    {
-      id: 2,
-      nameTime: "7 ngày trước",
-    },
-    {
-      id: 3,
-      nameTime: "15 ngày trước",
-    },
-    {
-      id: 4,
-      nameTime: "30 ngày trước",
-    },
-  ]);
   // ================================ API ================================
-
-  const getProductStats = async () => {
-    await statsControllers
-      .getStats({
-        startDate: startDate,
-        endDate: endDate,
-        page: currentPage,
-        pageSize: 100,
-      })
-      .then((res: any) => {
-        setStats(res);
-      });
-  };
   useEffect(() => {
-    getProductStats();
-  }, [selectedOption]);
+    getProductStats(dataFilter[0].value.from, dataFilter[0].value.to);
+  }, [dataFilter]);
+
+  const getProductStats = async (startDate: Date, endDate: Date) => {
+    const data: FilterDate = {
+      value: {
+        from: startDate,
+        to: endDate,
+      },
+      page: 1,
+      pageSize: 3,
+    };
+
+    try {
+      const res = await statsControllers.getStats(data);
+      console.log("🚀 ~ file: StatisticsPage.tsx:199 ~ res:", res);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   // ================================ handleSelect ================================
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log(
+      "🚀 ~ file: StatisticsPage.tsx:233 ~ handleSelectChange ~ event:",
+      event.target.value
+    );
     setSelectedOption(Number(event.target.value));
+    console.log(
+      "🚀 ~ file: StatisticsPage.tsx:239 ~ handleSelectChange ~  JSON.parse(event.target.value);:",
+      JSON.parse(event.target.value)
+    );
+
+    const filterDate: ValueDate = JSON.parse(event.target.value);
+    getProductStats(filterDate.from, filterDate.to);
   };
   // ================================ PANGINATION ================================
 
@@ -331,10 +281,14 @@ export default function StatisticsPage() {
                   onChange={handleSelectChange}
                   value={selectedOption}
                 >
-                  {selectStats.map((itemsSelect) => {
+                  {dataFilter.map((itemsSelect) => {
+                    console.log(
+                      "🚀 ~ file: StatisticsPage.tsx:378 ~ {dataFilter.map ~ itemsSelect:",
+                      itemsSelect
+                    );
                     return (
-                      <option key={itemsSelect.id} value={itemsSelect.id}>
-                        {itemsSelect.nameTime}
+                      <option value={JSON.stringify(itemsSelect.value)}>
+                        {itemsSelect.title}
                       </option>
                     );
                   })}
