@@ -2,35 +2,47 @@ import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { storage } from "../../../../../Firebase/Config";
-import Loading from "../../../../../Helper/Loading/Loading";
-import UploadIMG from "../../Assets/TSX/UploadIMG";
-import { categoryController } from "../../../../../Controllers/CategoryController";
-import Container from "../../../../../components/container/Container";
-import SitebarAdmin from "../../Sitebar/Sitebar";
-import Search from "../../../../../Assets/TSX/Search";
-import Download from "../../Assets/TSX/Download";
-import Line from "../../Assets/TSX/Line";
 import Plus from "../../../../../Assets/TSX/Plus";
-import DialogModal from "../../../../../Helper/Dialog/DialogModal";
+import Search from "../../../../../Assets/TSX/Search";
+import { categoryController } from "../../../../../Controllers/CategoryController";
+import { storage } from "../../../../../Firebase/Config";
 import DialogComfirm from "../../../../../Helper/Dialog/DialogComfirm";
-import Handle from "../../Assets/TSX/bacham";
+import DialogModal from "../../../../../Helper/Dialog/DialogModal";
+import Loading from "../../../../../Helper/Loading/Loading";
+import Container from "../../../../../components/container/Container";
+import Download from "../../Assets/TSX/Download";
 import Edit from "../../Assets/TSX/Edit";
+import Line from "../../Assets/TSX/Line";
+import PlusSquare from "../../Assets/TSX/PlusSquare";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
+import UploadIMG from "../../Assets/TSX/UploadIMG";
+import Handle from "../../Assets/TSX/bacham";
+import SitebarAdmin from "../../Sitebar/Sitebar";
+import Delete from "../../Assets/TSX/Delete";
+import { csvConfig } from "../../../../../Helper/Export/Excel";
+import { download, generateCsv } from "export-to-csv";
 
 export type FormValues = {
    id: number;
    name: string;
    image: string;
-   nameCateLv2: string;
+};
+
+export type FormValuesCateLv2 = {
+   id: number;
+   name: string;
+   image: string;
 };
 
 function Category() {
-   const idModal = "category";
-   const idComfirm = "comfirm";
-   const cateLv2 = "cateLv2";
+   const idModalCateLv1 = "categorLv1";
+   const idModalCateLv2 = "categoryLv2";
+   const idRemoveCategory = "comfirm";
+   const idRemoveCates = "comfirmCates";
 
    const [idCate, setIdCate] = useState(0);
+
+   const [indexCate, setIndexCate] = useState(0);
 
    const [categorys, setCategorys] = useState<FormValues[]>([]);
 
@@ -40,11 +52,16 @@ function Category() {
 
    const [checkedCategory, setCheckedCategory] = useState<FormValues[]>([]);
 
-   var checkAll: boolean = checkedCategory.length === categorys?.length;
+   var checkAll: boolean =
+      categorys?.length > 0
+         ? checkedCategory.length === categorys?.length
+         : false;
+
+   const [nameCateLv2, setNameCateLv2] = useState<string>("");
 
    // img firebase
    const loadImageFile = async (images: any) => {
-      for (let i = 0; i < images.length; i++) {
+      for (let i = 0; i < 1; i++) {
          const imageRef = ref(storage, `multipleFiles/${images[i].name}`);
          setLoading(true);
          await uploadBytes(imageRef, images[i])
@@ -117,7 +134,6 @@ function Category() {
          name: "",
          id: 0,
          image: "",
-         nameCateLv2: "",
       },
    });
 
@@ -138,6 +154,7 @@ function Category() {
                toast.success("Cập nhật thành công!!");
                getList();
                setnull();
+               setCheckedCategory([]);
             });
       } else {
          categoryController
@@ -146,16 +163,48 @@ function Category() {
                toast.success("Thêm thành công!!");
                getList();
                setnull();
+               setCheckedCategory([]);
             });
       }
    };
 
    const remove = (id: number, idDialog: string) => {
-      categoryController.remove(id).then(() => {
-         closeModal(idDialog);
-         toast.error("Successfully");
-         getList();
+      categoryController
+         .remove(id)
+         .then(() => {
+            closeModal(idDialog);
+            toast.error("Successfully");
+            getList();
+         })
+         .then(() => {
+            setCheckedCategory([]);
+         });
+   };
+
+   const removeCates = (cate: FormValues[], idDialog: string) => {
+      let successMessageDisplayed = false;
+
+      cate.map((e, index) => {
+         categoryController
+            .remove(e.id)
+            .then(() => {
+               if (index === cate.length - 1 && !successMessageDisplayed) {
+                  toast.success("Thành công");
+                  successMessageDisplayed = true;
+               }
+               closeModal(idDialog);
+               getList();
+            })
+            .then(() => {
+               setCheckedCategory([]);
+            });
       });
+   };
+
+   const createCateLv2 = (data: string, idCate: number) => {
+      console.log(data, idCate);
+      closeModal(idModalCateLv2);
+      setNameCateLv2("");
    };
 
    useEffect(() => {
@@ -171,7 +220,7 @@ function Category() {
    const openModal = (id: string, data: FormValues) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
-         reset({ name: data.name, id: data.id, nameCateLv2: data.nameCateLv2 });
+         reset({ name: data.name, id: data.id });
          setUrl(data.image);
          modal.showModal();
       }
@@ -182,6 +231,7 @@ function Category() {
       if (modal) {
          clearErrors();
          await setnull();
+         setNameCateLv2("");
          modal.close();
       }
    };
@@ -207,9 +257,6 @@ function Category() {
       }
    };
 
-   const createCateLv2 = (data: FormValues) => {
-      console.log(data);
-   };
    return (
       <>
          <Container>
@@ -227,31 +274,180 @@ function Category() {
                      </h2>
                   </div>
 
-                  <div className="flex flex-col gap-[27px]">
-                     <div className="flex gap-[24px]">
-                        <div
-                           className="Search-input-headerCenter items-center flex
-                                        py-[3px] px-[6px] border-[1px] border-[#FFAAAF] rounded-md"
-                        >
-                           <div className="mb-2">
-                              <Search />
-                           </div>
-                           <input
-                              className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm"
-                              placeholder="Tìm kiếm..."
-                           />
-                        </div>
-                        <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
-                           <Download />
-                           <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm">
-                              Xuất excel
+                  <div className="flex flex-col">
+                     <div className="flex justify-between mb-7">
+                        <div className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6">
+                           <button
+                              className="flex gap-3"
+                              onClick={() =>
+                                 openModal(idModalCateLv1, {
+                                    id: 0,
+                                 } as FormValues)
+                              }
+                           >
+                              <PlusSquare />
+                              <p className="cursor-default text-white text-base font-bold">
+                                 Thêm Danh Mục
+                              </p>
                            </button>
+                        </div>
+
+                        <DialogModal
+                           id={idModalCateLv1}
+                           onClose={() => closeModal(idModalCateLv1)}
+                           onSave={handleSubmit((data: any) => {
+                              saveModal(idModalCateLv1, data);
+                           })}
+                           title="Danh Mục Sản Phẩm"
+                           body={
+                              <>
+                                 <div className="grid grid-cols-5 gap-8">
+                                    <div className="col-span-3">
+                                       <div className="flex gap-3 ">
+                                          <div className="flex flex-col gap-5 max-lg:gap-2">
+                                             <div>
+                                                <Controller
+                                                   name="name"
+                                                   control={control}
+                                                   rules={{
+                                                      required: {
+                                                         value: true,
+                                                         message:
+                                                            "Không để trống",
+                                                      },
+                                                      minLength: {
+                                                         value: 4,
+                                                         message:
+                                                            "Ít nhất 4 ký tự",
+                                                      },
+                                                      maxLength: {
+                                                         value: 25,
+                                                         message:
+                                                            "Nhiều nhất 25 kí tự",
+                                                      },
+                                                   }}
+                                                   render={({ field }) => (
+                                                      <>
+                                                         <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                                            Tiêu Đề Danh Mục*
+                                                         </label>
+                                                         <input
+                                                            className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                                            placeholder="Nhập tiêu đề danh mục"
+                                                            value={field.value}
+                                                            onChange={(e) => {
+                                                               const reg =
+                                                                  /[!@#$%^&]/;
+                                                               const value =
+                                                                  e.target
+                                                                     .value;
+                                                               field.onChange(
+                                                                  value.replace(
+                                                                     reg,
+                                                                     ""
+                                                                  )
+                                                               );
+                                                            }}
+                                                            name="name"
+                                                         />
+                                                         {errors.name && (
+                                                            <p className="text-[11px] text-red-700 mt-2">
+                                                               {
+                                                                  errors.name
+                                                                     .message
+                                                               }
+                                                            </p>
+                                                         )}
+                                                      </>
+                                                   )}
+                                                />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div className="col-span-2 flex flex-col gap-12">
+                                       <div className="max-w-max items-center">
+                                          <Controller
+                                             control={control}
+                                             name="image"
+                                             render={({ field }) => (
+                                                <>
+                                                   <label htmlFor="images">
+                                                      <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2">
+                                                         {load()}
+                                                         <input
+                                                            value={field.value}
+                                                            type="file"
+                                                            onChange={(
+                                                               e: any
+                                                            ) => {
+                                                               loadImageFile(
+                                                                  e.target.files
+                                                               );
+                                                               field.onChange(
+                                                                  e
+                                                               );
+                                                            }}
+                                                            id="images"
+                                                            multiple
+                                                            className="hidden "
+                                                         />
+
+                                                         {renderImg()}
+                                                         {errors.image && (
+                                                            <p className="text-[13px] text-red-600 mt-2">
+                                                               {
+                                                                  errors.image
+                                                                     .message
+                                                               }
+                                                            </p>
+                                                         )}
+                                                      </div>
+                                                   </label>
+                                                </>
+                                             )}
+                                          />
+                                       </div>
+                                    </div>
+                                 </div>
+                              </>
+                           }
+                        />
+
+                        <div className="flex gap-[24px]">
+                           <div
+                              className="Search-input-headerCenter items-center flex
+                                        py-[3px] px-[6px] border-[1px] border-[#FFAAAF] rounded-md"
+                           >
+                              <div className="mb-2">
+                                 <Search />
+                              </div>
+                              <input
+                                 className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm"
+                                 placeholder="Tìm kiếm..."
+                              />
+                           </div>
+                           <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
+                              <Download />
+                              <button
+                                 className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                                 onClick={() => {
+                                    const csv =
+                                       generateCsv(csvConfig)(categorys); // Xuat excel
+                                    download(csvConfig)(csv);
+                                 }}
+                              >
+                                 Xuất excel
+                              </button>
+                           </div>
                         </div>
                      </div>
 
                      <div className="grid grid-cols-10 items-center">
-                        <div className="col-span-1 py-[15px] pl-[35px]">
-                           {/* <Delete /> */}
+                        <div className="col-span-3 py-[15px] pl-16">
                            <input
                               checked={checkAll}
                               className="checkbox checkbox-sm items-center"
@@ -261,296 +457,79 @@ function Category() {
                               }
                            />
                         </div>
-                        <div className="col-span-2">
+                        <div className="flex gap-[28px] col-span-5 ">
                            <Line />
-                        </div>
-                        <div className="flex gap-[32px] col-span-5 ">
-                           <Line />
-                           <p className=" pt-[12px] text-[16px] max-lg:text-sm">
-                              Tên
+                           <p className=" pt-[12px] text-[16px] font-medium max-lg:text-sm">
+                              Tên Danh Mục
                            </p>
                         </div>
-                        <div className="flex gap-[72px] col-span-2  max-lg:gap-[30px]">
-                           <Line />
-                           <p className="pt-[12px] text-[16px] max-lg:text-sm"></p>
-                        </div>
-                     </div>
-
-                     <div className="items-center flex gap-3 px-6">
-                        <button
-                           className=""
-                           onClick={() =>
-                              openModal(idModal, { id: 0 } as FormValues)
-                           }
-                        >
-                           <Plus />
-                        </button>
-                        <p className="cursor-default text-[#7A828A] text-base font-bold">
-                           THÊM DANH MỤC
-                        </p>
-                        <div className=" z-[-200]">
-                           <DialogModal
-                              id={idModal}
-                              onClose={() => closeModal(idModal)}
-                              onSave={handleSubmit((data: any) => {
-                                 saveModal(idModal, data);
-                              })}
-                              title="Danh Mục Sản Phẩm"
-                              body={
-                                 <>
-                                    <div className="grid grid-cols-5 gap-8">
-                                       <div className="col-span-3">
-                                          <div className="flex gap-3 ">
-                                             <div className="flex flex-col gap-5 max-lg:gap-2">
-                                                <div>
-                                                   <Controller
-                                                      name="name"
-                                                      control={control}
-                                                      rules={{
-                                                         required: {
-                                                            value: true,
-                                                            message:
-                                                               "Không để trống",
-                                                         },
-                                                         minLength: {
-                                                            value: 4,
-                                                            message:
-                                                               "Ít nhất 4 ký tự",
-                                                         },
-                                                         maxLength: {
-                                                            value: 25,
-                                                            message:
-                                                               "Nhiều nhất 25 kí tự",
-                                                         },
-                                                      }}
-                                                      render={({ field }) => (
-                                                         <>
-                                                            <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
-                                                               Tiêu Đề Danh Mục*
-                                                            </label>
-                                                            <input
-                                                               className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                             max-xl:text-xs max-lg:text-[10px]
-                                            `}
-                                                               placeholder="Nhập tiêu đề danh mục"
-                                                               value={
-                                                                  field.value
-                                                               }
-                                                               onChange={(
-                                                                  e
-                                                               ) => {
-                                                                  const reg =
-                                                                     /[!@#$%^&]/;
-                                                                  const value =
-                                                                     e.target
-                                                                        .value;
-                                                                  field.onChange(
-                                                                     value.replace(
-                                                                        reg,
-                                                                        ""
-                                                                     )
-                                                                  );
-                                                               }}
-                                                               name="name"
-                                                            />
-                                                            {errors.name && (
-                                                               <p className="text-[11px] text-red-700 mt-2">
-                                                                  {
-                                                                     errors.name
-                                                                        .message
-                                                                  }
-                                                               </p>
-                                                            )}
-                                                         </>
-                                                      )}
-                                                   />
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <div className="col-span-2 flex flex-col gap-12">
-                                          <div className="max-w-max items-center">
-                                             <Controller
-                                                control={control}
-                                                name="image"
-                                                render={({ field }) => (
-                                                   <>
-                                                      <label htmlFor="images">
-                                                         <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer max-lg:p-2">
-                                                            {load()}
-                                                            <input
-                                                               value={
-                                                                  field.value
-                                                               }
-                                                               type="file"
-                                                               onChange={(
-                                                                  e: any
-                                                               ) => {
-                                                                  loadImageFile(
-                                                                     e.target
-                                                                        .files
-                                                                  );
-                                                                  field.onChange(
-                                                                     e
-                                                                  );
-                                                               }}
-                                                               id="images"
-                                                               multiple
-                                                               className="hidden "
-                                                            />
-
-                                                            {renderImg()}
-                                                            {errors.image && (
-                                                               <p className="text-[13px] text-red-600 mt-2">
-                                                                  {
-                                                                     errors
-                                                                        .image
-                                                                        .message
-                                                                  }
-                                                               </p>
-                                                            )}
-                                                         </div>
-                                                      </label>
-                                                   </>
-                                                )}
-                                             />
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </>
+                        <div className="flex justify-end pr-11 col-span-2 max-lg:gap-[30px]">
+                           <p
+                              onClick={() =>
+                                 checkedCategory.length > 0
+                                    ? openModal(idRemoveCates, {} as FormValues)
+                                    : toast.warn("Chưa chọn danh mục")
                               }
-                           />
+                              className="pt-[12px] text-[16px] max-lg:text-sm"
+                           >
+                              <Delete />
+                           </p>
                         </div>
                      </div>
 
                      <DialogComfirm
                         desc="Danh mục"
-                        id={idComfirm}
-                        onClose={() => closeModal(idComfirm)}
+                        id={idRemoveCategory}
+                        onClose={() => closeModal(idRemoveCategory)}
                         title="Xóa danh mục"
-                        onSave={() => remove(idCate, idComfirm)}
+                        onSave={() => remove(idCate, idRemoveCategory)}
                      />
 
-                     {/* <DialogModalChild
-                        id={cateLv2}
-                        title="DANH MỤC CON"
+                     <DialogComfirm
+                        desc="Các danh mục"
+                        id={idRemoveCates}
+                        title="Xóa các danh mục đã chọn"
+                        onClose={() => closeModal(idRemoveCates)}
+                        onSave={() =>
+                           removeCates(checkedCategory, idRemoveCates)
+                        }
+                     />
+
+                     <DialogModal
+                        id={idModalCateLv2}
+                        title={categorys[indexCate]?.name}
+                        onClose={() => closeModal(idModalCateLv2)}
+                        onSave={() => createCateLv2(nameCateLv2, idCate)}
                         body={
                            <>
-                              <Controller
-                                 name="nameCateLv2"
-                                 control={control}
-                                 rules={{
-                                    required: {
-                                       value: true,
-                                       message: "Không để trống",
-                                    },
-                                    minLength: {
-                                       value: 4,
-                                       message: "Ít nhất 4 ký tự",
-                                    },
-                                    maxLength: {
-                                       value: 25,
-                                       message: "Nhiều nhất 25 kí tự",
-                                    },
-                                 }}
-                                 render={({ field }) => (
-                                    <>
-                                       <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
-                                          Tiêu Đề Danh Mục Con*
-                                       </label>
-                                       <input
-                                          className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                              <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                 Tiêu Đề Danh Mục con*
+                              </label>
+                              <input
+                                 className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                          placeholder="Nhập tiêu đề danh mục con"
-                                          value={field.value}
-                                          onChange={(e) => {
-                                             const reg = /[!@#$%^&]/;
-                                             const value = e.target.value;
-                                             field.onChange(
-                                                value.replace(reg, "")
-                                             );
-                                          }}
-                                          name="nameCateLv2"
-                                       />
-                                       {errors.nameCateLv2 && (
-                                          <p className="text-[11px] text-red-700 mt-2">
-                                             {errors.nameCateLv2.message}
-                                          </p>
-                                       )}
-                                    </>
-                                 )}
+                                 placeholder="Nhập tiêu đề danh mục con"
+                                 required
+                                 value={nameCateLv2}
+                                 onChange={(e) =>
+                                    setNameCateLv2(e.target.value)
+                                 }
                               />
                            </>
                         }
-                        onClose={() => closeModal(cateLv2)}
-                        onSave={handleSubmit((data: any) => {
-                           createCateLv2(data);
-                        })}
-                     /> */}
+                     />
 
                      <div className="grid grid-cols-10">
-                        {categorys.map((e) => {
+                        {categorys.map((e, index) => {
                            return (
                               <>
                                  <div
                                     key={e.id}
-                                    className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between px-6"
+                                    className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16"
                                  >
                                     <div className=" flex gap-[20px] max-lg:gap-2">
-                                       <button
-                                          onClick={() =>
-                                             openModal(cateLv2, {
-                                                id: e.id,
-                                             } as FormValues)
-                                          }
-                                       >
-                                          <Plus />
-                                       </button>
-                                       <div className="dropdown dropdown-left cursor-pointer">
-                                          <label tabIndex={0}>
-                                             <Handle />
-                                          </label>
-                                          <ul
-                                             tabIndex={0}
-                                             className="dropdown-content menu bg-white rounded-box w-52
-                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl::origin-left"
-                                          >
-                                             <li>
-                                                <button
-                                                   onClick={() =>
-                                                      openModal(idModal, e)
-                                                   }
-                                                   className="flex items-center gap-4"
-                                                >
-                                                   <Edit />
-                                                   <p className="text-[#EA4B48] text-sm font-medium">
-                                                      Sửa
-                                                   </p>
-                                                </button>
-                                             </li>
-                                             <li>
-                                                <button
-                                                   onClick={() => {
-                                                      openModal(
-                                                         idComfirm,
-                                                         {} as FormValues
-                                                      );
-                                                      setIdCate(e.id);
-                                                   }}
-                                                   className="flex items-center gap-4"
-                                                >
-                                                   <RemoveCate />
-                                                   <p className="text-[#EA4B48] text-sm font-medium">
-                                                      Xóa
-                                                   </p>
-                                                </button>
-                                             </li>
-                                          </ul>
-                                       </div>
                                        <input
                                           className="checkbox checkbox-sm items-center"
                                           type="checkbox"
@@ -571,13 +550,72 @@ function Category() {
                                        />
                                     </div>
                                  </div>
-                                 <div className="col-span-5 border-[#e0e0e0] h-20 border-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]">
+                                 <div className="col-span-5 border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]">
                                     <p className="text-[16px] font-bold my-auto max-lg:text-sm">
                                        {e.name}
                                     </p>
                                  </div>
                                  <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
-                                    <div className="flex text-center w-[37%] justify-start items-center gap-5 py-[25px] pl-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2"></div>
+                                    <div className="flex text-center justify-end items-center gap-5 py-[25px] px-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                                       <button
+                                          onClick={() => {
+                                             openModal(
+                                                idModalCateLv2,
+                                                {} as FormValues
+                                             );
+                                             setIdCate(e.id);
+                                             setIndexCate(index);
+                                          }}
+                                       >
+                                          <Plus />
+                                       </button>
+
+                                       <div className="dropdown dropdown-left">
+                                          <label tabIndex={0}>
+                                             <Handle />
+                                          </label>
+                                          <ul
+                                             tabIndex={0}
+                                             className="dropdown-content menu bg-white rounded-box w-52
+                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                                max-2xl:left-[100%] max-2xl::origin-left"
+                                          >
+                                             <li>
+                                                <button
+                                                   onClick={() =>
+                                                      openModal(
+                                                         idModalCateLv1,
+                                                         e
+                                                      )
+                                                   }
+                                                   className="flex items-center gap-4"
+                                                >
+                                                   <Edit />
+                                                   <p className="text-[#EA4B48] text-sm font-medium">
+                                                      Sửa
+                                                   </p>
+                                                </button>
+                                             </li>
+                                             <li>
+                                                <button
+                                                   onClick={() => {
+                                                      openModal(
+                                                         idRemoveCategory,
+                                                         {} as FormValues
+                                                      );
+                                                      setIdCate(e.id);
+                                                   }}
+                                                   className="flex items-center gap-4"
+                                                >
+                                                   <RemoveCate />
+                                                   <p className="text-[#EA4B48] text-sm font-medium">
+                                                      Xóa
+                                                   </p>
+                                                </button>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </div>
                                  </div>
                               </>
                            );

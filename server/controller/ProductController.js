@@ -394,18 +394,14 @@ const ProductController = {
                     },
                 },
             });
-            if (ratings && ratings.length > 0) {
-                const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
-                const averageRating = totalRating / ratings.length;
-                const resultProduct = {
-                    averageRating: averageRating,
-                    Rating: ratings,
-                    productDetail: productDetail,
-                };
-                res.status(200).json(resultProduct);
-            } else {
-                res.status(200).json('Không có đánh giá cho sản phẩm này.');
-            }
+            const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
+            const averageRating = totalRating / ratings.length;
+            const resultProduct = {
+                averageRating: averageRating,
+                Rating: ratings,
+                productDetail: productDetail,
+            };
+            res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -679,10 +675,10 @@ const ProductController = {
         try {
             const userId = parseInt(req.cookies.id);
             console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
-            const { productId, ratingValue, comment } = req.body;
+            const { idproduct, ratingValue, comment } = req.body;
             const rating = await prisma.rating.create({
                 data: {
-                    idproduct: productId,
+                    idproduct,
                     iduser: userId,
                     ratingValue,
                     comment,

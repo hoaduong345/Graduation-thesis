@@ -15,9 +15,11 @@ import StatisticalAdmin from "../Assets/TSX/statistical";
 import SitebarAdmin from "../Sitebar/Sitebar";
 import FilterListproduct from "./Filter/FilterListproduct";
 import ListproductMap from "./ListproductMap";
+import { Link } from "react-router-dom";
 
 export default function ListproductsAdmin() {
    const [products, setProducts] = useState<any>([]);
+   const [productChecked, setProductChecked] = useState<number[]>([]);
    // Xuat excel
    const [search, setSearch] = useState("");
    const debouncedInputValueSearch = useDebounce(search, 400); // Debounce for 300 milliseconds
@@ -43,7 +45,7 @@ export default function ListproductsAdmin() {
    const [showAllProducts, setShowAllProducts] = useState(false);
 
    // pagination
-   const [currentPage, setCurrentPage] = useState(1);
+   const [currentPage, setCurrentPage] = useState<number>(1);
 
    useEffect(() => {
       productController
@@ -59,9 +61,8 @@ export default function ListproductsAdmin() {
 
    const getData = (value: any) => {
       productController
-         .getSearchAndPaginationProduct(value.toString(), 1, 2)
+         .getSearchAndPaginationProduct(value.toString(), currentPage, 2)
          .then((res: any) => {
-            console.log(res);
             setProducts(res);
          });
    };
@@ -125,22 +126,12 @@ export default function ListproductsAdmin() {
       quantityRange: any,
       purchase: any
    ) => {
-      console.log(
-         "🚀 ~ file: Listproducts.tsx:140 ~ ListproductsAdmin ~ purchase:",
-         purchase
-      );
-      console.log(
-         "🚀 ~ file: Listproducts.tsx:131 ~ handleFilter ~ quantityRange:",
-         quantityRange
-      );
-      console.log("debouncedInputValue", priceRange);
-
       await productController
          .getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination(
             priceRange[0],
             priceRange[1],
             currentPage,
-            5,
+            2,
             quantityRange[0],
             quantityRange[1],
             purchase[0],
@@ -166,18 +157,17 @@ export default function ListproductsAdmin() {
       console.log("price Range:", purchase);
    };
    // Hàm gọi API để lấy tất cả sản phẩm
-   const getProductAll = async () => {
-      await productController
-         .getSearchAndPaginationProduct("", 1, 2)
-         .then((res) => {
-            setProducts(res);
-            console.log("Lấy tất cả sản phẩm:", res);
-         })
-         .catch((err) => console.log(err));
-   };
-   useEffect(() => {
-      getProductAll();
-   }, []);
+   // const getProductAll = async () => {
+   //    await productController
+   //       .getSearchAndPaginationProduct("", currentPage, 2)
+   //       .then((res) => {
+   //          setProducts(res);
+   //       })
+   //       .catch((err) => console.log(err));
+   // };
+   // useEffect(() => {
+   //    getProductAll();
+   // }, []);
    // check con hang API
    const handleClickinStock = () => {
       setinStock(!inStock); // Đảo ngược giá trị của biến inStock
@@ -186,7 +176,7 @@ export default function ListproductsAdmin() {
          setSoldOut(false);
          setShowAllProducts(false); // Đặt hiển thị tất cả sản phẩm thành false
       } else {
-         getProductAll();
+         getData(debouncedInputValueSearch);
          setShowAllProducts(true); // Đặt hiển thị tất cả sản phẩm thành true
       }
    };
@@ -206,7 +196,7 @@ export default function ListproductsAdmin() {
          setinStock(false);
          setShowAllProducts(false); // Đặt hiển thị tất cả sản phẩm thành false
       } else {
-         getProductAll();
+         getData(debouncedInputValueSearch);
          setShowAllProducts(true); // Đặt hiển thị tất cả sản phẩm thành true
       }
    };
@@ -219,6 +209,40 @@ export default function ListproductsAdmin() {
             console.log("🚀 ~ file: Listproducts.tsx:197 ~ .then ~ res:", res);
          })
          .catch((err) => console.log(err));
+   };
+
+   var checkAll: boolean =
+      !!products.rows?.length &&
+      productChecked.length === products.rows?.length;
+
+   const handleChecked = (checked: boolean, id: number) => {
+      if (checked) {
+         setProductChecked((prev) => [...prev, id]);
+      } else {
+         let cloneProduct = [...productChecked];
+         let products = cloneProduct.filter((e) => {
+            return e !== id;
+         });
+         setProductChecked(products);
+      }
+   };
+
+   const checked = (id: number) => {
+      const _check = productChecked.findIndex((el) => el == id);
+      return _check !== -1;
+   };
+
+   const handleCheckedAll = (checkedAll: boolean) => {
+      if (checkedAll) {
+         if (products.rows) {
+            setProductChecked(products.rows);
+            products?.row?.map((ele: any) => {
+               checked(ele.id);
+            });
+         }
+      } else {
+         setProductChecked([]);
+      }
    };
 
    return (
@@ -275,13 +299,15 @@ export default function ListproductsAdmin() {
                 max-[885px]:w-[40px]"
                         >
                            <PlusSquare />
-                           <button
-                              className="text-center text-base font-bold text-white 
-                  max-xl:text-sm max-lg:text-xs max-[885px]:hidden
-                  "
-                           >
-                              Thêm sản phẩm
-                           </button>
+                           <Link to={"/admin/Addproductspage"}>
+                              <button
+                                 className="text-center text-base font-bold text-white 
+                              max-xl:text-sm max-lg:text-xs max-[885px]:hidden
+                              "
+                              >
+                                 Thêm sản phẩm
+                              </button>
+                           </Link>
                         </div>
                      </div>
 
@@ -335,14 +361,16 @@ export default function ListproductsAdmin() {
                    "
                               >
                                  <StatisticalAdmin />
-                                 <button
-                                    className="text-center text-base font-bold text-[#EA4B48] 
-                    max-xl:font-medium
-                    max-lg:text-xs
-                    "
-                                 >
-                                    Thống kê
-                                 </button>
+                                 <Link to={"/admin/statisticsPage"}>
+                                    <button
+                                       className="text-center text-base font-bold text-[#EA4B48] 
+                                    max-xl:font-medium
+                                    max-lg:text-xs
+                                    "
+                                    >
+                                       Thống kê
+                                    </button>
+                                 </Link>
                               </div>
                            </div>
 
@@ -428,15 +456,19 @@ export default function ListproductsAdmin() {
                      />
                   )}
 
-                  <div className="w-[100%] mt-6 items-center flex">
-                     <div className="w-[10%] text-center">
+                  <div className="grid grid-cols-10 mt-6 items-center">
+                     <div className="col-span-1 text-center">
                         <input
                            id="default-checkbox"
                            type="checkbox"
-                           className="w-4 h-4 accent-[#EA4B48] "
+                           className="checkbox checkbox-sm items-center"
+                           checked={checkAll}
+                           onChange={(element) =>
+                              handleCheckedAll(element.target.checked)
+                           }
                         />
                      </div>
-                     <div className="w-[35%] text-center max-lg:w-[40%]">
+                     <div className="col-span-3 text-center max-lg:w-[40%]">
                         <h3
                            className="text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
@@ -447,7 +479,7 @@ export default function ListproductsAdmin() {
                            THÔNG TIN
                         </h3>
                      </div>
-                     <div className="w-[45%] flex justify-between">
+                     <div className="col-span-2 flex justify-center">
                         <h3
                            className="text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
@@ -455,27 +487,36 @@ export default function ListproductsAdmin() {
                 max-lg:text-[10px]
                 "
                         >
-                           SỐ LƯỢNG
+                           GIÁ
                         </h3>
+                     </div>
+
+                     <div className="col-span-1">
                         <h3
-                           className="text-[#1A1A1A] text-sm font-semibold leading-4
+                           className="flex justify-center text-[#1A1A1A] text-sm font-semibold leading-4 
                 max-xl:text-[13px]
                 max-lg:invisible
                 "
                         >
-                           TÌNH TRẠNG
+                           SỐ LƯỢNG
                         </h3>
+                     </div>
+
+                     <div className="col-span-1">
                         <h3
-                           className="text-[#1A1A1A] text-sm font-semibold leading-4
+                           className="flex justify-center text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
                 max-lg:text-[10px]
                 max-[940px]:truncate
                 "
                         >
-                           SỐ LƯỢNG ĐÃ BÁN
+                           KHO
                         </h3>
+                     </div>
+
+                     <div className="col-span-1">
                         <h3
-                           className="text-[#1A1A1A] text-sm font-semibold leading-4
+                           className="flex justify-center text-[#1A1A1A] text-sm font-semibold leading-4
                 max-xl:text-[13px]
                 max-lg:invisible
                 "
@@ -483,6 +524,8 @@ export default function ListproductsAdmin() {
                            ĐÁNH GIÁ
                         </h3>
                      </div>
+
+                     <div className="col-span-1"></div>
                   </div>
                   <div className="mb-6">
                      {products?.rows?.length > 0 ? (
@@ -493,6 +536,11 @@ export default function ListproductsAdmin() {
                                     soldOut={soldOut}
                                     HandleXoa={handleRemove}
                                     products={items}
+                                    handleChecked={(
+                                       checked: boolean,
+                                       id: number
+                                    ) => handleChecked(checked, id)}
+                                    checked={(id: number) => checked(id)}
                                  />
                               </>
                            );
