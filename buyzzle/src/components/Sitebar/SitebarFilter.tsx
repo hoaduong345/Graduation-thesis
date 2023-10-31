@@ -92,7 +92,7 @@ export default function SitebarFilter({
 }: SliderComponentProps) {
   const [rangeValue, setRangeValue] = useState([5000, 300000]);
   const handleSliderChange = (price: [number, number]) => {
-    console.log("sdssdsd", price);
+    // console.log("sdssdsd", price);
     setRangeValue(price);
     onPriceRangeChange(price);
   };
@@ -196,6 +196,7 @@ export default function SitebarFilter({
                   key={index}
                   onChangeFilter={(rating) => {
                     const ratingNum: number = Number(rating);
+                    handleRateChange(ratingNum)
                     onRateChange(ratingNum)
                   }}
                 />

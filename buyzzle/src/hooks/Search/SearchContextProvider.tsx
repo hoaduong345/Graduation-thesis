@@ -179,6 +179,21 @@ export default function useSearchContext() {
     }
   }, [stars]);
 
+
+   const getProductsWhereRating = (rate: any) => {
+    productController
+      .getProductWhereRatting(rate)
+      .then((res: any) => {
+   
+        console.log("Ratting fillter" + JSON.stringify(res));
+        setProducts(res.rows);
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   const handleActiveBTNLowToHighClick = async () => {
     await productController
       .getSortProductbyPrice("asc", idaCate)
@@ -314,6 +329,7 @@ export default function useSearchContext() {
     handleActiveBTNLatestCreationDate,
     handleActiveBTNHighToLowClick,
     handleActiveBTNLowToHighClick,
+    getProductsWhereRating,
     activeBtnLatestCreationDate,
     activeBtnHighToLow,
     activeBtnLowToHigh,

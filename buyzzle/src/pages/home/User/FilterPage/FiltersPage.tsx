@@ -13,6 +13,9 @@ import { useSearch } from "../../../../hooks/Search/SearchContextProvider";
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import Lightbulb from "../../../../Assets/TSX/Light-bulb";
+import { productController } from "../../../../Controllers/ProductsController";
+import { useState } from "react";
+import { Row } from "../../../../Model/ProductModel";
 export interface Cate {
   id: number;
   name: string;
@@ -66,13 +69,14 @@ export interface PriceRangeFilterPage {
 }
 export default function FiltersPage() {
   const { id } = useParams();
-
+  // const [product, setProducts] = useState<Row[]>([]);
   const {
     searchValue,
     handleSliderChange,
     handleActiveBTNLatestCreationDate,
     handleActiveBTNHighToLowClick,
     handleActiveBTNLowToHighClick,
+    getProductsWhereRating,
     activeBtnLatestCreationDate,
     activeBtnHighToLow,
     activeBtnLowToHigh,
@@ -81,19 +85,20 @@ export default function FiltersPage() {
     sliderValues,
     nameCate,
   } = useSearch();
-
-  const getProductsWhereRating = (rate: any) => {
-    productController
-      .getProductWhereRatting(rate)
-      .then((res: any) => {
-        // const [product, setProducts] = useState<Row[]>([]);
-        console.log("Ratting fillter" + res);
-        setProducts(res.rows);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  
+  // const getProductsWhereRating = (rate: any) => {
+  //   productController
+  //     .getProductWhereRatting(rate)
+  //     .then((res: any) => {
+   
+  //       console.log("Ratting fillter" + JSON.stringify(res));
+  //       setProducts(res.rows);
+        
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
   
   return (
@@ -105,7 +110,8 @@ export default function FiltersPage() {
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
-              onRateChange={(e: any) => getProductsWhereRating(e)} onPurchaseRangeChange={function (value: [number, number]): void {
+              onRateChange={(e: any) => getProductsWhereRating(e)} 
+              onPurchaseRangeChange={function (value: [number, number]): void {
                 throw new Error("Function not implemented.");
               } } oninStock={function (availability: boolean): void {
                 throw new Error("Function not implemented.");
