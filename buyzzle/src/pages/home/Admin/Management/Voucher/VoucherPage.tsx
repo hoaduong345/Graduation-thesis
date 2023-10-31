@@ -88,8 +88,8 @@ export default function VoucherPage() {
       mode: "all",
       defaultValues: {
          id: 0,
-         discount: 1,
-         quantity: 1,
+         discount: undefined,
+         quantity: undefined,
          voucherCode: "",
          startDate: "",
          endDate: "",
@@ -291,6 +291,14 @@ export default function VoucherPage() {
                                                       value: true,
                                                       message: "Hãy chọn ngày",
                                                    },
+                                                   validate: (date: string) => {
+                                                      const valid = moment(
+                                                         date
+                                                      ).isAfter(new Date());
+                                                      return valid == false
+                                                         ? "Ngày hôm nay trở đi"
+                                                         : undefined;
+                                                   },
                                                 }}
                                                 render={({ field }) => (
                                                    <>
@@ -341,6 +349,14 @@ export default function VoucherPage() {
                                                       value: true,
                                                       message: "Hãy chọn ngày",
                                                    },
+                                                   // validate: (date: string) => {
+                                                   //    const valid = moment(
+                                                   //       date
+                                                   //    ).isBefore(new Date());
+                                                   //    return valid == false
+                                                   //       ? "Lớn hơn ngày bắt đầu"
+                                                   //       : undefined;
+                                                   // },
                                                 }}
                                                 render={({ field }) => (
                                                    <>
