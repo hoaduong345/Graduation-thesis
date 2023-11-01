@@ -697,10 +697,14 @@ const ProductController = {
             const productId = parseInt(req.params.productId);
             const page = parseInt(req.query.page) || 1;
             const perPage = parseInt(req.query.perPage) || 40;
+            const selectedRatingValue = parseInt(req.query.selectedRatingValue);
 
             const ratings = await prisma.rating.findMany({
                 where: {
-                    idproduct: productId,
+                    idproduct: productId, 
+                    ratingValue: {
+                        gte: selectedRatingValue, // Sử dụng lọc "greater than or equal to" (lớn hơn hoặc bằng)
+                    },
                 },
                 include: {
                     user: {
@@ -730,6 +734,9 @@ const ProductController = {
             const totalRatings = await prisma.rating.count({
                 where: {
                     idproduct: productId,
+                    ratingValue: {
+                        gte: selectedRatingValue, // Sử dụng lọc "greater than or equal to" (lớn hơn hoặc bằng)
+                    }, 
                 },
             });
             const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
