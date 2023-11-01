@@ -5,19 +5,20 @@ const prisma = new PrismaClient();
 const StatisticsController = {
     getStatictics: async (req, res) => {
         try {
-            // const currentDate = new Date();
-
             const { startDate: from, endDate: to, filterValue, page, pageSize } = req.body;
 
             const skip = (page - 1) * pageSize; // Số lượng sản phẩm được bỏ qua (trang đầu tiên)
             const take = pageSize; // Số lượng sản phẩm được lấy
 
-            // const yesterday = new Date(currentDate);
-            // yesterday.setHours(23, 59, 59, 999);
-            // yesterday.setDate(currentDate.getDate() - 1);
-            // const oneWeekAgo = new Date(yesterday);
-            // oneWeekAgo.setHours(0, 0, 0, 0);
-            // oneWeekAgo.setDate(yesterday.getDate() - 7);
+            const currentDate = new Date();
+
+            const yesterday = new Date(currentDate);
+            yesterday.setHours(23, 59, 59, 999);
+            yesterday.setDate(currentDate.getDate() - 1);
+
+            const oneWeekAgo = new Date(yesterday);
+            oneWeekAgo.setHours(0, 0, 0, 0);
+            oneWeekAgo.setDate(yesterday.getDate() - 7);
 
             const orderInTimeRange = await prisma.order.findMany({
                 where: {
@@ -159,15 +160,42 @@ const StatisticsController = {
             //     categoryStatsByDay[date.toISOString().split('T')[0]] = topCategories;
             // }
 
-            res.status(200).json({
-                totalRevenueInRange,
-                totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
-                purchaseOrShoppingInRange: totalOrdersInRange,
-                revenuePercentageInRange: revenuePercentageInRange,
-                percentageQuantitySold: percentageQuantitySold,
-                hotProductsInRange: topProductsInRange,
+            const categories = await prisma.category.findMany({
+                include: {
+                    products: {
+                        where: {
+                            AND: [{ date: { gte: oneWeekAgo } }, { date: { lt: yesterday } }],
+                        },
+                        select: {
+                            id: true,
+                            name: true,
+                            soldcount: true,
+                        },
+                        orderBy: {
+                            soldcount: 'asc',
+                        },
+                    },
+                },
+            });
 
-                // sortedCategoriesToday: categoryStatsByDay,
+            const topSellingProductsByCategory = categories.map((category) => {
+                const productsInCategory = category.products;
+                productsInCategory.sort((a, b) => b.soldcount - a.soldcount);
+                return {
+                    category: category.name,
+                    topSellingProduct: productsInCategory[0],
+                };
+            });
+
+            res.status(200).json({
+                // totalRevenueInRange,
+                // totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
+                // purchaseOrShoppingInRange: totalOrdersInRange,
+                // revenuePercentageInRange: revenuePercentageInRange,
+                // percentageQuantitySold: percentageQuantitySold,
+                // hotProductsInRange: topProductsInRange,
+
+                sortedCategoriesToday: topSellingProductsByCategory,
             });
         } catch (error) {
             console.error(error);

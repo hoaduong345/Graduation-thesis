@@ -249,20 +249,20 @@ export default function StatisticsPage() {
     datasets: [
       {
         label: `${cate?.name}`,
-        data: [170, 30, 50, 130, 250],
+        data: [170, 30, 50, 130, 250, 50, 30],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
         label: "Đồ gia dụng",
-        data: [100, 200, 120, 120],
+        data: [100, 200, 120, 120, 150, 230, 100],
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
 
       {
         label: "Khác",
-        data: [10, 120, 20, 40],
+        data: [10, 120, 20, 40, 200, 30, 120],
         borderColor: "#95A4FC",
         backgroundColor: "#cad2ff",
       },
@@ -286,11 +286,6 @@ export default function StatisticsPage() {
         label: "Dataset 1",
         data: [800, 30, 70, 80, 650, 75, 900],
         backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Dataset 2",
-        data: [100, 200, 20, 150, 820, 180, 930],
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
@@ -336,6 +331,7 @@ export default function StatisticsPage() {
               {/* dateTimePicker */}
               <Datepicker
                 // disabledDates={disabledDates}
+                startWeekOn="mon"
                 primaryColor={"rose"}
                 value={value}
                 separator={"~"}
