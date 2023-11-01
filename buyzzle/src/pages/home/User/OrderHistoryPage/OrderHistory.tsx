@@ -204,6 +204,14 @@ export default function OrderHistory() {
                                                                      element.total
                                                                   )}
                                                                </td>
+                                                               <td className="whitespace-nowrap  px-6 py-4">
+                                                                  <Link
+                                                                     to={`/Detailproducts/${element.productId}`}
+                                                                     className="text-[#EA4B48] hover:text-[#ea4b48ad] text-center w-[13%]"
+                                                                  >
+                                                                     Mua lại
+                                                                  </Link>
+                                                               </td>
                                                             </tr>
                                                          </>
                                                       );

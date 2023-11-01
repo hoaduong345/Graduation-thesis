@@ -54,7 +54,7 @@ export default function OrderDetailPage() {
    };
    // img firebase
    const loadImageFile = async (images: any) => {
-      for (let i = 0; i < images.length; i++) {
+      for (let i = 0; i < 6; i++) {
          const imageRef = ref(storage, `multipleFiles/${images[i].name}`);
 
          await uploadBytes(imageRef, images[i])
@@ -105,7 +105,7 @@ export default function OrderDetailPage() {
    const { control, handleSubmit, reset, setValue } = useForm<Rating>({
       mode: "all",
       defaultValues: {
-         idproduct: 1,
+         idproduct: 0,
          comment: "",
          ratingValue: 5,
          iduser: 1,
@@ -165,7 +165,7 @@ export default function OrderDetailPage() {
          comment: data.comment,
       };
       console.log(_data);
-      RatingAndCommentController.postRatingAndComment(data)
+      RatingAndCommentController.postRatingAndComment(_data)
          .then(async (data) => {
             // setValue("iduser", data.iduser);
             // console.log(

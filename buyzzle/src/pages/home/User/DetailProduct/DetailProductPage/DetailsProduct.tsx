@@ -85,7 +85,7 @@ const arrRating: RatingStarDetail[] = [
 ];
 export interface EditImage {
   url: string;
-  id: number;
+id: number;
 }
 export default function DetailsProduct() {
   const { carts, addProduct } = useCart();
@@ -188,7 +188,7 @@ export default function DetailsProduct() {
 
   const getComment = (id: number) => {
     console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
-    RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
+RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
       (res: any) => {
         setRateAndcomment(res);
       }
@@ -294,7 +294,7 @@ export default function DetailsProduct() {
                 <div>
                   <img
                     className="w-[533px] h-[388px] object-cover"
-                    src={
+src={
                       first?.productDetail?.ProductImage?.[selectedImageIndex]
                         ?.url
                     }
@@ -366,7 +366,7 @@ export default function DetailsProduct() {
                               px-4 pb-[7.5px] pt-[8px] w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px] 
                                     "
                   >
-                    <ArrowDown />
+<ArrowDown />
                   </div>
                 </div>
               </div>
@@ -431,7 +431,7 @@ export default function DetailsProduct() {
                               src={
                                 index < selectedRating
                                   ? Images.star1
-                                  : Images.star2
+: Images.star2
                               }
                               alt=""
                             />
@@ -503,7 +503,7 @@ export default function DetailsProduct() {
                         {numberFormat(
                           first?.productDetail.price! -
                             first?.productDetail.price! *
-                              (first?.productDetail.discount! / 100)
+(first?.productDetail.discount! / 100)
                         )}
                       </p>
                       <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -567,7 +567,7 @@ export default function DetailsProduct() {
               {/* bachground price */}
               {/* icon */}
               <div className="w-[100%] flex mt-9 px-5 items-center justify-between">
-                <div className="flex gap-2">
+<div className="flex gap-2">
                   <FB />
                   <TW />
                   <Insta />
@@ -645,7 +645,7 @@ export default function DetailsProduct() {
           <div>
             <a
               className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "descriptions"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
                   : ""
                 }`}
               onClick={() => handleTabClick("descriptions")}
@@ -722,7 +722,7 @@ export default function DetailsProduct() {
                         Previous
                       </Button>
                       {[...new Array(rateAndcomment?.totalRatings)].map(
-                        (item, index) => {
+(item, index) => {
                           const page = index + 1;
                           console.log(item);
                           return (
@@ -793,7 +793,7 @@ export default function DetailsProduct() {
       <Container>
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
-          <div className="mt-11 col-span-2 ">
+<div className="mt-11 col-span-2 ">
             <div className="flex flex-wrap gap-3 ">
               {recommandProduct.map((items) => {
                 console.log(

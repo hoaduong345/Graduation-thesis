@@ -5,6 +5,7 @@ export interface OrderPanigation {
     page: number,
     pageSize: number,
     totalPage: number
+    totalOrder: number
 }
 export interface OrderModel {
     id: number,

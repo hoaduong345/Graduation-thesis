@@ -718,7 +718,7 @@ export default function CheckOut() {
                                              className="flex gap-3 items-center"
                                           >
                                              <input
-                                                className="max-lg:w-[10px]"
+                                                className="max-lg:w-[10px] accent-[#EA4B48]"
                                                 name="choose"
                                                 type="radio"
                                                 value={element.type}
@@ -763,7 +763,7 @@ export default function CheckOut() {
 
                            <div className="flex items-center gap-3">
                               <input
-                                 className="w-[14px] h-[14px]"
+                                 className="w-[14px] h-[14px] accent-[#EA4B48]"
                                  type="checkbox"
                                  checked={invoice}
                                  onChange={(e) => setInvoice(e.target.checked)}

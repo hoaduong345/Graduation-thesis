@@ -227,7 +227,7 @@ export default function InvoicesPage() {
                                  max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
                >
                   <PrintOrder />
-                  <p>Print</p>
+                  <p>In Ngay</p>
                </button>
             </div>
          </Container>
