@@ -2,7 +2,7 @@ import moment from "moment";
 
 export interface FilterDate {
   title?: string;
-  value: ValueDate;
+  filterValue: ValueDate;
   page?: number;
   pageSize?: number;
 }
@@ -25,24 +25,24 @@ const end = endOfDay(today.toDate());
 export const dataFilter: FilterDate[] = [
   {
     title: "Hom nay",
-    value: { from: start, to: end },
+    filterValue: { from: start, to: end },
   },
   {
     title: "7 ngay truoc",
-    value: {
+    filterValue: {
       from: today.subtract(7, "days").toDate(),
       to: end,
     },
   },
   {
     title: "15 ngay truoc",
-    value: {
+    filterValue: {
       from: today.clone().subtract(9, "days").toDate(),
       to: end,
     },
   },
   {
     title: "30 ngay truoc",
-    value: { from: today.subtract(23, "day").toDate(), to: end },
+    filterValue: { from: today.subtract(23, "day").toDate(), to: end },
   },
 ];

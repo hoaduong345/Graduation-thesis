@@ -112,12 +112,15 @@ export default function StatisticsPage() {
 
   // ================================ API ================================
   useEffect(() => {
-    getProductStats(dataFilter[0].value.from, dataFilter[0].value.to);
+    getProductStats(
+      dataFilter[0].filterValue.from,
+      dataFilter[0].filterValue.to
+    );
   }, [dataFilter]);
 
   const getProductStats = async (startDate: Date, endDate: Date) => {
     const data: FilterDate = {
-      value: {
+      filterValue: {
         from: startDate,
         to: endDate,
       },
@@ -126,7 +129,9 @@ export default function StatisticsPage() {
     };
 
     try {
-      const res = await statsControllers.getStats(data);
+      const res: any = await statsControllers.getStats(data);
+      setStats(res);
+
       console.log("🚀 ~ file: StatisticsPage.tsx:199 ~ res:", res);
     } catch (error) {
       console.error("Error:", error);
@@ -136,15 +141,7 @@ export default function StatisticsPage() {
   // ================================ handleSelect ================================
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(
-      "🚀 ~ file: StatisticsPage.tsx:233 ~ handleSelectChange ~ event:",
-      event.target.value
-    );
     setSelectedOption(Number(event.target.value));
-    console.log(
-      "🚀 ~ file: StatisticsPage.tsx:239 ~ handleSelectChange ~  JSON.parse(event.target.value);:",
-      JSON.parse(event.target.value)
-    );
 
     const filterDate: ValueDate = JSON.parse(event.target.value);
     getProductStats(filterDate.from, filterDate.to);
@@ -235,6 +232,12 @@ export default function StatisticsPage() {
       },
     ],
   };
+
+  console.log(
+    "🚀 ~ file: StatisticsPage.tsx:368 ~ {dataFilter.map ~ stats.productSoldPercentageInRange:",
+    stats.productSoldPercentageInRange
+  );
+
   return (
     <>
       <Container>
@@ -279,7 +282,6 @@ export default function StatisticsPage() {
                   empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 
                   disabled:bg-blue-gray-50"
                   onChange={handleSelectChange}
-                  value={selectedOption}
                 >
                   {dataFilter.map((itemsSelect) => {
                     console.log(
@@ -287,7 +289,7 @@ export default function StatisticsPage() {
                       itemsSelect
                     );
                     return (
-                      <option value={JSON.stringify(itemsSelect.value)}>
+                      <option value={JSON.stringify(itemsSelect.filterValue)}>
                         {itemsSelect.title}
                       </option>
                     );
@@ -356,22 +358,20 @@ export default function StatisticsPage() {
                       Lượt mua hàng
                     </p>
                   </div>
-                  {selectedOption == 1 && (
-                    <div className="items-center grid grid-cols-4">
-                      <div className="col-span-2">
-                        <p className="text-[#1C1C1C] font-semibold text-xl">
-                          {numberStast(stats.purchaseOrShoppingInToday)}
-                        </p>
-                      </div>
-                      <div className="col-end-6 flex gap-1">
-                        <p className="text-[#00B207] font-semibold text-xs">
-                          {stats.productSoldPercentageToday}
-                        </p>
-                        <ArrowRise />
-                      </div>
+                  <div className="items-center grid grid-cols-4">
+                    <div className="col-span-2">
+                      <p className="text-[#1C1C1C] font-semibold text-xl">
+                        {numberStast(stats.purchaseOrShoppingInRange)}
+                      </p>
                     </div>
-                  )}
-                  {selectedOption == 2 && (
+                    <div className="col-end-6 flex gap-1">
+                      <p className="text-[#00B207] font-semibold text-xs">
+                        {stats.productSoldPercentageInRange}
+                      </p>
+                      <ArrowRise />
+                    </div>
+                  </div>
+                  {/* {selectedOption == 2 && (
                     <div className="items-center grid grid-cols-4">
                       <div className="col-span-2">
                         <p className="text-[#1C1C1C] font-semibold text-xl">
@@ -415,7 +415,7 @@ export default function StatisticsPage() {
                         <ArrowRise />
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
                 {/* end Truy cập trang */}
                 {/* so lieu */}
@@ -427,72 +427,19 @@ export default function StatisticsPage() {
                   <div>
                     <p className="text-[#1C1C1C] font-semibold">Doanh thu</p>
                   </div>
-                  {selectedOption == 1 && (
-                    <div className="items-center grid grid-cols-4">
-                      <div className="col-span-2">
-                        <p className="text-[#1C1C1C] font-semibold text-xl">
-                          {numberStast(stats.totalRevenueToday)}
-                        </p>
-                      </div>
-                      <div className="col-end-6 flex gap-1 ">
-                        <p className="text-[#EA4B48] font-semibold text-xs ">
-                          {numberStast(parseInt(stats.revenuePercentageToday))}
-                        </p>
-                        <ArrowFall />
-                      </div>
+                  <div className="items-center grid grid-cols-4">
+                    <div className="col-span-2">
+                      <p className="text-[#1C1C1C] font-semibold text-xl">
+                        {numberStast(stats.totalRevenueInRange)}
+                      </p>
                     </div>
-                  )}
-                  {selectedOption == 2 && (
-                    <div className="items-center grid grid-cols-4">
-                      <div className="col-span-2">
-                        <p className="text-[#1C1C1C] font-semibold text-xl">
-                          {numberStast(stats.totalRevenueLast7Days)}
-                        </p>
-                      </div>
-                      <div className="col-end-6 flex gap-1 ">
-                        <p className="text-[#EA4B48] font-semibold text-xs ">
-                          {numberStast(
-                            parseInt(stats.revenuePercentageLast7Days)
-                          )}
-                        </p>
-                        <ArrowFall />
-                      </div>
+                    <div className="col-end-6 flex gap-1 ">
+                      <p className="text-[#EA4B48] font-semibold text-xs ">
+                        {numberStast(parseInt(stats.revenuePercentageInRange))}
+                      </p>
+                      <ArrowFall />
                     </div>
-                  )}
-                  {selectedOption == 3 && (
-                    <div className="items-center grid grid-cols-4">
-                      <div className="col-span-2">
-                        <p className="text-[#1C1C1C] font-semibold text-xl">
-                          {numberStast(stats.totalRevenueLast15Days)}
-                        </p>
-                      </div>
-                      <div className="col-end-6 flex gap-1 ">
-                        <p className="text-[#EA4B48] font-semibold text-xs ">
-                          {numberStast(
-                            parseInt(stats.revenuePercentageLast15Days)
-                          )}
-                        </p>
-                        <ArrowFall />
-                      </div>
-                    </div>
-                  )}
-                  {selectedOption == 4 && (
-                    <div className="items-center grid grid-cols-4">
-                      <div className="col-span-2">
-                        <p className="text-[#1C1C1C] font-semibold text-xl">
-                          {numberStast(stats.totalRevenueLast30Days)}
-                        </p>
-                      </div>
-                      <div className="col-end-6 flex gap-1 ">
-                        <p className="text-[#EA4B48] font-semibold text-xs ">
-                          {numberStast(
-                            parseInt(stats.revenuePercentageLast30Days)
-                          )}
-                        </p>
-                        <ArrowFall />
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -523,198 +470,52 @@ export default function StatisticsPage() {
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                     <div className="overflow-hidden">
-                      {selectedOption === 1 && (
-                        <table className="min-w-full text-left text-sm font-light">
-                          <thead className="border-b border-[#c7c7c7] font-medium ">
-                            <tr>
-                              <th scope="col" className="px-3 py-2"></th>
-                              <th scope="col" className="px-3 py-2">
-                                Tên
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Giá
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Lượt mua
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Doanh thu
-                              </th>
-                            </tr>
-                          </thead>
-                          {stats.hotProductsInToday?.map((items) => {
-                            return (
-                              <tbody key={items.id}>
-                                <tr className="transition duration-300 rounded-2xl ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-[#f0f0f0] ">
-                                  <td className="whitespace-nowrap px-3 py-2 font-semibold">
-                                    <span className="font-normal">#ID:</span>
-                                    00
-                                    {items.id}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {items.name.length > 40
-                                      ? `${items.name.substring(0, 40)}...`
-                                      : items.name}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {numberFormat(items.price)}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {items._sum.quantity} sản phẩm
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {numberFormat(items.total)}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            );
-                          })}
-                        </table>
-                      )}
-                      {selectedOption === 2 && (
-                        <table className="min-w-full text-left text-sm font-light">
-                          <thead className="border-b border-[#c7c7c7] font-medium ">
-                            <tr>
-                              <th scope="col" className="px-3 py-2"></th>
-                              <th scope="col" className="px-3 py-2">
-                                Tên
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Giá
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Lượt mua
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Doanh thu
-                              </th>
-                            </tr>
-                          </thead>
-                          {stats.hotProductLast7days?.map((items) => {
-                            return (
-                              <tbody key={items.id}>
-                                <tr className="transition duration-300 rounded-2xl ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-[#f0f0f0] ">
-                                  <td className="whitespace-nowrap px-3 py-2 font-semibold">
-                                    <span className="font-normal">#ID:</span>
-                                    00
-                                    {items.id}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {items.name.length > 40
-                                      ? `${items.name.substring(0, 40)}...`
-                                      : items.name}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {numberFormat(items.price)}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {items._sum.quantity} sản phẩm
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {numberFormat(items.total)}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            );
-                          })}
-                        </table>
-                      )}
-                      {selectedOption === 3 && (
-                        <table className="min-w-full text-left text-sm font-light">
-                          <thead className="border-b border-[#c7c7c7] font-medium ">
-                            <tr>
-                              <th scope="col" className="px-3 py-2"></th>
-                              <th scope="col" className="px-3 py-2">
-                                Tên
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Giá
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Lượt mua
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Doanh thu
-                              </th>
-                            </tr>
-                          </thead>
-                          {stats.hotProductLast15days?.map((items) => {
-                            return (
-                              <tbody key={items.id}>
-                                <tr className="transition duration-300 rounded-2xl ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-[#f0f0f0] ">
-                                  <td className="whitespace-nowrap px-3 py-2 font-semibold">
-                                    <span className="font-normal">#ID:</span>
-                                    00
-                                    {items.id}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {items.name.length > 40
-                                      ? `${items.name.substring(0, 40)}...`
-                                      : items.name}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {numberFormat(items.price)}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {items._sum.quantity} sản phẩm
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {numberFormat(items.total)}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            );
-                          })}
-                        </table>
-                      )}
-                      {selectedOption === 4 && (
-                        <table className="min-w-full text-left text-sm font-light">
-                          <thead className="border-b border-[#c7c7c7] font-medium ">
-                            <tr>
-                              <th scope="col" className="px-3 py-2"></th>
-                              <th scope="col" className="px-3 py-2">
-                                Tên
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Giá
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Lượt mua
-                              </th>
-                              <th scope="col" className="px-3 py-2">
-                                Doanh thu
-                              </th>
-                            </tr>
-                          </thead>
-                          {stats.hotProductLast30days?.map((items) => {
-                            return (
-                              <tbody key={items.id}>
-                                <tr className="transition duration-300 rounded-2xl ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-[#f0f0f0] ">
-                                  <td className="whitespace-nowrap px-3 py-2 font-semibold">
-                                    <span className="font-normal">#ID:</span>
-                                    00
-                                    {items.id}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {items.name.length > 40
-                                      ? `${items.name.substring(0, 40)}...`
-                                      : items.name}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {numberFormat(items.price)}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {items._sum.quantity} sản phẩm
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-2">
-                                    {numberFormat(items.total)}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            );
-                          })}
-                        </table>
-                      )}
+                      <table className="min-w-full text-left text-sm font-light">
+                        <thead className="border-b border-[#c7c7c7] font-medium ">
+                          <tr>
+                            <th scope="col" className="px-3 py-2"></th>
+                            <th scope="col" className="px-3 py-2">
+                              Tên
+                            </th>
+                            <th scope="col" className="px-3 py-2">
+                              Giá
+                            </th>
+                            <th scope="col" className="px-3 py-2">
+                              Lượt mua
+                            </th>
+                            <th scope="col" className="px-3 py-2">
+                              Doanh thu
+                            </th>
+                          </tr>
+                        </thead>
+                        {stats.hotProductsInRange?.map((items) => {
+                          return (
+                            <tbody key={items.id}>
+                              <tr className="transition duration-300 rounded-2xl ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-[#f0f0f0] ">
+                                <td className="whitespace-nowrap px-3 py-2 font-semibold">
+                                  <span className="font-normal">#ID:</span>
+                                  00
+                                  {items.id}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-2">
+                                  {items.name.length > 40
+                                    ? `${items.name.substring(0, 40)}...`
+                                    : items.name}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-2">
+                                  {numberFormat(items.price)}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-2">
+                                  {items._sum.quantity} sản phẩm
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-2">
+                                  {numberFormat(items.total)}
+                                </td>
+                              </tr>
+                            </tbody>
+                          );
+                        })}
+                      </table>
                     </div>
                   </div>
                 </div>
