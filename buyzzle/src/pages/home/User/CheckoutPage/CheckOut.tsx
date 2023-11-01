@@ -240,7 +240,7 @@ export default function CheckOut() {
                                                                 peer-checked:border-[#EA4B48] peer-checked:border-2"
                                              />
                                           </div>
-                                          <div className="flex flex-col gap-1">
+                                          <div className="flex flex-col gap-1 w-full">
                                              <div className="flex justify-between w-full">
                                                 <div className="flex items-center gap-3">
                                                    <p className="text-sm font-medium text-[#1A1A1A]">
@@ -265,9 +265,7 @@ export default function CheckOut() {
                                              </div>
                                              <div>
                                                 <p className="text-[13px] font-normal text-[#4C4C4C]">
-                                                   12 Nguyễn Chí Thanh Phường
-                                                   Tân An, Thành Phố Buôn Ma
-                                                   Thuột, Đắk Lắk
+                                                   12 Nguyễn
                                                 </p>
                                              </div>
                                           </div>
