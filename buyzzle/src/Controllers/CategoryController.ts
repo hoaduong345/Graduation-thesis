@@ -45,6 +45,10 @@ class CategoryController {
         }
         return await axios.post(`${appConfig.apiCategories}`, data)
     }
+
+    getAllCate = async (id: number) => {
+        return await axios.get(`${appConfig.apiCategories}`, { category: id })
+    }
 }
 
 export const categoryController = new CategoryController()

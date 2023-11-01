@@ -21,6 +21,7 @@ import SitebarAdmin from "../../Sitebar/Sitebar";
 import Delete from "../../Assets/TSX/Delete";
 import { csvConfig } from "../../../../../Helper/Export/Excel";
 import { download, generateCsv } from "export-to-csv";
+import { Accordion, AccordionBody } from "@material-tailwind/react";
 
 export type FormValues = {
    id: number;
@@ -49,6 +50,9 @@ function Category() {
    const [loading, setLoading] = useState(false);
 
    const [url, setUrl] = useState<string>();
+
+   const [open, setOpen] = useState<number>();
+   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
    const [checkedCategory, setCheckedCategory] = useState<FormValues[]>([]);
 
@@ -202,14 +206,14 @@ function Category() {
    };
 
    const createCateLv2 = async (data: string, idCate: number) => {
-      if (data.length >= 4) {
+      if (data.length >= 4 && data.length <= 20) {
          await categoryController.createSubcateLv1(idCate, data).then(() => {
             setNameCateLv2("");
             closeModal(idModalSubCateLv1);
             setCheckedCategory([]);
          });
       } else {
-         toast.warn("Danh Mục con");
+         toast.warn("4 kí tự trở lên");
       }
    };
 
@@ -527,103 +531,118 @@ function Category() {
                         }
                      />
 
-                     <div className="grid grid-cols-10">
-                        {categorys.map((e, index) => {
-                           return (
-                              <>
+                     {categorys.map((e, index) => {
+                        return (
+                           <>
+                              <Accordion open={open == e.id}>
                                  <div
+                                    className="grid grid-cols-10"
+                                    onClick={() => handleOpen(e.id)}
                                     key={e.id}
-                                    className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16"
                                  >
-                                    <div className=" flex gap-[20px] max-lg:gap-2">
-                                       <input
-                                          className="checkbox checkbox-sm items-center"
-                                          type="checkbox"
-                                          checked={checkedCategory.includes(e)}
-                                          onChange={(element) =>
-                                             handleChecked(
-                                                element.target.checked,
+                                    <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16">
+                                       <div className=" flex gap-[20px] max-lg:gap-2">
+                                          <input
+                                             className="checkbox checkbox-sm items-center"
+                                             type="checkbox"
+                                             checked={checkedCategory.includes(
                                                 e
-                                             )
-                                          }
-                                       />
+                                             )}
+                                             onChange={(element) =>
+                                                handleChecked(
+                                                   element.target.checked,
+                                                   e
+                                                )
+                                             }
+                                          />
+                                       </div>
+                                       <div>
+                                          <img
+                                             className="w-[50px]"
+                                             src={e.image}
+                                             alt=""
+                                          />
+                                       </div>
                                     </div>
-                                    <div>
-                                       <img
-                                          className="w-[50px]"
-                                          src={e.image}
-                                          alt=""
-                                       />
+                                    <div className="col-span-5 border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]">
+                                       <p className="text-[16px] font-bold my-auto max-lg:text-sm">
+                                          {e.name}
+                                       </p>
                                     </div>
-                                 </div>
-                                 <div className="col-span-5 border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]">
-                                    <p className="text-[16px] font-bold my-auto max-lg:text-sm">
-                                       {e.name}
-                                    </p>
-                                 </div>
-                                 <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
-                                    <div className="flex text-center justify-end items-center gap-5 py-[25px] px-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
-                                       <button
-                                          onClick={() => {
-                                             openModal(
-                                                idModalSubCateLv1,
-                                                {} as FormValues
-                                             );
-                                             setIdCate(e.id);
-                                             setIndexCate(index);
-                                          }}
-                                       >
-                                          <Plus />
-                                       </button>
+                                    <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
+                                       <div className="flex text-center justify-end items-center gap-5 py-[25px] px-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                                          <button
+                                             onClick={() => {
+                                                openModal(
+                                                   idModalSubCateLv1,
+                                                   {} as FormValues
+                                                );
+                                                setIdCate(e.id);
+                                                setIndexCate(index);
+                                             }}
+                                          >
+                                             <Plus />
+                                          </button>
 
-                                       <div className="dropdown dropdown-left">
-                                          <label tabIndex={0}>
-                                             <Handle />
-                                          </label>
-                                          <ul
-                                             tabIndex={0}
-                                             className="dropdown-content menu bg-white rounded-box w-52
+                                          <div className="dropdown dropdown-left">
+                                             <label tabIndex={0}>
+                                                <Handle />
+                                             </label>
+                                             <ul
+                                                tabIndex={0}
+                                                className="dropdown-content menu bg-white rounded-box w-52
                                                 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                                 max-2xl:left-[100%] max-2xl::origin-left"
-                                          >
-                                             <li>
-                                                <button
-                                                   onClick={() =>
-                                                      openModal(idModalCate, e)
-                                                   }
-                                                   className="flex items-center gap-4"
-                                                >
-                                                   <Edit />
-                                                   <p className="text-[#EA4B48] text-sm font-medium">
-                                                      Sửa
-                                                   </p>
-                                                </button>
-                                             </li>
-                                             <li>
-                                                <button
-                                                   onClick={() => {
-                                                      openModal(
-                                                         idRemoveCategory,
-                                                         {} as FormValues
-                                                      );
-                                                      setIdCate(e.id);
-                                                   }}
-                                                   className="flex items-center gap-4"
-                                                >
-                                                   <RemoveCate />
-                                                   <p className="text-[#EA4B48] text-sm font-medium">
-                                                      Xóa
-                                                   </p>
-                                                </button>
-                                             </li>
-                                          </ul>
+                                             >
+                                                <li>
+                                                   <button
+                                                      onClick={() =>
+                                                         openModal(
+                                                            idModalCate,
+                                                            e
+                                                         )
+                                                      }
+                                                      className="flex items-center gap-4"
+                                                   >
+                                                      <Edit />
+                                                      <p className="text-[#EA4B48] text-sm font-medium">
+                                                         Sửa
+                                                      </p>
+                                                   </button>
+                                                </li>
+                                                <li>
+                                                   <button
+                                                      onClick={() => {
+                                                         openModal(
+                                                            idRemoveCategory,
+                                                            {} as FormValues
+                                                         );
+                                                         setIdCate(e.id);
+                                                      }}
+                                                      className="flex items-center gap-4"
+                                                   >
+                                                      <RemoveCate />
+                                                      <p className="text-[#EA4B48] text-sm font-medium">
+                                                         Xóa
+                                                      </p>
+                                                   </button>
+                                                </li>
+                                             </ul>
+                                          </div>
                                        </div>
                                     </div>
                                  </div>
-                              </>
-                           );
-                        })}
-                     </div>
+                                 <AccordionBody>
+                                    <div className="grid grid-cols-10">
+                                       <div className="col-span-3"></div>
+                                       <div className="col-span-5">s</div>
+                                       <div className="col-span-2"></div>
+                                    </div>
+                                 </AccordionBody>
+                              </Accordion>
+                           </>
+                        );
+                     })}
                   </div>
                </div>
             </div>
