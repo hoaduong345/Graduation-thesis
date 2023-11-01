@@ -242,6 +242,9 @@ model Rating {
 model Order {
   id            Int           @id @default(autoincrement())
   userId        Int?
+  name          String?
+  address       String?
+  phoneNumber   String?
   status        String?
   note          String?
   invoice       String?
