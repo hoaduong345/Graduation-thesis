@@ -28,7 +28,13 @@ class AdminController {
         return res.data;
       });
   };
-
+  getAllAdmin = async () => {
+    return await axios
+    .get(`${appConfig.apiUrl}/getalladmin`)
+    .then((res) => {
+      return res.data;
+    });
+  };
   
 
 }

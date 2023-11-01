@@ -34,6 +34,7 @@ import LoginAdmin from "../../pages/home/Admin/LoginAdmin/AdminLogin";
 import AdminProfile from "../../pages/home/Admin/AdminProfile/AdminProfile";
 import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
 import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
+import Admin from "../../pages/home/Admin/Management/Admin/Admin";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -600,6 +601,10 @@ export default function useRouterEmelent() {
         {
           path: "invoice/:id",
           element: <InvoicesPage />,
+        },
+        {
+          path: "adminmanager",
+          element: <Admin />,
         },
       ],
       

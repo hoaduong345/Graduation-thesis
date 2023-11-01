@@ -45,11 +45,11 @@ const listSitebar: SitebarAdmin[] = [
     pathName: "/admin/usersmanager",
   },
 
-  // {
-  //   title: "Khuyễn Mãi",
-  //   icon: <SalesIcon />,
-  //   pathName: "",
-  // },
+  {
+    title: "Admin",
+    icon: <Members />,
+    pathName: "/admin/adminmanager",
+  },
   {
     title: "Mã Giảm Giá",
     icon: <VouchersIcon />,

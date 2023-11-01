@@ -240,10 +240,10 @@ export default function useSearchContext() {
     await productController
       .getAllProductsSearch(searchValue?.toString())
       .then((res: any) => {
-        console.log(res);
+       
         setStars(res.data);
-
         setProducts(res.rows);
+        console.log("PRODUCTS:"+products);
       });
   };
   const getSearchDataName = async () => {

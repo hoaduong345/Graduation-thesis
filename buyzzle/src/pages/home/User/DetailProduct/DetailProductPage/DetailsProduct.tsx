@@ -85,7 +85,7 @@ const arrRating: RatingStarDetail[] = [
 ];
 export interface EditImage {
   url: string;
-id: number;
+  id: number;
 }
 export default function DetailsProduct() {
   const { carts, addProduct } = useCart();
@@ -159,6 +159,7 @@ export default function DetailsProduct() {
       .getCommentWhereRating(idproduct, rating)
       .then((res: any) => {
         setRateAndcomment(res);
+        console.log("CCCCCCCCCCCCCCCCCCCCCCc:" + JSON.stringify(rateAndcomment));
       }).catch((err) => {
         console.log(err);
       });
@@ -188,12 +189,14 @@ export default function DetailsProduct() {
 
   const getComment = (id: number) => {
     console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
-RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
+    RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
       (res: any) => {
         setRateAndcomment(res);
       }
     );
   };
+
+  
   const getItemProps = (index: number) =>
   ({
     variant: currentPage === index ? "filled" : "text",
@@ -294,7 +297,7 @@ RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
                 <div>
                   <img
                     className="w-[533px] h-[388px] object-cover"
-src={
+                    src={
                       first?.productDetail?.ProductImage?.[selectedImageIndex]
                         ?.url
                     }
@@ -366,7 +369,7 @@ src={
                               px-4 pb-[7.5px] pt-[8px] w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px] 
                                     "
                   >
-<ArrowDown />
+                    <ArrowDown />
                   </div>
                 </div>
               </div>
@@ -431,7 +434,7 @@ src={
                               src={
                                 index < selectedRating
                                   ? Images.star1
-: Images.star2
+                                  : Images.star2
                               }
                               alt=""
                             />
@@ -567,7 +570,7 @@ src={
               {/* bachground price */}
               {/* icon */}
               <div className="w-[100%] flex mt-9 px-5 items-center justify-between">
-<div className="flex gap-2">
+                <div className="flex gap-2">
                   <FB />
                   <TW />
                   <Insta />
@@ -645,8 +648,8 @@ src={
           <div>
             <a
               className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "descriptions"
-? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
                 }`}
               onClick={() => handleTabClick("descriptions")}
               role="tab"
@@ -659,8 +662,8 @@ src={
           <div>
             <a
               className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "Rating"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
                 }`}
               onClick={() => handleTabClick("Rating")}
               role="tab"
@@ -713,8 +716,8 @@ src={
                         variant="text"
                         // className="flex items-center gap-2"
                         className={`${currentPage == 1
-                            ? `hidden`
-                            : `flex items-center gap-2`
+                          ? `hidden`
+                          : `flex items-center gap-2`
                           }`}
                         onClick={prev}
                       >
@@ -722,7 +725,7 @@ src={
                         Previous
                       </Button>
                       {[...new Array(rateAndcomment?.totalRatings)].map(
-(item, index) => {
+                        (item, index) => {
                           const page = index + 1;
                           console.log(item);
                           return (
@@ -740,8 +743,8 @@ src={
                       <Button
                         variant="text"
                         className={`${currentPage == rateAndcomment?.totalRatings
-                            ? "hidden"
-                            : "flex items-center gap-2"
+                          ? "hidden"
+                          : "flex items-center gap-2"
                           }`}
                         onClick={next}
                       >
@@ -793,7 +796,7 @@ src={
       <Container>
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
-<div className="mt-11 col-span-2 ">
+          <div className="mt-11 col-span-2 ">
             <div className="flex flex-wrap gap-3 ">
               {recommandProduct.map((items) => {
                 console.log(
