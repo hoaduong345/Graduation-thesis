@@ -269,6 +269,7 @@ model OrderDetail {
   price        Int?
   quantity     Int?
   total        Int?
+  ratingAt     DateTime?
   createdAt    DateTime? @default(now())
   updatedAt    DateTime? @default(now())
   deletedAt    DateTime?

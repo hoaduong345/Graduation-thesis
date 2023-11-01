@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
@@ -32,6 +31,7 @@ export default function OrderDetailPage() {
    const [loadingImage, setLoadingImage] = useState(false);
 
    const [idSP, setIdSP] = useState(0);
+   const [indexSP, setIndexSP] = useState<number>(0);
 
    useEffect(() => {
       getOrderDetails();
@@ -121,6 +121,7 @@ export default function OrderDetailPage() {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          modal.close();
+         reset({});
       }
    };
 
@@ -164,7 +165,6 @@ export default function OrderDetailPage() {
          ratingValue: data.ratingValue,
          comment: data.comment,
       };
-      console.log(_data);
       RatingAndCommentController.postRatingAndComment(_data)
          .then(async (data) => {
             // setValue("iduser", data.iduser);
@@ -181,6 +181,17 @@ export default function OrderDetailPage() {
             }
             reset({});
             onClose(id);
+         })
+         .then(() => {
+            orderControllers
+               .putRatingAt(
+                  idOrder,
+                  idSP,
+                  orderDetails?.OrderDetail[indexSP]?.id
+               )
+               .then(() => {
+                  getOrderDetails();
+               });
          })
          .catch(() => {
             toast.error("Đánh giá thất bại !");
@@ -333,7 +344,7 @@ export default function OrderDetailPage() {
                               THAO TÁC
                            </h4>
                         </div>
-                        {orderDetails?.OrderDetail?.map((e) => {
+                        {orderDetails?.OrderDetail?.map((e, index) => {
                            return (
                               <>
                                  <div className="grid grid-cols-5 px-[26px] py-[16px] items-center bg-[#FFFFFF] shadow">
@@ -370,14 +381,23 @@ export default function OrderDetailPage() {
                                     </div>
                                     <div className="col-span-1 flex mx-auto items-center">
                                        <button
-                                          className="bg-[#EA4B48] rounded-md font-medium"
+                                          className={`bg-[#EA4B48] rounded-md font-medium ${
+                                             e.ratingAt == null
+                                                ? `cursor-pointer`
+                                                : `cursor-not-allowed bg-[#908a8a]`
+                                          }`}
                                           onClick={() => {
-                                             openDialog(idDialogRating);
-                                             setIdSP(e.productId);
+                                             if (e.ratingAt == null) {
+                                                openDialog(idDialogRating);
+                                                setIdSP(e.productId);
+                                                setIndexSP(index);
+                                             }
                                           }}
                                        >
                                           <p className="px-4 py-2 text-white">
-                                             Đánh giá
+                                             {e.ratingAt == null
+                                                ? "Đánh giá"
+                                                : "Đã đánh giá"}
                                           </p>
                                        </button>
                                     </div>
@@ -388,19 +408,6 @@ export default function OrderDetailPage() {
                         <DialogModal
                            id={idDialogRating}
                            onClose={() => onClose(idDialogRating)}
-                           // onSave={handleSubmit((data: Rating) => {
-                           //   const htmlString = data.comment;
-                           //   const regex = /<p>(.*?)<\/p>/;
-                           //   const match = htmlString.match(regex);
-                           //   if (match) {
-                           //     const extractedText = match[1];
-                           //     const _data: Rating = {
-                           //       ...data,
-                           //       comment: extractedText,
-                           //     };
-                           //     handleAddProductRating(idDialogRating, _data);
-                           //   }
-                           // })}
                            onSave={handleSubmit((data: Rating) => {
                               handleAddProductRating(idDialogRating, data);
                            })}
@@ -411,17 +418,35 @@ export default function OrderDetailPage() {
                                     <div className="flex col-span-1 items-start gap-3">
                                        <div>
                                           <img
-                                             src={Images.imageproduct5}
+                                             src={
+                                                orderDetails?.OrderDetail
+                                                   ?.length > 0
+                                                   ? orderDetails?.OrderDetail[
+                                                        indexSP
+                                                     ]?.image
+                                                   : ""
+                                             }
                                              alt="imageproduct5"
-                                             className="mb-5"
+                                             className="mb-5 h-[50px] w-[50px] object-cover"
                                           />
                                        </div>
                                        <div className="flex-col flex">
                                           <p className="text-[#393939] text-base font-semibold">
-                                             Máy tính để bàn
+                                             {orderDetails?.OrderDetail
+                                                ?.length > 0
+                                                ? orderDetails?.OrderDetail[
+                                                     indexSP
+                                                  ]?.name
+                                                : 0}
                                           </p>
                                           <p className="text-[#393939] text-sm font-normal">
-                                             SL: x2
+                                             SL: x
+                                             {orderDetails?.OrderDetail
+                                                ?.length > 0
+                                                ? orderDetails?.OrderDetail[
+                                                     indexSP
+                                                  ]?.quantity
+                                                : 0}
                                           </p>
                                        </div>
                                     </div>

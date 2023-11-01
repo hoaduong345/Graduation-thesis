@@ -6,5 +6,6 @@ app.post('/', OrderController.createOrder);
 app.get('/', OrderController.getOrderUser);
 app.get('/:id', OrderController.getOrderDetails);
 app.get('/admin/listOrder', OrderController.getOrderAdmin);
+app.put('/:id', OrderController.isRatingAt);
 
 module.exports = app;
