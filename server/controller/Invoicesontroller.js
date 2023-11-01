@@ -112,8 +112,6 @@ const InvoiceController = {
             res.status(200).json({
                 status: true,
                 data: order
-                   
-                
             });
         } catch (error) {
             res.send(404).send('Get order details failed');

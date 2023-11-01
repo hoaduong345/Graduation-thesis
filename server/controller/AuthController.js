@@ -203,8 +203,8 @@ const AuthController = {
             }
 
             if (user.verify == false) {
-                const token = await prisma.token.findUnique({
-                    where: { tokenid: user.id },
+                const token = await prisma.token.findFirst({
+                    where: { userid: parseInt(user.id) },
                 });
                 if (!token) {
                     token = await prisma.token.create({
@@ -214,11 +214,10 @@ const AuthController = {
 
                     const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
 
-                    await SendEmail(user.email, 'Verify email', url);
+                    // await SendEmail(user.email, 'Verify email', url);
+                    console.log('login: ~ url:', url);
                 }
-                return res.status(400).send({
-                    message: 'An email has sent to your email, please check that',
-                });
+                return res.status(404).json('An email has sent to your email, please check that');
             }
 
             if (user.email && validPassword) {
@@ -231,11 +230,14 @@ const AuthController = {
                         data: { refresh_token: refreshToken },
                     });
                 }
+                const expirationDate = new Date();
+                expirationDate.setDate(expirationDate.getDate() + 30);
                 res.cookie('refreshtoken', refreshToken, {
                     httpOnly: true,
                     secure: false,
                     path: '/',
                     sameSite: 'strict',
+                    expires: expirationDate, // Set an expiration date
                 });
 
                 res.cookie('accesstoken', accessToken, {
@@ -243,12 +245,15 @@ const AuthController = {
                     secure: false,
                     path: '/',
                     sameSite: 'strict',
+                    expires: expirationDate, // Set an expiration date
                 });
+
                 res.cookie('id', user.id, {
                     httpOnly: true,
                     secure: false,
                     path: '/',
                     sameSite: 'strict',
+                    expires: expirationDate, // Set an expiration date
                 });
                 const { password, ...others } = user;
                 return res.status(200).json({ accessToken, ...others });
