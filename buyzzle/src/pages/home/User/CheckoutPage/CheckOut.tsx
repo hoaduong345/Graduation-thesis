@@ -381,47 +381,6 @@ export default function CheckOut() {
                       onSave={() => saveModal({} as FormValues)}
                       body={
                         <>
-                          {/* <div className="border-b-[1px] pb-4 mb-4 flex gap-1 w-full">
-                            <div className="flex items-center mr-4 justify-start ">
-                              <input
-                                checked
-                                type="radio"
-                                name="colored-radio"
-                                id="orange-radio"
-                                className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
-                                                                checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                              />
-                              <div
-                                className="h-5 w-5 absolute rounded-full pointer-events-none
-                                                                peer-checked:border-[#EA4B48] peer-checked:border-2"
-                              />
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <div className="flex justify-between">
-                                <div className="flex gap-1 items-center">
-                                  <p className="text-sm font-medium text-[#1A1A1A]">
-                                    {user.username}
-                                  </p>
-                                  <p className="text-[10px] text-[#4C4C4C]">
-                                    (+84) {userAddress.phonenumber}
-                                  </p>
-                                </div>
-                                <button
-                                  onClick={() => openUpadate(idModalUpdate)}
-                                  className="text-[10px] text-[#5D5FEF] font-semibold max-[870px]:text-[8px]"
-                                >
-                                  Cập nhật
-                                </button>
-                              </div>
-
-                              <div>
-                                <p className="text-[13px] font-normal text-[#4C4C4C]">
-                                  {user.specificaddress}
-                                </p>
-                              </div>
-                            </div>
-                          </div> */}
-
                           <div className="flex flex-col gap-1 p-[26px] border-b-[1px] pb-4 mb-4 ">
                             <div className="flex justify-between">
                               <div className="flex gap-1 items-center">
