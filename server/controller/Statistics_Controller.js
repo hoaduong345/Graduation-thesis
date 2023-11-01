@@ -8,8 +8,6 @@ const StatisticsController = {
             // const currentDate = new Date();
 
             const { startDate: from, endDate: to, filterValue, page, pageSize } = req.body;
-            console.log('🚀 ~ file: Statistics_Controller.js:11 ~ getStatictics: ~ from:', filterValue.from);
-            console.log('🚀 ~ file: Statistics_Controller.js:11 ~ getStatictics: ~ req.body:', req.body);
 
             const skip = (page - 1) * pageSize; // Số lượng sản phẩm được bỏ qua (trang đầu tiên)
             const take = pageSize; // Số lượng sản phẩm được lấy

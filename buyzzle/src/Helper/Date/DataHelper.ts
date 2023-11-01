@@ -1,4 +1,5 @@
 import moment from "moment";
+import { DateValueType } from "react-tailwindcss-datepicker";
 
 export interface FilterDate {
   title?: string;
@@ -10,6 +11,11 @@ export interface ValueDate {
   from: Date;
   to: Date;
 }
+
+const value: DateValueType = {
+  startDate: new Date(), // Ngày bắt đầu
+  endDate: new Date(), // Ngày kết thúc
+};
 
 const startOfDay = (startdate: Date) =>
   moment(startdate).startOf("day").toDate();

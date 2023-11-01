@@ -27,6 +27,8 @@ import {
   ValueDate,
   dataFilter,
 } from "../../../../Helper/Date/DataHelper";
+import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
+
 ChartJS.register(
   ArcElement,
   Tooltip,
@@ -77,8 +79,21 @@ interface selectStats {
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
   const [cate, setCate] = useState<Category>();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedOption, setSelectedOption] = useState<number>(1); // Mặc định chọn "Hôm nay"
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [selectedOption, setSelectedOption] = useState<number>(1); // Mặc định chọn "Hôm nay"
+  const startDate = new Date();
+  const endDate = new Date();
+  startDate.setHours(0);
+  startDate.setMinutes(0);
+  startDate.setSeconds(0);
+  endDate.setHours(23);
+  endDate.setMinutes(59);
+  endDate.setSeconds(59);
+
+  const [value, setValue] = useState<DateValueType>({
+    startDate: startDate,
+    endDate: endDate,
+  });
 
   const numberStast = (n: number) => {
     const { number } = useSpring({
@@ -125,7 +140,7 @@ export default function StatisticsPage() {
         to: endDate,
       },
       page: 1,
-      pageSize: 3,
+      pageSize: 10,
     };
 
     try {
@@ -138,22 +153,69 @@ export default function StatisticsPage() {
     }
   };
 
-  // ================================ handleSelect ================================
+  // ================================ handleSelectDateTime ================================
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(Number(event.target.value));
+  const handleSelectChange = (
+    value: DateValueType,
+    e?: HTMLInputElement | null | undefined
+  ) => {
+    setValue(value);
 
-    const filterDate: ValueDate = JSON.parse(event.target.value);
-    getProductStats(filterDate.from, filterDate.to);
+    const startDate = new Date(value?.startDate!);
+    const endDate = new Date(value?.endDate!);
+
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+    startDate.setSeconds(0);
+    endDate.setHours(23);
+    endDate.setMinutes(59);
+    endDate.setSeconds(59);
+
+    const filterDate = {
+      startDate,
+      endDate,
+    };
+    console.log(
+      "🚀 ~ file: StatisticsPage.tsx:178 ~ StatisticsPage ~ filterDate:",
+      filterDate
+    );
+
+    getProductStats(filterDate?.startDate, filterDate?.endDate);
   };
+
+  const createDisabledDates = () => {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 1); // Di chuyển tới ngày mai
+    const disabledDates = [];
+
+    while (currentDate < new Date("2030-12-31")) {
+      const startDate = new Date(currentDate);
+      const endDate = new Date(currentDate);
+
+      endDate.setHours(23, 59, 59); // Đặt giờ, phút và giây cuối cùng của ngày
+
+      disabledDates.push({
+        startDate: startDate.toISOString().slice(0, 10), // Định dạng ngày thành "YYYY-MM-DD"
+        endDate: endDate.toISOString().slice(0, 10),
+      });
+
+      // Di chuyển tới ngày tiếp theo
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return disabledDates;
+  };
+
+  const disabledDates = createDisabledDates();
+
   // ================================ PANGINATION ================================
 
-  const getItemProps = (index: number) =>
-    ({
-      variant: currentPage === index ? "filled" : "text",
-      color: "gray",
-      onClick: () => setCurrentPage(index),
-    } as any);
+  // const getItemProps = (index: number) =>
+  //   ({
+  //     variant: currentPage === index ? "filled" : "text",
+  //     color: "gray",
+  //     onClick: () => setCurrentPage(index),
+  //   } as any);
 
   // ================================ CHART ================================
 
@@ -232,11 +294,9 @@ export default function StatisticsPage() {
       },
     ],
   };
-
-  console.log(
-    "🚀 ~ file: StatisticsPage.tsx:368 ~ {dataFilter.map ~ stats.productSoldPercentageInRange:",
-    stats.productSoldPercentageInRange
-  );
+  {
+    console.log("🚀 ~ file: StatisticsPage.tsx:315 ~ value:", value);
+  }
 
   return (
     <>
@@ -272,34 +332,27 @@ export default function StatisticsPage() {
                 THỐNG KÊ BUYZZLE
               </h2>
             </div>
-            <div className="mt-[52px]">
-              {/* Select box */}
-              <div className="relative h-10 w-[142px] min-w-[200px]">
-                <select
-                  className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent
-                 bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 
-                 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200
-                  empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 
-                  disabled:bg-blue-gray-50"
-                  onChange={handleSelectChange}
-                >
-                  {dataFilter.map((itemsSelect) => {
-                    console.log(
-                      "🚀 ~ file: StatisticsPage.tsx:378 ~ {dataFilter.map ~ itemsSelect:",
-                      itemsSelect
-                    );
-                    return (
-                      <option value={JSON.stringify(itemsSelect.filterValue)}>
-                        {itemsSelect.title}
-                      </option>
-                    );
-                  })}
-                </select>
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  Thời gian
-                </label>
-              </div>
-              {/* end Select box  */}
+            <div className="mt-[52px] flex">
+              {/* dateTimePicker */}
+              <Datepicker
+                // disabledDates={disabledDates}
+                primaryColor={"rose"}
+                value={value}
+                separator={"~"}
+                onChange={handleSelectChange}
+                displayFormat={"DD/MM/YYYY"}
+                showShortcuts={true}
+                configs={{
+                  shortcuts: {
+                    today: "Hôm nay",
+                    yesterday: "Hôm qua",
+                    past: (period) => `${period} ngày trước`,
+                    currentMonth: "Tháng này",
+                    pastMonth: "Tháng trước",
+                  },
+                }}
+              />
+              {/* end dateTimePicker */}
             </div>
             <div className="grid grid-cols-4 gap-3 mt-4">
               <div className="col-span-1 inline-flex items-center gap-1.5 p-6 rounded-2xl font-medium bg-blue-100 text-blue-800">
@@ -366,60 +419,12 @@ export default function StatisticsPage() {
                     </div>
                     <div className="col-end-6 flex gap-1">
                       <p className="text-[#00B207] font-semibold text-xs">
-                        {stats.productSoldPercentageInRange}
+                        {stats.percentageQuantitySold}
                       </p>
                       <ArrowRise />
                     </div>
                   </div>
-                  {/* {selectedOption == 2 && (
-                    <div className="items-center grid grid-cols-4">
-                      <div className="col-span-2">
-                        <p className="text-[#1C1C1C] font-semibold text-xl">
-                          {numberStast(stats.purchaseOrShoppingLast7Days)}
-                        </p>
-                      </div>
-                      <div className="col-end-6 flex gap-1">
-                        <p className="text-[#00B207] font-semibold text-xs">
-                          {stats.productSoldPercentageLast7Days}
-                        </p>
-                        <ArrowRise />
-                      </div>
-                    </div>
-                  )}
-                  {selectedOption == 3 && (
-                    <div className="items-center grid grid-cols-4">
-                      <div className="col-span-2">
-                        <p className="text-[#1C1C1C] font-semibold text-xl">
-                          {numberStast(stats.purchaseOrShoppingLast15Days)}
-                        </p>
-                      </div>
-                      <div className="col-end-6 flex gap-1">
-                        <p className="text-[#00B207] font-semibold text-xs">
-                          {stats.productSoldPercentageLast15Days}
-                        </p>
-                        <ArrowRise />
-                      </div>
-                    </div>
-                  )}
-                  {selectedOption == 4 && (
-                    <div className="items-center grid grid-cols-4">
-                      <div className="col-span-2">
-                        <p className="text-[#1C1C1C] font-semibold text-xl">
-                          {numberStast(stats.purchaseOrShoppingLast30Days)}
-                        </p>
-                      </div>
-                      <div className="col-end-6 flex gap-1">
-                        <p className="text-[#00B207] font-semibold text-xs">
-                          {stats.productSoldPercentageLast30Days}
-                        </p>
-                        <ArrowRise />
-                      </div>
-                    </div>
-                  )} */}
                 </div>
-                {/* end Truy cập trang */}
-                {/* so lieu */}
-                {/* end so lieu */}
               </div>
 
               <div className="col-span-1 inline-flex items-center gap-1.5 p-6 rounded-2xl font-medium bg-[#E5ECF6] text-blue-800">
@@ -435,7 +440,7 @@ export default function StatisticsPage() {
                     </div>
                     <div className="col-end-6 flex gap-1 ">
                       <p className="text-[#EA4B48] font-semibold text-xs ">
-                        {numberStast(parseInt(stats.revenuePercentageInRange))}
+                        {numberStast(stats.revenuePercentageInRange)}
                       </p>
                       <ArrowFall />
                     </div>

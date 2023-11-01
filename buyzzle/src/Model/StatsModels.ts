@@ -3,8 +3,8 @@ export interface Statistics {
   totalRevenueInRange: number;
   totalQuantitySoldInRange: number;
   purchaseOrShoppingInRange: number;
-  revenuePercentageInRange: string;
-  productSoldPercentageInRange: string;
+  revenuePercentageInRange: number;
+  percentageQuantitySold: string;
   hotProductsInRange: HotProductsInRange[];
 
   sortedCategoriesToday: SortedCategoriesToday;
