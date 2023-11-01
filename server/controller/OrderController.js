@@ -109,6 +109,36 @@ const OderController = {
             res.status(404).send('Get order failed');
         }
     },
+
+    isRatingAt: async (req, res) => {
+        try {
+            const id = parseInt(req.params.id);
+            const productId = parseInt(req.body.productId);
+            const orderDetailId = parseInt(req.body.orderDetailId);
+            console.log(id, productId);
+            const existingCategory = await prisma.orderDetail.findMany({
+                where: {
+                    orderId: id,
+                },
+            });
+            if (existingCategory) {
+                await prisma.orderDetail.update({
+                    where: {
+                        id: orderDetailId,
+                        orderId: id,
+                        productId: productId,
+                    },
+                    data: {
+                        ratingAt: new Date(),
+                    },
+                });
+                return res.status(200).json('Đánh giá thành công');
+            }
+            return res.status(404).json('Đánh giá thất bại');
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
+    },
 };
 
 module.exports = OderController;

@@ -68,13 +68,13 @@ export default function DetailOrderManagement() {
                            <>
                               <Link to={`/admin/invoice/${order.id}`}>
                                  <button
-                                    className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C]
-                                 rounded-md py-[8px] px-3 flex
+                                    className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C] hover:bg-[#E0E0E0] hover:text-[#4C4C4C]
+                                 rounded-md py-2 px-3 flex
                                  transition duration-150 cursor-pointer border-[#E0E0E0] border-[1px]
                                  max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
                                  >
                                     <PrintOrder />
-                                    <p>Print</p>
+                                    <p>Hóa đơn</p>
                                  </button>
                               </Link>
                            </>

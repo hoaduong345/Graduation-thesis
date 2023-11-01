@@ -16,6 +16,7 @@ import SitebarAdmin from "../../Sitebar/Sitebar";
 import PlusSquare from "../../Assets/TSX/PlusSquare";
 import { csvConfig } from "../../../../../Helper/Export/Excel";
 import { download, generateCsv } from "export-to-csv";
+import Delete from "../../Assets/TSX/Delete";
 type FormValues = {
    id: number;
    discount: number;
@@ -28,9 +29,15 @@ type FormValues = {
 export default function VoucherPage() {
    const idModal = "voucher";
    const idRemove = "removeVoucher";
+   const idRemoveVouchers = "removeVouchers";
 
    const [vouchers, setVoucher] = useState<VoucherModel[]>([]);
    const [idVoucher, setIdVoucher] = useState<number | undefined>(0);
+   const [checkedVoucher, setCheckedVoucher] = useState<VoucherModel[]>([]);
+
+   var checkAll: boolean =
+      vouchers?.length > 0 ? checkedVoucher.length === vouchers?.length : false;
+
    const currentDate = (date: Date) => {
       return moment(date).format("L");
    };
@@ -48,20 +55,42 @@ export default function VoucherPage() {
       await voucherControllers.remove(id);
       getVoucher();
       closeModal(idRemove);
+      setCheckedVoucher([]);
+   };
+
+   const removeVouchers = (data: VoucherModel[], idModal: string) => {
+      let successMessageDisplayed = false;
+
+      data.map((e, index) => {
+         voucherControllers
+            .remove(e.id)
+            .then(() => {
+               if (index === data.length - 1 && !successMessageDisplayed) {
+                  toast.success("Thành công");
+                  successMessageDisplayed = true;
+               }
+               closeModal(idModal);
+               getVoucher();
+            })
+            .then(() => {
+               setCheckedVoucher([]);
+            });
+      });
    };
 
    const {
       control,
       handleSubmit,
       reset,
+      watch,
       clearErrors,
       formState: { errors },
    } = useForm<FormValues>({
       mode: "all",
       defaultValues: {
          id: 0,
-         discount: 1,
-         quantity: 1,
+         discount: undefined,
+         quantity: undefined,
          voucherCode: "",
          startDate: "",
          endDate: "",
@@ -100,15 +129,34 @@ export default function VoucherPage() {
          voucherControllers.add(dataForm).then(() => {
             getVoucher();
             toast.success("Thành Công");
+            setCheckedVoucher([]);
          });
       } else {
          voucherControllers.update(dataForm.id, dataForm).then(() => {
             getVoucher();
             toast.success("Thành Công");
+            setCheckedVoucher([]);
          });
       }
 
       reset({});
+   };
+
+   const handleChecked = (checked: boolean, data: VoucherModel) => {
+      if (checked) {
+         setCheckedVoucher((prev) => [...prev, data]);
+      } else {
+         const cloneVoucher = [...checkedVoucher];
+         const cloneVouchers = cloneVoucher.filter((e) => e.id !== data.id);
+         setCheckedVoucher(cloneVouchers);
+      }
+   };
+   const handleCheckedAll = (checked: boolean) => {
+      if (checked) {
+         setCheckedVoucher(vouchers);
+      } else {
+         setCheckedVoucher([]);
+      }
    };
 
    return (
@@ -176,7 +224,7 @@ export default function VoucherPage() {
                            <DialogModal
                               body={
                                  <>
-                                    <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
+                                    <div className="grid grid-cols-4 mb-5 gap-5 max-[940px]:gap-2">
                                        <div className="col-span-2">
                                           <div className="flex flex-col gap-1">
                                              <Controller
@@ -221,7 +269,7 @@ export default function VoucherPage() {
                                                          }}
                                                       />
                                                       {errors.voucherCode && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors
                                                                   .voucherCode
@@ -243,6 +291,18 @@ export default function VoucherPage() {
                                                    required: {
                                                       value: true,
                                                       message: "Hãy chọn ngày",
+                                                   },
+                                                   validate: (date: string) => {
+                                                      const valid = moment(
+                                                         date
+                                                      ).isBefore(
+                                                         moment()
+                                                            .subtract(1, "days")
+                                                            .toDate()
+                                                      );
+                                                      return valid == true
+                                                         ? "Thời gian không hợp lệ"
+                                                         : undefined;
                                                    },
                                                 }}
                                                 render={({ field }) => (
@@ -272,7 +332,7 @@ export default function VoucherPage() {
                                                          }}
                                                       />
                                                       {errors.startDate && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors.startDate
                                                                   .message
@@ -293,6 +353,16 @@ export default function VoucherPage() {
                                                    required: {
                                                       value: true,
                                                       message: "Hãy chọn ngày",
+                                                   },
+                                                   validate: (date: string) => {
+                                                      const valid = moment(
+                                                         date
+                                                      ).isBefore(
+                                                         watch("startDate")
+                                                      );
+                                                      return valid == true
+                                                         ? "Thời gian không hợp lệ"
+                                                         : undefined;
                                                    },
                                                 }}
                                                 render={({ field }) => (
@@ -323,7 +393,7 @@ export default function VoucherPage() {
                                                          }}
                                                       />
                                                       {errors.endDate && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors.endDate
                                                                   .message
@@ -336,7 +406,7 @@ export default function VoucherPage() {
                                           </div>
                                        </div>
                                     </div>
-                                    {/* sda */}
+
                                     <div className="grid grid-cols-4 gap-5 max-[940px]:gap-2">
                                        <div className="col-span-2">
                                           <div className="flex flex-col gap-1">
@@ -360,7 +430,7 @@ export default function VoucherPage() {
                                                       </label>
                                                       <input
                                                          className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%]
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                                          placeholder="Nhập % giảm giá"
@@ -382,7 +452,7 @@ export default function VoucherPage() {
                                                       />
 
                                                       {errors.discount && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors.discount
                                                                   .message
@@ -413,7 +483,7 @@ export default function VoucherPage() {
 
                                                       <input
                                                          className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%]
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
                                                          placeholder="Nhập số lượng voucher"
@@ -434,7 +504,7 @@ export default function VoucherPage() {
                                                          }}
                                                       />
                                                       {errors.quantity && (
-                                                         <p className="text-[11px] text-red-700 mt-2">
+                                                         <p className="text-[11px] text-red-700">
                                                             {
                                                                errors.quantity
                                                                   .message
@@ -462,8 +532,11 @@ export default function VoucherPage() {
                      <div className="">
                         <div className="grid grid-cols-7 pb-7">
                            <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
-                              {/* <Delete /> */}
                               <input
+                                 checked={checkAll}
+                                 onChange={(e) =>
+                                    handleCheckedAll(e.target.checked)
+                                 }
                                  type="checkbox"
                                  className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
                               />
@@ -483,8 +556,31 @@ export default function VoucherPage() {
                                  <span className="max-[940px]:hidden"> SL</span>
                               </p>
                            </div>
-                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm"></div>
+                           <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                              <p
+                                 onClick={() =>
+                                    checkedVoucher.length > 0
+                                       ? openModal(
+                                            idRemoveVouchers,
+                                            {} as FormValues
+                                         )
+                                       : toast.warn("Chưa chọn Voucher để xóa")
+                                 }
+                              >
+                                 <Delete />
+                              </p>
+                           </div>
                         </div>
+
+                        <DialogComfirm
+                           id={idRemoveVouchers}
+                           desc="Các voucher này"
+                           title="Các voucher này"
+                           onClose={() => closeModal(idRemoveVouchers)}
+                           onSave={() => {
+                              removeVouchers(checkedVoucher, idRemoveVouchers);
+                           }}
+                        />
 
                         <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                            {vouchers.map((e) => {
@@ -495,6 +591,15 @@ export default function VoucherPage() {
                                           <input
                                              type="checkbox"
                                              className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                                             checked={checkedVoucher.includes(
+                                                e
+                                             )}
+                                             onChange={(element) =>
+                                                handleChecked(
+                                                   element.target.checked,
+                                                   e
+                                                )
+                                             }
                                           />
                                        </div>
 
