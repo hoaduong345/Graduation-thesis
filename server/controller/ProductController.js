@@ -130,7 +130,6 @@ const ProductController = {
             res.status(500).json(error.message);
         }
     },
-
     // thêm sản phẩm
 
     addImagesByProductsID: async (req, res) => {
@@ -217,19 +216,16 @@ const ProductController = {
                 name,
                 price,
                 rate,
-                pricesale,
-                sellingPrice,
                 discount,
-                soldcount,
                 quantity,
                 description,
                 status,
-                date,
-                createdAt,
-                updatedAt,
                 categoryID,
+                subcategoriesID,
             } = req.body;
 
+            console.log("aaa", categoryID)
+            console.log("bbbbb", subcategoriesID)
             const SellingPrice = price - price * (discount / 100);
             const Pricesale = price * (discount / 100);
 
@@ -249,14 +245,12 @@ const ProductController = {
                 updatedAt: new Date(),
                 // productId: parseInt(productId),
                 categoryID: parseInt(categoryID),
+                subcateId: parseInt(subcategoriesID),
             };
 
             const neww = await prisma.product.create({
                 data: newProduct,
             });
-
-            console.log('a', SellingPrice);
-            console.log('b', Pricesale);
 
             console.log(neww);
             // res.status(200).json("Thêm sản phẩm thành công");

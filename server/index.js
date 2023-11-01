@@ -8,8 +8,8 @@ const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
 const InvoiceRouter = require('./routes/InvoiceRoutes');
-const OrderRouter = require('./routes/OrderRoutes');
 const StatisticsRouter = require('./routes/Statistics_Router');
+const CategoriesRouter = require('./routes/CategoriesRoutes')
 
 const ProductRoutes = require('./routes/ProductRoutes');
 const VoucherRouter = require('./routes/VoucherRoutes');
@@ -49,14 +49,13 @@ app.use('/buyzzle/auth', AuthRouter);
 app.use('/buyzzle/user', UserRouter);
 app.use('/buyzzle/product', ProductRoutes);
 app.use('/buyzzle/cart', CartRouter);
+app.use('/buyzzle/categories',CategoriesRouter)
 
 app.use('/buyzzle/voucher', VoucherRouter);
 app.use('/buyzzle/statistics', StatisticsRouter);
 
 app.use('/buyzzle/invoice', InvoiceRouter);
-// app.use('buyzzle/stripe', SripeRouter);
 app.use('/buyzzle/stripe', SripeRouter);
-app.use('/buyzzle/order', OrderRouter)
 // Setup socket.io
 const server = http.createServer(app);
 const io = socketIo(server);
