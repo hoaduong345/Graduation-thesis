@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-
+import { v4 } from "uuid";
 import { userController } from "../../../../../Controllers/UserController";
 import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
@@ -197,7 +197,7 @@ export default function UserProfile() {
   // img firebase
   const loadImageFile = async (image: any) => {
     try {
-      const imageRef = ref(storage, `imageUrl/${image}`);
+      const imageRef = ref(storage, `imageUrl/${image.name}`);
 
       await uploadBytes(imageRef, image);
 
