@@ -7,9 +7,9 @@ export const appConfig = {
 };
 
 class StatsControllers {
-  getStats = async (data: FilterDate): Promise<Statistics[]> => {
+  getStats = async (data: FilterDate): Promise<Statistics> => {
     return await axios.post(`${appConfig.apiUrl}`, data).then((res) => {
-      return res.data as Statistics[];
+      return res.data as Statistics;
     });
   };
 }

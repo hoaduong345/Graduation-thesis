@@ -18,16 +18,13 @@ import {
 } from "chart.js";
 import { Bar, Line } from "react-chartjs-2";
 import { animated, useSpring } from "react-spring";
+import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import ArrowFall from "../../../../Assets/TSX/ArrowFall";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
+import { FilterDate, dataFilter } from "../../../../Helper/Date/DataHelper";
+import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
 import { Statistics } from "../../../../Model/StatsModels";
-import { numberFormat } from "../../../../Helper/Format";
-import {
-  FilterDate,
-  ValueDate,
-  dataFilter,
-} from "../../../../Helper/Date/DataHelper";
-import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
+import moment from "moment";
 
 ChartJS.register(
   ArcElement,
@@ -42,6 +39,7 @@ ChartJS.register(
 );
 const optionsChartLine = {
   responsive: true,
+
   plugins: {
     legend: {
       position: "bottom" as const,
@@ -78,37 +76,43 @@ interface selectStats {
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [selectedOption, setSelectedOption] = useState<number>(1); // Mặc định chọn "Hôm nay"
-  const startDate = new Date();
-  const endDate = new Date();
-  startDate.setHours(0);
-  startDate.setMinutes(0);
-  startDate.setSeconds(0);
-  endDate.setHours(23);
-  endDate.setMinutes(59);
-  endDate.setSeconds(59);
+  console.log(
+    "🚀 ~ file: StatisticsPage.tsx:77 ~ StatisticsPage ~ stats:",
+    stats
+  );
 
   const [value, setValue] = useState<DateValueType>({
-    startDate: startDate,
-    endDate: endDate,
+    startDate: moment().startOf("date").toDate(),
+    endDate: moment().endOf("date").toDate(),
   });
-  const initialDataChartLine = {
-    labels: "stats.initialDataChartLine.labels",
-    datasets: [
-      {
-        label: stats.initialDataChartLine.datasets.map((labelCate) => {
-          return labelCate.label;
-        }),
-        data: stats.initialDataChartLine.datasets.map((dataCate) => {
-          return Number(dataCate.data);
-        }),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  };
 
+  // Lấy ra từng cái label từ datasets
+  const dataSets = stats.initialDataChartLine?.datasets?.map((data, index) => {
+    return {
+      label: data.label,
+      data: data.data,
+      borderColor:
+        index === 0 ? "#FFB6B9" : index === 1 ? "#687EFF" : "#2E97A7",
+      backgroundColor:
+        index === 0 ? "#FFE2E2" : index === 1 ? "#80B3FF" : "#64CCC5",
+    };
+  });
+
+  const dataWithTransformedLabels = {
+    labels: stats.initialDataChartLine?.labels || [],
+    datasets: dataSets ?? [],
+  };
+  const transformedLabels = dataWithTransformedLabels.labels.map((label) => {
+    const date = new Date(label);
+    const formattedLabel = `${date.getDate()}/${date.getMonth() + 1}`;
+    return formattedLabel;
+  });
+
+  // Sử dụng transformedLabels trong biểu đồ
+  const initialDataChartLine = {
+    labels: transformedLabels,
+    datasets: dataWithTransformedLabels.datasets,
+  };
   const labelsVertical = [
     "January",
     "February",
@@ -129,8 +133,6 @@ export default function StatisticsPage() {
       },
     ],
   };
-
-  const [dataChartLine, setDataChartLine] = useState(initialDataChartLine);
 
   const numberStast = (n: number) => {
     const { number } = useSpring({
@@ -164,13 +166,19 @@ export default function StatisticsPage() {
 
   // ================================ API ================================
   useEffect(() => {
-    getProductStats(
-      dataFilter[0].filterValue.from,
-      dataFilter[0].filterValue.to
-    );
-  }, [dataFilter]);
+    if (!!value?.startDate && !!value.endDate) {
+      getProductStats(
+        moment(value?.startDate).startOf("date").toDate(),
+        moment(value?.endDate).endOf("date").toDate()
+      );
+    }
+  }, [value]);
+  console.log(
+    "🚀 ~ file: StatisticsPage.tsx:192 ~ StatisticsPage ~ value:",
+    value
+  );
 
-  const getProductStats = async (startDate: Date, endDate: Date) => {
+  const getProductStats = (startDate: Date, endDate: Date) => {
     const data: FilterDate = {
       filterValue: {
         from: startDate,
@@ -179,36 +187,10 @@ export default function StatisticsPage() {
       page: 1,
       pageSize: 10,
     };
-
-    try {
-      const res: any = await statsControllers.getStats(data);
-      setStats(res);
-
-      console.log("🚀 ~ file: StatisticsPage.tsx:199 ~ res:", res);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-    // try {
-    //   const res = await statsControllers.getStats(data);
-
-    //   const updatedDataChartLine = { ...dataChartLine };
-    //   const labels = updatedDataChartLine.labels;
-    //   const datasets = updatedDataChartLine.datasets;
-
-    //   // Lặp qua từng danh mục (category) trong mảng hotProductsInRange
-    //   res[0].hotProductsInRange.forEach((categoryData, index) => {
-    //     const dataset = datasets[index];
-    //     dataset.label = categoryData.name; // Cập nhật nhãn cho biểu đồ
-
-    //     // Lặp qua từng ngày trong danh mục và cập nhật dữ liệu
-    //     const dataForCategory = categoryData._sum.quantity; // Sử dụng _sum.quantity thay vì totalSoldCount
-    //     dataset.data = labels.map(() => dataForCategory);
-    //   });
-
-    //   setDataChartLine(updatedDataChartLine);
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
+    statsControllers
+      .getStats(data)
+      .then((res) => setStats(res))
+      .catch((err) => console.log(err.response?.data?.message));
   };
 
   // ================================ handleSelectDateTime ================================
@@ -218,27 +200,6 @@ export default function StatisticsPage() {
     e?: HTMLInputElement | null | undefined
   ) => {
     setValue(value);
-
-    const startDate = new Date(value?.startDate!);
-    const endDate = new Date(value?.endDate!);
-
-    startDate.setHours(0);
-    startDate.setMinutes(0);
-    startDate.setSeconds(0);
-    endDate.setHours(23);
-    endDate.setMinutes(59);
-    endDate.setSeconds(59);
-
-    const filterDate = {
-      startDate,
-      endDate,
-    };
-    console.log(
-      "🚀 ~ file: StatisticsPage.tsx:178 ~ StatisticsPage ~ filterDate:",
-      filterDate
-    );
-
-    getProductStats(filterDate?.startDate, filterDate?.endDate);
   };
 
   const createDisabledDates = () => {
@@ -450,7 +411,10 @@ export default function StatisticsPage() {
                   Top loại sản phẩm
                 </p>
                 <div>
-                  <Line options={optionsChartLine} data={dataChartLine} />
+                  <Line
+                    options={optionsChartLine}
+                    data={initialDataChartLine}
+                  />
                 </div>
               </div>
 

@@ -190,6 +190,8 @@ const StatisticsController = {
                 hotProductsInRange: topProductsInRange,
 
                 initialDataChartLine: initialDataChartLine,
+
+                // initialDataChartVertical: initialDataChartVertical,
             });
         } catch (error) {
             console.error(error);
