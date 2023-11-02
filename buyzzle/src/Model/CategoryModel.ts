@@ -7,5 +7,6 @@ export type CategoryModal = {
 
 type subCate = {
     id: number;
+    categoryid: number;
     name: string;
 };
