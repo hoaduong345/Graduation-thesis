@@ -14,14 +14,6 @@ export default function DialogAddress(props: Props) {
       <>
          <dialog id={id} className="modal">
             <div className="modal-box">
-               <form method="dialog">
-                  <button
-                     onClick={() => onClose()}
-                     className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                  >
-                     ✕
-                  </button>
-               </form>
                <div className="border-b-[1px] pb-4 mb-4">
                   <h1 className="text-[#EA4B48] text-sm font-lg font-bold tracking-normal leading-tight max-[870px]:text-xs">
                      {title}

@@ -83,7 +83,7 @@ export default function DetailOrderManagement() {
                         )}
 
                         <button
-                           className="justify-center gap-3 items-center text-sm font-bold text-white
+                           className="justify-center gap-2 items-center text-sm font-bold text-white
                              rounded-md py-[8px] px-3 flex
                                 transition duration-150 bg-[#00B207] cursor-pointer
                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
@@ -94,7 +94,7 @@ export default function DetailOrderManagement() {
 
                         <button
                            className="justify-center gap-3 items-center text-sm font-bold text-white
-                             rounded-md py-[8px] px-[29.5px] flex
+                             rounded-md py-[8px] px-[27.9px] flex
                                 transition duration-150 bg-[#EA4B48] cursor-pointer
                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
                         >
@@ -231,11 +231,15 @@ export default function DetailOrderManagement() {
 
                                  <div>
                                     <p className="text-sm">
-                                       {order?.User?.name.substring(0, 11)}{" "}
+                                       {order?.name?.length > 0
+                                          ? order?.name.substring(0, 11)
+                                          : ""}{" "}
                                     </p>
 
                                     <p className="text-[#12b004] text-[10px]">
-                                       {order?.User?.email.substring(0, 11)}{" "}
+                                       {order?.name?.length
+                                          ? order?.address.substring(0, 11)
+                                          : ""}{" "}
                                     </p>
                                  </div>
                               </div>
@@ -252,9 +256,8 @@ export default function DetailOrderManagement() {
                                        <MessageOrderAdmin />
                                     </button>
                                  </div>
-                                 <div className=" flex gap-1 items-center text-[10px] text-[#7A828A]">
-                                    <BuyzzleOrderAdmin />
-                                    <p>20 Đơn hàng</p>
+                                 <div className=" flex gap-1 items-center text-[10px] text-red-700">
+                                    Đang hoạt động
                                  </div>
                               </div>
                            </div>
@@ -271,7 +274,7 @@ export default function DetailOrderManagement() {
                                        <p>Phone</p>
                                     </div>
                                     <p className="pl-2 border-l-[1px] border-[#FFAAAF] font-semibold text-[#5D5FEF] text-sm">
-                                       {order?.User?.phonenumber}
+                                       {order?.phoneNumber}
                                     </p>
                                  </div>
 
@@ -282,10 +285,10 @@ export default function DetailOrderManagement() {
                                     </div>
                                     <div className="pl-2 border-l-[1px] border-[#FFAAAF] font-semibold">
                                        <p className="text-[#1A1A1A] text-sm">
-                                          {order?.User?.name}
+                                          {order?.name}
                                        </p>
                                        <p className="text-[#4C4C4C] text-sm">
-                                          {order?.User?.address}
+                                          {order?.address}
                                        </p>
                                     </div>
                                  </div>

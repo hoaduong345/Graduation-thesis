@@ -1,4 +1,3 @@
-import { UserModel } from "./UserModel";
 
 export interface OrderPanigation {
     data: OrderModel[],
@@ -19,16 +18,18 @@ export interface OrderModel {
     status: string;
     invoice: string,
     note: string,
-    User: UserModel
+    name: string,
+    address: string,
+    phoneNumber: number,
     OrderDetail: OrderItems[]
 }
 export interface OrderItems {
-    id: number,
+    id?: number,
     productId: number,
     name: string,
     price: number,
     quantity: number,
     image: string
     total: number
-    ratingAt: Date
+    ratingAt?: Date
 }

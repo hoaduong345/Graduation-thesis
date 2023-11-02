@@ -238,10 +238,10 @@ export default function OrderDetailPage() {
                               <div>
                                  <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
                                     <span className="font-bold">
-                                       {orderDetails?.User?.name},{" "}
-                                       {orderDetails?.User?.phonenumber}{" "}
+                                       {orderDetails?.name},{" "}
+                                       {orderDetails?.phoneNumber}{" "}
                                     </span>{" "}
-                                    {orderDetails?.User?.address}
+                                    {orderDetails?.address}
                                  </p>
                               </div>
                            </div>
@@ -381,9 +381,9 @@ export default function OrderDetailPage() {
                                     </div>
                                     <div className="col-span-1 flex mx-auto items-center">
                                        <button
-                                          className={`bg-[#EA4B48] rounded-md font-medium ${
+                                          className={` rounded-md font-medium ${
                                              e.ratingAt == null
-                                                ? `cursor-pointer`
+                                                ? `cursor-pointer bg-[#EA4B48]`
                                                 : `cursor-not-allowed bg-[#908a8a]`
                                           }`}
                                           onClick={() => {

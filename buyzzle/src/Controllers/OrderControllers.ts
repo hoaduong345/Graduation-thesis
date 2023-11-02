@@ -31,7 +31,7 @@ class OrderControllers {
         })
     }
 
-    putRatingAt = async (idOrder: number, productId: number, orderDetailId: number) => {
+    putRatingAt = async (idOrder: number, productId: number, orderDetailId?: number) => {
         return await axios.put(`${appConfig.apiUrl}/${idOrder}`, { productId: productId, orderDetailId: orderDetailId })
     }
 }

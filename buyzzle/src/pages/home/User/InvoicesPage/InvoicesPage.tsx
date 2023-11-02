@@ -51,20 +51,17 @@ export default function InvoicesPage() {
                <div className="grid grid-cols-2 items-center mt-8">
                   <div>
                      <p className="font-bold text-gray-800">Gửi đến:</p>
-                     <p className="text-gray-500">{invoice?.User?.address}</p>
-                     <p className="text-gray-500">{invoice.User?.email}</p>
+                     <p className="text-gray-500">{invoice?.address}</p>
                   </div>
                   <div className="text-right">
                      <p className="">
                         Khách hàng:{" "}
-                        <span className="text-gray-500">
-                           {invoice.User?.name}
-                        </span>
+                        <span className="text-gray-500">{invoice?.name}</span>
                      </p>
                      <p>
                         SĐT:{" "}
                         <span className="text-gray-500">
-                           {invoice.User?.phonenumber}
+                           {invoice?.phoneNumber}
                         </span>
                         <br />
                         Ngày đặt:{" "}
