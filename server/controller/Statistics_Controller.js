@@ -160,32 +160,73 @@ const StatisticsController = {
             //     categoryStatsByDay[date.toISOString().split('T')[0]] = topCategories;
             // }
 
-            const categories = await prisma.category.findMany({
-                include: {
-                    products: {
-                        where: {
-                            AND: [{ date: { gte: oneWeekAgo } }, { date: { lt: yesterday } }],
-                        },
-                        select: {
-                            id: true,
-                            name: true,
-                            soldcount: true,
-                        },
-                        orderBy: {
-                            soldcount: 'asc',
+            // const categories = await prisma.category.findMany({
+            //     include: {
+            //         products: {
+            //             where: {
+            //                 AND: [{ date: { gte: oneWeekAgo } }, { date: { lt: yesterday } }],
+            //             },
+            //             select: {
+            //                 id: true,
+            //                 name: true,
+            //                 soldcount: true,
+            //             },
+            //             orderBy: {
+            //                 soldcount: 'asc',
+            //             },
+            //         },
+            //     },
+            // });
+
+            // const topSellingProductsByCategory = categories.map((category) => {
+            //     const productsInCategory = category.products;
+            //     productsInCategory.sort((a, b) => b.soldcount - a.soldcount);
+            //     return {
+            //         category: category.name,
+            //         topSellingProduct: productsInCategory[0],
+            //     };
+            // });
+            while (currentDate > oneWeekAgo) {
+                const startOfDay = new Date(currentDate);
+                startOfDay.setHours(0, 0, 0, 0);
+
+                const endOfDay = new Date(currentDate);
+                endOfDay.setHours(23, 59, 59, 999);
+
+                const categories = await prisma.category.findMany({
+                    select: {
+                        name: true,
+                        products: {
+                            where: {
+                                date: {
+                                    gte: startOfDay, // Lọc các sản phẩm từ đầu ngày
+                                    lte: endOfDay, // đến cuối ngày
+                                },
+                            },
+                            select: {
+                                soldcount: true,
+                            },
                         },
                     },
-                },
-            });
+                });
 
-            const topSellingProductsByCategory = categories.map((category) => {
-                const productsInCategory = category.products;
-                productsInCategory.sort((a, b) => b.soldcount - a.soldcount);
-                return {
-                    category: category.name,
-                    topSellingProduct: productsInCategory[0],
-                };
-            });
+                // Tính tổng số lượng sản phẩm bán được cho từng danh mục trong ngày
+                const categoriesWithTotalSoldCount = categories.map((category) => {
+                    const totalSoldCount = category.products.reduce(
+                        (acc, product) => acc + (product.soldcount || 0),
+                        0
+                    );
+                    return { name: category.name, totalSoldCount };
+                });
+
+                // Sắp xếp danh mục theo tổng số lượng sản phẩm bán được từ cao đến thấp
+                categoriesWithTotalSoldCount.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
+
+                console.log(`Ngày ${currentDate.toISOString().split('T')[0]}`);
+                console.log(categoriesWithTotalSoldCount);
+
+                currentDate.setDate(currentDate.getDate() - 1); // Chuyển sang ngày trước đó
+            }
 
             res.status(200).json({
                 // totalRevenueInRange,
@@ -195,7 +236,7 @@ const StatisticsController = {
                 // percentageQuantitySold: percentageQuantitySold,
                 // hotProductsInRange: topProductsInRange,
 
-                sortedCategoriesToday: topSellingProductsByCategory,
+                sortedCategoriesToday: categoriesWithTotalSoldCount,
             });
         } catch (error) {
             console.error(error);
