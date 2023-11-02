@@ -6,13 +6,15 @@ import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { v4 } from "uuid";
+
 import { userController } from "../../../../../Controllers/UserController";
 import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { replace } from "lodash";
 import { stringify } from "querystring";
+import { adminController } from "../../../../../Controllers/AdminControllder";
+import SitebarAdmin from "../../Sitebar/Sitebar";
 
 export type FormValues = {
   username: string;
@@ -20,7 +22,7 @@ export type FormValues = {
   email: string;
   sex: string;
   phonenumber: string;
-  dateOfBirth: string;
+  dateofbirth: string;
 
 };
 export type FormImage = {
@@ -35,7 +37,7 @@ type UserData1 = {
   email: string,
   sex: string,
   phonenumber: string,
-  dateOfBirth: string,
+  dateofbirth: string,
 }
 export default function UserProfile() {
 
@@ -54,11 +56,7 @@ export default function UserProfile() {
   const [emailThen, setEmailThen] = useState<string>("");
   const [sdtThen, setSdtThen] = useState<string>("");
 
-  const [username, setUsername] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phonenumber, setPhonenumber] = useState<string>("");
-  const [dateOfBirth, setDateOfBirth] = useState<string>("");
+
 
   const [loading, setLoading] = useState(true);
 
@@ -75,55 +73,53 @@ export default function UserProfile() {
     mode: "all",
     // defaultValues: UserData1
   });
-  
+
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
   useEffect(() => {
     const fetchData = async () => {
-      const user = localStorage.getItem("user");
+      const user = param.username;
       try {
         if (user != null) {
-          const userData = JSON.parse(user);
-          const username = userData.username;
+          const username = user;
           console.log("USERNAME: " + username);
-          await userController.getUserWhereUsername(username)
+          await adminController.getAdminWhereUsername(username)
             .then((res) => {
-              console.log(JSON.stringify(res));
-              if (res.dateOfBirth == null) {
-                res.dateOfBirth = "dd/mm/yyyy";
+              console.log((res.adminWithImage.phonenumber));
+              if (res.adminWithImage.dateofbirth == null) {
+                res.adminWithImage.dateofbirth = "dd/mm/yyyy";
               } else {
-                res.dateOfBirth = (res.dateOfBirth).substring(0, 10);
+                res.adminWithImage.dateofbirth = (res.adminWithImage.dateofbirth).substring(0, 10);
               }
 
-              let Bruh = res.email;
-              Bruh = Bruh.replace(res.email[3], "*")
-              Bruh = Bruh.replace(res.email[4], "*")
-              Bruh = Bruh.replace(res.email[5], "*")
+              let Bruh = res.adminWithImage.email;
+              Bruh = Bruh.replace(res.adminWithImage.email[3], "*")
+              Bruh = Bruh.replace(res.adminWithImage.email[4], "*")
+              Bruh = Bruh.replace(res.adminWithImage.email[5], "*")
               let emailDef = Bruh;
+              setEmailThen(res.adminWithImage.email);
 
-              // console.log(emailDef);
-              setEmailThen(res.email);
-
-              let Bruh2 = res.phonenumber;
-              Bruh2 = Bruh2.replace(res.phonenumber[0], "*")
-              Bruh2 = Bruh2.replace(res.phonenumber[1], "*")
-              Bruh2 = Bruh2.replace(res.phonenumber[2], "*")
-              Bruh2 = Bruh2.replace(res.phonenumber[3], "*")
-              Bruh2 = Bruh2.replace(res.phonenumber[4], "*")
-              Bruh2 = Bruh2.replace(res.phonenumber[5], "*")
-              Bruh2 = Bruh2.replace(res.phonenumber[6], "*")
+              let Bruh2 = res.adminWithImage.phonenumber;
+              Bruh2 = Bruh2.replace((res.adminWithImage.phonenumber[0]), "*")
+              Bruh2 = Bruh2.replace((res.adminWithImage.phonenumber[1]), "*")
+              Bruh2 = Bruh2.replace((res.adminWithImage.phonenumber[2]), "*")
+              Bruh2 = Bruh2.replace((res.adminWithImage.phonenumber[3]), "*")
+              Bruh2 = Bruh2.replace((res.adminWithImage.phonenumber[4]), "*")
+              Bruh2 = Bruh2.replace((res.adminWithImage.phonenumber[5]), "*")
+              Bruh2 = Bruh2.replace((res.adminWithImage.phonenumber[6]), "*")
               let phonenumberDef = Bruh2;
-              
 
-              setSdtThen(res.phonenumber);
 
-              res.email = emailDef;
-              res.phonenumber = phonenumberDef;
-              setId(res.id);
-              setSex(res.sex);
+              setSdtThen(res.adminWithImage.phonenumber);
+
+              res.adminWithImage.email = emailDef;
+              res.adminWithImage.phonenumber = phonenumberDef;
+              setId(res.adminWithImage.id);
+              setSex(res.adminWithImage.sex);
+              console.log("CC" + res.adminWithImage.sex);
               setLoading(false);
-              SetDataUser(res);
+              SetDataUser(res.adminWithImage);
 
-              const UserImageArray = JSON.stringify(res.UserImage);
+              const UserImageArray = JSON.stringify(res.adminWithImage.UserImage);
               if (UserImageArray == "[]") {
                 setCheckImageUrl(false);
               } else {
@@ -144,7 +140,7 @@ export default function UserProfile() {
           "ERROR", error
         );
       }
-     
+
     };
 
     // Call the fetchData function
@@ -170,12 +166,12 @@ export default function UserProfile() {
 
       console.log("UserData1:" + JSON.stringify(data));
       reset({
-        username: "" + Username?.username,
+        username: "" + data?.username,
         name: "" + data?.name,
         email: "" + data?.email,
         // sex: JSON.stringify(data?.sex),
         phonenumber: " " + data?.phonenumber,
-        dateOfBirth: data?.dateOfBirth,
+        dateofbirth: data?.dateofbirth,
       });
     }
   }
@@ -197,7 +193,7 @@ export default function UserProfile() {
   // img firebase
   const loadImageFile = async (image: any) => {
     try {
-      const imageRef = ref(storage, `imageUrl/${image.name}`);
+      const imageRef = ref(storage, `imageUrl/${image}`);
 
       await uploadBytes(imageRef, image);
 
@@ -233,7 +229,7 @@ export default function UserProfile() {
   }
 
 
-  const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
+  const API = `http://localhost:5000/admin/adminprofile/${param.username}`;
   const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
       console.log("selectedFile:" + selectedFile);
@@ -245,20 +241,20 @@ export default function UserProfile() {
       formData.sex = JSON.parse(formData.sex);
       formData.email = emailThen;
       formData.phonenumber = sdtThen;
-      console.log("SERVER:"+JSON.stringify(formData));
+      console.log("SERVER:" + JSON.stringify(formData));
       const response = await axios.put(API, formData);
       FormImage.id = parseInt(id);
       if (response) {
         console.log("UrlThen" + url);
 
-        if (CheckImageUrl == false) {
-          await addImages(FormImage.id, url);
-          setCheckImageUrl(true);
-        } else {
-          console.log("IDUSER:" + FormImage.id);
-          await EditImages(FormImage.id, url);
+        // if (CheckImageUrl == false) {
+        //   await addImages(FormImage.id, url);
+        //   setCheckImageUrl(true);
+        // } else {
+        //   console.log("IDUSER:" + FormImage.id);
+        //   await EditImages(FormImage.id, url);
 
-        }
+        // }
 
       }
 
@@ -340,12 +336,12 @@ export default function UserProfile() {
                 <div className="body-filter container mx-auto">
                   <div>
                     <div className="grid grid-cols-4 gap-4">
-                      <div>
-                        <div className="col-span-1 max-2xl:hidden">
-                          <Sitebar />
-                        </div>
+
+                      <div className="col-span-1 max-2xl:hidden">
+                        <SitebarAdmin />
                       </div>
-                      <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
+                      
+                        <div className="mt-20 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
                         <form
                           className="card py-4 px-5 col-span-3  rounded-[6px]
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
@@ -614,7 +610,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                           <div className="w-[100%] mt-4">
                             <Controller
                               control={control}
-                              name="dateOfBirth"
+                              name="dateofbirth"
                               rules={
                                 {
                                   required: {
@@ -643,9 +639,9 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     }}
 
                                   />
-                                  {!!errors.dateOfBirth && (
+                                  {!!errors.dateofbirth && (
                                     <p className="text-red-700 mt-2">
-                                      {errors.dateOfBirth.message}
+                                      {errors.dateofbirth.message}
                                     </p>
                                   )}
                                 </>
@@ -746,13 +742,14 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                           </div>
                         </div>
                       </div>
+                      </div>
                     </div>
+
+
+
+
                   </div>
-
-
-
-
-                </div>
+            
               </Container>
             ) : (
               <Container>

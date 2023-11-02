@@ -158,7 +158,7 @@ export default function RatingMap(props: Props) {
                         <div className="flex items-center">
                           {/* name */}{" "}
                           <p className="text-[#1A1A1A] text-xl font-medium">
-                            {rating.user.username}
+                            {rating?.user?.username}
                           </p>
                           {/* end name */}
                           {/* period */}

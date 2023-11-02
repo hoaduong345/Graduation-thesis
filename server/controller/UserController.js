@@ -33,6 +33,7 @@ const UserController = {
                         userid: registerId,
                     },
                 });
+                return res.status(200).json('Xóa User thành công');
             }
             if (existingUser) {
                 await prisma.user.update({
@@ -43,7 +44,7 @@ const UserController = {
                         deletedAt: new Date(),
                     },
                 });
-                return res.status(200).json('Xóa User thành công');
+              
             }
             return res.status(402).json('Xóa User that bai');
         } catch (error) {

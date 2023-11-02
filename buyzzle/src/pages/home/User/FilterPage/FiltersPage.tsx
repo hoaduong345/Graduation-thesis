@@ -13,6 +13,9 @@ import { useSearch } from "../../../../hooks/Search/SearchContextProvider";
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import Lightbulb from "../../../../Assets/TSX/Light-bulb";
+import { productController } from "../../../../Controllers/ProductsController";
+import { useState } from "react";
+import { Row } from "../../../../Model/ProductModel";
 export interface Cate {
    id: number;
    name: string;
@@ -51,7 +54,12 @@ export type Props = {
    maxPrice: number;
    onChangeSlider(min: number, max: number): void;
 };
+export interface RatingStar {
+   checked: boolean;
+   rating: number;
 
+   onChangeFilter(tittle: string): void;
+}
 export interface PriceRangeFilterPage {
    minPrice: number;
    maxPrice: number;
@@ -61,13 +69,14 @@ export interface PriceRangeFilterPage {
 }
 export default function FiltersPage() {
    const { id } = useParams();
-
+   // const [product, setProducts] = useState<Row[]>([]);
    const {
       searchValue,
       handleSliderChange,
       handleActiveBTNLatestCreationDate,
       handleActiveBTNHighToLowClick,
       handleActiveBTNLowToHighClick,
+      getProductsWhereRating,
       activeBtnLatestCreationDate,
       activeBtnHighToLow,
       activeBtnLowToHigh,
@@ -77,26 +86,47 @@ export default function FiltersPage() {
       nameCate,
    } = useSearch();
 
+   // const getProductsWhereRating = (rate: any) => {
+   //   productController
+   //     .getProductWhereRatting(rate)
+   //     .then((res: any) => {
+
+   //       console.log("Ratting fillter" + JSON.stringify(res));
+   //       setProducts(res.rows);
+
+   //     })
+   //     .catch((err) => {
+   //       console.log(err);
+   //     });
+   // }
+
+
    return (
       <Container>
          <body className="body-filter container mx-auto">
             <div className="grid grid-cols-4 max-2xl:grid-cols-1">
                <div className="col-span-1 max-2xl:hidden">
                   <SitebarFilter
-                     onPurchaseRangeChange={() => console.log("")}
-                     onSoldOut={() => console.log("")}
-                     oninStock={() => console.log("")}
                      valuePrice={sliderValues}
                      onQuantityRangeChange={() => console.log("")}
                      onPriceRangeChange={(e: any) => handleSliderChange(e)}
+                     onRateChange={(e: any) => getProductsWhereRating(e)}
+                     onPurchaseRangeChange={function (value: [number, number]): void {
+                        throw new Error("Function not implemented.");
+                     }} oninStock={function (availability: boolean): void {
+                        throw new Error("Function not implemented.");
+                     }} onSoldOut={function (soldOut: boolean): void {
+                        throw new Error("Function not implemented.");
+                     }}
                   />
                </div>
-               {/* content-right-filter */}
-               <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">
-                  {/* banner filter */}
-                  <div className="banner-filter max-w-[970px] mb-5 max-2xl:max-w-[1150px] max-2xl:mx-auto">
-                     <SlidesFilter />
-                  </div>
+            </div>
+            {/* content-right-filter */}
+            <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">
+               <div className="max-lg:hidden">
+                  <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-xl:text-2xl max-lg:text-xl">
+                     THƯƠNG HIỆU NỔI TIẾNG:
+                  </h2>
 
                   <div className="bg-[#FFEAE9] h-[60px] mt-[18px] rounded-[6px] ">
                      <div className="txt-content flex">
@@ -197,61 +227,12 @@ export default function FiltersPage() {
                      </div>
                   </div>
 
-                  <div className="text-xl mt-5">
-                     {searchValue ? (
-                        <div className="flex gap-2 items-center">
-                           <Lightbulb />
-                           <p className="group text-[#7A828A]">
-                              KẾT QUẢ TÌM KIẾM VỚI:{" "}
-                           </p>
-                           <span className="font-semibold group-hover:text-current">
-                              '{searchValue?.toString()}'
-                           </span>
-                        </div>
-                     ) : (
-                        <div className="flex gap-2">
-                           <p className="group text-[#7A828A]"> DANH MỤC: </p>
-                           <span className="font-semibold group-hover:text-current">
-                              '{nameCate}'
-                           </span>
-                        </div>
-                     )}
-                  </div>
-
-                  <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
+                  <div className="flex flex-wrap gap-4 ml-[37px] max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
                      {products?.map((items) => {
-                        return (
-                           <Filter starsnumber={starsnumber} product={items} />
-                        );
+                        return <Filter starsnumber={starsnumber} product={items} />;
                      })}
                   </div>
-                  {/* <div
-              style={{ borderTopColor: "transparent" }}
-              className="w-16 h-16 border-4 border-red-400  mx-auto border-double rounded-full animate-spin"
-            /> */}
-                  {/* <div className="pagination">
-              <a href="#" className="prev mr-[60px]">
-                <ArrowPrev />
-              </a>
-              <a href="#" className="page">
-                1
-              </a>
-              <a href="#" className="page">
-                2
-              </a>
-              <a href="#" className="page">
-                ...
-              </a>
-              <a href="#" className="page">
-                7
-              </a>
-              <a href="#" className="page">
-                8
-              </a>
-              <a href="#" className="next ml-[60px]">
-                <ArrowNext />
-              </a>
-            </div> */}
+
                </div>
                {/* content-right-filter-end */}
             </div>

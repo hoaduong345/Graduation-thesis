@@ -55,7 +55,8 @@ const listVoucherBanner: VoucherBanner[] = [
 function Index() {
    useScroll();
    const { categoty, products } = useSearch();
-   return (
+   console.log("CCCCCCCCCCC:"+products);
+   return ( 
       <>
          <Container>
             <div className="container mt-[50px]">
