@@ -15,7 +15,7 @@ const OderController = {
                     amountTotal: orderData.amount_total,
                     paymentMethod: orderData.method,
                     note: orderData.note,
-                    invoice: orderData.invoice.toString()
+                    invoice: orderData.invoice.toString(),
                 },
             });
             orderData.cartItems.map(async (e) => {
@@ -62,7 +62,7 @@ const OderController = {
 
     getOrderAdmin: async (req, res) => {
         try {
-            const page = parseInt(req.query.page)
+            const page = parseInt(req.query.page);
             const limit = 4;
             const startIndex = (page - 1) * limit;
             const totalOrder = (await prisma.order.findMany()).length;
@@ -72,7 +72,7 @@ const OderController = {
                 take: limit,
                 include: {
                     OrderDetail: true,
-                    User: true
+                    User: true,
                 },
                 orderBy: {
                     id: 'desc',
@@ -84,14 +84,13 @@ const OderController = {
                 pageSize: limit,
                 totalPage: Math.ceil(totalOrder / limit),
                 data: orders,
-                totalOrder: totalOrder
+                totalOrder: totalOrder,
             };
             res.status(200).json(results);
         } catch (error) {
-            res.status(404).json('error.message', error.message)
+            res.status(404).json('error.message', error.message);
         }
     },
-
     getOrderDetails: async (req, res) => {
         try {
             const id = parseInt(req.params.id);
@@ -116,7 +115,7 @@ const OderController = {
             const id = parseInt(req.params.id);
             const productId = parseInt(req.body.productId);
             const orderDetailId = parseInt(req.body.orderDetailId);
-            console.log(id, productId)
+            console.log(id, productId);
             const existingCategory = await prisma.orderDetail.findMany({
                 where: {
                     orderId: id,
@@ -137,9 +136,9 @@ const OderController = {
             }
             return res.status(404).json('Đánh giá thất bại');
         } catch (error) {
-            res.status(500).json(error.message)
+            res.status(500).json(error.message);
         }
-    }
+    },
 };
 
 module.exports = OderController;

@@ -30,8 +30,11 @@ import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
 import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
+import LoginAdmin from "../../pages/home/Admin/LoginAdmin/AdminLogin";
+import AdminProfile from "../../pages/home/Admin/AdminProfile/AdminProfile";
 import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
 import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
+import Admin from "../../pages/home/Admin/Management/Admin/Admin";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -541,6 +544,10 @@ export default function useRouterEmelent() {
           path: "Addproductspage",
           element: <Addproducts />,
         },
+        {
+          path: "adminprofile/:username",
+          element: <AdminProfile />,
+        },
 
         {
           path: "updateproduct/:id",
@@ -567,6 +574,14 @@ export default function useRouterEmelent() {
           path: "detailuser/:username",
           element: <DetailUser />,
         },
+
+        // {
+        //   path: "loginadmin",
+        //   element:
+        //   <RegisterLoginLayout>
+        //     <LoginAdmin />
+        //     </RegisterLoginLayout>,
+        // },
         {
           path: "ordermanagement",
           element: <OrderManagement />,
@@ -587,9 +602,26 @@ export default function useRouterEmelent() {
           path: "invoice/:id",
           element: <InvoicesPage />,
         },
+        {
+          path: "adminmanager",
+          element: <Admin />,
+        },
+      ],
+      
+    },
+    {
+      path: "/admin",
+      children: [
+        {
+          path: "loginadmin",
+          element: (
+            <RegisterLoginLayout>
+              <LoginAdmin />
+            </RegisterLoginLayout>
+          ),
+        },
       ],
     },
-
     {
       path: path.resetpassword,
       element: (

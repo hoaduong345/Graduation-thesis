@@ -84,9 +84,9 @@ export default function User() {
   const DeleteUser = (id: any) => {
     userController
       .deleteUser(id)
-      .then((_) => {
+      .then((res) => {
         toast.success("Xóa thành công !");
-        console.log("123");
+        console.log("res:"+res);
         getAllUserData();
       })
       .catch(() => {
@@ -249,7 +249,7 @@ export default function User() {
                                       className="text-[#EA4B48] text-sm font-medium
                                             max-[940px]:text-xs "
                                     >
-                                      Sửa
+                                      Xem chi tiết
                                     </p>
                                   </button>
                                 </li>

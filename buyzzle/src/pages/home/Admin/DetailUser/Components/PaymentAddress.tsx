@@ -1,12 +1,9 @@
-import { ChangeEvent, Fragment, useState, useEffect } from "react";
-import Container from "../../../../../components/container/Container";
+import { Fragment, useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import * as yup from "yup";
 import { userController } from "../../../../../Controllers/UserController";
-import { Console } from "console";
 
 type FormValues = {
   id: number;
@@ -17,7 +14,6 @@ type FormValues = {
 };
 
 export default function PaymentAddress() {
-  const [editAddress, setAddress] = useState<FormValues>();
   const [validUrl, setValidUrl] = useState(false);
   const param = useParams();
   const [selectedOption, setSelectedOption] = useState<string>("aaaaa");
@@ -90,7 +86,6 @@ export default function PaymentAddress() {
 
   const {
     control,
-    handleSubmit,
     register,
     reset,
     formState: { errors, isDirty, isValid },
@@ -102,10 +97,6 @@ export default function PaymentAddress() {
       specificaddress: "",
     },
   });
-
-  const isDisabled = !(isValid && isDirty);
-
-  const API = `http://localhost:5000/buyzzle/user/paymentaddress/${param.username}`;
 
   useEffect(() => {
     function CheckLink() {
@@ -157,84 +148,6 @@ export default function PaymentAddress() {
     getUserData();
   }, []);
 
-  const sendToDatabase = async (formData: FormValues) => {
-    try {
-      const response1 = await axios.put(API, formData); // Gọi API1
-
-      return response1;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const onSubmit = async (formData: FormValues) => {
-    try {
-      console.log("TESTING: " + formData);
-      const response1 = await sendToDatabase(formData);
-      console.log("edit thanh cong", response1);
-
-      if (response1.status === 200) {
-        console.log("Edit successfully");
-        toast.success("Cập nhật thành công", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      } else {
-        console.log("Sign-in Failed!");
-        toast.warning("Sign-in failed", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      if (axios.isAxiosError(error) && error.response) {
-        const responseData = error.response.data;
-        if (responseData.error) {
-          console.log(`Lỗi2: ${responseData.error}`);
-          const errorMessageUsername = responseData.error.username;
-          const errorMessageAddresstype = responseData.error.addresstype;
-          const errorMessageAddress = responseData.error.address;
-          const errorMessageSpecificaddress =
-            responseData.error.specificaddress;
-          if (errorMessageUsername) {
-            toast.warning(errorMessageUsername, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageAddresstype) {
-            toast.warning(errorMessageAddresstype, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageAddress) {
-            toast.warning(errorMessageAddress, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageSpecificaddress) {
-            toast.warning(errorMessageSpecificaddress, {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else {
-            console.log("Lỗi không xác định từ server");
-          }
-        } else {
-          console.error("Lỗi gửi yêu cầu không thành công", error);
-        }
-      }
-    }
-  };
-
-  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(JSON.parse(event.target.value));
-  };
-
-  const onChangeInput = (e: any) => {
-    setAddress(e.target.value);
-  };
-
   return (
     <div className="ml-[60px]">
       <Fragment>
@@ -245,10 +158,7 @@ export default function PaymentAddress() {
                 <div className="col-span-1 max-2xl:hidden"></div>
               </div>
               <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-2 gap-4">
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                >
+                <form className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                   <span className="text-[#000] text-2xl font-normal ">
                     Địa chỉ thanh toán
                   </span>
@@ -260,13 +170,6 @@ export default function PaymentAddress() {
                           <Controller
                             control={control}
                             name="username"
-                            rules={{
-                              required: {
-                                value: true,
-                                message:
-                                  "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                              },
-                            }}
                             render={({ field }) => (
                               <>
                                 <label
@@ -284,16 +187,8 @@ export default function PaymentAddress() {
                                                 ? "border-[2px] border-red-900"
                                                 : "border-[1px] border-[#FFAAAF]"
                                             }`}
-                                  placeholder="Họ và tên"
                                   value={field.value}
-                                  // {...register("username")}
-                                  // onChange={onChangeInput}
                                 />
-                                {!!errors.username && (
-                                  <p className="text-red-700 mt-2">
-                                    {errors.username.message}
-                                  </p>
-                                )}
                               </>
                             )}
                           />
@@ -311,7 +206,7 @@ export default function PaymentAddress() {
                               render={({ field }) => (
                                 <select
                                   className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
-                                  {...field} // Sử dụng {...field} để gán giá trị và sự kiện onChange tự động
+                                  {...field}
                                 >
                                   <option value="Địa chỉ văn phòng">
                                     Địa chỉ văn phòng
@@ -339,13 +234,7 @@ export default function PaymentAddress() {
                               <div className="w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                 <select
                                   className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
-                                  value={field.value} // Sử dụng field.value thay vì selectedOption
-                                  {...register("address")}
-                                  onChange={(e) => {
-                                    const value = e.target.value;
-                                    const reg = /[!@#$%^&*]/;
-                                    field.onChange(value.replace(reg, ""));
-                                  }}
+                                  value={field.value}
                                 >
                                   {provinces.map((province, index) => (
                                     <option key={index} value={province}>
@@ -362,13 +251,6 @@ export default function PaymentAddress() {
                         <Controller
                           control={control}
                           name="specificaddress"
-                          rules={{
-                            required: {
-                              value: true,
-                              message:
-                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                            },
-                          }}
                           render={({ field }) => (
                             <>
                               <label
@@ -386,19 +268,8 @@ export default function PaymentAddress() {
                                                 ? "border-[2px] border-red-900"
                                                 : "border-[1px] border-[#FFAAAF]"
                                             }`}
-                                placeholder="Địa chỉ cụ thể"
-                                onChange={(e) => {
-                                  const value = e.target.value;
-                                  const reg = /[!@#$%^&*]/;
-                                  field.onChange(value.replace(reg, ""));
-                                }}
                                 value={field.value}
                               />
-                              {!!errors.specificaddress && (
-                                <p className="text-red-700 mt-2">
-                                  {errors.specificaddress.message}
-                                </p>
-                              )}
                             </>
                           )}
                         />
