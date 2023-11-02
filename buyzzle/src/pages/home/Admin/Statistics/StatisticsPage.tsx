@@ -20,7 +20,7 @@ import { Bar, Line } from "react-chartjs-2";
 import { animated, useSpring } from "react-spring";
 import ArrowFall from "../../../../Assets/TSX/ArrowFall";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
-import { Category, Statistics } from "../../../../Model/StatsModels";
+import { Statistics } from "../../../../Model/StatsModels";
 import { numberFormat } from "../../../../Helper/Format";
 import {
   FilterDate,
@@ -78,7 +78,6 @@ interface selectStats {
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
-  const [cate, setCate] = useState<Category>();
   // const [currentPage, setCurrentPage] = useState(1);
   // const [selectedOption, setSelectedOption] = useState<number>(1); // Mặc định chọn "Hôm nay"
   const startDate = new Date();
@@ -94,6 +93,44 @@ export default function StatisticsPage() {
     startDate: startDate,
     endDate: endDate,
   });
+  const initialDataChartLine = {
+    labels: "stats.initialDataChartLine.labels",
+    datasets: [
+      {
+        label: stats.initialDataChartLine.datasets.map((labelCate) => {
+          return labelCate.label;
+        }),
+        data: stats.initialDataChartLine.datasets.map((dataCate) => {
+          return Number(dataCate.data);
+        }),
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
+
+  const labelsVertical = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+  ];
+
+  const dataChartVertical = {
+    labels: labelsVertical,
+    datasets: [
+      {
+        label: "Dataset 1",
+        data: [800, 30, 70, 80, 650, 75, 900],
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
+
+  const [dataChartLine, setDataChartLine] = useState(initialDataChartLine);
 
   const numberStast = (n: number) => {
     const { number } = useSpring({
@@ -151,6 +188,27 @@ export default function StatisticsPage() {
     } catch (error) {
       console.error("Error:", error);
     }
+    // try {
+    //   const res = await statsControllers.getStats(data);
+
+    //   const updatedDataChartLine = { ...dataChartLine };
+    //   const labels = updatedDataChartLine.labels;
+    //   const datasets = updatedDataChartLine.datasets;
+
+    //   // Lặp qua từng danh mục (category) trong mảng hotProductsInRange
+    //   res[0].hotProductsInRange.forEach((categoryData, index) => {
+    //     const dataset = datasets[index];
+    //     dataset.label = categoryData.name; // Cập nhật nhãn cho biểu đồ
+
+    //     // Lặp qua từng ngày trong danh mục và cập nhật dữ liệu
+    //     const dataForCategory = categoryData._sum.quantity; // Sử dụng _sum.quantity thay vì totalSoldCount
+    //     dataset.data = labels.map(() => dataForCategory);
+    //   });
+
+    //   setDataChartLine(updatedDataChartLine);
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
   };
 
   // ================================ handleSelectDateTime ================================
@@ -233,65 +291,6 @@ export default function StatisticsPage() {
   // };
 
   // chart
-
-  const labelsLine = [
-    "Ngày hôm qua",
-    "1 ngày trước",
-    "2 ngày trước",
-    "3 ngày trước",
-    "4 ngày trước",
-    "5 ngày trước",
-    "6 ngày trước",
-  ];
-
-  const dataChartLine = {
-    labels: labelsLine,
-    datasets: [
-      {
-        label: `${cate?.name}`,
-        data: [170, 30, 50, 130, 250, 50, 30],
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Đồ gia dụng",
-        data: [100, 200, 120, 120, 150, 230, 100],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-
-      {
-        label: "Khác",
-        data: [10, 120, 20, 40, 200, 30, 120],
-        borderColor: "#95A4FC",
-        backgroundColor: "#cad2ff",
-      },
-    ],
-  };
-
-  const labelsVertical = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
-
-  const dataChartVertical = {
-    labels: labelsVertical,
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: [800, 30, 70, 80, 650, 75, 900],
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  };
-  {
-    console.log("🚀 ~ file: StatisticsPage.tsx:315 ~ value:", value);
-  }
 
   return (
     <>
@@ -451,7 +450,7 @@ export default function StatisticsPage() {
                   Top loại sản phẩm
                 </p>
                 <div>
-                  <Line options={optionsChartLine} data={dataChartLine} />{" "}
+                  <Line options={optionsChartLine} data={dataChartLine} />
                 </div>
               </div>
 

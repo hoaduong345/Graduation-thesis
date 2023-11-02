@@ -124,73 +124,15 @@ const StatisticsController = {
 
             const revenuePercentageInRange = (totalQuantitySoldInRange._sum.quantity / totalRevenueInRange) * 100;
 
-            // const categoryStatsByDay = {};
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            // for (let date = yesterday; date >= oneWeekAgo; date.setDate(date.getDate() - 1)) {
-            //     const startDate = new Date(date);
-            //     const endDate = date;
-            //     startDate.setHours(0, 0, 0, 0); // Đặt giờ, phút, giây và mili giây thành 0:00:00.000
-            //     endDate.setHours(23, 59, 59, 999); // Đặt giờ, phút, giây và mili giây thành 23:59:59.999
-            //     const categories = await prisma.category.findMany({
-            //         include: {
-            //             products: {
-            //                 where: {
-            //                     date: {
-            //                         gte: startDate, // Ngày bắt đầu là 7 ngày trước ngày hôm qua
-            //                         lte: endDate, // Ngày kết thúc là ngày hôm qua
-            //                     },
-            //                 },
-            //             },
-            //         },
-            //     });
-            //     const topCategories = categories.map((category) => {
-            //         return {
-            //             category: category,
-            //             totalSoldCount: category.products.reduce(
-            //                 (total, product) => total + (product.soldcount || 0),
-            //                 0
-            //             ),
-            //         };
-            //     });
+            const dataByDay = {};
 
-            //     // Sắp xếp danh mục theo số sản phẩm đã bán giảm dần
-            //     topCategories.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
-
-            //     // Lưu kết quả vào categoryStatsByDay dựa trên ngày tương ứng
-            //     categoryStatsByDay[date.toISOString().split('T')[0]] = topCategories;
-            // }
-
-            // const categories = await prisma.category.findMany({
-            //     include: {
-            //         products: {
-            //             where: {
-            //                 AND: [{ date: { gte: oneWeekAgo } }, { date: { lt: yesterday } }],
-            //             },
-            //             select: {
-            //                 id: true,
-            //                 name: true,
-            //                 soldcount: true,
-            //             },
-            //             orderBy: {
-            //                 soldcount: 'asc',
-            //             },
-            //         },
-            //     },
-            // });
-
-            // const topSellingProductsByCategory = categories.map((category) => {
-            //     const productsInCategory = category.products;
-            //     productsInCategory.sort((a, b) => b.soldcount - a.soldcount);
-            //     return {
-            //         category: category.name,
-            //         topSellingProduct: productsInCategory[0],
-            //     };
-            // });
-            while (currentDate > oneWeekAgo) {
-                const startOfDay = new Date(currentDate);
+            while (yesterday > oneWeekAgo) {
+                const startOfDay = new Date(yesterday);
                 startOfDay.setHours(0, 0, 0, 0);
 
-                const endOfDay = new Date(currentDate);
+                const endOfDay = new Date(yesterday);
                 endOfDay.setHours(23, 59, 59, 999);
 
                 const categories = await prisma.category.findMany({
@@ -199,8 +141,8 @@ const StatisticsController = {
                         products: {
                             where: {
                                 date: {
-                                    gte: startOfDay, // Lọc các sản phẩm từ đầu ngày
-                                    lte: endOfDay, // đến cuối ngày
+                                    gte: startOfDay,
+                                    lte: endOfDay,
                                 },
                             },
                             select: {
@@ -211,7 +153,7 @@ const StatisticsController = {
                 });
 
                 // Tính tổng số lượng sản phẩm bán được cho từng danh mục trong ngày
-                const categoriesWithTotalSoldCount = categories.map((category) => {
+                const topSellingProductsByCategory = categories.map((category) => {
                     const totalSoldCount = category.products.reduce(
                         (acc, product) => acc + (product.soldcount || 0),
                         0
@@ -219,24 +161,35 @@ const StatisticsController = {
                     return { name: category.name, totalSoldCount };
                 });
 
-                // Sắp xếp danh mục theo tổng số lượng sản phẩm bán được từ cao đến thấp
-                categoriesWithTotalSoldCount.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
+                topSellingProductsByCategory.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
 
-                console.log(`Ngày ${currentDate.toISOString().split('T')[0]}`);
-                console.log(categoriesWithTotalSoldCount);
+                dataByDay[yesterday.toISOString().split('T')[0]] = topSellingProductsByCategory;
 
-                currentDate.setDate(currentDate.getDate() - 1); // Chuyển sang ngày trước đó
+                yesterday.setDate(yesterday.getDate() - 1); // Chuyển sang ngày trước đó
             }
+            const labelsLine = Object.keys(dataByDay).reverse();
+            const datasets = Object.values(dataByDay[labelsLine[0]]).map((category) => ({
+                label: category.name,
+                data: labelsLine.map((date) => {
+                    const categoryData = dataByDay[date].find((item) => item.name === category.name);
+                    return categoryData ? categoryData.totalSoldCount : 0;
+                }),
+            }));
+
+            const initialDataChartLine = {
+                labels: labelsLine,
+                datasets,
+            };
 
             res.status(200).json({
-                // totalRevenueInRange,
-                // totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
-                // purchaseOrShoppingInRange: totalOrdersInRange,
-                // revenuePercentageInRange: revenuePercentageInRange,
-                // percentageQuantitySold: percentageQuantitySold,
-                // hotProductsInRange: topProductsInRange,
+                totalRevenueInRange,
+                totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
+                purchaseOrShoppingInRange: totalOrdersInRange,
+                revenuePercentageInRange: revenuePercentageInRange,
+                percentageQuantitySold: percentageQuantitySold,
+                hotProductsInRange: topProductsInRange,
 
-                sortedCategoriesToday: categoriesWithTotalSoldCount,
+                initialDataChartLine: initialDataChartLine,
             });
         } catch (error) {
             console.error(error);
