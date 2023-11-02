@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
+import Map from "../../../../../Assets/TSX/Map";
+import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
 import Orderbuyzzle from "../../../../../Assets/TSX/Orderbuyzzle";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDateYYYY, numberFormat } from "../../../../../Helper/Format";
 import TimelineStepper from "../../../../../Helper/Stepper/TimelineStepper";
 import { OrderModel } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
-import BuyzzleOrderAdmin from "../../Assets/TSX/BuyzzleOrderAdmin";
 import MessageOrderAdmin from "../../Assets/TSX/MessageOrderAdmin";
+import Paymethod from "../../Assets/TSX/Paymethod";
+import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
 import PrintOrder from "../../Assets/TSX/PrintOrder";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
-import Map from "../../../../../Assets/TSX/Map";
-import Paymethod from "../../Assets/TSX/Paymethod";
-import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
 
 export default function DetailOrderManagement() {
    const { id } = useParams();
