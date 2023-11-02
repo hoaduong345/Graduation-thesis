@@ -36,7 +36,7 @@ const CategoriesController = {
             // });
             // if (!category) return res.json('Category is undefined');
             const whereClause = {
-                deleteAt : null
+                deletedAt : null
             }
             const subcategories = await prisma.category.findMany({
                 where: whereClause,
