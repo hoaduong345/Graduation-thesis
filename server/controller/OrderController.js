@@ -84,6 +84,7 @@ const OderController = {
                 pageSize: limit,
                 totalPage: Math.ceil(totalOrder / limit),
                 data: orders,
+                totalOrder: totalOrder
             };
             res.status(200).json(results);
         } catch (error) {

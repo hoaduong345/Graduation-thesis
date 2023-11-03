@@ -32,8 +32,10 @@ import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
 import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
 import Share from "../../../Admin/Assets/TSX/Share";
 import TW from "../../../Admin/Assets/TSX/TW";
-import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
+import { Products } from "../../FilterPage/FiltersPage";
+import RatingMap from "../RatingAndComments/RatingMap";
+
 
 export interface ImgOfProduct {
   url: string;
@@ -152,19 +154,20 @@ export default function DetailsProduct() {
       setQuantity(quantity - 1);
     }
   };
-  const getCommentWhereRating = (idproduct: any, rating: any) =>{
+  const getCommentWhereRating = (idproduct: any, rating: any) => {
     RatingAndCommentController
-    .getCommentWhereRating(idproduct, rating)
-    .then((res: any)=>{
-      setRateAndcomment(res);
-    }).catch((err) => {
-      console.log(err);
-    });
+      .getCommentWhereRating(idproduct, rating)
+      .then((res: any) => {
+        setRateAndcomment(res);
+        console.log("CCCCCCCCCCCCCCCCCCCCCCc:" + JSON.stringify(rateAndcomment));
+      }).catch((err) => {
+        console.log(err);
+      });
 
   }
-  const HandleGetCommentWhereRating = (rating: any) =>{
+  const HandleGetCommentWhereRating = (rating: any) => {
     const idproduct = id;
-    console.log("IDDDDDDDDDDDD:"+id);
+    console.log("IDDDDDDDDDDDD:" + id);
     getCommentWhereRating(idproduct, rating);
   }
 
@@ -192,12 +195,14 @@ export default function DetailsProduct() {
       }
     );
   };
+
+  
   const getItemProps = (index: number) =>
-    ({
-      variant: currentPage === index ? "filled" : "text",
-      color: "gray",
-      onClick: () => setCurrentPage(index),
-    } as any);
+  ({
+    variant: currentPage === index ? "filled" : "text",
+    color: "gray",
+    onClick: () => setCurrentPage(index),
+  } as any);
   const next = () => {
     if (currentPage === 999) return;
 
@@ -501,7 +506,7 @@ export default function DetailsProduct() {
                         {numberFormat(
                           first?.productDetail.price! -
                             first?.productDetail.price! *
-                              (first?.productDetail.discount! / 100)
+(first?.productDetail.discount! / 100)
                         )}
                       </p>
                       <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -513,8 +518,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-bold ">
                           {numberFormat(
                             first?.productDetail.price! -
-                              first?.productDetail.price! *
-                                (first?.productDetail.discount! / 100)
+                            first?.productDetail.price! *
+                            (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -642,11 +647,10 @@ export default function DetailsProduct() {
         <div className="justify-center gap-6 flex mt-10">
           <div>
             <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "descriptions"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "descriptions"
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
+                }`}
               onClick={() => handleTabClick("descriptions")}
               role="tab"
               aria-selected={activeTab === "descriptions" ? "true" : "false"}
@@ -657,11 +661,10 @@ export default function DetailsProduct() {
           </div>
           <div>
             <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "Rating"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "Rating"
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
+                }`}
               onClick={() => handleTabClick("Rating")}
               role="tab"
               aria-selected={activeTab === "Rating" ? "true" : "false"}
@@ -676,9 +679,8 @@ export default function DetailsProduct() {
       <Container>
         <div data-tab-content className="p-5">
           <div
-            className={` ${
-              activeTab === "descriptions" ? "visible" : "hidden"
-            }`}
+            className={` ${activeTab === "descriptions" ? "visible" : "hidden"
+              }`}
             id="descriptions"
             role="tabpanel"
           >
@@ -707,17 +709,16 @@ export default function DetailsProduct() {
                       handleRemoveRating={handleRemoveRating}
                     />
                   </div>
-                  {}
+                  { }
                   <div className="pagination">
                     <div className="flex">
                       <Button
                         variant="text"
                         // className="flex items-center gap-2"
-                        className={`${
-                          currentPage == 1
-                            ? `hidden`
-                            : `flex items-center gap-2`
-                        }`}
+                        className={`${currentPage == 1
+                          ? `hidden`
+                          : `flex items-center gap-2`
+                          }`}
                         onClick={prev}
                       >
                         <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
@@ -741,11 +742,10 @@ export default function DetailsProduct() {
                       )}
                       <Button
                         variant="text"
-                        className={`${
-                          currentPage == rateAndcomment?.totalRatings
-                            ? "hidden"
-                            : "flex items-center gap-2"
-                        }`}
+                        className={`${currentPage == rateAndcomment?.totalRatings
+                          ? "hidden"
+                          : "flex items-center gap-2"
+                          }`}
                         onClick={next}
                       >
                         Next
@@ -775,7 +775,7 @@ export default function DetailsProduct() {
                                 checked={item.checked}
                                 rating={item.rating}
                                 onChangeFilter={(rating) => {
-                                  console.log("Ratting:"+rating)
+                                  console.log("Ratting:" + rating)
                                   HandleGetCommentWhereRating(rating);
                                 }}
                               />

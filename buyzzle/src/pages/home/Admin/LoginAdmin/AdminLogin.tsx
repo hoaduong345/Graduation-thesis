@@ -21,9 +21,8 @@ function LoginAdmin() {
     };
 
     const validationSchema = yup.object().shape({
-        email: yup
+        username: yup
             .string()
-            .email('Email không hợp lệ')
             .required('Vui lòng nhập email'),
 
         password: yup
@@ -59,31 +58,28 @@ function LoginAdmin() {
 
                     }
                 );
+                
+                localStorage.removeItem("user");
+                const jsonString: string = JSON.stringify(data);
+                const jsonObject = JSON.parse(jsonString);
+                // console.log("aaaaaaaaaa"+response)
+                // // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
+              
+                // Truy cập các giá trị trong jsonObject
+
+                const username = jsonObject.username;
+                console.log(username);
+                // const accessToken = jsonObject.accessToken;
+                // console.log(accessToken);
+                const UserData = {username};
+                // const Token = {accessToken}; 
+                localStorage.setItem('user', JSON.stringify(UserData));
+                // localStorage.setItem("accessToken", JSON.stringify(Token));
+
                 setTimeout(() => {
                     window.location.href = "/admin/ListproductsAdmin";
                 },
                     2000);
-
-                if (response.headers['content-type'] === 'application/json; charset=utf-8') {
-                    // const jsonString: string = JSON.stringify(response.data);
-                    // const jsonObject = JSON.parse(jsonString);
-                    // console.log("aaaaaaaaaa"+response)
-                    // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
-                    // console.log(response);
-                    // Truy cập các giá trị trong jsonObject
-
-                    // const username = jsonObject.username;
-                    // const accessToken = jsonObject.accessToken;
-                    // console.log(accessToken);
-                    // const UserData = { username};
-                    // const Token = {accessToken};
-                    // localStorage.setItem('user', JSON.stringify(UserData));
-                    // localStorage.setItem("accessToken", JSON.stringify(Token));
-                   
-
-                } else {
-                    console.error('Response không phải là JSON.');
-                }
             } else {
                 console.log("Login Failed!");
                 toast.warning(
@@ -146,19 +142,19 @@ function LoginAdmin() {
                         <h1 className=' login-a text-[40px]'>ĐĂNG NHẬP ADMIN</h1>
                         <div className='mb-4'>
                             <label htmlFor='email' className='login-a4 font-sans'>
-                                Email
+                                Username
                             </label>
                             <input
                                 type="text"
-                                id="email"
+                                id="username"
                                 // value={formData.email}
                                 className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
                                 placeholder="Email"
-                                {...register("email")}
+                                {...register("username")}
                             />
-                            {errors.email && (
+                            {errors.username && (
                                 <span className="text-red-500 text-sm">
-                                    {errors.email.message}
+                                    {errors.username.message}
                                 </span>
                             )}
                         </div>

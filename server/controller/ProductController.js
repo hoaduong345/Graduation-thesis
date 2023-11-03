@@ -493,7 +493,6 @@ const ProductController = {
                     },
                 },
             });
-
             const result = await prisma.product.findMany({
                 orderBy: [{ sellingPrice: sortByPrice }, { createdAt: sortByDateCreate }, { soldcount: 'desc' }],
                 include: {
@@ -675,10 +674,10 @@ const ProductController = {
         try {
             const userId = parseInt(req.cookies.id);
             console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
-            const { productId, ratingValue, comment } = req.body;
+            const { idproduct, ratingValue, comment } = req.body;
             const rating = await prisma.rating.create({
                 data: {
-                    idproduct: productId,
+                    idproduct,
                     iduser: userId,
                     ratingValue,
                     comment,
@@ -701,7 +700,7 @@ const ProductController = {
 
             const ratings = await prisma.rating.findMany({
                 where: {
-                    idproduct: productId, 
+                    idproduct: productId,
                     ratingValue: {
                         gte: selectedRatingValue, // Sử dụng lọc "greater than or equal to" (lớn hơn hoặc bằng)
                     },
@@ -736,7 +735,7 @@ const ProductController = {
                     idproduct: productId,
                     ratingValue: {
                         gte: selectedRatingValue, // Sử dụng lọc "greater than or equal to" (lớn hơn hoặc bằng)
-                    }, 
+                    },
                 },
             });
             const totalRating = ratings.reduce((sum, rating) => sum + rating.ratingValue, 0);
