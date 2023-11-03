@@ -1,33 +1,40 @@
+
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const cron = require('node-cron');
 
-// chạy mỗi ngày 2h sáng để xóa voucher hết hạn
-cron.schedule('0 2 * * *', async () => {
-    const today = new Date();
-  
-    // Tìm tất cả các voucher hết hạn
-    const expiredVouchers = await prisma.voucher.findMany({
-      where: {
-        endDay: {
-          lte: today,
-        },
-      },
-    });
-  
-    // Xóa voucher hết hạn
-    for (const voucher of expiredVouchers) {
-      await prisma.voucher.delete({
-        where: {
-          id: voucher.id,
-        },
-      });
-    }
-  
-    console.log('Xóa các voucher hết hạn thành công.');
-  });
+
 
 const VoucherController = {
+
+    VoucherExpired : async(req, res) =>{
+        try {
+
+            const today = new Date();
+            const expiredVouchers = await prisma.voucher.findMany({
+              where: {
+                endDay: {
+                  lte: today,
+                },
+              },
+            });
+        
+            // Xóa voucher hết hạn
+            for (const voucher of expiredVouchers) {
+              await prisma.voucher.delete({
+                where: {
+                  id: voucher.id,
+                },
+              });
+              console.log(`Voucher ${voucher.id} đã hết hạn và đã được xóa.`);
+            }
+        
+            res.status(200).json('Đã xóa voucher hết hạn.');
+          } catch (error) {
+            console.error(error);
+            res.status(500).json(error.message);
+          }
+    },
 
     get: async (req, res) => {
         try {

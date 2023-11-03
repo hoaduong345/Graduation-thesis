@@ -46,7 +46,7 @@ model User {
 }
 
 model Voucher {
-  id        Int       @id @default(autoincrement())
+  id        Int       @id @default(autoincrement()) 
   code      String?
   discount  Int?
   quantity  Int?
@@ -67,7 +67,7 @@ model SavedVoucher {
   used      Boolean   @default(false)  
 
   user    User    @relation(fields: [userId], references: [id])
-  voucher Voucher @relation(fields: [voucherId], references: [id])
+  voucher Voucher @relation(fields: [voucherId], references: [id],onDelete: Cascade)
 }
 
 model UserImage {
@@ -258,7 +258,7 @@ model Admin {
 model AdminImage {
   id              Int       @id @default(autoincrement())
   url             String?
-  idadmin       Int?
+  idadmin       Int? @unique
   fk_adminImage Admin?   @relation(fields: [idadmin], references: [id], onDelete: Cascade)
   deletedAt       DateTime?
 }
