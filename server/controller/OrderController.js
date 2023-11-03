@@ -19,6 +19,7 @@ const OderController = {
                     name: orderData.name,
                     address: orderData.address,
                     phoneNumber: orderData.phoneNumber,
+                    status: 0,
                 },
             });
             orderData.cartItems.map(async (e) => {
