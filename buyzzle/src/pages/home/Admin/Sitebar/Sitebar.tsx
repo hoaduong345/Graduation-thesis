@@ -109,9 +109,13 @@ export default function SitebarAdmin() {
               setHref(`/admin/adminprofile/${username}`);
               setName(name);
               setEmail(email);
-              const Image = res.adminWithImage.AdminImage[0].url;
-              setImage(Image);
-
+              if(res.adminWithImage.AdminImage != undefined){
+                const Image = res.adminWithImage.AdminImage[0].url;
+                setImage(Image);
+              }else{
+                console.log("k co hinh");
+              }
+             
 
               return res;
             })
