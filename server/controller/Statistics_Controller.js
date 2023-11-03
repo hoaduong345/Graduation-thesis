@@ -181,15 +181,54 @@ const StatisticsController = {
                 datasets: datasetsLineChart,
             };
 
+            const labels = [];
+            const datasets = [
+                {
+                    label: 'Doanh thu',
+                    data: [],
+                },
+            ];
+
+            for (let i = 0; i < 7; i++) {
+                const startDate = new Date(currentDate);
+                startDate.setDate(currentDate.getDate() - i);
+                const endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 1);
+                // Định dạng ngày tháng dưới dạng chuỗi "YYYY-MM-DD"
+                const formattedDate = startDate.toISOString().split('T')[0];
+                const orders = await prisma.order.findMany({
+                    where: {
+                        createdAt: {
+                            gte: startDate,
+                            lt: endDate,
+                        },
+                    },
+                    select: {
+                        amountTotal: true,
+                    },
+                });
+
+                const dailyRevenue = orders.reduce((acc, order) => acc + order.amountTotal, 0);
+                labels.push(formattedDate);
+                datasets[0].data.push(dailyRevenue);
+            }
+
+            const initialDataChartBar = {
+                labels: labels, // Đảo ngược để có thứ tự đúng
+                datasets,
+            };
+
             res.status(200).json({
-                // totalRevenueInRange,
-                // totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
-                // purchaseOrShoppingInRange: totalOrdersInRange,
-                // revenuePercentageInRange: revenuePercentageInRange,
-                // percentageQuantitySold: percentageQuantitySold,
-                // hotProductsInRange: topProductsInRange,
+                totalRevenueInRange,
+                totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
+                purchaseOrShoppingInRange: totalOrdersInRange,
+                revenuePercentageInRange: revenuePercentageInRange,
+                percentageQuantitySold: percentageQuantitySold,
+                hotProductsInRange: topProductsInRange,
 
                 initialDataChartLine: initialDataChartLine,
+
+                initialDataChartBar: initialDataChartBar,
             });
         } catch (error) {
             console.error(error);

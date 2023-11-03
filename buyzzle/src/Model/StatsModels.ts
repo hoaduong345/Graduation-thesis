@@ -8,6 +8,8 @@ export interface Statistics {
   hotProductsInRange: HotProductsInRange[];
 
   initialDataChartLine: InitialDataChartLine;
+
+  initialDataChartBar: InitialDataChartBar;
 }
 export interface HotProductsInRange {
   _sum: sumQuantity;
@@ -29,6 +31,16 @@ export interface InitialDataChartLine {
 }
 
 export interface Dataset {
+  label: string;
+  data: number[];
+}
+
+export interface InitialDataChartBar {
+  labels: string[];
+  datasets: Dataset2[];
+}
+
+export interface Dataset2 {
   label: string;
   data: number[];
 }
