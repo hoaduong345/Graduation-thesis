@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const { prototype } = require('events');
+const moment = require('moment');
 const prisma = new PrismaClient();
 
 const StatisticsController = {
@@ -128,11 +129,19 @@ const StatisticsController = {
 
             const dataByDayLineChart = {};
 
-            while (yesterday > oneWeekAgo) {
-                const startOfDay = new Date(yesterday);
+            const endDate = new Date(); // Ngày hôm nay
+            endDate.setHours(23, 59, 59, 999);
+
+            const startDate = new Date(endDate); // Sao chép ngày hôm nay
+            startDate.setDate(startDate.getDate() - 1); // Trừ 1 ngày
+            const sixDaysAgos = new Date(startDate); // Sao chép ngày hôm qua
+            sixDaysAgos.setDate(sixDaysAgos.getDate() - 6); // Trừ thêm 6 ngày
+
+            while (startDate >= sixDaysAgos) {
+                const startOfDay = new Date(startDate);
                 startOfDay.setHours(0, 0, 0, 0);
 
-                const endOfDay = new Date(yesterday);
+                const endOfDay = new Date(startDate);
                 endOfDay.setHours(23, 59, 59, 999);
 
                 const categories = await prisma.category.findMany({
@@ -163,10 +172,11 @@ const StatisticsController = {
 
                 topSellingProductsByCategory.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
 
-                dataByDayLineChart[yesterday.toISOString().split('T')[0]] = topSellingProductsByCategory;
+                dataByDayLineChart[startDate.toISOString().split('T')[0]] = topSellingProductsByCategory;
 
-                yesterday.setDate(yesterday.getDate() - 1); // Chuyển sang ngày trước đó
+                startDate.setDate(startDate.getDate() - 1); // Chuyển sang ngày trước đó
             }
+
             const labelsLineChart = Object.keys(dataByDayLineChart).reverse();
             const datasetsLineChart = Object.values(dataByDayLineChart[labelsLineChart[0]]).map((category) => ({
                 label: category.name,
@@ -181,26 +191,22 @@ const StatisticsController = {
                 datasets: datasetsLineChart,
             };
 
-            const labels = [];
-            const datasets = [
-                {
-                    label: 'Doanh thu',
-                    data: [],
-                },
-            ];
+            const yesterdays = moment().subtract(1, 'day');
+            const sixDaysAgo = yesterdays.clone().subtract(6, 'days');
 
-            for (let i = 0; i < 7; i++) {
-                const startDate = new Date(currentDate);
-                startDate.setDate(currentDate.getDate() - i);
-                const endDate = new Date(startDate);
-                endDate.setDate(startDate.getDate() + 1);
-                // Định dạng ngày tháng dưới dạng chuỗi "YYYY-MM-DD"
-                const formattedDate = startDate.toISOString().split('T')[0];
+            const labels = [];
+            const data = [];
+
+            while (yesterdays >= sixDaysAgo) {
+                const startOfDay = yesterdays.clone().startOf('day');
+                const endOfDay = yesterdays.clone().endOf('day');
+
+                // Query the database to retrieve orders placed within the day
                 const orders = await prisma.order.findMany({
                     where: {
                         createdAt: {
-                            gte: startDate,
-                            lt: endDate,
+                            gte: startOfDay.toDate(),
+                            lte: endOfDay.toDate(),
                         },
                     },
                     select: {
@@ -208,14 +214,25 @@ const StatisticsController = {
                     },
                 });
 
-                const dailyRevenue = orders.reduce((acc, order) => acc + order.amountTotal, 0);
-                labels.push(formattedDate);
-                datasets[0].data.push(dailyRevenue);
+                // Calculate daily revenue
+                const dailyRevenue = orders.reduce((total, order) => {
+                    return total + (order.amountTotal || 0);
+                }, 0);
+
+                labels.unshift(yesterdays.format('YYYY-MM-DD'));
+                data.unshift(dailyRevenue);
+
+                yesterdays.subtract(1, 'day');
             }
 
             const initialDataChartBar = {
-                labels: labels, // Đảo ngược để có thứ tự đúng
-                datasets,
+                labels,
+                datasets: [
+                    {
+                        label: 'Doanh thu',
+                        data,
+                    },
+                ],
             };
 
             res.status(200).json({
@@ -227,7 +244,6 @@ const StatisticsController = {
                 hotProductsInRange: topProductsInRange,
 
                 initialDataChartLine: initialDataChartLine,
-
                 initialDataChartBar: initialDataChartBar,
             });
         } catch (error) {
