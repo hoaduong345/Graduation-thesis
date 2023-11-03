@@ -126,7 +126,7 @@ const StatisticsController = {
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            const dataByDay = {};
+            const dataByDayLineChart = {};
 
             while (yesterday > oneWeekAgo) {
                 const startOfDay = new Date(yesterday);
@@ -163,35 +163,33 @@ const StatisticsController = {
 
                 topSellingProductsByCategory.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
 
-                dataByDay[yesterday.toISOString().split('T')[0]] = topSellingProductsByCategory;
+                dataByDayLineChart[yesterday.toISOString().split('T')[0]] = topSellingProductsByCategory;
 
                 yesterday.setDate(yesterday.getDate() - 1); // Chuyển sang ngày trước đó
             }
-            const labelsLine = Object.keys(dataByDay).reverse();
-            const datasets = Object.values(dataByDay[labelsLine[0]]).map((category) => ({
+            const labelsLineChart = Object.keys(dataByDayLineChart).reverse();
+            const datasetsLineChart = Object.values(dataByDayLineChart[labelsLineChart[0]]).map((category) => ({
                 label: category.name,
-                data: labelsLine.map((date) => {
-                    const categoryData = dataByDay[date].find((item) => item.name === category.name);
+                data: labelsLineChart.map((date) => {
+                    const categoryData = dataByDayLineChart[date].find((item) => item.name === category.name);
                     return categoryData ? categoryData.totalSoldCount : 0;
                 }),
             }));
 
             const initialDataChartLine = {
-                labels: labelsLine,
-                datasets,
+                labels: labelsLineChart,
+                datasets: datasetsLineChart,
             };
 
             res.status(200).json({
-                totalRevenueInRange,
-                totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
-                purchaseOrShoppingInRange: totalOrdersInRange,
-                revenuePercentageInRange: revenuePercentageInRange,
-                percentageQuantitySold: percentageQuantitySold,
-                hotProductsInRange: topProductsInRange,
+                // totalRevenueInRange,
+                // totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
+                // purchaseOrShoppingInRange: totalOrdersInRange,
+                // revenuePercentageInRange: revenuePercentageInRange,
+                // percentageQuantitySold: percentageQuantitySold,
+                // hotProductsInRange: topProductsInRange,
 
                 initialDataChartLine: initialDataChartLine,
-
-                // initialDataChartVertical: initialDataChartVertical,
             });
         } catch (error) {
             console.error(error);
