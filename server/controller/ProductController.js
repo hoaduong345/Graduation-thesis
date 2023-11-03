@@ -300,17 +300,13 @@ const ProductController = {
                 name,
                 price,
                 rate,
-                pricesale,
-                sellingPrice,
                 discount,
                 soldcount,
                 quantity,
                 description,
                 status,
-                date,
-                createdAt,
-                updatedAt,
                 categoryID,
+                subcateId,
             } = req.body;
 
             const SellingPrice = price - price * (discount / 100);
@@ -332,6 +328,7 @@ const ProductController = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 categoryID: parseInt(categoryID),
+                subcateId: parseInt(subcateId)
             };
 
             const updatedProduct = await prisma.product.update({
@@ -341,6 +338,7 @@ const ProductController = {
                 data: {
                     ...updatedProductData,
                     categoryID: parseInt(categoryID),
+                    subcateId : parseInt(subcateId)
                 },
             });
             console.log('?? ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:', updatedProduct);
