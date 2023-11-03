@@ -292,7 +292,7 @@ model Admin {
 model AdminImage {
   id              Int       @id @default(autoincrement())
   url             String?
-  idadmin       Int?
+  idadmin       Int? @unique
   fk_adminImage Admin?   @relation(fields: [idadmin], references: [id], onDelete: Cascade)
   deletedAt       DateTime?
 }

@@ -30,51 +30,16 @@ export interface FormValues {
   username: string
   email: string;
   password: string;
-  comfirmPassword: string;
+  dateofbirth: string;
+  phonenumber: string;
+  sex: string;
 
 
 }
 
 export default function Admin() {
-  const active = [
-    {
-      id: "#1334",
-      username: "tranvanA231",
-      email: "tranvanA@gmail.com",
-      sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-    {
-      idUser: "#1335",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-    {
-      idUser: "#1336",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Ngừng Hoạt động",
-    },
-    {
-      idUser: "#1337",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-  ];
 
+  const [sex, setSex] = useState<boolean>();
   let status = "Hoạt động";
   const [admin, setAdmin] = useState<any>({});
   const idAddAdmin = "AddAdmin";
@@ -84,11 +49,14 @@ export default function Admin() {
     handleSubmit,
     clearErrors,
     reset,
+    register,
     formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
   });
-
+  const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSex(JSON.parse(event.target.value));
+  };
   const getAllAdmin = () => {
     adminController
       .getAllAdmin()
@@ -115,12 +83,12 @@ export default function Admin() {
   }, []);
 
   function JumpEditUser(username: any) {
-    window.location.href = `detailuser/${username}`;
+    window.location.href = `adminprofile/${username}`;
   }
 
   const DeleteUser = (id: any) => {
-    userController
-      .deleteUser(id)
+    adminController
+      .DeleteAdmin(id)
       .then((res) => {
         toast.success("Xóa thành công !");
         console.log("res:" + res);
@@ -130,6 +98,17 @@ export default function Admin() {
         toast.error("Xóa thất bại !");
       });
   };
+  const AddAdmin = (data: FormValues) => {
+    adminController.AddAdmin(data)
+      .then((res) => {
+        toast.success("Thêm thành công !");
+        console.log("res:" + res);
+        getAllAdmin();
+      })
+      .catch(() => {
+        toast.error("Thêm thất bại !");
+      });
+  }
   function reformatDate(dateStr: any) {
     var dArr = dateStr.split("-");  // ex input: "2010-01-18"
     return dArr[2] + "/" + dArr[1] + "/" + dArr[0].substring(0); //ex output: "18/01/10"
@@ -149,8 +128,22 @@ export default function Admin() {
     }
   };
   const saveModal = (id: string, data: FormValues) => {
-    // closeModal(id);
-    console.log("Data:"+JSON.stringify(data));
+    data.sex = JSON.parse(data.sex);
+    AddAdmin(data);
+    reset({
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+      dateofbirth: "",
+      phonenumber: "",
+      sex: "",
+    })
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+    console.log("Data:" + JSON.stringify(data));
   };
 
   return (
@@ -194,7 +187,7 @@ export default function Admin() {
                 body={
                   <>
                     <div className="grid grid-cols-5 gap-8">
-                      <div className="col-span-3 mt-[20px] mb-[20px] " >
+                      <div className="col-span-3 " >
                         <div className="flex gap-3  ">
                           <div className="flex flex-col gap-5 max-lg:gap-2">
                             <div className="h-[90px] w-[500px]">
@@ -220,7 +213,7 @@ export default function Admin() {
                                 }}
                                 render={({ field }) => (
                                   <>
-                                    <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                    <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
                                       Tên
                                     </label>
                                     <input
@@ -285,7 +278,7 @@ export default function Admin() {
                                 }}
                                 render={({ field }) => (
                                   <>
-                                    <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                    <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
                                       Tên tài khoản
                                     </label>
                                     <input
@@ -350,7 +343,7 @@ export default function Admin() {
                                 }}
                                 render={({ field }) => (
                                   <>
-                                    <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                    <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
                                       Mật khẩu
                                     </label>
                                     <input
@@ -391,72 +384,7 @@ export default function Admin() {
                           </div>
 
                         </div>
-                        <div className="flex gap-3 ">
-                          <div className="flex flex-col gap-5 max-lg:gap-2">
-                            <div className="h-[90px] w-[500px]">
-                              <Controller
-                                name="comfirmPassword"
-                                control={control}
-                                rules={{
-                                  required: {
-                                    value: true,
-                                    message:
-                                      "Không để trống",
-                                  },
-                                  minLength: {
-                                    value: 4,
-                                    message:
-                                      "Ít nhất 4 ký tự",
-                                  },
-                                  maxLength: {
-                                    value: 25,
-                                    message:
-                                      "Nhiều nhất 25 kí tự",
-                                  },
-                                }}
-                                render={({ field }) => (
-                                  <>
-                                    <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
-                                      Xác nhận mật khẩu
-                                    </label>
-                                    <input
-                                      className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
-                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
-                                            `}
-                                      placeholder="Xác nhận mật khẩu"
-                                      value={field.value}
-                                      type="password"
-                                      onChange={(e) => {
-                                        const reg =
-                                          /[!@#$%^&]/;
-                                        const value =
-                                          e.target
-                                            .value;
-                                        field.onChange(
-                                          value.replace(
-                                            reg,
-                                            ""
-                                          )
-                                        );
-                                      }}
-                                      name="comfirmPassword"
-                                    />
-                                    {errors.comfirmPassword && (
-                                      <p className="text-[11px] text-red-700 mt-0">
-                                        {
-                                          errors.comfirmPassword
-                                            .message
-                                        }
-                                      </p>
-                                    )}
-                                  </>
-                                )}
-                              />
-                            </div>
-                          </div>
 
-                        </div>
                         <div className="flex gap-3 ">
                           <div className="flex flex-col gap-5 max-lg:gap-2">
                             <div className="h-[90px] w-[500px]">
@@ -479,10 +407,15 @@ export default function Admin() {
                                     message:
                                       "Nhiều nhất 25 kí tự",
                                   },
+                                  validate: { // Kiểm tra email có đúng định dạng không 
+                                    validEmail: (value) => /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(value) || "Email không hợp lệ",
+
+                                  },
+
                                 }}
                                 render={({ field }) => (
                                   <>
-                                    <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                    <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
                                       Email
                                     </label>
                                     <input
@@ -522,6 +455,166 @@ export default function Admin() {
                           </div>
 
                         </div>
+                        <div className="w-[500px] flex justify-between">
+                          <div className="w-[48%] mb-[15px]">
+                            <label
+                              htmlFor="name"
+                              className="text-[#4C4C4C] text-sm font-medium"
+                            >
+                              Giới tính:
+                            </label>
+                            <div className="flex w-[100%] mt-3">
+                              <div className="flex items-center w-[33%] gap-1">
+                                <div>
+                                  <h3>Nam</h3>
+                                </div>
+                                <div className="flex items-center justify-start ">
+                                  <input
+                                    type="radio"
+                                    // name="colored-radio"
+                                    id="orange-radio1"
+                                    value="true"
+                                    {...register("sex")}
+                                    checked={sex === true}
+                                    onChange={handleSexChange}
+                                    className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
+                                        checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
+                                  />
+                                  <div
+                                    className="h-6 w-6 absolute rounded-full pointer-events-none
+                                        peer-checked:border-[#EA4B48] peer-checked:border-2"
+                                  />
+                                </div>
+                              </div>
+                              <div className="flex items-center w-[33%] ml-[30px] gap-1">
+                                <div>
+                                  <h3>Nữ</h3>
+                                </div>
+                                <div className="flex items-center justify-start ">
+                                  <input
+                                    type="radio"
+                                    // name="colored-radio"
+                                    id="orange-radio2"
+                                    value="false"
+                                    {...register("sex")}
+                                    checked={sex === false}
+                                    onChange={handleSexChange}
+                                    className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full
+checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
+                                  />
+                                  <div
+                                    className="h-6 w-6 absolute rounded-full pointer-events-none
+                                        peer-checked:border-[#EA4B48] peer-checked:border-2"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className=" h-[90px] w-[500px]">
+                            <Controller
+                              name="phonenumber"
+                              control={control}
+                              rules={{
+                                required: {
+                                  value: true,
+                                  message:
+                                    "Không để trống",
+                                },
+                                minLength: {
+                                  value: 4,
+                                  message:
+                                    "Ít nhất 4 ký tự",
+                                },
+                                maxLength: {
+                                  value: 25,
+                                  message:
+                                    "Nhiều nhất 25 kí tự",
+                                },
+                              }}
+                              render={({ field }) => (
+                                <>
+                                  <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                                    Số điện thoại
+                                  </label>
+                                  <input
+                                    className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                                    placeholder="Nhập vào số điện thoại"
+                                    value={field.value}
+                                    onChange={(e) => {
+                                      const reg =
+                                        /[!#$%^&]/;
+                                      const value =
+                                        e.target
+                                          .value;
+                                      field.onChange(
+                                        value.replace(
+                                          reg,
+                                          ""
+                                        )
+                                      );
+                                    }}
+                                    name="phonenumber"
+                                  />
+                                  {errors.phonenumber && (
+                                    <p className="text-[11px] text-red-700 mt-0">
+                                      {
+                                        errors.phonenumber
+                                          .message
+                                      }
+                                    </p>
+                                  )}
+                                </>
+                              )}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="w-[500px] mt-4">
+                          <Controller
+                            control={control}
+                            name="dateofbirth"
+                            rules={
+                              {
+                                required: {
+                                  value: true,
+                                  message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
+                                }
+                              }
+                            }
+                            render={({ field }) => (
+                              <>
+                                <label
+                                  htmlFor="name"
+                                  className="text-[#4C4C4C] text-sm font-medium"
+                                >
+                                  Ngày sinh
+                                </label>
+                                <input
+                                  className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                  rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                  max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]`}
+                                  type="date"
+                                  value={field.value}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    const reg = /[!@#$%^&*]/;
+                                    field.onChange(value.replace(reg, ""));
+                                  }}
+
+                                />
+                                {!!errors.dateofbirth && (
+                                  <p className="text-red-700 mt-2">
+                                    {errors.dateofbirth.message}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          />
+                        </div>
+
                       </div>
                     </div>
                   </>
@@ -566,6 +659,12 @@ export default function Admin() {
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
                     Id Admin
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
+                  >
+                    Tên Admin
                   </th>
                   <th
                     scope="col"
@@ -666,6 +765,9 @@ export default function Admin() {
                           >
                             {items.id}
                           </th>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.name}
+                          </td>
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
                             {items.username}
                           </td>

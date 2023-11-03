@@ -19,7 +19,7 @@ export default function DialogAddAdmin(props: Props) {
                <div className="flex flex-col max-lg:gap-4">
                   <div className="flex items-center justify-center">
                    
-                     <h3 className="font-bold text-2xl max-xl:text-[18px] uppercase text-[#4C4C4C]">
+                     <h3 className="font-bold text-3xl max-xl:text-[18px] uppercase text-[#FFAAAF]">
                         {title}
                      </h3>
                   </div>
