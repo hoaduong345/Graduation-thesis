@@ -15,7 +15,7 @@ export interface OrderModel {
     amountTotal: number,
     paymentMethod: string,
     createdAt: Date,
-    status: string;
+    status: number;
     invoice: string,
     note: string,
     name: string,

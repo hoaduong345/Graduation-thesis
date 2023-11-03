@@ -2,7 +2,6 @@ import { IonIcon } from "@ionic/react";
 import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
-// import QuantityHistory from "../../../../Assets/TSX/QuantityHistory";
 import { Link } from "react-router-dom";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
 import EmptyPage from "../../../../Helper/Empty/EmptyPage";
@@ -17,7 +16,6 @@ export default function OrderHistory() {
    const [open, setOpen] = useState<number>();
 
    const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-   //  const [arrowAction, setArrowAction] = useState(false);
    const openModal = () => {
       const modal = document.getElementById(
          "my_modal_3"
@@ -130,8 +128,9 @@ export default function OrderHistory() {
                                                       SP)
                                                    </div>
                                                    <div className="w-[16%] text-center">
-                                                      {/* {e.status} */}
-                                                      Dang giao hang
+                                                      {e.status == 0
+                                                         ? "Đã đặt hàng"
+                                                         : ""}
                                                    </div>
                                                    <Link
                                                       to={`/orderdetail/${e.id}`}
