@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Images } from "../../../../../Assets/TS";
 import Map from "../../../../../Assets/TSX/Map";
 import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
-import Orderbuyzzle from "../../../../../Assets/TSX/Orderbuyzzle";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDateYYYY, numberFormat } from "../../../../../Helper/Format";
 import TimelineStepper from "../../../../../Helper/Stepper/TimelineStepper";
@@ -30,6 +30,13 @@ export default function DetailOrderManagement() {
    useEffect(() => {
       getOrder();
    }, []);
+
+   const setStatus = (status: number) => {
+      orderControllers.setStatus(idOrder, status).then(() => {
+         getOrder();
+         toast.success("Thành công");
+      });
+   };
 
    return (
       <>
@@ -81,15 +88,21 @@ export default function DetailOrderManagement() {
                            <></>
                         )}
 
-                        <button
+                        {/* <button
                            className="justify-center gap-2 items-center text-sm font-bold text-white
                              rounded-md py-[8px] px-3 flex
                                 transition duration-150 bg-[#00B207] cursor-pointer
                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
                         >
-                           <p>Xác nhận</p>
+                           <p onClick={setStatusTo1}>
+                              {order.status == statusOrder.comfirm
+                                 ? "Giao cho ĐVVT"
+                                 : order.status == statusOrder.handOverToCarrier
+                                 ? "Đã giao cho ĐVVT"
+                                 : "sdsds"}
+                           </p>
                            <Orderbuyzzle />
-                        </button>
+                        </button> */}
 
                         <button
                            className="justify-center gap-3 items-center text-sm font-bold text-white
@@ -209,7 +222,10 @@ export default function DetailOrderManagement() {
                               <p>Trạng Thái Đơn Hàng</p>
                            </div>
                            <div className="px-11 pt-4">
-                              <TimelineStepper />
+                              <TimelineStepper
+                                 status={order.status}
+                                 comfirm={(status) => setStatus(status)}
+                              />
                            </div>
                         </div>
                      </div>

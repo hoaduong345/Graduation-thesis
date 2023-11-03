@@ -15,7 +15,7 @@ export interface OrderModel {
     amountTotal: number,
     paymentMethod: string,
     createdAt: Date,
-    status: number;
+    status: StatusOrder;
     invoice: string,
     note: string,
     name: string,
@@ -32,4 +32,11 @@ export interface OrderItems {
     image: string
     total: number
     ratingAt?: Date
+}
+
+export enum StatusOrder {
+    Ordered,
+    WaitingCourier, // Giao cho Đơn vị Vận tải (ĐVVT)
+    Shipping, //Đang trên đường giao hàng
+    Succed // Giao hàng thành công
 }
