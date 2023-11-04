@@ -27,8 +27,9 @@ const ShippingController = {
             res.status(500).json(error.message);
         }
     },
+    
     // Render toàn bộ đơn hàng có status = 1 ra giao diện nhận hàng thành công của đơn vị giao hàng
-    getAllStatus1: async (req, res) => {
+    getAllStatus: async (req, res) => {
         try {
             const whereClause = {
                 status: 1,
