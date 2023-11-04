@@ -79,7 +79,10 @@ const AdminController = {
         res.status(400).json("Mật khẩu mới và xác nhận mật khẩu không khớp");
         return;
       }
-  
+      if (oldPassword == newPassword) {
+        res.status(400).json("Mật khẩu cũ và mật khẩu mới không được trùng nhau");
+        return;
+      }
       // Mã hóa mật khẩu mới
       const saltRounds = 10; 
       const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
@@ -183,13 +186,24 @@ const AdminController = {
     }
   },
 
-  updateImageAdmin : async ( req, res) =>{
-      try{
+  updateImageAdmin: async (req, res) => {
+    try {
+        const { idadmin } = req.params;
+        const { url } = req.body;
 
-      }catch(error){
-        
-      }
-  },
+        const updateImage = await prisma.adminImage.update({
+            where: {
+                idadmin: parseInt(idadmin),
+            },
+            data: {
+                url,
+            },
+        });
+        res.status(200).json('Cập nhật hình ảnh thành công');
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+},
 
   
 };
