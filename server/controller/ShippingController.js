@@ -47,15 +47,7 @@ const ShippingController = {
                 skip: startIndex,
                 take: limit,
                 include: {
-                    OrderDetail: {
-                        include: {
-                            productOrder: {
-                                include: {
-                                    ProductImage: true,
-                                },
-                            },
-                        },
-                    },
+                    OrderDetail: true
                 },
             });
             const results = {
