@@ -7,10 +7,11 @@ import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDate, numberFormat } from "../../../../../Helper/Format";
 import { OrderPanigation } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
+import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import Calendar from "../../Assets/TSX/calendar";
 import Excel from "../../Assets/TSX/excel";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-
+import { Input } from "@material-tailwind/react";
 export default function OrderManagement() {
    const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
    const [currentPage, setCurrentPage] = useState<number>(1);
@@ -292,24 +293,22 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                  </div>
                                  <div className="flex items-center mt-5 gap-5">
                                     {/* Select box */}
-                                    <div className="relative h-10 w-[142px] min-w-[200px]">
+                                    {/* <div className="relative h-10 w-[142px] min-w-[200px]">
                                        <select className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
-                                          <option value="pending">
-                                             Chờ xác nhận
-                                          </option>
-                                          <option value="in-transit">
-                                             Đang vận chuyển
-                                          </option>
-                                          <option value="delivered">
-                                             Đã giao hàng
-                                          </option>
-                                          <option value="cancelled">
-                                             Đã hủy
+                                          <option>
+                                             {getStatusOrder(e.status)}
                                           </option>
                                        </select>
                                        <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
                                           Trạng thái
                                        </label>
+                                    </div> */}
+                                    <div className="max-w-max">
+                                       <Input
+                                          crossOrigin=""
+                                          label="Trạng thái"
+                                          value={getStatusOrder(e.status)}
+                                       />
                                     </div>
                                     {/* end Select box  */}
                                     <div className="badge badge-xs badge-error py-3 px-5">
