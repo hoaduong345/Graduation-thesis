@@ -49,6 +49,9 @@ const ShippingController = {
                 include: {
                     OrderDetail: true
                 },
+                orderBy:{
+                    id : "desc"
+                }
             });
             const results = {
                 page: page,
