@@ -23,10 +23,12 @@ export interface OrderModel {
     OrderDetail: OrderItems[]
 }
 export interface OrderItems {
+    id: number,
     productId: number,
     name: string,
     price: number,
     quantity: number,
     image: string
     total: number
+    ratingAt: Date
 }

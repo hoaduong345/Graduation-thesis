@@ -1,9 +1,10 @@
 import axios from "axios"
-import { FormValues } from "../pages/home/Admin/Category/Category"
+import { FormValues } from "../pages/home/Admin/Management/Category/Category"
 
 
 export const appConfig = {
-    apiUrl: import.meta.env.VITE_BACKEND_URL || ''
+    apiUrl: import.meta.env.VITE_BACKEND_URL || '',
+    apiCategories: import.meta.env.VITE_BACKEND_CATEGORIES_URL || ''
 }
 
 export interface ModelProducts {
@@ -35,6 +36,14 @@ class CategoryController {
         return await axios.post(`${appConfig.apiUrl}/addcategory`, data).then((res) => {
             return res.data as FormValues
         })
+    }
+
+    createSubcateLv1 = async (cateID: number, name: string) => {
+        const data = {
+            categoryId: cateID,
+            name: name
+        }
+        return await axios.post(`${appConfig.apiCategories}`, data)
     }
 }
 

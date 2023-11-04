@@ -35,8 +35,8 @@ export type FormValuesCateLv2 = {
 };
 
 function Category() {
-   const idModalCateLv1 = "categorLv1";
-   const idModalCateLv2 = "categoryLv2";
+   const idModalCate = "category";
+   const idModalSubCateLv1 = "sybCategoryLv1";
    const idRemoveCategory = "comfirm";
    const idRemoveCates = "comfirmCates";
 
@@ -201,10 +201,16 @@ function Category() {
       });
    };
 
-   const createCateLv2 = (data: string, idCate: number) => {
-      console.log(data, idCate);
-      closeModal(idModalCateLv2);
-      setNameCateLv2("");
+   const createCateLv2 = async (data: string, idCate: number) => {
+      if (data.length >= 4) {
+         await categoryController.createSubcateLv1(idCate, data).then(() => {
+            setNameCateLv2("");
+            closeModal(idModalSubCateLv1);
+            setCheckedCategory([]);
+         });
+      } else {
+         toast.warn("Danh Mục con");
+      }
    };
 
    useEffect(() => {
@@ -280,7 +286,7 @@ function Category() {
                            <button
                               className="flex gap-3"
                               onClick={() =>
-                                 openModal(idModalCateLv1, {
+                                 openModal(idModalCate, {
                                     id: 0,
                                  } as FormValues)
                               }
@@ -293,10 +299,10 @@ function Category() {
                         </div>
 
                         <DialogModal
-                           id={idModalCateLv1}
-                           onClose={() => closeModal(idModalCateLv1)}
+                           id={idModalCate}
+                           onClose={() => closeModal(idModalCate)}
                            onSave={handleSubmit((data: any) => {
-                              saveModal(idModalCateLv1, data);
+                              saveModal(idModalCate, data);
                            })}
                            title="Danh Mục Sản Phẩm"
                            body={
@@ -496,9 +502,9 @@ function Category() {
                      />
 
                      <DialogModal
-                        id={idModalCateLv2}
+                        id={idModalSubCateLv1}
                         title={categorys[indexCate]?.name}
-                        onClose={() => closeModal(idModalCateLv2)}
+                        onClose={() => closeModal(idModalSubCateLv1)}
                         onSave={() => createCateLv2(nameCateLv2, idCate)}
                         body={
                            <>
@@ -560,7 +566,7 @@ function Category() {
                                        <button
                                           onClick={() => {
                                              openModal(
-                                                idModalCateLv2,
+                                                idModalSubCateLv1,
                                                 {} as FormValues
                                              );
                                              setIdCate(e.id);
@@ -583,10 +589,7 @@ function Category() {
                                              <li>
                                                 <button
                                                    onClick={() =>
-                                                      openModal(
-                                                         idModalCateLv1,
-                                                         e
-                                                      )
+                                                      openModal(idModalCate, e)
                                                    }
                                                    className="flex items-center gap-4"
                                                 >

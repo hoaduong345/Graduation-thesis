@@ -97,41 +97,55 @@ model Token {
   deletedAt    DateTime?
 }
 
-
 model Product {
-  id           Int            @id @default(autoincrement())
-  name         String?
-  price        Int?
-  rate         Int?
-  pricesale    Int?
-  sellingPrice Int?
-  discount     Int?
-  soldcount    Int?           @default(0)
-  quantity     Int?
-  description  String?        @db.VarChar(15000)
-  status       String?
-  date         DateTime?      @default(now())
+  id            Int                    @id @default(autoincrement())
+  name          String?
+  price         Int?
+  rate          Int?
+  pricesale     Int?
+  sellingPrice  Int?
+  discount      Int?
+  soldcount     Int?                   @default(0)
+  quantity      Int?
+  description   String?                @db.VarChar(15000)
+  status        String?
+  date          DateTime?              @default(now())
   // productId    Int?
-  deletedAt    DateTime?
-  createdAt    DateTime?      @default(now())
-  updatedAt    DateTime?      @default(now())
-  categoryID   Int?
-  fK_category  Category?      @relation(fields: [categoryID], references: [id])
-  OrderDetail  OrderDetail[]
-  ProductImage ProductImage[]
-  cart         ItemCart[]
-  Rating       Rating[]
+  deletedAt     DateTime?
+  createdAt     DateTime?              @default(now())
+  updatedAt     DateTime?              @default(now())
+  categoryID    Int?        
+  subcateId     Int?
+  fK_category   Category?              @relation(fields: [categoryID], references: [id])
+  fK_subcateLv2 subCategoriesMultiLv2? @relation(fields: [subcateId], references: [id])
+  OrderDetail   OrderDetail[]
+  ProductImage  ProductImage[]
+  cart          ItemCart[]
+  Rating        Rating[]
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String?
-  date      DateTime? @default(now())
-  updatedAt DateTime? @default(now())
-  createdAt DateTime? @default(now())
-  image     String?
-  products  Product[]
-  deletedAt DateTime?
+  id            Int                     @id @default(autoincrement())
+  name          String?
+  date          DateTime?               @default(now())
+  updatedAt     DateTime?               @default(now())
+  createdAt     DateTime?               @default(now())
+  image         String?
+  products      Product[]
+  subCategories subCategoriesMultiLv2[]  @relation("CategorySubcategories")
+  deletedAt     DateTime?
+  @@index([name])
+}
+
+model subCategoriesMultiLv2 {
+  id         Int       @id @default(autoincrement())
+  categoryid Int      
+  name       String   
+  date       DateTime?
+  createAt   DateTime?
+  productId  Product[]
+  category   Category  @relation("CategorySubcategories", fields: [categoryid], references: [id])
+  @@index([name])
 }
 
 model Cart {
@@ -192,6 +206,9 @@ model Rating {
 model Order {
   id            Int           @id @default(autoincrement())
   userId        Int?
+  name          String?
+  address       String?
+  phoneNumber   String?
   status        String?
   note          String?
   invoice       String?
@@ -216,6 +233,7 @@ model OrderDetail {
   price        Int?
   quantity     Int?
   total        Int?
+  ratingAt     DateTime?
   createdAt    DateTime? @default(now())
   updatedAt    DateTime? @default(now())
   deletedAt    DateTime?

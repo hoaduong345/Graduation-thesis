@@ -30,6 +30,10 @@ class OrderControllers {
             return res.data as OrderModel
         })
     }
+
+    putRatingAt = async (idOrder: number, productId: number, orderDetailId: number) => {
+        return await axios.put(`${appConfig.apiUrl}/${idOrder}`, { productId: productId, orderDetailId: orderDetailId })
+    }
 }
 
 export const orderControllers = new OrderControllers
