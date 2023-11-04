@@ -33,6 +33,10 @@ const ShippingController = {
     // Render toàn bộ đơn hàng có status = 1 ra giao diện nhận hàng thành công của đơn vị giao hàng
     getAllStatus: async (req, res) => {
         try {
+            const page = parseInt(req.query.page);
+            const limit = 4;
+            const startIndex = (page - 1) * limit;
+            const totalOrder = (await prisma.order.findMany()).length;
             const whereClause = {
                 status: {
                     gte: 1,
@@ -40,6 +44,8 @@ const ShippingController = {
             };
             const ProductFromOrder = await prisma.order.findMany({
                 where: whereClause,
+                skip: startIndex,
+                take: limit,
                 include: {
                     OrderDetail: {
                         include: {
@@ -52,7 +58,14 @@ const ShippingController = {
                     },
                 },
             });
-            res.status(200).json(ProductFromOrder);
+            const results = {
+                page: page,
+                pageSize: limit,
+                totalPage: Math.ceil(totalOrder / limit),
+                data: ProductFromOrder,
+                totalOrder: totalOrder,
+            };
+            res.status(200).json(results);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
