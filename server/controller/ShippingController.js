@@ -8,7 +8,9 @@ const ShippingController = {
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status)
             const order = await prisma.order.findFirst({
-                where: orderId,
+                where: {
+                    id : orderId
+                },
             });
             if (!order) {
                 return res.status(404).send('Order is undefined');
@@ -54,5 +56,15 @@ const ShippingController = {
             res.status(500).json(error.message);
         }
     },
+    // Huỷ đơn hàng
+    requestDeleteOrder : async(req,res) =>{
+        try {
+            
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(error.message);
+        }
+    },
+
 };
 module.exports = ShippingController;
