@@ -11,13 +11,13 @@ import { storage } from "../../../../Firebase/Config";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import { numberFormat } from "../../../../Helper/Format";
 import Loading from "../../../../Helper/Loading/Loading";
-import StepperPage from "../../../../Helper/Stepper/StepperPage";
 import { OrderModel } from "../../../../Model/OrderModel";
 import { Rating } from "../../../../Model/ProductModel";
 import Container from "../../../../components/container/Container";
 import Back from "../../Admin/Assets/TSX/Back";
 import UploadIMG from "../../Admin/Assets/TSX/UploadIMG";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
+import StepperPage from "../../../../Helper/Stepper/StepperUser";
 
 export default function OrderDetailPage() {
    const { id } = useParams();

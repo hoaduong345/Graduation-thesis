@@ -40,6 +40,12 @@ class OrderControllers {
     setStatus = async (id: number, status: number) => {
         return await axios.post(`${appConfig.apiShipping}`, { id: id, status: status })
     }
+
+    getShipping = async (page: number) => {
+        return await axios.get(`${appConfig.apiShipping}?page=${page}`).then((res) => {
+            return res.data
+        })
+    }
 }
 
 export const orderControllers = new OrderControllers

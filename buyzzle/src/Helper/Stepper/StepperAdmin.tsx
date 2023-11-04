@@ -3,7 +3,7 @@ type handleClick = {
    comfirm: (status: number) => void;
 };
 
-function TimelineStepper(props: handleClick) {
+function StepperAdmin(props: handleClick) {
    const { comfirm, status } = props;
    return (
       <ul className="steps steps-vertical">
@@ -98,4 +98,4 @@ function TimelineStepper(props: handleClick) {
    );
 }
 
-export default TimelineStepper;
+export default StepperAdmin;

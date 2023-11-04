@@ -1,44 +1,19 @@
-import { IonIcon } from "@ionic/react";
 import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
-import { useNavigate } from "react-router-dom";
-import Search from "../../../../../Assets/TSX/Search";
-import { orderControllers } from "../../../../../Controllers/OrderControllers";
-import { formatDate, numberFormat } from "../../../../../Helper/Format";
-import { OrderPanigation } from "../../../../../Model/OrderModel";
-import Container from "../../../../../components/container/Container";
-import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
-import Calendar from "../../Assets/TSX/calendar";
-import Excel from "../../Assets/TSX/excel";
-import SitebarAdmin from "../../Sitebar/Sitebar";
+import { Link } from "react-router-dom";
+
 import { Input } from "@material-tailwind/react";
-export default function OrderManagement() {
+import Search from "../../../Assets/TSX/Search";
+import { orderControllers } from "../../../Controllers/OrderControllers";
+import { formatDate, numberFormat } from "../../../Helper/Format";
+import { OrderPanigation } from "../../../Model/OrderModel";
+import Container from "../../../components/container/Container";
+import Calendar from "../Admin/Assets/TSX/calendar";
+import Excel from "../Admin/Assets/TSX/excel";
+import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
+export default function ShippingPage() {
    const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
    const [currentPage, setCurrentPage] = useState<number>(1);
-
-   const [open, setOpen] = useState(false);
-
-   const openModal = () => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
-      if (modal) {
-         modal.showModal();
-         setOpen(!open);
-      }
-   };
-   const closeModal = () => {
-      const modal = document.getElementById(
-         "my_modal_3"
-      ) as HTMLDialogElement | null;
-      if (modal) {
-         modal.close();
-      }
-   };
-   console.log(
-      "🚀 ~ file: OrderManagement.tsx:39 ~ OrderManagement ~ order?.totalOrder;:",
-      order?.totalOrder
-   );
    const [changeButton, setChangeButton] = useState([
       {
          id: 1,
@@ -93,7 +68,7 @@ export default function OrderManagement() {
    }
 
    const getOrder = async () => {
-      await orderControllers.getAdmin(currentPage).then((res) => {
+      await orderControllers.getShipping(currentPage).then((res) => {
          setOrder(res);
       });
    };
@@ -102,39 +77,14 @@ export default function OrderManagement() {
       getOrder();
    }, [currentPage]);
 
-   const navigate = useNavigate();
-
    return (
       <Container>
-         <div
-            className="float-right cursor-pointer max-[1920px]:invisible max-2xl:visible"
-            onClick={() => openModal()}
-         >
-            <IonIcon className="text-[2rem]" name={"menu"}></IonIcon>
-         </div>
          <div className="grid grid-cols-5">
-            <div className={`col-span-1`}>
-               {/* You can open the modal using document.getElementById('ID').showModal() method */}
-               <dialog id="my_modal_3" className="max-2xl:modal ">
-                  <div className="relative">
-                     <button
-                        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-[120px]"
-                        onClick={closeModal}
-                     >
-                        ✕
-                     </button>
-                     <SitebarAdmin />
-                  </div>
-               </dialog>
-               <div className="max-2xl:hidden">
-                  <SitebarAdmin />
-               </div>
-            </div>
-            <div className="content-right-filter mt-[34px] col-span-4 max-2xl:col-span-5 ">
+            <div className="content-right-filter mt-[34px] col-span-5 max-2xl:col-span-5 ">
                {/* h2 */}
                <div>
                   <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">
-                     QUẢN LÝ ĐƠN HÀNG
+                     VẬN CHUYỂN ĐƠN HÀNG
                   </h2>
                </div>
                {/* end h2 */}
@@ -156,7 +106,7 @@ export default function OrderManagement() {
                            {btnItems.text}
                            {btnItems.id == 1 && (
                               <div className="badge badge-xs badge-error badge-outline py-2">
-                                 {order?.totalOrder}
+                                 {order?.data?.length}
                               </div>
                            )}
                            {btnItems.id == 2 && (
@@ -275,21 +225,6 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                           </div>
                                        </div>
                                     </div>
-
-                                    {e.invoice == "true" ? (
-                                       <>
-                                          <div className="flex justify-end items-center gap-2">
-                                             <p className="text-[#4C4C4C] font-bold text-sm">
-                                                Yêu cầu:
-                                             </p>
-                                             <p className="text-[#EA4B48] font-bold text-sm">
-                                                In Hóa đơn
-                                             </p>
-                                          </div>
-                                       </>
-                                    ) : (
-                                       <></>
-                                    )}
                                  </div>
                                  <div className="flex items-center mt-5 gap-5">
                                     <div className="max-w-max">
@@ -298,12 +233,6 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                           label="Trạng thái"
                                           value={getStatusOrder(e.status)}
                                        />
-                                    </div>
-                                    {/* end Select box  */}
-                                    <div className="badge badge-xs badge-error py-3 px-5">
-                                       <p className="font-bold text-xs text-white ">
-                                          Mới
-                                       </p>
                                     </div>
                                  </div>
                                  <div className="grid grid-cols-3 mt-4 ">
@@ -343,26 +272,11 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                  </div>
                               </div>
                               <div className="group-hover:opacity-100 flex absolute top-[50%] transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
-                                 {/* {e.invoice == "true" ? (
-                                    <>
-                                       <Link to={`/admin/invoice/${e.id}`}>
-                                          <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
-                                             <Print />
-                                             <p>Print</p>
-                                          </button>
-                                       </Link>
-                                    </>
-                                 ) : (
-                                    <></>
-                                 )} */}
-                                 <button
-                                    className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex"
-                                    onClick={() => {
-                                       navigate(`${e.id}`);
-                                    }}
-                                 >
-                                    <p>Xem chi tiết</p>
-                                 </button>
+                                 <Link to={`/shipping/detail/${e.id}`}>
+                                    <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
+                                       <p>Xem chi tiết</p>
+                                    </button>
+                                 </Link>
                               </div>
                            </div>
                            {/* end card */}
