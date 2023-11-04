@@ -1,4 +1,3 @@
-import { UserModel } from "./UserModel";
 
 export interface OrderPanigation {
     data: OrderModel[],
@@ -16,19 +15,28 @@ export interface OrderModel {
     amountTotal: number,
     paymentMethod: string,
     createdAt: Date,
-    status: string;
+    status: StatusOrder;
     invoice: string,
     note: string,
-    User: UserModel
+    name: string,
+    address: string,
+    phoneNumber: number,
     OrderDetail: OrderItems[]
 }
 export interface OrderItems {
-    id: number,
+    id?: number,
     productId: number,
     name: string,
     price: number,
     quantity: number,
     image: string
     total: number
-    ratingAt: Date
+    ratingAt?: Date
+}
+
+export enum StatusOrder {
+    Ordered,
+    WaitingCourier, // Giao cho Đơn vị Vận tải (ĐVVT)
+    Shipping, //Đang trên đường giao hàng
+    Succed // Giao hàng thành công
 }

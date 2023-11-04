@@ -299,18 +299,14 @@ const ProductController = {
             const {
                 name,
                 price,
-                rate,
-                pricesale,
-                sellingPrice,
+                // rate,    
                 discount,
-                soldcount,
+                // soldcount,
                 quantity,
                 description,
-                status,
-                date,
-                createdAt,
-                updatedAt,
+                // status,
                 categoryID,
+                subcateId,
             } = req.body;
 
             const SellingPrice = price - price * (discount / 100);
@@ -320,18 +316,19 @@ const ProductController = {
             const updatedProductData = {
                 name,
                 price: parseInt(price),
-                rate: parseInt(rate),
+                // rate: parseInt(rate),
                 pricesale: Pricesale,
                 sellingPrice: SellingPrice,
                 discount: parseInt(discount),
-                soldcount: parseInt(soldcount),
+                // soldcount: parseInt(soldcount),
                 quantity: parseInt(quantity),
                 description,
-                status,
+                // status,
                 date: new Date(),
-                createdAt: new Date(),
+                // createdAt: new Date(),
                 updatedAt: new Date(),
                 categoryID: parseInt(categoryID),
+                subcateId: parseInt(subcateId)
             };
 
             const updatedProduct = await prisma.product.update({
@@ -341,9 +338,9 @@ const ProductController = {
                 data: {
                     ...updatedProductData,
                     categoryID: parseInt(categoryID),
+                    subcateId : parseInt(subcateId)
                 },
             });
-            console.log('?? ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:', updatedProduct);
 
             // res.status(200).json("Cập nhật sản phẩm thành công");
             console.log(updatedProduct);

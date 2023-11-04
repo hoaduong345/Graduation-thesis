@@ -238,10 +238,10 @@ export default function OrderDetailPage() {
                               <div>
                                  <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
                                     <span className="font-bold">
-                                       {orderDetails?.User?.name},{" "}
-                                       {orderDetails?.User?.phonenumber}{" "}
+                                       {orderDetails?.name},{" "}
+                                       {orderDetails?.phoneNumber}{" "}
                                     </span>{" "}
-                                    {orderDetails?.User?.address}
+                                    {orderDetails?.address}
                                  </p>
                               </div>
                            </div>
@@ -326,7 +326,7 @@ export default function OrderDetailPage() {
                         </div>
                      </div>
                      <div>
-                        <StepperPage />
+                        <StepperPage status={orderDetails.status} />
                      </div>
 
                      <div className="flex flex-col gap-3">
@@ -380,26 +380,42 @@ export default function OrderDetailPage() {
                                        </p>
                                     </div>
                                     <div className="col-span-1 flex mx-auto items-center">
-                                       <button
-                                          className={`bg-[#EA4B48] rounded-md font-medium ${
-                                             e.ratingAt == null
-                                                ? `cursor-pointer`
-                                                : `cursor-not-allowed bg-[#908a8a]`
-                                          }`}
-                                          onClick={() => {
-                                             if (e.ratingAt == null) {
-                                                openDialog(idDialogRating);
-                                                setIdSP(e.productId);
-                                                setIndexSP(index);
-                                             }
-                                          }}
-                                       >
-                                          <p className="px-4 py-2 text-white">
-                                             {e.ratingAt == null
-                                                ? "Đánh giá"
-                                                : "Đã đánh giá"}
-                                          </p>
-                                       </button>
+                                       {orderDetails.status == 3 ? (
+                                          <>
+                                             <button
+                                                className={` rounded-md font-medium ${
+                                                   e.ratingAt == null
+                                                      ? `cursor-pointer bg-[#EA4B48]`
+                                                      : `cursor-not-allowed bg-[#908a8a]`
+                                                }`}
+                                                onClick={() => {
+                                                   if (e.ratingAt == null) {
+                                                      openDialog(
+                                                         idDialogRating
+                                                      );
+                                                      setIdSP(e.productId);
+                                                      setIndexSP(index);
+                                                   }
+                                                }}
+                                             >
+                                                <p className="px-4 py-2 text-white">
+                                                   {e.ratingAt == null
+                                                      ? "Đánh giá"
+                                                      : "Đã đánh giá"}
+                                                </p>
+                                             </button>
+                                          </>
+                                       ) : (
+                                          <>
+                                             <button
+                                                className={` rounded-md font-medium cursor-not-allowed bg-[#908a8a]`}
+                                             >
+                                                <p className="px-4 py-2 text-white">
+                                                   Đánh giá
+                                                </p>
+                                             </button>
+                                          </>
+                                       )}
                                     </div>
                                  </div>
                               </>

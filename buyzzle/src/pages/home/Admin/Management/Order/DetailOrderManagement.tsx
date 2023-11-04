@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Images } from "../../../../../Assets/TS";
-import Orderbuyzzle from "../../../../../Assets/TSX/Orderbuyzzle";
+import Map from "../../../../../Assets/TSX/Map";
+import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import { formatDateYYYY, numberFormat } from "../../../../../Helper/Format";
 import TimelineStepper from "../../../../../Helper/Stepper/TimelineStepper";
 import { OrderModel } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
-import BuyzzleOrderAdmin from "../../Assets/TSX/BuyzzleOrderAdmin";
 import MessageOrderAdmin from "../../Assets/TSX/MessageOrderAdmin";
+import Paymethod from "../../Assets/TSX/Paymethod";
+import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
 import PrintOrder from "../../Assets/TSX/PrintOrder";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
-import Map from "../../../../../Assets/TSX/Map";
-import Paymethod from "../../Assets/TSX/Paymethod";
-import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
 
 export default function DetailOrderManagement() {
    const { id } = useParams();
@@ -31,6 +30,13 @@ export default function DetailOrderManagement() {
    useEffect(() => {
       getOrder();
    }, []);
+
+   const setStatus = (status: number) => {
+      orderControllers.setStatus(idOrder, status).then(() => {
+         getOrder();
+         toast.success("Thành công");
+      });
+   };
 
    return (
       <>
@@ -82,19 +88,25 @@ export default function DetailOrderManagement() {
                            <></>
                         )}
 
-                        <button
-                           className="justify-center gap-3 items-center text-sm font-bold text-white
+                        {/* <button
+                           className="justify-center gap-2 items-center text-sm font-bold text-white
                              rounded-md py-[8px] px-3 flex
                                 transition duration-150 bg-[#00B207] cursor-pointer
                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
                         >
-                           <p>Xác nhận</p>
+                           <p onClick={setStatusTo1}>
+                              {order.status == statusOrder.comfirm
+                                 ? "Giao cho ĐVVT"
+                                 : order.status == statusOrder.handOverToCarrier
+                                 ? "Đã giao cho ĐVVT"
+                                 : "sdsds"}
+                           </p>
                            <Orderbuyzzle />
-                        </button>
+                        </button> */}
 
                         <button
                            className="justify-center gap-3 items-center text-sm font-bold text-white
-                             rounded-md py-[8px] px-[29.5px] flex
+                             rounded-md py-[8px] px-[27.9px] flex
                                 transition duration-150 bg-[#EA4B48] cursor-pointer
                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
                         >
@@ -210,7 +222,10 @@ export default function DetailOrderManagement() {
                               <p>Trạng Thái Đơn Hàng</p>
                            </div>
                            <div className="px-11 pt-4">
-                              <TimelineStepper />
+                              <TimelineStepper
+                                 status={order.status}
+                                 comfirm={(status) => setStatus(status)}
+                              />
                            </div>
                         </div>
                      </div>
@@ -231,11 +246,15 @@ export default function DetailOrderManagement() {
 
                                  <div>
                                     <p className="text-sm">
-                                       {order?.User?.name.substring(0, 11)}{" "}
+                                       {order?.name?.length > 0
+                                          ? order?.name.substring(0, 11)
+                                          : ""}{" "}
                                     </p>
 
                                     <p className="text-[#12b004] text-[10px]">
-                                       {order?.User?.email.substring(0, 11)}{" "}
+                                       {order?.name?.length
+                                          ? order?.address.substring(0, 11)
+                                          : ""}{" "}
                                     </p>
                                  </div>
                               </div>
@@ -252,9 +271,8 @@ export default function DetailOrderManagement() {
                                        <MessageOrderAdmin />
                                     </button>
                                  </div>
-                                 <div className=" flex gap-1 items-center text-[10px] text-[#7A828A]">
-                                    <BuyzzleOrderAdmin />
-                                    <p>20 Đơn hàng</p>
+                                 <div className=" flex gap-1 items-center text-[10px] text-red-700">
+                                    Đang hoạt động
                                  </div>
                               </div>
                            </div>
@@ -271,7 +289,7 @@ export default function DetailOrderManagement() {
                                        <p>Phone</p>
                                     </div>
                                     <p className="pl-2 border-l-[1px] border-[#FFAAAF] font-semibold text-[#5D5FEF] text-sm">
-                                       {order?.User?.phonenumber}
+                                       {order?.phoneNumber}
                                     </p>
                                  </div>
 
@@ -282,10 +300,10 @@ export default function DetailOrderManagement() {
                                     </div>
                                     <div className="pl-2 border-l-[1px] border-[#FFAAAF] font-semibold">
                                        <p className="text-[#1A1A1A] text-sm">
-                                          {order?.User?.name}
+                                          {order?.name}
                                        </p>
                                        <p className="text-[#4C4C4C] text-sm">
-                                          {order?.User?.address}
+                                          {order?.address}
                                        </p>
                                     </div>
                                  </div>

@@ -78,7 +78,7 @@ export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
   const [filterState, setFilterState] = useState<FilterChart>({
     filterValue: {
-      from: moment().startOf("date").toDate(),
+      from: moment().startOf("date").add(-4, "d").toDate(),
       to: moment().endOf("date").toDate(),
     },
     page: 1,
@@ -203,11 +203,12 @@ export default function StatisticsPage() {
 
   // ================================ PANGINATION ================================
 
-  const loadMore = () => {
-    setFilterState((prev) => ({ ...prev, page: prev.page! + 1 }));
+  const handleLoadMore = () => {
+    setFilterState((prev) => ({ ...prev, page: filterState.page! + 1 }));
     statsControllers
       .getStats({ ...filterState, page: filterState.page! + 1 })
       .then((res) => {
+        console.log("🚀 ~ file : StatisticsPage.tsx:211 ~ .then ~ res:", res);
         let arr: HotProductsInRange[] = [];
         if (stats?.hotProductsInRange?.length) {
           arr = stats?.hotProductsInRange.concat(res.hotProductsInRange);
@@ -215,13 +216,33 @@ export default function StatisticsPage() {
           arr = res.hotProductsInRange;
         }
         setStats((prev) => ({ ...prev, hotProductsInRange: arr }));
-        if (
-          stats.hotProductsInRange.length === stats.hotProductsInRange.length
-        ) {
+        if (stats.hotProductsInRange.length == res.hotProductsInRange.length) {
           setIsLoadMoreComplete(true);
         }
       })
+
       .catch((err) => console.log(err.response?.data?.message));
+  };
+
+  const handleShrink = () => {
+    setFilterState((prev) => ({ ...prev, page: filterState.page! - 1 }));
+    statsControllers
+      .getStats({ ...filterState, page: filterState.page! - 1 })
+      .then((res) => {
+        let arr: HotProductsInRange[] = [];
+        if (res.hotProductsInRange.length) {
+          arr = res.hotProductsInRange?.reduce((acc, item) => {
+            if (!stats.hotProductsInRange?.includes(item)) {
+              acc.push();
+            }
+            return acc;
+          }, []);
+        } else {
+          arr = stats.hotProductsInRange;
+        }
+        setStats((prev) => ({ ...prev, hotProductsInRange: arr }));
+        setIsLoadMoreComplete(false);
+      });
   };
 
   // chart
@@ -464,13 +485,16 @@ export default function StatisticsPage() {
               <div className="mt-3">
                 {!isLoadMoreComplete ? (
                   <p
-                    onClick={loadMore}
+                    onClick={handleLoadMore}
                     className="text-[#5D5FEF] text-sm cursor-pointer hover:text-[#4648cc] duration-200"
                   >
                     Xem thêm..
                   </p>
                 ) : (
-                  <p className="text-[#5D5FEF] text-sm cursor-pointer hover:text-[#4648cc] duration-200">
+                  <p
+                    onClick={handleShrink}
+                    className="text-[#5D5FEF] text-sm cursor-pointer hover:text-[#4648cc] duration-200"
+                  >
                     Thu gọn..
                   </p>
                 )}

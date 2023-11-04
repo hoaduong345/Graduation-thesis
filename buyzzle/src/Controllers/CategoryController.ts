@@ -1,6 +1,5 @@
 import axios from "axios"
-import { FormValues } from "../pages/home/Admin/Management/Category/Category"
-
+import { CategoryModal } from "../Model/CategoryModel"
 
 export const appConfig = {
     apiUrl: import.meta.env.VITE_BACKEND_URL || '',
@@ -26,15 +25,15 @@ class CategoryController {
     remove = async (id: number) => {
         return await axios.delete(`${appConfig.apiUrl}/deletecategory/${id}`)
     }
-    update = async (id: number, data: FormValues) => {
+    update = async (id: number, data: CategoryModal) => {
         return await axios.put(`${appConfig.apiUrl}/updatecategory/${id}`, data)
     }
     getAll = async () => {
         return await axios.get(`${appConfig.apiUrl}/allcategory`)
     }
-    create = async (data: FormValues): Promise<FormValues> => {
+    create = async (data: CategoryModal): Promise<CategoryModal> => {
         return await axios.post(`${appConfig.apiUrl}/addcategory`, data).then((res) => {
-            return res.data as FormValues
+            return res.data as CategoryModal
         })
     }
 
@@ -44,6 +43,10 @@ class CategoryController {
             name: name
         }
         return await axios.post(`${appConfig.apiCategories}`, data)
+    }
+
+    getAllCate = async () => {
+        return await axios.get(`${appConfig.apiCategories}`)
     }
 }
 
