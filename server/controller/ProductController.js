@@ -325,7 +325,7 @@ const ProductController = {
                 description,
                 // status,
                 date: new Date(),
-                createdAt: new Date(),
+                // createdAt: new Date(),
                 updatedAt: new Date(),
                 categoryID: parseInt(categoryID),
                 subcateId: parseInt(subcateId)
