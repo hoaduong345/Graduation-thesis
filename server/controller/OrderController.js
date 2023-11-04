@@ -16,6 +16,9 @@ const OderController = {
                     paymentMethod: orderData.method,
                     note: orderData.note,
                     invoice: orderData.invoice.toString(),
+                    name: orderData.name,
+                    address: orderData.address,
+                    phoneNumber: orderData.phoneNumber,
                 },
             });
             orderData.cartItems.map(async (e) => {
@@ -72,7 +75,6 @@ const OderController = {
                 take: limit,
                 include: {
                     OrderDetail: true,
-                    User: true,
                 },
                 orderBy: {
                     id: 'desc',
@@ -115,7 +117,6 @@ const OderController = {
             const id = parseInt(req.params.id);
             const productId = parseInt(req.body.productId);
             const orderDetailId = parseInt(req.body.orderDetailId);
-            console.log(id, productId);
             const existingCategory = await prisma.orderDetail.findMany({
                 where: {
                     orderId: id,

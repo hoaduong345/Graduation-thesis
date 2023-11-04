@@ -1,20 +1,19 @@
-import { useEffect, useRef, useState } from "react";
-import Container from "../../../../components/container/Container";
-import Back from "../Assets/TSX/Back";
-// import ArrowDown from '../../../Assets/TSX/ArrowDown'
-import UploadIMG from "../Assets/TSX/UploadIMG";
-// import { Images } from '../../../Assets/TS'
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { ref, uploadBytes } from "firebase/storage";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
+import { categoryController } from "../../../../Controllers/CategoryController";
 import { storage } from "../../../../Firebase/Config";
 import Loading from "../../../../Helper/Loading/Loading";
+import { CategoryModal } from "../../../../Model/CategoryModel";
+import Container from "../../../../components/container/Container";
 import { appConfig } from "../../../../configsEnv";
-// import { v4 } from 'uuid'
+import Back from "../Assets/TSX/Back";
+import UploadIMG from "../Assets/TSX/UploadIMG";
 
 export type FormValues = {
    productName: string;
@@ -24,14 +23,11 @@ export type FormValues = {
    productImage: string;
    productDiscount: number;
    categoryID: number;
+   subCategoryID: Number;
 };
-export interface Cate {
-   id: number;
-   name: string;
-}
 
 export default function Addproducts() {
-   const [categoty, setCategory] = useState<Cate[]>([]);
+   const [categoty, setCategory] = useState<CategoryModal[]>([]);
    const editorRef = useRef<any>(null);
 
    const [url, setUrl] = useState<string[]>([]);
@@ -42,11 +38,10 @@ export default function Addproducts() {
    }, []);
 
    const getCategory = () => {
-      axios
-         .get("http://localhost:5000/buyzzle/product/allcategory")
-         .then((response) => response.data)
-         .then((data) => {
-            setCategory(data);
+      categoryController
+         .getAllCate()
+         .then((res) => {
+            setCategory(res.data);
          })
          .catch((err) => console.log(err));
    };
@@ -111,6 +106,7 @@ export default function Addproducts() {
          quantity: data.productQuantity,
          discount: data.productDiscount,
          categoryID: data.categoryID,
+         subcategoriesID: data.subCategoryID,
       };
       axios
          .post(`${appConfig.apiUrl}/addproduct`, _data)
@@ -134,12 +130,14 @@ export default function Addproducts() {
       control,
       handleSubmit,
       reset,
+      watch,
       formState: { errors, isDirty, isValid },
    } = useForm<FormValues>({
       mode: "all",
       defaultValues: {
          productName: "",
          categoryID: 0,
+         subCategoryID: 0,
          productDesc: "",
          productImage: "",
          productPrice: 1,
@@ -703,7 +701,7 @@ export default function Addproducts() {
                                  render={({ field }) => (
                                     <>
                                        <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
-                                          Danh Mục Sản Phẩm
+                                          Danh Mục Cấp 1
                                           <span className="text-[#FF0000]">
                                              *
                                           </span>
@@ -712,12 +710,6 @@ export default function Addproducts() {
                                        <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                                           <select
                                              className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
-                                             // onChange={(na) => {
-                                             //     const Id = na.target.value
-                                             //     setI(Number(Id))
-
-                                             //     console.log(Id)
-                                             // }}
                                              value={field.value}
                                              onChange={(e) => {
                                                 const reg = /[]/;
@@ -728,7 +720,7 @@ export default function Addproducts() {
                                              }}
                                           >
                                              <option value="">
-                                                -- Chọn Danh Mục --
+                                                -- Chọn Danh Mục Cấp 1 --
                                              </option>
                                              {categoty.map((e) => {
                                                 return (
@@ -748,20 +740,80 @@ export default function Addproducts() {
                                  )}
                               />
 
-                              <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
-                                 Tag<span className="text-[#FF0000]">*</span>
-                              </p>
-                              {/* Dropdown */}
-                              <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                 <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md">
-                                    <option>
-                                       key-word tìm kiếm / key-word tìm kiếm 1
-                                    </option>
-                                    <option>
-                                       key-word tìm kiếm 2 / key-word tìm kiếm 3
-                                    </option>
-                                 </select>
-                              </div>
+                              <Controller
+                                 control={control}
+                                 name="subCategoryID"
+                                 rules={{
+                                    required: {
+                                       value: true,
+                                       message: "Vui lòng chọn danh mục!",
+                                    },
+                                 }}
+                                 render={({ field }) => (
+                                    <>
+                                       <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
+                                          Danh Mục Cấp 2
+                                          <span className="text-[#FF0000]">
+                                             *
+                                          </span>
+                                       </p>
+                                       {/* Dropdown */}
+                                       <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                          <select
+                                             value={field.value.toString()}
+                                             onChange={(e) => {
+                                                const reg = /[]/;
+                                                const value = e.target.value;
+                                                field.onChange(
+                                                   value.replace(reg, "")
+                                                );
+                                             }}
+                                             className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
+                                          >
+                                             <option value="">
+                                                -- Chọn Danh Mục Cấp 2 --
+                                             </option>
+                                             {categoty.map((e) => {
+                                                return (
+                                                   <>
+                                                      {e?.subCategories?.map(
+                                                         (ele) => {
+                                                            return (
+                                                               <>
+                                                                  {ele.categoryid ==
+                                                                  watch(
+                                                                     "categoryID"
+                                                                  ) ? (
+                                                                     <option
+                                                                        value={
+                                                                           ele.id
+                                                                        }
+                                                                     >
+                                                                        {
+                                                                           ele.name
+                                                                        }
+                                                                     </option>
+                                                                  ) : (
+                                                                     <></>
+                                                                  )}
+                                                               </>
+                                                            );
+                                                         }
+                                                      )}
+                                                   </>
+                                                );
+                                             })}
+                                          </select>
+                                       </div>
+                                       {!!errors.subCategoryID && (
+                                          <p className="text-red-700 mt-2">
+                                             {errors.subCategoryID.message}
+                                          </p>
+                                       )}
+                                    </>
+                                 )}
+                              />
+
                               {/* end input addNameProducts */}
                            </div>
                         </div>

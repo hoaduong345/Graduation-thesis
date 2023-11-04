@@ -1,23 +1,44 @@
 import { IonIcon } from "@ionic/react";
 import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
-// import QuantityHistory from "../../../../Assets/TSX/QuantityHistory";
 import { Link } from "react-router-dom";
+import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
 import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
-import { OrderModel } from "../../../../Model/OrderModel";
+import { OrderModel, StatusOrder } from "../../../../Model/OrderModel";
 import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
+
+export const getStatusOrder = (status: StatusOrder) => {
+   let _statusOrder = "";
+   switch (status) {
+      case StatusOrder.Ordered:
+         _statusOrder = "Đã đặt hàng";
+         break;
+      case StatusOrder.Succed:
+         _statusOrder = "Giao hàng thành công";
+         break;
+      case StatusOrder.WaitingCourier:
+         _statusOrder = "Giao cho ĐVVT";
+         break;
+      case StatusOrder.Shipping:
+         _statusOrder = "Đang giao hàng";
+         break;
+      default:
+         _statusOrder = "Chờ xác nhận";
+         break;
+   }
+   return _statusOrder;
+};
+
 export default function OrderHistory() {
    const [order, setOrder] = useState<OrderModel[]>([]);
 
    const [open, setOpen] = useState<number>();
 
    const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-   //  const [arrowAction, setArrowAction] = useState(false);
    const openModal = () => {
       const modal = document.getElementById(
          "my_modal_3"
@@ -130,8 +151,7 @@ export default function OrderHistory() {
                                                       SP)
                                                    </div>
                                                    <div className="w-[16%] text-center">
-                                                      {/* {e.status} */}
-                                                      Dang giao hang
+                                                      {getStatusOrder(e.status)}
                                                    </div>
                                                    <Link
                                                       to={`/orderdetail/${e.id}`}

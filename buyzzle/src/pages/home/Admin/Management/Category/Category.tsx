@@ -1,3 +1,5 @@
+import { Accordion, AccordionBody } from "@material-tailwind/react";
+import { download, generateCsv } from "export-to-csv";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -8,8 +10,11 @@ import { categoryController } from "../../../../../Controllers/CategoryControlle
 import { storage } from "../../../../../Firebase/Config";
 import DialogComfirm from "../../../../../Helper/Dialog/DialogComfirm";
 import DialogModal from "../../../../../Helper/Dialog/DialogModal";
+import { csvConfig } from "../../../../../Helper/Export/Excel";
 import Loading from "../../../../../Helper/Loading/Loading";
+import { CategoryModal } from "../../../../../Model/CategoryModel";
 import Container from "../../../../../components/container/Container";
+import Delete from "../../Assets/TSX/Delete";
 import Download from "../../Assets/TSX/Download";
 import Edit from "../../Assets/TSX/Edit";
 import Line from "../../Assets/TSX/Line";
@@ -18,21 +23,6 @@ import RemoveCate from "../../Assets/TSX/RemoveCate";
 import UploadIMG from "../../Assets/TSX/UploadIMG";
 import Handle from "../../Assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import Delete from "../../Assets/TSX/Delete";
-import { csvConfig } from "../../../../../Helper/Export/Excel";
-import { download, generateCsv } from "export-to-csv";
-
-export type FormValues = {
-   id: number;
-   name: string;
-   image: string;
-};
-
-export type FormValuesCateLv2 = {
-   id: number;
-   name: string;
-   image: string;
-};
 
 function Category() {
    const idModalCate = "category";
@@ -44,13 +34,16 @@ function Category() {
 
    const [indexCate, setIndexCate] = useState(0);
 
-   const [categorys, setCategorys] = useState<FormValues[]>([]);
+   const [categorys, setCategorys] = useState<CategoryModal[]>([]);
 
    const [loading, setLoading] = useState(false);
 
    const [url, setUrl] = useState<string>();
 
-   const [checkedCategory, setCheckedCategory] = useState<FormValues[]>([]);
+   const [open, setOpen] = useState<number>();
+   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
+
+   const [checkedCategory, setCheckedCategory] = useState<CategoryModal[]>([]);
 
    var checkAll: boolean =
       categorys?.length > 0
@@ -128,7 +121,7 @@ function Category() {
       clearErrors,
       reset,
       formState: { errors },
-   } = useForm<FormValues>({
+   } = useForm<CategoryModal>({
       mode: "all",
       defaultValues: {
          name: "",
@@ -137,7 +130,7 @@ function Category() {
       },
    });
 
-   const saveModal = (id: string, data: FormValues) => {
+   const saveModal = (id: string, data: CategoryModal) => {
       if (!url) {
          toast.error("Thêm Hình", {});
          return;
@@ -181,7 +174,7 @@ function Category() {
          });
    };
 
-   const removeCates = (cate: FormValues[], idDialog: string) => {
+   const removeCates = (cate: CategoryModal[], idDialog: string) => {
       let successMessageDisplayed = false;
 
       cate.map((e, index) => {
@@ -201,15 +194,16 @@ function Category() {
       });
    };
 
-   const createCateLv2 = async (data: string, idCate: number) => {
-      if (data.length >= 4) {
+   const createSubcate = async (data: string, idCate: number) => {
+      if (data.length >= 4 && data.length <= 20) {
          await categoryController.createSubcateLv1(idCate, data).then(() => {
             setNameCateLv2("");
             closeModal(idModalSubCateLv1);
             setCheckedCategory([]);
+            getList();
          });
       } else {
-         toast.warn("Danh Mục con");
+         toast.warn("4 kí tự trở lên");
       }
    };
 
@@ -218,12 +212,12 @@ function Category() {
    }, []);
 
    const getList = () => {
-      categoryController.getAll().then((res: any) => {
+      categoryController.getAllCate().then((res: any) => {
          closeModal("");
          setCategorys(res.data);
       });
    };
-   const openModal = (id: string, data: FormValues) => {
+   const openModal = (id: string, data: CategoryModal) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          reset({ name: data.name, id: data.id });
@@ -246,7 +240,7 @@ function Category() {
       setUrl("");
    };
 
-   const handleChecked = (checked: boolean, data: FormValues) => {
+   const handleChecked = (checked: boolean, data: CategoryModal) => {
       if (checked) {
          setCheckedCategory((prev) => [...prev, data]);
       } else {
@@ -288,7 +282,7 @@ function Category() {
                               onClick={() =>
                                  openModal(idModalCate, {
                                     id: 0,
-                                 } as FormValues)
+                                 } as CategoryModal)
                               }
                            >
                               <PlusSquare />
@@ -473,7 +467,10 @@ function Category() {
                            <p
                               onClick={() =>
                                  checkedCategory.length > 0
-                                    ? openModal(idRemoveCates, {} as FormValues)
+                                    ? openModal(
+                                         idRemoveCates,
+                                         {} as CategoryModal
+                                      )
                                     : toast.warn("Chưa chọn danh mục")
                               }
                               className="pt-[12px] text-[16px] max-lg:text-sm"
@@ -505,7 +502,7 @@ function Category() {
                         id={idModalSubCateLv1}
                         title={categorys[indexCate]?.name}
                         onClose={() => closeModal(idModalSubCateLv1)}
-                        onSave={() => createCateLv2(nameCateLv2, idCate)}
+                        onSave={() => createSubcate(nameCateLv2, idCate)}
                         body={
                            <>
                               <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
@@ -527,103 +524,126 @@ function Category() {
                         }
                      />
 
-                     <div className="grid grid-cols-10">
-                        {categorys.map((e, index) => {
-                           return (
-                              <>
+                     {categorys.map((e, index) => {
+                        return (
+                           <>
+                              <Accordion open={open == e.id}>
                                  <div
+                                    className="grid grid-cols-10"
+                                    onClick={() => handleOpen(e.id)}
                                     key={e.id}
-                                    className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16"
                                  >
-                                    <div className=" flex gap-[20px] max-lg:gap-2">
-                                       <input
-                                          className="checkbox checkbox-sm items-center"
-                                          type="checkbox"
-                                          checked={checkedCategory.includes(e)}
-                                          onChange={(element) =>
-                                             handleChecked(
-                                                element.target.checked,
+                                    <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16">
+                                       <div className=" flex gap-[20px] max-lg:gap-2">
+                                          <input
+                                             className="checkbox checkbox-sm items-center"
+                                             type="checkbox"
+                                             checked={checkedCategory.includes(
                                                 e
-                                             )
-                                          }
-                                       />
+                                             )}
+                                             onChange={(element) =>
+                                                handleChecked(
+                                                   element.target.checked,
+                                                   e
+                                                )
+                                             }
+                                          />
+                                       </div>
+                                       <div>
+                                          <img
+                                             className="w-[50px]"
+                                             src={e.image}
+                                             alt=""
+                                          />
+                                       </div>
                                     </div>
-                                    <div>
-                                       <img
-                                          className="w-[50px]"
-                                          src={e.image}
-                                          alt=""
-                                       />
+                                    <div className="col-span-5 border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]">
+                                       <p className="text-[16px] font-bold my-auto max-lg:text-sm">
+                                          {e.name}
+                                       </p>
                                     </div>
-                                 </div>
-                                 <div className="col-span-5 border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]">
-                                    <p className="text-[16px] font-bold my-auto max-lg:text-sm">
-                                       {e.name}
-                                    </p>
-                                 </div>
-                                 <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
-                                    <div className="flex text-center justify-end items-center gap-5 py-[25px] px-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
-                                       <button
-                                          onClick={() => {
-                                             openModal(
-                                                idModalSubCateLv1,
-                                                {} as FormValues
-                                             );
-                                             setIdCate(e.id);
-                                             setIndexCate(index);
-                                          }}
-                                       >
-                                          <Plus />
-                                       </button>
+                                    <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
+                                       <div className="flex text-center justify-end items-center gap-5 py-[25px] px-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                                          <button
+                                             onClick={() => {
+                                                openModal(
+                                                   idModalSubCateLv1,
+                                                   {} as CategoryModal
+                                                );
+                                                setIdCate(e.id);
+                                                setIndexCate(index);
+                                             }}
+                                          >
+                                             <Plus />
+                                          </button>
 
-                                       <div className="dropdown dropdown-left">
-                                          <label tabIndex={0}>
-                                             <Handle />
-                                          </label>
-                                          <ul
-                                             tabIndex={0}
-                                             className="dropdown-content menu bg-white rounded-box w-52
+                                          <div className="dropdown dropdown-left">
+                                             <label tabIndex={0}>
+                                                <Handle />
+                                             </label>
+                                             <ul
+                                                tabIndex={0}
+                                                className="dropdown-content menu bg-white rounded-box w-52
                                                 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                                 max-2xl:left-[100%] max-2xl::origin-left"
-                                          >
-                                             <li>
-                                                <button
-                                                   onClick={() =>
-                                                      openModal(idModalCate, e)
-                                                   }
-                                                   className="flex items-center gap-4"
-                                                >
-                                                   <Edit />
-                                                   <p className="text-[#EA4B48] text-sm font-medium">
-                                                      Sửa
-                                                   </p>
-                                                </button>
-                                             </li>
-                                             <li>
-                                                <button
-                                                   onClick={() => {
-                                                      openModal(
-                                                         idRemoveCategory,
-                                                         {} as FormValues
-                                                      );
-                                                      setIdCate(e.id);
-                                                   }}
-                                                   className="flex items-center gap-4"
-                                                >
-                                                   <RemoveCate />
-                                                   <p className="text-[#EA4B48] text-sm font-medium">
-                                                      Xóa
-                                                   </p>
-                                                </button>
-                                             </li>
-                                          </ul>
+                                             >
+                                                <li>
+                                                   <button
+                                                      onClick={() =>
+                                                         openModal(
+                                                            idModalCate,
+                                                            e
+                                                         )
+                                                      }
+                                                      className="flex items-center gap-4"
+                                                   >
+                                                      <Edit />
+                                                      <p className="text-[#EA4B48] text-sm font-medium">
+                                                         Sửa
+                                                      </p>
+                                                   </button>
+                                                </li>
+                                                <li>
+                                                   <button
+                                                      onClick={() => {
+                                                         openModal(
+                                                            idRemoveCategory,
+                                                            {} as CategoryModal
+                                                         );
+                                                         setIdCate(e.id);
+                                                      }}
+                                                      className="flex items-center gap-4"
+                                                   >
+                                                      <RemoveCate />
+                                                      <p className="text-[#EA4B48] text-sm font-medium">
+                                                         Xóa
+                                                      </p>
+                                                   </button>
+                                                </li>
+                                             </ul>
+                                          </div>
                                        </div>
                                     </div>
                                  </div>
-                              </>
-                           );
-                        })}
-                     </div>
+                                 <AccordionBody>
+                                    <div className="grid grid-cols-10">
+                                       {e.subCategories?.map((elements) => {
+                                          return (
+                                             <>
+                                                <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16"></div>
+                                                <div className="col-span-5 border-[#e0e0e0] flex h-10 border-y-[1px] border-l-[1px] items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
+                                                   {elements.name}
+                                                </div>
+                                                <div className="col-span-2 border-[#e0e0e0] border-y-[1px]"></div>
+                                             </>
+                                          );
+                                       })}
+                                    </div>
+                                 </AccordionBody>
+                              </Accordion>
+                           </>
+                        );
+                     })}
                   </div>
                </div>
             </div>

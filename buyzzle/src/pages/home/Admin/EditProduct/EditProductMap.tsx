@@ -13,6 +13,7 @@ import { storage } from "../../../../Firebase/Config";
 import { appConfig } from "../../../../configsEnv";
 import UploadIMG from "../Assets/TSX/UploadIMG";
 import Loading from "../../../../Helper/Loading/Loading";
+import { CategoryModal } from "../../../../Model/CategoryModel";
 
 export type FormValues = {
    name: string;
@@ -21,12 +22,8 @@ export type FormValues = {
    quantity: number;
    discount: number;
    categoryID: number;
+   subcateId: Number;
 };
-
-export interface Cate {
-   name: string;
-   id: number;
-}
 
 interface EditImage {
    url: string;
@@ -36,7 +33,7 @@ interface EditImage {
 export default function EditProductMap() {
    const [url, setUrl] = useState<string[]>([]);
    const editorRef = useRef<any>(null);
-   const [categoty, setCategory] = useState<Cate[]>([]);
+   const [categoty, setCategory] = useState<CategoryModal[]>([]);
 
    const [editImages, setEditImages] = useState<EditImage[]>([]);
 
@@ -46,6 +43,7 @@ export default function EditProductMap() {
       control,
       handleSubmit,
       reset,
+      watch,
       formState: { errors, isDirty, isValid },
    } = useForm<FormValues>({
       mode: "all",
@@ -56,7 +54,7 @@ export default function EditProductMap() {
       imagesController
          .remove(id)
          .then((_) => {
-            getListIMG();
+            getList();
             console.log(id);
          })
          .catch((err) => {
@@ -73,7 +71,7 @@ export default function EditProductMap() {
 
    const getCategory = () => {
       categoryController
-         .getAll()
+         .getAllCate()
          .then((res) => {
             setCategory(res.data);
          })
@@ -91,24 +89,23 @@ export default function EditProductMap() {
          quantity: data.quantity,
          discount: data.discount,
          categoryID: Number(data.categoryID),
+         subcateId: Number(data.subcateId),
       };
       console.log(_data);
       productController
          .update(id, _data)
          .then(async (responseData) => {
-            console.log(
-               "🚀 ~ file: EditProductMap.tsx:90 ~ productController.update ~ responseData:",
-               responseData
-            );
-            toast.success("Thành công", {
-               position: "bottom-right",
-            });
+            // console.log(
+            //    "🚀 ~ file: EditProductMap.tsx:90 ~ productController.update ~ responseData:",
+            //    responseData
+            // );
+            toast.success("Thành công");
             for (let i = 0; i < url.length; i++) {
                await updateImages(responseData?.data.id, url[i]);
             }
          })
          .catch(() => {
-            toast.error("Sua sanr phaarm that bai !");
+            toast.error("Lỗi hình !");
          });
    };
 
@@ -121,7 +118,7 @@ export default function EditProductMap() {
          .post(`${appConfig.apiUrl}/addImagesByProductsID`, urlImages)
          .then((response) => response.data);
    };
-   const getListIMG = () => {
+   const getList = () => {
       axios
          .get(`${appConfig.apiUrl}/chitietproduct/${id}`)
          .then((detailForm) => {
@@ -135,6 +132,7 @@ export default function EditProductMap() {
                discount: detailForm.data.productDetail.discount,
                quantity: detailForm.data.productDetail.quantity,
                categoryID: detailForm.data.productDetail.categoryID,
+               subcateId: detailForm.data.productDetail.subcateId,
             });
             setEditImages(detailForm.data.productDetail.ProductImage);
          })
@@ -146,7 +144,7 @@ export default function EditProductMap() {
          });
    };
    useEffect(() => {
-      getListIMG();
+      getList();
    }, []);
 
    // img firebase
@@ -314,74 +312,44 @@ export default function EditProductMap() {
                         />
                      </div>
                   </div>
-                  {/* Danh Mục Sản Phẩm */}
-                  <div className="mt-7">
-                     <span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
-                        Danh Mục Sản Phẩm
-                     </span>
-                     {/* card */}
-                     <div
-                        className="card w-[100%] py-6 px-6 mt-2 rounded-md
-                            shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                     >
-                        <Controller
-                           control={control}
-                           name="categoryID"
-                           rules={{
-                              required: {
-                                 value: true,
-                                 message: "Vui lòng chọn danh mục!",
-                              },
-                           }}
-                           render={({ field }) => (
-                              <>
-                                 <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
-                                    Danh Mục Sản Phẩm*
-                                 </p>
-                                 {/* Dropdown */}
-                                 <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                                    <select
-                                       className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
-                                       onChange={field.onChange}
-                                       value={field.value}
-                                    >
-                                       <option value="">
-                                          -- Chọn Danh Mục --
-                                       </option>
-                                       {categoty.map((e) => {
-                                          return (
-                                             <option value={e.id}>
-                                                {e.name}
-                                             </option>
-                                          );
-                                       })}
-                                    </select>
-                                 </div>
-                                 {!!errors.categoryID && (
-                                    <p className="text-red-700 mt-2">
-                                       {errors.categoryID.message}
-                                    </p>
-                                 )}
-                                 {/* end input addNameProducts */}
-                              </>
-                           )}
-                        />
 
-                        <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
-                           Tag*
-                        </p>
-                        {/* Dropdown */}
-                        <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
-                           <select className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md">
-                              <option>
-                                 key-word tìm kiếm / key-word tìm kiếm 1
-                              </option>
-                              <option>
-                                 key-word tìm kiếm 2 / key-word tìm kiếm 3
-                              </option>
-                           </select>
-                        </div>
-                        {/* end input addNameProducts */}
+                  {/* button */}
+                  <div className="flex w-[50%] justify-between mt-6 max-[1330px]:gap-5 max-[1330px]:w-[55%] max-[1024px]:w-[75%]">
+                     <div
+                        className={`flex items-center w-[150px] rounded-md h-[46px] transition 
+                                    duration-150 justify-evenly  max-[1330px]:w-[280px] max-[1024px]:w-[320px]
+                                ${
+                                   isDisabled
+                                      ? "bg-[#aeaeae] cursor-not-allowed"
+                                      : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                                }
+                                    `}
+                     >
+                        <button
+                           disabled={isDisabled}
+                           onClick={handleSubmit((data: any) => {
+                              submitData(data);
+                           })}
+                           className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
+                                        ${
+                                           isDisabled
+                                              ? "cursor-not-allowed"
+                                              : "cursor-pointer"
+                                        } `}
+                        >
+                           Sửa sản phẩm
+                        </button>
+                     </div>
+
+                     <div
+                        className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer
+                                    max-[1330px]:w-[160px] max-[1024px]:w-[190px]"
+                     >
+                        <Link to="/admin/ListproductsAdmin">
+                           <button className="text-center text-base font-bold text-[#1A1A1A] max-xl:text-sm max-lg:text-[13px]">
+                              Hủy bỏ
+                           </button>
+                        </Link>
                      </div>
                   </div>
                </div>
@@ -681,74 +649,121 @@ export default function EditProductMap() {
                         />
                      </div>
                   </div>
-                  {/* tình trạng sản phẩm */}
+
+                  {/* Danh Mục Sản Phẩm */}
                   <div className="mt-7">
                      <span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
-                        Tình trạng sản phẩm
+                        Danh Mục Sản Phẩm
                      </span>
                      {/* card */}
                      <div
-                        className="card w-[100%] py-4 px-9 mt-2 rounded-md
+                        className="card w-[100%] py-6 px-6 mt-2 rounded-md
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                      >
-                        <p className="text-[#4C4C4C] text-sm font-semibold mb-[18px] max-xl:text-[13px] max-lg:text-xs">
-                           Tình trạng sản phẩm*
-                        </p>
-                        <div className="flex text-center  w-16 justify-start gap-5">
-                           <h3 className="text-[#4C4C4C] font-semibold max-xl:text-[13px] max-lg:text-xs">
-                              Ẩn
-                           </h3>
-                           {/* Swich */}
-                           <div className="form-control">
-                              <input
-                                 type="checkbox"
-                                 className="toggle toggle-error max-xl:h-[20px] max-lg:h-[18px]"
-                              />
-                           </div>
-                           {/* end  Swich */}
-                           <h3 className="text-[#5D5FEF] font-semibold max-xl:text-[13px] max-lg:text-xs">
-                              Đăng
-                           </h3>
-                        </div>
-                     </div>
-                  </div>
-                  {/* button */}
-                  <div className="flex w-[50%] justify-between mt-6 max-[1330px]:gap-5 max-[1330px]:w-[55%] max-[1024px]:w-[75%]">
-                     <div
-                        className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48] border-[1px] justify-evenly cursor-pointer
-                                    max-[1330px]:w-[160px] max-[1024px]:w-[190px]"
-                     >
-                        <Link to="/">
-                           <button className="text-center text-base font-bold text-[#1A1A1A] max-xl:text-sm max-lg:text-[13px]">
-                              Hủy bỏ
-                           </button>
-                        </Link>
-                     </div>
+                        <Controller
+                           control={control}
+                           name="categoryID"
+                           rules={{
+                              required: {
+                                 value: true,
+                                 message: "Vui lòng chọn danh mục!",
+                              },
+                           }}
+                           render={({ field }) => (
+                              <>
+                                 <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
+                                    Danh Mục Cấp 1
+                                 </p>
+                                 {/* Dropdown */}
+                                 <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                    <select
+                                       className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
+                                       onChange={field.onChange}
+                                       value={field.value}
+                                    >
+                                       <option value="">
+                                          -- Chọn Danh Mục --
+                                       </option>
+                                       {categoty.map((e) => {
+                                          return (
+                                             <option value={e.id}>
+                                                {e.name}
+                                             </option>
+                                          );
+                                       })}
+                                    </select>
+                                 </div>
+                                 {!!errors.categoryID && (
+                                    <p className="text-red-700 mt-2">
+                                       {errors.categoryID.message}
+                                    </p>
+                                 )}
+                                 {/* end input addNameProducts */}
+                              </>
+                           )}
+                        />
 
-                     <div
-                        className={`flex items-center w-[150px] rounded-md h-[46px] transition 
-                                    duration-150 justify-evenly  max-[1330px]:w-[280px] max-[1024px]:w-[320px]
-                                ${
-                                   isDisabled
-                                      ? "bg-[#aeaeae] cursor-not-allowed"
-                                      : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                                }
-                                    `}
-                     >
-                        <button
-                           disabled={isDisabled}
-                           onClick={handleSubmit((data: any) => {
-                              submitData(data);
-                           })}
-                           className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
-                                        ${
-                                           isDisabled
-                                              ? "cursor-not-allowed"
-                                              : "cursor-pointer"
-                                        } `}
-                        >
-                           Sửa sản phẩm
-                        </button>
+                        <Controller
+                           name="subcateId"
+                           control={control}
+                           rules={{
+                              required: {
+                                 value: true,
+                                 message: "Vui lòng chọn danh mục!",
+                              },
+                           }}
+                           render={({ field }) => (
+                              <>
+                                 <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
+                                    Danh Mục Cấp 2
+                                 </p>
+                                 {/* Dropdown */}
+                                 <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                    <select
+                                       onChange={(e) => {
+                                          const reg = /[]/;
+                                          const value = e.target.value;
+                                          field.onChange(
+                                             value.replace(reg, "")
+                                          );
+                                       }}
+                                       value={field.value}
+                                       className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
+                                    >
+                                       <option value="">
+                                          -- Chọn Danh Mục Cấp 2 --
+                                       </option>
+                                       {categoty.map((e) => {
+                                          return (
+                                             <>
+                                                {e?.subCategories?.map(
+                                                   (ele) => {
+                                                      return (
+                                                         <>
+                                                            {ele.categoryid ==
+                                                            watch(
+                                                               "categoryID"
+                                                            ) ? (
+                                                               <option
+                                                                  value={ele.id}
+                                                               >
+                                                                  {ele.name}
+                                                               </option>
+                                                            ) : (
+                                                               <></>
+                                                            )}
+                                                         </>
+                                                      );
+                                                   }
+                                                )}
+                                             </>
+                                          );
+                                       })}
+                                    </select>
+                                 </div>
+                              </>
+                           )}
+                        />
                      </div>
                   </div>
                </div>
