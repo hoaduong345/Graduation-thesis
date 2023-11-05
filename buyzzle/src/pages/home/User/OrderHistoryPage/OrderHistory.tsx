@@ -15,11 +15,11 @@ import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
 export const getStatusOrder = (status: StatusOrder) => {
    let _statusOrder = "";
    switch (status) {
+      case StatusOrder.Comfirm:
+         _statusOrder = "Chờ xác nhận";
+         break;
       case StatusOrder.Ordered:
          _statusOrder = "Đã đặt hàng";
-         break;
-      case StatusOrder.Succed:
-         _statusOrder = "Giao hàng thành công";
          break;
       case StatusOrder.WaitingCourier:
          _statusOrder = "Giao cho ĐVVT";
@@ -30,8 +30,11 @@ export const getStatusOrder = (status: StatusOrder) => {
       case StatusOrder.Shipping:
          _statusOrder = "Đang giao hàng";
          break;
+      case StatusOrder.Succed:
+         _statusOrder = "Giao hàng thành công";
+         break;
       default:
-         _statusOrder = "Chờ xác nhận";
+         _statusOrder = "Yêu Cầu Hủy Đơn";
          break;
    }
    return _statusOrder;
@@ -69,6 +72,11 @@ export default function OrderHistory() {
          setOrder(res.data);
       });
    };
+
+   const abortOrder = async (id: number) => {
+      await orderControllers.abortOrder(id);
+   };
+
    return (
       <Container>
          <div
@@ -182,9 +190,16 @@ export default function OrderHistory() {
                                                       Tổng
                                                    </th>
                                                    <th className=" px-6 py-2 w-[14%] font-normal">
-                                                      {e.status < 1 ? (
+                                                      {e.status < 2 ? (
                                                          <>
-                                                            <p className="cursor-pointer">
+                                                            <p
+                                                               onClick={() =>
+                                                                  abortOrder(
+                                                                     e.id
+                                                                  )
+                                                               }
+                                                               className="cursor-pointer"
+                                                            >
                                                                Hủy đơn
                                                             </p>
                                                          </>
@@ -238,7 +253,7 @@ export default function OrderHistory() {
                                                                </td>
                                                                <td className="whitespace-nowrap  px-6 py-4">
                                                                   {e.status ==
-                                                                  4 ? (
+                                                                  5 ? (
                                                                      <>
                                                                         <Link
                                                                            to={`/Detailproducts/${element.productId}`}

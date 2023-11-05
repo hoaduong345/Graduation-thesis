@@ -54,19 +54,24 @@ export default function OrderManagement() {
          text: "Tất cả",
          active: true, // Thêm trường active
       },
-      // {
-      //    id: 2,
-      //    text: "Mới",
-      //    active: false, // Thêm trường active
-      // },
       {
-         id: 3,
+         id: 2,
          text: "Chờ xác nhận",
          active: false, // Thêm trường active
       },
       {
-         id: 4,
+         id: 3,
          text: "Đã giao cho ĐVVC",
+         active: false, // Thêm trường active
+      },
+      {
+         id: 4,
+         text: "Giao hàng thành công",
+         active: false, // Thêm trường active
+      },
+      {
+         id: 5,
+         text: "Yêu Cầu Hủy Đơn",
          active: false, // Thêm trường active
       },
    ]);
@@ -168,19 +173,36 @@ export default function OrderManagement() {
                                  {order?.totalOrder}
                               </div>
                            )}
+                           {btnItems.id == 5 && (
+                              <div className="badge badge-xs badge-accent badge-outline py-2">
+                                 {
+                                    order?.data?.filter((e) => e.status == null)
+                                       .length
+                                 }
+                              </div>
+                           )}
                            {btnItems.id == 2 && (
                               <div className="badge badge-xs badge-info badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 0)
+                                       .length
+                                 }
                               </div>
                            )}
                            {btnItems.id == 3 && (
                               <div className="badge badge-xs badge-secondary badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 2)
+                                       .length
+                                 }
                               </div>
                            )}
                            {btnItems.id == 4 && (
                               <div className="badge badge-xs badge-accent badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 5)
+                                       .length
+                                 }
                               </div>
                            )}
                         </button>

@@ -116,7 +116,7 @@ export default function ShippingPage() {
                            {btnItems.id == 2 && (
                               <div className="badge badge-xs badge-info badge-outline py-2">
                                  {
-                                    order?.data?.filter((e) => e.status == 1)
+                                    order?.data?.filter((e) => e.status == 2)
                                        .length
                                  }
                               </div>
@@ -124,7 +124,7 @@ export default function ShippingPage() {
                            {btnItems.id == 3 && (
                               <div className="badge badge-xs badge-secondary badge-outline py-2">
                                  {
-                                    order?.data?.filter((e) => e.status == 3)
+                                    order?.data?.filter((e) => e.status == 4)
                                        .length
                                  }
                               </div>
@@ -132,7 +132,7 @@ export default function ShippingPage() {
                            {btnItems.id == 4 && (
                               <div className="badge badge-xs badge-accent badge-outline py-2">
                                  {
-                                    order?.data?.filter((e) => e.status == 4)
+                                    order?.data?.filter((e) => e.status == 5)
                                        .length
                                  }
                               </div>

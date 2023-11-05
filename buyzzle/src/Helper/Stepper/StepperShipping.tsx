@@ -9,13 +9,13 @@ function StepperAdmin(props: handleClick) {
       <ul className="steps steps-vertical">
          <li
             className={`step ${
-               status >= 2 && status != null ? `step-primary` : ``
+               status >= 3 && status != null ? `step-primary` : ``
             } `}
          >
             <div className="flex gap-36 items-center">
                <p
                   className={` ${
-                     status >= 2 && status != null
+                     status >= 3 && status != null
                         ? `inherit`
                         : `text-[#9c9c9c]`
                   }`}
@@ -23,12 +23,12 @@ function StepperAdmin(props: handleClick) {
                   Đã nhận Đơn Hàng
                </p>
                <button
-                  onClick={() => comfirm(2)}
+                  onClick={() => comfirm(3)}
                   className={`justify-center gap-1 items-center text-sm font-bold text-white
                   rounded-md py-1 px-2 flex
                      transition duration-150 bg-[#00B207] cursor-pointer
                      max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs
-                     ${status >= 2 ? `hidden` : ``}
+                     ${status >= 3 ? `hidden` : ``}
                      `}
                >
                   <svg
@@ -52,7 +52,7 @@ function StepperAdmin(props: handleClick) {
          </li>
          <li
             className={`step ${
-               status >= 3 && status != null ? `step-primary` : ``
+               status >= 4 && status != null ? `step-primary` : ``
             } `}
          >
             <div className="flex gap-36 items-center">
@@ -66,12 +66,12 @@ function StepperAdmin(props: handleClick) {
                   Đang giao hàng
                </p>
                <button
-                  onClick={() => comfirm(3)}
+                  onClick={() => comfirm(4)}
                   className={`justify-center gap-1 items-center text-sm font-bold text-white
                   rounded-md py-1 px-2 flex
                      transition duration-150 bg-[#00B207] cursor-pointer
                      max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs
-                     ${status == 2 ? `` : `hidden`}
+                     ${status == 3 ? `` : `hidden`}
                      `}
                >
                   <svg
@@ -95,13 +95,13 @@ function StepperAdmin(props: handleClick) {
          </li>
          <li
             className={`step ${
-               status == 4 && status != null ? `step-primary` : ``
+               status == 5 && status != null ? `step-primary` : ``
             } `}
          >
             <div className="flex gap-36 items-center">
                <p
                   className={` ${
-                     status == 4 && status != null
+                     status == 5 && status != null
                         ? `inherit`
                         : `text-[#9c9c9c]`
                   }`}
@@ -109,12 +109,12 @@ function StepperAdmin(props: handleClick) {
                   Giao hàng thành công
                </p>
                <button
-                  onClick={() => comfirm(4)}
+                  onClick={() => comfirm(5)}
                   className={`justify-center gap-1 items-center text-sm font-bold text-white
                   rounded-md py-1 px-2 flex
                      transition duration-150 bg-[#00B207] cursor-pointer
                      max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs
-                     ${status == 3 ? `` : `hidden`}
+                     ${status == 4 ? `` : `hidden`}
                      `}
                >
                   <svg

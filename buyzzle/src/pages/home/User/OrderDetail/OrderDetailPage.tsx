@@ -376,7 +376,7 @@ export default function OrderDetailPage() {
                                        </p>
                                     </div>
                                     <div className="col-span-1 flex mx-auto items-center">
-                                       {orderDetails.status == 4 ? (
+                                       {orderDetails.status == 5 ? (
                                           <>
                                              <button
                                                 className={` rounded-md font-medium ${
