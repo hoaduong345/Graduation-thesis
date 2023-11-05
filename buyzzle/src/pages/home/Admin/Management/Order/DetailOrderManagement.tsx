@@ -5,7 +5,7 @@ import { Images } from "../../../../../Assets/TS";
 import Map from "../../../../../Assets/TSX/Map";
 import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
-import { formatDateYYYY, numberFormat } from "../../../../../Helper/Format";
+import { numberFormat } from "../../../../../Helper/Format";
 import StepperAdmin from "../../../../../Helper/Stepper/StepperAdmin";
 import { OrderModel } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
@@ -14,6 +14,7 @@ import MessageOrderAdmin from "../../Assets/TSX/MessageOrderAdmin";
 import Paymethod from "../../Assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
 import PrintOrder from "../../Assets/TSX/PrintOrder";
+import { dateOrder, timeOrder } from "./OrderManagement";
 
 export default function DetailOrderManagement() {
    const { id } = useParams();
@@ -62,14 +63,15 @@ export default function DetailOrderManagement() {
                               </span>
                            </h2>
                         </div>
-                        <div className="flex flex-col gap-[4px] items-center">
-                           <p className="py-[1px] px-5 border-[1px] rounded-[10px] bg-[#00B207] text-xs text-white font-bold">
+                        <div className="flex flex-col gap-[4px]">
+                           <p className="py-[1px] px-3 w-[70%] border-[1px] rounded-[10px] bg-[#00B207] text-xs text-white font-bold">
                               {order.paymentMethod == "Thẻ tín dụng"
                                  ? "Đã thanh toán"
                                  : "Chưa thanh toán"}
                            </p>
                            <p className="text-[#4C4C4C] text-sm">
-                              {formatDateYYYY(order.createdAt)}
+                              {dateOrder(order.createdAt)} lúc{" "}
+                              {timeOrder(order.createdAt)}
                            </p>
                         </div>
                      </div>

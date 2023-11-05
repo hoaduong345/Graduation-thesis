@@ -1,17 +1,26 @@
 import { IonIcon } from "@ionic/react";
+import { Input } from "@material-tailwind/react";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { useNavigate } from "react-router-dom";
 import Search from "../../../../../Assets/TSX/Search";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
-import { formatDate, numberFormat } from "../../../../../Helper/Format";
+import { numberFormat } from "../../../../../Helper/Format";
 import { OrderPanigation } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
 import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import Calendar from "../../Assets/TSX/calendar";
 import Excel from "../../Assets/TSX/excel";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import { Input } from "@material-tailwind/react";
+
+export const dateOrder = (date: Date) => {
+   return moment(date).format("L");
+};
+export const timeOrder = (date: Date) => {
+   return moment(date).format("LT");
+};
+
 export default function OrderManagement() {
    const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
    const [currentPage, setCurrentPage] = useState<number>(1);
@@ -45,11 +54,11 @@ export default function OrderManagement() {
          text: "Tất cả",
          active: true, // Thêm trường active
       },
-      {
-         id: 2,
-         text: "Mới",
-         active: false, // Thêm trường active
-      },
+      // {
+      //    id: 2,
+      //    text: "Mới",
+      //    active: false, // Thêm trường active
+      // },
       {
          id: 3,
          text: "Chờ xác nhận",
@@ -253,7 +262,8 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                        {/* end calendarIcon */}
                                        <div className="flex">
                                           <p className="text-[#4C4C4C] font-bold text-sm">
-                                             {formatDate(e.createdAt)}
+                                             {dateOrder(e.createdAt)} lúc{" "}
+                                             {timeOrder(e.createdAt)}
                                           </p>
                                           <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
                                           <div className="badge badge-xs badge-accent text-center py-2 px-3">
@@ -301,11 +311,11 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                        />
                                     </div>
                                     {/* end Select box  */}
-                                    <div className="badge badge-xs badge-error py-3 px-5">
+                                    {/* <div className="badge badge-xs badge-error py-3 px-5">
                                        <p className="font-bold text-xs text-white ">
                                           Mới
                                        </p>
-                                    </div>
+                                    </div> */}
                                  </div>
                                  <div className="grid grid-cols-3 mt-4 ">
                                     {e.OrderDetail.map((items) => {

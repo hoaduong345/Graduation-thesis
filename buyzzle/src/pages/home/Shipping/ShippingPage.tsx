@@ -5,11 +5,15 @@ import { Link } from "react-router-dom";
 import { Input } from "@material-tailwind/react";
 import Search from "../../../Assets/TSX/Search";
 import { orderControllers } from "../../../Controllers/OrderControllers";
-import { formatDate, numberFormat } from "../../../Helper/Format";
+import { numberFormat } from "../../../Helper/Format";
 import { OrderPanigation } from "../../../Model/OrderModel";
 import Container from "../../../components/container/Container";
 import Calendar from "../Admin/Assets/TSX/calendar";
 import Excel from "../Admin/Assets/TSX/excel";
+import {
+   dateOrder,
+   timeOrder,
+} from "../Admin/Management/Order/OrderManagement";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 export default function ShippingPage() {
    const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
@@ -22,17 +26,17 @@ export default function ShippingPage() {
       },
       {
          id: 2,
-         text: "Mới",
-         active: false, // Thêm trường active
-      },
-      {
-         id: 3,
          text: "Chờ xác nhận",
          active: false, // Thêm trường active
       },
       {
+         id: 3,
+         text: "Đang Giao Hàng",
+         active: false, // Thêm trường active
+      },
+      {
          id: 4,
-         text: "Đã giao cho ĐVVC",
+         text: "Giao Hàng Thành công",
          active: false, // Thêm trường active
       },
    ]);
@@ -111,17 +115,26 @@ export default function ShippingPage() {
                            )}
                            {btnItems.id == 2 && (
                               <div className="badge badge-xs badge-info badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 1)
+                                       .length
+                                 }
                               </div>
                            )}
                            {btnItems.id == 3 && (
                               <div className="badge badge-xs badge-secondary badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 3)
+                                       .length
+                                 }
                               </div>
                            )}
                            {btnItems.id == 4 && (
                               <div className="badge badge-xs badge-accent badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 4)
+                                       .length
+                                 }
                               </div>
                            )}
                         </button>
@@ -204,7 +217,8 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                           {/* end calendarIcon */}
                                           <div className="flex">
                                              <p className="text-[#4C4C4C] font-bold text-sm">
-                                                {formatDate(e.createdAt)}
+                                                {dateOrder(e.createdAt)} lúc{" "}
+                                                {timeOrder(e.createdAt)}
                                              </p>
                                              <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
                                              <div className="badge badge-xs badge-accent text-center py-2 px-3">

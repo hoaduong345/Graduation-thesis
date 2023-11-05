@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
 import EmptyPage from "../../../../Helper/Empty/EmptyPage";
-import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
+import { numberFormat } from "../../../../Helper/Format";
 import { OrderModel, StatusOrder } from "../../../../Model/OrderModel";
 import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
+import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
 
 export const getStatusOrder = (status: StatusOrder) => {
    let _statusOrder = "";
@@ -142,9 +143,7 @@ export default function OrderHistory() {
                                                       #ID: 000{e.id}
                                                    </div>
                                                    <div className="w-[20%]">
-                                                      {formatDateYYYY(
-                                                         e.createdAt
-                                                      )}
+                                                      {dateOrder(e.createdAt)}
                                                    </div>
                                                    <div className="w-[22%] text-center">
                                                       {numberFormat(
@@ -170,7 +169,7 @@ export default function OrderHistory() {
                                           <table className="w-full">
                                              <thead className="border-b bg-[#F2F2F2] dark:text-[#4C4C4C]">
                                                 <tr>
-                                                   <th className=" px-[50px] py-2 w-[50%] text-left font-normal">
+                                                   <th className=" px-[50px] py-2 w-[40%] text-left font-normal">
                                                       Thông tin sản phẩm
                                                    </th>
                                                    <th className=" px-6 py-2 w-[14%] font-normal">
@@ -182,7 +181,17 @@ export default function OrderHistory() {
                                                    <th className=" px-6 py-2 w-[14%] font-normal">
                                                       Tổng
                                                    </th>
-                                                   <th className=" px-6 py-2 w-[14%] font-normal"></th>
+                                                   <th className=" px-6 py-2 w-[14%] font-normal">
+                                                      {e.status < 1 ? (
+                                                         <>
+                                                            <p className="cursor-pointer">
+                                                               Hủy đơn
+                                                            </p>
+                                                         </>
+                                                      ) : (
+                                                         ""
+                                                      )}
+                                                   </th>
                                                 </tr>
                                              </thead>
                                              <tbody>
@@ -228,12 +237,20 @@ export default function OrderHistory() {
                                                                   )}
                                                                </td>
                                                                <td className="whitespace-nowrap  px-6 py-4">
-                                                                  <Link
-                                                                     to={`/Detailproducts/${element.productId}`}
-                                                                     className="text-[#EA4B48] hover:text-[#ea4b48ad] text-center w-[13%]"
-                                                                  >
-                                                                     Mua lại
-                                                                  </Link>
+                                                                  {e.status ==
+                                                                  4 ? (
+                                                                     <>
+                                                                        <Link
+                                                                           to={`/Detailproducts/${element.productId}`}
+                                                                           className="text-[#EA4B48] hover:text-[#ea4b48ad] text-center w-[13%]"
+                                                                        >
+                                                                           Mua
+                                                                           lại
+                                                                        </Link>
+                                                                     </>
+                                                                  ) : (
+                                                                     ""
+                                                                  )}
                                                                </td>
                                                             </tr>
                                                          </>
