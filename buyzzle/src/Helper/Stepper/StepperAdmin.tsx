@@ -13,7 +13,7 @@ function StepperAdmin(props: handleClick) {
             } `}
          >
             {/* step-primary */}
-            <div className="flex gap-36 items-center">
+            <div className="flex gap-64 items-center">
                <p
                   className={` ${
                      status >= 0 && status != null
@@ -52,7 +52,7 @@ function StepperAdmin(props: handleClick) {
             </div>
          </li>
          <li className={`step ${status >= 1 ? `step-primary` : ``} `}>
-            <div className="flex gap-20 items-center">
+            <div className="flex gap-[215px] items-center">
                <p className={` ${status >= 1 ? `inherit` : `text-[#9c9c9c]`}`}>
                   Giao cho ĐVVT
                </p>
@@ -62,7 +62,7 @@ function StepperAdmin(props: handleClick) {
                   rounded-md py-1 px-2 flex
                      transition duration-150 bg-[#00B207] cursor-pointer
                      max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs
-                     ${status >= 1 || status == null ? `hidden` : ``}
+                     ${status == 0 ? `` : `hidden`}
                      `}
                >
                   <svg
@@ -84,15 +84,15 @@ function StepperAdmin(props: handleClick) {
                </button>
             </div>
          </li>
-         <li className="step">
-            <div>
-               <p className="text-[#9c9c9c]">Đang giao hàng</p>
-            </div>
+         <li className={`step ${status >= 3 ? `step-primary` : ``} `}>
+            <p className={` ${status >= 3 ? `inherit` : `text-[#9c9c9c]`}`}>
+               Đang giao hàng
+            </p>
          </li>
-         <li className="step">
-            <div>
-               <p className="text-[#9c9c9c]">Giao hàng thành công</p>
-            </div>
+         <li className={`step ${status == 4 ? `step-primary` : ``} `}>
+            <p className={` ${status == 4 ? `inherit` : `text-[#9c9c9c]`}`}>
+               Giao hàng thành công
+            </p>
          </li>
       </ul>
    );

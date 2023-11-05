@@ -37,6 +37,7 @@ export interface OrderItems {
 export enum StatusOrder {
     Ordered,
     WaitingCourier, // Giao cho Đơn vị Vận tải (ĐVVT)
+    recievedCourier,
     Shipping, //Đang trên đường giao hàng
     Succed // Giao hàng thành công
 }

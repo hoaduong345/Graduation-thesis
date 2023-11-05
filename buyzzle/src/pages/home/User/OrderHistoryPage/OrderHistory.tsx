@@ -23,6 +23,9 @@ export const getStatusOrder = (status: StatusOrder) => {
       case StatusOrder.WaitingCourier:
          _statusOrder = "Giao cho ĐVVT";
          break;
+      case StatusOrder.recievedCourier:
+         _statusOrder = "ĐVVT đã Nhận hàng";
+         break;
       case StatusOrder.Shipping:
          _statusOrder = "Đang giao hàng";
          break;

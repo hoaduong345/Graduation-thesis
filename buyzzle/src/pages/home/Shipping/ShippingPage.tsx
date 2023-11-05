@@ -160,129 +160,137 @@ export default function ShippingPage() {
                </div>
                {/* end checkBox and Printf*/}
                <div className="flex flex-col space-y-4">
-                  {order?.data?.map((e) => {
-                     return (
-                        <>
-                           {/* card */}
-                           <div
-                              className="p-10 group relative 
+                  {order?.data?.length > 0 ? (
+                     order?.data?.map((e) => {
+                        return (
+                           <>
+                              {/* card */}
+                              <div
+                                 className="p-10 group relative 
 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                           >
-                              <div className="justify-between flex ">
-                                 <div className="col-span-2 flex items-center">
-                                    <div className="flex items-center gap-1">
-                                       <p className="text-[#4C4C4C] font-bold text-base">
-                                          Đơn hàng:{" "}
-                                       </p>
-                                       <p className="text-[#1A1A1A] font-bold text-base mr-3">
-                                          #00{e.id}
-                                       </p>
-                                    </div>
-                                    <div className="flex items-center gap-1 border-l-2 border-[#4C4C4C] pl-2">
-                                       <p className="text-[#4C4C4C] font-bold text-base">
-                                          Khách Hàng:{" "}
-                                       </p>
-                                       <p className="text-[#1A1A1A] font-bold text-base mr-3">
-                                          {e.name}
-                                       </p>
-                                    </div>
-                                 </div>
-                                 <div className="col-span-2">
-                                    <p className="text-[#EA4B48] text-2xl font-bold">
-                                       {numberFormat(e.amountTotal)}
-                                    </p>
-                                 </div>
-                              </div>
-                              <div className="">
-                                 <div className="my-2 flex justify-between items-center gap-2">
-                                    <div className="flex items-center">
-                                       {/* calendarIcon */}
-                                       <div>
-                                          <Calendar />
-                                       </div>
-                                       {/* end calendarIcon */}
-                                       <div className="flex">
-                                          <p className="text-[#4C4C4C] font-bold text-sm">
-                                             {formatDate(e.createdAt)}
+                              >
+                                 <div className="justify-between flex ">
+                                    <div className="col-span-2 flex items-center">
+                                       <div className="flex items-center gap-1">
+                                          <p className="text-[#4C4C4C] font-bold text-base">
+                                             Đơn hàng:{" "}
                                           </p>
-                                          <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
-                                          <div className="badge badge-xs badge-accent text-center py-2 px-3">
-                                             <p className="font-bold text-xs text-white">
-                                                {e.paymentMethod ==
-                                                "Thẻ tín dụng"
-                                                   ? "Đã thanh toán"
-                                                   : "Chưa thanh toán"}
-                                             </p>
+                                          <p className="text-[#1A1A1A] font-bold text-base mr-3">
+                                             #00{e.id}
+                                          </p>
+                                       </div>
+                                       <div className="flex items-center gap-1 border-l-2 border-[#4C4C4C] pl-2">
+                                          <p className="text-[#4C4C4C] font-bold text-base">
+                                             Khách Hàng:{" "}
+                                          </p>
+                                          <p className="text-[#1A1A1A] font-bold text-base mr-3">
+                                             {e.name}
+                                          </p>
+                                       </div>
+                                    </div>
+                                    <div className="col-span-2">
+                                       <p className="text-[#EA4B48] text-2xl font-bold">
+                                          {numberFormat(e.amountTotal)}
+                                       </p>
+                                    </div>
+                                 </div>
+                                 <div className="">
+                                    <div className="my-2 flex justify-between items-center gap-2">
+                                       <div className="flex items-center">
+                                          {/* calendarIcon */}
+                                          <div>
+                                             <Calendar />
                                           </div>
-                                          <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
-                                          <div className="flex items-center gap-2">
+                                          {/* end calendarIcon */}
+                                          <div className="flex">
                                              <p className="text-[#4C4C4C] font-bold text-sm">
-                                                Mã vận đơn:
+                                                {formatDate(e.createdAt)}
                                              </p>
-                                             <p className="text-[#EA4B48] font-bold text-sm">
-                                                SPXR24
-                                             </p>
+                                             <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
+                                             <div className="badge badge-xs badge-accent text-center py-2 px-3">
+                                                <p className="font-bold text-xs text-white">
+                                                   {e.paymentMethod ==
+                                                   "Thẻ tín dụng"
+                                                      ? "Đã thanh toán"
+                                                      : "Chưa thanh toán"}
+                                                </p>
+                                             </div>
+                                             {/* <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
+                                             <div className="flex items-center gap-2">
+                                                <p className="text-[#4C4C4C] font-bold text-sm">
+                                                   Mã vận đơn:
+                                                </p>
+                                                <p className="text-[#EA4B48] font-bold text-sm">
+                                                   SPXR24
+                                                </p>
+                                             </div> */}
                                           </div>
                                        </div>
                                     </div>
-                                 </div>
-                                 <div className="flex items-center mt-5 gap-5">
-                                    <div className="max-w-max">
-                                       <Input
-                                          crossOrigin=""
-                                          label="Trạng thái"
-                                          value={getStatusOrder(e.status)}
-                                       />
+                                    <div className="flex items-center mt-5 gap-5">
+                                       <div className="max-w-max">
+                                          <Input
+                                             crossOrigin=""
+                                             label="Trạng thái"
+                                             value={getStatusOrder(e.status)}
+                                          />
+                                       </div>
                                     </div>
-                                 </div>
-                                 <div className="grid grid-cols-3 mt-4 ">
-                                    {e.OrderDetail.map((items) => {
-                                       return (
-                                          <>
-                                             {/* San pham */}
-                                             <div
-                                                className="py-[16px] items-center"
-                                                key={items.name}
-                                             >
-                                                <div className="col-span-2 text-sm flex gap-4 items-center">
-                                                   {items.image && (
-                                                      <img
-                                                         className="w-[50px] h-[50px] object-contain"
-                                                         src={items.image}
-                                                         alt=""
-                                                      />
-                                                   )}
-                                                   <div>
-                                                      <p className="text-sm font-bold text-[#393939] max-[870px]:text-[13px]">
-                                                         {items.name}
-                                                      </p>
-                                                      <p className="text-xs text-[#1A1A1A] max-[870px]:text-[13px]">
-                                                         SL:{" "}
-                                                         <span className="text-[#4C4C4C]">
-                                                            x{items.quantity}
-                                                         </span>
-                                                      </p>
+                                    <div className="grid grid-cols-3 mt-4 ">
+                                       {e.OrderDetail.map((items) => {
+                                          return (
+                                             <>
+                                                {/* San pham */}
+                                                <div
+                                                   className="py-[16px] items-center"
+                                                   key={items.name}
+                                                >
+                                                   <div className="col-span-2 text-sm flex gap-4 items-center">
+                                                      {items.image && (
+                                                         <img
+                                                            className="w-[50px] h-[50px] object-contain"
+                                                            src={items.image}
+                                                            alt=""
+                                                         />
+                                                      )}
+                                                      <div>
+                                                         <p className="text-sm font-bold text-[#393939] max-[870px]:text-[13px]">
+                                                            {items.name}
+                                                         </p>
+                                                         <p className="text-xs text-[#1A1A1A] max-[870px]:text-[13px]">
+                                                            SL:{" "}
+                                                            <span className="text-[#4C4C4C]">
+                                                               x{items.quantity}
+                                                            </span>
+                                                         </p>
+                                                      </div>
                                                    </div>
                                                 </div>
-                                             </div>
-                                             {/* end San pham */}
-                                          </>
-                                       );
-                                    })}
+                                                {/* end San pham */}
+                                             </>
+                                          );
+                                       })}
+                                    </div>
+                                 </div>
+                                 <div className="group-hover:opacity-100 flex absolute top-[50%] transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
+                                    <Link to={`/shipping/detail/${e.id}`}>
+                                       <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
+                                          <p>Xem chi tiết</p>
+                                       </button>
+                                    </Link>
                                  </div>
                               </div>
-                              <div className="group-hover:opacity-100 flex absolute top-[50%] transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
-                                 <Link to={`/shipping/detail/${e.id}`}>
-                                    <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
-                                       <p>Xem chi tiết</p>
-                                    </button>
-                                 </Link>
-                              </div>
-                           </div>
-                           {/* end card */}
-                        </>
-                     );
-                  })}
+                              {/* end card */}
+                           </>
+                        );
+                     })
+                  ) : (
+                     <>
+                        <div className="flex justify-center p-20">
+                           <p className="text-2xl">Trống</p>
+                        </div>
+                     </>
+                  )}
                   <ResponsivePagination
                      current={currentPage}
                      total={order.totalPage}
