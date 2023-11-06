@@ -6,10 +6,19 @@ const AdminController = {
   // get all
   getAllAdmins: async (req, res) => {
     try {
-      const admins = await prisma.admin.findMany();
+      const keyword = req.query.keyword;
+      const admins = await prisma.admin.findMany({
+        where: {
+          username: {
+            contains: keyword 
+          }
+        }
+      });
+  
       res.json(admins);
     } catch (error) {
-      res.status(500).json("loi");
+      console.error(error);
+      res.status(500).json("Lỗi trong quá trình xử lý yêu cầu.");
     }
   },
 

@@ -2,6 +2,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const cron = require('node-cron');
+// const { Translate } = require('@google-cloud/translate');
+// const translate = new Translate();
 
 
 
@@ -243,12 +245,12 @@ const VoucherController = {
 
     getSavedUser: async (req, res) => {
         try {
-            const userId = parseInt(req.params.id); 
+            const userIdFromCookies = parseInt(req.cookies.id); 
     
             
             const user = await prisma.user.findUnique({
                 where: {
-                    id: userId,
+                    id : userIdFromCookies,
                 },
                 include: {
                     savedVouchers: {
@@ -332,6 +334,8 @@ const VoucherController = {
             res.status(500).json(error.message);
         }
     },
+
+    //  
     
     
     
