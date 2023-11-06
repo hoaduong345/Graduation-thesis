@@ -98,50 +98,44 @@ const ShippingController = {
             res.status(500).json(error.message);
         }
     },
-    // SORT theo status
-    sortByStatus: async (req, res) => {
+    // SORT theo status 0 ( chờ xác nhận)
+    sortByStatus0: async (req, res) => {
         try {
-            const orderID = parseInt(req.body.id);
-            const orderStatus = parent(req.body.status);
-            const order = await prisma.order.findFirst({
-                where: {
-                    id: orderID,
-                },
-            });
-            if (!order) return res.status(404).send('Order is undifined');
-
-            const whereClause = {
-                status: orderStatus,
-            };
-            const sortByStatus = await prisma.order.findMany({
-                where: whereClause,
-            });
-            res.send(200).json(sortByStatus);
+            const productByStatus = await prisma.order.findMany({
+                where:{
+                    status: 0
+                }
+            })
+            res.send(200).json(productByStatus);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    // SORT theo status 2 (đã giao cho đơn vị vận chuyển)
+    sortByStatus2: async(req,res) =>{
+        try {
+            const productByStatus = await prisma.order.findMany({
+                where:{
+                    status: 2
+                }
+            })
+            res.send(200).json(productByStatus);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(error.message);
+        }
+    },
+
     // SORT theo ngày mới nhất
     sortByNewDay: async (req, res) => {
         try {
-            const orderId = parseInt(req.body.id);
-            const order = await prisma.order.findFirst({
-                where: {
-                    id: orderId,
-                },
-            });
-            if (!order) return res.status(404).send('Order is undifined');
-
-            const latestOrders = await prisma.order.findMany({
-                where: {
-                    id: order.id,
-                },
-                orderBy: {
-                    createdAt: 'desc', // Sort by createdAt in descending order
-                },
-            });
-            res.status(200).json(latestOrders);
+            const newOrder = await prisma.order.findMany({
+                orderBy:{
+                    createdAt: 'desc'
+                }
+            })
+            res.json(newOrder);
         } catch (error) {
             console.log(error);
             res.status(500).json(error.message);
