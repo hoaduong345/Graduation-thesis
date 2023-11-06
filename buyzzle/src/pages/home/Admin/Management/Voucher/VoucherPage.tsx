@@ -46,7 +46,7 @@ export default function VoucherPage() {
    }, []);
 
    const getVoucher = async () => {
-      await voucherControllers.get(1).then((res) => {
+      await voucherControllers.getAdmin(1).then((res) => {
          setVoucher(res.data);
       });
    };

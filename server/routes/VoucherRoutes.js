@@ -8,12 +8,14 @@ router.post('/', VoucherController.add);
 router.get('/', VoucherController.get);
 router.delete('/:id', VoucherController.remove);
 router.put('/:id', VoucherController.update);
+router.get('/pageUser', VoucherController.getUser);
+
+router.get('/getSavedUser', VoucherController.getSavedUser);
 
 router.get('/savevoucher/:voucherId', VoucherController.SaveVoucher);
 
-router.get('/getUser', VoucherController.getSavedUser);
 
-router.get('/usevoucher/:voucherId', VoucherController.UseVoucher);
+router.post('/usevoucher', VoucherController.UseVoucher);
 
 router.get('/VoucherExpired', VoucherController.VoucherExpired);
 

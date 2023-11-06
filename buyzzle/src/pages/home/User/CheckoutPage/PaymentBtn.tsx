@@ -7,10 +7,12 @@ import { OrderItems } from "../../../../Model/OrderModel";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
 import { cartControllers } from "../../../../Controllers/CartControllers";
 import { toast } from "react-toastify";
+import { VoucherModel } from "../../../../Model/VoucherModel";
+import { voucherControllers } from "../../../../Controllers/VoucherControllers";
 
 export interface StripePayment {
    cartItems: CartItem[];
-   discount: number;
+   voucher: VoucherModel;
    method: PaymentMethod;
    idUser: number;
    note: string;
@@ -24,7 +26,7 @@ export default function PaymentBtn(props: StripePayment) {
    const {
       cartItems,
       method,
-      discount,
+      voucher,
       idUser,
       note,
       invoice,
@@ -44,7 +46,7 @@ export default function PaymentBtn(props: StripePayment) {
                      .createPayment({
                         cartItems: cartItems,
                         method: method,
-                        discount: discount,
+                        discount: voucher.discount,
                         idUser: Number(idUser),
                         note: note,
                         invoice: invoice,
@@ -82,8 +84,9 @@ export default function PaymentBtn(props: StripePayment) {
                   cartItems: item,
                   amount_subtotal: subtotal,
                   shipping: 30000,
-                  discount: subtotal * (discount / 100),
-                  amount_total: subtotal - subtotal * (discount / 100) + 30000,
+                  discount: subtotal * (voucher.discount / 100),
+                  amount_total:
+                     subtotal - subtotal * (voucher.discount / 100) + 30000,
                   note: note,
                   invoice: invoice,
                   name: name,
@@ -102,6 +105,12 @@ export default function PaymentBtn(props: StripePayment) {
                         order.cartItems.map((e) => {
                            cartControllers.removeItemCart(e.productId);
                         });
+                     })
+                     .then(() => {
+                        voucherControllers.useVoucher(
+                           Number(idUser),
+                           voucher.id
+                        );
                      });
                }, 3000);
             }

@@ -18,6 +18,7 @@ import { CartItem } from "../../../../Model/CartModel";
 import { VoucherModel } from "../../../../Model/VoucherModel";
 import Container from "../../../../components/container/Container";
 import PaymentBtn from "./PaymentBtn";
+import { voucherControllers } from "../../../../Controllers/VoucherControllers";
 
 type FormValues = {
    name: string;
@@ -93,6 +94,15 @@ const provinces = [
    "Yên Bái",
 ];
 
+const defaultVoucher: VoucherModel = {
+   id: 0,
+   discount: 0,
+   code: "",
+   endDay: new Date(),
+   quantity: 0,
+   startDay: new Date(),
+};
+
 interface PaymentModel {
    id: number;
    icon: string;
@@ -125,10 +135,14 @@ export default function CheckOut() {
    const [idUpdateAddress, setIdUpdateAddress] = useState<string>("0");
 
    const [user, setUser] = useState<FormValues>({} as FormValues);
-   const [discount, setDiscount] = useState<number>(0);
+   const [itemVoucher, setItemVoucher] = useState<VoucherModel>(
+      {} as VoucherModel
+   );
    const [username, setUsername] = useState("");
    const [selectedPaymentMethod, setSelectedPaymentMethod] =
       useState<PaymentMethod>("stripe");
+
+   const [getVoucher, setGetVoucher] = useState<VoucherModel[]>([]);
 
    const localCart = sessionStorage.getItem("cartBuyzzle");
    const listLocalCart: CartItem[] =
@@ -136,10 +150,6 @@ export default function CheckOut() {
 
    // const id = localStorage.getItem("idUser");
    const idUser = idUpdateAddress == null ? 0 : JSON.parse(idUpdateAddress);
-
-   const voucherLocal = localStorage.getItem("voucher");
-   const dataVoucherLocal: VoucherModel[] =
-      voucherLocal == null ? [] : JSON.parse(voucherLocal);
 
    const {
       control,
@@ -233,8 +243,7 @@ export default function CheckOut() {
          const userData = JSON.parse(user);
          const username = userData.username;
          setUsername(username);
-         console.log("USERNAME1: " + username);
-         userController
+         await userController
             .getUserWhereUsername2(username)
             .then((res) => {
                console.log("TEST " + JSON.stringify(res));
@@ -292,9 +301,18 @@ export default function CheckOut() {
       }
    };
 
+   const getVoucherUser = async () => {
+      await voucherControllers.GetUserSavedVoucher().then((res) => {
+         setGetVoucher(res);
+      });
+   };
+
    useEffect(() => {
+      getVoucherUser();
       getUserAddress();
    }, []);
+
+   console.log(itemVoucher);
 
    return (
       <>
@@ -767,17 +785,18 @@ export default function CheckOut() {
                               <Voucher />
                               <select
                                  onChange={(e) => {
-                                    setDiscount(Number(e.target.value));
+                                    setItemVoucher(JSON.parse(e.target.value));
+                                    console.log(JSON.parse(e.target.value));
                                  }}
                                  className="outline-none w-full text-[#EA4B48] items-center border-[#FFAAAF] bg-[#fff] border-[1px] py-[8px] rounded-md max-lg:py-[4px]"
                               >
-                                 <option value={0}>
+                                 <option value={JSON.stringify(defaultVoucher)}>
                                     -- Chọn mã giảm giá --
                                  </option>
-                                 {dataVoucherLocal.map((e) => {
+                                 {getVoucher.map((e) => {
                                     return (
                                        <>
-                                          <option value={e.discount}>
+                                          <option value={JSON.stringify(e)}>
                                              {e.code} - {e.discount}%
                                           </option>
                                        </>
@@ -802,9 +821,12 @@ export default function CheckOut() {
                                  <div className="flex gap-1">
                                     <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
                                        -
-                                       {numberFormat(
-                                          calculatePrice() * (discount / 100)
-                                       )}
+                                       {itemVoucher.discount
+                                          ? numberFormat(
+                                               calculatePrice() *
+                                                  (itemVoucher.discount / 100)
+                                            )
+                                          : numberFormat(0)}
                                     </p>
                                  </div>
                               </div>
@@ -823,11 +845,14 @@ export default function CheckOut() {
                                     Tổng Thanh Toán:{" "}
                                  </p>
                                  <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
-                                    {numberFormat(
-                                       calculatePrice() -
-                                          calculatePrice() * (discount / 100) +
-                                          30000
-                                    )}
+                                    {itemVoucher.discount
+                                       ? numberFormat(
+                                            calculatePrice() -
+                                               calculatePrice() *
+                                                  (itemVoucher.discount / 100) +
+                                               30000
+                                         )
+                                       : numberFormat(calculatePrice())}
                                  </p>
                               </div>
                            </div>
@@ -909,7 +934,7 @@ export default function CheckOut() {
                               idUser={idUser}
                               cartItems={listLocalCart}
                               method={selectedPaymentMethod}
-                              discount={discount}
+                              voucher={itemVoucher}
                               note={note}
                               invoice={invoice}
                               address={user.specificaddress}
