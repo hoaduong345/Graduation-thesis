@@ -35,67 +35,70 @@ import AdminProfile from "../../pages/home/Admin/AdminProfile/AdminProfile";
 import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
 import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 import Admin from "../../pages/home/Admin/Management/Admin/Admin";
+import ShippingPage from "../../pages/home/Shipping/ShippingPage";
+import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
+import ShippingLayout from "../../layout/ShippingLayout";
 export default function useRouterEmelent() {
-   const routes = useRoutes([
-      {
-         path: "/",
-         element: (
-            <MainLayout>
-               <HomePage />
-            </MainLayout>
-         ),
-      },
+  const routes = useRoutes([
+    {
+      path: "/",
+      element: (
+        <MainLayout>
+          <HomePage />
+        </MainLayout>
+      ),
+    },
 
-      {
-         path: "/userprofilepage/:username",
-         element: (
-            <MainLayout>
-               <UserProfile />
-            </MainLayout>
-         ),
-      },
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
 
-      {
-         path: "/products",
-         element: (
-            <MainLayout>
-               <ProductsPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "/FiltersPage/",
-         element: (
-            <MainLayout>
-               <FiltersPage />
-            </MainLayout>
-         ),
-      },
-      // {
-      //   path: "/FiltersPage/:text",
-      //   element: (
-      //     <MainLayout>
-      //       <FiltersPage />
-      //     </MainLayout>
-      //   ),
-      // },
+    {
+      path: "/products",
+      element: (
+        <MainLayout>
+          <ProductsPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/FiltersPage/",
+      element: (
+        <MainLayout>
+          <FiltersPage />
+        </MainLayout>
+      ),
+    },
+    // {
+    //   path: "/FiltersPage/:text",
+    //   element: (
+    //     <MainLayout>
+    //       <FiltersPage />
+    //     </MainLayout>
+    //   ),
+    // },
 
-      {
-         path: "/register",
-         element: (
-            <RegisterLoginLayout>
-               <Register />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "/login",
-         element: (
-            <RegisterLoginLayout>
-               <Login />
-            </RegisterLoginLayout>
-         ),
-      },
+    {
+      path: "/register",
+      element: (
+        <RegisterLoginLayout>
+          <Register />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/login",
+      element: (
+        <RegisterLoginLayout>
+          <Login />
+        </RegisterLoginLayout>
+      ),
+    },
 
     {
       path: "/forgotpassword",
@@ -549,14 +552,14 @@ export default function useRouterEmelent() {
           element: <AdminProfile />,
         },
 
-            {
-               path: "updateproduct/:id",
-               element: <Editproducts />,
-            },
-            {
-               path: "ListproductsAdmin",
-               element: <ListproductsAdmin />,
-            },
+        {
+          path: "updateproduct/:id",
+          element: <Editproducts />,
+        },
+        {
+          path: "ListproductsAdmin",
+          element: <ListproductsAdmin />,
+        },
 
         {
           path: "Detailproducts/:id",
@@ -574,6 +577,14 @@ export default function useRouterEmelent() {
           path: "detailuser/:username",
           element: <DetailUser />,
         },
+
+        // {
+        //   path: "loginadmin",
+        //   element:
+        //   <RegisterLoginLayout>
+        //     <LoginAdmin />
+        //     </RegisterLoginLayout>,
+        // },
         {
           path: "ordermanagement",
           element: <OrderManagement />,
@@ -600,16 +611,42 @@ export default function useRouterEmelent() {
         },
       ],
     },
-
-      {
-         path: path.resetpassword,
-         element: (
+    {
+      path: "/admin",
+      children: [
+        {
+          path: "loginadmin",
+          element: (
             <RegisterLoginLayout>
-               <ChangePassword />
-               <ConfirmAccount />
+              <LoginAdmin />
             </RegisterLoginLayout>
-         ),
-      },
-   ]);
-   return routes;
+          ),
+        },
+      ],
+    },
+    {
+      path: "/shipping",
+      element: <ShippingLayout />,
+      children: [
+        {
+          path: "management",
+          element: <ShippingPage />,
+        },
+        {
+          path: "detail/:id",
+          element: <ShippingDetail />,
+        },
+      ],
+    },
+    {
+      path: path.resetpassword,
+      element: (
+        <RegisterLoginLayout>
+          <ChangePassword />
+          <ConfirmAccount />
+        </RegisterLoginLayout>
+      ),
+    },
+  ]);
+  return routes;
 }

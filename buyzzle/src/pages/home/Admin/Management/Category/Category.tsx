@@ -23,6 +23,8 @@ import RemoveCate from "../../Assets/TSX/RemoveCate";
 import UploadIMG from "../../Assets/TSX/UploadIMG";
 import Handle from "../../Assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
+import ArrowDown from "../../Assets/TSX/ArrowDown";
+import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 
 function Category() {
    const idModalCate = "category";
@@ -463,7 +465,7 @@ function Category() {
                               Tên Danh Mục
                            </p>
                         </div>
-                        <div className="flex justify-end pr-11 col-span-2 max-lg:gap-[30px]">
+                        <div className="flex justify-center col-span-2 max-lg:gap-[30px]">
                            <p
                               onClick={() =>
                                  checkedCategory.length > 0
@@ -473,7 +475,7 @@ function Category() {
                                       )
                                     : toast.warn("Chưa chọn danh mục")
                               }
-                              className="pt-[12px] text-[16px] max-lg:text-sm"
+                              className="pt-[12px] text-[16px] pr-2 max-lg:text-sm"
                            >
                               <Delete />
                            </p>
@@ -523,47 +525,47 @@ function Category() {
                            </>
                         }
                      />
-
                      {categorys.map((e, index) => {
                         return (
                            <>
-                              <Accordion open={open == e.id}>
-                                 <div
-                                    className="grid grid-cols-10"
-                                    onClick={() => handleOpen(e.id)}
-                                    key={e.id}
-                                 >
-                                    <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16">
-                                       <div className=" flex gap-[20px] max-lg:gap-2">
-                                          <input
-                                             className="checkbox checkbox-sm items-center"
-                                             type="checkbox"
-                                             checked={checkedCategory.includes(
-                                                e
-                                             )}
-                                             onChange={(element) =>
-                                                handleChecked(
-                                                   element.target.checked,
+                              <Accordion open={open == e.id} key={e.id}>
+                                 <div className="grid grid-cols-10">
+                                    <div className="col-span-8 grid grid-cols-8">
+                                       <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16">
+                                          <div className=" flex gap-[20px] max-lg:gap-2">
+                                             <input
+                                                className="checkbox checkbox-sm items-center"
+                                                type="checkbox"
+                                                checked={checkedCategory.includes(
                                                    e
-                                                )
-                                             }
-                                          />
+                                                )}
+                                                onChange={(element) =>
+                                                   handleChecked(
+                                                      element.target.checked,
+                                                      e
+                                                   )
+                                                }
+                                             />
+                                          </div>
+                                          <div>
+                                             <img
+                                                className="w-[50px]"
+                                                src={e.image}
+                                                alt=""
+                                             />
+                                          </div>
                                        </div>
-                                       <div>
-                                          <img
-                                             className="w-[50px]"
-                                             src={e.image}
-                                             alt=""
-                                          />
+                                       <div
+                                          onClick={() => handleOpen(e.id)}
+                                          className="col-span-5 cursor-pointer border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]"
+                                       >
+                                          <p className="text-[16px] font-bold my-auto max-lg:text-sm">
+                                             {e.name}
+                                          </p>
                                        </div>
-                                    </div>
-                                    <div className="col-span-5 border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]">
-                                       <p className="text-[16px] font-bold my-auto max-lg:text-sm">
-                                          {e.name}
-                                       </p>
                                     </div>
                                     <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
-                                       <div className="flex text-center justify-end items-center gap-5 py-[25px] px-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                                       <div className="flex text-center justify-center items-center gap-5 py-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
                                           <button
                                              onClick={() => {
                                                 openModal(
@@ -583,7 +585,7 @@ function Category() {
                                              </label>
                                              <ul
                                                 tabIndex={0}
-                                                className="dropdown-content menu bg-white rounded-box w-52
+                                                className="dropdown-content menu bg-white rounded-box w-52 z-30
                                                 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                                 max-2xl:left-[100%] max-2xl::origin-left"
                                              >
@@ -622,6 +624,14 @@ function Category() {
                                                 </li>
                                              </ul>
                                           </div>
+
+                                          <div onClick={() => handleOpen(e.id)}>
+                                             {open === e.id ? (
+                                                <ArrowDown />
+                                             ) : (
+                                                <ArrowNextHistory />
+                                             )}
+                                          </div>
                                        </div>
                                     </div>
                                  </div>
@@ -632,7 +642,9 @@ function Category() {
                                              <>
                                                 <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16"></div>
                                                 <div className="col-span-5 border-[#e0e0e0] flex h-10 border-y-[1px] border-l-[1px] items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
-                                                   {elements.name}
+                                                   <p className="text-[16px] font-bold my-auto max-lg:text-sm">
+                                                      {elements.name}
+                                                   </p>
                                                 </div>
                                                 <div className="col-span-2 border-[#e0e0e0] border-y-[1px]"></div>
                                              </>

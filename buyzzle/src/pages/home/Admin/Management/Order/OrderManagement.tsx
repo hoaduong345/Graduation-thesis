@@ -1,17 +1,26 @@
 import { IonIcon } from "@ionic/react";
+import { Input } from "@material-tailwind/react";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { useNavigate } from "react-router-dom";
 import Search from "../../../../../Assets/TSX/Search";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
-import { formatDate, numberFormat } from "../../../../../Helper/Format";
+import { numberFormat } from "../../../../../Helper/Format";
 import { OrderPanigation } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
 import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import Calendar from "../../Assets/TSX/calendar";
 import Excel from "../../Assets/TSX/excel";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import { Input } from "@material-tailwind/react";
+
+export const dateOrder = (date: Date) => {
+   return moment(date).format("L");
+};
+export const timeOrder = (date: Date) => {
+   return moment(date).format("LT");
+};
+
 export default function OrderManagement() {
    const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
    const [currentPage, setCurrentPage] = useState<number>(1);
@@ -47,17 +56,22 @@ export default function OrderManagement() {
       },
       {
          id: 2,
-         text: "Mới",
-         active: false, // Thêm trường active
-      },
-      {
-         id: 3,
          text: "Chờ xác nhận",
          active: false, // Thêm trường active
       },
       {
-         id: 4,
+         id: 3,
          text: "Đã giao cho ĐVVC",
+         active: false, // Thêm trường active
+      },
+      {
+         id: 4,
+         text: "Giao hàng thành công",
+         active: false, // Thêm trường active
+      },
+      {
+         id: 5,
+         text: "Yêu Cầu Hủy Đơn",
          active: false, // Thêm trường active
       },
    ]);
@@ -159,19 +173,36 @@ export default function OrderManagement() {
                                  {order?.totalOrder}
                               </div>
                            )}
+                           {btnItems.id == 5 && (
+                              <div className="badge badge-xs badge-accent badge-outline py-2">
+                                 {
+                                    order?.data?.filter((e) => e.status == null)
+                                       .length
+                                 }
+                              </div>
+                           )}
                            {btnItems.id == 2 && (
                               <div className="badge badge-xs badge-info badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 0)
+                                       .length
+                                 }
                               </div>
                            )}
                            {btnItems.id == 3 && (
                               <div className="badge badge-xs badge-secondary badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 2)
+                                       .length
+                                 }
                               </div>
                            )}
                            {btnItems.id == 4 && (
                               <div className="badge badge-xs badge-accent badge-outline py-2">
-                                 0
+                                 {
+                                    order?.data?.filter((e) => e.status == 5)
+                                       .length
+                                 }
                               </div>
                            )}
                         </button>
@@ -253,7 +284,8 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                        {/* end calendarIcon */}
                                        <div className="flex">
                                           <p className="text-[#4C4C4C] font-bold text-sm">
-                                             {formatDate(e.createdAt)}
+                                             {dateOrder(e.createdAt)} lúc{" "}
+                                             {timeOrder(e.createdAt)}
                                           </p>
                                           <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
                                           <div className="badge badge-xs badge-accent text-center py-2 px-3">
@@ -264,7 +296,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                                    : "Chưa thanh toán"}
                                              </p>
                                           </div>
-                                          <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
+                                          {/* <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
                                           <div className="flex items-center gap-2">
                                              <p className="text-[#4C4C4C] font-bold text-sm">
                                                 Mã vận đơn:
@@ -272,7 +304,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                              <p className="text-[#EA4B48] font-bold text-sm">
                                                 SPXR24
                                              </p>
-                                          </div>
+                                          </div> */}
                                        </div>
                                     </div>
 
@@ -292,8 +324,8 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                     )}
                                  </div>
                                  <div className="flex items-center mt-5 gap-5">
-                                    {/* Select box */}
-                                    {/* <div className="relative h-10 w-[142px] min-w-[200px]">
+                                    <div className="max-w-max">
+                                       {/* <div className="relative h-10 w-[142px] min-w-[200px]">
                                        <select className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
                                           <option>
                                              {getStatusOrder(e.status)}
@@ -303,7 +335,6 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                           Trạng thái
                                        </label>
                                     </div> */}
-                                    <div className="max-w-max">
                                        <Input
                                           crossOrigin=""
                                           label="Trạng thái"
@@ -311,11 +342,11 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                        />
                                     </div>
                                     {/* end Select box  */}
-                                    <div className="badge badge-xs badge-error py-3 px-5">
+                                    {/* <div className="badge badge-xs badge-error py-3 px-5">
                                        <p className="font-bold text-xs text-white ">
                                           Mới
                                        </p>
-                                    </div>
+                                    </div> */}
                                  </div>
                                  <div className="grid grid-cols-3 mt-4 ">
                                     {e.OrderDetail.map((items) => {
@@ -354,18 +385,6 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                  </div>
                               </div>
                               <div className="group-hover:opacity-100 flex absolute top-[50%] transform -translate-y-1/2 right-0 space-x-2 p-4 opacity-0 transition-opacity duration-500 ease-in-out">
-                                 {/* {e.invoice == "true" ? (
-                                    <>
-                                       <Link to={`/admin/invoice/${e.id}`}>
-                                          <button className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex">
-                                             <Print />
-                                             <p>Print</p>
-                                          </button>
-                                       </Link>
-                                    </>
-                                 ) : (
-                                    <></>
-                                 )} */}
                                  <button
                                     className="btn btn-outline hover:bg-[#E0E0E0] hover:text-[#4C4C4C] px-4 py-1 flex"
                                     onClick={() => {

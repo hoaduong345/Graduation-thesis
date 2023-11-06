@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../../Assets/TS";
-import Map from "../../../../../Assets/TSX/Map";
-import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
-import { orderControllers } from "../../../../../Controllers/OrderControllers";
-import { numberFormat } from "../../../../../Helper/Format";
-import StepperAdmin from "../../../../../Helper/Stepper/StepperAdmin";
-import { OrderModel } from "../../../../../Model/OrderModel";
-import Container from "../../../../../components/container/Container";
-import Back from "../../Assets/TSX/Back";
-import MessageOrderAdmin from "../../Assets/TSX/MessageOrderAdmin";
-import Paymethod from "../../Assets/TSX/Paymethod";
-import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
-import PrintOrder from "../../Assets/TSX/PrintOrder";
-import { dateOrder, timeOrder } from "./OrderManagement";
+import { Images } from "../../../Assets/TS";
+import Map from "../../../Assets/TSX/Map";
+import NoteOrderAdmin from "../../../Assets/TSX/NoteOrderAdmin";
+import { orderControllers } from "../../../Controllers/OrderControllers";
+import { numberFormat } from "../../../Helper/Format";
+import StepperShipping from "../../../Helper/Stepper/StepperShipping";
+import { OrderModel } from "../../../Model/OrderModel";
+import Container from "../../../components/container/Container";
+import Back from "../Admin/Assets/TSX/Back";
+import Paymethod from "../Admin/Assets/TSX/Paymethod";
+import PhoneOrderAdmin from "../Admin/Assets/TSX/PhoneOrderAdmin";
+import {
+   dateOrder,
+   timeOrder,
+} from "../Admin/Management/Order/OrderManagement";
 
-export default function DetailOrderManagement() {
+export default function ShippingDetail() {
    const { id } = useParams();
    const idOrder = Number(id);
 
@@ -38,15 +39,14 @@ export default function DetailOrderManagement() {
          toast.success("Thành công");
       });
    };
-
    return (
       <>
          <Container>
-            <div className="grid grid-cols-5">
+            <div className="grid grid-cols-5 pb-10">
                <div className="content-right-filter mt-[34px] col-span-5 max-2xl:col-span-5 ">
                   <div className="flex justify-between">
                      <div className="flex gap-5 items-center text-center">
-                        <Link to={"/admin/ordermanagement"}>
+                        <Link to={"/shipping/management"}>
                            <div className="back h-[57px]">
                               <div className="flex items-center">
                                  <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
@@ -75,34 +75,7 @@ export default function DetailOrderManagement() {
                            </p>
                         </div>
                      </div>
-                     <div className="flex gap-2 items-center">
-                        {order.invoice == "true" ? (
-                           <>
-                              <Link to={`/admin/invoice/${order.id}`}>
-                                 <button
-                                    className="justify-center gap-3 items-center text-sm font-bold text-[#4C4C4C] hover:bg-[#E0E0E0] hover:text-[#4C4C4C]
-                                 rounded-md py-2 px-3 flex
-                                 transition duration-150 cursor-pointer border-[#E0E0E0] border-[1px]
-                                 max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
-                                 >
-                                    <PrintOrder />
-                                    <p>Hóa đơn</p>
-                                 </button>
-                              </Link>
-                           </>
-                        ) : (
-                           <></>
-                        )}
-
-                        <button
-                           className="justify-center gap-3 items-center text-sm font-bold text-white
-                             rounded-md py-[8px] px-[27.9px] flex
-                                transition duration-150 bg-[#EA4B48] cursor-pointer
-                                max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs"
-                        >
-                           <p>Hủy đơn</p>
-                        </button>
-                     </div>
+                     <div className="flex gap-2 items-center"></div>
                   </div>
 
                   <div className="grid grid-cols-4 gap-3 mt-[34px] ">
@@ -200,7 +173,10 @@ export default function DetailOrderManagement() {
                                           Tổng Thanh Toán:{" "}
                                        </p>
                                        <p className="text-xl text-[#EA4B48] font-semibold max-[870px]:text-sm">
-                                          {numberFormat(order.amountTotal)}
+                                          {order?.paymentMethod ==
+                                          "Thẻ tín dụng"
+                                             ? "Đã thanh toán"
+                                             : numberFormat(order.amountTotal)}
                                        </p>
                                     </div>
                                  </div>
@@ -212,7 +188,7 @@ export default function DetailOrderManagement() {
                               <p>Trạng Thái Đơn Hàng</p>
                            </div>
                            <div className="px-11 pt-4">
-                              <StepperAdmin
+                              <StepperShipping
                                  status={order.status}
                                  comfirm={(status) => setStatus(status)}
                               />
@@ -223,7 +199,7 @@ export default function DetailOrderManagement() {
                      <div className="col-span-1">
                         <div className="flex flex-col gap-5 px-5 py-8 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                            <div className="text-xl font-semibold text-[#393939]">
-                              <p>Thông Tin User</p>
+                              <p>Thông Tin Khách hàng</p>
                            </div>
 
                            <div className="flex justify-between mb-8">
@@ -237,32 +213,15 @@ export default function DetailOrderManagement() {
                                  <div>
                                     <p className="text-sm">
                                        {order?.name?.length > 0
-                                          ? order?.name.substring(0, 11)
+                                          ? order?.name
                                           : ""}{" "}
                                     </p>
 
                                     <p className="text-[#12b004] text-[10px]">
                                        {order?.name?.length
-                                          ? order?.address.substring(0, 11)
+                                          ? order?.phoneNumber
                                           : ""}{" "}
                                     </p>
-                                 </div>
-                              </div>
-
-                              <div className="flex flex-col gap-3">
-                                 <div className="flex justify-end items-centers">
-                                    <button
-                                       className="text-white text-center text-xs font-bold
-                 bg-[#EA4B48] hover:bg-[#ff6d65] mt-2
-                 rounded-md transition duration-150 cursor-pointer
-                 flex items-center px-2 py-1"
-                                    >
-                                       <p className="w-full">Chat</p>
-                                       <MessageOrderAdmin />
-                                    </button>
-                                 </div>
-                                 <div className=" flex gap-1 items-center text-[10px] text-red-700">
-                                    Đang hoạt động
                                  </div>
                               </div>
                            </div>
