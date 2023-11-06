@@ -9,10 +9,16 @@ function StepperAdmin(props: handleClick) {
     <>
       <ul className="steps w-full">
         <li
-          data-content={`${status >= 1 ? `✓` : `1`}`}
-          className={`step ${status >= 1 ? `step-neutral` : ``}`}
+          data-content={`${status >= 1 && status != null ? `✓` : `1`}`}
+          className={`step ${
+            status >= 1 && status != null ? `step-neutral` : ``
+          }`}
         >
-          <p className={` ${status >= 1 ? `inherit` : `text-[#9c9c9c]`}`}>
+          <p
+            className={` ${
+              status >= 1 && status != null ? `inherit` : `text-[#9c9c9c]`
+            }`}
+          >
             Đặt hàng
           </p>
           <div className="group inline-block mt-2">
