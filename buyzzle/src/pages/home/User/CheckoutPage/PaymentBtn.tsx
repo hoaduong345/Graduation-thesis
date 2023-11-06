@@ -53,6 +53,7 @@ export default function PaymentBtn(props: StripePayment) {
                         name: name,
                         address: address,
                         phoneNumber: phoneNumber,
+                        voucherId: voucher.id,
                      })
                      .then((res) => {
                         if (res.data.url) {

@@ -552,8 +552,7 @@ export default function VoucherPage() {
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                               <p>
-                                 Đã dùng / Tổng{" "}
-                                 <span className="max-[940px]:hidden"> SL</span>
+                                 Đã dùng / Còn Lại
                               </p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
@@ -561,9 +560,9 @@ export default function VoucherPage() {
                                  onClick={() =>
                                     checkedVoucher.length > 0
                                        ? openModal(
-                                            idRemoveVouchers,
-                                            {} as FormValues
-                                         )
+                                          idRemoveVouchers,
+                                          {} as FormValues
+                                       )
                                        : toast.warn("Chưa chọn Voucher để xóa")
                                  }
                               >

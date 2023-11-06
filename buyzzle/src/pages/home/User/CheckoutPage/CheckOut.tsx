@@ -136,7 +136,7 @@ export default function CheckOut() {
 
    const [user, setUser] = useState<FormValues>({} as FormValues);
    const [itemVoucher, setItemVoucher] = useState<VoucherModel>(
-      {} as VoucherModel
+      defaultVoucher
    );
    const [username, setUsername] = useState("");
    const [selectedPaymentMethod, setSelectedPaymentMethod] =
@@ -312,8 +312,6 @@ export default function CheckOut() {
       getUserAddress();
    }, []);
 
-   console.log(itemVoucher);
-
    return (
       <>
          <Container>
@@ -485,11 +483,10 @@ export default function CheckOut() {
                                                          <input
                                                             className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                    rounded-[6px] px-[10px] py-[10.5px] w-[100%] mt-2
-                                                  ${
-                                                     !!errors.name
-                                                        ? "border-[2px] border-red-900"
-                                                        : "border-[1px] border-[#FFAAAF]"
-                                                  }`}
+                                                  ${!!errors.name
+                                                                  ? "border-[2px] border-red-900"
+                                                                  : "border-[1px] border-[#FFAAAF]"
+                                                               }`}
                                                             placeholder="Họ và tên"
                                                             value={field.value}
                                                          />
@@ -649,11 +646,10 @@ export default function CheckOut() {
                                                       <input
                                                          className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                    rounded-[6px] px-[10px] py-[12px] w-[100%]
-                                                  ${
-                                                     !!errors.specificaddress
-                                                        ? "border-[2px] border-red-900"
-                                                        : "border-[1px] border-[#FFAAAF]"
-                                                  }`}
+                                                  ${!!errors.specificaddress
+                                                               ? "border-[2px] border-red-900"
+                                                               : "border-[1px] border-[#FFAAAF]"
+                                                            }`}
                                                          placeholder="Địa chỉ cụ thể"
                                                          onChange={(e) => {
                                                             const value =
@@ -739,7 +735,7 @@ export default function CheckOut() {
                                              <p className="font-medium text-[#EA4B48] text-base text-center max-[870px]:text-[13px]">
                                                 {numberFormat(
                                                    e.quantity *
-                                                      e.product.sellingPrice
+                                                   e.product.sellingPrice
                                                 )}
                                              </p>
                                           </div>
@@ -786,7 +782,6 @@ export default function CheckOut() {
                               <select
                                  onChange={(e) => {
                                     setItemVoucher(JSON.parse(e.target.value));
-                                    console.log(JSON.parse(e.target.value));
                                  }}
                                  className="outline-none w-full text-[#EA4B48] items-center border-[#FFAAAF] bg-[#fff] border-[1px] py-[8px] rounded-md max-lg:py-[4px]"
                               >
@@ -823,9 +818,9 @@ export default function CheckOut() {
                                        -
                                        {itemVoucher.discount
                                           ? numberFormat(
-                                               calculatePrice() *
-                                                  (itemVoucher.discount / 100)
-                                            )
+                                             calculatePrice() *
+                                             (itemVoucher.discount / 100)
+                                          )
                                           : numberFormat(0)}
                                     </p>
                                  </div>
@@ -847,12 +842,12 @@ export default function CheckOut() {
                                  <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
                                     {itemVoucher.discount
                                        ? numberFormat(
-                                            calculatePrice() -
-                                               calculatePrice() *
-                                                  (itemVoucher.discount / 100) +
-                                               30000
-                                         )
-                                       : numberFormat(calculatePrice())}
+                                          calculatePrice() -
+                                          calculatePrice() *
+                                          (itemVoucher.discount / 100) +
+                                          30000
+                                       )
+                                       : numberFormat(calculatePrice() + 30000)}
                                  </p>
                               </div>
                            </div>
@@ -892,12 +887,11 @@ export default function CheckOut() {
                                                 />
                                              </div>
                                              <p
-                                                className={`max-lg:text-[10px] ${
-                                                   selectedPaymentMethod ===
+                                                className={`max-lg:text-[10px] ${selectedPaymentMethod ===
                                                    element.type
-                                                      ? "inherit"
-                                                      : "text-[#9c9c9c]"
-                                                } cursor-pointer`}
+                                                   ? "inherit"
+                                                   : "text-[#9c9c9c]"
+                                                   } cursor-pointer`}
                                                 onClick={() => {
                                                    setSelectedPaymentMethod(
                                                       element.type
@@ -921,9 +915,8 @@ export default function CheckOut() {
                                  onChange={(e) => setInvoice(e.target.checked)}
                               />
                               <p
-                                 className={`text-[15px] max-[870px]:text-[13px] cursor-pointer ${
-                                    invoice ? `inherit` : `text-[#9c9c9c]`
-                                 }`}
+                                 className={`text-[15px] max-[870px]:text-[13px] cursor-pointer ${invoice ? `inherit` : `text-[#9c9c9c]`
+                                    }`}
                                  onClick={() => setInvoice(!invoice)}
                               >
                                  Xuất hóa đơn

@@ -1,17 +1,12 @@
-
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const cron = require('node-cron');
 // const { Translate } = require('@google-cloud/translate');
 // const translate = new Translate();
 
-
-
 const VoucherController = {
-
     VoucherExpired: async (req, res) => {
         try {
-
             const today = new Date();
             const expiredVouchers = await prisma.voucher.findMany({
                 where: {
@@ -38,7 +33,7 @@ const VoucherController = {
         }
     },
 
-    get: async (req, res) => {  //getADMIN
+    getAdmin: async (req, res) => {
         try {
             const pageCurr = parseInt(req.query.page);
 
@@ -85,12 +80,12 @@ const VoucherController = {
             const voucher = await prisma.voucher.findMany({
                 where: {
                     quantity: {
-                        gte: 1
+                        gte: 1,
                     },
                     endDay: {
-                        gte: new Date()
+                        gte: new Date(),
                     },
-                    deletedAt: null
+                    deletedAt: null,
                 },
                 skip: startIndex,
                 take: limit,
@@ -123,12 +118,12 @@ const VoucherController = {
 
             // Kiểm tra startDay
             if (startDate < today) {
-                return res.status(400).json({ message: "startDay phải là ngày hôm nay hoặc sau ngày hôm nay" });
+                return res.status(400).json({ message: 'startDay phải là ngày hôm nay hoặc sau ngày hôm nay' });
             }
 
             // Kiểm tra endDay
             if (endDate < startDate) {
-                return res.status(400).json({ message: "endDay phải sau startDay" });
+                return res.status(400).json({ message: 'endDay phải sau startDay' });
             }
 
             // Tạo voucher
@@ -196,12 +191,12 @@ const VoucherController = {
 
             // Kiểm tra startDay
             if (startDate < today) {
-                return res.status(400).json({ message: "startDay phải là ngày hôm nay hoặc sau ngày hôm nay" });
+                return res.status(400).json({ message: 'startDay phải là ngày hôm nay hoặc sau ngày hôm nay' });
             }
 
             // Kiểm tra endDay
             if (endDate < startDate) {
-                return res.status(400).json({ message: "endDay phải sau startDay" });
+                return res.status(400).json({ message: 'endDay phải sau startDay' });
             }
 
             const updateVoucher = {
@@ -235,7 +230,6 @@ const VoucherController = {
                 where: { id: userIdFromCookies },
             });
 
-
             const voucher = await prisma.voucher.findUnique({
                 where: { id: voucherId },
             });
@@ -245,7 +239,7 @@ const VoucherController = {
             }
 
             if (!voucher || voucher.quantity === 0) {
-                return res.status(400).json("Voucher không tồn tại hoặc đã hết.");
+                return res.status(400).json('Voucher không tồn tại hoặc đã hết.');
             }
 
             // Kiểm tra xem người dùng đã lưu voucher này trước đó chưa
@@ -276,7 +270,7 @@ const VoucherController = {
                         quantity: voucher.quantity - 1, // Giảm quantity đi 1
                     },
                 }),
-            ])
+            ]);
 
             res.status(201).json('Voucher đã được lưu thành công.');
         } catch (error) {
@@ -297,13 +291,13 @@ const VoucherController = {
                     used: false,
                     voucher: {
                         endDay: {
-                            gte: new Date()
+                            gte: new Date(),
                         },
                         startDay: {
-                            lte: new Date()
+                            lte: new Date(),
                         },
-                        deletedAt: null
-                    }
+                        deletedAt: null,
+                    },
                 },
                 include: {
                     voucher: {
@@ -312,17 +306,16 @@ const VoucherController = {
                             code: true,
                             discount: true,
                         },
-
-                    }
-                }
-            })
+                    },
+                },
+            });
 
             if (user) {
                 // Trả về danh sách voucher mà người dùng đã lưu
                 const savedVouchers = user.map((sv) => sv.voucher);
                 res.status(200).json(savedVouchers);
             } else {
-                res.status(404).json({ message: "Không tìm thấy người dùng" });
+                res.status(404).json({ message: 'Không tìm thấy người dùng' });
             }
         } catch (error) {
             console.error(error);
@@ -332,83 +325,38 @@ const VoucherController = {
 
     UseVoucher: async (req, res) => {
         try {
-            // const userIdFromCookies = parseInt(req.cookies.id);
-            // const voucherId = parseInt(req.params.voucherId);
+            const userId = parseInt(req.body.userId);
+            const voucherId = parseInt(req.body.voucherId);
 
-            const userId = req.body.userId;
-            const voucherId = req.body.voucherId
-
-            await prisma.savedVoucher.update({
+            // Kiểm tra xem người dùng đã lưu voucher chưa
+            const savedVoucher = await prisma.savedVoucher.findFirst({
                 where: {
                     userId: userId,
                     voucherId: voucherId,
+                    used: false,
                 },
-                data: {
-                    used: true,
-                },
-            }),
+            });
 
-                // Kiểm tra xem voucher có tồn tại và còn lại quantity không
-                // const voucher = await prisma.voucher.findUnique({
-                //     where: {
-                //         id: voucherId,
-                //     },
-                // });
+            // Sử dụng voucher và xóa voucher đã lưu khỏi danh sách voucher đã lưu của người dùng
+            await prisma.$transaction([
+                prisma.savedVoucher.update({
+                    where: {
+                        id: savedVoucher.id,
+                    },
+                    data: {
+                        used: true,
+                    },
+                }),
+            ]);
 
-                // if (!voucher || voucher.quantity === 0) {
-                //     return res.status(400).json({ message: "Voucher không tồn tại hoặc đã hết." });
-                // }
-
-                // Kiểm tra xem người dùng đã lưu voucher chưa
-                // const savedVoucher = await prisma.savedVoucher.findFirst({
-                //     where: {
-                //         userId: userIdFromCookies,
-                //         voucherId: voucherId,
-                //         used: false,
-                //     },
-                // });
-
-                // if (!savedVoucher) {
-                //     return res.status(400).json({ message: "Người dùng chưa lưu voucher này hoặc đã sử dụng." });
-                // }
-
-                // Sử dụng voucher và xóa voucher đã lưu khỏi danh sách voucher đã lưu của người dùng
-                // await prisma.$transaction([
-                //     prisma.savedVoucher.update({
-                //         where: {
-                //             id: savedVoucher.id,
-                //         },
-                //         data: {
-                //             used: true,
-                //         },
-                //     }),
-                //     prisma.savedVoucher.delete({
-                //         where: {
-                //             id: savedVoucher.id,
-                //         },
-                //     }),
-                //     prisma.voucher.update({
-                //         where: {
-                //             id: voucherId,
-                //         },
-                //         data: {
-                //             quantity: voucher.quantity - 1, // Giảm quantity đi 1
-                //         },
-                //     }),
-                // ]);
-
-                res.status(200).json({ message: "Sử dụng voucher thành công." });
+            res.status(200).json({ message: 'Sử dụng voucher thành công.' });
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
 
-    //  
-
-
-
-
+    //
 };
 
 module.exports = VoucherController;
