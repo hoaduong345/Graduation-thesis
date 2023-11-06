@@ -9,16 +9,10 @@ function StepperAdmin(props: handleClick) {
     <>
       <ul className="steps w-full">
         <li
-          data-content={`${status >= 1 && status != null ? `✓` : `1`}`}
-          className={`step ${
-            status >= 1 && status != null ? `step-neutral` : ``
-          }`}
+          data-content={`${status >= 1 ? `✓` : `1`}`}
+          className={`step ${status >= 1 ? `step-neutral` : ``}`}
         >
-          <p
-            className={` ${
-              status >= 1 && status != null ? `inherit` : `text-[#9c9c9c]`
-            }`}
-          >
+          <p className={` ${status >= 1 ? `inherit` : `text-[#9c9c9c]`}`}>
             Đặt hàng
           </p>
           <div className="group inline-block mt-2">
@@ -58,7 +52,7 @@ function StepperAdmin(props: handleClick) {
           <div className="group inline-block mt-2">
             <button
               className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${
-                status == 1 ? `hidden` : ``
+                status != 1 ? `hidden` : ``
               }`}
               onClick={() => comfirm(2)}
             >
@@ -82,12 +76,18 @@ function StepperAdmin(props: handleClick) {
           </div>
         </li>
         {/* ---------------- */}
-        <li className={`step ${status >= 4 ? `step-primary` : ``} `}>
+        <li
+          data-content={`${status >= 4 ? `✓` : `4`}`}
+          className={`step ${status >= 4 ? `step-neutral` : ``} `}
+        >
           <p className={` ${status >= 4 ? `inherit` : `text-[#9c9c9c]`}`}>
             Đang giao hàng
           </p>
         </li>
-        <li className={`step ${status == 5 ? `step-primary` : ``} `}>
+        <li
+          data-content={`${status >= 5 ? `✓` : `5`}`}
+          className={`step ${status == 5 ? `step-neutral` : ``} `}
+        >
           <p className={` ${status == 5 ? `inherit` : `text-[#9c9c9c]`}`}>
             Giao hàng thành công
           </p>

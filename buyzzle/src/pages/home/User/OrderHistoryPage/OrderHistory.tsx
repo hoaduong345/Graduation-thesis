@@ -14,6 +14,8 @@ import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
+  let _paymentStatus: string | undefined;
+
   switch (status) {
     case StatusOrder.Comfirm:
       _statusOrder = <p className="text-teal-700">Chờ xác nhận</p>;
@@ -32,12 +34,16 @@ export const getStatusOrder = (status: StatusOrder) => {
       break;
     case StatusOrder.Succed:
       _statusOrder = <p className="text-green-700">Giao hàng thành công</p>;
+      _paymentStatus = "Đã thanh toán";
       break;
     default:
       _statusOrder = <p className="text-red-700">Yêu Cầu Hủy Đơn</p>;
       break;
   }
-  return _statusOrder;
+  return {
+    _statusOrder,
+    _paymentStatus,
+  };
 };
 
 export default function OrderHistory() {
@@ -153,7 +159,7 @@ export default function OrderHistory() {
                                     {e.OrderDetail.length} SP)
                                   </div>
                                   <div className="w-[16%] text-center">
-                                    {getStatusOrder(e.status)}
+                                    {getStatusOrder(e.status)._statusOrder}
                                   </div>
                                   <Link
                                     to={`/orderdetail/${e.id}`}

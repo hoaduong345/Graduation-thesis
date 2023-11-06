@@ -212,13 +212,21 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                 {timeOrder(e.createdAt)}
                               </p>
                               <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
-                              <div className="badge badge-xs badge-accent text-center py-2 px-3">
-                                <p className="font-bold text-xs text-white">
-                                  {e.paymentMethod == "Thẻ tín dụng"
-                                    ? "Đã thanh toán"
-                                    : "Chưa thanh toán"}
-                                </p>
-                              </div>
+                              {e.paymentMethod == "Thẻ tín dụng" ||
+                              getStatusOrder(e.status)._paymentStatus ? (
+                                <div className="badge badge-xs badge-accent text-center py-2 px-3">
+                                  <p className="font-bold text-xs text-white">
+                                    Đã thanh toán
+                                  </p>
+                                </div>
+                              ) : (
+                                <div className="badge badge-xs badge-error text-center py-2 px-3">
+                                  <p className="font-bold text-xs text-white">
+                                    Chưa thanh toán
+                                  </p>
+                                </div>
+                              )}
+
                               {/* <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
                                              <div className="flex items-center gap-2">
                                                 <p className="text-[#4C4C4C] font-bold text-sm">
@@ -234,7 +242,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                         <div className="flex items-center mt-5 gap-5">
                           <div className="max-w-max">
                             <div className="border-[1px] border-[#E0E0E0] rounded-md px-6 py-2 relative mx-3">
-                              <p>{getStatusOrder(e.status)}</p>
+                              <p>{getStatusOrder(e.status)._statusOrder}</p>
                               <p className="bg-white text-xs top-[-8px] absolute w-[60px] ">
                                 Trạng thái
                               </p>
