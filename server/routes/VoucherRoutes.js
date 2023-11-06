@@ -13,7 +13,7 @@ router.put('/:id', VoucherController.update);
 router.post('/savevoucher/:voucherId', VoucherController.SaveVoucher);
 
 
-router.get('/getUser/:id',VoucherController.getSavedUser);
+router.get('/getUser',VoucherController.getSavedUser);
 
 router.post('/usevoucher/:voucherId', VoucherController.UseVoucher);
 
@@ -22,7 +22,7 @@ router.post('/usevoucher/:voucherId', VoucherController.UseVoucher);
 
 router.get('/VoucherExpired',VoucherController.VoucherExpired);
     
-  
+// router.post('/translate', VoucherController.translate);
 
 
 module.exports = router;
