@@ -1,8 +1,25 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+const errorResponse = (res, error) => {
+    console.error(error);
+    res.status(500).json(error.message);
+};
+
+const getProductsByStatus = async (req, res, status) => {
+    try {
+        const productByStatus = await prisma.order.findMany({
+            where: {
+                status: status
+            }
+        });
+        res.status(200).json(productByStatus);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+};
+
 const ShippingController = {
-    // Set lại status khi có thao tác
     setStatus: async (req, res) => {
         try {
             const orderId = parseInt(req.body.id);
@@ -12,7 +29,7 @@ const ShippingController = {
                     id: orderId,
                 },
             });
-          
+
             if (!order) {
                 return res.status(404).send('Order is undefined');
             }
@@ -26,12 +43,10 @@ const ShippingController = {
             });
             res.status(200).send('Update status successfully');
         } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
+            errorResponse(res, error);
         }
     },
 
-    // Render toàn bộ đơn hàng có status = 1 ra giao diện nhận hàng thành công của đơn vị giao hàng
     getAllStatusForDelivery: async (req, res) => {
         try {
             const page = parseInt(req.query.page);
@@ -49,111 +64,33 @@ const ShippingController = {
                 include: {
                     OrderDetail: true
                 },
-                orderBy:{
-                    id : "desc"
-                }
-            });
-            const results = {
-                page: page,
-                pageSize: limit,
-                totalPage: Math.ceil(ProductFromOrder / limit),
-                data: ProductFromOrder,
-            };
-            res.status(200).json(results);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
-        }
-    },
-      getAllStatusForDelivery: async (req, res) => {
-        try {
-            const page = parseInt(req.query.page);
-            const limit = 4;
-            const startIndex = (page - 1) * limit;
-            const whereClause = {
-                status: {
-                    gte: 2,
-                }
-            };
-            const ProductFromOrder = await prisma.order.findMany({
-                where: whereClause,
-                skip: startIndex,
-                take: limit,
-                include: {
-                    OrderDetail: true
-                },
-                orderBy:{
-                    id : "desc"
-                }
-            });
-            const results = {
-                page: page,
-                pageSize: limit,
-                totalPage: Math.ceil(ProductFromOrder / limit),
-                data: ProductFromOrder,
-            };
-            res.status(200).json(results);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
-        }
-    },
-    // SORT theo status
-    sortByStatus: async (req, res) => {
-        try {
-            const orderID = parseInt(req.body.id);
-            const orderStatus = parent(req.body.status);
-            const order = await prisma.order.findFirst({
-                where: {
-                    id: orderID,
-                },
-            });
-            if (!order) return res.status(404).send('Order is undifined');
-
-            const whereClause = {
-                status: orderStatus,
-            };
-            const sortByStatus = await prisma.order.findMany({
-                where: whereClause,
-            });
-            res.send(200).json(sortByStatus);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
-        }
-    },
-    // SORT theo ngày mới nhất
-    sortByNewDay: async (req, res) => {
-        try {
-            const orderId = parseInt(req.body.id);
-            const order = await prisma.order.findFirst({
-                where: {
-                    id: orderId,
-                },
-            });
-            if (!order) return res.status(404).send('Order is undifined');
-
-            const latestOrders = await prisma.order.findMany({
-                where: {
-                    id: order.id,
-                },
                 orderBy: {
-                    createdAt: 'desc', // Sort by createdAt in descending order
-                },
+                    id: "desc"
+                }
             });
-            res.status(200).json(latestOrders);
+            const results = {
+                page: page,
+                pageSize: limit,
+                totalPage: Math.ceil(ProductFromOrder.length / limit),
+                data: ProductFromOrder,
+            };
+            res.status(200).json(results);
         } catch (error) {
-            console.log(error);
-            res.status(500).json(error.message);
+            errorResponse(res, error);
         }
     },
-    // SEARCH đơn hàng orderId và tên khách hàng
+
+    sortByStatus: async (req, res) => {
+        const status = parseInt(req.query.status); // Get status from query parameter
+        getProductsByStatus(req, res, status);
+    },
+
     searchWithNameAndOrderId: async (req, res) => {
         try {
             const keyword = req.body.keyword;
             const whereClause = {
-                id : {
-                    contains : keyword
+                id: {
+                    contains: keyword
                 },
                 name: {
                     contains: keyword,
@@ -165,18 +102,13 @@ const ShippingController = {
             });
             res.status(200).json(searchOrder);
         } catch (error) {
-            console.log(error);
-            res.status(500).json(error.message);
+            errorResponse(res, error);
         }
     },
 
-    // Huỷ đơn hàng
     requestDeleteOrder: async (req, res) => {
-        try {
-        } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
-        }
+     
     },
 };
+
 module.exports = ShippingController;
