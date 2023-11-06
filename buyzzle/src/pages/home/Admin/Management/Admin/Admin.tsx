@@ -402,11 +402,11 @@ export default function Admin() {
                                     message:
                                       "Ít nhất 4 ký tự",
                                   },
-                                  maxLength: {
-                                    value: 25,
-                                    message:
-                                      "Nhiều nhất 25 kí tự",
-                                  },
+                                  // maxLength: {
+                                  //   value: ,
+                                  //   message:
+                                  //     "Nhiều nhất 25 kí tự",
+                                  // },
                                   validate: { // Kiểm tra email có đúng định dạng không 
                                     validEmail: (value) => /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(value) || "Email không hợp lệ",
 
@@ -651,14 +651,14 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     scope="col"
                     className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    <Delete />
-                    <p>Xóa</p>
+                    {/* <Delete />
+                    <p>Xóa</p> */}
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Id Admin
+                    Id 
                   </th>
                   <th
                     scope="col"
@@ -753,10 +753,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 </li>
                               </ul>
                             </div>
-                            <input
+                            {/* <input
                               type="checkbox"
                               className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                            />
+                            /> */}
 
                           </th>
                           <th
@@ -808,16 +808,9 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                       <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
 
                       <td className="px-3 py-5 max-lg:py-3 justify-center">
-                        3999999
+                        
                       </td>
-                      <td
-                        className={`${status == "Hoạt động"
-                          ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                          : "text-[#FF8A00] "
-                          }`}
-                      >
-                        Hoạt động
-                      </td>
+                      <td className = "px-3 py-5 max-lg:py-3 justify-center"> </td>
                       <th
                         scope="row"
                         className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
