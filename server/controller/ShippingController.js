@@ -12,6 +12,7 @@ const ShippingController = {
                     id: orderId,
                 },
             });
+          
             if (!order) {
                 return res.status(404).send('Order is undefined');
             }
@@ -31,15 +32,14 @@ const ShippingController = {
     },
 
     // Render toàn bộ đơn hàng có status = 1 ra giao diện nhận hàng thành công của đơn vị giao hàng
-    getAllStatus: async (req, res) => {
+    getAllStatusForDelivery: async (req, res) => {
         try {
             const page = parseInt(req.query.page);
             const limit = 4;
             const startIndex = (page - 1) * limit;
-            const totalOrder = (await prisma.order.findMany()).length;
             const whereClause = {
                 status: {
-                    gte: 1,
+                    gte: 2,
                 }
             };
             const ProductFromOrder = await prisma.order.findMany({
@@ -56,9 +56,41 @@ const ShippingController = {
             const results = {
                 page: page,
                 pageSize: limit,
-                totalPage: Math.ceil(totalOrder / limit),
+                totalPage: Math.ceil(ProductFromOrder / limit),
                 data: ProductFromOrder,
-                totalOrder: totalOrder,
+            };
+            res.status(200).json(results);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(error.message);
+        }
+    },
+      getAllStatusForDelivery: async (req, res) => {
+        try {
+            const page = parseInt(req.query.page);
+            const limit = 4;
+            const startIndex = (page - 1) * limit;
+            const whereClause = {
+                status: {
+                    gte: 2,
+                }
+            };
+            const ProductFromOrder = await prisma.order.findMany({
+                where: whereClause,
+                skip: startIndex,
+                take: limit,
+                include: {
+                    OrderDetail: true
+                },
+                orderBy:{
+                    id : "desc"
+                }
+            });
+            const results = {
+                page: page,
+                pageSize: limit,
+                totalPage: Math.ceil(ProductFromOrder / limit),
+                data: ProductFromOrder,
             };
             res.status(200).json(results);
         } catch (error) {
