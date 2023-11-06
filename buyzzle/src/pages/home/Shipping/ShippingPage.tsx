@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 
-import { Input } from "@material-tailwind/react";
 import Search from "../../../Assets/TSX/Search";
 import { orderControllers } from "../../../Controllers/OrderControllers";
 import { numberFormat } from "../../../Helper/Format";
@@ -115,7 +114,7 @@ export default function ShippingPage() {
                   )}
                   {btnItems.id == 2 && (
                     <div className="badge badge-xs badge-warning badge-outline py-2">
-                      {order?.data?.filter((e) => e.status == 2).length}
+                      {order?.data?.filter((e) => e.status == 3).length}
                     </div>
                   )}
                   {btnItems.id == 3 && (
