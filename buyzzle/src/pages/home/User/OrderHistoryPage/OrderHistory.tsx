@@ -18,22 +18,22 @@ export const getStatusOrder = (status: StatusOrder) => {
 
   switch (status) {
     case StatusOrder.Comfirm:
-      _statusOrder = <p className="text-teal-700">Chờ xác nhận</p>;
+      _statusOrder = <p className="text-[#3DC0F8]">Chờ xác nhận</p>;
       break;
     case StatusOrder.Ordered:
-      _statusOrder = <p className="text-yellow-700">Đã đặt hàng</p>;
+      _statusOrder = <p className="text-teal-700">Đã đặt hàng</p>;
       break;
     case StatusOrder.WaitingCourier:
-      _statusOrder = <p className="text-blue-700">Giao cho ĐVVT</p>;
+      _statusOrder = <p className="text-[#F43FCA]">Giao cho ĐVVT</p>;
       break;
     case StatusOrder.recievedCourier:
-      _statusOrder = <p className="text-green-700">ĐVVT đã nhận hàng</p>;
+      _statusOrder = <p className="text-[#FBC132]">ĐVVT đã nhận hàng</p>;
       break;
     case StatusOrder.Shipping:
-      _statusOrder = <p className="text-orange-700">Đang giao hàng</p>;
+      _statusOrder = <p className="text-[#F43FCA]">Đang giao hàng</p>;
       break;
     case StatusOrder.Succed:
-      _statusOrder = <p className="text-green-700">Giao hàng thành công</p>;
+      _statusOrder = <p className="text-[#21CEBD]">Giao hàng thành công</p>;
       _paymentStatus = "Đã thanh toán";
       break;
     default:
@@ -74,7 +74,7 @@ export default function OrderHistory() {
   }, []);
 
   const getOrder = async () => {
-    await orderControllers.getUser().then((res) => {
+    await orderControllers.getOrderOfUser().then((res) => {
       setOrder(res.data);
     });
   };

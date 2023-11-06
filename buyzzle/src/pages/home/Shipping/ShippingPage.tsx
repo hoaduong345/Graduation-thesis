@@ -26,7 +26,7 @@ export default function ShippingPage() {
     },
     {
       id: 2,
-      text: "Chờ xác nhận",
+      text: "Đã nhận hàng",
       active: false, // Thêm trường active
     },
     {
@@ -59,9 +59,9 @@ export default function ShippingPage() {
   function getBorderColor(id: number) {
     switch (id) {
       case 1:
-        return "#FA9595"; // Màu biên cho id 1
+        return "#570DF8"; // Màu biên cho id 1
       case 2:
-        return "#3DC0F8"; // Màu biên cho id 2
+        return "#FBC132"; // Màu biên cho id 2
       case 3:
         return "#F43FCA"; // Màu biên cho id 3
       case 4:
@@ -72,7 +72,7 @@ export default function ShippingPage() {
   }
 
   const getOrder = async () => {
-    await orderControllers.getShipping(currentPage).then((res) => {
+    await orderControllers.getOrderOfShipping(currentPage).then((res) => {
       setOrder(res);
     });
   };
@@ -109,12 +109,12 @@ export default function ShippingPage() {
                 >
                   {btnItems.text}
                   {btnItems.id == 1 && (
-                    <div className="badge badge-xs badge-error badge-outline py-2">
+                    <div className="badge badge-xs badge-primary badge-outline py-2">
                       {order?.data?.length}
                     </div>
                   )}
                   {btnItems.id == 2 && (
-                    <div className="badge badge-xs badge-info badge-outline py-2">
+                    <div className="badge badge-xs badge-warning badge-outline py-2">
                       {order?.data?.filter((e) => e.status == 2).length}
                     </div>
                   )}
@@ -241,7 +241,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                         </div>
                         <div className="flex items-center mt-5 gap-5">
                           <div className="max-w-max">
-                            <div className="border-[1px] border-[#E0E0E0] rounded-md px-6 py-2 relative mx-3">
+                            <div className="border-[1px] border-[#E0E0E0] rounded-md px-6 py-2 relative mx-3 w-[196px]">
                               <p>{getStatusOrder(e.status)._statusOrder}</p>
                               <p className="bg-white text-xs top-[-8px] absolute w-[60px] ">
                                 Trạng thái

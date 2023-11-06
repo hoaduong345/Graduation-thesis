@@ -94,20 +94,22 @@ export default function OrderManagement() {
   function getBorderColor(id: number) {
     switch (id) {
       case 1:
-        return "#FA9595"; // Màu biên cho id 1
+        return "#570DF8"; // Màu biên cho id 1
       case 2:
         return "#3DC0F8"; // Màu biên cho id 2
       case 3:
         return "#F43FCA"; // Màu biên cho id 3
       case 4:
         return "#21CEBD"; // Màu biên cho id 4
+      case 5:
+        return "#FA9595"; // Màu biên cho id 45
       default:
         return "#ccc"; // Màu biên mặc định (nếu id không khớp với bất kỳ case nào)
     }
   }
 
   const getOrder = async () => {
-    await orderControllers.getAdmin(currentPage).then((res) => {
+    await orderControllers.getOrderOfAdmin(currentPage).then((res) => {
       setOrder(res);
     });
   };
@@ -169,12 +171,12 @@ export default function OrderManagement() {
                 >
                   {btnItems.text}
                   {btnItems.id == 1 && (
-                    <div className="badge badge-xs badge-error badge-outline py-2">
+                    <div className="badge badge-xs badge-primary badge-outline py-2">
                       {order?.totalOrder}
                     </div>
                   )}
                   {btnItems.id == 5 && (
-                    <div className="badge badge-xs badge-accent badge-outline py-2">
+                    <div className="badge badge-xs badge-error badge-outline py-2">
                       {order?.data?.filter((e) => e.status == null).length}
                     </div>
                   )}

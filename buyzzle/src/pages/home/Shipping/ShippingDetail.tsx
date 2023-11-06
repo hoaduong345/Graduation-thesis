@@ -16,6 +16,7 @@ import {
   dateOrder,
   timeOrder,
 } from "../Admin/Management/Order/OrderManagement";
+import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 
 export default function ShippingDetail() {
   const { id } = useParams();
@@ -62,13 +63,20 @@ export default function ShippingDetail() {
                   </h2>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <div className="badge badge-xs badge-accent text-center py-2 px-3">
-                    <p className="font-bold text-xs text-white">
-                      {order.paymentMethod == "Thẻ tín dụng"
-                        ? "Đã thanh toán"
-                        : "Chưa thanh toán"}
-                    </p>
-                  </div>
+                  {order.paymentMethod == "Thẻ tín dụng" ||
+                  getStatusOrder(order.status)._paymentStatus ? (
+                    <div className="badge badge-xs badge-accent text-center py-2 px-3">
+                      <p className="font-bold text-xs text-white">
+                        Đã thanh toán
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="badge badge-xs badge-error text-center py-2 px-3">
+                      <p className="font-bold text-xs text-white">
+                        Chưa thanh toán
+                      </p>
+                    </div>
+                  )}
                   <div>
                     <p className="text-[#4C4C4C] text-sm">
                       {dateOrder(order.createdAt)} lúc{" "}
