@@ -36,66 +36,66 @@ import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
 import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 import Admin from "../../pages/home/Admin/Management/Admin/Admin";
 export default function useRouterEmelent() {
-   const routes = useRoutes([
-      {
-         path: "/",
-         element: (
-            <MainLayout>
-               <HomePage />
-            </MainLayout>
-         ),
-      },
+  const routes = useRoutes([
+    {
+      path: "/",
+      element: (
+        <MainLayout>
+          <HomePage />
+        </MainLayout>
+      ),
+    },
 
-      {
-         path: "/userprofilepage/:username",
-         element: (
-            <MainLayout>
-               <UserProfile />
-            </MainLayout>
-         ),
-      },
+    {
+      path: "/userprofilepage/:username",
+      element: (
+        <MainLayout>
+          <UserProfile />
+        </MainLayout>
+      ),
+    },
 
-      {
-         path: "/products",
-         element: (
-            <MainLayout>
-               <ProductsPage />
-            </MainLayout>
-         ),
-      },
-      {
-         path: "/FiltersPage/",
-         element: (
-            <MainLayout>
-               <FiltersPage />
-            </MainLayout>
-         ),
-      },
-      // {
-      //   path: "/FiltersPage/:text",
-      //   element: (
-      //     <MainLayout>
-      //       <FiltersPage />
-      //     </MainLayout>
-      //   ),
-      // },
+    {
+      path: "/products",
+      element: (
+        <MainLayout>
+          <ProductsPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/FiltersPage/",
+      element: (
+        <MainLayout>
+          <FiltersPage />
+        </MainLayout>
+      ),
+    },
+    // {
+    //   path: "/FiltersPage/:text",
+    //   element: (
+    //     <MainLayout>
+    //       <FiltersPage />
+    //     </MainLayout>
+    //   ),
+    // },
 
-      {
-         path: "/register",
-         element: (
-            <RegisterLoginLayout>
-               <Register />
-            </RegisterLoginLayout>
-         ),
-      },
-      {
-         path: "/login",
-         element: (
-            <RegisterLoginLayout>
-               <Login />
-            </RegisterLoginLayout>
-         ),
-      },
+    {
+      path: "/register",
+      element: (
+        <RegisterLoginLayout>
+          <Register />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/login",
+      element: (
+        <RegisterLoginLayout>
+          <Login />
+        </RegisterLoginLayout>
+      ),
+    },
 
     {
       path: "/forgotpassword",
@@ -549,14 +549,14 @@ export default function useRouterEmelent() {
           element: <AdminProfile />,
         },
 
-            {
-               path: "updateproduct/:id",
-               element: <Editproducts />,
-            },
-            {
-               path: "ListproductsAdmin",
-               element: <ListproductsAdmin />,
-            },
+        {
+          path: "updateproduct/:id",
+          element: <Editproducts />,
+        },
+        {
+          path: "ListproductsAdmin",
+          element: <ListproductsAdmin />,
+        },
 
         {
           path: "Detailproducts/:id",
@@ -600,16 +600,28 @@ export default function useRouterEmelent() {
         },
       ],
     },
+    {
+      path: path.resetpassword,
+      element: (
+        <RegisterLoginLayout>
+          <ChangePassword />
+          <ConfirmAccount />
+        </RegisterLoginLayout>
+      ),
+    },
+    {
+      path: "/admin/login",
+      element:(
+        <RegisterLoginLayout>
+          <LoginAdmin/>
+          </RegisterLoginLayout>
+      ),
+    }
+  ]
 
-      {
-         path: path.resetpassword,
-         element: (
-            <RegisterLoginLayout>
-               <ChangePassword />
-               <ConfirmAccount />
-            </RegisterLoginLayout>
-         ),
-      },
-   ]);
-   return routes;
+
+  );
+
+
+  return routes;
 }
