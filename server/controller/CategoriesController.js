@@ -11,7 +11,7 @@ const CategoriesController = {
             const category = await prisma.category.findUnique({
                 where: { id: categoryId },
             });
-
+         
             if (!category) {
                 return res.status(404).json('Category not found');
             }
@@ -21,6 +21,7 @@ const CategoriesController = {
                     name: name,
                 },
             });
+      
             res.status(201).json(newSubcategory);
         } catch (error) {
             console.error(error);
