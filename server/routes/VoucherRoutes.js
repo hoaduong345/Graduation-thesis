@@ -15,6 +15,16 @@ router.get('/getUser/:id', VoucherController.getSavedUser);
 
 router.get('/usevoucher/:voucherId', VoucherController.UseVoucher);
 
-router.get('/VoucherExpired', VoucherController.VoucherExpired);
+router.get('/getUser',VoucherController.getSavedUser);
+
+router.post('/usevoucher/:voucherId', VoucherController.UseVoucher);
+
+
+
+
+router.get('/VoucherExpired',VoucherController.VoucherExpired);
+    
+// router.post('/translate', VoucherController.translate);
+
 
 module.exports = router;

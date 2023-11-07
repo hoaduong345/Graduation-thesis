@@ -2,6 +2,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const cron = require('node-cron');
+// const { Translate } = require('@google-cloud/translate');
+// const translate = new Translate();
 
 
 
@@ -39,23 +41,30 @@ const VoucherController = {
     get: async (req, res) => {
         try {
             const pageCurr = parseInt(req.query.page);
-
-            const keyword = req.query.name;
-
+            const keyword = req.query.keyword;
             const limit = 100;
-
             const startIndex = (pageCurr - 1) * limit;
             const whereClause = {
                 deletedAt: null,
             };
             const totalProduct = (await prisma.voucher.findMany()).length;
-
+    
             const products = await prisma.voucher.findMany({
-                where: whereClause,
-                skip: startIndex,
+                where: {
+                    AND: [
+                        whereClause, 
+                        {
+                            code: {
+                                contains: keyword
+                            }
+                        }
+                    ]
+                },
+                // skip: startIndex,
+                // skip: 0,
                 take: limit,
             });
-
+    
             const results = {
                 page: pageCurr,
                 pageSize: limit,
@@ -63,7 +72,7 @@ const VoucherController = {
                 data: products,
                 // name: keyword?.toLowerCase(),
             };
-
+    
             return res.status(200).json(results ?? []);
         } catch (err) {
             return res.status(500).json(err.message);
@@ -243,12 +252,12 @@ const VoucherController = {
 
     getSavedUser: async (req, res) => {
         try {
-            const userId = parseInt(req.params.id); 
+            const userIdFromCookies = parseInt(req.cookies.id); 
     
             
             const user = await prisma.user.findUnique({
                 where: {
-                    id: userId,
+                    id : userIdFromCookies,
                 },
                 include: {
                     savedVouchers: {
@@ -332,6 +341,8 @@ const VoucherController = {
             res.status(500).json(error.message);
         }
     },
+
+    //  
     
     
     
