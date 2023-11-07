@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import LogoVoucher from "../../../../Assets/TSX/LogoVoucher";
 import VoucherManage from "../../../../Assets/TSX/VoucherManage";
+import VoucherManageItem from "../../../../Assets/TSX/VoucherManageItem";
+import { voucherControllers } from "../../../../Controllers/VoucherControllers";
 import { formatDate } from "../../../../Helper/Format";
+import { toastSuccess } from "../../../../Helper/Toast/Success";
+import { toastWarn } from "../../../../Helper/Toast/Warning";
 import { VoucherModel } from "../../../../Model/VoucherModel";
 import Container from "../../../container/Container";
 import "./voucher.css";
-import { voucherControllers } from "../../../../Controllers/VoucherControllers";
-import { toast } from "react-toastify";
-import VoucherManageItem from "../../../../Assets/TSX/VoucherManageItem";
 
 export default function VoucherHomePage() {
    const [voucher, setVoucher] = useState<VoucherModel[]>([]);
@@ -25,11 +26,11 @@ export default function VoucherHomePage() {
       voucherControllers
          .userSavedVoucher(id)
          .then((_) => {
-            toast.success("thanh cong");
+            toastSuccess("Thành Công");
             getVoucher();
          })
          .catch((err) => {
-            toast.warning(err.response?.data);
+            toastWarn(err.response?.data);
          });
    };
 
