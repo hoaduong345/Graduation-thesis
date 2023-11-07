@@ -41,23 +41,30 @@ const VoucherController = {
     get: async (req, res) => {
         try {
             const pageCurr = parseInt(req.query.page);
-
-            const keyword = req.query.name;
-
+            const keyword = req.query.keyword;
             const limit = 100;
-
             const startIndex = (pageCurr - 1) * limit;
             const whereClause = {
                 deletedAt: null,
             };
             const totalProduct = (await prisma.voucher.findMany()).length;
-
+    
             const products = await prisma.voucher.findMany({
-                where: whereClause,
-                skip: startIndex,
+                where: {
+                    AND: [
+                        whereClause, 
+                        {
+                            code: {
+                                contains: keyword
+                            }
+                        }
+                    ]
+                },
+                // skip: startIndex,
+                // skip: 0,
                 take: limit,
             });
-
+    
             const results = {
                 page: pageCurr,
                 pageSize: limit,
@@ -65,7 +72,7 @@ const VoucherController = {
                 data: products,
                 // name: keyword?.toLowerCase(),
             };
-
+    
             return res.status(200).json(results ?? []);
         } catch (err) {
             return res.status(500).json(err.message);
