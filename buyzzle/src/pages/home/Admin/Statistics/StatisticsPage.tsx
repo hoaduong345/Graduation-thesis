@@ -220,7 +220,6 @@ export default function StatisticsPage() {
           setIsLoadMoreComplete(true);
         }
       })
-
       .catch((err) => console.log(err.response?.data?.message));
   };
 

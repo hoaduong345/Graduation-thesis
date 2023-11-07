@@ -4,6 +4,7 @@ export interface OrderPanigation {
   pageSize: number;
   totalPage: number;
   totalOrder: number;
+  totalOrderShipping: number;
 }
 export interface OrderModel {
   id: number;

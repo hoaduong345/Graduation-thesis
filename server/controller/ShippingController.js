@@ -10,8 +10,8 @@ const getProductsByStatus = async (req, res, status) => {
     try {
         const productByStatus = await prisma.order.findMany({
             where: {
-                status: status
-            }
+                status: status,
+            },
         });
         res.status(200).json(productByStatus);
     } catch (error) {
@@ -49,55 +49,60 @@ const ShippingController = {
 
     getAllStatusForDelivery: async (req, res) => {
         try {
-            const page = parseInt(req.query.page) || 1;
-            const pageSize = parseInt(req.query.pageSize) || 40;
-            const keyword = req.query.keyword;
-            const status = parseInt(req.query.status)
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
+            const keyword = req.body.keyword;
+            const status = parseInt(req.body.status);
+
             const skip = (page - 1) * pageSize;
-            
+
+            let sortStatus = {};
+            if (status) {
+                sortStatus = status;
+            } else {
+                sortStatus = {
+                    gte: 2,
+                };
+            }
+
             const whereClause = {
                 name: {
-                    contains: keyword
+                    contains: keyword,
                 },
+                status: sortStatus,
             };
-            const whereClauseOrder = {
-                status: {
-                    gte: 2,
-                }
-            };
+            const totalOrdersCount = await prisma.order.count({
+                where: whereClause,
+            });
+            console.log(
+                '🚀 ~ file: ShippingController.js:77 ~ getAllStatusForDelivery: ~ totalOrdersCount:',
+                totalOrdersCount
+            );
+            const getAll = await prisma.order.findMany({
+                where: {
+                    status: {
+                        gte: 2,
+                    },
+                },
+            });
             const allOrderAdmin = await prisma.order.findMany({
-                where: whereClauseOrder,
+                where: whereClause,
                 skip,
                 take: pageSize,
                 include: {
-                    OrderDetail: true
+                    OrderDetail: true,
                 },
+
                 orderBy: {
-                    id: "desc"
-                }
-            });
-
-            const searchOrder = await prisma.order.findMany({
-
-                where: whereClause,
-            });
-
-            const statusOrder = await prisma.order.findMany({
-                skip,
-                take: pageSize,
-                where:{
-                    status : status
+                    id: 'desc',
                 },
-                orderBy:{
-                    id : "desc"
-                }
-            })
+            });
+
             const results = {
-                statusOrder : statusOrder,
-                searchOrder : searchOrder,
                 page: page,
                 pageSize: pageSize,
-                totalPage: Math.ceil(allOrderAdmin.length / pageSize),
+                totalPage: Math.ceil(totalOrdersCount / pageSize),
+                totalOrderShipping: getAll.length,
                 data: allOrderAdmin,
             };
             res.status(200).json(results);
@@ -116,23 +121,21 @@ const ShippingController = {
             const keyword = req.query.keyword;
             const whereClause = {
                 id: {
-                    contains: keyword
+                    contains: keyword,
                 },
                 name: {
                     contains: keyword,
                 },
                 deletedAt: null,
             };
-        
+
             res.status(200).json(searchOrder);
         } catch (error) {
             errorResponse(res, error);
         }
     },
 
-    requestDeleteOrder: async (req, res) => {
-     
-    },
+    requestDeleteOrder: async (req, res) => {},
 };
 
 module.exports = ShippingController;
