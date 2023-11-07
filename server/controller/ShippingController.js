@@ -49,18 +49,26 @@ const ShippingController = {
 
     getAllStatusForDelivery: async (req, res) => {
         try {
-            const page = parseInt(req.query.page);
-            const limit = 4;
-            const startIndex = (page - 1) * limit;
+            const page = parseInt(req.query.page) || 1;
+            const pageSize = parseInt(req.query.pageSize) || 40;
+            const keyword = req.query.keyword;
+            const status = parseInt(req.query.status)
+            const skip = (page - 1) * pageSize;
+            
             const whereClause = {
+                name: {
+                    contains: keyword
+                },
+            };
+            const whereClauseOrder = {
                 status: {
                     gte: 2,
                 }
             };
-            const ProductFromOrder = await prisma.order.findMany({
-                where: whereClause,
-                skip: startIndex,
-                take: limit,
+            const allOrderAdmin = await prisma.order.findMany({
+                where: whereClauseOrder,
+                skip,
+                take: pageSize,
                 include: {
                     OrderDetail: true
                 },
@@ -68,11 +76,29 @@ const ShippingController = {
                     id: "desc"
                 }
             });
+
+            const searchOrder = await prisma.order.findMany({
+
+                where: whereClause,
+            });
+
+            const statusOrder = await prisma.order.findMany({
+                skip,
+                take: pageSize,
+                where:{
+                    status : status
+                },
+                orderBy:{
+                    id : "desc"
+                }
+            })
             const results = {
+                statusOrder : statusOrder,
+                searchOrder : searchOrder,
                 page: page,
-                pageSize: limit,
-                totalPage: Math.ceil(ProductFromOrder.length / limit),
-                data: ProductFromOrder,
+                pageSize: pageSize,
+                totalPage: Math.ceil(allOrderAdmin.length / pageSize),
+                data: allOrderAdmin,
             };
             res.status(200).json(results);
         } catch (error) {
@@ -87,7 +113,7 @@ const ShippingController = {
 
     searchWithNameAndOrderId: async (req, res) => {
         try {
-            const keyword = req.body.keyword;
+            const keyword = req.query.keyword;
             const whereClause = {
                 id: {
                     contains: keyword
@@ -97,9 +123,7 @@ const ShippingController = {
                 },
                 deletedAt: null,
             };
-            const searchOrder = await prisma.order.findMany({
-                where: whereClause,
-            });
+        
             res.status(200).json(searchOrder);
         } catch (error) {
             errorResponse(res, error);
