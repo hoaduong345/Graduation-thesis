@@ -67,22 +67,12 @@ export default function VoucherHomePage() {
                                  #{e.code}
                               </p>
                               <div className="flex items-center gap-6">
-                                 {e.quantity == 0 ? (
-                                    <>
-                                       <p className="py-1 px-5 rounded text-white font-bold bg-[#908a8a] text-base">
-                                          Hết
-                                       </p>
-                                    </>
-                                 ) : (
-                                    <>
-                                       <button
-                                          onClick={() => savedVoucher(e.id)}
-                                          className="py-1 px-5 rounded text-white font-bold bg-[#F7755F] hover:bg-[#ec8f7f] text-base"
-                                       >
-                                          Lưu
-                                       </button>
-                                    </>
-                                 )}
+                                 <button
+                                    onClick={() => savedVoucher(e.id)}
+                                    className="py-1 px-5 rounded text-white font-bold bg-[#F7755F] hover:bg-[#ec8f7f] text-base"
+                                 >
+                                    Lưu
+                                 </button>
                                  <p className="text-sm font-medium text-[#EA4B48]">
                                     {formatDate(e.startDay)} -{" "}
                                     {formatDate(e.endDay)}
