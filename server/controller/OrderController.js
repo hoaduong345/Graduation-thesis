@@ -77,6 +77,9 @@ const OderController = {
                 include: {
                     OrderDetail: true,
                 },
+                orderBy: {
+                    id: 'desc',
+                },
             });
 
             const results = {

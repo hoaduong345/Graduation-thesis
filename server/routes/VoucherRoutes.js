@@ -4,27 +4,23 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const cron = require('node-cron');
 
+//ADMIN
 router.post('/', VoucherController.add);
-router.get('/', VoucherController.get);
+router.get('/', VoucherController.getAdmin);
 router.delete('/:id', VoucherController.remove);
 router.put('/:id', VoucherController.update);
 
-router.get('/savevoucher/:voucherId', VoucherController.SaveVoucher);
+//USER
+router.get('/pageUser', VoucherController.getUser); //Get để user lưu
 
-router.get('/getUser/:id', VoucherController.getSavedUser);
+router.get('/getSavedUser', VoucherController.getSavedUser); // Get những voucher user đã lưu
 
-router.get('/usevoucher/:voucherId', VoucherController.UseVoucher);
+router.get('/savevoucher/:voucherId', VoucherController.SaveVoucher); //User lưu Voucher
 
-router.get('/getUser',VoucherController.getSavedUser);
+router.post('/usevoucher', VoucherController.UseVoucher); // User Sử dụng Voucher
 
-router.post('/usevoucher/:voucherId', VoucherController.UseVoucher);
+router.get('/VoucherExpired', VoucherController.VoucherExpired);
 
-
-
-
-router.get('/VoucherExpired',VoucherController.VoucherExpired);
-    
 // router.post('/translate', VoucherController.translate);
-
 
 module.exports = router;

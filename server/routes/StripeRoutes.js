@@ -44,7 +44,8 @@ app.post('/create-checkout-session', async (req, res) => {
                 invoice: req.body.invoice,
                 name: req.body.name,
                 address: req.body.address,
-                phoneNumber: req.body.phoneNumber
+                phoneNumber: req.body.phoneNumber,
+                voucherId: req.body.voucherId,
             },
         });
         const coupon = await stripe.coupons.create({
@@ -125,6 +126,8 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                 const line_items = await stripe.checkout.sessions.listLineItems(event.data.object.id);
                 const iduser = await stripe.customers.retrieve(event.data.object.customer);
                 const orderItems = await getCartItems(line_items, event.data.object, iduser.metadata);
+                console.log('first', iduser.metadata.voucherId);
+
                 await axios
                     .post('http://localhost:5000/buyzzle/order', { order: orderItems })
                     .then(() => {
@@ -135,7 +138,15 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                             });
                         });
                     })
-                    .catch((err) => console.log(err));
+                    .then(() => {
+                        if (parseInt(iduser.metadata.voucherId) != 0) {
+                            axios.post(`http://localhost:5000/buyzzle/voucher/usevoucher`, {
+                                userId: parseInt(iduser.metadata.idUser),
+                                voucherId: parseInt(iduser.metadata.voucherId),
+                            });
+                        }
+                    })
+                    .catch((err) => {});
                 break;
         }
         response.json({ received: true });
