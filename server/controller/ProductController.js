@@ -118,11 +118,21 @@ const ProductController = {
     // get all data category
     getAllCategory: async (req, res) => {
         try {
+            const keyword = req.query.keyword;
             const whereClause = {
                 deletedAt: null,
             };
             const AllCategory = await prisma.category.findMany({
-                where: whereClause,
+                where: {
+                    AND: [
+                        whereClause,
+                        { 
+                            name: {
+                                 contains: keyword 
+                                }
+                             }
+                    ]
+                }
             });
             res.status(200).json(AllCategory);
         } catch (error) {
@@ -130,7 +140,6 @@ const ProductController = {
             res.status(500).json(error.message);
         }
     },
-
     // thêm sản phẩm
 
     addImagesByProductsID: async (req, res) => {
@@ -217,19 +226,16 @@ const ProductController = {
                 name,
                 price,
                 rate,
-                pricesale,
-                sellingPrice,
                 discount,
-                soldcount,
                 quantity,
                 description,
                 status,
-                date,
-                createdAt,
-                updatedAt,
                 categoryID,
+                subcategoriesID,
             } = req.body;
 
+            console.log("aaa", categoryID)
+            console.log("bbbbb", subcategoriesID)
             const SellingPrice = price - price * (discount / 100);
             const Pricesale = price * (discount / 100);
 
@@ -249,14 +255,12 @@ const ProductController = {
                 updatedAt: new Date(),
                 // productId: parseInt(productId),
                 categoryID: parseInt(categoryID),
+                subcateId: parseInt(subcategoriesID),
             };
 
             const neww = await prisma.product.create({
                 data: newProduct,
             });
-
-            console.log('a', SellingPrice);
-            console.log('b', Pricesale);
 
             console.log(neww);
             // res.status(200).json("Thêm sản phẩm thành công");
@@ -305,18 +309,14 @@ const ProductController = {
             const {
                 name,
                 price,
-                rate,
-                pricesale,
-                sellingPrice,
+                // rate,    
                 discount,
-                soldcount,
+                // soldcount,
                 quantity,
                 description,
-                status,
-                date,
-                createdAt,
-                updatedAt,
+                // status,
                 categoryID,
+                subcateId,
             } = req.body;
 
             const SellingPrice = price - price * (discount / 100);
@@ -326,18 +326,19 @@ const ProductController = {
             const updatedProductData = {
                 name,
                 price: parseInt(price),
-                rate: parseInt(rate),
+                // rate: parseInt(rate),
                 pricesale: Pricesale,
                 sellingPrice: SellingPrice,
                 discount: parseInt(discount),
-                soldcount: parseInt(soldcount),
+                // soldcount: parseInt(soldcount),
                 quantity: parseInt(quantity),
                 description,
-                status,
+                // status,
                 date: new Date(),
-                createdAt: new Date(),
+                // createdAt: new Date(),
                 updatedAt: new Date(),
                 categoryID: parseInt(categoryID),
+                subcateId: parseInt(subcateId)
             };
 
             const updatedProduct = await prisma.product.update({
@@ -347,9 +348,9 @@ const ProductController = {
                 data: {
                     ...updatedProductData,
                     categoryID: parseInt(categoryID),
+                    subcateId : parseInt(subcateId)
                 },
             });
-            console.log('?? ~ file: ProductController.js:258 ~ upload.single ~ updatedProduct:', updatedProduct);
 
             // res.status(200).json("Cập nhật sản phẩm thành công");
             console.log(updatedProduct);

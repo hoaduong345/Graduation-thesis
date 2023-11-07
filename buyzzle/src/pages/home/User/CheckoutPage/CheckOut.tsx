@@ -1,36 +1,97 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import BlueMedium from "../../../../Assets/SVG/LetterPayment/BlueMedium";
+import BlueMediumSmall from "../../../../Assets/SVG/LetterPayment/BlueMediumSmall";
+import BlueRight from "../../../../Assets/SVG/LetterPayment/BlueRight";
+import PinkMedium from "../../../../Assets/SVG/LetterPayment/PinkMedium";
+import PinkMediumSmall from "../../../../Assets/SVG/LetterPayment/PinkMediumSmall";
+import PinkRight from "../../../../Assets/SVG/LetterPayment/PinkRight";
 import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import Voucher from "../../../../Assets/TSX/Voucher";
-import Container from "../../../../components/container/Container";
-import PinkRight from "../../../../Assets/SVG/LetterPayment/PinkRight";
-import BlueRight from "../../../../Assets/SVG/LetterPayment/BlueRight";
-import PinkMedium from "../../../../Assets/SVG/LetterPayment/PinkMedium";
-import BlueMedium from "../../../../Assets/SVG/LetterPayment/BlueMedium";
-import PinkMediumSmall from "../../../../Assets/SVG/LetterPayment/PinkMediumSmall";
-import BlueMediumSmall from "../../../../Assets/SVG/LetterPayment/BlueMediumSmall";
-import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
-import Address from "../../../../Assets/SVG/LetterPayment/Address";
-import { Controller, useForm } from "react-hook-form";
-import { CartItem } from "../../../../Model/CartModel";
 import { userController } from "../../../../Controllers/UserController";
+import DialogAddress from "../../../../Helper/Dialog/DialogAddress";
 import { numberFormat } from "../../../../Helper/Format";
+import { CartItem } from "../../../../Model/CartModel";
 import { VoucherModel } from "../../../../Model/VoucherModel";
+import Container from "../../../../components/container/Container";
 import PaymentBtn from "./PaymentBtn";
 
 type FormValues = {
    name: string;
    address: string;
-   typeAddress: string;
-   currentAddress: string;
+   addresstype: string;
+   specificaddress: string;
    phonenumber: number;
 };
 
-interface User {
-   username: string;
-}
-
 export type PaymentMethod = "stripe" | "cash";
+
+const provinces = [
+   `An Giang`,
+   "Bà Rịa - Vũng Tàu",
+   "Bạc Liêu",
+   "Bắc Giang",
+   "Bắc Kạn",
+   "Bắc Ninh",
+   "Bình Định",
+   "Bình Dương",
+   "Bình Phước",
+   "Bình Thuận",
+   "Cà Mau",
+   "Cao Bằng",
+   "Đà Nẵng",
+   "Đắk Lắk",
+   "Đắk Nông",
+   "Điện Biên",
+   "Đồng Nai",
+   "Đồng Tháp",
+   "Gia Lai",
+   "Hà Giang",
+   "Hà Nam",
+   "Hà Nội",
+   "Hà Tĩnh",
+   "Hải Dương",
+   "Hải Phòng",
+   "Hậu Giang",
+   "Hòa Bình",
+   "Hưng Yên",
+   "Khánh Hòa",
+   "Kiên Giang",
+   "Kon Tum",
+   "Lai Châu",
+   "Lâm Đồng",
+   "Lạng Sơn",
+   "Lào Cai",
+   "Long An",
+   "Nam Định",
+   "Nghệ An",
+   "Ninh Bình",
+   "Ninh Thuận",
+   "Phú Thọ",
+   "Phú Yên",
+   "Quảng Bình",
+   "Quảng Nam",
+   "Quảng Ngãi",
+   "Quảng Ninh",
+   "Quảng Trị",
+   "Sóc Trăng",
+   "Sơn La",
+   "Tây Ninh",
+   "Thái Bình",
+   "Thái Nguyên",
+   "Thanh Hóa",
+   "Thừa Thiên-Huế",
+   "Tiền Giang",
+   "TP. HCM",
+   "Trà Vinh",
+   "Tuyên Quang",
+   "Vĩnh Long",
+   "Vĩnh Phúc",
+   "Yên Bái",
+];
 
 interface PaymentModel {
    id: number;
@@ -58,52 +119,41 @@ export default function CheckOut() {
    const idModal = "checkout";
    const idModalUpdate = "my_modal_update";
 
-   const [user, setUser] = useState<FormValues>({} as FormValues);
-   const [discount, setDiscount] = useState<number>(0);
-   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-      useState<PaymentMethod>("stripe");
    const [note, setNote] = useState("");
    const [invoice, setInvoice] = useState(false);
+
+   const [idUpdateAddress, setIdUpdateAddress] = useState<string>("0");
+
+   const [user, setUser] = useState<FormValues>({} as FormValues);
+   const [discount, setDiscount] = useState<number>(0);
+   const [username, setUsername] = useState("");
+   const [selectedPaymentMethod, setSelectedPaymentMethod] =
+      useState<PaymentMethod>("stripe");
 
    const localCart = sessionStorage.getItem("cartBuyzzle");
    const listLocalCart: CartItem[] =
       localCart == null ? [] : JSON.parse(localCart);
 
+   // const id = localStorage.getItem("idUser");
+   const idUser = idUpdateAddress == null ? 0 : JSON.parse(idUpdateAddress);
+
    const voucherLocal = localStorage.getItem("voucher");
    const dataVoucherLocal: VoucherModel[] =
       voucherLocal == null ? [] : JSON.parse(voucherLocal);
-
-   const localUsername = localStorage.getItem("user");
-   const userLocal: User =
-      localUsername == null ? "" : JSON.parse(localUsername);
-
-   const id = localStorage.getItem("idUser");
-   const idUser = id == null ? 0 : JSON.parse(id);
-
-   useEffect(() => {
-      getUser();
-   }, []);
-
-   const getUser = async () => {
-      await userController
-         .getUserWhereUsername(userLocal.username)
-         .then((res) => {
-            setUser(res);
-         });
-   };
 
    const {
       control,
       handleSubmit,
       clearErrors,
+      register,
       reset,
       formState: { errors },
    } = useForm<FormValues>({
       mode: "all",
       defaultValues: {
          address: "",
-         currentAddress: "",
-         typeAddress: "",
+         specificaddress: "",
+         addresstype: "",
          name: "",
       },
    });
@@ -122,19 +172,95 @@ export default function CheckOut() {
          modal.close();
       }
    };
-   const saveModal = (data: FormValues) => {
-      console.log(data);
+   const saveModal = async (formData: FormValues) => {
+      try {
+         const data = {
+            id: idUser,
+            name: formData.name,
+            address: formData.address,
+            specificaddress: formData.specificaddress,
+            addresstype: formData.addresstype,
+         };
+         sendToDatabase(data);
+         // console.log("edit thanh cong", response1);
+         // if (response1.status === 200) {
+         //    console.log("Edit successfully");
+         //    toast.success("Cập nhật thành công", {
+         //       position: "top-right",
+         //       autoClose: 5000,
+         //    });
+         //    closeModal(idModalUpdate);
+         // } else {
+         //    toast.warning("Sign-in failed", {
+         //       position: "top-right",
+         //       autoClose: 5000,
+         //    });
+         // }
+      } catch (error) {
+         console.error(error);
+         if (axios.isAxiosError(error) && error.response) {
+            const responseData = error.response.data;
+            if (responseData) {
+               console.log(`Lỗi2: ${responseData}`);
+               toast.warning(responseData, {
+                  position: "top-right",
+                  autoClose: 5000,
+               });
+            } else {
+               console.log("Lỗi không xác định từ server");
+            }
+         } else {
+            console.error("Lỗi gửi yêu cầu không thành công", error);
+         }
+      }
    };
    const openUpadate = (id: string) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          reset({
-            address: "",
+            address: user.address,
             name: user.name,
-            typeAddress: "",
-            currentAddress: "",
+            addresstype: user.addresstype,
+            specificaddress: user.specificaddress,
          });
          modal.showModal();
+      }
+   };
+
+   const getUserAddress = async () => {
+      const user = localStorage.getItem("user");
+      if (user != null) {
+         const userData = JSON.parse(user);
+         const username = userData.username;
+         setUsername(username);
+         console.log("USERNAME1: " + username);
+         userController
+            .getUserWhereUsername2(username)
+            .then((res) => {
+               console.log("TEST " + JSON.stringify(res));
+               return res;
+            })
+            .then((res) => {
+               reset({
+                  name: res.username,
+                  addresstype: res.addresstype,
+                  address: res.address,
+                  specificaddress: res.specificaddress,
+               });
+               setUser(res);
+               setIdUpdateAddress(res.id);
+               if (res.specificaddress == null) {
+                  openModal(idModal);
+               }
+            })
+            .catch((error) => {
+               console.log(
+                  "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
+                  error
+               );
+            });
+      } else {
+         console.log("Chua Dang Nhap Dung");
       }
    };
 
@@ -150,6 +276,25 @@ export default function CheckOut() {
       }
       return totalCart;
    };
+
+   const API = `http://localhost:5000/buyzzle/user/paymentaddress/${username}`;
+
+   const sendToDatabase = async (formData: any) => {
+      try {
+         const response1 = await axios.put(API, formData).then(() => {
+            getUserAddress();
+            closeModal(idModalUpdate);
+            closeModal(idModal);
+         });
+         return response1;
+      } catch (error) {
+         throw error;
+      }
+   };
+
+   useEffect(() => {
+      getUserAddress();
+   }, []);
 
    return (
       <>
@@ -195,10 +340,9 @@ export default function CheckOut() {
                                  <div>
                                     <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
                                        <span className="font-bold">
-                                          {user.name} {user.phonenumber}
+                                          {user.name}, {user.phonenumber}{" "}
                                        </span>{" "}
-                                       12 Nguyễn Chí Thanh Phường Tân An, Thành
-                                       Phố Buôn Ma Thuột, Đắk Lắk
+                                       {user.specificaddress}
                                     </p>
                                  </div>
                               </div>
@@ -222,11 +366,11 @@ export default function CheckOut() {
                                  id={idModal}
                                  title="Địa Chỉ Của Tôi"
                                  onClose={() => closeModal(idModal)}
-                                 onSave={() => saveModal({} as FormValues)}
+                                 onSave={() => closeModal(idModal)}
                                  body={
                                     <>
                                        <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
-                                          <div className="flex items-center mr-4 justify-start ">
+                                          {/* <div className="flex items-center mr-4 justify-start ">
                                              <input
                                                 checked
                                                 type="radio"
@@ -239,15 +383,15 @@ export default function CheckOut() {
                                                 className="h-5 w-5 absolute rounded-full pointer-events-none
                                                                 peer-checked:border-[#EA4B48] peer-checked:border-2"
                                              />
-                                          </div>
-                                          <div className="flex flex-col gap-1">
+                                          </div> */}
+                                          <div className="flex flex-col gap-1 w-full">
                                              <div className="flex justify-between w-full">
                                                 <div className="flex items-center gap-3">
                                                    <p className="text-sm font-medium text-[#1A1A1A]">
                                                       {user.name}
                                                    </p>
                                                    <p className="text-[10px] text-[#4C4C4C]">
-                                                      (+84) {user.phonenumber}
+                                                      {user.phonenumber}
                                                    </p>
                                                 </div>
                                                 <div className="">
@@ -265,15 +409,12 @@ export default function CheckOut() {
                                              </div>
                                              <div>
                                                 <p className="text-[13px] font-normal text-[#4C4C4C]">
-                                                   12 Nguyễn Chí Thanh Phường
-                                                   Tân An, Thành Phố Buôn Ma
-                                                   Thuột, Đắk Lắk
+                                                   {user.specificaddress}
                                                 </p>
                                              </div>
                                           </div>
                                        </div>
-
-                                       <div className="border-b-[1px] pb-4 mb-4 flex gap-1 items-center justify-center">
+                                       {/* <div className="border-b-[1px] pb-4 mb-4 flex gap-1 items-center justify-center">
                                           <button
                                              onClick={() =>
                                                 openUpadate(idModalUpdate)
@@ -285,7 +426,7 @@ export default function CheckOut() {
                                                 Thêm địa chỉ mới
                                              </p>
                                           </button>
-                                       </div>
+                                       </div> */}
                                     </>
                                  }
                               />
@@ -303,7 +444,7 @@ export default function CheckOut() {
                                     <>
                                        <div className="flex flex-col gap-2">
                                           <div className="flex justify-around gap-5">
-                                             <div className=" w-full">
+                                             <div className="w-[55%]">
                                                 <Controller
                                                    control={control}
                                                    name="name"
@@ -311,45 +452,31 @@ export default function CheckOut() {
                                                       required: {
                                                          value: true,
                                                          message:
-                                                            "Không để trống",
-                                                      },
-                                                      minLength: {
-                                                         value: 4,
-                                                         message:
-                                                            "Ít nhất 4 ký tự",
-                                                      },
-                                                      maxLength: {
-                                                         value: 25,
-                                                         message:
-                                                            "Nhiều nhất 25 ký tự",
+                                                            "Bạn phải nhập thông tin cho trường dữ liệu này!",
                                                       },
                                                    }}
                                                    render={({ field }) => (
                                                       <>
-                                                         <label className="text-sm text-[#4C4C4C]">
-                                                            Họ và tên:
+                                                         <label
+                                                            htmlFor="username"
+                                                            className="text-[#4C4C4C] text-sm font-semibold"
+                                                         >
+                                                            Họ và tên
                                                          </label>
+                                                         {/* input addNameProducts */}
                                                          <input
-                                                            id="name"
-                                                            className="max-[870px]:text-xs mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
-                                                            placeholder="Nhập Họ Tên"
+                                                            className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                   rounded-[6px] px-[10px] py-[10.5px] w-[100%] mt-2
+                                                  ${
+                                                     !!errors.name
+                                                        ? "border-[2px] border-red-900"
+                                                        : "border-[1px] border-[#FFAAAF]"
+                                                  }`}
+                                                            placeholder="Họ và tên"
                                                             value={field.value}
-                                                            onChange={(e) => {
-                                                               const reg =
-                                                                  /[!@#$%^&*]/;
-                                                               const value =
-                                                                  e.target
-                                                                     .value;
-                                                               field.onChange(
-                                                                  value.replace(
-                                                                     reg,
-                                                                     ""
-                                                                  )
-                                                               );
-                                                            }}
                                                          />
-                                                         {errors.name && (
-                                                            <p className="text-red-600 text-xs my-2">
+                                                         {!!errors.name && (
+                                                            <p className="text-red-700 mt-2">
                                                                {
                                                                   errors.name
                                                                      .message
@@ -360,69 +487,57 @@ export default function CheckOut() {
                                                    )}
                                                 />
                                              </div>
-                                             <div className=" w-full">
-                                                <Controller
-                                                   name="typeAddress"
-                                                   control={control}
-                                                   rules={{
-                                                      required: {
-                                                         value: true,
-                                                         message:
-                                                            "Vui lòng chọn",
-                                                      },
-                                                   }}
-                                                   render={({ field }) => (
-                                                      <>
-                                                         <label className="text-sm text-[#4C4C4C]">
-                                                            Loại địa chỉ
-                                                         </label>
+                                             <div className="w-[43%]">
+                                                <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
+                                                   Loại đỉa chỉ*
+                                                </p>
+                                                <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                                   <Controller
+                                                      name="addresstype"
+                                                      control={control}
+                                                      rules={{
+                                                         required: {
+                                                            value: true,
+                                                            message:
+                                                               "Vui lòng chọn",
+                                                         },
+                                                      }}
+                                                      render={({ field }) => (
                                                          <select
-                                                            id="name"
-                                                            className="max-[870px]:text-xs mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
+                                                            className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
                                                             value={field.value}
-                                                            onChange={(e) => {
-                                                               const value =
-                                                                  e.target
-                                                                     .value;
-                                                               const reg = /[]/;
-                                                               field.onChange(
-                                                                  value.replace(
-                                                                     reg,
-                                                                     ""
-                                                                  )
-                                                               );
-                                                            }}
+                                                            {...register(
+                                                               "addresstype"
+                                                            )}
                                                          >
-                                                            <option value="">
-                                                               -- Chọn loại địa
-                                                               chỉ --
+                                                            <option value="Địa chỉ văn phòng">
+                                                               Địa chỉ văn phòng
                                                             </option>
-                                                            <option>
+                                                            <option value="Địa chỉ công ty">
+                                                               Địa chỉ công ty
+                                                            </option>
+                                                            <option value="Nhà riêng">
                                                                Nhà riêng
                                                             </option>
-                                                            <option>
-                                                               Công ty
-                                                            </option>
                                                          </select>
-                                                         {errors.typeAddress && (
-                                                            <p className="text-red-600 text-xs my-2">
-                                                               {
-                                                                  errors
-                                                                     .typeAddress
-                                                                     .message
-                                                               }
-                                                            </p>
-                                                         )}
-                                                      </>
-                                                   )}
-                                                />
+                                                      )}
+                                                   />
+                                                </div>
+                                                {!!errors.addresstype && (
+                                                   <p className="text-red-700 mt-2">
+                                                      {
+                                                         errors.addresstype
+                                                            .message
+                                                      }
+                                                   </p>
+                                                )}
                                              </div>
                                           </div>
 
-                                          <div>
+                                          <div className="w-[100%] mt-4">
                                              <Controller
-                                                name="address"
                                                 control={control}
+                                                name="address"
                                                 rules={{
                                                    required: {
                                                       value: true,
@@ -431,43 +546,49 @@ export default function CheckOut() {
                                                 }}
                                                 render={({ field }) => (
                                                    <>
-                                                      <label className="text-sm text-[#4C4C4C]">
-                                                         Địa chỉ:
-                                                      </label>
-                                                      <select
-                                                         id="name"
-                                                         className="max-[870px]:text-xs mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-[#FFAAAF] rounded border"
-                                                         value={field.value}
-                                                         onChange={(e) => {
-                                                            const value =
-                                                               e.target.value;
-                                                            const reg = /[]/;
-                                                            field.onChange(
-                                                               value.replace(
-                                                                  reg,
-                                                                  ""
+                                                      <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
+                                                         Địa chỉ*
+                                                      </p>
+                                                      <div className="w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
+                                                         <select
+                                                            className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-[6px]"
+                                                            value={field.value}
+                                                            {...register(
+                                                               "address"
+                                                            )}
+                                                            onChange={(e) => {
+                                                               const value =
+                                                                  e.target
+                                                                     .value;
+                                                               const reg =
+                                                                  /[!@#$%^&*]/;
+                                                               field.onChange(
+                                                                  value.replace(
+                                                                     reg,
+                                                                     ""
+                                                                  )
+                                                               );
+                                                            }}
+                                                         >
+                                                            {provinces.map(
+                                                               (
+                                                                  province,
+                                                                  index
+                                                               ) => (
+                                                                  <option
+                                                                     key={index}
+                                                                     value={
+                                                                        province
+                                                                     }
+                                                                  >
+                                                                     {province}
+                                                                  </option>
                                                                )
-                                                            );
-                                                         }}
-                                                      >
-                                                         <option value="">
-                                                            -- Tỉnh/Thành phố,
-                                                            Quận/Huyện,
-                                                            Phường/Xã --
-                                                         </option>
-                                                         <option>
-                                                            Phường Thống Nhất,
-                                                            Thành Phố Buôn Ma
-                                                            Thuột, Đắk Lắk
-                                                         </option>
-                                                         <option>
-                                                            Phường Tân An, Thành
-                                                            Phố Buôn Ma Thuột,
-                                                            Đắk Lắk
-                                                         </option>
-                                                      </select>
-                                                      {errors.address && (
-                                                         <p className="text-red-600 text-xs my-2">
+                                                            )}
+                                                         </select>
+                                                      </div>
+                                                      {!!errors.address && (
+                                                         <p className="text-red-700 mt-2">
                                                             {
                                                                errors.address
                                                                   .message
@@ -481,7 +602,7 @@ export default function CheckOut() {
 
                                           <div className="flex flex-col border-b-[1px] pb-4 mb-4 gap-2">
                                              <Controller
-                                                name="currentAddress"
+                                                name="specificaddress"
                                                 control={control}
                                                 rules={{
                                                    required: {
@@ -501,14 +622,21 @@ export default function CheckOut() {
                                                 }}
                                                 render={({ field }) => (
                                                    <>
-                                                      <label className="text-sm text-[#4C4C4C]">
-                                                         Địa chỉ cụ thể:
+                                                      <label
+                                                         htmlFor="specificaddress"
+                                                         className="text-[#4C4C4C] text-sm font-medium"
+                                                      >
+                                                         Địa chỉ cụ thể
                                                       </label>
-                                                      <textarea
-                                                         className="text-xs p-3 border-[#FFAAAF] rounded border"
-                                                         cols={30}
-                                                         rows={4}
-                                                         value={field.value}
+                                                      <input
+                                                         className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                   rounded-[6px] px-[10px] py-[12px] w-[100%]
+                                                  ${
+                                                     !!errors.specificaddress
+                                                        ? "border-[2px] border-red-900"
+                                                        : "border-[1px] border-[#FFAAAF]"
+                                                  }`}
+                                                         placeholder="Địa chỉ cụ thể"
                                                          onChange={(e) => {
                                                             const value =
                                                                e.target.value;
@@ -521,15 +649,13 @@ export default function CheckOut() {
                                                                )
                                                             );
                                                          }}
-                                                         defaultValue={
-                                                            "407 Hoàng Diệu, Phường Thống Nhất, Thành Phố Buôn Ma Thuột, Đắk Lắk "
-                                                         }
+                                                         value={field.value}
                                                       />
-                                                      {errors.currentAddress && (
-                                                         <p className="text-red-600 text-xs my-2">
+                                                      {!!errors.specificaddress && (
+                                                         <p className="text-red-700 mt-2">
                                                             {
                                                                errors
-                                                                  .currentAddress
+                                                                  .specificaddress
                                                                   .message
                                                             }
                                                          </p>
@@ -556,6 +682,7 @@ export default function CheckOut() {
                                     TỔNG
                                  </h4>
                               </div>
+
                               {listLocalCart.map((e) => {
                                  return (
                                     <>
@@ -785,6 +912,9 @@ export default function CheckOut() {
                               discount={discount}
                               note={note}
                               invoice={invoice}
+                              address={user.specificaddress}
+                              name={user.name}
+                              phoneNumber={user.phonenumber}
                            />
                         </div>
                      </div>

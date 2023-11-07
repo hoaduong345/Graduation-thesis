@@ -44,7 +44,7 @@ const UserController = {
                         deletedAt: new Date(),
                     },
                 });
-              
+
             }
             return res.status(402).json('Xóa User that bai');
         } catch (error) {
@@ -134,10 +134,10 @@ const UserController = {
 
     PaymentAddress: async (req, res) => {
         try {
-            const Name = req.body.username;
+            const id = req.body.id;
 
             const updatedPaymentAddress = {
-                username: req.body.username,
+                name: req.body.name,
                 addresstype: req.body.addresstype,
                 address: req.body.address,
                 specificaddress: req.body.specificaddress,
@@ -145,7 +145,7 @@ const UserController = {
 
             const update = await prisma.user.update({
                 where: {
-                    username: Name,
+                    id: id
                 },
                 data: updatedPaymentAddress,
             });
@@ -167,7 +167,8 @@ const UserController = {
                 },
                 select: {
                     id: true,
-                    username: true,
+                    name: true,
+                    phonenumber: true,
                     address: true,
                     addresstype: true,
                     specificaddress: true,
@@ -265,7 +266,14 @@ const UserController = {
 
     getAllUser: async (req, res) => {
         try {
-            const AllUser = await prisma.user.findMany();
+            const keyword = req.query.keyword;
+            const AllUser = await prisma.user.findMany({
+                where : {
+                    username : {
+                        contains : keyword
+                    }
+                }
+            });
             res.status(200).json(AllUser);
         } catch (error) {
             res.status(500).json(error);

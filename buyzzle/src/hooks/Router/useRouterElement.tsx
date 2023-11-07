@@ -35,6 +35,9 @@ import AdminProfile from "../../pages/home/Admin/AdminProfile/AdminProfile";
 import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
 import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 import Admin from "../../pages/home/Admin/Management/Admin/Admin";
+import ShippingPage from "../../pages/home/Shipping/ShippingPage";
+import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
+import ShippingLayout from "../../layout/ShippingLayout";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -574,6 +577,14 @@ export default function useRouterEmelent() {
           path: "detailuser/:username",
           element: <DetailUser />,
         },
+
+        // {
+        //   path: "loginadmin",
+        //   element:
+        //   <RegisterLoginLayout>
+        //     <LoginAdmin />
+        //     </RegisterLoginLayout>,
+        // },
         {
           path: "ordermanagement",
           element: <OrderManagement />,
@@ -601,6 +612,33 @@ export default function useRouterEmelent() {
       ],
     },
     {
+      path: "/admin",
+      children: [
+        {
+          path: "loginadmin",
+          element: (
+            <RegisterLoginLayout>
+              <LoginAdmin />
+            </RegisterLoginLayout>
+          ),
+        },
+      ],
+    },
+    {
+      path: "/shipping",
+      element: <ShippingLayout />,
+      children: [
+        {
+          path: "management",
+          element: <ShippingPage />,
+        },
+        {
+          path: "detail/:id",
+          element: <ShippingDetail />,
+        },
+      ],
+    },
+    {
       path: path.resetpassword,
       element: (
         <RegisterLoginLayout>
@@ -609,19 +647,6 @@ export default function useRouterEmelent() {
         </RegisterLoginLayout>
       ),
     },
-    {
-      path: "/admin/login",
-      element:(
-        <RegisterLoginLayout>
-          <LoginAdmin/>
-          </RegisterLoginLayout>
-      ),
-    }
-  ]
-
-
-  );
-
-
+  ]);
   return routes;
 }

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../Assets/TS";
 import Location from "../../../../Assets/TSX/Location";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
@@ -12,13 +11,12 @@ import { storage } from "../../../../Firebase/Config";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import { numberFormat } from "../../../../Helper/Format";
 import Loading from "../../../../Helper/Loading/Loading";
-import StepperPage from "../../../../Helper/Stepper/StepperPage";
+import StepperPage from "../../../../Helper/Stepper/StepperUser";
 import { OrderModel } from "../../../../Model/OrderModel";
 import { Rating } from "../../../../Model/ProductModel";
 import Container from "../../../../components/container/Container";
 import Back from "../../Admin/Assets/TSX/Back";
 import UploadIMG from "../../Admin/Assets/TSX/UploadIMG";
-import Sitebar from "../UserProfile/Sitebar/Sitebar";
 
 export default function OrderDetailPage() {
    const { id } = useParams();
@@ -32,6 +30,7 @@ export default function OrderDetailPage() {
    const [loadingImage, setLoadingImage] = useState(false);
 
    const [idSP, setIdSP] = useState(0);
+   const [indexSP, setIndexSP] = useState<number>(0);
 
    useEffect(() => {
       getOrderDetails();
@@ -121,6 +120,7 @@ export default function OrderDetailPage() {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
          modal.close();
+         reset({});
       }
    };
 
@@ -164,7 +164,6 @@ export default function OrderDetailPage() {
          ratingValue: data.ratingValue,
          comment: data.comment,
       };
-      console.log(_data);
       RatingAndCommentController.postRatingAndComment(_data)
          .then(async (data) => {
             // setValue("iduser", data.iduser);
@@ -182,6 +181,17 @@ export default function OrderDetailPage() {
             reset({});
             onClose(id);
          })
+         .then(() => {
+            orderControllers
+               .putRatingAt(
+                  idOrder,
+                  idSP,
+                  orderDetails?.OrderDetail[indexSP]?.id
+               )
+               .then(() => {
+                  getOrderDetails();
+               });
+         })
          .catch(() => {
             toast.error("Đánh giá thất bại !");
          });
@@ -189,14 +199,11 @@ export default function OrderDetailPage() {
 
    return (
       <Container>
-         <div className="body-filter container mx-auto">
-            <div className="grid grid-cols-4 gap-6">
-               <div className="col-span-1 max-2xl:hidden">
-                  <Sitebar />
-               </div>
-
-               <div className="col-span-3 max-2xl:col-span-5">
-                  <div className="back h-[57px] mt-[46px] ">
+         <div className="body-filter">
+            <div className="grid grid-cols-9 mt-10 shadow gap-6 ">
+               <div className="col-span-1"></div>
+               <div className="col-span-7 max-2xl:col-span-5">
+                  <div className="back p-12 h-[57px] ">
                      <div className="flex gap-3 items-center">
                         <Link to={"/orderhistory"}>
                            <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
@@ -214,7 +221,7 @@ export default function OrderDetailPage() {
                      </div>
                   </div>
 
-                  <div className="p-12 shadow border-[#6C6C6C40] rounded-md flex flex-col gap-10 max-lg:p-6">
+                  <div className="p-12  border-[#6C6C6C40] rounded-md flex flex-col gap-10 max-lg:p-6">
                      <div className="flex gap-5">
                         <div className="w-[60%] max-lg:w-[55%] border-[#6C6C6C40] border-[1px] rounded-md p-[26px] flex flex-col gap-9">
                            <div className="flex flex-col gap-3">
@@ -227,10 +234,10 @@ export default function OrderDetailPage() {
                               <div>
                                  <p className="text-sm font-normal text-[#1A1A1A] max-[870px]:text-xs">
                                     <span className="font-bold">
-                                       {orderDetails?.User?.name},{" "}
-                                       {orderDetails?.User?.phonenumber}{" "}
+                                       {orderDetails?.name},{" "}
+                                       {orderDetails?.phoneNumber}{" "}
                                     </span>{" "}
-                                    {orderDetails?.User?.address}
+                                    {orderDetails?.address}
                                  </p>
                               </div>
                            </div>
@@ -315,7 +322,7 @@ export default function OrderDetailPage() {
                         </div>
                      </div>
                      <div>
-                        <StepperPage />
+                        <StepperPage status={orderDetails.status} />
                      </div>
 
                      <div className="flex flex-col gap-3">
@@ -333,7 +340,7 @@ export default function OrderDetailPage() {
                               THAO TÁC
                            </h4>
                         </div>
-                        {orderDetails?.OrderDetail?.map((e) => {
+                        {orderDetails?.OrderDetail?.map((e, index) => {
                            return (
                               <>
                                  <div className="grid grid-cols-5 px-[26px] py-[16px] items-center bg-[#FFFFFF] shadow">
@@ -369,17 +376,42 @@ export default function OrderDetailPage() {
                                        </p>
                                     </div>
                                     <div className="col-span-1 flex mx-auto items-center">
-                                       <button
-                                          className="bg-[#EA4B48] rounded-md font-medium"
-                                          onClick={() => {
-                                             openDialog(idDialogRating);
-                                             setIdSP(e.productId);
-                                          }}
-                                       >
-                                          <p className="px-4 py-2 text-white">
-                                             Đánh giá
-                                          </p>
-                                       </button>
+                                       {orderDetails.status == 5 ? (
+                                          <>
+                                             <button
+                                                className={` rounded-md font-medium ${
+                                                   e.ratingAt == null
+                                                      ? `cursor-pointer bg-[#EA4B48]`
+                                                      : `cursor-not-allowed bg-[#908a8a]`
+                                                }`}
+                                                onClick={() => {
+                                                   if (e.ratingAt == null) {
+                                                      openDialog(
+                                                         idDialogRating
+                                                      );
+                                                      setIdSP(e.productId);
+                                                      setIndexSP(index);
+                                                   }
+                                                }}
+                                             >
+                                                <p className="px-4 py-2 text-white">
+                                                   {e.ratingAt == null
+                                                      ? "Đánh giá"
+                                                      : "Đã đánh giá"}
+                                                </p>
+                                             </button>
+                                          </>
+                                       ) : (
+                                          <>
+                                             <button
+                                                className={` rounded-md font-medium cursor-not-allowed bg-[#908a8a]`}
+                                             >
+                                                <p className="px-4 py-2 text-white">
+                                                   Đánh giá
+                                                </p>
+                                             </button>
+                                          </>
+                                       )}
                                     </div>
                                  </div>
                               </>
@@ -388,19 +420,6 @@ export default function OrderDetailPage() {
                         <DialogModal
                            id={idDialogRating}
                            onClose={() => onClose(idDialogRating)}
-                           // onSave={handleSubmit((data: Rating) => {
-                           //   const htmlString = data.comment;
-                           //   const regex = /<p>(.*?)<\/p>/;
-                           //   const match = htmlString.match(regex);
-                           //   if (match) {
-                           //     const extractedText = match[1];
-                           //     const _data: Rating = {
-                           //       ...data,
-                           //       comment: extractedText,
-                           //     };
-                           //     handleAddProductRating(idDialogRating, _data);
-                           //   }
-                           // })}
                            onSave={handleSubmit((data: Rating) => {
                               handleAddProductRating(idDialogRating, data);
                            })}
@@ -411,17 +430,35 @@ export default function OrderDetailPage() {
                                     <div className="flex col-span-1 items-start gap-3">
                                        <div>
                                           <img
-                                             src={Images.imageproduct5}
+                                             src={
+                                                orderDetails?.OrderDetail
+                                                   ?.length > 0
+                                                   ? orderDetails?.OrderDetail[
+                                                        indexSP
+                                                     ]?.image
+                                                   : ""
+                                             }
                                              alt="imageproduct5"
-                                             className="mb-5"
+                                             className="mb-5 h-[50px] w-[50px] object-cover"
                                           />
                                        </div>
                                        <div className="flex-col flex">
                                           <p className="text-[#393939] text-base font-semibold">
-                                             Máy tính để bàn
+                                             {orderDetails?.OrderDetail
+                                                ?.length > 0
+                                                ? orderDetails?.OrderDetail[
+                                                     indexSP
+                                                  ]?.name
+                                                : 0}
                                           </p>
                                           <p className="text-[#393939] text-sm font-normal">
-                                             SL: x2
+                                             SL: x
+                                             {orderDetails?.OrderDetail
+                                                ?.length > 0
+                                                ? orderDetails?.OrderDetail[
+                                                     indexSP
+                                                  ]?.quantity
+                                                : 0}
                                           </p>
                                        </div>
                                     </div>
@@ -625,6 +662,7 @@ export default function OrderDetailPage() {
                      </div>
                   </div>
                </div>
+               <div className="col-span-1"></div>
             </div>
          </div>
       </Container>

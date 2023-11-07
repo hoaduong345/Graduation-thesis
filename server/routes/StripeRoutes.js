@@ -41,7 +41,10 @@ app.post('/create-checkout-session', async (req, res) => {
                 idUser: req.body.idUser,
                 paymentMethod: req.body.method,
                 note: req.body.note,
-                invoice: req.body.invoice
+                invoice: req.body.invoice,
+                name: req.body.name,
+                address: req.body.address,
+                phoneNumber: req.body.phoneNumber
             },
         });
         const coupon = await stripe.coupons.create({
@@ -86,7 +89,10 @@ const getCartItems = async (line_items, object, metadata) => {
             amount_total: object.amount_total,
             method: 'Thẻ tín dụng',
             note: metadata.note,
-            invoice: metadata.invoice
+            invoice: metadata.invoice,
+            name: metadata.name,
+            address: metadata.address,
+            phoneNumber: metadata.phoneNumber,
         };
         line_items?.data?.map(async (element) => {
             const product = await stripe.products.retrieve(element.price.product);

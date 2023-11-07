@@ -59,12 +59,18 @@ export const Images = {
   picture: "../src/Assets/PNG/picture.png",
   avatar_admin: "../../../src/pages/home/Admin/Assets/Images/avatar.png",
   imageproduct: "../../../src/pages/home/Admin/Assets/Images/imageproduct.png",
-  imageproduct1: "../../../src/pages/home/Admin/Assets/Images/imageproduct1.png",
-  imageproduct2: "../../../src/pages/home/Admin/Assets/Images/imageproduct2.png",
-  imageproduct3: "../../../src/pages/home/Admin/Assets/Images/imageproduct3.png",
-  imageproduct4: "../../../src/pages/home/Admin/Assets/Images/imageproduct4.png",
-  imageproduct5: "../../../src/pages/home/Admin/Assets/Images/imageproduct5.png",
-  imageproduct6: "../../../src/pages/home/Admin/Assets/Images/imageproduct6.png",
+  imageproduct1:
+    "../../../src/pages/home/Admin/Assets/Images/imageproduct1.png",
+  imageproduct2:
+    "../../../src/pages/home/Admin/Assets/Images/imageproduct2.png",
+  imageproduct3:
+    "../../../src/pages/home/Admin/Assets/Images/imageproduct3.png",
+  imageproduct4:
+    "../../../src/pages/home/Admin/Assets/Images/imageproduct4.png",
+  imageproduct5:
+    "../../../src/pages/home/Admin/Assets/Images/imageproduct5.png",
+  imageproduct6:
+    "../../../src/pages/home/Admin/Assets/Images/imageproduct6.png",
   chevron: "../../../src/pages/home/Admin/Assets/Images/chevron-right.png",
   chevron1: "../../../src/pages/home/Admin/Assets/Images/chevron-right1.png",
   Banner: "../src/Assets/Images/banner.jpg",
@@ -77,6 +83,9 @@ export const Images = {
   zalo: "../src/Assets/PNG/Logo-ZaloPay.png",
   nhanHang: "../src/Assets/PNG/nhanhang.png",
   detailHover: "../src/Assets/PNG/Line 56.png",
+  visa: "../src/Assets/PNG/294654_visa_icon.png",
+  EmptyPage: "../src/Assets/PNG/Group 863.png",
+
   viettelpost: "../src/Assets/JPG/VTPost.jpg",
   ghn: "../src/Assets/PNG/GHN.png",
   bestex: "../src/Assets/PNG/bestex.png",
@@ -85,6 +94,5 @@ export const Images = {
   JT: "../src/Assets/PNG/J&T.png",
   vnpost: "../src/Assets/PNG/vnpost.png",
   momo2: "../src/Assets/PNG/momo2.png",
-  zalopay: "../src/Assets/PNG/zalopay.png"
+  zalopay: "../src/Assets/PNG/zalopay.png",
 };
-
