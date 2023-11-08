@@ -53,7 +53,7 @@ class OrderControllers {
   abortOrder = async (id: number) => {
     return await axios.post(`${appConfig.apiShipping}/setStatus`, {
       id: id,
-      status: null,
+      status: 0,
     });
   };
 
