@@ -49,55 +49,39 @@ const ShippingController = {
 
     getAllStatusForDelivery: async (req, res) => {
         try {
-            const page = parseInt(req.query.page) || 1;
-            const pageSize = parseInt(req.query.pageSize) || 40;
-            const keyword = req.query.keyword;
-            const status = parseInt(req.query.status)
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 8;
+            const keyword = req.body.keyword;
+            const status = parseInt(req.body.status);
             const skip = (page - 1) * pageSize;
-            
+
+            let sortStatus = {};
+            if (status) sortStatus = status;
+
             const whereClause = {
                 name: {
-                    contains: keyword
+                    contains: keyword,
                 },
+                status: sortStatus,
             };
-            const whereClauseOrder = {
-                status: {
-                    gte: 2,
-                }
-            };
-            const order = await prisma.order.findMany({
-                where: whereClauseOrder,
-            });
+            const getAll = await prisma.order.findMany({});
             const allOrderAdmin = await prisma.order.findMany({
-                where: whereClauseOrder,
+                where: whereClause,
                 skip,
                 take: pageSize,
                 include: {
-                    OrderDetail: true
+                    OrderDetail: true,
                 },
+
                 orderBy: {
-                    id: "desc"
-                }
-            });
-
-            const searchOrder = await prisma.order.findMany({
-                where: whereClause,
-            });
-
-            const statusOrder = await prisma.order.findMany({
-                where:{
-                    status : status
+                    id: 'desc',
                 },
-                orderBy:{
-                    id : "desc"
-                }
-            })
+            });
+
             const results = {
-                statusOrder : statusOrder,
-                searchOrder : searchOrder,
                 page: page,
                 pageSize: pageSize,
-                totalPage: Math.ceil(order.length / pageSize),
+                totalPage: Math.ceil(getAll.length / pageSize),
                 data: allOrderAdmin,
             };
             res.status(200).json(results);
@@ -105,6 +89,7 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
+
     getAllStatusForAdmin: async (req, res) => {
         try {
             const page = parseInt(req.query.page) || 1;
