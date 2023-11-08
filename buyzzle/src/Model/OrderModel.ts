@@ -4,7 +4,17 @@ export interface OrderPanigation {
   pageSize: number;
   totalPage: number;
   totalOrder: number;
+  statusCounts: StatusCounts;
   totalOrderShipping: number;
+}
+export interface StatusCounts {
+  orderStatus1: number;
+  orderStatus4: number;
+  orderStatus0: number;
+  orderStatus2: number;
+  orderStatus3: number;
+  orderStatus10: number;
+  orderStatus5: number;
 }
 export interface OrderModel {
   id: number;

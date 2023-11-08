@@ -6,7 +6,6 @@ const errorResponse = (res, error) => {
     res.status(500).json(error.message);
 };
 
-
 const ShippingController = {
     setStatus: async (req, res) => {
         try {
@@ -62,7 +61,7 @@ const ShippingController = {
             const totalOrdersCount = await prisma.order.count({
                 where: whereClause,
             });
-     
+
             const getAll = await prisma.order.findMany({
                 where: {
                     status: {
@@ -82,12 +81,24 @@ const ShippingController = {
                     id: 'desc',
                 },
             });
+            // Tạo một đối tượng chứa thông tin về từng trạng thái
+            const statusCounts = {};
 
+            // Lặp qua mảng `getAll` để đếm số lượng đơn hàng cho từng trạng thái
+            getAll.forEach((order) => {
+                const orderStatus = order.status;
+                if (!statusCounts[`orderStatus${orderStatus}`]) {
+                    statusCounts[`orderStatus${orderStatus}`] = 1;
+                } else {
+                    statusCounts[`orderStatus${orderStatus}`]++;
+                }
+            });
             const results = {
                 page: page,
                 pageSize: pageSize,
                 totalPage: Math.ceil(totalOrdersCount / pageSize),
                 totalOrderShipping: getAll.length,
+                statusCounts: statusCounts,
                 data: allOrderAdmin,
             };
             res.status(200).json(results);
@@ -96,7 +107,7 @@ const ShippingController = {
         }
     },
     // GET ALL status từ 1-5 cho quản lý admin
-    getAllStatusForAdmin : async(req,res) =>{
+    getAllStatusForAdmin: async (req, res) => {
         try {
             const page = parseInt(req.body.page) || 1;
             const pageSize = parseInt(req.body.pageSize) || 40;
@@ -106,11 +117,13 @@ const ShippingController = {
             const skip = (page - 1) * pageSize;
 
             let sortStatus = {};
-            if (status) {
+            if (status == 0) {
+                sortStatus = 0;
+            } else if (status) {
                 sortStatus = status;
             } else {
                 sortStatus = {
-                    gte: 0,
+                    gte: -1,
                 };
             }
 
@@ -123,11 +136,11 @@ const ShippingController = {
             const totalOrdersCount = await prisma.order.count({
                 where: whereClause,
             });
-     
+
             const getAll = await prisma.order.findMany({
                 where: {
                     status: {
-                        gte: 0,
+                        gte: -1,
                     },
                 },
             });
@@ -142,12 +155,23 @@ const ShippingController = {
                     id: 'desc',
                 },
             });
+            const statusCounts = {};
+
+            getAll.forEach((order) => {
+                const orderStatus = order.status;
+                if (!statusCounts[`orderStatus${orderStatus}`]) {
+                    statusCounts[`orderStatus${orderStatus}`] = 1;
+                } else {
+                    statusCounts[`orderStatus${orderStatus}`]++;
+                }
+            });
 
             const results = {
                 page: page,
                 pageSize: pageSize,
                 totalPage: Math.ceil(totalOrdersCount / pageSize),
                 totalOrderShipping: getAll.length,
+                statusCounts: statusCounts,
                 data: allOrderAdmin,
             };
             res.status(200).json(results);
@@ -156,27 +180,25 @@ const ShippingController = {
         }
     },
 
-
     requestDeleteOrder: async (req, res) => {
         try {
-            const orderId = parseInt(req.query.orderId)
+            const orderId = parseInt(req.query.orderId);
             const order = await prisma.order.findFirst({
-                where:{
-                    id: orderId
-                }
-            })
-            if(!order) return res.send("Order is not undifined")
+                where: {
+                    id: orderId,
+                },
+            });
+            if (!order) return res.send('Order is not undifined');
 
             const requestDeleteOrder = await prisma.order.update({
-                where:{
-                    id: order.id
+                where: {
+                    id: order.id,
                 },
-                data:{
-                    status: -1
-                }
-            })
-            res.send(200).json(requestDeleteOrder)
-
+                data: {
+                    status: 10,
+                },
+            });
+            res.send(200).json(requestDeleteOrder);
         } catch (error) {
             errorResponse(res, error);
         }
