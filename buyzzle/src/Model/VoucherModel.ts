@@ -1,12 +1,15 @@
 export interface Voucher {
-    data: VoucherModel[]
-    totalPage: number
+  page: number;
+  pageSize: number;
+  totalPage: number;
+  data: VoucherModel[];
 }
+
 export interface VoucherModel {
-    id: number,
-    code: string,
-    quantity: number,
-    startDay: Date,
-    endDay: Date,
-    discount: number
+  id: number;
+  code: string;
+  quantity: number;
+  startDay: Date;
+  endDay: Date;
+  discount: number;
 }

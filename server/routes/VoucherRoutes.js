@@ -6,7 +6,7 @@ const cron = require('node-cron');
 
 //ADMIN
 router.post('/', VoucherController.add);
-router.get('/', VoucherController.getAdmin);
+router.post('/getVoucher', VoucherController.getAdmin);
 router.delete('/:id', VoucherController.remove);
 router.put('/:id', VoucherController.update);
 

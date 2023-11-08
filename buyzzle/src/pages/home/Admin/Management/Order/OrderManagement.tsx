@@ -31,7 +31,7 @@ export default function OrderManagement() {
     pageSize: 4,
   });
   const [open, setOpen] = useState(false);
-  const debouncedInputValueSearch = useDebounce(orderAPI.keyword, 1000); // Debounce for 300 milliseconds
+  const debouncedInputValueSearch = useDebounce(orderAPI.keyword, 500);
 
   const openModal = () => {
     const modal = document.getElementById(
