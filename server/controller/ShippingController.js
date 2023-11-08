@@ -203,6 +203,19 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
+    confirmDeleteOrder : async(req,res) =>{
+        try {
+            const orderId = parseInt(req.query.orderId);
+            const order = await prisma.order.findFirst({
+                where: {
+                    id: orderId,
+                },
+            });
+            if (!order) return res.send('Order is not undifined');
+        } catch (error) {
+            
+        }y
+    }
 };
 
 module.exports = ShippingController;
