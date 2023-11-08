@@ -1,22 +1,23 @@
+import { download, generateCsv } from "export-to-csv";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import Search from "../../../../../Assets/TSX/Search";
 import { voucherControllers } from "../../../../../Controllers/VoucherControllers";
 import DialogComfirm from "../../../../../Helper/Dialog/DialogComfirm";
 import DialogModal from "../../../../../Helper/Dialog/DialogModal";
+import { csvConfig } from "../../../../../Helper/Export/Excel";
+import { toastSuccess } from "../../../../../Helper/Toast/Success";
+import { toastWarn } from "../../../../../Helper/Toast/Warning";
 import { VoucherModel } from "../../../../../Model/VoucherModel";
 import Container from "../../../../../components/container/Container";
+import Delete from "../../Assets/TSX/Delete";
 import Download from "../../Assets/TSX/Download";
 import Edit from "../../Assets/TSX/Edit";
+import PlusSquare from "../../Assets/TSX/PlusSquare";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Handle from "../../Assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import PlusSquare from "../../Assets/TSX/PlusSquare";
-import { csvConfig } from "../../../../../Helper/Export/Excel";
-import { download, generateCsv } from "export-to-csv";
-import Delete from "../../Assets/TSX/Delete";
 type FormValues = {
    id: number;
    discount: number;
@@ -66,7 +67,7 @@ export default function VoucherPage() {
             .remove(e.id)
             .then(() => {
                if (index === data.length - 1 && !successMessageDisplayed) {
-                  toast.success("Thành công");
+                  toastSuccess("Thành công");
                   successMessageDisplayed = true;
                }
                closeModal(idModal);
@@ -100,7 +101,15 @@ export default function VoucherPage() {
    const openModal = async (id: string, data: FormValues) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
-         reset(data);
+         reset({
+            id: data.id,
+            voucherCode: data.voucherCode,
+            discount: data.discount,
+            quantity: data.quantity,
+            startDate: moment(data.startDate).format("YYYY-MM-DD"),
+            endDate: moment(data.endDate).format("YYYY-MM-DD"),
+         });
+         console.log(data);
          modal.showModal();
       }
    };
@@ -128,13 +137,13 @@ export default function VoucherPage() {
       if (data.id == 0) {
          voucherControllers.add(dataForm).then(() => {
             getVoucher();
-            toast.success("Thành Công");
+            toastSuccess("Thành Công");
             setCheckedVoucher([]);
          });
       } else {
          voucherControllers.update(dataForm.id, dataForm).then(() => {
             getVoucher();
-            toast.success("Thành Công");
+            toastSuccess("Thành Công");
             setCheckedVoucher([]);
          });
       }
@@ -551,19 +560,17 @@ export default function VoucherPage() {
                               <p>Thời Gian</p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
-                              <p>
-                                 Đã dùng / Còn Lại
-                              </p>
+                              <p>Đã dùng / Còn Lại</p>
                            </div>
                            <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                               <p
                                  onClick={() =>
                                     checkedVoucher.length > 0
                                        ? openModal(
-                                          idRemoveVouchers,
-                                          {} as FormValues
-                                       )
-                                       : toast.warn("Chưa chọn Voucher để xóa")
+                                            idRemoveVouchers,
+                                            {} as FormValues
+                                         )
+                                       : toastWarn("Chưa chọn Voucher để xóa")
                                  }
                               >
                                  <Delete />

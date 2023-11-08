@@ -43,11 +43,11 @@ const VoucherController = {
                 deletedAt: null,
             };
             const totalProduct = (await prisma.voucher.findMany()).length;
-    
+
             const products = await prisma.voucher.findMany({
                 where: {
                     AND: [
-                        whereClause, 
+                        whereClause,
                         {
                             code: {
                                 contains: keyword
@@ -59,7 +59,7 @@ const VoucherController = {
                 // skip: 0,
                 take: limit,
             });
-    
+
             const results = {
                 page: pageCurr,
                 pageSize: limit,
@@ -67,7 +67,7 @@ const VoucherController = {
                 data: products,
                 // name: keyword?.toLowerCase(),
             };
-    
+
             return res.status(200).json(results ?? []);
         } catch (err) {
             return res.status(500).json(err.message);
@@ -307,13 +307,7 @@ const VoucherController = {
                     },
                 },
                 include: {
-                    voucher: {
-                        select: {
-                            id: true,
-                            code: true,
-                            discount: true,
-                        },
-                    },
+                    voucher: true
                 },
             });
 
