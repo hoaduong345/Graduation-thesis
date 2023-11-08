@@ -58,11 +58,8 @@ function LoginAdmin() {
 
                     }
                 );
-                setTimeout(() => {
-                    window.location.href = "/admin/ListproductsAdmin";
-                },
-                    2000);
-
+                
+                localStorage.removeItem("user");
                 const jsonString: string = JSON.stringify(data);
                 const jsonObject = JSON.parse(jsonString);
                 // console.log("aaaaaaaaaa"+response)
@@ -78,6 +75,11 @@ function LoginAdmin() {
                 // const Token = {accessToken}; 
                 localStorage.setItem('user', JSON.stringify(UserData));
                 // localStorage.setItem("accessToken", JSON.stringify(Token));
+
+                setTimeout(() => {
+                    window.location.href = "/admin/ListproductsAdmin";
+                },
+                    2000);
             } else {
                 console.log("Login Failed!");
                 toast.warning(

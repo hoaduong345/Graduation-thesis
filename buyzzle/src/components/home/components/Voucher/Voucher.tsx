@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react";
 import LogoVoucher from "../../../../Assets/TSX/LogoVoucher";
 import VoucherManage from "../../../../Assets/TSX/VoucherManage";
+import VoucherManageItem from "../../../../Assets/TSX/VoucherManageItem";
+import { voucherControllers } from "../../../../Controllers/VoucherControllers";
 import { formatDate } from "../../../../Helper/Format";
+import { toastSuccess } from "../../../../Helper/Toast/Success";
+import { toastWarn } from "../../../../Helper/Toast/Warning";
 import { VoucherModel } from "../../../../Model/VoucherModel";
 import Container from "../../../container/Container";
 import "./voucher.css";
-import { voucherControllers } from "../../../../Controllers/VoucherControllers";
-import { toast } from "react-toastify";
-import VoucherManageItem from "../../../../Assets/TSX/VoucherManageItem";
 
 export default function VoucherHomePage() {
    const [voucher, setVoucher] = useState<VoucherModel[]>([]);
-   const [save, setSave] = useState<string>("Lưu");
-
-   const voucherLocal = localStorage.getItem("voucher");
-   const dataVoucherLocal: VoucherModel[] =
-      voucherLocal == null ? [] : JSON.parse(voucherLocal);
 
    const getVoucher = async () => {
-      await voucherControllers.get(1).then((res) => {
+      await voucherControllers.getUser(1).then((res) => {
          setVoucher(res.data);
       });
    };
@@ -26,24 +22,16 @@ export default function VoucherHomePage() {
       getVoucher();
    }, []);
 
-   const saveVoucherLocal = (data: VoucherModel) => {
-      const maxVoucher = dataVoucherLocal.length;
-      const index = dataVoucherLocal.findIndex((e) => e.id == data.id);
-      if (maxVoucher >= 5) {
-         toast.error("Lưu tối đa 5 voucher");
-      } else {
-         if (index !== -1) {
-            toast.warning("Bạn đã lưu mã giảm giá này");
-            setSave("Đã lưu");
-         } else {
-            dataVoucherLocal.push(data);
-            localStorage.setItem(
-               "voucher",
-               JSON.stringify([...dataVoucherLocal])
-            );
-            toast.success("Thành công");
-         }
-      }
+   const savedVoucher = (id: number) => {
+      voucherControllers
+         .userSavedVoucher(id)
+         .then((_) => {
+            toastSuccess("Thành Công");
+            getVoucher();
+         })
+         .catch((err) => {
+            toastWarn(err.response?.data);
+         });
    };
 
    return (
@@ -81,10 +69,10 @@ export default function VoucherHomePage() {
                               </p>
                               <div className="flex items-center gap-6">
                                  <button
-                                    onClick={() => saveVoucherLocal(e)}
+                                    onClick={() => savedVoucher(e.id)}
                                     className="py-1 px-5 rounded text-white font-bold bg-[#F7755F] hover:bg-[#ec8f7f] text-base"
                                  >
-                                    {save}
+                                    Lưu
                                  </button>
                                  <p className="text-sm font-medium text-[#EA4B48]">
                                     {formatDate(e.startDay)} -{" "}

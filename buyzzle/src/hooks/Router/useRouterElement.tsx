@@ -35,6 +35,9 @@ import AdminProfile from "../../pages/home/Admin/AdminProfile/AdminProfile";
 import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
 import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
 import Admin from "../../pages/home/Admin/Management/Admin/Admin";
+import ShippingPage from "../../pages/home/Shipping/ShippingPage";
+import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
+import ShippingLayout from "../../layout/ShippingLayout";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -607,7 +610,6 @@ export default function useRouterEmelent() {
           element: <Admin />,
         },
       ],
-      
     },
     {
       path: "/admin",
@@ -619,6 +621,20 @@ export default function useRouterEmelent() {
               <LoginAdmin />
             </RegisterLoginLayout>
           ),
+        },
+      ],
+    },
+    {
+      path: "/shipping",
+      element: <ShippingLayout />,
+      children: [
+        {
+          path: "management",
+          element: <ShippingPage />,
+        },
+        {
+          path: "detail/:id",
+          element: <ShippingDetail />,
         },
       ],
     },

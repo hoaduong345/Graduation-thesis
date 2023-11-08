@@ -266,7 +266,14 @@ const UserController = {
 
     getAllUser: async (req, res) => {
         try {
-            const AllUser = await prisma.user.findMany();
+            const keyword = req.query.keyword;
+            const AllUser = await prisma.user.findMany({
+                where : {
+                    username : {
+                        contains : keyword
+                    }
+                }
+            });
             res.status(200).json(AllUser);
         } catch (error) {
             res.status(500).json(error);

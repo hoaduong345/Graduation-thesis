@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const { prototype } = require('events');
+const moment = require('moment');
 const prisma = new PrismaClient();
 
 const StatisticsController = {
@@ -124,73 +125,23 @@ const StatisticsController = {
 
             const revenuePercentageInRange = (totalQuantitySoldInRange._sum.quantity / totalRevenueInRange) * 100;
 
-            // const categoryStatsByDay = {};
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            // for (let date = yesterday; date >= oneWeekAgo; date.setDate(date.getDate() - 1)) {
-            //     const startDate = new Date(date);
-            //     const endDate = date;
-            //     startDate.setHours(0, 0, 0, 0); // Đặt giờ, phút, giây và mili giây thành 0:00:00.000
-            //     endDate.setHours(23, 59, 59, 999); // Đặt giờ, phút, giây và mili giây thành 23:59:59.999
-            //     const categories = await prisma.category.findMany({
-            //         include: {
-            //             products: {
-            //                 where: {
-            //                     date: {
-            //                         gte: startDate, // Ngày bắt đầu là 7 ngày trước ngày hôm qua
-            //                         lte: endDate, // Ngày kết thúc là ngày hôm qua
-            //                     },
-            //                 },
-            //             },
-            //         },
-            //     });
-            //     const topCategories = categories.map((category) => {
-            //         return {
-            //             category: category,
-            //             totalSoldCount: category.products.reduce(
-            //                 (total, product) => total + (product.soldcount || 0),
-            //                 0
-            //             ),
-            //         };
-            //     });
+            const dataByDayLineChart = {};
 
-            //     // Sắp xếp danh mục theo số sản phẩm đã bán giảm dần
-            //     topCategories.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
+            const endDate = new Date(); // Ngày hôm nay
+            endDate.setHours(23, 59, 59, 999);
 
-            //     // Lưu kết quả vào categoryStatsByDay dựa trên ngày tương ứng
-            //     categoryStatsByDay[date.toISOString().split('T')[0]] = topCategories;
-            // }
+            const startDate = new Date(endDate); // Sao chép ngày hôm nay
+            startDate.setDate(startDate.getDate() - 1); // Trừ 1 ngày
+            const sixDaysAgos = new Date(startDate); // Sao chép ngày hôm qua
+            sixDaysAgos.setDate(sixDaysAgos.getDate() - 6); // Trừ thêm 6 ngày
 
-            // const categories = await prisma.category.findMany({
-            //     include: {
-            //         products: {
-            //             where: {
-            //                 AND: [{ date: { gte: oneWeekAgo } }, { date: { lt: yesterday } }],
-            //             },
-            //             select: {
-            //                 id: true,
-            //                 name: true,
-            //                 soldcount: true,
-            //             },
-            //             orderBy: {
-            //                 soldcount: 'asc',
-            //             },
-            //         },
-            //     },
-            // });
-
-            // const topSellingProductsByCategory = categories.map((category) => {
-            //     const productsInCategory = category.products;
-            //     productsInCategory.sort((a, b) => b.soldcount - a.soldcount);
-            //     return {
-            //         category: category.name,
-            //         topSellingProduct: productsInCategory[0],
-            //     };
-            // });
-            while (currentDate > oneWeekAgo) {
-                const startOfDay = new Date(currentDate);
+            while (startDate >= sixDaysAgos) {
+                const startOfDay = new Date(startDate);
                 startOfDay.setHours(0, 0, 0, 0);
 
-                const endOfDay = new Date(currentDate);
+                const endOfDay = new Date(startDate);
                 endOfDay.setHours(23, 59, 59, 999);
 
                 const categories = await prisma.category.findMany({
@@ -199,8 +150,8 @@ const StatisticsController = {
                         products: {
                             where: {
                                 date: {
-                                    gte: startOfDay, // Lọc các sản phẩm từ đầu ngày
-                                    lte: endOfDay, // đến cuối ngày
+                                    gte: startOfDay,
+                                    lte: endOfDay,
                                 },
                             },
                             select: {
@@ -211,7 +162,7 @@ const StatisticsController = {
                 });
 
                 // Tính tổng số lượng sản phẩm bán được cho từng danh mục trong ngày
-                const categoriesWithTotalSoldCount = categories.map((category) => {
+                const topSellingProductsByCategory = categories.map((category) => {
                     const totalSoldCount = category.products.reduce(
                         (acc, product) => acc + (product.soldcount || 0),
                         0
@@ -219,24 +170,81 @@ const StatisticsController = {
                     return { name: category.name, totalSoldCount };
                 });
 
-                // Sắp xếp danh mục theo tổng số lượng sản phẩm bán được từ cao đến thấp
-                categoriesWithTotalSoldCount.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
+                topSellingProductsByCategory.sort((a, b) => b.totalSoldCount - a.totalSoldCount);
 
-                console.log(`Ngày ${currentDate.toISOString().split('T')[0]}`);
-                console.log(categoriesWithTotalSoldCount);
+                dataByDayLineChart[startDate.toISOString().split('T')[0]] = topSellingProductsByCategory;
 
-                currentDate.setDate(currentDate.getDate() - 1); // Chuyển sang ngày trước đó
+                startDate.setDate(startDate.getDate() - 1); // Chuyển sang ngày trước đó
             }
 
-            res.status(200).json({
-                // totalRevenueInRange,
-                // totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
-                // purchaseOrShoppingInRange: totalOrdersInRange,
-                // revenuePercentageInRange: revenuePercentageInRange,
-                // percentageQuantitySold: percentageQuantitySold,
-                // hotProductsInRange: topProductsInRange,
+            const labelsLineChart = Object.keys(dataByDayLineChart).reverse();
+            const datasetsLineChart = Object.values(dataByDayLineChart[labelsLineChart[0]]).map((category) => ({
+                label: category.name,
+                data: labelsLineChart.map((date) => {
+                    const categoryData = dataByDayLineChart[date].find((item) => item.name === category.name);
+                    return categoryData ? categoryData.totalSoldCount : 0;
+                }),
+            }));
 
-                sortedCategoriesToday: categoriesWithTotalSoldCount,
+            const initialDataChartLine = {
+                labels: labelsLineChart,
+                datasets: datasetsLineChart,
+            };
+
+            const yesterdays = moment().subtract(1, 'day');
+            const sixDaysAgo = yesterdays.clone().subtract(6, 'days');
+
+            const labels = [];
+            const data = [];
+
+            while (yesterdays >= sixDaysAgo) {
+                const startOfDay = yesterdays.clone().startOf('day');
+                const endOfDay = yesterdays.clone().endOf('day');
+
+                // Query the database to retrieve orders placed within the day
+                const orders = await prisma.order.findMany({
+                    where: {
+                        createdAt: {
+                            gte: startOfDay.toDate(),
+                            lte: endOfDay.toDate(),
+                        },
+                    },
+                    select: {
+                        amountTotal: true,
+                    },
+                });
+
+                // Calculate daily revenue
+                const dailyRevenue = orders.reduce((total, order) => {
+                    return total + (order.amountTotal || 0);
+                }, 0);
+
+                labels.unshift(yesterdays.format('YYYY-MM-DD'));
+                data.unshift(dailyRevenue);
+
+                yesterdays.subtract(1, 'day');
+            }
+
+            const initialDataChartBar = {
+                labels,
+                datasets: [
+                    {
+                        label: 'Doanh thu',
+                        data,
+                    },
+                ],
+            };
+
+            res.status(200).json({
+                totalRevenueInRange,
+                totalQuantitySoldInRange: totalQuantitySoldInRange._sum.quantity,
+                purchaseOrShoppingInRange: totalOrdersInRange,
+                revenuePercentageInRange: revenuePercentageInRange,
+                percentageQuantitySold: percentageQuantitySold,
+                hotProductsInRange: topProductsInRange,
+
+                initialDataChartLine: initialDataChartLine,
+                initialDataChartBar: initialDataChartBar,
             });
         } catch (error) {
             console.error(error);

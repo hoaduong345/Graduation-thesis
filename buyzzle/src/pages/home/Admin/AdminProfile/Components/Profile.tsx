@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 import { userController } from "../../../../../Controllers/UserController";
-import { appConfigUser } from "../../../../../configsEnv";
+import { appConfigAdmin, appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { replace } from "lodash";
@@ -27,7 +27,7 @@ export type FormValues = {
 };
 export type FormImage = {
 
-  id: number;
+  idadmin: number;
   UserImage: string[];
 
 }
@@ -73,7 +73,7 @@ export default function UserProfile() {
     mode: "all",
     // defaultValues: UserData1
   });
-
+  // console.log("URLTHEN:"+url);
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
   useEffect(() => {
     const fetchData = async () => {
@@ -119,7 +119,8 @@ export default function UserProfile() {
               setLoading(false);
               SetDataUser(res.adminWithImage);
 
-              const UserImageArray = JSON.stringify(res.adminWithImage.UserImage);
+              const UserImageArray = JSON.stringify(res.adminWithImage.AdminImage);
+              console.log("HINH:"+UserImageArray);
               if (UserImageArray == "[]") {
                 setCheckImageUrl(false);
               } else {
@@ -193,7 +194,7 @@ export default function UserProfile() {
   // img firebase
   const loadImageFile = async (image: any) => {
     try {
-      const imageRef = ref(storage, `imageUrl/${image}`);
+      const imageRef = ref(storage, `imageUrl/${image.name}`);
 
       await uploadBytes(imageRef, image);
 
@@ -208,12 +209,15 @@ export default function UserProfile() {
 
   const addImages = async (id: number, url: string) => {
     const urlImages = {
-      iduser: id,
+      idadmin: id,
       url: url,
     };
+    console.log("NHucc:"+JSON.stringify(urlImages))
     await axios
-      .post(`${appConfigUser.apiUrl}/addimageuser`, urlImages)
-      .then((response) => response.data);
+      .post(`${appConfigAdmin.apiUrl}/addimageadmin/`, urlImages)
+      .then((response) => 
+      console.log("CCCCCCCCCCCC:"+JSON.stringify(urlImages))
+      );
   };
 
 
@@ -223,7 +227,7 @@ export default function UserProfile() {
       url: url,
     };
     await axios
-      .put(`${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`, urlImages.url)
+      .put(`${appConfigAdmin.apiUrl}/updateimageadmin/${urlImages.iduser}`, urlImages.url)
       .then((response) => response.data);
 
   }
@@ -243,18 +247,18 @@ export default function UserProfile() {
       formData.phonenumber = sdtThen;
       console.log("SERVER:" + JSON.stringify(formData));
       const response = await axios.put(API, formData);
-      FormImage.id = parseInt(id);
+      FormImage.idadmin = parseInt(id);
+      console.log("ID:"+FormImage.idadmin);
       if (response) {
         console.log("UrlThen" + url);
+        if (CheckImageUrl == false) {
+          await addImages(FormImage.idadmin, url);
+          setCheckImageUrl(true);
+        } else {
+          console.log("IDUSER:" + FormImage.idadmin);
+          await EditImages(FormImage.idadmin, url);
 
-        // if (CheckImageUrl == false) {
-        //   await addImages(FormImage.id, url);
-        //   setCheckImageUrl(true);
-        // } else {
-        //   console.log("IDUSER:" + FormImage.id);
-        //   await EditImages(FormImage.id, url);
-
-        // }
+        }
 
       }
 

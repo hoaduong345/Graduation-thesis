@@ -11,13 +11,12 @@ import { storage } from "../../../../Firebase/Config";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import { numberFormat } from "../../../../Helper/Format";
 import Loading from "../../../../Helper/Loading/Loading";
-import StepperPage from "../../../../Helper/Stepper/StepperPage";
+import StepperPage from "../../../../Helper/Stepper/StepperUser";
 import { OrderModel } from "../../../../Model/OrderModel";
 import { Rating } from "../../../../Model/ProductModel";
 import Container from "../../../../components/container/Container";
 import Back from "../../Admin/Assets/TSX/Back";
 import UploadIMG from "../../Admin/Assets/TSX/UploadIMG";
-import Sitebar from "../UserProfile/Sitebar/Sitebar";
 
 export default function OrderDetailPage() {
    const { id } = useParams();
@@ -200,14 +199,11 @@ export default function OrderDetailPage() {
 
    return (
       <Container>
-         <div className="body-filter container mx-auto">
-            <div className="grid grid-cols-4 gap-6">
-               <div className="col-span-1 max-2xl:hidden">
-                  <Sitebar />
-               </div>
-
-               <div className="col-span-3 max-2xl:col-span-5">
-                  <div className="back h-[57px] mt-[46px] ">
+         <div className="body-filter">
+            <div className="grid grid-cols-9 mt-10 shadow gap-6 ">
+               <div className="col-span-1"></div>
+               <div className="col-span-7 max-2xl:col-span-5">
+                  <div className="back p-12 h-[57px] ">
                      <div className="flex gap-3 items-center">
                         <Link to={"/orderhistory"}>
                            <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
@@ -225,7 +221,7 @@ export default function OrderDetailPage() {
                      </div>
                   </div>
 
-                  <div className="p-12 shadow border-[#6C6C6C40] rounded-md flex flex-col gap-10 max-lg:p-6">
+                  <div className="p-12  border-[#6C6C6C40] rounded-md flex flex-col gap-10 max-lg:p-6">
                      <div className="flex gap-5">
                         <div className="w-[60%] max-lg:w-[55%] border-[#6C6C6C40] border-[1px] rounded-md p-[26px] flex flex-col gap-9">
                            <div className="flex flex-col gap-3">
@@ -326,7 +322,7 @@ export default function OrderDetailPage() {
                         </div>
                      </div>
                      <div>
-                        <StepperPage />
+                        <StepperPage status={orderDetails.status} />
                      </div>
 
                      <div className="flex flex-col gap-3">
@@ -380,26 +376,42 @@ export default function OrderDetailPage() {
                                        </p>
                                     </div>
                                     <div className="col-span-1 flex mx-auto items-center">
-                                       <button
-                                          className={` rounded-md font-medium ${
-                                             e.ratingAt == null
-                                                ? `cursor-pointer bg-[#EA4B48]`
-                                                : `cursor-not-allowed bg-[#908a8a]`
-                                          }`}
-                                          onClick={() => {
-                                             if (e.ratingAt == null) {
-                                                openDialog(idDialogRating);
-                                                setIdSP(e.productId);
-                                                setIndexSP(index);
-                                             }
-                                          }}
-                                       >
-                                          <p className="px-4 py-2 text-white">
-                                             {e.ratingAt == null
-                                                ? "Đánh giá"
-                                                : "Đã đánh giá"}
-                                          </p>
-                                       </button>
+                                       {orderDetails.status == 5 ? (
+                                          <>
+                                             <button
+                                                className={` rounded-md font-medium ${
+                                                   e.ratingAt == null
+                                                      ? `cursor-pointer bg-[#EA4B48]`
+                                                      : `cursor-not-allowed bg-[#908a8a]`
+                                                }`}
+                                                onClick={() => {
+                                                   if (e.ratingAt == null) {
+                                                      openDialog(
+                                                         idDialogRating
+                                                      );
+                                                      setIdSP(e.productId);
+                                                      setIndexSP(index);
+                                                   }
+                                                }}
+                                             >
+                                                <p className="px-4 py-2 text-white">
+                                                   {e.ratingAt == null
+                                                      ? "Đánh giá"
+                                                      : "Đã đánh giá"}
+                                                </p>
+                                             </button>
+                                          </>
+                                       ) : (
+                                          <>
+                                             <button
+                                                className={` rounded-md font-medium cursor-not-allowed bg-[#908a8a]`}
+                                             >
+                                                <p className="px-4 py-2 text-white">
+                                                   Đánh giá
+                                                </p>
+                                             </button>
+                                          </>
+                                       )}
                                     </div>
                                  </div>
                               </>
@@ -650,6 +662,7 @@ export default function OrderDetailPage() {
                      </div>
                   </div>
                </div>
+               <div className="col-span-1"></div>
             </div>
          </div>
       </Container>

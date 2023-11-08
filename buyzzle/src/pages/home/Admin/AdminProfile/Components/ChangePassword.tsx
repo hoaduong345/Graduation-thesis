@@ -6,11 +6,12 @@ import ShowPass from "../../../../../Assets/TSX/ShowPass";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import { adminController } from "../../../../../Controllers/AdminControllder";
 
-type FormValues = {
+export interface FormValues1 {
   oldPassword: string;
   newPassword: string;
-  confirmNewPassword: string;
+  confirmPassword: string;
 };
 
 export default function ChangePassword() {
@@ -19,12 +20,12 @@ export default function ChangePassword() {
     handleSubmit,
     register,
     formState: { errors, isDirty, isValid },
-  } = useForm<FormValues>({
+  } = useForm<FormValues1>({
     // mode: 'all',
     defaultValues: {
       oldPassword: "",
       newPassword: "",
-      confirmNewPassword: "",
+      confirmPassword: "",
     },
   });
   const instance = axios.create({
@@ -45,7 +46,7 @@ export default function ChangePassword() {
     }
     CheckLink();
   }, [param]);
-
+  const [id1, setId] = useState<number>();
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
@@ -70,32 +71,61 @@ export default function ChangePassword() {
   const toggleShowPassword3 = () => {
     setShowPassword3(!showPassword3);
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = param.username;
+      try {
+        if (user != null) {
+          const username = user;
+          console.log("USERNAME: " + username);
+          await adminController.getAdminWhereUsername(username)
+            .then((res) => {
+              setId(res.adminWithImage.id);
+              console.log("ID:" + res.adminWithImage.id);
+              return res;
+            })
 
-  const API2 = "http://localhost:5000/buyzzle/auth/changepassword";
-  const onSubmit2 = async (formData: FormValues) => {
-    try {
-      console.log("checker", formData);
-      const response = await instance.put(API2, formData);
-      console.log("Change successfully", response);
+        } else {
+          console.log("Chua Dang Nhap Dung");
+        }
 
-      if (response.status === 200) {
-        console.log("Change successfully");
-        toast.success("Change successfully", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      } else {
-        console.log("Change Failed!");
-        toast.warning("Change failed", {
-          position: "top-right",
-          autoClose: 5000,
-        });
+      } catch (error) {
+        console.log(
+          "ERROR", error
+        );
       }
+
+    };
+    fetchData();
+  }, [])
+  const onSubmit2 = async (formData: FormValues1) => {
+    // console.log("DATA:"+JSON.stringify(formData))
+
+    try {
+      await adminController.ChangePasswordAdmin(id1, formData)
+        .then((res) => {
+          console.log("checker", formData);
+          console.log("Change successfully", res);
+          if(res !=null){
+            toast.success("Change successfully", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }else{
+            toast.success("Change fail", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+        
+
+        })
     } catch (error) {
       // console.log("Them that bai", error);
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
+        console.log("Bug:"+responseData);
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData) {
           console.log(`Lỗi2: ${responseData}`);
@@ -124,7 +154,7 @@ export default function ChangePassword() {
                 </div>
                 <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
                   <form
-                    onSubmit={handleSubmit(onSubmit2)}
+                    // onSubmit={handleSubmit(onSubmit2)}
                     className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                   >
                     <span className="text-[#000] text-2xl font-normal ">
@@ -235,7 +265,7 @@ export default function ChangePassword() {
                         />
                         <Controller
                           control={control}
-                          name="confirmNewPassword"
+                          name="confirmPassword"
                           rules={{
                             required: {
                               value: true,
@@ -277,9 +307,9 @@ export default function ChangePassword() {
                                     placeholder="Xác nhận mật khẩu mới"
                                   />
                                 </div>
-                                {!!errors.confirmNewPassword && (
+                                {!!errors.confirmPassword && (
                                   <p className="text-red-700 mt-2">
-                                    {errors.confirmNewPassword.message}
+                                    {errors.confirmPassword.message}
                                   </p>
                                 )}
                               </div>
@@ -289,7 +319,11 @@ export default function ChangePassword() {
                       </div>
                       <div className="flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] hover:bg-[#ff6d65] mt-5">
                         <button
-                          className={`text-center text-base font-bold text-[#FFFFFF]`}
+
+                          onClick={handleSubmit((formData: any) => {
+                            onSubmit2(formData);
+                          })}
+                          className="text-center text-base font-bold text-[#FFFFFF]"
                         >
                           Lưu
                         </button>

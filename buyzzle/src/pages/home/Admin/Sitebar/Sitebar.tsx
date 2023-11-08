@@ -80,6 +80,7 @@ export default function SitebarAdmin() {
   const [name, setName] = useState<string>();
   const [email, setEmail] = useState<string>();
   const [image, setImage] = useState<string>();
+  const [urlThen, setUrlThen] = useState<string>();
   const loadBorder = (index: number) => {
     if ((index + 1) % 2 == 0) {
       return (
@@ -102,14 +103,19 @@ export default function SitebarAdmin() {
             .then((res) => {
 
               const name = res.adminWithImage.name;
-              const Image = res.adminWithImage.AdminImage.url;
+          
               const email = res.adminWithImage.email;
               // const pathName = `/admin/adminprofile/${username}`
               setHref(`/admin/adminprofile/${username}`);
               setName(name);
-              setImage(Image);
               setEmail(email);
-              // newListSitebarItem(title);
+              if(res.adminWithImage.AdminImage != undefined){
+                const Image = res.adminWithImage.AdminImage[0].url;
+                setImage(Image);
+              }else{
+                console.log("k co hinh");
+              }
+             
 
               return res;
             })

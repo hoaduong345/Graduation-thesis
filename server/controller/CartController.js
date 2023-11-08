@@ -18,6 +18,21 @@ const CartController = {
                 return res.status(201).json(cart);
             }
 
+            const product = await prisma.product.findFirst({
+                where: { id: productId },
+            });
+            const existingCartItem = cart.item.find((item) => item.productid === productId);
+
+            if (existingCartItem) {
+                if ((existingCartItem.quantity + quantity) > product.quantity) {
+                    return res.status(500).json('Sản phẩm trong giỏ hàng tối đa')
+                }
+            } else {
+                if (quantity > product.quantity) {
+                    return res.status(500).json('Sản phẩm trong giỏ hàng tối đa')
+                }
+            }
+
             const updatedCart = await CartController.updateCart(cart, productId, quantity);
             res.status(200).json(updatedCart);
         } catch (error) {

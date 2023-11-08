@@ -1,5 +1,6 @@
 import axios from "axios";
-import { FormValues } from "../pages/home/Admin/Addproduct/Addproducts";
+import { FormValues } from "../pages/home/Admin/Management/Admin/Admin";
+import { FormValues1 } from "../pages/home/Admin/AdminProfile/Components/ChangePassword";
 // import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 import { users } from "../pages/home/Admin/Management/User/User";
 import { userStatus } from "../pages/home/Admin/DetailUser/Components/AccountStatus";
@@ -35,7 +36,27 @@ class AdminController {
       return res.data;
     });
   };
-  
+  AddAdmin = async (data:FormValues) => {
+    return await axios
+    .post(`${appConfig.apiUrl}/addadmin`,data)
+    .then((res) => {
+      return res.data;
+    });
+  };
+  DeleteAdmin = async (id:any) => {
+    return await axios
+    .delete(`${appConfig.apiUrl}/deleteadmin/${id}`)
+    .then((res) => {
+      return res.data;
+    });
+  };
+  ChangePasswordAdmin = async (id:any,data:FormValues1)=>{
+    return await axios
+    .post(`${appConfig.apiUrl}/changepassword/${id}`,data)
+    .then((res) => {
+      return res.data;
+    });
+  }
 
 }
 

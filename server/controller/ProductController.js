@@ -118,11 +118,21 @@ const ProductController = {
     // get all data category
     getAllCategory: async (req, res) => {
         try {
+            const keyword = req.query.keyword;
             const whereClause = {
                 deletedAt: null,
             };
             const AllCategory = await prisma.category.findMany({
-                where: whereClause,
+                where: {
+                    AND: [
+                        whereClause,
+                        { 
+                            name: {
+                                 contains: keyword 
+                                }
+                             }
+                    ]
+                }
             });
             res.status(200).json(AllCategory);
         } catch (error) {

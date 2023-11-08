@@ -51,15 +51,15 @@ export default function useSearchContext() {
   const [categoty, setCategory] = useState<Cate[]>([]);
 
   const [idaCate, setidaCate] = useState(0);
-  const getIdCate = () => {
-    // const id = localStorage.getItem("cateId");
-    // const idCate = JSON.parse(id!);
-    // getProductWithinIdCate(idCate);
-    // setidaCate(idCate);
-  };
-  useEffect(() => {
-    getIdCate();
-  }, []);
+  // const getIdCate = () => {
+  //   const id = localStorage.getItem("cateId");
+  //   const idCate = JSON.parse(id!);
+  //   getProductWithinIdCate(idCate);
+  //   setidaCate(idCate);
+  // };
+  // useEffect(() => {
+  //   getIdCate();
+  // }, []);
 
   const getProductWithinIdCate = async (id: number) => {
     console.log(

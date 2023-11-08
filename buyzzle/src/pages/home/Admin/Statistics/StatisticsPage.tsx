@@ -18,16 +18,13 @@ import {
 } from "chart.js";
 import { Bar, Line } from "react-chartjs-2";
 import { animated, useSpring } from "react-spring";
+import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import ArrowFall from "../../../../Assets/TSX/ArrowFall";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
-import { Category, Statistics } from "../../../../Model/StatsModels";
-import { numberFormat } from "../../../../Helper/Format";
-import {
-  FilterDate,
-  ValueDate,
-  dataFilter,
-} from "../../../../Helper/Date/DataHelper";
-import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
+import { FilterChart, dataFilter } from "../../../../Helper/Date/DataHelper";
+import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
+import { HotProductsInRange, Statistics } from "../../../../Model/StatsModels";
+import moment from "moment";
 
 ChartJS.register(
   ArcElement,
@@ -42,6 +39,7 @@ ChartJS.register(
 );
 const optionsChartLine = {
   responsive: true,
+
   plugins: {
     legend: {
       position: "bottom" as const,
@@ -78,22 +76,73 @@ interface selectStats {
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
-  const [cate, setCate] = useState<Category>();
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [selectedOption, setSelectedOption] = useState<number>(1); // Mặc định chọn "Hôm nay"
-  const startDate = new Date();
-  const endDate = new Date();
-  startDate.setHours(0);
-  startDate.setMinutes(0);
-  startDate.setSeconds(0);
-  endDate.setHours(23);
-  endDate.setMinutes(59);
-  endDate.setSeconds(59);
-
-  const [value, setValue] = useState<DateValueType>({
-    startDate: startDate,
-    endDate: endDate,
+  const [filterState, setFilterState] = useState<FilterChart>({
+    filterValue: {
+      from: moment().startOf("date").add(-4, "d").toDate(),
+      to: moment().endOf("date").toDate(),
+    },
+    page: 1,
+    pageSize: 3,
   });
+  const [isLoadMoreComplete, setIsLoadMoreComplete] = useState(false);
+
+  // Lấy ra từng cái label từ datasets
+  const dataSetsLineChart = stats.initialDataChartLine?.datasets?.map(
+    (dataLineChart, index) => {
+      return {
+        label: dataLineChart.label,
+        data: dataLineChart.data,
+        borderColor:
+          index === 0 ? "#FFB6B9" : index === 1 ? "#687EFF" : "#2E97A7",
+        backgroundColor:
+          index === 0 ? "#FFE2E2" : index === 1 ? "#80B3FF" : "#64CCC5",
+      };
+    }
+  );
+
+  const dataWithTransformedLabels = {
+    labels: stats.initialDataChartLine?.labels || [],
+    datasets: dataSetsLineChart ?? [],
+  };
+  const transformedLabelsLineChart = dataWithTransformedLabels.labels.map(
+    (label) => {
+      const date = new Date(label);
+      const formattedLabel = `${date.getDate()}/${date.getMonth() + 1}`;
+      return formattedLabel;
+    }
+  );
+
+  // Sử dụng transformedLabels trong biểu đồ
+  const initialDataChartLine = {
+    labels: transformedLabelsLineChart,
+    datasets: dataWithTransformedLabels.datasets,
+  };
+
+  const datasetsBarChart = stats.initialDataChartBar?.datasets?.map(
+    (dataBarChart) => {
+      return {
+        label: dataBarChart.label,
+        data: dataBarChart.data,
+        backgroundColor: "#FFB6B9",
+      };
+    }
+  );
+  const dataWithTransformedLabelsBarChart = {
+    labels: stats.initialDataChartBar?.labels || [],
+    datasets: datasetsBarChart ?? [],
+  };
+  const transformedLabelsBarChart =
+    dataWithTransformedLabelsBarChart.labels.map((label) => {
+      const date = new Date(label);
+      const formattedLabel = `${date.getDate()}/${date.getMonth() + 1}`;
+      return formattedLabel;
+    });
+
+  // Sử dụng transformedLabels trong biểu đồ
+  const initialDataBarLine = {
+    labels: transformedLabelsBarChart,
+    datasets: dataWithTransformedLabelsBarChart.datasets,
+  };
 
   const numberStast = (n: number) => {
     const { number } = useSpring({
@@ -127,30 +176,14 @@ export default function StatisticsPage() {
 
   // ================================ API ================================
   useEffect(() => {
-    getProductStats(
-      dataFilter[0].filterValue.from,
-      dataFilter[0].filterValue.to
-    );
-  }, [dataFilter]);
+    getProductStats({ ...filterState, page: 1 });
+  }, [filterState.filterValue]);
 
-  const getProductStats = async (startDate: Date, endDate: Date) => {
-    const data: FilterDate = {
-      filterValue: {
-        from: startDate,
-        to: endDate,
-      },
-      page: 1,
-      pageSize: 10,
-    };
-
-    try {
-      const res: any = await statsControllers.getStats(data);
-      setStats(res);
-
-      console.log("🚀 ~ file: StatisticsPage.tsx:199 ~ res:", res);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+  const getProductStats = (filterState: FilterChart) => {
+    statsControllers
+      .getStats(filterState)
+      .then((res) => setStats(res))
+      .catch((err) => console.log(err.response?.data?.message));
   };
 
   // ================================ handleSelectDateTime ================================
@@ -159,139 +192,59 @@ export default function StatisticsPage() {
     value: DateValueType,
     e?: HTMLInputElement | null | undefined
   ) => {
-    setValue(value);
+    const startDate = moment(value?.startDate!).toDate();
+    const endDate = moment(value?.endDate!).toDate();
 
-    const startDate = new Date(value?.startDate!);
-    const endDate = new Date(value?.endDate!);
-
-    startDate.setHours(0);
-    startDate.setMinutes(0);
-    startDate.setSeconds(0);
-    endDate.setHours(23);
-    endDate.setMinutes(59);
-    endDate.setSeconds(59);
-
-    const filterDate = {
-      startDate,
-      endDate,
-    };
-    console.log(
-      "🚀 ~ file: StatisticsPage.tsx:178 ~ StatisticsPage ~ filterDate:",
-      filterDate
-    );
-
-    getProductStats(filterDate?.startDate, filterDate?.endDate);
+    setFilterState((prev) => ({
+      ...prev,
+      filterValue: { from: startDate, to: endDate },
+    }));
   };
-
-  const createDisabledDates = () => {
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + 1); // Di chuyển tới ngày mai
-    const disabledDates = [];
-
-    while (currentDate < new Date("2030-12-31")) {
-      const startDate = new Date(currentDate);
-      const endDate = new Date(currentDate);
-
-      endDate.setHours(23, 59, 59); // Đặt giờ, phút và giây cuối cùng của ngày
-
-      disabledDates.push({
-        startDate: startDate.toISOString().slice(0, 10), // Định dạng ngày thành "YYYY-MM-DD"
-        endDate: endDate.toISOString().slice(0, 10),
-      });
-
-      // Di chuyển tới ngày tiếp theo
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return disabledDates;
-  };
-
-  const disabledDates = createDisabledDates();
 
   // ================================ PANGINATION ================================
 
-  // const getItemProps = (index: number) =>
-  //   ({
-  //     variant: currentPage === index ? "filled" : "text",
-  //     color: "gray",
-  //     onClick: () => setCurrentPage(index),
-  //   } as any);
+  const handleLoadMore = () => {
+    setFilterState((prev) => ({ ...prev, page: filterState.page! + 1 }));
+    statsControllers
+      .getStats({ ...filterState, page: filterState.page! + 1 })
+      .then((res) => {
+        console.log("🚀 ~ file : StatisticsPage.tsx:211 ~ .then ~ res:", res);
+        let arr: HotProductsInRange[] = [];
+        if (stats?.hotProductsInRange?.length) {
+          arr = stats?.hotProductsInRange.concat(res.hotProductsInRange);
+        } else {
+          arr = res.hotProductsInRange;
+        }
+        setStats((prev) => ({ ...prev, hotProductsInRange: arr }));
+        if (stats.hotProductsInRange.length == res.hotProductsInRange.length) {
+          setIsLoadMoreComplete(true);
+        }
+      })
+      .catch((err) => console.log(err.response?.data?.message));
+  };
 
-  // ================================ CHART ================================
-
-  // const next = () => {
-
-  //   if (currentPage === 999) return;
-
-  //   setCurrentPage(currentPage + 1);
-  // };
-
-  // const prev = () => {
-  //   if (currentPage === 1) return;
-
-  //   setCurrentPage(currentPage - 1);
-  // };
+  const handleShrink = () => {
+    setFilterState((prev) => ({ ...prev, page: filterState.page! - 1 }));
+    statsControllers
+      .getStats({ ...filterState, page: filterState.page! - 1 })
+      .then((res) => {
+        let arr: HotProductsInRange[] = [];
+        if (res.hotProductsInRange.length) {
+          arr = res.hotProductsInRange?.reduce((acc, item) => {
+            if (!stats.hotProductsInRange?.includes(item)) {
+              acc.push();
+            }
+            return acc;
+          }, []);
+        } else {
+          arr = stats.hotProductsInRange;
+        }
+        setStats((prev) => ({ ...prev, hotProductsInRange: arr }));
+        setIsLoadMoreComplete(false);
+      });
+  };
 
   // chart
-
-  const labelsLine = [
-    "Ngày hôm qua",
-    "1 ngày trước",
-    "2 ngày trước",
-    "3 ngày trước",
-    "4 ngày trước",
-    "5 ngày trước",
-    "6 ngày trước",
-  ];
-
-  const dataChartLine = {
-    labels: labelsLine,
-    datasets: [
-      {
-        label: `${cate?.name}`,
-        data: [170, 30, 50, 130, 250, 50, 30],
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Đồ gia dụng",
-        data: [100, 200, 120, 120, 150, 230, 100],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-
-      {
-        label: "Khác",
-        data: [10, 120, 20, 40, 200, 30, 120],
-        borderColor: "#95A4FC",
-        backgroundColor: "#cad2ff",
-      },
-    ],
-  };
-
-  const labelsVertical = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
-
-  const dataChartVertical = {
-    labels: labelsVertical,
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: [800, 30, 70, 80, 650, 75, 900],
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  };
-  {
-    console.log("🚀 ~ file: StatisticsPage.tsx:315 ~ value:", value);
-  }
 
   return (
     <>
@@ -333,7 +286,10 @@ export default function StatisticsPage() {
                 // disabledDates={disabledDates}
                 startWeekOn="mon"
                 primaryColor={"rose"}
-                value={value}
+                value={{
+                  startDate: filterState.filterValue.from,
+                  endDate: filterState.filterValue.to,
+                }}
                 separator={"~"}
                 onChange={handleSelectChange}
                 displayFormat={"DD/MM/YYYY"}
@@ -451,7 +407,10 @@ export default function StatisticsPage() {
                   Top loại sản phẩm
                 </p>
                 <div>
-                  <Line options={optionsChartLine} data={dataChartLine} />{" "}
+                  <Line
+                    options={optionsChartLine}
+                    data={initialDataChartLine}
+                  />
                 </div>
               </div>
 
@@ -459,7 +418,7 @@ export default function StatisticsPage() {
                 <div>
                   <Bar
                     options={optionsChartVertical}
-                    data={dataChartVertical}
+                    data={initialDataBarLine}
                   />
                 </div>
               </div>
@@ -523,9 +482,21 @@ export default function StatisticsPage() {
               </div>
               {/* see more */}
               <div className="mt-3">
-                <p className="text-[#5D5FEF] text-sm cursor-pointer hover:text-[#4648cc] duration-200">
-                  Xem thêm...
-                </p>
+                {!isLoadMoreComplete ? (
+                  <p
+                    onClick={handleLoadMore}
+                    className="text-[#5D5FEF] text-sm cursor-pointer hover:text-[#4648cc] duration-200"
+                  >
+                    Xem thêm..
+                  </p>
+                ) : (
+                  <p
+                    onClick={handleShrink}
+                    className="text-[#5D5FEF] text-sm cursor-pointer hover:text-[#4648cc] duration-200"
+                  >
+                    Thu gọn..
+                  </p>
+                )}
               </div>
             </div>
           </div>
