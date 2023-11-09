@@ -77,18 +77,12 @@ export default function FiltersPage() {
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
 
-  const { id: nameCate } = useParams();
+  const { id: nameCate, keyword } = useParams();
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:81 ~ FiltersPage ~ keyword:",
+    keyword
+  );
   const cateName = String(nameCate);
-  console.log(
-    "🚀 ~ file: FiltersPage.tsx:48 ~ FiltersPage ~ idCate:",
-    cateName
-  );
-  const { pathname } = useLocation();
-  const keywordSearch = decodeURIComponent(pathname);
-  console.log(
-    "🚀 ~ file: FiltersPage.tsx:79 ~ FiltersPage ~ text:",
-    keywordSearch
-  );
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
@@ -137,10 +131,10 @@ export default function FiltersPage() {
   };
 
   useEffect(() => {
-    if (keywordSearch) {
+    if (keyword) {
       getSearchDataName();
     }
-  }, [keywordSearch]);
+  }, [keyword]);
 
   useEffect(() => {
     if (nameCate) {
@@ -187,7 +181,7 @@ export default function FiltersPage() {
 
   const getSearchDataName = () => {
     productController
-      .getSearchAndPaginationProduct(keywordSearch.slice(13).toString())
+      .getSearchAndPaginationProduct(keyword!.slice(13).toString())
       .then((res: any) => {
         console.log(res);
         setProducts(res.rows);

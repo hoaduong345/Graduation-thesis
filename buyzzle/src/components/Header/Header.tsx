@@ -6,7 +6,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import Bell from "../../Assets/TSX/Bell";
 import Chevron_down from "../../Assets/TSX/Chevron-down";
 import Globe from "../../Assets/TSX/Globe";
@@ -27,15 +32,31 @@ export default function Header() {
   const navigate = useNavigate();
   const [text, setText] = useState("");
 
-  const dataInputHeaderSearch = useContext(ThemeContext);
-  const dataSearchBodyIndexFromHeader = useContext(ThemeContext);
   const [productSearch, setProductSearch] = useState<Products[]>([]);
-  const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
   const [isSearch, setIsSearch] = useState(false);
 
   const user = localStorage.getItem("user");
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
 
+  // using UseSearchParams
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchValue = searchParams.get("keyword");
+  const debouncedSearchParams = useDebounce(searchParams, 2000);
+
+  const decodedData = decodeURIComponent(text);
+  // Remove diacritics from Vietnamese characters
+  function removeDiacritics(str: string) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  // Remove special characters and diacritics
+  const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
+  useEffect(() => {
+    setSearchParams(
+      createSearchParams({
+        keyword: cleanedData,
+      })
+    );
+  }, [debouncedSearchParams]);
   var username;
   const [name, setName] = useState("");
   const [img, setImg] = useState("");
@@ -67,7 +88,6 @@ export default function Header() {
   const href = `/userprofilepage/${username}`;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dataInputHeaderSearch?.onChange(e);
     setShowSuggestions(true);
     setText(e.target.value);
   };
@@ -82,23 +102,21 @@ export default function Header() {
     }
   };
   const getSearhvalue = (value: any) => {
-    productController
-      .getAllProductsSearch(debouncedInputValue?.data.toString())
-      .then((res: any) => {
-        setProductSearch(res.rows);
-      });
+    productController.getAllProductsSearch(value).then((res: any) => {
+      setProductSearch(res.rows);
+    });
   };
 
   useEffect(() => {
-    getSearhvalue(debouncedInputValue);
-    if (dataSearchBodyIndexFromHeader?.data != "") {
+    getSearhvalue(searchValue);
+    if (searchParams.toString() != "") {
       productController
-        .getAllProductsSearch(dataSearchBodyIndexFromHeader?.data.toString())
+        .getAllProductsSearch(searchParams.toString())
         .then((res: any) => {
           setProductSearch(res.rows);
         });
     }
-  }, [debouncedInputValue]);
+  }, [searchValue]);
   return (
     <>
       <header className="Header">

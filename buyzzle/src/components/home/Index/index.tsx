@@ -4,7 +4,7 @@ import Category from "../components/Category";
 
 import axios from "axios";
 import { ReactNode, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, createSearchParams, useSearchParams } from "react-router-dom";
 import LogoVoucherBuyzzle from "../../../Assets/TSX/LogoVoucherBuyzzle";
 import LogoVoucherFreeship from "../../../Assets/TSX/LogoVoucherFreeship";
 import SanVoucher from "../../../Assets/TSX/SanVoucher";
@@ -16,6 +16,7 @@ import { ImgOfProduct } from "../../../pages/home/User/FilterPage/FiltersPage";
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
+import useDebounce from "../../../useDebounceHook/useDebounce";
 
 export type Product = {
   id: number;
@@ -85,6 +86,7 @@ function Index() {
     getCategory();
     getAllProducts();
   }, []);
+
   return (
     <>
       <Container>
