@@ -1,21 +1,19 @@
 import { Accordion, AccordionBody } from "@material-tailwind/react";
-import { download, generateCsv } from "export-to-csv";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 import Plus from "../../../../../Assets/TSX/Plus";
-import Search from "../../../../../Assets/TSX/Search";
 import { categoryController } from "../../../../../Controllers/CategoryController";
 import { storage } from "../../../../../Firebase/Config";
 import DialogComfirm from "../../../../../Helper/Dialog/DialogComfirm";
 import DialogModal from "../../../../../Helper/Dialog/DialogModal";
-import { csvConfig } from "../../../../../Helper/Export/Excel";
 import Loading from "../../../../../Helper/Loading/Loading";
 import { CategoryModal } from "../../../../../Model/CategoryModel";
 import Container from "../../../../../components/container/Container";
+import ArrowDown from "../../Assets/TSX/ArrowDown";
 import Delete from "../../Assets/TSX/Delete";
-import Download from "../../Assets/TSX/Download";
 import Edit from "../../Assets/TSX/Edit";
 import Line from "../../Assets/TSX/Line";
 import PlusSquare from "../../Assets/TSX/PlusSquare";
@@ -23,8 +21,6 @@ import RemoveCate from "../../Assets/TSX/RemoveCate";
 import UploadIMG from "../../Assets/TSX/UploadIMG";
 import Handle from "../../Assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import ArrowDown from "../../Assets/TSX/ArrowDown";
-import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 
 function Category() {
   const idModalCate = "category";

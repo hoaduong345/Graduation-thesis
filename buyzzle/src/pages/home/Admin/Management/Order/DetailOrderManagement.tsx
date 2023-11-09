@@ -109,7 +109,7 @@ export default function DetailOrderManagement() {
                 ) : (
                   <></>
                 )}
-                <button className="btn btn-outline btn-sm text-xs hover:bg-[#EA4B48] text-[#EA4B48] hover:text-[#ffffff] hover:outline-none">
+                <button className="btn btn-outline btn-sm text-xs hover:bg-[#ffeded] text-[#EA4B48] hover:text-[#EA4B48] hover:border-[#EA4B48]">
                   Hủy đơn
                 </button>
               </div>
