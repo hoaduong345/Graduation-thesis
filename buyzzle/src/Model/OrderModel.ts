@@ -8,13 +8,13 @@ export interface OrderPanigation {
   totalOrderShipping: number;
 }
 export interface StatusCounts {
-  orderStatus1: number;
-  orderStatus4: number;
-  orderStatus0: number;
   orderStatus2: number;
-  orderStatus3: number;
-  orderStatus10: number;
   orderStatus5: number;
+  orderStatus0: number;
+  orderStatus1: number;
+  orderStatus3: number;
+  orderStatus4: number;
+  orderStatus6: number;
 }
 export interface OrderModel {
   id: number;
@@ -46,6 +46,7 @@ export interface OrderItems {
 }
 
 export enum StatusOrder {
+  Cancel,
   Comfirm,
   Ordered,
   WaitingCourier, // Giao cho Đơn vị Vận tải (ĐVVT)

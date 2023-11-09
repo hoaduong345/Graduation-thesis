@@ -16,21 +16,21 @@ export default function StepperPage(props: StatusOrder) {
       <ol className="flex items-center w-full px-20">
         <li
           className={`flex w-full items-center  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block ${
-            status >= 2
+            status >= 3
               ? `dark:after:border-[#EA4B48]`
               : `dark:after:border-gray-200`
           }`}
         >
           <span
             className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 ${
-              status >= 1
+              status >= 2
                 ? `dark:bg-[#EA4B48] bg-gray-100`
                 : `border-dashed border-2 border-[#EA4B48]`
             }`}
           >
             <svg
               className={`w-3.5 h-3.5 lg:w-4 lg:h-4 ${
-                status >= 1 ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
+                status >= 2 ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
               }`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
@@ -50,21 +50,21 @@ export default function StepperPage(props: StatusOrder) {
 
         <li
           className={`flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block ${
-            status >= 4
+            status >= 5
               ? `dark:after:border-[#EA4B48]`
               : `dark:after:border-gray-200`
           }`}
         >
           <span
             className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 ${
-              status >= 2
+              status >= 3
                 ? `dark:bg-[#EA4B48] bg-gray-100`
                 : `border-dashed border-2 border-[#EA4B48]`
             }`}
           >
             <svg
               className={`w-4 h-4 text-red-900 lg:w-5 lg:h-5 ${
-                status >= 2 ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
+                status >= 3 ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
               }`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
@@ -78,21 +78,21 @@ export default function StepperPage(props: StatusOrder) {
 
         <li
           className={`flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block ${
-            status >= 5
+            status >= 6
               ? `dark:after:border-[#EA4B48]`
               : `dark:after:border-gray-200`
           }`}
         >
           <span
             className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0  ${
-              status >= 4
+              status >= 5
                 ? `dark:bg-[#EA4B48] bg-gray-100`
                 : `border-dashed border-2 border-[#EA4B48]`
             }`}
           >
             <svg
               className={`w-4 h-4 text-gray-500 lg:w-5 lg:h-5 ${
-                status >= 4 ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
+                status >= 5 ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
               }`}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 640 512"
@@ -106,14 +106,14 @@ export default function StepperPage(props: StatusOrder) {
         <li className="flex items-center">
           <span
             className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 ${
-              status >= 5
+              status >= 6
                 ? `dark:bg-[#EA4B48] bg-gray-100`
                 : ` border-dashed border-2 border-[#EA4B48]`
             }`}
           >
             <svg
               className={`w-4 h-4  lg:w-5 lg:h-5 ${
-                status >= 5 ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
+                status >= 6 ? `dark:text-gray-100` : `dark:text-[#EA4B48]`
               }`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
@@ -128,28 +128,28 @@ export default function StepperPage(props: StatusOrder) {
       <div className="w-[100%] mt-3 flex">
         <p
           className={`${
-            status >= 1 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
+            status >= 2 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
           } w-[23%] text-center`}
         >
           Đặt hàng
         </p>
         <p
           className={`${
-            status >= 2 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
+            status >= 3 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
           } w-[27%] text-center`}
         >
           Giao cho ĐVVT
         </p>
         <p
           className={`${
-            status >= 4 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
+            status >= 5 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
           } w-[25%] text-center`}
         >
           Đang giao hàng
         </p>
         <p
           className={`${
-            status == 5 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
+            status == 6 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
           } w-[25%] text-center`}
         >
           Giao hàng thành công

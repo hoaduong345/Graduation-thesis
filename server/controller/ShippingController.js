@@ -48,7 +48,7 @@ const ShippingController = {
                 sortStatus = status;
             } else {
                 sortStatus = {
-                    gte: 2,
+                    gte: 3,
                 };
             }
 
@@ -65,7 +65,7 @@ const ShippingController = {
             const getAll = await prisma.order.findMany({
                 where: {
                     status: {
-                        gte: 2,
+                        gte: 3,
                     },
                 },
             });
@@ -123,7 +123,7 @@ const ShippingController = {
                 sortStatus = status;
             } else {
                 sortStatus = {
-                    gte: -1,
+                    gte: 0,
                 };
             }
 
@@ -140,7 +140,7 @@ const ShippingController = {
             const getAll = await prisma.order.findMany({
                 where: {
                     status: {
-                        gte: -1,
+                        gte: 0,
                     },
                 },
             });

@@ -56,27 +56,27 @@ export default function OrderManagement() {
   );
   const [changeButton, setChangeButton] = useState([
     {
-      id: 1,
+      id: -1,
       text: "Tất cả",
       active: true, // Thêm trường active
     },
     {
-      id: 0,
+      id: 1,
       text: "Chờ xác nhận",
       active: false, // Thêm trường active
     },
     {
-      id: 2,
+      id: 3,
       text: "Đã giao cho ĐVVC",
       active: false, // Thêm trường active
     },
     {
-      id: 5,
+      id: 6,
       text: "Giao hàng thành công",
       active: false, // Thêm trường active
     },
     {
-      id: -1,
+      id: 0,
       text: "Yêu Cầu Hủy Đơn",
       active: false, // Thêm trường active
     },
@@ -97,7 +97,7 @@ export default function OrderManagement() {
     setChangeButton(updatedButtons);
     const selectedButton = updatedButtons.find((btn) => btn.id === id);
 
-    if (selectedButton && selectedButton.id !== 1) {
+    if (selectedButton && selectedButton.id !== -1) {
       console.log(
         "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
         selectedButton.id
@@ -110,18 +110,18 @@ export default function OrderManagement() {
 
   function getBorderColor(id: number) {
     switch (id) {
-      case 1:
-        return "#570DF8"; // Màu biên cho id 1
-      case 0:
-        return "#3DC0F8"; // Màu biên cho id 2
-      case 2:
-        return "#F43FCA"; // Màu biên cho id 3
-      case 5:
-        return "#21CEBD"; // Màu biên cho id 4
       case -1:
-        return "#FA9595"; // Màu biên cho id 45
+        return "#570DF8";
+      case 1:
+        return "#3DC0F8";
+      case 3:
+        return "#F43FCA";
+      case 6:
+        return "#21CEBD";
+      case 0:
+        return "#FA9595";
       default:
-        return "#ccc"; // Màu biên mặc định (nếu id không khớp với bất kỳ case nào)
+        return "#ccc";
     }
   }
 
@@ -191,29 +191,29 @@ export default function OrderManagement() {
                   onClick={() => handleClick(btnItems.id)}
                 >
                   {btnItems.text}
-                  {btnItems.id == 1 && (
+                  {btnItems.id == -1 && (
                     <div className="badge badge-xs badge-primary badge-outline py-2">
                       {order?.totalOrderShipping}
                     </div>
                   )}
-                  {btnItems.id == -1 && (
-                    <div className="badge badge-xs badge-error badge-outline py-2">
-                      {223}
-                    </div>
-                  )}
                   {btnItems.id == 0 && (
-                    <div className="badge badge-xs badge-info badge-outline py-2">
+                    <div className="badge badge-xs badge-error badge-outline py-2">
                       {order?.statusCounts?.orderStatus0}
                     </div>
                   )}
-                  {btnItems.id == 2 && (
-                    <div className="badge badge-xs badge-secondary badge-outline py-2">
-                      {order?.statusCounts?.orderStatus2}
+                  {btnItems.id == 1 && (
+                    <div className="badge badge-xs badge-info badge-outline py-2">
+                      {order?.statusCounts?.orderStatus1}
                     </div>
                   )}
-                  {btnItems.id == 5 && (
+                  {btnItems.id == 3 && (
+                    <div className="badge badge-xs badge-secondary badge-outline py-2">
+                      {order?.statusCounts?.orderStatus3}
+                    </div>
+                  )}
+                  {btnItems.id == 6 && (
                     <div className="badge badge-xs badge-accent badge-outline py-2">
-                      {order?.statusCounts?.orderStatus5}
+                      {order?.statusCounts?.orderStatus6}
                     </div>
                   )}
                 </button>

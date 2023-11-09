@@ -28,22 +28,22 @@ export default function ShippingPage() {
 
   const [changeButton, setChangeButton] = useState([
     {
-      id: 1,
+      id: -1,
       text: "Tất cả",
       active: true, // Thêm trường active
     },
     {
-      id: 3,
+      id: 4,
       text: "Đã nhận hàng",
       active: false, // Thêm trường active
     },
     {
-      id: 4,
+      id: 5,
       text: "Đang Giao Hàng",
       active: false, // Thêm trường active
     },
     {
-      id: 5,
+      id: 6,
       text: "Giao Hàng Thành công",
       active: false, // Thêm trường active
     },
@@ -60,7 +60,7 @@ export default function ShippingPage() {
     setChangeButton(updatedButtons);
     const selectedButton = updatedButtons.find((btn) => btn.id === id);
 
-    if (selectedButton && selectedButton.id !== 1) {
+    if (selectedButton && selectedButton.id !== -1) {
       console.log(
         "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
         selectedButton.id
@@ -73,16 +73,16 @@ export default function ShippingPage() {
 
   function getBorderColor(id: number) {
     switch (id) {
-      case 1:
-        return "#570DF8"; // Màu biên cho id 1
-      case 3:
-        return "#FBC132"; // Màu biên cho id 2
+      case -1:
+        return "#570DF8";
       case 4:
-        return "#F43FCA"; // Màu biên cho id 3
+        return "#FBC132";
       case 5:
-        return "#21CEBD"; // Màu biên cho id 4
+        return "#F43FCA";
+      case 6:
+        return "#21CEBD";
       default:
-        return "#ccc"; // Màu biên mặc định (nếu id không khớp với bất kỳ case nào)
+        return "#ccc";
     }
   }
 
@@ -130,24 +130,24 @@ export default function ShippingPage() {
                   onClick={() => handleClick(btnItems.id)}
                 >
                   {btnItems.text}
-                  {btnItems.id == 1 && (
+                  {btnItems.id == -1 && (
                     <div className="badge badge-xs badge-primary badge-outline py-2">
                       {order?.totalOrderShipping}
                     </div>
                   )}
-                  {btnItems.id == 3 && (
-                    <div className="badge badge-xs badge-warning badge-outline py-2">
-                      {order?.statusCounts?.orderStatus3}
-                    </div>
-                  )}
                   {btnItems.id == 4 && (
-                    <div className="badge badge-xs badge-secondary badge-outline py-2">
+                    <div className="badge badge-xs badge-warning badge-outline py-2">
                       {order?.statusCounts?.orderStatus4}
                     </div>
                   )}
                   {btnItems.id == 5 && (
-                    <div className="badge badge-xs badge-accent badge-outline py-2">
+                    <div className="badge badge-xs badge-secondary badge-outline py-2">
                       {order?.statusCounts?.orderStatus5}
+                    </div>
+                  )}
+                  {btnItems.id == 6 && (
+                    <div className="badge badge-xs badge-accent badge-outline py-2">
+                      {order?.statusCounts?.orderStatus6}
                     </div>
                   )}
                 </button>

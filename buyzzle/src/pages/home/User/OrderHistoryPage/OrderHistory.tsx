@@ -17,6 +17,9 @@ export const getStatusOrder = (status: StatusOrder) => {
   let _paymentStatus: string | undefined;
 
   switch (status) {
+    case StatusOrder.Cancel:
+      _statusOrder = <p className="text-red-700">Yêu Cầu Hủy Đơn</p>;
+      break;
     case StatusOrder.Comfirm:
       _statusOrder = <p className="text-[#3DC0F8]">Chờ xác nhận</p>;
       break;
