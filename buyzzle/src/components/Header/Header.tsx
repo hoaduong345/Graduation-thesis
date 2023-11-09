@@ -1,6 +1,12 @@
 /* eslint-disable no-var */
-import { KeyboardEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Bell from "../../Assets/TSX/Bell";
 import Chevron_down from "../../Assets/TSX/Chevron-down";
 import Globe from "../../Assets/TSX/Globe";
@@ -8,25 +14,24 @@ import LogoWeb from "../../Assets/TSX/LogoWeb";
 import Map from "../../Assets/TSX/Map";
 import Search from "../../Assets/TSX/Search";
 import Headphones from "../../Assets/TSX/headphones";
+import { productController } from "../../Controllers/ProductsController";
 import { userController } from "../../Controllers/UserController";
-import { useSearch } from "../../hooks/Search/SearchContextProvider";
+import { ThemeContext } from "../../hooks/Context/ThemeContextProvider";
+import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
+import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import Container from "../container/Container";
 
 export default function Header() {
-  const {
-    data,
-    handleKeyPress,
-    hideSuggestions,
-    handleChange,
-    productSearch,
-    showSuggestions,
-    isSearch,
-    setIsSearch,
-    setShowSuggestions,
-    navigate,
-    // text,
-  } = useSearch();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const navigate = useNavigate();
+  const [text, setText] = useState("");
+
+  const dataInputHeaderSearch = useContext(ThemeContext);
+  const dataSearchBodyIndexFromHeader = useContext(ThemeContext);
+  const [productSearch, setProductSearch] = useState<Products[]>([]);
+  const debouncedInputValue = useDebounce(dataSearchBodyIndexFromHeader, 500);
+  const [isSearch, setIsSearch] = useState(false);
 
   const user = localStorage.getItem("user");
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
@@ -41,6 +46,7 @@ export default function Header() {
       const username = userData.username;
       console.log("USERNAME: " + username);
       userController.getUserWhereUsername(username).then((res) => {
+        // setEditUser(res)
         setName(res.name);
         setCheckLogin(true);
         const UserImageArray = JSON.stringify(res.UserImage);
@@ -60,6 +66,39 @@ export default function Header() {
   }
   const href = `/userprofilepage/${username}`;
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    dataInputHeaderSearch?.onChange(e);
+    setShowSuggestions(true);
+    setText(e.target.value);
+  };
+  // Function to hide suggestions
+  const hideSuggestions = () => {
+    setShowSuggestions(false);
+  };
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      navigate(`/FiltersPage/${text}`);
+      setShowSuggestions(false);
+    }
+  };
+  const getSearhvalue = (value: any) => {
+    productController
+      .getAllProductsSearch(debouncedInputValue?.data.toString())
+      .then((res: any) => {
+        setProductSearch(res.rows);
+      });
+  };
+
+  useEffect(() => {
+    getSearhvalue(debouncedInputValue);
+    if (dataSearchBodyIndexFromHeader?.data != "") {
+      productController
+        .getAllProductsSearch(dataSearchBodyIndexFromHeader?.data.toString())
+        .then((res: any) => {
+          setProductSearch(res.rows);
+        });
+    }
+  }, [debouncedInputValue]);
   return (
     <>
       <header className="Header">
@@ -195,7 +234,7 @@ export default function Header() {
                               Từ khóa
                             </h1>
                             <p className="text-base cursor-default p-1 pl-2 font-normal">
-                              {data == "" ? "" : `"${data}"`}
+                              {text == "" ? "" : `"${text}"`}
                             </p>
                           </div>
                         </div>
