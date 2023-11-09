@@ -70,7 +70,7 @@ export default function FavoritePage() {
                                         <p className="text-[#7A828A] text-xs line-through leading-none	">
                                             {numberFormat(60000)}
                                         </p>{" "}
-                                        <p className="text-[#EA4B48] text-xl text-sm">
+                                        <p className="text-[#EA4B48] text-sm">
                                             {numberFormat(36000)}
                                         </p>
                                     </div>
