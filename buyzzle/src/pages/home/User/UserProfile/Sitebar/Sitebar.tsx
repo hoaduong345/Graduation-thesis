@@ -44,7 +44,7 @@ const listSitebar: SitebarUser[] = [
    },
    {
       icon: <Heart />,
-      pathName: "",
+      pathName: "/favorite",
       title: "Sản phẩm yêu thích",
    },
    {
@@ -82,11 +82,10 @@ export default function Sitebar() {
                      <div
                         className={`w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
                         hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4
-                         ${
-                            e.pathName == pathname
-                               ? `bg-[#FFEAE9] rounded-md text-[#EA4B48]`
-                               : `bg-white text-[#7A828A]`
-                         }   `}
+                         ${e.pathName == pathname
+                              ? `bg-[#FFEAE9] rounded-md text-[#EA4B48]`
+                              : `bg-white text-[#7A828A]`
+                           }   `}
                      >
                         {e.icon}
                         <span className="text-base font-normal ">

@@ -38,6 +38,7 @@ import Admin from "../../pages/home/Admin/Management/Admin/Admin";
 import ShippingPage from "../../pages/home/Shipping/ShippingPage";
 import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
+import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -514,6 +515,14 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "favorite",
+      element: (
+        <MainLayout>
+          <FavoritePage />
         </MainLayout>
       ),
     },
