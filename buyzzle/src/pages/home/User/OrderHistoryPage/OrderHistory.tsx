@@ -85,7 +85,7 @@ export default function OrderHistory() {
 
   const abortOrder = async (id: number) => {
     await orderControllers.abortOrder(id);
-    toast.success("Đang xử lý yêu cầu hủy đơn !", {
+    toast.success("Đã xác nhận yêu cầu hủy đơn !", {
       position: "top-right",
       autoClose: 3000,
       theme: "light",
