@@ -193,27 +193,37 @@ export default function OrderManagement() {
                   {btnItems.text}
                   {btnItems.id == -1 && (
                     <div className="badge badge-xs badge-primary badge-outline py-2">
-                      {order?.totalOrderShipping}
+                      {order?.totalOrderShipping != 0
+                        ? order?.totalOrderShipping
+                        : 0}
                     </div>
                   )}
                   {btnItems.id == 0 && (
                     <div className="badge badge-xs badge-error badge-outline py-2">
-                      {order?.statusCounts?.orderStatus0}
+                      {order?.statusCounts?.orderStatus0 != 0
+                        ? order?.statusCounts?.orderStatus0
+                        : 0}
                     </div>
                   )}
                   {btnItems.id == 1 && (
                     <div className="badge badge-xs badge-info badge-outline py-2">
-                      {order?.statusCounts?.orderStatus1}
+                      {order?.statusCounts?.orderStatus1 != 0
+                        ? order?.statusCounts?.orderStatus1
+                        : 0}
                     </div>
                   )}
                   {btnItems.id == 3 && (
                     <div className="badge badge-xs badge-secondary badge-outline py-2">
-                      {order?.statusCounts?.orderStatus3}
+                      {order?.statusCounts?.orderStatus3 != 0
+                        ? order?.statusCounts?.orderStatus3
+                        : 0}
                     </div>
                   )}
                   {btnItems.id == 6 && (
                     <div className="badge badge-xs badge-accent badge-outline py-2">
-                      {order?.statusCounts?.orderStatus6}
+                      {order?.statusCounts?.orderStatus6 != 0
+                        ? order?.statusCounts?.orderStatus6
+                        : 0}
                     </div>
                   )}
                 </button>

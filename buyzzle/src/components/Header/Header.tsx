@@ -61,8 +61,8 @@ export default function Header() {
       setSearchParams(
         createSearchParams({
           keyword: text,
-          min: sliderValues[0].toString(),
-          max: sliderValues[1].toString(),
+          // min: sliderValues[0].toString(),
+          // max: sliderValues[1].toString(),
         })
       );
     }
