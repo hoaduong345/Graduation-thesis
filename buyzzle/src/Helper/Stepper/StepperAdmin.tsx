@@ -17,9 +17,8 @@ function StepperAdmin(props: handleClick) {
           </p>
           <div className="group inline-block mt-2">
             <button
-              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${
-                status != 0 ? `hidden` : ``
-              }`}
+              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${status != 0 ? `hidden` : ``
+                }`}
               onClick={() => comfirm(1)}
             >
               <svg
@@ -32,9 +31,9 @@ function StepperAdmin(props: handleClick) {
                 <path
                   d="M20 6L9 17L4 12"
                   stroke="#1DCDBC"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
               <p className="text-xs">Xác nhận</p>
@@ -51,9 +50,8 @@ function StepperAdmin(props: handleClick) {
           </p>
           <div className="group inline-block mt-2">
             <button
-              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${
-                status != 1 ? `hidden` : ``
-              }`}
+              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${status != 1 ? `hidden` : ``
+                }`}
               onClick={() => comfirm(2)}
             >
               <svg
@@ -66,9 +64,9 @@ function StepperAdmin(props: handleClick) {
                 <path
                   d="M20 6L9 17L4 12"
                   stroke="#1DCDBC"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
               <p className="text-xs">Xác nhận</p>

@@ -254,11 +254,10 @@ export default function PaymentAddress() {
                                                 <input
                                                    className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                               !!errors.name
-                                                  ? "border-[2px] border-red-900"
-                                                  : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                            ${!!errors.name
+                                                         ? "border-[2px] border-red-900"
+                                                         : "border-[1px] border-[#FFAAAF]"
+                                                      }`}
                                                    placeholder="Họ và tên"
                                                    value={field.value}
                                                 />
@@ -360,11 +359,10 @@ export default function PaymentAddress() {
                                              <input
                                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                               !!errors.specificaddress
-                                                  ? "border-[2px] border-red-900"
-                                                  : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                            ${!!errors.specificaddress
+                                                      ? "border-[2px] border-red-900"
+                                                      : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                                 placeholder="Địa chỉ cụ thể"
                                                 onChange={(e) => {
                                                    const value = e.target.value;
@@ -398,11 +396,10 @@ export default function PaymentAddress() {
                               </div>
                            </div>
                            <div
-                              className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
-                                 isDisabled
-                                    ? "bg-[#aeaeae] cursor-not-allowed"
-                                    : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                              }
+                              className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
+                                 ? "bg-[#aeaeae] cursor-not-allowed"
+                                 : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                                 }
                          `}
                            >
                               <button
@@ -411,9 +408,8 @@ export default function PaymentAddress() {
                                     onSubmit(formData);
                                  })}
                                  className={`text-center text-base font-bold text-[#FFFFFF]
-                        ${
-                           isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                        }                `}
+                        ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                                    }                `}
                               >
                                  Lưu
                               </button>
@@ -448,9 +444,9 @@ export default function PaymentAddress() {
                               fill="currentColor"
                            >
                               <path
-                                 fill-rule="evenodd"
+                                 fillRule="evenodd"
                                  d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
-                                 clip-rule="evenodd"
+                                 clipRule="evenodd"
                               ></path>
                            </svg>
                            <span>Return Home</span>
