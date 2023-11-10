@@ -7,5 +7,6 @@ router.post('/manager', ShippingController.getAllStatusForAdmin)
 
 
 router.post('/delete', ShippingController.requestDeleteOrder);
+router.post('/confirmdelete', ShippingController.confirmDeleteOrder);
 
 module.exports = router;
