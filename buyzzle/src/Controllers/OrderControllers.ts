@@ -26,14 +26,6 @@ class OrderControllers {
     });
   };
 
-  getOrderOfAdmin = async (page: number) => {
-    return await axios
-      .get(`${appConfig.apiOrder}/admin/listOrder?page=${page}`)
-      .then((res) => {
-        return res.data;
-      });
-  };
-
   getDetails = async (id: number): Promise<OrderModel> => {
     return await axios.get(`${appConfig.apiOrder}/${id}`).then((res) => {
       return res.data as OrderModel;
@@ -61,7 +53,7 @@ class OrderControllers {
   abortOrder = async (id: number) => {
     return await axios.post(`${appConfig.apiShipping}/setStatus`, {
       id: id,
-      status: null,
+      status: 0,
     });
   };
 
@@ -69,6 +61,13 @@ class OrderControllers {
     return await axios.post(`${appConfig.apiShipping}`, data).then((res) => {
       return res.data;
     });
+  };
+  getOrderOfAdmin = async (data: orderModelController) => {
+    return await axios
+      .post(`${appConfig.apiShipping}/manager`, data)
+      .then((res) => {
+        return res.data;
+      });
   };
 }
 

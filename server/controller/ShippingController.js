@@ -6,19 +6,6 @@ const errorResponse = (res, error) => {
     res.status(500).json(error.message);
 };
 
-const getProductsByStatus = async (req, res, status) => {
-    try {
-        const productByStatus = await prisma.order.findMany({
-            where: {
-                status: status,
-            },
-        });
-        res.status(200).json(productByStatus);
-    } catch (error) {
-        errorResponse(res, error);
-    }
-};
-
 const ShippingController = {
     setStatus: async (req, res) => {
         try {
@@ -46,7 +33,7 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
-
+    // GET ALL status 2 cho bên đơn vị vận chuyển
     getAllStatusForDelivery: async (req, res) => {
         try {
             const page = parseInt(req.body.page) || 1;
@@ -61,7 +48,7 @@ const ShippingController = {
                 sortStatus = status;
             } else {
                 sortStatus = {
-                    gte: 2,
+                    gte: 3,
                 };
             }
 
@@ -74,14 +61,11 @@ const ShippingController = {
             const totalOrdersCount = await prisma.order.count({
                 where: whereClause,
             });
-            console.log(
-                '🚀 ~ file: ShippingController.js:77 ~ getAllStatusForDelivery: ~ totalOrdersCount:',
-                totalOrdersCount
-            );
+
             const getAll = await prisma.order.findMany({
                 where: {
                     status: {
-                        gte: 2,
+                        gte: 3,
                     },
                 },
             });
@@ -97,12 +81,97 @@ const ShippingController = {
                     id: 'desc',
                 },
             });
+            // Tạo một đối tượng chứa thông tin về từng trạng thái
+            const statusCounts = {};
+
+            // Lặp qua mảng `getAll` để đếm số lượng đơn hàng cho từng trạng thái
+            getAll.forEach((order) => {
+                const orderStatus = order.status;
+                if (!statusCounts[`orderStatus${orderStatus}`]) {
+                    statusCounts[`orderStatus${orderStatus}`] = 1;
+                } else {
+                    statusCounts[`orderStatus${orderStatus}`]++;
+                }
+            });
+            const results = {
+                page: page,
+                pageSize: pageSize,
+                totalPage: Math.ceil(totalOrdersCount / pageSize),
+                totalOrderShipping: getAll.length,
+                statusCounts: statusCounts,
+                data: allOrderAdmin,
+            };
+            res.status(200).json(results);
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+    // GET ALL status từ 1-5 cho quản lý admin
+    getAllStatusForAdmin: async (req, res) => {
+        try {
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
+            const keyword = req.body.keyword;
+            const status = parseInt(req.body.status);
+
+            const skip = (page - 1) * pageSize;
+
+            let sortStatus = {};
+            if (status == 0) {
+                sortStatus = 0;
+            } else if (status) {
+                sortStatus = status;
+            } else {
+                sortStatus = {
+                    gte: 0,
+                };
+            }
+
+            const whereClause = {
+                name: {
+                    contains: keyword,
+                },
+                status: sortStatus,
+            };
+            const totalOrdersCount = await prisma.order.count({
+                where: whereClause,
+            });
+
+            const getAll = await prisma.order.findMany({
+                where: {
+                    status: {
+                        gte: 0,
+                    },
+                },
+            });
+            const allOrderAdmin = await prisma.order.findMany({
+                where: whereClause,
+                skip,
+                take: pageSize,
+                include: {
+                    OrderDetail: true,
+                },
+                orderBy: {
+                    id: 'desc',
+                },
+            });
+            const statusCounts = {};
+
+            getAll.forEach((order) => {
+                const orderStatus = order.status;
+                if (!statusCounts[`orderStatus${orderStatus}`]) {
+                    statusCounts[`orderStatus${orderStatus}`] = 1;
+                } else {
+                    statusCounts[`orderStatus${orderStatus}`]++;
+                }
+            });
 
             const results = {
                 page: page,
                 pageSize: pageSize,
                 totalPage: Math.ceil(totalOrdersCount / pageSize),
                 totalOrderShipping: getAll.length,
+                statusCounts: statusCounts,
                 data: allOrderAdmin,
             };
             res.status(200).json(results);
@@ -111,31 +180,29 @@ const ShippingController = {
         }
     },
 
-    sortByStatus: async (req, res) => {
-        const status = parseInt(req.query.status); // Get status from query parameter
-        getProductsByStatus(req, res, status);
-    },
-
-    searchWithNameAndOrderId: async (req, res) => {
+    requestDeleteOrder: async (req, res) => {
         try {
-            const keyword = req.query.keyword;
-            const whereClause = {
-                id: {
-                    contains: keyword,
+            const orderId = parseInt(req.query.orderId);
+            const order = await prisma.order.findFirst({
+                where: {
+                    id: orderId,
                 },
-                name: {
-                    contains: keyword,
-                },
-                deletedAt: null,
-            };
+            });
+            if (!order) return res.send('Order is not undifined');
 
-            res.status(200).json(searchOrder);
+            const requestDeleteOrder = await prisma.order.update({
+                where: {
+                    id: order.id,
+                },
+                data: {
+                    status: 10,
+                },
+            });
+            res.send(200).json(requestDeleteOrder);
         } catch (error) {
             errorResponse(res, error);
         }
     },
-
-    requestDeleteOrder: async (req, res) => {},
 };
 
 module.exports = ShippingController;

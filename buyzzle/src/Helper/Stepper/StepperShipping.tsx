@@ -11,145 +11,20 @@ function StepperAdmin(props: handleClick) {
   );
   return (
     <>
-      {/* <ul className="steps steps-vertical">
-        <li
-          className={`step ${
-            status >= 3 ? `step-primary` : ``
-          } `}
-        >
-          <div className="flex gap-36 items-center">
-            <p
-              className={` ${
-                status >= 3 ? `inherit` : `text-[#9c9c9c]`
-              }`}
-            >
-              Đã nhận Đơn Hàng
-            </p>
-            <button
-              onClick={() => comfirm(3)}
-              className={`justify-center gap-1 items-center text-sm font-bold text-white
-                  rounded-md py-1 px-2 flex
-                     transition duration-150 bg-[#00B207] cursor-pointer
-                     max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs
-                     ${status >= 3 ? `hidden` : ``}
-                     `}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M20 6L9 17L4 12"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <p className="text-xs">Xác nhận</p>
-            </button>
-          </div>
-        </li>
-        <li
-          className={`step ${
-            status >= 4 ? `step-primary` : ``
-          } `}
-        >
-          <div className="flex gap-36 items-center">
-            <p
-              className={` ${
-                status >= 3 ? `inherit` : `text-[#9c9c9c]`
-              }`}
-            >
-              Đang giao hàng
-            </p>
-            <button
-              onClick={() => comfirm(4)}
-              className={`justify-center gap-1 items-center text-sm font-bold text-white
-                  rounded-md py-1 px-2 flex
-                     transition duration-150 bg-[#00B207] cursor-pointer
-                     max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs
-                     ${status == 3 ? `` : `hidden`}
-                     `}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M20 6L9 17L4 12"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <p className="text-xs">Xác nhận</p>
-            </button>
-          </div>
-        </li>
-        <li
-          className={`step ${
-            status == 5 ? `step-primary` : ``
-          } `}
-        >
-          <div className="flex gap-36 items-center">
-            <p
-              className={` ${
-                status == 5 ? `inherit` : `text-[#9c9c9c]`
-              }`}
-            >
-              Giao hàng thành công
-            </p>
-            <button
-              onClick={() => comfirm(5)}
-              className={`justify-center gap-1 items-center text-sm font-bold text-white
-                  rounded-md py-1 px-2 flex
-                     transition duration-150 bg-[#00B207] cursor-pointer
-                     max-[1105px]:px-[80px] max-lg:px-[60px] max-lg:text-sm max-[850px]:px-[45px] max-[850px]:text-xs
-                     ${status == 4 ? `` : `hidden`}
-                     `}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M20 6L9 17L4 12"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <p className="text-xs">Xác nhận</p>
-            </button>
-          </div>
-        </li>
-      </ul> */}
-
       <ul className="steps w-full">
         <li
-          data-content={`${status >= 3 ? `✓` : `3`}`}
-          className={`step ${status >= 3 ? `step-neutral` : ``}`}
+          data-content={`${status >= 4 ? `✓` : `3`}`}
+          className={`step ${status >= 4 ? `step-neutral` : ``}`}
         >
-          <p className={` ${status >= 3 ? `inherit` : `text-[#9c9c9c]`}`}>
+          <p className={` ${status >= 4 ? `inherit` : `text-[#9c9c9c]`}`}>
             Đã nhận Đơn Hàng
           </p>
           <div className="group inline-block mt-2">
             <button
-              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${status >= 3 ? `hidden` : ``
-                }`}
-              onClick={() => comfirm(3)}
+              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${
+                status >= 4 ? `hidden` : ``
+              }`}
+              onClick={() => comfirm(4)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -161,9 +36,9 @@ function StepperAdmin(props: handleClick) {
                 <path
                   d="M20 6L9 17L4 12"
                   stroke="#1DCDBC"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 />
               </svg>
               <p className="text-xs">Xác nhận</p>
@@ -172,49 +47,17 @@ function StepperAdmin(props: handleClick) {
         </li>
         {/* ------------- */}
         <li
-          data-content={`${status >= 4 ? `✓` : `4`}`}
-          className={`step ${status >= 4 ? `step-neutral` : ``}`}
+          data-content={`${status >= 5 ? `✓` : `4`}`}
+          className={`step ${status >= 5 ? `step-neutral` : ``}`}
         >
-          <p className={` ${status >= 3 ? `inherit` : `text-[#9c9c9c]`}`}>
+          <p className={` ${status >= 4 ? `inherit` : `text-[#9c9c9c]`}`}>
             Đang giao hàng
           </p>
           <div className="group inline-block mt-2">
             <button
-              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${status == 3 ? `` : `hidden`
-                }`}
-              onClick={() => comfirm(4)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M20 6L9 17L4 12"
-                  stroke="#1DCDBC"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <p className="text-xs">Xác nhận</p>
-            </button>
-          </div>
-        </li>
-        {/* ---------------- */}
-        <li
-          data-content={`${status == 5 ? `✓` : `5`}`}
-          className={`step ${status == 5 ? `step-neutral` : ``} `}
-        >
-          <p className={` ${status == 5 ? `inherit` : `text-[#9c9c9c]`}`}>
-            Giao hàng thành công
-          </p>
-          <div className="group inline-block mt-2">
-            <button
-              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${status == 4 ? `` : `hidden`
-                }`}
+              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${
+                status == 4 ? `` : `hidden`
+              }`}
               onClick={() => comfirm(5)}
             >
               <svg
@@ -227,9 +70,43 @@ function StepperAdmin(props: handleClick) {
                 <path
                   d="M20 6L9 17L4 12"
                   stroke="#1DCDBC"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <p className="text-xs">Xác nhận</p>
+            </button>
+          </div>
+        </li>
+        {/* ---------------- */}
+        <li
+          data-content={`${status == 6 ? `✓` : `5`}`}
+          className={`step ${status == 6 ? `step-neutral` : ``} `}
+        >
+          <p className={` ${status == 6 ? `inherit` : `text-[#9c9c9c]`}`}>
+            Giao hàng thành công
+          </p>
+          <div className="group inline-block mt-2">
+            <button
+              className={`btn btn-outline btn-accent btn-sm group-hover:bg-[#dbfffb] group-hover:text-[#1DCDBC]  ${
+                status == 5 ? `` : `hidden`
+              }`}
+              onClick={() => comfirm(6)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M20 6L9 17L4 12"
+                  stroke="#1DCDBC"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 />
               </svg>
               <p className="text-xs">Xác nhận</p>

@@ -6,21 +6,10 @@ import { userStatus } from "../pages/home/Admin/DetailUser/Components/AccountSta
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_USER_URL || "",
 };
-
-export interface ModelUser {
-  id: string;
-  email: string;
-  username: string;
-  // password: string,
-  name: string;
-  phonenumber: string;
-  image: string;
-  dateOfBirth: Date;
-  sex: boolean;
-  UserImage: string[];
-  addresstype: string;
-  address: string;
-  specificaddress: string;
+export interface userModel {
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
 }
 
 class UserController {
@@ -40,8 +29,8 @@ class UserController {
       });
   };
 
-  getAllUser = async () => {
-    return await axios.get(`${appConfig.apiUrl}/alluser`).then((res) => {
+  getAllUser = async (data: userModel) => {
+    return await axios.post(`${appConfig.apiUrl}/alluser`, data).then((res) => {
       return res.data as users[];
     });
   };
@@ -52,12 +41,13 @@ class UserController {
         return res.data;
       });
   };
-  getStatusUser =async (username: string| undefined) => {
-    return await axios.get(`${appConfig.apiUrl}/getaccountstatus/${username}`).then((res) => {
-      return res.data;
-    });
-  }
-
+  getStatusUser = async (username: string | undefined) => {
+    return await axios
+      .get(`${appConfig.apiUrl}/getaccountstatus/${username}`)
+      .then((res) => {
+        return res.data;
+      });
+  };
 }
 
 export const userController = new UserController();

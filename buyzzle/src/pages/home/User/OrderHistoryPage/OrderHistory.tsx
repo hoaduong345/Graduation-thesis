@@ -11,12 +11,16 @@ import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
+import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
+import { toast } from "react-toastify";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
   let _paymentStatus: string | undefined;
-
   switch (status) {
+    case StatusOrder.Cancel:
+      _statusOrder = <p className="text-red-700">Yêu Cầu Hủy Đơn</p>;
+      break;
     case StatusOrder.Comfirm:
       _statusOrder = <p className="text-[#3DC0F8]">Chờ xác nhận</p>;
       break;
@@ -48,22 +52,22 @@ export const getStatusOrder = (status: StatusOrder) => {
 
 export default function OrderHistory() {
   const [order, setOrder] = useState<OrderModel[]>([]);
-
+  const [isOrderCancelled, setIsOrderCancelled] = useState(false);
+  const [idOrder, setIdOrder] = useState<number | undefined>(0);
   const [open, setOpen] = useState<number>();
 
+  const idRemove = "removeVoucher";
+  const idSitebar = "my_modal_3";
+
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-  const openModal = () => {
-    const modal = document.getElementById(
-      "my_modal_3"
-    ) as HTMLDialogElement | null;
+  const openModal = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
       modal.showModal();
     }
   };
-  const closeModal = () => {
-    const modal = document.getElementById(
-      "my_modal_3"
-    ) as HTMLDialogElement | null;
+  const closeModal = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
       modal.close();
     }
@@ -81,13 +85,19 @@ export default function OrderHistory() {
 
   const abortOrder = async (id: number) => {
     await orderControllers.abortOrder(id);
+    toast.success("Đã xác nhận yêu cầu hủy đơn !", {
+      position: "top-right",
+      autoClose: 3000,
+      theme: "light",
+    });
+    closeModal(idRemove);
   };
 
   return (
     <Container>
       <div
         className="float-right cursor-pointer max-[1920px]:invisible max-2xl:visible"
-        onClick={() => openModal()}
+        onClick={() => openModal(idSitebar)}
       >
         <IonIcon className="text-[2rem]" name={"menu"}></IonIcon>
       </div>
@@ -98,7 +108,7 @@ export default function OrderHistory() {
             <div className="relative">
               <button
                 className="btn btn-sm btn-circle btn-ghost absolute right-1 top-10"
-                onClick={closeModal}
+                onClick={() => closeModal(idSitebar)}
               >
                 <IonIcon className="text-[1rem]" name={"close"}></IonIcon>
               </button>
@@ -188,14 +198,21 @@ export default function OrderHistory() {
                                     Tổng
                                   </th>
                                   <th className=" px-6 py-2 w-[14%] font-normal">
-                                    {e.status < 2 ? (
+                                    {e.status == 2 ? (
                                       <>
-                                        <p
-                                          onClick={() => abortOrder(e.id)}
-                                          className="cursor-pointer"
-                                        >
-                                          Hủy đơn
-                                        </p>
+                                        {!isOrderCancelled ? (
+                                          <p
+                                            onClick={() => {
+                                              openModal(idRemove);
+                                              setIdOrder(e.id);
+                                            }}
+                                            className="cursor-pointer text-[#EA4B48]"
+                                          >
+                                            Hủy đơn
+                                          </p>
+                                        ) : (
+                                          ""
+                                        )}
                                       </>
                                     ) : (
                                       ""
@@ -261,6 +278,15 @@ export default function OrderHistory() {
                 ) : (
                   <EmptyPage title="Chưa có đơn hàng" button="Mua ngay" />
                 )}
+                <DialogComfirm
+                  onClose={() => closeModal(idRemove)}
+                  title="Hủy đơn hàng này"
+                  onSave={() => {
+                    abortOrder(idOrder!);
+                    setIsOrderCancelled(true);
+                  }}
+                  id={idRemove}
+                />
               </div>
             </div>
           </div>
