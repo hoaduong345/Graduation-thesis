@@ -1,9 +1,9 @@
-import { Accordion, AccordionBody } from "@material-tailwind/react";
+
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from "@chakra-ui/react";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 import Plus from "../../../../../Assets/TSX/Plus";
 import { categoryController } from "../../../../../Controllers/CategoryController";
 import { storage } from "../../../../../Firebase/Config";
@@ -12,10 +12,8 @@ import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import Loading from "../../../../../Helper/Loading/Loading";
 import { CategoryModal } from "../../../../../Model/CategoryModel";
 import Container from "../../../../../components/container/Container";
-import ArrowDown from "../../Assets/TSX/ArrowDown";
 import Delete from "../../Assets/TSX/Delete";
 import Edit from "../../Assets/TSX/Edit";
-import Line from "../../Assets/TSX/Line";
 import PlusSquare from "../../Assets/TSX/PlusSquare";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import UploadIMG from "../../Assets/TSX/UploadIMG";
@@ -38,8 +36,8 @@ function Category() {
 
   const [url, setUrl] = useState<string>();
 
-  const [open, setOpen] = useState<number>();
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
+  // const [open, setOpen] = useState<number>();
+  // const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const [checkedCategory, setCheckedCategory] = useState<CategoryModal[]>([]);
 
@@ -284,7 +282,7 @@ function Category() {
                     }
                   >
                     <PlusSquare />
-                    <p className="cursor-default text-white text-base font-bold">
+                    <p className="cursor-pointer text-white text-base font-bold">
                       Thêm Danh Mục
                     </p>
                   </button>
@@ -405,9 +403,9 @@ function Category() {
                   />
                 </div>
                 <div className="flex gap-[28px] col-span-5 ">
-                  <Line />
+                  <p></p>
                   <p className=" pt-[12px] text-[16px] font-medium max-lg:text-sm">
-                    Tên Danh Mục
+                    {/* Tên Danh Mục */}
                   </p>
                 </div>
                 <div className="flex justify-center col-span-2 max-lg:gap-[30px]">
@@ -466,10 +464,10 @@ function Category() {
               {categorys.map((e, index) => {
                 return (
                   <>
-                    <Accordion open={open == e.id} key={e.id}>
-                      <div className="grid grid-cols-10">
+                    <Accordion allowMultiple className="w-full" key={e.id}>
+                      <AccordionItem className="grid grid-cols-10">
                         <div className="col-span-8 grid grid-cols-8">
-                          <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16">
+                          <div className="col-span-3 border-[#e0e0e0] items-center flex justify-between pr-6 pl-16">
                             <div className=" flex gap-[20px] max-lg:gap-2">
                               <input
                                 className="checkbox checkbox-sm items-center"
@@ -481,19 +479,35 @@ function Category() {
                               />
                             </div>
                             <div>
-                              <img className="w-[50px]" src={e.image} alt="" />
+                              <AccordionButton>
+                                <img className="w-[50px]" src={e.image} alt="" />
+                              </AccordionButton>
                             </div>
                           </div>
-                          <div
-                            onClick={() => handleOpen(e.id)}
-                            className="col-span-5 cursor-pointer border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]"
+                          <AccordionButton
+                            className="col-span-5 cursor-pointer border-[#e0e0e0] h-20 items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]"
                           >
-                            <p className="text-[16px] font-bold my-auto max-lg:text-sm">
+                            <p className="text-[16px] font-medium my-auto max-lg:text-sm">
                               {e.name}
                             </p>
-                          </div>
+
+                          </AccordionButton>
+                          <AccordionPanel className="text-left text-medium mt-2 !text-navy-900 dark:!text-[#1A1A1A]"
+                            pb={4}>
+                            {e.subCategories?.map((elements) => {
+                              return (
+                                <>
+                                  <div className="border-[#e0e0e0] mx-auto flex h-5 items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
+                                    <p className="text-[16px] font-medium max-lg:text-sm">
+                                      {elements.name}
+                                    </p>
+                                  </div>
+                                </>
+                              );
+                            })}
+                          </AccordionPanel>
                         </div>
-                        <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
+                        <div className="col-span-2 border-[#e0e0e0]">
                           <div className="flex text-center justify-center items-center gap-5 py-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
                             <button
                               onClick={() => {
@@ -548,34 +562,15 @@ function Category() {
                                 </li>
                               </ul>
                             </div>
-
-                            <div onClick={() => handleOpen(e.id)}>
-                              {open === e.id ? (
-                                <ArrowDown />
-                              ) : (
-                                <ArrowNextHistory />
-                              )}
+                            <div>
+                              <AccordionButton>
+                                <AccordionIcon className="text-left !text-navy-900 dark:!text-[#1A1A1A]" />
+                              </AccordionButton>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <AccordionBody>
-                        <div className="grid grid-cols-10">
-                          {e.subCategories?.map((elements) => {
-                            return (
-                              <>
-                                <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16"></div>
-                                <div className="col-span-5 border-[#e0e0e0] flex h-10 border-y-[1px] border-l-[1px] items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
-                                  <p className="text-[16px] font-bold my-auto max-lg:text-sm">
-                                    {elements.name}
-                                  </p>
-                                </div>
-                                <div className="col-span-2 border-[#e0e0e0] border-y-[1px]"></div>
-                              </>
-                            );
-                          })}
-                        </div>
-                      </AccordionBody>
+
+                      </AccordionItem>
                     </Accordion>
                   </>
                 );
