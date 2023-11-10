@@ -1,7 +1,9 @@
-import { Link, createSearchParams, useSearchParams } from "react-router-dom";
-import { useSearch } from "../../../hooks/Search/SearchContextProvider";
-import { useEffect, useState } from "react";
-
+import {
+  Link,
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 export type Cate = {
   id: string;
   image: string;
@@ -9,27 +11,42 @@ export type Cate = {
 };
 
 export default function Category(props: Cate) {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const min = searchParams.get("minPrice");
+  const max = searchParams.get("maxPrice");
+  const handleNavigation = () => {
+    const nameCate = props.name;
+    const decodedData = decodeURIComponent(nameCate);
+    // Remove diacritics from Vietnamese characters
+    function removeDiacritics(str: string) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+    // Remove special characters and diacritics
+    const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
+
+    navigate({
+      pathname: `/FiltersPage/`,
+      search: createSearchParams({
+        nameCate: cleanedData,
+      }).toString(),
+    });
+  };
   return (
     <>
-      <div>
-        <Link to={`/FiltersPage?CategoryId=${props.id}`}>
-          <div
-            onClick={() => {
-              // localStorage.setItem("cateId", JSON.stringify(props.id));
-              localStorage.setItem("cateName", JSON.stringify(props.name));
-            }}
-            className="max-w-[200px] max-lg:max-w-[90%] border-2 border-solid 
+      <div onClick={handleNavigation}>
+        <div
+          className="max-w-[200px] max-lg:max-w-[90%] border-2 border-solid 
         hover:bg-[#f4f4f4] border-[#E0E0E0] py-[16px] px-[17.5px] rounded-lg text-center
           max-lg:py-1 max-lg:px-3 max-lg:justify-center"
-          >
-            <img
-              className="w-[151px] h-[123px] object-contain"
-              src={props.image}
-              alt=""
-            />
-            <span className="max-lg:text-[10px]">{props.name}</span>
-          </div>
-        </Link>
+        >
+          <img
+            className="w-[151px] h-[123px] object-contain"
+            src={props.image}
+            alt=""
+          />
+          <span className="max-lg:text-[10px]">{props.name}</span>
+        </div>
       </div>
     </>
   );

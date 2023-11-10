@@ -1,21 +1,20 @@
-import { useParams } from "react-router-dom";
-import { Images } from "../../../../Assets/TS";
+import { ReactNode, useEffect, useState } from "react";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 import Series from "../../../../Assets/TSX/Series";
 import StepsLogo from "../../../../Assets/TSX/StepsLogo";
+import { productController } from "../../../../Controllers/ProductsController";
+import { roundedNumber } from "../../../../Helper/Format";
+import { Rate, Row } from "../../../../Model/ProductModel";
 import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
 import Container from "../../../../components/container/Container";
 import SlidesFilter from "../../../../components/home/components/slides/SlidesFilter/SlidesFilter";
-import { useSearch } from "../../../../hooks/Search/SearchContextProvider";
+import useDebounce from "../../../../useDebounceHook/useDebounce";
 import "../../../css/filter.css";
 import Filter from "./Filter";
-import Lightbulb from "../../../../Assets/TSX/Light-bulb";
-import { productController } from "../../../../Controllers/ProductsController";
-import { useState } from "react";
-import { Row } from "../../../../Model/ProductModel";
 export interface Cate {
   id: number;
   name: string;
@@ -54,12 +53,7 @@ export type Props = {
   maxPrice: number;
   onChangeSlider(min: number, max: number): void;
 };
-export interface RatingStar {
-  checked: boolean;
-  rating: number;
 
-  onChangeFilter(tittle: string): void;
-}
 export interface PriceRangeFilterPage {
   minPrice: number;
   maxPrice: number;
@@ -67,39 +61,146 @@ export interface PriceRangeFilterPage {
   // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
   onChangeSlider(min: number, max: number): void;
 }
+
 export default function FiltersPage() {
-  const { id } = useParams();
-  // const [product, setProducts] = useState<Row[]>([]);
-  const {
-    searchValue,
-    handleSliderChange,
-    handleActiveBTNLatestCreationDate,
-    handleActiveBTNHighToLowClick,
-    handleActiveBTNLowToHighClick,
-    getProductsWhereRating,
-    activeBtnLatestCreationDate,
-    activeBtnHighToLow,
-    activeBtnLowToHigh,
-    starsnumber,
-    products,
-    sliderValues,
-    nameCate,
-  } = useSearch();
+  const [products, setProducts] = useState<Row[]>([]);
+  const [stars, setStars] = useState<Rate>();
+  const [starsnumber, setStarsnumber] = useState(0);
+  // Button FIlterPage
+  const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
+  const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
+  const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
+    useState(true);
 
-  // const getProductsWhereRating = (rate: any) => {
-  //   productController
-  //     .getProductWhereRatting(rate)
-  //     .then((res: any) => {
+  // Slider Price SiteBarFilterPages
+  const [sliderValues, setSliderValues] = useState<[number, number]>([
+    0, 10000000000,
+  ]);
+  const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchValue = searchParams.get("keyword");
+  const nameCateValue = searchParams.get("nameCate");
+  const min = searchParams.get("minPrice");
+  const max = searchParams.get("maxPrice");
 
-  //       console.log("Ratting fillter" + JSON.stringify(res));
-  //       setProducts(res.rows);
+  // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
+  useEffect(() => {
+    if (stars) {
+      setStarsnumber(roundedNumber(stars.averageRating));
+      console.log(
+        "🚀 ~ file: FiltersPage.tsx:99 ~ useEffect ~ stars.averageRating:",
+        stars.averageRating
+      );
+    }
+  }, [stars]);
 
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
+  const handleActiveBTNLowToHighClick = () => {
+    productController
+      .getSortProductbyPrice("asc", nameCateValue?.toString()!)
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+          res
+        );
+        setActiveBtnLowToHigh(false);
+        setActiveBtnHighToLow(true);
+        setProducts(res.rows);
+      });
+  };
+  const handleActiveBTNHighToLowClick = () => {
+    productController
+      .getSortProductbyPrice("desc", nameCateValue?.toString()!)
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
+          res
+        );
+        setActiveBtnLowToHigh(true);
+        setActiveBtnHighToLow(false);
+        setProducts(res.rows);
+      });
+  };
+  const handleActiveBTNLatestCreationDate = () => {
+    setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
+    productController
+      .getSortProductbyDateCreate("desc", nameCateValue?.toString()!)
+      .then((res: any) => {
+        setProducts(res.rows);
+      });
+  };
+  const getSearchDataName = () => {
+    productController
+      .getSearchAndPaginationProduct(searchValue?.toString())
+      .then((res: any) => {
+        console.log("🚀 ~ file: FiltersPage.tsx:183 ~ .then ~ res:", res);
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    if (searchValue?.toString()) {
+      getSearchDataName();
+    }
+  }, [searchValue?.toString()]);
 
+  useEffect(() => {
+    if (nameCateValue?.toString()) {
+      getData();
+    }
+  }, [nameCateValue?.toString()]);
+
+  const getData = () => {
+    productController
+      .getList("", nameCateValue?.toString()!)
+      .then((res: any) => {
+        console.log(res);
+        setStars(res.data);
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
+          res.data
+        );
+        setProducts(res.rows);
+      });
+  };
+
+  // Slider Price SiteBarFilterPages
+  useEffect(() => {
+    if (debouncedInputValue) {
+      handleFilter(debouncedInputValue);
+    }
+  }, [debouncedInputValue]);
+
+  const handleFilter = async (debouncedInputValue: any) => {
+    console.log(debouncedInputValue);
+
+    await productController
+      .getFilterProductWithinRangeIDCategory(
+        debouncedInputValue[0],
+        debouncedInputValue[1],
+        nameCateValue?.toString()!
+      )
+      .then((res: any) => {
+        setProducts(res.rows);
+      });
+  };
+  function handleSliderChange(price: [number, number]): void {
+    console.log("value", price);
+    setSliderValues(price);
+  }
+
+  const getProductsWhereRating = (rate: any) => {
+    productController
+      .getProductWhereRatting(rate)
+      .then((res: any) => {
+        console.log("Ratting fillter" + JSON.stringify(res));
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Container>
       <body className="body-filter container mx-auto">
@@ -228,7 +329,11 @@ export default function FiltersPage() {
                   </div>
                 </div>
               </div>
-
+              {nameCateValue ? (
+                <p>Danh mục {nameCateValue}</p>
+              ) : (
+                <p>Tìm kiếm với kết quả {searchValue}</p>
+              )}
               <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
                 {products?.map((items) => {
                   return <Filter starsnumber={starsnumber} product={items} />;

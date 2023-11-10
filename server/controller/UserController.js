@@ -44,7 +44,6 @@ const UserController = {
                         deletedAt: new Date(),
                     },
                 });
-
             }
             return res.status(402).json('Xóa User that bai');
         } catch (error) {
@@ -145,7 +144,7 @@ const UserController = {
 
             const update = await prisma.user.update({
                 where: {
-                    id: id
+                    id: id,
                 },
                 data: updatedPaymentAddress,
             });
@@ -266,15 +265,31 @@ const UserController = {
 
     getAllUser: async (req, res) => {
         try {
-            const keyword = req.query.keyword;
-            const AllUser = await prisma.user.findMany({
-                where : {
-                    username : {
-                        contains : keyword
-                    }
-                }
+            const keyword = req.body.keyword;
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
+            const skip = (page - 1) * pageSize;
+
+            const whereClause = {
+                deletedAt: null,
+                username: {
+                    contains: keyword,
+                },
+            };
+            const totalUserPage = await prisma.user.count({
+                where: whereClause,
             });
-            res.status(200).json(AllUser);
+            const AllUser = await prisma.user.findMany({
+                where: whereClause,
+                skip,
+                take: pageSize,
+            });
+            res.status(200).json({
+                page: page,
+                pageSize: pageSize,
+                totalPage: Math.ceil(totalUserPage / pageSize),
+                data: AllUser,
+            });
         } catch (error) {
             res.status(500).json(error);
         }

@@ -8,17 +8,10 @@ export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_ADMIN_URL || "",
 };
 
-export interface ModelUser {
-  id: string;
-  email: string;
-  username: string;
-  // password: string,
-  name: string;
-  phonenumber: string;
-  image: string;
-  dateOfBirth: Date;
-  sex: boolean;
-  UserImage: string[];
+export interface AdminModel {
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
 }
 
 class AdminController {
@@ -29,35 +22,34 @@ class AdminController {
         return res.data;
       });
   };
-  getAllAdmin = async () => {
+  getAllAdmin = async (data: AdminModel) => {
     return await axios
-    .get(`${appConfig.apiUrl}/getalladmin`)
-    .then((res) => {
-      return res.data;
-    });
+      .post(`${appConfig.apiUrl}/getalladmin`, data)
+      .then((res) => {
+        return res.data;
+      });
   };
-  AddAdmin = async (data:FormValues) => {
+  AddAdmin = async (data: FormValues) => {
     return await axios
-    .post(`${appConfig.apiUrl}/addadmin`,data)
-    .then((res) => {
-      return res.data;
-    });
+      .post(`${appConfig.apiUrl}/addadmin`, data)
+      .then((res) => {
+        return res.data;
+      });
   };
-  DeleteAdmin = async (id:any) => {
+  DeleteAdmin = async (id: any) => {
     return await axios
-    .delete(`${appConfig.apiUrl}/deleteadmin/${id}`)
-    .then((res) => {
-      return res.data;
-    });
+      .delete(`${appConfig.apiUrl}/deleteadmin/${id}`)
+      .then((res) => {
+        return res.data;
+      });
   };
-  ChangePasswordAdmin = async (id:any,data:FormValues1)=>{
+  ChangePasswordAdmin = async (id: any, data: FormValues1) => {
     return await axios
-    .post(`${appConfig.apiUrl}/changepassword/${id}`,data)
-    .then((res) => {
-      return res.data;
-    });
-  }
-
+      .post(`${appConfig.apiUrl}/changepassword/${id}`, data)
+      .then((res) => {
+        return res.data;
+      });
+  };
 }
 
 export const adminController = new AdminController();
