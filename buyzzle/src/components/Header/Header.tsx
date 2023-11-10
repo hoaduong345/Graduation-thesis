@@ -1,11 +1,5 @@
 /* eslint-disable no-var */
-import {
-  ChangeEvent,
-  KeyboardEvent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import {
   Link,
   createSearchParams,
@@ -21,7 +15,6 @@ import Search from "../../Assets/TSX/Search";
 import Headphones from "../../Assets/TSX/headphones";
 import { productController } from "../../Controllers/ProductsController";
 import { userController } from "../../Controllers/UserController";
-import { ThemeContext } from "../../hooks/Context/ThemeContextProvider";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
@@ -31,6 +24,7 @@ export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
   const [text, setText] = useState("");
+  console.log("🚀 ~ file: Header.tsx:27 ~ Header ~ text:", text);
 
   const [productSearch, setProductSearch] = useState<Products[]>([]);
   const [isSearch, setIsSearch] = useState(false);
@@ -40,8 +34,10 @@ export default function Header() {
 
   // using UseSearchParams
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchValue = searchParams.get("keyword");
-  const debouncedSearchParams = useDebounce(searchParams, 2000);
+
+  // const searchValue = searchParams.get("keyword");
+  // console.log("🚀 ~ file: Header.tsx:39 ~ Header ~ searchValue:", searchValue);
+  const debouncedSearchParams = useDebounce(text, 500);
 
   const decodedData = decodeURIComponent(text);
   // Remove diacritics from Vietnamese characters
@@ -50,12 +46,21 @@ export default function Header() {
   }
   // Remove special characters and diacritics
   const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
+  const getSearhvalue = async () => {
+    await productController.getAllProductsSearch(text).then((res: any) => {
+      setProductSearch(res.rows);
+    });
+  };
+
   useEffect(() => {
-    setSearchParams(
-      createSearchParams({
-        keyword: cleanedData,
-      })
-    );
+    if (text != "") {
+      getSearhvalue();
+      // setSearchParams(
+      //   createSearchParams({
+      //     keyword: text,
+      //   })
+      // );
+    }
   }, [debouncedSearchParams]);
   var username;
   const [name, setName] = useState("");
@@ -97,26 +102,18 @@ export default function Header() {
   };
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
-      navigate(`/FiltersPage/${text}`);
+      // navigate(`/FiltersPage`);
+      const keyword = cleanedData;
+      navigate({
+        pathname: `/FiltersPage/${keyword}`,
+        search: createSearchParams({
+          keyword: keyword,
+        }).toString(),
+      });
       setShowSuggestions(false);
     }
   };
-  const getSearhvalue = (value: any) => {
-    productController.getAllProductsSearch(value).then((res: any) => {
-      setProductSearch(res.rows);
-    });
-  };
 
-  useEffect(() => {
-    getSearhvalue(searchValue);
-    if (searchParams.toString() != "") {
-      productController
-        .getAllProductsSearch(searchParams.toString())
-        .then((res: any) => {
-          setProductSearch(res.rows);
-        });
-    }
-  }, [searchValue]);
   return (
     <>
       <header className="Header">

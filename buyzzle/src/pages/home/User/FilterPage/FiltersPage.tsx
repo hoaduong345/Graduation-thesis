@@ -77,11 +77,16 @@ export default function FiltersPage() {
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
 
-  const { id: nameCate, keyword } = useParams();
+  const { keyword, nameCate } = useParams();
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:81 ~ FiltersPage ~ nameCate:",
+    nameCate
+  );
   console.log(
     "🚀 ~ file: FiltersPage.tsx:81 ~ FiltersPage ~ keyword:",
     keyword
   );
+
   const cateName = String(nameCate);
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
@@ -129,7 +134,17 @@ export default function FiltersPage() {
         setProducts(res.rows);
       });
   };
-
+  const getSearchDataName = () => {
+    productController
+      .getSearchAndPaginationProduct(keyword!.toString())
+      .then((res: any) => {
+        console.log("🚀 ~ file: FiltersPage.tsx:183 ~ .then ~ res:", res);
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     if (keyword) {
       getSearchDataName();
@@ -155,41 +170,30 @@ export default function FiltersPage() {
   };
 
   // Slider Price SiteBarFilterPages
-  useEffect(() => {
-    if (debouncedInputValue) {
-      handleFilter(debouncedInputValue);
-    }
-  }, [debouncedInputValue]);
+  // useEffect(() => {
+  //   if (debouncedInputValue) {
+  //     handleFilter(debouncedInputValue);
+  //   }
+  // }, [debouncedInputValue]);
 
-  const handleFilter = async (debouncedInputValue: any) => {
-    console.log(debouncedInputValue);
+  // const handleFilter = async (debouncedInputValue: any) => {
+  //   console.log(debouncedInputValue);
 
-    await productController
-      .getFilterProductWithinRangeIDCategory(
-        debouncedInputValue[0],
-        debouncedInputValue[1],
-        cateName
-      )
-      .then((res: any) => {
-        setProducts(res.rows);
-      });
-  };
+  //   await productController
+  //     .getFilterProductWithinRangeIDCategory(
+  //       debouncedInputValue[0],
+  //       debouncedInputValue[1],
+  //       cateName
+  //     )
+  //     .then((res: any) => {
+  //       setProducts(res.rows);
+  //     });
+  // };
   function handleSliderChange(price: [number, number]): void {
     console.log("value", price);
     setSliderValues(price);
   }
 
-  const getSearchDataName = () => {
-    productController
-      .getSearchAndPaginationProduct(keyword!.slice(13).toString())
-      .then((res: any) => {
-        console.log(res);
-        setProducts(res.rows);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const getProductsWhereRating = (rate: any) => {
     productController
       .getProductWhereRatting(rate)

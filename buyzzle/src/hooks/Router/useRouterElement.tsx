@@ -67,21 +67,13 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/FiltersPage/:keyword",
+      path: "/FiltersPage/:nameCate?/:keyword?",
       element: (
         <MainLayout>
           <FiltersPage />
         </MainLayout>
       ),
     },
-    // {
-    //   path: "/FiltersPage/:text",
-    //   element: (
-    //     <MainLayout>
-    //       <FiltersPage />
-    //     </MainLayout>
-    //   ),
-    // },
 
     {
       path: "/register",
