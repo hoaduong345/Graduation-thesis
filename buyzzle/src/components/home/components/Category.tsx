@@ -1,4 +1,9 @@
-import { Link, createSearchParams, useNavigate } from "react-router-dom";
+import {
+  Link,
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 export type Cate = {
   id: string;
   image: string;
@@ -7,18 +12,23 @@ export type Cate = {
 
 export default function Category(props: Cate) {
   const navigate = useNavigate();
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const min = searchParams.get("minPrice");
+  const max = searchParams.get("maxPrice");
   const handleNavigation = () => {
     const nameCate = props.name;
-    console.log(
-      "🚀 ~ file: Category.tsx:13 ~ handleNavigation ~ nameCate:",
-      nameCate
-    );
+    const decodedData = decodeURIComponent(nameCate);
+    // Remove diacritics from Vietnamese characters
+    function removeDiacritics(str: string) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+    // Remove special characters and diacritics
+    const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
 
     navigate({
-      pathname: `/FiltersPages/${props.name}`,
+      pathname: `/FiltersPage/`,
       search: createSearchParams({
-        nameCate: nameCate,
+        nameCate: cleanedData,
       }).toString(),
     });
   };

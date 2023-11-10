@@ -24,7 +24,6 @@ export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
   const [text, setText] = useState("");
-  console.log("🚀 ~ file: Header.tsx:27 ~ Header ~ text:", text);
 
   const [productSearch, setProductSearch] = useState<Products[]>([]);
   const [isSearch, setIsSearch] = useState(false);
@@ -34,18 +33,10 @@ export default function Header() {
 
   // using UseSearchParams
   const [searchParams, setSearchParams] = useSearchParams();
+  const searchValue = searchParams.get("keyword");
 
-  // const searchValue = searchParams.get("keyword");
-  // console.log("🚀 ~ file: Header.tsx:39 ~ Header ~ searchValue:", searchValue);
   const debouncedSearchParams = useDebounce(text, 500);
 
-  const decodedData = decodeURIComponent(text);
-  // Remove diacritics from Vietnamese characters
-  function removeDiacritics(str: string) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  }
-  // Remove special characters and diacritics
-  const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
   const getSearhvalue = async () => {
     await productController.getAllProductsSearch(text).then((res: any) => {
       setProductSearch(res.rows);
@@ -55,11 +46,11 @@ export default function Header() {
   useEffect(() => {
     if (text != "") {
       getSearhvalue();
-      // setSearchParams(
-      //   createSearchParams({
-      //     keyword: text,
-      //   })
-      // );
+      setSearchParams(
+        createSearchParams({
+          keyword: text,
+        })
+      );
     }
   }, [debouncedSearchParams]);
   var username;
@@ -103,11 +94,10 @@ export default function Header() {
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
       // navigate(`/FiltersPage`);
-      const keyword = cleanedData;
       navigate({
-        pathname: `/FiltersPage/${keyword}`,
+        pathname: `/FiltersPage/`,
         search: createSearchParams({
-          keyword: keyword,
+          keyword: searchValue?.toString()!,
         }).toString(),
       });
       setShowSuggestions(false);

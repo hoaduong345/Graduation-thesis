@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { ReactNode, useEffect, useState } from "react";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
@@ -61,6 +61,7 @@ export interface PriceRangeFilterPage {
   // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
   onChangeSlider(min: number, max: number): void;
 }
+
 export default function FiltersPage() {
   const [products, setProducts] = useState<Row[]>([]);
   const [stars, setStars] = useState<Rate>();
@@ -76,18 +77,11 @@ export default function FiltersPage() {
     0, 10000000000,
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
-
-  const { keyword, nameCate } = useParams();
-  console.log(
-    "🚀 ~ file: FiltersPage.tsx:81 ~ FiltersPage ~ nameCate:",
-    nameCate
-  );
-  console.log(
-    "🚀 ~ file: FiltersPage.tsx:81 ~ FiltersPage ~ keyword:",
-    keyword
-  );
-
-  const cateName = String(nameCate);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchValue = searchParams.get("keyword");
+  const nameCateValue = searchParams.get("nameCate");
+  const min = searchParams.get("minPrice");
+  const max = searchParams.get("maxPrice");
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
@@ -102,7 +96,7 @@ export default function FiltersPage() {
 
   const handleActiveBTNLowToHighClick = () => {
     productController
-      .getSortProductbyPrice("asc", cateName)
+      .getSortProductbyPrice("asc", nameCateValue?.toString()!)
       .then((res: any) => {
         console.log(
           "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
@@ -115,7 +109,7 @@ export default function FiltersPage() {
   };
   const handleActiveBTNHighToLowClick = () => {
     productController
-      .getSortProductbyPrice("desc", cateName)
+      .getSortProductbyPrice("desc", nameCateValue?.toString()!)
       .then((res: any) => {
         console.log(
           "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
@@ -129,14 +123,14 @@ export default function FiltersPage() {
   const handleActiveBTNLatestCreationDate = () => {
     setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
     productController
-      .getSortProductbyDateCreate("desc", cateName)
+      .getSortProductbyDateCreate("desc", nameCateValue?.toString()!)
       .then((res: any) => {
         setProducts(res.rows);
       });
   };
   const getSearchDataName = () => {
     productController
-      .getSearchAndPaginationProduct(keyword!.toString())
+      .getSearchAndPaginationProduct(searchValue?.toString())
       .then((res: any) => {
         console.log("🚀 ~ file: FiltersPage.tsx:183 ~ .then ~ res:", res);
         setProducts(res.rows);
@@ -146,49 +140,51 @@ export default function FiltersPage() {
       });
   };
   useEffect(() => {
-    if (keyword) {
+    if (searchValue?.toString()) {
       getSearchDataName();
     }
-  }, [keyword]);
+  }, [searchValue?.toString()]);
 
   useEffect(() => {
-    if (nameCate) {
+    if (nameCateValue?.toString()) {
       getData();
     }
-  }, [nameCate]);
+  }, [nameCateValue?.toString()]);
 
   const getData = () => {
-    productController.getList("", cateName).then((res: any) => {
-      console.log(res);
-      setStars(res.data);
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
-        res.data
-      );
-      setProducts(res.rows);
-    });
+    productController
+      .getList("", nameCateValue?.toString()!)
+      .then((res: any) => {
+        console.log(res);
+        setStars(res.data);
+        console.log(
+          "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
+          res.data
+        );
+        setProducts(res.rows);
+      });
   };
 
   // Slider Price SiteBarFilterPages
-  // useEffect(() => {
-  //   if (debouncedInputValue) {
-  //     handleFilter(debouncedInputValue);
-  //   }
-  // }, [debouncedInputValue]);
+  useEffect(() => {
+    if (debouncedInputValue) {
+      handleFilter(debouncedInputValue);
+    }
+  }, [debouncedInputValue]);
 
-  // const handleFilter = async (debouncedInputValue: any) => {
-  //   console.log(debouncedInputValue);
+  const handleFilter = async (debouncedInputValue: any) => {
+    console.log(debouncedInputValue);
 
-  //   await productController
-  //     .getFilterProductWithinRangeIDCategory(
-  //       debouncedInputValue[0],
-  //       debouncedInputValue[1],
-  //       cateName
-  //     )
-  //     .then((res: any) => {
-  //       setProducts(res.rows);
-  //     });
-  // };
+    await productController
+      .getFilterProductWithinRangeIDCategory(
+        debouncedInputValue[0],
+        debouncedInputValue[1],
+        nameCateValue?.toString()!
+      )
+      .then((res: any) => {
+        setProducts(res.rows);
+      });
+  };
   function handleSliderChange(price: [number, number]): void {
     console.log("value", price);
     setSliderValues(price);
@@ -333,7 +329,11 @@ export default function FiltersPage() {
                   </div>
                 </div>
               </div>
-
+              {nameCateValue ? (
+                <p>Danh mục {nameCateValue}</p>
+              ) : (
+                <p>Tìm kiếm với kết quả {searchValue}</p>
+              )}
               <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
                 {products?.map((items) => {
                   return <Filter starsnumber={starsnumber} product={items} />;

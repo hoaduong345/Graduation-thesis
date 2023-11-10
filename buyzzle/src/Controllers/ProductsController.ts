@@ -96,19 +96,19 @@ class ProductController {
         return res.data as Products[];
       });
   };
-  // getFilterProductWithinRangeIDCategory = async (
-  //   min: number,
-  //   max: number,
-  //   nameCate: string
-  // ): Promise<Products[]> => {
-  //   return await axios
-  //     .get(
-  //       `${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryName=${nameCate}`
-  //     )
-  //     .then((res) => {
-  //       return res.data as Products[];
-  //     });
-  // };
+  getFilterProductWithinRangeIDCategory = async (
+    min: number,
+    max: number,
+    nameCate: string
+  ): Promise<Products[]> => {
+    return await axios
+      .get(
+        `${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryName=${nameCate}`
+      )
+      .then((res) => {
+        return res.data as Products[];
+      });
+  };
   getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination = async (
     minPrice: number,
     maxPrice: number,
