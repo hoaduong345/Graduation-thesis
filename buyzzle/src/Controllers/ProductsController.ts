@@ -96,15 +96,26 @@ class ProductController {
         return res.data as Products[];
       });
   };
+
   getFilterProductWithinRangeIDCategory = async (
-    min: number,
-    max: number,
-    nameCate: string
+    options: {
+      min?: number;
+      max?: number;
+      nameCate?: string;
+      keyword?: string | undefined;
+    }
   ): Promise<Products[]> => {
+    const { min, max, nameCate, keyword } = options;
+
+    const queryParams = new URLSearchParams({
+      minPrice: min?.toString() || '',
+      maxPrice: max?.toString() || '',
+      categoryName: nameCate || '',
+      keyword: keyword || '',
+    });
+
     return await axios
-      .get(
-        `${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryName=${nameCate}`
-      )
+      .get(`${appConfig.apiUrl}/allproducts?${queryParams}`)
       .then((res) => {
         return res.data as Products[];
       });

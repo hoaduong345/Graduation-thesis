@@ -20,6 +20,7 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import useDebounce from "../../../../useDebounceHook/useDebounce";
 import "../../../css/filter.css";
 import Filter from "./Filter";
+import { number } from "yup";
 export interface Cate {
   id: number;
   name: string;
@@ -79,23 +80,33 @@ export default function FiltersPage() {
 
   // Slider Price SiteBarFilterPages
   const [sliderValues, setSliderValues] = useState<[number, number]>([
-    0, 10000000000,
+    0, 10000000,
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
   const [searchParams, setSearchParams] = useSearchParams();
   const searchValue = searchParams.get("keyword");
   const nameCateValue = searchParams.get("nameCate");
-  const min = searchParams.get("minPrice");
-  const max = searchParams.get("maxPrice");
+  const urlSliderValues = searchParams.get("sliderValues");
 
-  // useEffect(() => {
-  //   setSearchParams(
-  //     createSearchParams({
-  //       minPrice: min!,
-  //       maxPrice: max!,
-  //     })
-  //   );
-  // }, [debouncedInputValue]);
+  useEffect(() => {
+    // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
+    if (urlSliderValues) {
+      const [min, max] = urlSliderValues.split(",").map(Number);
+      setSliderValues([min, max]);
+    }
+  }, [urlSliderValues]);
+
+  useEffect(() => {
+    if (nameCateValue != undefined) {
+      setSearchParams(
+        createSearchParams({
+          nameCate: nameCateValue?.toString()!,
+          min: sliderValues[0].toString(),
+          max: sliderValues[1].toString(),
+        })
+      );
+    }
+  }, [sliderValues]);
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
@@ -169,12 +180,15 @@ export default function FiltersPage() {
   }, [debouncedInputValue]);
 
   const handleFilter = async (debouncedInputValue: any) => {
+    const filterOptions = {
+      min: debouncedInputValue[0],
+      max: debouncedInputValue[1],
+      nameCate: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
+
     await productController
-      .getFilterProductWithinRangeIDCategory(
-        debouncedInputValue[0],
-        debouncedInputValue[1],
-        nameCateValue?.toString()!
-      )
+      .getFilterProductWithinRangeIDCategory(filterOptions)
       .then((res: any) => {
         setProducts(res.rows);
       });
