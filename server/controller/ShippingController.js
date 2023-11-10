@@ -41,8 +41,10 @@ const ShippingController = {
             const keyword = req.body.keyword;
             const status = parseInt(req.body.status);
 
-            const skip = (page - 1) * pageSize;
-
+            let skip = (page - 1) * pageSize;
+            if (keyword) {
+                skip = 0;
+            }
             let sortStatus = {};
             if (status) {
                 sortStatus = status;
@@ -114,7 +116,11 @@ const ShippingController = {
             const keyword = req.body.keyword;
             const status = parseInt(req.body.status);
 
-            const skip = (page - 1) * pageSize;
+            let skip = (page - 1) * pageSize;
+
+            if (keyword) {
+                skip = 0;
+            }
 
             let sortStatus = {};
             if (status == 0) {
@@ -128,11 +134,15 @@ const ShippingController = {
             }
 
             const whereClause = {
-                name: {
-                    contains: keyword,
-                },
                 status: sortStatus,
             };
+
+            if (keyword) {
+                whereClause.name = {
+                    contains: keyword,
+                };
+            }
+
             const totalOrdersCount = await prisma.order.count({
                 where: whereClause,
             });
@@ -203,7 +213,7 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
-    confirmDeleteOrder : async(req,res) =>{
+    confirmDeleteOrder: async (req, res) => {
         try {
             const orderId = parseInt(req.query.orderId);
             const order = await prisma.order.findFirst({
@@ -213,9 +223,9 @@ const ShippingController = {
             });
             if (!order) return res.send('Order is not undifined');
         } catch (error) {
-            
-        }y
-    }
+            errorResponse(res, error);
+        }
+    },
 };
 
 module.exports = ShippingController;
