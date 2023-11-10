@@ -67,7 +67,15 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/FiltersPage/:nameCate?/:keyword?",
+      path: "/FiltersPages/:nameCate?",
+      element: (
+        <MainLayout>
+          <FiltersPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/FiltersPage/:keyword?",
       element: (
         <MainLayout>
           <FiltersPage />

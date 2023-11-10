@@ -16,7 +16,7 @@ export default function Category(props: Cate) {
     );
 
     navigate({
-      pathname: `/FiltersPage/${props.name}`,
+      pathname: `/FiltersPages/${props.name}`,
       search: createSearchParams({
         nameCate: nameCate,
       }).toString(),
