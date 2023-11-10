@@ -1,5 +1,10 @@
 import { ReactNode, useEffect, useState } from "react";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
@@ -83,14 +88,19 @@ export default function FiltersPage() {
   const min = searchParams.get("minPrice");
   const max = searchParams.get("maxPrice");
 
+  // useEffect(() => {
+  //   setSearchParams(
+  //     createSearchParams({
+  //       minPrice: min!,
+  //       maxPrice: max!,
+  //     })
+  //   );
+  // }, [debouncedInputValue]);
+
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (stars) {
       setStarsnumber(roundedNumber(stars.averageRating));
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:99 ~ useEffect ~ stars.averageRating:",
-        stars.averageRating
-      );
     }
   }, [stars]);
 
@@ -98,10 +108,6 @@ export default function FiltersPage() {
     productController
       .getSortProductbyPrice("asc", nameCateValue?.toString()!)
       .then((res: any) => {
-        console.log(
-          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-          res
-        );
         setActiveBtnLowToHigh(false);
         setActiveBtnHighToLow(true);
         setProducts(res.rows);
@@ -111,10 +117,6 @@ export default function FiltersPage() {
     productController
       .getSortProductbyPrice("desc", nameCateValue?.toString()!)
       .then((res: any) => {
-        console.log(
-          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-          res
-        );
         setActiveBtnLowToHigh(true);
         setActiveBtnHighToLow(false);
         setProducts(res.rows);
@@ -132,7 +134,6 @@ export default function FiltersPage() {
     productController
       .getSearchAndPaginationProduct(searchValue?.toString())
       .then((res: any) => {
-        console.log("🚀 ~ file: FiltersPage.tsx:183 ~ .then ~ res:", res);
         setProducts(res.rows);
       })
       .catch((err) => {
@@ -155,12 +156,7 @@ export default function FiltersPage() {
     productController
       .getList("", nameCateValue?.toString()!)
       .then((res: any) => {
-        console.log(res);
         setStars(res.data);
-        console.log(
-          "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
-          res.data
-        );
         setProducts(res.rows);
       });
   };
@@ -173,8 +169,6 @@ export default function FiltersPage() {
   }, [debouncedInputValue]);
 
   const handleFilter = async (debouncedInputValue: any) => {
-    console.log(debouncedInputValue);
-
     await productController
       .getFilterProductWithinRangeIDCategory(
         debouncedInputValue[0],
@@ -186,7 +180,6 @@ export default function FiltersPage() {
       });
   };
   function handleSliderChange(price: [number, number]): void {
-    console.log("value", price);
     setSliderValues(price);
   }
 
@@ -194,7 +187,6 @@ export default function FiltersPage() {
     productController
       .getProductWhereRatting(rate)
       .then((res: any) => {
-        console.log("Ratting fillter" + JSON.stringify(res));
         setProducts(res.rows);
       })
       .catch((err) => {
