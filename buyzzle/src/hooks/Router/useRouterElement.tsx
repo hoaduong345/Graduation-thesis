@@ -38,6 +38,7 @@ import Admin from "../../pages/home/Admin/Management/Admin/Admin";
 import ShippingPage from "../../pages/home/Shipping/ShippingPage";
 import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
+import Notification from "../../components/notification/Notification";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -48,7 +49,14 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-
+    {
+      path: "/notification",
+      element: (
+        <MainLayout>
+          <Notification />
+        </MainLayout>
+      ),
+    },
     {
       path: "/userprofilepage/:username",
       element: (
