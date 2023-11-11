@@ -71,7 +71,7 @@ export default function EditProductMap() {
 
    const getCategory = () => {
       categoryController
-         .getAllCate()
+         .getAllCateAdmin()
          .then((res) => {
             setCategory(res.data);
          })
@@ -225,11 +225,10 @@ export default function EditProductMap() {
                                     className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%]
                                              max-xl:text-sm max-lg:text-[13px]
-                                            ${
-                                               !!errors.name
-                                                  ? "border-[2px] border-red-900"
-                                                  : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                            ${!!errors.name
+                                          ? "border-[2px] border-red-900"
+                                          : "border-[1px] border-[#FFAAAF]"
+                                       }`}
                                     placeholder="Nhập tiêu đề sản phẩm"
                                     value={field.value}
                                     onChange={(e) => {
@@ -318,11 +317,10 @@ export default function EditProductMap() {
                      <div
                         className={`flex items-center w-[150px] rounded-md h-[46px] transition 
                                     duration-150 justify-evenly  max-[1330px]:w-[280px] max-[1024px]:w-[320px]
-                                ${
-                                   isDisabled
-                                      ? "bg-[#aeaeae] cursor-not-allowed"
-                                      : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                                }
+                                ${isDisabled
+                              ? "bg-[#aeaeae] cursor-not-allowed"
+                              : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                           }
                                     `}
                      >
                         <button
@@ -331,11 +329,10 @@ export default function EditProductMap() {
                               submitData(data);
                            })}
                            className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
-                                        ${
-                                           isDisabled
-                                              ? "cursor-not-allowed"
-                                              : "cursor-pointer"
-                                        } `}
+                                        ${isDisabled
+                                 ? "cursor-not-allowed"
+                                 : "cursor-pointer"
+                              } `}
                         >
                            Sửa sản phẩm
                         </button>
@@ -505,11 +502,10 @@ export default function EditProductMap() {
                                        </p>
                                        <div
                                           className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
-                                                            ${
-                                                               !!errors.price
-                                                                  ? "border-[1px] border-red-900"
-                                                                  : "border-[1px] border-[#FFAAAF]"
-                                                            }
+                                                            ${!!errors.price
+                                                ? "border-[1px] border-red-900"
+                                                : "border-[1px] border-[#FFAAAF]"
+                                             }
                                                             `}
                                        >
                                           <input
@@ -565,11 +561,10 @@ export default function EditProductMap() {
                                        </p>
                                        <div
                                           className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
-                                                            ${
-                                                               !!errors.discount
-                                                                  ? "border-[1px] border-red-900"
-                                                                  : "border-[1px] border-[#FFAAAF]"
-                                                            }
+                                                            ${!!errors.discount
+                                                ? "border-[1px] border-red-900"
+                                                : "border-[1px] border-[#FFAAAF]"
+                                             }
                                                             `}
                                        >
                                           <input
@@ -625,11 +620,10 @@ export default function EditProductMap() {
                                  <input
                                     className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
                                                 max-xl:text-sm max-lg:text-[13px]
-                                                    ${
-                                                       !!errors.quantity
-                                                          ? "border-[1px] border-red-900"
-                                                          : "border-[1px] border-[#FFAAAF]"
-                                                    } `}
+                                                    ${!!errors.quantity
+                                          ? "border-[1px] border-red-900"
+                                          : "border-[1px] border-[#FFAAAF]"
+                                       } `}
                                     placeholder="000.000"
                                     value={field.value}
                                     onChange={(e) => {
@@ -741,9 +735,9 @@ export default function EditProductMap() {
                                                       return (
                                                          <>
                                                             {ele.categoryid ==
-                                                            watch(
-                                                               "categoryID"
-                                                            ) ? (
+                                                               watch(
+                                                                  "categoryID"
+                                                               ) ? (
                                                                <option
                                                                   value={ele.id}
                                                                >

@@ -7,11 +7,13 @@ import {
 } from "@chakra-ui/react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Images } from "../../Assets/TS";
 import { numberFormat } from "../../Helper/Format";
 import Checkbox from "./Checkbox/Checkbox";
 import Rate from "./Rate/Rate";
+import { categoryController } from "../../Controllers/CategoryController";
+import { subCate } from "../../Model/CategoryModel";
 // rati star
 export interface RatingStar {
   checked: boolean;
@@ -100,6 +102,17 @@ export default function SitebarFilter({
     setRating(rate);
     onRateChange(rate);
   };
+
+  const [subcate, setSubcate] = useState<subCate[]>([])
+
+  const getCate = () => {
+    categoryController.getCateFilter(nameCate).then((res) => {
+      setSubcate(res)
+    })
+  }
+  useEffect(() => {
+    getCate()
+  }, [])
   console.log("🚀 ~ file: SitebarFilter.tsx:79 ~ nameCate:", nameCate);
 
   return (
@@ -125,18 +138,18 @@ export default function SitebarFilter({
               >
                 <div className="mt-[20px]">
                   {/* default-radio-1 */}
-                  {arrCBCategory.map((item, index) => {
+                  {subcate.map((item, index) => {
                     return (
                       <Checkbox
-                        checkedCB={item.checkedCB}
-                        quantity={item.quantity}
-                        title={item.title}
+                        checkedCB={false}
+                        quantity={item.productId.length}
+                        title={item.name}
                         key={index}
-                        // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
-                        // onChangeFilter={(title) => {
-                        //   console.log("SiteFilterPages: " + title);
-                        //   props.onChangeFilters?.(title);
-                        // }}
+                      // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
+                      // onChangeFilter={(title) => {
+                      //   console.log("SiteFilterPages: " + title);
+                      //   props.onChangeFilters?.(title);
+                      // }}
                       />
                     );
                   })}
@@ -178,10 +191,10 @@ export default function SitebarFilter({
                   // value={rangeValue}
                   // onChange={() => onSliderChange}
                   range
-                  // onChange={(e) => {
-                  //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
-                  //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
-                  // }}
+                // onChange={(e) => {
+                //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
+                //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
+                // }}
                 />
                 <div className="flex mt-[20px] justify-start gap-2 ">
                   <p className="max-w-max">Giá: </p>
