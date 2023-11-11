@@ -1,11 +1,8 @@
 
-import Globe from "../../Assets/TSX/Globe";
-import Chevron_down from "../../Assets/TSX/Chevron-down";
 import Bell from "../../Assets/TSX/Bell";
-import Headphones from "../../Assets/TSX/headphones";
 import Map from "../../Assets/TSX/Map";
+import Headphones from "../../Assets/TSX/headphones";
 import Container from "../container/Container";
-
 
 
 export default function HeaderTop() {
@@ -24,12 +21,10 @@ export default function HeaderTop() {
 
               <div className="content-right flex items-center gap-2 ">
                 <div className="content-left flex items-center">
-                  <Globe />
-                  <span className="text-[#4C4C4C] pl-2">EN</span>
+                  <span className="text-[#4C4C4C] pl-2">VN</span>
                 </div>
                 <div className="content-left flex py-2 gap-2 ">
                   <div className="pt-1">
-                    <Chevron_down />
                   </div>
                   <div className="border-[1px] border-black " />
                   <div className="flex items-center pl-3">
