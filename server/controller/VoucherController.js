@@ -38,7 +38,7 @@ const VoucherController = {
             const page = parseInt(req.body.page) || 1;
             const pageSize = parseInt(req.body.pageSize) || 40;
             const keyword = req.body.keyword;
-            const skip = (page - 1) * pageSize;
+            let skip = (page - 1) * pageSize;
             if (keyword) {
                 skip = 0;
             }

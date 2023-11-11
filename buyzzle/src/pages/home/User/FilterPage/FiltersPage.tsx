@@ -85,7 +85,16 @@ export default function FiltersPage() {
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
   const [searchParams, setSearchParams] = useSearchParams();
   const searchValue = searchParams.get("keyword");
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:88 ~ FiltersPage ~ searchValue:",
+    searchValue
+  );
   const nameCateValue = searchParams.get("nameCate");
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:90 ~ FiltersPage ~ nameCateValue:",
+    nameCateValue
+  );
+
   const urlSliderValues = searchParams.get("sliderValues");
 
   useEffect(() => {
@@ -101,12 +110,23 @@ export default function FiltersPage() {
       setSearchParams(
         createSearchParams({
           nameCate: nameCateValue?.toString()!,
-          min: sliderValues[0].toString(),
-          max: sliderValues[1].toString(),
+          minPrice: sliderValues[0].toString(),
+          maxPrice: sliderValues[1].toString(),
         })
       );
     }
   }, [sliderValues]);
+
+  // useEffect(() => {
+  //   getProductInNameCate();
+  // }, [nameCateValue?.toString()]);
+
+  // const getProductInNameCate = () => {
+  //   productController.getList(nameCateValue?.toString()!).then((res: any) => {
+  //     setStars(res.data);
+  //     setProducts(res.rows);
+  //   });
+  // };
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
@@ -116,8 +136,13 @@ export default function FiltersPage() {
   }, [stars]);
 
   const handleActiveBTNLowToHighClick = () => {
+    const filterOptions = {
+      key: "asc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
     productController
-      .getSortProductbyPrice("asc", nameCateValue?.toString()!)
+      .getSortProductbyPriceAndDateCreate(filterOptions)
       .then((res: any) => {
         setActiveBtnLowToHigh(false);
         setActiveBtnHighToLow(true);
@@ -125,8 +150,14 @@ export default function FiltersPage() {
       });
   };
   const handleActiveBTNHighToLowClick = () => {
+    const filterOptions = {
+      key: "desc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
+
     productController
-      .getSortProductbyPrice("desc", nameCateValue?.toString()!)
+      .getSortProductbyPriceAndDateCreate(filterOptions)
       .then((res: any) => {
         setActiveBtnLowToHigh(true);
         setActiveBtnHighToLow(false);
@@ -135,13 +166,18 @@ export default function FiltersPage() {
   };
   const handleActiveBTNLatestCreationDate = () => {
     setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
+    const filterOptions = {
+      key: "desc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
     productController
-      .getSortProductbyDateCreate("desc", nameCateValue?.toString()!)
+      .getSortProductbyPriceAndDateCreate(filterOptions)
       .then((res: any) => {
         setProducts(res.rows);
       });
   };
-  const getSearchDataName = () => {
+  const getProductSearch = () => {
     productController
       .getSearchAndPaginationProduct(searchValue?.toString())
       .then((res: any) => {
@@ -153,24 +189,9 @@ export default function FiltersPage() {
   };
   useEffect(() => {
     if (searchValue?.toString()) {
-      getSearchDataName();
+      getProductSearch();
     }
   }, [searchValue?.toString()]);
-
-  useEffect(() => {
-    if (nameCateValue?.toString()) {
-      getData();
-    }
-  }, [nameCateValue?.toString()]);
-
-  const getData = () => {
-    productController
-      .getList("", nameCateValue?.toString()!)
-      .then((res: any) => {
-        setStars(res.data);
-        setProducts(res.rows);
-      });
-  };
 
   // Slider Price SiteBarFilterPages
   useEffect(() => {
@@ -181,15 +202,16 @@ export default function FiltersPage() {
 
   const handleFilter = async (debouncedInputValue: any) => {
     const filterOptions = {
-      min: debouncedInputValue[0],
-      max: debouncedInputValue[1],
-      nameCate: nameCateValue?.toString(),
+      minPrice: debouncedInputValue[0],
+      maxPrice: debouncedInputValue[1],
+      categoryName: nameCateValue?.toString(),
       keyword: searchValue?.toString(),
     };
 
     await productController
       .getFilterProductWithinRangeIDCategory(filterOptions)
       .then((res: any) => {
+        setStars(res.data);
         setProducts(res.rows);
       });
   };
@@ -213,6 +235,7 @@ export default function FiltersPage() {
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
             <SitebarFilter
+              nameCate={nameCateValue?.toString()}
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
@@ -336,9 +359,19 @@ export default function FiltersPage() {
                 </div>
               </div>
               {nameCateValue ? (
-                <p>Danh mục {nameCateValue}</p>
+                <div className="flex gap-2 mt-3 items-center">
+                  <p className="text-lg font-bold">Danh mục: </p>
+                  <p className="text-base font-medium text-[#4C4C4C]">
+                    ' {nameCateValue} '
+                  </p>
+                </div>
               ) : (
-                <p>Tìm kiếm với kết quả {searchValue}</p>
+                <div className="flex gap-2 mt-3 items-center">
+                  <p className="text-lg font-bold">Tìm kiếm với từ khóa: </p>
+                  <p className="text-base font-medium text-[#4C4C4C]">
+                    ' {searchValue} '
+                  </p>
+                </div>
               )}
               <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
                 {products?.map((items) => {

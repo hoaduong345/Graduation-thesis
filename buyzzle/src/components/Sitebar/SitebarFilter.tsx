@@ -1,12 +1,3 @@
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
-import { useState } from "react";
-import { Images } from "../../Assets/TS";
-import ArrowUp from "../../Assets/TSX/ArrowUp";
-import { numberFormat } from "../../Helper/Format";
-import ButtonSuggestt from "./ButtonSuggest/ButtonSuggest";
-import Checkbox from "./Checkbox/Checkbox";
-import Rate from "./Rate/Rate";
 import {
   Accordion,
   AccordionButton,
@@ -14,6 +5,13 @@ import {
   AccordionItem,
   AccordionPanel,
 } from "@chakra-ui/react";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import { useState } from "react";
+import { Images } from "../../Assets/TS";
+import { numberFormat } from "../../Helper/Format";
+import Checkbox from "./Checkbox/Checkbox";
+import Rate from "./Rate/Rate";
 // rati star
 export interface RatingStar {
   checked: boolean;
@@ -75,7 +73,7 @@ export interface SliderComponentProps {
   onPurchaseRangeChange: (value: [number, number]) => void;
   oninStock: (availability: boolean) => void;
   onSoldOut: (soldOut: boolean) => void;
-
+  nameCate?: string;
   valueSoldOut?: boolean;
   valueinStock?: boolean;
   valuePrice?: [number, number];
@@ -85,6 +83,7 @@ export interface SliderComponentProps {
 
 export default function SitebarFilter({
   valuePrice,
+  nameCate,
   onPriceRangeChange,
   onRateChange,
 }: SliderComponentProps) {
@@ -101,6 +100,7 @@ export default function SitebarFilter({
     setRating(rate);
     onRateChange(rate);
   };
+  console.log("🚀 ~ file: SitebarFilter.tsx:79 ~ nameCate:", nameCate);
 
   return (
     <>
@@ -109,41 +109,46 @@ export default function SitebarFilter({
           <h2 className="txt-filter font-bold text-[#1A1A1A] text-[20px]">
             BỘ LỌC TÌM KIẾM
           </h2>
-          <AccordionItem className="border-b border-gray-200 py-[17px] dark:!border-[#E6E6E6]">
-            <h2>
-              <AccordionButton className="flex justify-between">
-                <span className="text-left font-medium text-navy-900 dark:text-[#1A1A1A]">
-                  Theo Danh Mục
-                </span>
-                <AccordionIcon className="text-left !text-navy-900 dark:!text-[#1A1A1A]" />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel
-              className="text-left text-medium mt-2 !text-navy-900 dark:!text-[#1A1A1A]"
-              pb={4}
-            >
-              <div className="mt-[20px]">
-                {/* default-radio-1 */}
-                {arrCBCategory.map((item, index) => {
-                  return (
-                    <Checkbox
-                      checkedCB={item.checkedCB}
-                      quantity={item.quantity}
-                      title={item.title}
-                      key={index}
-                      // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
-                      // onChangeFilter={(title) => {
-                      //   console.log("SiteFilterPages: " + title);
-                      //   props.onChangeFilters?.(title);
-                      // }}
-                    />
-                  );
-                })}
+          {nameCate != null ? (
+            <AccordionItem className="border-b border-gray-200 py-[17px] dark:!border-[#E6E6E6]">
+              <h2>
+                <AccordionButton className="flex justify-between">
+                  <span className="text-left font-medium text-navy-900 dark:text-[#1A1A1A]">
+                    Theo Danh Mục
+                  </span>
+                  <AccordionIcon className="text-left !text-navy-900 dark:!text-[#1A1A1A]" />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel
+                className="text-left text-medium mt-2 !text-navy-900 dark:!text-[#1A1A1A]"
+                pb={4}
+              >
+                <div className="mt-[20px]">
+                  {/* default-radio-1 */}
+                  {arrCBCategory.map((item, index) => {
+                    return (
+                      <Checkbox
+                        checkedCB={item.checkedCB}
+                        quantity={item.quantity}
+                        title={item.title}
+                        key={index}
+                        // b6. xac dinh ben Components con da truyen duoc roi va qua ben cho cha goi ra thang con va nhan lai.
+                        // onChangeFilter={(title) => {
+                        //   console.log("SiteFilterPages: " + title);
+                        //   props.onChangeFilters?.(title);
+                        // }}
+                      />
+                    );
+                  })}
 
-                {/* default-radio-1-endsd */}
-              </div>
-            </AccordionPanel>
-          </AccordionItem>{" "}
+                  {/* default-radio-1-endsd */}
+                </div>
+              </AccordionPanel>
+            </AccordionItem>
+          ) : (
+            <></>
+          )}
+
           <AccordionItem className="border-b border-gray-200 py-[17px] dark:!border-[#E6E6E6]">
             <h2>
               <AccordionButton className="flex justify-between">
@@ -226,7 +231,7 @@ export default function SitebarFilter({
               type="button"
               className=" text-white bg-[#EA4B48] hover:bg-red-400 rounded-lg px-6 py-3 w-[95%] "
             >
-              XÓA BỘ LỌC
+              Xóa bộ lọc
             </button>
           </div>
           <a href="#">

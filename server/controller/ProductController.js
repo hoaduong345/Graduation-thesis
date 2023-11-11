@@ -126,13 +126,13 @@ const ProductController = {
                 where: {
                     AND: [
                         whereClause,
-                        { 
+                        {
                             name: {
-                                 contains: keyword 
-                                }
-                             }
-                    ]
-                }
+                                contains: keyword,
+                            },
+                        },
+                    ],
+                },
             });
             res.status(200).json(AllCategory);
         } catch (error) {
@@ -222,20 +222,11 @@ const ProductController = {
 
     addProduct: async (req, res) => {
         try {
-            const {
-                name,
-                price,
-                rate,
-                discount,
-                quantity,
-                description,
-                status,
-                categoryID,
-                subcategoriesID,
-            } = req.body;
+            const { name, price, rate, discount, quantity, description, status, categoryID, subcategoriesID } =
+                req.body;
 
-            console.log("aaa", categoryID)
-            console.log("bbbbb", subcategoriesID)
+            console.log('aaa', categoryID);
+            console.log('bbbbb', subcategoriesID);
             const SellingPrice = price - price * (discount / 100);
             const Pricesale = price * (discount / 100);
 
@@ -309,7 +300,7 @@ const ProductController = {
             const {
                 name,
                 price,
-                // rate,    
+                // rate,
                 discount,
                 // soldcount,
                 quantity,
@@ -338,7 +329,7 @@ const ProductController = {
                 // createdAt: new Date(),
                 updatedAt: new Date(),
                 categoryID: parseInt(categoryID),
-                subcateId: parseInt(subcateId)
+                subcateId: parseInt(subcateId),
             };
 
             const updatedProduct = await prisma.product.update({
@@ -348,7 +339,7 @@ const ProductController = {
                 data: {
                     ...updatedProductData,
                     categoryID: parseInt(categoryID),
-                    subcateId : parseInt(subcateId)
+                    subcateId: parseInt(subcateId),
                 },
             });
 
@@ -433,14 +424,17 @@ const ProductController = {
                 take: 3,
             });
 
-            const skip = (page - 1) * pageSize;
+            let skip = (page - 1) * pageSize;
+            if (keyword) {
+                skip = 0;
+            }
             const whereClause = {
                 name: {
                     contains: keyword,
                 },
                 deletedAt: null,
             };
-            const totalProduct = await prisma.product.findMany({
+            const totalProduct = await prisma.product.count({
                 where: whereClause,
             });
 
@@ -563,7 +557,7 @@ const ProductController = {
                 const resultProduct = {
                     FlashsaleProducts: FlashsaleProducts,
                     currentPage: page,
-                    totalPage: Math.ceil(totalProduct.length / pageSize),
+                    totalPage: Math.ceil(totalProduct / pageSize),
                     rows: result,
                     Rating: ratings,
                 };
