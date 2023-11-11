@@ -111,8 +111,8 @@ export default function Header() {
         pathname: `/FiltersPage/`,
         search: createSearchParams({
           keyword: searchValue?.toString()!,
-          min: sliderValues[0].toString(),
-          max: sliderValues[1].toString(),
+          minPrice: sliderValues[0].toString(),
+          maxPrice: sliderValues[1].toString(),
         }).toString(),
       });
       setShowSuggestions(false);
