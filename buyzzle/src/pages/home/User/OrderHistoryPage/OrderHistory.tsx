@@ -28,7 +28,7 @@ export const getStatusOrder = (status: StatusOrder) => {
       _statusOrder = <p className="text-teal-700">Đã đặt hàng</p>;
       break;
     case StatusOrder.WaitingCourier:
-      _statusOrder = <p className="text-[#F43FCA]">Giao cho ĐVVT</p>;
+      _statusOrder = <p className="text-[#F43FCA]">Giao cho ĐVVC</p>;
       break;
     case StatusOrder.recievedCourier:
       _statusOrder = <p className="text-[#FBC132]">ĐVVT đã nhận hàng</p>;

@@ -47,7 +47,7 @@ function StepperAdmin(props: handleClick) {
           className={`step ${status >= 3 ? `step-neutral` : ``}`}
         >
           <p className={` ${status >= 3 ? `inherit` : `text-[#9c9c9c]`}`}>
-            Giao cho ĐVVT
+            Giao cho ĐVVC
           </p>
           <div className="group inline-block mt-2">
             <button
@@ -77,7 +77,7 @@ function StepperAdmin(props: handleClick) {
         </li>
         {/* ---------------- */}
         <li
-          data-content={`${status >= 5 ? `✓` : `4`}`}
+          data-content={`${status >= 5 ? `✓` : `3`}`}
           className={`step ${status >= 5 ? `step-neutral` : ``} `}
         >
           <p className={` ${status >= 5 ? `inherit` : `text-[#9c9c9c]`}`}>
@@ -85,7 +85,7 @@ function StepperAdmin(props: handleClick) {
           </p>
         </li>
         <li
-          data-content={`${status >= 6 ? `✓` : `5`}`}
+          data-content={`${status >= 6 ? `✓` : `4`}`}
           className={`step ${status == 6 ? `step-neutral` : ``} `}
         >
           <p className={` ${status == 6 ? `inherit` : `text-[#9c9c9c]`}`}>

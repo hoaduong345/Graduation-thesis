@@ -138,7 +138,7 @@ export default function StepperPage(props: StatusOrder) {
             status >= 3 ? `text-[#EA4B48]` : `text-[#e0e0e0]`
           } w-[27%] text-center`}
         >
-          Giao cho ĐVVT
+          Giao cho ĐVVC
         </p>
         <p
           className={`${
