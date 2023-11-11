@@ -1,5 +1,5 @@
 
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from "@chakra-ui/react";
+import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -19,6 +19,8 @@ import RemoveCate from "../../Assets/TSX/RemoveCate";
 import UploadIMG from "../../Assets/TSX/UploadIMG";
 import Handle from "../../Assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
+import ArrowDown from "../../Assets/TSX/ArrowDown";
+import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 
 function Category() {
   const idModalCate = "category";
@@ -36,8 +38,8 @@ function Category() {
 
   const [url, setUrl] = useState<string>();
 
-  // const [open, setOpen] = useState<number>();
-  // const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
+  const [open, setOpen] = useState<number>();
+  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const [checkedCategory, setCheckedCategory] = useState<CategoryModal[]>([]);
 
@@ -270,8 +272,8 @@ function Category() {
               </h2>
             </div>
 
-            <div className="flex flex-col">
-              <div className="flex justify-between mb-7">
+            <div className="flex flex-col gap-5">
+              <div className="flex justify-between">
                 <div className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6">
                   <button
                     className="flex gap-3"
@@ -461,55 +463,42 @@ function Category() {
                   </>
                 }
               />
-              {categorys.map((e, index) => {
-                return (
-                  <>
-                    <Accordion allowMultiple className="w-full" key={e.id}>
-                      <AccordionItem className="grid grid-cols-10">
-                        <div className="col-span-8 grid grid-cols-8">
-                          <div className="col-span-3 border-[#e0e0e0] items-center flex justify-between pr-6 pl-16">
-                            <div className=" flex gap-[20px] max-lg:gap-2">
-                              <input
-                                className="checkbox checkbox-sm items-center"
-                                type="checkbox"
-                                checked={checkedCategory.includes(e)}
-                                onChange={(element) =>
-                                  handleChecked(element.target.checked, e)
-                                }
-                              />
+              <div className=" flex flex-col gap-7">
+                {categorys.map((e, index) => {
+                  return (
+                    <>
+                      <Accordion open={open === e.id} className="w-full" key={e.id}>
+                        <div className="grid grid-cols-10">
+                          <div className="col-span-8 grid grid-cols-8">
+                            <div className="col-span-3 border-[#e0e0e0] flex justify-between items-center pr-6 pl-16">
+                              <div className=" flex gap-[20px] max-lg:gap-2">
+                                <input
+                                  className="checkbox checkbox-sm items-center"
+                                  type="checkbox"
+                                  checked={checkedCategory.includes(e)}
+                                  onChange={(element) =>
+                                    handleChecked(element.target.checked, e)
+                                  }
+                                />
+                              </div>
+                              <div onClick={() => handleOpen(e.id)} className="cursor-pointer">
+                                <img className="w-[50px] h-[50px] object-cover" src={e.image} alt="" />
+                              </div>
                             </div>
-                            <div>
-                              <AccordionButton>
-                                <img className="w-[50px]" src={e.image} alt="" />
-                              </AccordionButton>
-                            </div>
-                          </div>
-                          <AccordionButton
-                            className="col-span-5 cursor-pointer border-[#e0e0e0] h-20 items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]"
-                          >
-                            <p className="text-[16px] font-medium my-auto max-lg:text-sm">
-                              {e.name}
-                            </p>
+                            <div
+                              onClick={() => handleOpen(e.id)}
+                              className="col-span-5 flex cursor-pointer border-[#e0e0e0] items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]"
+                            >
+                              <p className="text-[16px] font-medium my-auto max-lg:text-sm">
+                                {e.name}
+                              </p>
 
-                          </AccordionButton>
-                          <AccordionPanel className="text-left text-medium mt-2 !text-navy-900 dark:!text-[#1A1A1A]"
-                            pb={4}>
-                            {e.subCategories?.map((elements) => {
-                              return (
-                                <>
-                                  <div className="border-[#e0e0e0] mx-auto flex h-5 items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
-                                    <p className="text-[16px] font-medium max-lg:text-sm">
-                                      {elements.name}
-                                    </p>
-                                  </div>
-                                </>
-                              );
-                            })}
-                          </AccordionPanel>
-                        </div>
-                        <div className="col-span-2 border-[#e0e0e0]">
-                          <div className="flex text-center justify-center items-center gap-5 py-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                            </div>
+
+                          </div>
+                          <div className="flex col-span-2 text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
                             <button
+                              className="flex items-center"
                               onClick={() => {
                                 openModal(
                                   idModalSubCateLv1,
@@ -522,7 +511,7 @@ function Category() {
                               <Plus />
                             </button>
 
-                            <div className="dropdown dropdown-left">
+                            <div className="dropdown dropdown-left flex items-center">
                               <label tabIndex={0}>
                                 <Handle />
                               </label>
@@ -562,19 +551,40 @@ function Category() {
                                 </li>
                               </ul>
                             </div>
-                            <div>
-                              <AccordionButton>
-                                <AccordionIcon className="text-left !text-navy-900 dark:!text-[#1A1A1A]" />
-                              </AccordionButton>
+
+                            <div onClick={() => handleOpen(e.id)} className="cursor-pointer flex items-center">
+                              {open === e.id ? (
+                                <ArrowDown />
+                              ) : (
+                                <ArrowNextHistory />
+                              )}
+
                             </div>
                           </div>
                         </div>
 
-                      </AccordionItem>
-                    </Accordion>
-                  </>
-                );
-              })}
+                        <AccordionBody>
+                          {e.subCategories?.map((elements) => {
+                            return (
+                              <>
+                                <div key={elements.id} className="grid grid-cols-10">
+                                  <div className="col-span-3"></div>
+                                  <div className="col-span-5 border-[#e0e0e0] flex h-5 items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
+                                    <p className="text-[16px] font-medium max-lg:text-sm">
+                                      {elements.name}
+                                    </p>
+                                  </div>
+                                  <div className="col-span-2"></div>
+                                </div>
+                              </>
+                            );
+                          })}
+                        </AccordionBody>
+                      </Accordion>
+                    </>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
