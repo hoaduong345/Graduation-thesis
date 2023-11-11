@@ -564,23 +564,29 @@ function Category() {
                         </div>
 
                         <AccordionBody>
-                          {e.subCategories?.map((elements) => {
-                            return (
-                              <>
-                                <div key={elements.id} className="grid grid-cols-10">
-                                  <div className="col-span-3"></div>
-                                  <div className="col-span-5 border-[#e0e0e0] flex h-5 items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
-                                    <p className="text-[16px] font-medium max-lg:text-sm">
-                                      {elements.name}
-                                    </p>
-                                  </div>
-                                  <div className="col-span-2"></div>
-                                </div>
-                              </>
-                            );
-                          })}
+                          <div className="flex flex-col gap-5">
+                            {e.subCategories?.map((elements) => {
+                              return (
+                                <>
+                                  <div key={elements.id} className="grid grid-cols-10">
+                                    <div className="col-span-3"></div>
+                                    <div className="col-span-5 border-[#e0e0e0] flex h-5 items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
+                                      <p className="text-[16px] font-medium max-lg:text-sm">
+                                        {elements.name}
+                                      </p>
+                                    </div>
+                                    <div className="flex col-span-2 text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                                      <Edit />
+                                      <Delete />
+                                    </div>
+                                  </div >
+                                </>
+                              );
+                            })}
+
+                          </div>
                         </AccordionBody>
-                      </Accordion>
+                      </Accordion >
                     </>
                   );
                 })}
@@ -588,7 +594,7 @@ function Category() {
             </div>
           </div>
         </div>
-      </Container>
+      </Container >
     </>
   );
 }
