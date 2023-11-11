@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
 import { CheckboxCategory } from "../SitebarFilter";
-import { title } from "process";
 
 // b2. se di tim cai data minh muon chuyen di (title trong props: CheckboxCategory)
 export default function Checkbox(props: CheckboxCategory) {
@@ -13,10 +11,11 @@ export default function Checkbox(props: CheckboxCategory) {
           type="radio"
           name="colored-radio"
           id="orange-radio"
+          onClick={() => props.getProduct(props.index)}
           className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
           checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
           // b1. Xac dinh kieu focus cua inpt la onChange event
-          onChange={(e) => {
+          onChange={() => {
             // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
             props.onChangeFilter?.(props.title);
           }}
