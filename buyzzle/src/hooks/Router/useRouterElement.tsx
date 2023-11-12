@@ -39,6 +39,7 @@ import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
 import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
 import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
+import CustomToast from "../../Helper/Toast/CustomToast";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -54,6 +55,14 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <UserProfile />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/custom",
+      element: (
+        <MainLayout>
+          <CustomToast />
         </MainLayout>
       ),
     },

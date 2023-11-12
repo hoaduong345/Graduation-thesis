@@ -13,14 +13,28 @@ function AdminLayout() {
     const socket = io("http://localhost:5000");
     socket.on("requestdelete", (newOrder) => {
       console.log("Received deleted order data:", newOrder);
-      toast.warn(
-        <div>
-          <img src={Images.avatar_admin} alt="Custom Toast" />
-          <button onClick={() => alert("Button Clicked")}>Custom Button</button>
+      toast.error(
+        <div className="flex gap-2 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
+          <div className="items-center flex gap-3">
+            <div className="p-1">
+              <img
+                src={Images.avatar_admin}
+                alt="avatar_admin"
+                width={45}
+                height={45}
+              />
+            </div>
+            <div>
+              <p className="text-red-600 text-xs">Có yêu cầu hủy đơn từ: </p>
+              <div className="text-xs font-semibold text-black">
+                Nguyen Viet Thang
+              </div>
+            </div>
+          </div>
         </div>,
         {
           position: "bottom-left",
-          autoClose: 5000,
+          autoClose: 10000,
           closeButton: true,
         }
       );
@@ -35,10 +49,30 @@ function AdminLayout() {
     const socket = io("http://localhost:5000");
     socket.on("newOrder", (newOrder) => {
       console.log("Received deleted order data:", newOrder);
-      toast.info("Có đơn hàng mới từ người dùng", {
-        position: "bottom-left",
-        autoClose: 5000,
-      });
+      toast.info(
+        <div className="flex gap-2 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
+          <div className="items-center flex gap-3">
+            <div className="p-1">
+              <img
+                src={Images.avatar_admin}
+                alt="avatar_admin"
+                width={45}
+                height={45}
+              />
+            </div>
+            <div>
+              <p className="text-[#3DC0F8] text-xs">Có đơn hàng mới từ: </p>
+              <div className="text-xs font-semibold text-black">
+                Nguyen Viet Thang
+              </div>
+            </div>
+          </div>
+        </div>,
+        {
+          position: "bottom-left",
+          autoClose: 5000,
+        }
+      );
       setDeletedOrder(newOrder);
     });
     socket.on("disconnect", () => {
