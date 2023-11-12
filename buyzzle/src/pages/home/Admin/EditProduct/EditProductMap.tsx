@@ -721,7 +721,7 @@ export default function EditProductMap() {
                                              value.replace(reg, "")
                                           );
                                        }}
-                                       value={field.value}
+                                       value={field.value ? field.value.toString() : ''}
                                        className="w-[100%] p-2.5 text-gray-500 bg-white py-[14px] outline-none rounded-md"
                                     >
                                        <option value="">
