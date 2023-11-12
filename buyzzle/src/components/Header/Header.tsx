@@ -6,20 +6,15 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import Bell from "../../Assets/TSX/Bell";
-import Chevron_down from "../../Assets/TSX/Chevron-down";
-import Globe from "../../Assets/TSX/Globe";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
-import Map from "../../Assets/TSX/Map";
 import Search from "../../Assets/TSX/Search";
-import Headphones from "../../Assets/TSX/headphones";
 import { productController } from "../../Controllers/ProductsController";
 import { userController } from "../../Controllers/UserController";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import Container from "../container/Container";
-import HeaderTop from "../HeaderTop/HeaderTop";
+import HeaderTopUser from "../HeaderTop/HeaderTopUser";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -124,7 +119,9 @@ export default function Header() {
     <>
       <header className="Header">
         <Container>
-          <HeaderTop />
+          <div className="my-1">
+            <HeaderTopUser />
+          </div>
         </Container>
 
         <div className="border-2 border-[#E6E6E6]" />

@@ -11,13 +11,19 @@ export default function CartCount() {
         <div>
           <Link to={"/cart"}>
             <div className="items-center flex pr-11 max-[769px]:pr-[10px]">
-              <Shoppingcart />
-              <div className="absolute">
-                <Ellips />
-                <span className="text-white font-bold absolute top-[-21px] ml-[30px] text-xs max-xl:text-[9px] max-xl:absolute max-xl:mr-[100px]">
-                  {carts.item?.length ?? 0}
+              <span className="relative inline-block">
+                <Shoppingcart />
+                <span
+                  className="absolute top-0 right-0 inline-flex items-center justify-center py-1 px-[6px] text-xs  border-[2px] border-[#44170f]
+                        font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"
+                >
+                  {carts.item?.length >= 10 ? (
+                    <p>10+</p>
+                  ) : (
+                    <p>{carts.item?.length}</p> ?? 0
+                  )}
                 </span>
-              </div>
+              </span>
             </div>
           </Link>
         </div>

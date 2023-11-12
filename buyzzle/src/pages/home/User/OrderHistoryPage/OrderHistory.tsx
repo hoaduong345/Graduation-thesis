@@ -198,7 +198,7 @@ export default function OrderHistory() {
                                     Tổng
                                   </th>
                                   <th className=" px-6 py-2 w-[14%] font-normal">
-                                    {e.status == 2 ? (
+                                    {e.status === 1 || e.status === 2 ? (
                                       <>
                                         {!isOrderCancelled ? (
                                           <p

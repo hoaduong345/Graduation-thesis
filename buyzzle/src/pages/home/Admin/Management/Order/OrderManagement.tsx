@@ -368,7 +368,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                           <p className="font-bold text-xs text-white ">Mới</p>
                         </div> */}
                       </div>
-                      <div className="grid grid-cols-3 mt-4 ">
+                      <div className="grid grid-cols-2 mt-4 ">
                         {e.OrderDetail.map((items) => {
                           return (
                             <>
