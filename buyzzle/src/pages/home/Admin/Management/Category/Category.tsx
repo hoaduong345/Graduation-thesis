@@ -210,7 +210,7 @@ function Category() {
   }, []);
 
   const getList = () => {
-    categoryController.getAllCate().then((res: any) => {
+    categoryController.getAllCateAdmin().then((res: any) => {
       closeModal("");
       setCategorys(res.data);
     });

@@ -10,18 +10,18 @@ export default function Category(props: Cate) {
 
   const handleNavigation = () => {
     const nameCate = props.name;
-    const decodedData = decodeURIComponent(nameCate);
-    // Remove diacritics from Vietnamese characters
-    function removeDiacritics(str: string) {
-      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    }
-    // Remove special characters and diacritics
-    const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
+    // const decodedData = decodeURIComponent(nameCate);
+    // // Remove diacritics from Vietnamese characters
+    // function removeDiacritics(str: string) {
+    //   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // }
+    // // Remove special characters and diacritics
+    // const cleanedData = removeDiacritics(decodedData).replace(/[^\w\s]/gi, "");
 
     navigate({
       pathname: `/FiltersPage/`,
       search: createSearchParams({
-        nameCate: cleanedData,
+        nameCate: nameCate,
       }).toString(),
     });
   };

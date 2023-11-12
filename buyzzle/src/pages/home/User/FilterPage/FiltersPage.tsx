@@ -1,9 +1,7 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createSearchParams,
-  useLocation,
-  useParams,
-  useSearchParams,
+  useSearchParams
 } from "react-router-dom";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
@@ -11,8 +9,10 @@ import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 import Series from "../../../../Assets/TSX/Series";
 import StepsLogo from "../../../../Assets/TSX/StepsLogo";
+import { categoryController } from "../../../../Controllers/CategoryController";
 import { productController } from "../../../../Controllers/ProductsController";
 import { roundedNumber } from "../../../../Helper/Format";
+import { subCate } from "../../../../Model/CategoryModel";
 import { Rate, Row } from "../../../../Model/ProductModel";
 import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
 import Container from "../../../../components/container/Container";
@@ -20,7 +20,6 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import useDebounce from "../../../../useDebounceHook/useDebounce";
 import "../../../css/filter.css";
 import Filter from "./Filter";
-import { number } from "yup";
 export interface Cate {
   id: number;
   name: string;
@@ -45,13 +44,6 @@ export interface Products {
   date: string;
   fK_category: Cate;
   ProductImage: ImgOfProduct[];
-}
-interface TProductResponse {
-  currentPage?: number;
-  totalpage?: number;
-  rows?: Products[];
-  createdAt?: string;
-  ProductImage?: ImgOfProduct[];
 }
 
 export type Props = {
@@ -96,6 +88,19 @@ export default function FiltersPage() {
   );
 
   const urlSliderValues = searchParams.get("sliderValues");
+
+  const [subcate, setSubcate] = useState<subCate[]>([])
+
+  const getCate = (index: number) => {
+    categoryController.getCateFilter(nameCateValue?.toString()).then((res) => {
+      setSubcate(res)
+      console.log(index)
+      setProducts(res[index].productId)
+    })
+  }
+  useEffect(() => {
+    getCate(NaN)
+  }, [])
 
   useEffect(() => {
     // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
@@ -249,6 +254,8 @@ export default function FiltersPage() {
               onSoldOut={function (soldOut: boolean): void {
                 throw new Error("Function not implemented.");
               }}
+              subcate={subcate}
+              setProductSubcate={(index) => getCate(index)}
             />
           </div>
           {/* content-right-filter */}
