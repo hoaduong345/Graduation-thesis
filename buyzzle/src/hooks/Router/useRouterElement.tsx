@@ -6,7 +6,6 @@ import Login from "../../pages/login/Login";
 import ListproductsAdmin from "../../pages/home/Admin/ListProduct/Listproducts";
 import HomePage from "../../pages/home/User/HomePage";
 import ProductsPage from "../../pages/home/User/ProductsPage";
-import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
 // import Addproducts from "../pages/home/Admin/Addproducts";
 import Editproducts from "../../pages/home/Admin/EditProduct/Editproducts";
 // import Detailproducts from "../pages/home/Admin/Detailproducts";
@@ -38,6 +37,8 @@ import Admin from "../../pages/home/Admin/Management/Admin/Admin";
 import ShippingPage from "../../pages/home/Shipping/ShippingPage";
 import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
+import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
+import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
 import Notification from "../../components/Notification/Notification";
 export default function useRouterEmelent() {
   const routes = useRoutes([
@@ -46,14 +47,6 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <HomePage />
-        </MainLayout>
-      ),
-    },
-    {
-      path: "/notification",
-      element: (
-        <MainLayout>
-          <Notification />
         </MainLayout>
       ),
     },
@@ -514,6 +507,14 @@ export default function useRouterEmelent() {
       element: (
         <MainLayout>
           <OrderDetailPage />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "favorite",
+      element: (
+        <MainLayout>
+          <FavoritePage />
         </MainLayout>
       ),
     },

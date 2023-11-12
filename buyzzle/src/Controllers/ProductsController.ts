@@ -14,13 +14,11 @@ export interface ModelProducts {
 }
 class ProductController {
   getList = async (
-    name: string | undefined,
     nameCate: string
+    // id: number
   ): Promise<Products[]> => {
     return await axios
-      .get(
-        `${appConfig.apiUrl}/allproducts?keyword=${name}&categoryName=${nameCate}`
-      )
+      .get(`${appConfig.apiUrl}/allproducts?categoryName=${nameCate}`)
       .then((res) => {
         return res.data as Products[];
       });
@@ -72,39 +70,54 @@ class ProductController {
         return res.data as Products[];
       });
   };
-  getSortProductbyPrice = async (
-    key: string,
-    nameCate: string
-  ): Promise<Products[]> => {
+  getSortProductbyPriceAndDateCreate = async (options: {
+    key?: string;
+    categoryName?: string;
+    keyword?: string;
+  }): Promise<Products[]> => {
+    const { key, categoryName, keyword } = options;
+    const queryParams = new URLSearchParams({
+      sortByPrice: key || "",
+      sortByDateCreate: key || "",
+      categoryName: categoryName || "",
+      keyword: keyword || "",
+    });
     return await axios
-      .get(
-        `${appConfig.apiUrl}/allproducts?sortByPrice=${key}&categoryName=${nameCate}`
-      )
+      .get(`${appConfig.apiUrl}/allproducts?${queryParams}`)
       .then((res) => {
         return res.data as Products[];
       });
   };
-  getSortProductbyDateCreate = async (
-    key: string,
-    nameCate: string
-  ): Promise<Products[]> => {
+  // getSortProductbyDateCreate = async (
+  //   key: string,
+  //   nameCate: string
+  // ): Promise<Products[]> => {
+  //   return await axios
+  //     .get(
+  //       `${appConfig.apiUrl}/allproducts?sortByDateCreate=${key}&categoryName=${nameCate}`
+  //     )
+  //     .then((res) => {
+  //       return res.data as Products[];
+  //     });
+  // };
+
+  getFilterProductWithinRangeIDCategory = async (options: {
+    minPrice?: number;
+    maxPrice?: number;
+    categoryName?: string;
+    keyword?: string;
+  }): Promise<Products[]> => {
+    const { minPrice, maxPrice, categoryName, keyword } = options;
+
+    const queryParams = new URLSearchParams({
+      minPrice: minPrice?.toString() || "",
+      maxPrice: maxPrice?.toString() || "",
+      categoryName: categoryName || "",
+      keyword: keyword || "",
+    });
+
     return await axios
-      .get(
-        `${appConfig.apiUrl}/allproducts?sortByDateCreate=${key}&categoryName=${nameCate}`
-      )
-      .then((res) => {
-        return res.data as Products[];
-      });
-  };
-  getFilterProductWithinRangeIDCategory = async (
-    min: number,
-    max: number,
-    nameCate: string
-  ): Promise<Products[]> => {
-    return await axios
-      .get(
-        `${appConfig.apiUrl}/allproducts?minPrice=${min}&maxPrice=${max}&categoryName=${nameCate}`
-      )
+      .get(`${appConfig.apiUrl}/allproducts?${queryParams}`)
       .then((res) => {
         return res.data as Products[];
       });

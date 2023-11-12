@@ -36,6 +36,18 @@ export default function Header() {
   const searchValue = searchParams.get("keyword");
 
   const debouncedSearchParams = useDebounce(text, 500);
+  // Slider Price SiteBarFilterPages
+  const [sliderValues, setSliderValues] = useState<[number, number]>([
+    0, 10000000,
+  ]);
+  const urlSliderValues = searchParams.get("sliderValues");
+  useEffect(() => {
+    // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
+    if (urlSliderValues) {
+      const [min, max] = urlSliderValues.split(",").map(Number);
+      setSliderValues([min, max]);
+    }
+  }, [urlSliderValues]);
 
   const getSearhvalue = async () => {
     await productController.getAllProductsSearch(text).then((res: any) => {
@@ -49,6 +61,8 @@ export default function Header() {
       setSearchParams(
         createSearchParams({
           keyword: text,
+          // min: sliderValues[0].toString(),
+          // max: sliderValues[1].toString(),
         })
       );
     }
@@ -93,11 +107,12 @@ export default function Header() {
   };
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
-      // navigate(`/FiltersPage`);
       navigate({
         pathname: `/FiltersPage/`,
         search: createSearchParams({
           keyword: searchValue?.toString()!,
+          minPrice: sliderValues[0].toString(),
+          maxPrice: sliderValues[1].toString(),
         }).toString(),
       });
       setShowSuggestions(false);

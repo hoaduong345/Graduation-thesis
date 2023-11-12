@@ -1,13 +1,18 @@
-import { ReactNode, useEffect, useState } from "react";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  createSearchParams,
+  useSearchParams
+} from "react-router-dom";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 import Series from "../../../../Assets/TSX/Series";
 import StepsLogo from "../../../../Assets/TSX/StepsLogo";
+import { categoryController } from "../../../../Controllers/CategoryController";
 import { productController } from "../../../../Controllers/ProductsController";
 import { roundedNumber } from "../../../../Helper/Format";
+import { subCate } from "../../../../Model/CategoryModel";
 import { Rate, Row } from "../../../../Model/ProductModel";
 import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
 import Container from "../../../../components/container/Container";
@@ -40,13 +45,6 @@ export interface Products {
   fK_category: Cate;
   ProductImage: ImgOfProduct[];
 }
-interface TProductResponse {
-  currentPage?: number;
-  totalpage?: number;
-  rows?: Products[];
-  createdAt?: string;
-  ProductImage?: ImgOfProduct[];
-}
 
 export type Props = {
   minPrice: number;
@@ -74,47 +72,98 @@ export default function FiltersPage() {
 
   // Slider Price SiteBarFilterPages
   const [sliderValues, setSliderValues] = useState<[number, number]>([
-    0, 10000000000,
+    0, 10000000,
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
   const [searchParams, setSearchParams] = useSearchParams();
   const searchValue = searchParams.get("keyword");
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:88 ~ FiltersPage ~ searchValue:",
+    searchValue
+  );
   const nameCateValue = searchParams.get("nameCate");
-  const min = searchParams.get("minPrice");
-  const max = searchParams.get("maxPrice");
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:90 ~ FiltersPage ~ nameCateValue:",
+    nameCateValue
+  );
+
+  const urlSliderValues = searchParams.get("sliderValues");
+
+  const [subcate, setSubcate] = useState<subCate[]>([])
+
+  const getCate = (index: number) => {
+    categoryController.getCateFilter(nameCateValue?.toString()).then((res) => {
+      setSubcate(res)
+      console.log(index)
+      setProducts(res[index].productId)
+    })
+  }
+  useEffect(() => {
+    getCate(NaN)
+  }, [])
+
+  useEffect(() => {
+    // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
+    if (urlSliderValues) {
+      const [min, max] = urlSliderValues.split(",").map(Number);
+      setSliderValues([min, max]);
+    }
+  }, [urlSliderValues]);
+
+  useEffect(() => {
+    if (nameCateValue != undefined) {
+      setSearchParams(
+        createSearchParams({
+          nameCate: nameCateValue?.toString()!,
+          minPrice: sliderValues[0].toString(),
+          maxPrice: sliderValues[1].toString(),
+        })
+      );
+    }
+  }, [sliderValues]);
+
+  // useEffect(() => {
+  //   getProductInNameCate();
+  // }, [nameCateValue?.toString()]);
+
+  // const getProductInNameCate = () => {
+  //   productController.getList(nameCateValue?.toString()!).then((res: any) => {
+  //     setStars(res.data);
+  //     setProducts(res.rows);
+  //   });
+  // };
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (stars) {
       setStarsnumber(roundedNumber(stars.averageRating));
-      console.log(
-        "🚀 ~ file: FiltersPage.tsx:99 ~ useEffect ~ stars.averageRating:",
-        stars.averageRating
-      );
     }
   }, [stars]);
 
   const handleActiveBTNLowToHighClick = () => {
+    const filterOptions = {
+      key: "asc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
     productController
-      .getSortProductbyPrice("asc", nameCateValue?.toString()!)
+      .getSortProductbyPriceAndDateCreate(filterOptions)
       .then((res: any) => {
-        console.log(
-          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-          res
-        );
         setActiveBtnLowToHigh(false);
         setActiveBtnHighToLow(true);
         setProducts(res.rows);
       });
   };
   const handleActiveBTNHighToLowClick = () => {
+    const filterOptions = {
+      key: "desc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
+
     productController
-      .getSortProductbyPrice("desc", nameCateValue?.toString()!)
+      .getSortProductbyPriceAndDateCreate(filterOptions)
       .then((res: any) => {
-        console.log(
-          "🚀 ~ file: FiltersPage.tsx:57 ~ productController.getSortProductbyPrice ~ res:",
-          res
-        );
         setActiveBtnLowToHigh(true);
         setActiveBtnHighToLow(false);
         setProducts(res.rows);
@@ -122,17 +171,21 @@ export default function FiltersPage() {
   };
   const handleActiveBTNLatestCreationDate = () => {
     setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
+    const filterOptions = {
+      key: "desc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
     productController
-      .getSortProductbyDateCreate("desc", nameCateValue?.toString()!)
+      .getSortProductbyPriceAndDateCreate(filterOptions)
       .then((res: any) => {
         setProducts(res.rows);
       });
   };
-  const getSearchDataName = () => {
+  const getProductSearch = () => {
     productController
       .getSearchAndPaginationProduct(searchValue?.toString())
       .then((res: any) => {
-        console.log("🚀 ~ file: FiltersPage.tsx:183 ~ .then ~ res:", res);
         setProducts(res.rows);
       })
       .catch((err) => {
@@ -141,29 +194,9 @@ export default function FiltersPage() {
   };
   useEffect(() => {
     if (searchValue?.toString()) {
-      getSearchDataName();
+      getProductSearch();
     }
   }, [searchValue?.toString()]);
-
-  useEffect(() => {
-    if (nameCateValue?.toString()) {
-      getData();
-    }
-  }, [nameCateValue?.toString()]);
-
-  const getData = () => {
-    productController
-      .getList("", nameCateValue?.toString()!)
-      .then((res: any) => {
-        console.log(res);
-        setStars(res.data);
-        console.log(
-          "🚀 ~ file: FiltersPage.tsx:151 ~ productController.getList ~ res.data:",
-          res.data
-        );
-        setProducts(res.rows);
-      });
-  };
 
   // Slider Price SiteBarFilterPages
   useEffect(() => {
@@ -173,20 +206,21 @@ export default function FiltersPage() {
   }, [debouncedInputValue]);
 
   const handleFilter = async (debouncedInputValue: any) => {
-    console.log(debouncedInputValue);
+    const filterOptions = {
+      minPrice: debouncedInputValue[0],
+      maxPrice: debouncedInputValue[1],
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
 
     await productController
-      .getFilterProductWithinRangeIDCategory(
-        debouncedInputValue[0],
-        debouncedInputValue[1],
-        nameCateValue?.toString()!
-      )
+      .getFilterProductWithinRangeIDCategory(filterOptions)
       .then((res: any) => {
+        setStars(res.data);
         setProducts(res.rows);
       });
   };
   function handleSliderChange(price: [number, number]): void {
-    console.log("value", price);
     setSliderValues(price);
   }
 
@@ -194,7 +228,6 @@ export default function FiltersPage() {
     productController
       .getProductWhereRatting(rate)
       .then((res: any) => {
-        console.log("Ratting fillter" + JSON.stringify(res));
         setProducts(res.rows);
       })
       .catch((err) => {
@@ -207,6 +240,7 @@ export default function FiltersPage() {
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
             <SitebarFilter
+              nameCate={nameCateValue?.toString()}
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
@@ -220,6 +254,8 @@ export default function FiltersPage() {
               onSoldOut={function (soldOut: boolean): void {
                 throw new Error("Function not implemented.");
               }}
+              subcate={subcate}
+              setProductSubcate={(index) => getCate(index)}
             />
           </div>
           {/* content-right-filter */}
@@ -330,9 +366,19 @@ export default function FiltersPage() {
                 </div>
               </div>
               {nameCateValue ? (
-                <p>Danh mục {nameCateValue}</p>
+                <div className="flex gap-2 mt-3 items-center">
+                  <p className="text-lg font-bold">Danh mục: </p>
+                  <p className="text-base font-medium text-[#4C4C4C]">
+                    ' {nameCateValue} '
+                  </p>
+                </div>
               ) : (
-                <p>Tìm kiếm với kết quả {searchValue}</p>
+                <div className="flex gap-2 mt-3 items-center">
+                  <p className="text-lg font-bold">Tìm kiếm với từ khóa: </p>
+                  <p className="text-base font-medium text-[#4C4C4C]">
+                    ' {searchValue} '
+                  </p>
+                </div>
               )}
               <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
                 {products?.map((items) => {

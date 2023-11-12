@@ -1,9 +1,9 @@
+
 import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 import Plus from "../../../../../Assets/TSX/Plus";
 import { categoryController } from "../../../../../Controllers/CategoryController";
 import { storage } from "../../../../../Firebase/Config";
@@ -12,15 +12,15 @@ import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import Loading from "../../../../../Helper/Loading/Loading";
 import { CategoryModal } from "../../../../../Model/CategoryModel";
 import Container from "../../../../../components/container/Container";
-import ArrowDown from "../../Assets/TSX/ArrowDown";
 import Delete from "../../Assets/TSX/Delete";
 import Edit from "../../Assets/TSX/Edit";
-import Line from "../../Assets/TSX/Line";
 import PlusSquare from "../../Assets/TSX/PlusSquare";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import UploadIMG from "../../Assets/TSX/UploadIMG";
 import Handle from "../../Assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
+import ArrowDown from "../../Assets/TSX/ArrowDown";
+import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 
 function Category() {
   const idModalCate = "category";
@@ -210,7 +210,7 @@ function Category() {
   }, []);
 
   const getList = () => {
-    categoryController.getAllCate().then((res: any) => {
+    categoryController.getAllCateAdmin().then((res: any) => {
       closeModal("");
       setCategorys(res.data);
     });
@@ -272,8 +272,8 @@ function Category() {
               </h2>
             </div>
 
-            <div className="flex flex-col">
-              <div className="flex justify-between mb-7">
+            <div className="flex flex-col gap-5">
+              <div className="flex justify-between">
                 <div className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6">
                   <button
                     className="flex gap-3"
@@ -284,7 +284,7 @@ function Category() {
                     }
                   >
                     <PlusSquare />
-                    <p className="cursor-default text-white text-base font-bold">
+                    <p className="cursor-pointer text-white text-base font-bold">
                       Thêm Danh Mục
                     </p>
                   </button>
@@ -405,9 +405,9 @@ function Category() {
                   />
                 </div>
                 <div className="flex gap-[28px] col-span-5 ">
-                  <Line />
+                  <p></p>
                   <p className=" pt-[12px] text-[16px] font-medium max-lg:text-sm">
-                    Tên Danh Mục
+                    {/* Tên Danh Mục */}
                   </p>
                 </div>
                 <div className="flex justify-center col-span-2 max-lg:gap-[30px]">
@@ -463,39 +463,42 @@ function Category() {
                   </>
                 }
               />
-              {categorys.map((e, index) => {
-                return (
-                  <>
-                    <Accordion open={open == e.id} key={e.id}>
-                      <div className="grid grid-cols-10">
-                        <div className="col-span-8 grid grid-cols-8">
-                          <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16">
-                            <div className=" flex gap-[20px] max-lg:gap-2">
-                              <input
-                                className="checkbox checkbox-sm items-center"
-                                type="checkbox"
-                                checked={checkedCategory.includes(e)}
-                                onChange={(element) =>
-                                  handleChecked(element.target.checked, e)
-                                }
-                              />
+              <div className=" flex flex-col gap-7">
+                {categorys.map((e, index) => {
+                  return (
+                    <>
+                      <Accordion open={open === e.id} className="w-full" key={e.id}>
+                        <div className="grid grid-cols-10">
+                          <div className="col-span-8 grid grid-cols-8">
+                            <div className="col-span-3 border-[#e0e0e0] flex justify-between items-center pr-6 pl-16">
+                              <div className=" flex gap-[20px] max-lg:gap-2">
+                                <input
+                                  className="checkbox checkbox-sm items-center"
+                                  type="checkbox"
+                                  checked={checkedCategory.includes(e)}
+                                  onChange={(element) =>
+                                    handleChecked(element.target.checked, e)
+                                  }
+                                />
+                              </div>
+                              <div onClick={() => handleOpen(e.id)} className="cursor-pointer">
+                                <img className="w-[50px] h-[50px] object-cover" src={e.image} alt="" />
+                              </div>
                             </div>
-                            <div>
-                              <img className="w-[50px]" src={e.image} alt="" />
+                            <div
+                              onClick={() => handleOpen(e.id)}
+                              className="col-span-5 flex cursor-pointer border-[#e0e0e0] items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]"
+                            >
+                              <p className="text-[16px] font-medium my-auto max-lg:text-sm">
+                                {e.name}
+                              </p>
+
                             </div>
+
                           </div>
-                          <div
-                            onClick={() => handleOpen(e.id)}
-                            className="col-span-5 cursor-pointer border-[#e0e0e0] h-20 border-y-[1px] border-l-[1px] items-center gap-5 py-[5%] pl-[5%] max-lg:h-16 max-lg:py-[7%]"
-                          >
-                            <p className="text-[16px] font-bold my-auto max-lg:text-sm">
-                              {e.name}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-span-2 border-[#e0e0e0] border-y-[1px]">
-                          <div className="flex text-center justify-center items-center gap-5 py-[25px] max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                          <div className="flex col-span-2 text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
                             <button
+                              className="flex items-center"
                               onClick={() => {
                                 openModal(
                                   idModalSubCateLv1,
@@ -508,7 +511,7 @@ function Category() {
                               <Plus />
                             </button>
 
-                            <div className="dropdown dropdown-left">
+                            <div className="dropdown dropdown-left flex items-center">
                               <label tabIndex={0}>
                                 <Handle />
                               </label>
@@ -549,41 +552,49 @@ function Category() {
                               </ul>
                             </div>
 
-                            <div onClick={() => handleOpen(e.id)}>
+                            <div onClick={() => handleOpen(e.id)} className="cursor-pointer flex items-center">
                               {open === e.id ? (
                                 <ArrowDown />
                               ) : (
                                 <ArrowNextHistory />
                               )}
+
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <AccordionBody>
-                        <div className="grid grid-cols-10">
-                          {e.subCategories?.map((elements) => {
-                            return (
-                              <>
-                                <div className="col-span-3 border-[#e0e0e0] border-y-[1px] items-center flex justify-between pr-6 pl-16"></div>
-                                <div className="col-span-5 border-[#e0e0e0] flex h-10 border-y-[1px] border-l-[1px] items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
-                                  <p className="text-[16px] font-bold my-auto max-lg:text-sm">
-                                    {elements.name}
-                                  </p>
-                                </div>
-                                <div className="col-span-2 border-[#e0e0e0] border-y-[1px]"></div>
-                              </>
-                            );
-                          })}
-                        </div>
-                      </AccordionBody>
-                    </Accordion>
-                  </>
-                );
-              })}
+
+                        <AccordionBody>
+                          <div className="flex flex-col gap-5">
+                            {e.subCategories?.map((elements) => {
+                              return (
+                                <>
+                                  <div key={elements.id} className="grid grid-cols-10">
+                                    <div className="col-span-3"></div>
+                                    <div className="col-span-5 border-[#e0e0e0] flex h-5 items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
+                                      <p className="text-[16px] font-medium max-lg:text-sm">
+                                        {elements.name}
+                                      </p>
+                                    </div>
+                                    <div className="flex col-span-2 text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                                      <Edit />
+                                      <Delete />
+                                    </div>
+                                  </div >
+                                </>
+                              );
+                            })}
+
+                          </div>
+                        </AccordionBody>
+                      </Accordion >
+                    </>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
-      </Container>
+      </Container >
     </>
   );
 }
