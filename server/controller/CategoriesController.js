@@ -82,19 +82,11 @@ const CategoriesController = {
 
     DeleteSubcategories: async (req, res) => {
         try {
-            const categoryId = parseInt(req.params.id);
-            const subCategoriesId = parseInt(req.body.id);
-            const category = await prisma.category.findFirst({
-                where: {
-                    id: categoryId,
-                },
-            });
-            if (!category) return res.status(404).send('Category not found');
+            const subCategoriesId = parseInt(req.params.id);
 
             await prisma.subCategoriesMultiLv2.delete({
                 where: {
                     id: subCategoriesId,
-                    categoryid: category.id,
                 },
             });
             res.status(200).json('Delete Sub Categories Successfull');
