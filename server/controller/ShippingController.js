@@ -16,6 +16,15 @@ const ShippingController = {
             if ((statusOrder = 3)) {
                 const io = req.app.get('socketio');
                 io.emit('setstatus', statusOrder);
+                
+                await prisma.notification.create({
+                    data: {
+                        orderId: order.id,
+                        message: 'new delivery',
+                        status: 3,
+                        seen: false,
+                    },
+                });
             }
             const order = await prisma.order.findFirst({
                 where: {
@@ -34,14 +43,7 @@ const ShippingController = {
                     status: statusOrder,
                 },
             });
-            await prisma.notification.create({
-                data: {
-                    orderId: order.id,
-                    message: 'new delivery',
-                    status: 3,
-                    seen: false,
-                },
-            });
+        
             res.status(200).send('Update status successfully');
         } catch (error) {
             errorResponse(res, error);
