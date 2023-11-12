@@ -12,6 +12,20 @@ const ShippingController = {
         try {
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status);
+
+            if ((statusOrder = 3)) {
+                const io = req.app.get('socketio');
+                io.emit('setstatus', statusOrder);
+                
+                await prisma.notification.create({
+                    data: {
+                        orderId: order.id,
+                        message: 'new delivery',
+                        status: 3,
+                        seen: false,
+                    },
+                });
+            }
             const order = await prisma.order.findFirst({
                 where: {
                     id: orderId,
@@ -29,6 +43,7 @@ const ShippingController = {
                     status: statusOrder,
                 },
             });
+        
             res.status(200).send('Update status successfully');
         } catch (error) {
             errorResponse(res, error);
@@ -210,19 +225,18 @@ const ShippingController = {
                 },
             });
 
-            const notification =  await prisma.notification.create({
-                data:{
-                    orderId : order.id,
-                    message : 'request delete order',
-                    status: 3,
-                    seen : false
-                    
-                }
-            })
+            await prisma.notification.create({
+                data: {
+                    orderId: order.id,
+                    message: 'request delete order',
+                    status: 2,
+                    seen: false,
+                },
+            });
 
             const io = req.app.get('socketio');
             io.emit('requestdelete', requestDeleteOrder);
-            
+
             res.status(200).json(requestDeleteOrder);
         } catch (error) {
             errorResponse(res, error);
@@ -239,14 +253,14 @@ const ShippingController = {
             });
             if (!order) return res.send('Order is not undifined');
             await prisma.order.update({
-                where:{
-                    id : order.id
+                where: {
+                    id: order.id,
                 },
-                data:{
-                    deletedAt : new Date()
-                }
-            })
-            res.status(200).json("Request delete order successfully")
+                data: {
+                    deletedAt: new Date(),
+                },
+            });
+            res.status(200).json('Delete order successfully');
         } catch (error) {
             errorResponse(res, error);
         }

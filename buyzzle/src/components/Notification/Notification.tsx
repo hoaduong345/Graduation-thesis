@@ -1,6 +1,6 @@
 import Container from "../container/Container";
 import avatar from "../../Assets/Images/Avtcmt.png";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
@@ -16,6 +16,21 @@ export default function Notification() {
         autoClose: 5000,
       });
       setDeletedOrder(deletedOrderData);
+    });
+    socket.on("disconnect", () => {
+      console.log(socket.id);
+    });
+  }, []);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+    socket.on("newOrder", (newOrder) => {
+      console.log("Received deleted order data:", newOrder);
+      toast.success("Có đơn hàng mới admin", {
+        position: "bottom-left",
+        autoClose: 5000,
+      });
+      setDeletedOrder(newOrder);
     });
     socket.on("disconnect", () => {
       console.log(socket.id);

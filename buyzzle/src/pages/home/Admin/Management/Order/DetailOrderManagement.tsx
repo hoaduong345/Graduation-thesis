@@ -17,10 +17,25 @@ import PrintOrder from "../../Assets/TSX/PrintOrder";
 import { dateOrder, timeOrder } from "./OrderManagement";
 import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 
+import { io } from "socket.io-client";
 export default function DetailOrderManagement() {
   const { id } = useParams();
   const idOrder = Number(id);
-
+  const [newDelivery, setNewDelivery] = useState(null);
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+    socket.on("setstatus", (statusOrder) => {
+      console.log("Received deleted order data:", statusOrder);
+      toast.success("Có đơn hàng mới delivery", {
+        position: "bottom-left",
+        autoClose: 5000,
+      });
+      setNewDelivery(statusOrder);
+    });
+    socket.on("disconnect", () => {
+      console.log(socket.id);
+    });
+  }, []);
   const [order, setOrder] = useState<OrderModel>({} as OrderModel);
 
   const getOrder = async () => {

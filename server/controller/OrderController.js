@@ -35,7 +35,16 @@ const OderController = {
                     },
                 });
             });
-
+            await prisma.notification.create({
+                data: {
+                    orderId: order.id,
+                    message: 'New order',
+                    status: 1,
+                    seen: false,
+                },
+            });
+            const io = req.app.get('socketio');
+            io.emit('newOrder', order);
             res.status(200).json(order ?? {});
         } catch (error) {
             console.log(error);
