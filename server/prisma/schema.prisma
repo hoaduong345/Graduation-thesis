@@ -204,7 +204,7 @@ model Rating {
 }
 
 model Order {
-  id            Int           @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   userId        Int?
   name          String?
   address       String?
@@ -217,11 +217,12 @@ model Order {
   discount      Int?
   amountTotal   Int?
   paymentMethod String?
-  createdAt     DateTime?     @default(now())
-  updatedAt     DateTime?     @default(now())
+  createdAt     DateTime?      @default(now())
+  updatedAt     DateTime?      @default(now())
   deletedAt     DateTime?
   OrderDetail   OrderDetail[]
-  User          User?         @relation(fields: [userId], references: [id])
+  User          User?          @relation(fields: [userId], references: [id])
+  Notification  Notification[]
 }
 
 model OrderDetail {
@@ -286,4 +287,14 @@ model Message {
   receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
   receiverId Int
   createdAt  DateTime @default(now())
+}
+
+model Notification {
+  id       Int      @id @default(autoincrement())
+  orderId  Int
+  message  String
+  date     DateTime @default(now())
+  status   Int?
+  seen     Boolean?
+  fk_order Order    @relation(fields: [orderId], references: [id])
 }
