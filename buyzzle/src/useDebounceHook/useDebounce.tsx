@@ -6,10 +6,7 @@ function useDebounce<T>(value: T, delay: number): T {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedValue(value);
-      console.log(
-        "🚀 ~ file: useDebounce.tsx:9 ~ timer ~ setDebouncedValue(value);:",
-        setDebouncedValue(value)
-      );
+ 
     }, delay);
 
     // Cleanup the timer on unmount or when value changes

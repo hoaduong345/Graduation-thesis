@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { Server } = require('socket.io');
 const prisma = new PrismaClient();
 
 const errorResponse = (res, error) => {
@@ -208,15 +209,29 @@ const ShippingController = {
                     status: 0,
                 },
             });
+
+            const notification =  await prisma.notification.create({
+                data:{
+                    orderId : order.id,
+                    message : 'request delete order',
+                    status: 3,
+                    seen : false
+                    
+                }
+            })
+
+            const io = req.app.get('socketio');
+            io.emit('requestdelete', requestDeleteOrder);
+            
             res.status(200).json(requestDeleteOrder);
         } catch (error) {
             errorResponse(res, error);
         }
     },
+
     confirmDeleteOrder: async (req, res) => {
         try {
             const orderId = parseInt(req.body.orderId);
-            console.log("🚀 ~ file: ShippingController.js:219 ~ confirmDeleteOrder: ~ orderId:", orderId)
             const order = await prisma.order.findFirst({
                 where: {
                     id: orderId,
