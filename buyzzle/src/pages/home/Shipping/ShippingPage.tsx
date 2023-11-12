@@ -18,7 +18,26 @@ import {
 } from "../Admin/Management/Order/OrderManagement";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 import useDebounce from "../../../useDebounceHook/useDebounce";
+import { io } from "socket.io-client";
+import { toast } from "react-toastify";
 export default function ShippingPage() {
+  // Socket Noti Admin -> Shipping ==========
+  const [deletedOrder, setDeletedOrder] = useState(null);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+    socket.on("setstatus", (newOrder) => {
+      console.log("Received deleted order data:", newOrder);
+      toast.success("Có đơn hàng mới admin", {
+        position: "bottom-left",
+        autoClose: 5000,
+      });
+      setDeletedOrder(newOrder);
+    });
+    socket.on("disconnect", () => {
+      console.log(socket.id);
+    });
+  }, []);
   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
   const [orderAPI, setOrderAPI] = useState<orderModelController>({
     pageSize: 4,

@@ -17,7 +17,6 @@ import PrintOrder from "../../Assets/TSX/PrintOrder";
 import { dateOrder, timeOrder } from "./OrderManagement";
 import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 
-
 export default function DetailOrderManagement() {
   const { id } = useParams();
   const idOrder = Number(id);
