@@ -189,16 +189,7 @@ export default function DetailOrderManagement() {
                             {numberFormat(order.subtotal)}
                           </p>
                         </div>
-                        <div className="flex justify-between border-t-[1px] pt-2">
-                          <p className="text-sm font-medium text-[#393939] max-[870px]:text-[11px]">
-                            Giảm:{" "}
-                          </p>
-                          <div className="flex gap-1">
-                            <p className="text-sm text-[#FFAAAF] line-through max-[870px]:text-[11px]">
-                              {numberFormat(order.discount)}
-                            </p>
-                          </div>
-                        </div>
+
                         <div className="flex justify-between border-t-[1px] pt-2">
                           <p className="text-sm font-medium text-[#393939] max-[870px]:text-[11px]">
                             Phí Giao Hàng:{" "}
@@ -206,6 +197,20 @@ export default function DetailOrderManagement() {
                           <div className="flex gap-1">
                             <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
                               {numberFormat(order.shipping)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex justify-between border-t-[1px] pt-2">
+                          <p className="text-sm font-medium text-[#393939] max-[870px]:text-[11px]">
+                            Giảm:{" "}
+                          </p>
+                          <div className="flex gap-1">
+                            <p className="text-sm text-[#FFAAAF] max-[870px]:text-[11px]">
+                              {order.discount == 0 ? (
+                                numberFormat(order.discount)
+                              ) : (
+                                <p>- {numberFormat(order.discount)}</p>
+                              )}
                             </p>
                           </div>
                         </div>
