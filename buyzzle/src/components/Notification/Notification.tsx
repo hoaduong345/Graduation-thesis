@@ -8,22 +8,19 @@ import { useEffect, useState } from "react";
 export default function Notification() {
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
-    
     const socket = io("http://localhost:5000");
     socket.on("requestdelete", (deletedOrderData) => {
-      console.log('Received deleted order data:', deletedOrderData);
+      console.log("Received deleted order data:", deletedOrderData);
       toast.success("Có yêu cầu huỷ đơn hàng", {
         position: "bottom-left",
         autoClose: 5000,
-     });
+      });
       setDeletedOrder(deletedOrderData);
-      
     });
     socket.on("disconnect", () => {
       console.log(socket.id);
     });
   }, []);
-
 
   return (
     <Container>

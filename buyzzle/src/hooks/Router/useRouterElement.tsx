@@ -58,7 +58,14 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-
+    {
+      path: "/notification",
+      element: (
+        <MainLayout>
+          <Notification />
+        </MainLayout>
+      ),
+    },
     {
       path: "/products",
       element: (
