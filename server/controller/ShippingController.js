@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { count } = require('console');
 const { Server } = require('socket.io');
 const prisma = new PrismaClient();
 
@@ -225,14 +226,14 @@ const ShippingController = {
                 },
             });
 
-            // await prisma.notification.create({
-            //     data: {
-            //         orderId: order.id,
-            //         message: 'request delete order',
-            //         status: 2,
-            //         seen: false,
-            //     },
-            // });
+            await prisma.notification.create({
+                data: {
+                    orderId: order.id,
+                    message: 'request delete order',
+                    status: 2,
+                    seen: false,
+                },
+            });
 
             const io = req.app.get('socketio');
             io.emit('requestdelete', requestDeleteOrder);
@@ -261,6 +262,23 @@ const ShippingController = {
                 },
             });
             res.status(200).json('Delete order successfully');
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+    // GET noti lên pop ups thông báo
+    getNotification: async (req, res) => {
+        try {
+            const whereClause = {
+                deleteAt: null,
+            };
+            const allNotification = await prisma.notification.findMany({
+                where: whereClause,
+            });
+            const countNotification = await prisma.notification.count({
+                where: whereClause,
+            });
+            res.status(200).json({ allNotification, countNotification });
         } catch (error) {
             errorResponse(res, error);
         }
