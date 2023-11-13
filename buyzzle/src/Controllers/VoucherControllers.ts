@@ -6,8 +6,14 @@ const appConfig = {
 };
 
 class VoucherControllers {
-  get = async (page: number): Promise<Voucher> => {
+  getAdmin = async (page: number): Promise<Voucher> => {
     return await axios.get(`${appConfig.apiUrl}?page=${page}`).then((res) => {
+      return res.data as Voucher;
+    });
+  };
+
+  getUser = async (page: number): Promise<Voucher> => {
+    return await axios.get(`${appConfig.apiUrl}/pageUser?page=${page}`).then((res) => {
       return res.data as Voucher;
     });
   };
@@ -40,9 +46,9 @@ class VoucherControllers {
         return res.data as VoucherModel;
       });
   };
-  GetUserSavedVoucher = async (id: number): Promise<VoucherModel> => {
+  GetUserSavedVoucher = async (): Promise<VoucherModel[]> => {
     return await axios
-      .get(`${appConfig.apiUrl}/getUser/${id}`, {
+      .get(`${appConfig.apiUrl}/getSavedUser`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
@@ -50,19 +56,13 @@ class VoucherControllers {
       })
       .then((res) => {
         console.log(res);
-        return res.data as VoucherModel;
+        return res.data as VoucherModel[];
       });
   };
-  useVoucherMinusQuantity = async (id: number): Promise<VoucherModel> => {
+  useVoucher = async (userId: number, voucherId: number): Promise<VoucherModel> => {
     return await axios
-      .get(`${appConfig.apiUrl}/usevoucher/${id}`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-        withCredentials: true,
-      })
+      .post(`${appConfig.apiUrl}/usevoucher`, { userId: userId, voucherId: voucherId })
       .then((res) => {
-        console.log(res);
         return res.data as VoucherModel;
       });
   };
