@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Bell from "../../Assets/TSX/Bell";
 import Map from "../../Assets/TSX/Map";
 import Notification from "../Notification/Notification";
+import { NotificationModel } from "../../Model/Notification";
+import { notificationControllers } from "../../Controllers/NotificationController";
 
 export default function HeaderTopAdmin() {
+  const [countNotification, setCountNotification] = useState<NotificationModel>(
+    {} as NotificationModel
+  );
+  useEffect(() => {
+    getCountNoti();
+  }, []);
+  const getCountNoti = async () => {
+    await notificationControllers.getAllNotification().then((res) => {
+      setCountNotification(res);
+    });
+  };
   return (
     <>
       <header className="Header">
@@ -31,7 +44,7 @@ export default function HeaderTopAdmin() {
                           className="absolute top-0 inline-flex items-center justify-center px-[5px] py-1 text-xs cursor-default
                         font-medium leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"
                         >
-                          99
+                          {countNotification.countNotification}
                         </span>
                       </span>
                       <span className="text-[#4C4C4C] pl-2 cursor-default">
