@@ -6,19 +6,15 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import Bell from "../../Assets/TSX/Bell";
-import Chevron_down from "../../Assets/TSX/Chevron-down";
-import Globe from "../../Assets/TSX/Globe";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
-import Map from "../../Assets/TSX/Map";
 import Search from "../../Assets/TSX/Search";
-import Headphones from "../../Assets/TSX/headphones";
 import { productController } from "../../Controllers/ProductsController";
 import { userController } from "../../Controllers/UserController";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import Container from "../container/Container";
+import HeaderTopUser from "../HeaderTop/HeaderTopUser";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -123,36 +119,8 @@ export default function Header() {
     <>
       <header className="Header">
         <Container>
-          <div className="Header-top bg-white">
-            <div className="container mx-auto">
-              <div className="Header-top-content flex justify-between max-[426px]:text-[8px]">
-                <div className="content-left flex py-2">
-                  <Map />
-                  <span className="text-[#4C4C4C] pl-2">Buon Ma Thuot</span>
-                </div>
-
-                <div className="content-right flex items-center gap-2  ">
-                  <div className="content-left flex items-center">
-                    <Globe />
-                    <span className="text-[#4C4C4C] pl-2">EN</span>
-                  </div>
-                  <div className="content-left flex py-2 gap-2 ">
-                    <div className="pt-1">
-                      <Chevron_down />
-                    </div>
-                    <div className="border-[1px] border-black " />
-                    <div className="flex items-center pl-3">
-                      <Bell />
-                      <span className="text-[#4C4C4C] pl-2">Thong bao</span>
-                    </div>
-                    <div className="flex items-center pl-3">
-                      <Headphones />
-                      <span className="text-[#4C4C4C] pl-2">Ho tro</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="my-1">
+            <HeaderTopUser />
           </div>
         </Container>
 

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 
@@ -10,6 +10,7 @@ import {
 import { numberFormat } from "../../../Helper/Format";
 import { OrderPanigation } from "../../../Model/OrderModel";
 import Container from "../../../components/container/Container";
+import useDebounce from "../../../useDebounceHook/useDebounce";
 import Calendar from "../Admin/Assets/TSX/calendar";
 import Excel from "../Admin/Assets/TSX/excel";
 import {
@@ -17,7 +18,6 @@ import {
   timeOrder,
 } from "../Admin/Management/Order/OrderManagement";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
-import useDebounce from "../../../useDebounceHook/useDebounce";
 export default function ShippingPage() {
   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
   const [orderAPI, setOrderAPI] = useState<orderModelController>({
@@ -277,7 +277,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                           <p className="font-bold text-xs text-white ">Mới</p>
                         </div> */}
                         </div>
-                        <div className="grid grid-cols-3 mt-4 ">
+                        <div className="grid grid-cols-2 mt-4 ">
                           {e.OrderDetail.map((items) => {
                             return (
                               <>

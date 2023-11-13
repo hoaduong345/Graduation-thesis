@@ -39,7 +39,7 @@ import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
 import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
 import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
-import Notification from "../../components/Notification/Notification";
+import CustomToast from "../../Helper/Toast/CustomToast";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -58,7 +58,14 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-
+    {
+      path: "/custom",
+      element: (
+        <MainLayout>
+          <CustomToast />
+        </MainLayout>
+      ),
+    },
     {
       path: "/products",
       element: (
@@ -133,14 +140,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
+
     {
       path: path.confirmAccount,
       element: (
@@ -285,14 +285,6 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
 
     {
       path: path.confirmAccount,
@@ -366,14 +358,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
+
     {
       path: path.confirmAccount,
       element: (
@@ -430,14 +415,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
+
     {
       path: path.confirmAccount,
       element: (
@@ -502,14 +480,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
+
     {
       path: "favorite",
       element: (

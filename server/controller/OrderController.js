@@ -5,6 +5,16 @@ const OderController = {
     createOrder: async (req, res) => {
         try {
             const orderData = req.body.order;
+            const iduser = req.cookies.id;
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: iduser,
+                },
+                select: {
+                    name: true,
+                    image: true,
+                },
+            });
 
             const order = await prisma.order.create({
                 data: {
@@ -35,7 +45,17 @@ const OderController = {
                     },
                 });
             });
+            await prisma.notification.create({
+                data: {
+                    orderId: order.id,
+                    message: 'New order',
+                    status: 1,
+                    seen: false,
+                },
+            });
 
+            const io = req.app.get('socketio');
+            io.emit('newOrder', user);
             res.status(200).json(order ?? {});
         } catch (error) {
             console.log(error);

@@ -1,5 +1,4 @@
 const { PrismaClient } = require('@prisma/client');
-const { Server } = require('socket.io');
 const prisma = new PrismaClient();
 
 const errorResponse = (res, error) => {
@@ -12,14 +11,40 @@ const ShippingController = {
         try {
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status);
+
             const order = await prisma.order.findFirst({
                 where: {
                     id: orderId,
+                },
+                include: {
+                    User: {
+                        select: {
+                            name: true,
+                            UserImage: {
+                                select: {
+                                    url: true,
+                                },
+                            },
+                        },
+                    },
                 },
             });
 
             if (!order) {
                 return res.status(404).send('Order is undefined');
+            }
+            if (statusOrder === 3) {
+                const io = req.app.get('socketio');
+                io.emit('setstatus', order);
+
+                await prisma.notification.create({
+                    data: {
+                        orderId: orderId,
+                        message: 'new delivery',
+                        status: 3,
+                        seen: false,
+                    },
+                });
             }
             await prisma.order.update({
                 where: {
@@ -29,6 +54,7 @@ const ShippingController = {
                     status: statusOrder,
                 },
             });
+
             res.status(200).send('Update status successfully');
         } catch (error) {
             errorResponse(res, error);
@@ -198,6 +224,18 @@ const ShippingController = {
                 where: {
                     id: orderId,
                 },
+                include: {
+                    User: {
+                        select: {
+                            name: true,
+                            UserImage: {
+                                select: {
+                                    url: true,
+                                },
+                            },
+                        },
+                    },
+                },
             });
             if (!order) return res.send('Order is not undifined');
 
@@ -210,19 +248,18 @@ const ShippingController = {
                 },
             });
 
-            const notification =  await prisma.notification.create({
-                data:{
-                    orderId : order.id,
-                    message : 'request delete order',
-                    status: 3,
-                    seen : false
-                    
-                }
-            })
+            await prisma.notification.create({
+                data: {
+                    orderId: order.id,
+                    message: 'request delete order',
+                    status: 2,
+                    seen: false,
+                },
+            });
 
             const io = req.app.get('socketio');
-            io.emit('requestdelete', requestDeleteOrder);
-            
+            io.emit('requestdelete', order);
+
             res.status(200).json(requestDeleteOrder);
         } catch (error) {
             errorResponse(res, error);
@@ -239,14 +276,102 @@ const ShippingController = {
             });
             if (!order) return res.send('Order is not undifined');
             await prisma.order.update({
-                where:{
-                    id : order.id
+                where: {
+                    id: order.id,
                 },
-                data:{
-                    deletedAt : new Date()
-                }
-            })
-            res.status(200).json("Request delete order successfully")
+                data: {
+                    deletedAt: new Date(),
+                },
+            });
+            res.status(200).json('Delete order successfully');
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+    // GET noti lên pop ups thông báo
+    getNotification: async (req, res) => {
+        try {
+            const whereClause = {
+                deleteAt: null,
+            };
+            const whereNotSeen = {
+                seen: false,
+            };
+
+            const allNotification = await prisma.notification.findMany({
+                where: whereClause,
+                orderBy: {
+                    id: 'desc',
+                },
+                include: {
+                    fk_order: {
+                        include: {
+                            User: {
+                                select: {
+                                    name: true,
+                                    image: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+            const countNotification = await prisma.notification.count({
+                where: whereNotSeen,
+            });
+            const result = {
+                allNotification: allNotification,
+                countNotification: countNotification,
+            };
+            res.status(200).json(result);
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+
+    // Lọc theo status của notification 1 : có đơn hàng mới, 2 : Đơn vị vận chuyển đi lấy hàng, 3 : có yêu cầu huỷ đơn hàng
+    filterWithStatusNotification: async (req, res) => {
+        try {
+            const status = parseInt(req.body.status);
+            const whereClauseStatus = {
+                status: status,
+            };
+            const filterStatus = await prisma.notification.findMany({
+                where: whereClauseStatus,
+                orderBy: {
+                    id: 'desc',
+                },
+                include: {
+                    fk_order: {
+                        include: {
+                            User: {
+                                select: {
+                                    name: true,
+                                    image: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+            res.status(200).json(filterStatus);
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+    // đánh dấu đã đọc
+    isMarkAsRead: async (req, res) => {
+        try {
+            const mark = req.body.id;
+            await prisma.notification.update({
+                where: {
+                    id: mark,
+                },
+                data: {
+                    seen: true,
+                },
+            });
+            res.send('Mark as read successfully');
         } catch (error) {
             errorResponse(res, error);
         }

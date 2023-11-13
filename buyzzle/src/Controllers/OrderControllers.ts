@@ -51,9 +51,8 @@ class OrderControllers {
   };
 
   abortOrder = async (id: number) => {
-    return await axios.post(`${appConfig.apiShipping}/setStatus`, {
-      id: id,
-      status: 0,
+    return await axios.post(`${appConfig.apiShipping}/delete`, {
+      orderId: id,
     });
   };
 
