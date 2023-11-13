@@ -296,5 +296,6 @@ model Notification {
   date     DateTime @default(now())
   status   Int?
   seen     Boolean?
+  deleteAt DateTime?
   fk_order Order    @relation(fields: [orderId], references: [id])
 }
