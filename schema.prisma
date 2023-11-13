@@ -42,31 +42,21 @@ model User {
   invoices             Invoice[]
   savedVouchers        SavedVoucher[]
   usedVouchers         Voucher[]      @relation("UsedBy")
+  ShippingUnit         ShippingUnit[]
   
 }
 
 model ShippingUnit {
  id            Int            @id @default(autoincrement())
  name          String?
- username       String? @unique
  email         String?
  password      String?
  city            String?
  address       String?
  phonenumber   String?
- sex         Boolean?
- dateofbirth DateTime?
- createdAt DateTime?      @default(now())
- updatedAt DateTime?      @default(now())
- deletedAt DateTime?  
- ShippingImage  ShippingImage[]
-}
-model ShippingImage {
-  id            Int       @id @default(autoincrement())
-  url           String?
-  idshipping       Int?      @unique
-  fk_shippingImage ShippingUnit?    @relation(fields: [idshipping], references: [id], onDelete: Cascade)
-  deletedAt     DateTime?
+ User       User?   @relation(fields: [UserId], references: [id])
+ UserId     Int?
+  
 }
 
 

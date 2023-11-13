@@ -8,7 +8,18 @@ const prisma = new PrismaClient();
 router.post("/register", AdminShippingController.registerShipping);
 
 
+router.post('/login', AdminShippingController.login);
 
+router.delete('/delete/:id', AdminShippingController.deleteShipping);
+
+router.get('/allshipping', AdminShippingController.getAllShipping);
+
+router.put("/shippingprofile/:username", AdminShippingController.ShippingProfile);
+
+router.get("/getShipping/:username", AdminShippingController.getShipping);
+
+router.post("/addimageshipping", AdminShippingController.addImageShipping);
+router.put("/updateimageshipping/:idshipping",AdminShippingController.updateImageShipping);
 
 
 module.exports = router;
