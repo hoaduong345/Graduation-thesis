@@ -44,7 +44,11 @@ const listSitebar: SitebarAdmin[] = [
     icon: <Members />,
     pathName: "/admin/usersmanager",
   },
-
+  {
+    title: "Shipper",
+    icon: <Members />,
+    pathName: "/admin/shippermanager",
+  },
   {
     title: "Admin",
     icon: <Members />,

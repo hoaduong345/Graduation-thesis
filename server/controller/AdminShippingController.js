@@ -35,11 +35,11 @@ const AdminShippingController = {
 
       login: async (req, res) => {
         try {
-          const { email, password } = req.body;
+          const { username, password } = req.body;
       
           const user = await prisma.shippingUnit.findFirst({
             where: {
-              email,
+              username,
             },
           });
       
@@ -48,7 +48,7 @@ const AdminShippingController = {
             return res.status(401).json('loi');
           }
       
-          return res.status(200).json('login tc');
+          return res.status(200).json(username);
         } catch (error) {
           console.error('Error', error);
           return res.status(500).json({ error: 'Server Error' });

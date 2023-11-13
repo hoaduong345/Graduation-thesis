@@ -39,6 +39,9 @@ import ShippingPage from "../../pages/home/Shipping/ShippingPage";
 import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
 import RegisterShipper from "../../pages/home/Shipping/RegisterShipper/RegisterShipper";
+import LoginShipper from "../../pages/home/Shipping/LoginShipper/LoginShipper";
+import Shipper from "../../pages/home/Admin/Management/Shipper/Shipper";
+import DetailShipper from "../../pages/home/Admin/DetailShipper/DetailShipper";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -578,14 +581,10 @@ export default function useRouterEmelent() {
           path: "detailuser/:username",
           element: <DetailUser />,
         },
-
-        // {
-        //   path: "loginadmin",
-        //   element:
-        //   <RegisterLoginLayout>
-        //     <LoginAdmin />
-        //     </RegisterLoginLayout>,
-        // },
+        {
+          path: "detailshipper/:username",
+          element: <DetailShipper />,
+        },
         {
           path: "ordermanagement",
           element: <OrderManagement />,
@@ -597,6 +596,10 @@ export default function useRouterEmelent() {
         {
           path: "usersmanager",
           element: <User />,
+        },
+        {
+          path: "shippermanager",
+          element: <Shipper />,
         },
         {
           path: "statisticspage",
@@ -651,8 +654,12 @@ export default function useRouterEmelent() {
              ),
         },
         {
-          path: "detail/:id",
-          element: <ShippingDetail />,
+          path: "loginShipper",
+          element: (
+            <RegisterLoginLayout>
+               <LoginShipper />
+               </RegisterLoginLayout>
+               ),
         },
       ],
     },
