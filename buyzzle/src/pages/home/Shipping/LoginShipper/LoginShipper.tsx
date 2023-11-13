@@ -119,7 +119,7 @@ function LoginShipper() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
                                              max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
                                             `}
-                                             placeholder="Nhập vào username"
+                                             placeholder="Tên tài khoản"
                                              value={field.value}
                                              onChange={(e) => {
                                                 const reg =
@@ -185,7 +185,7 @@ function LoginShipper() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
                                              max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
                                             `}
-                                             placeholder="Nhập vào mật khẩu"
+                                             placeholder="Mật khẩu"
                                              value={field.value}
                                              type="password"
                                              onChange={(e) => {
