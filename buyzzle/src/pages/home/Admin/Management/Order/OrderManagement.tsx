@@ -193,14 +193,14 @@ export default function OrderManagement() {
                   {btnItems.text}
                   {btnItems.id == -1 && (
                     <div className="badge badge-xs badge-primary badge-outline py-2">
-                      {order?.totalOrderShipping != 0
+                      {order?.totalOrderShipping !== 0
                         ? order?.totalOrderShipping
                         : 0}
                     </div>
                   )}
                   {btnItems.id == 0 && (
                     <div className="badge badge-xs badge-error badge-outline py-2">
-                      {order?.statusCounts?.orderStatus0 != 0
+                      {order?.statusCounts?.orderStatus0 !== 0
                         ? order?.statusCounts?.orderStatus0
                         : 0}
                     </div>

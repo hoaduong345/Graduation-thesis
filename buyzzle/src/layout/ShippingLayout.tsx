@@ -1,8 +1,8 @@
-import { Outlet } from "react-router-dom";
-import HeaderAdmin from "../components/Header/HeaderAdmin";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { Outlet } from "react-router-dom";
 import { toast } from "react-toastify";
+import { io } from "socket.io-client";
+import HeaderShipping from "../components/Header/HeaderShipping";
 function ShippingLayout() {
   // Socket Noti Admin -> Shipping ==========
   const [deletedOrder, setDeletedOrder] = useState(null);
@@ -23,7 +23,7 @@ function ShippingLayout() {
   }, []);
   return (
     <div>
-      <HeaderAdmin />
+      <HeaderShipping />
       <Outlet />
     </div>
   );

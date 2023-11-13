@@ -1,53 +1,32 @@
-import React from "react";
-import { toast } from "react-toastify";
+import { ReactNode } from "react";
 import { Images } from "../../Assets/TS";
-
-export default function CustomToast() {
-  console.log("first");
-  toast.error(
-    <div className="flex gap-2 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
-      <div className="items-center flex gap-3">
-        <div className="p-1">
-          <img
-            src={Images.avatar_admin}
-            alt="avatar_admin"
-            width={45}
-            height={45}
-          />
-        </div>
-        <div>
-          <p className="text-red-600 text-xs">Có yêu cầu hủy đơn từ: </p>
-          <div className="text-xs font-semibold text-black">
-            Nguyen Viet Thang
-          </div>
-        </div>
-      </div>
-    </div>,
-    {
-      position: "bottom-left",
-      autoClose: 10000,
-      closeButton: true,
-    }
-  );
-
+interface ToastCustomModel {
+  image?: ReactNode;
+  iconSVG: ReactNode;
+  name: ReactNode;
+  content: ReactNode;
+}
+export default function CustomToast(props: ToastCustomModel) {
+  const { image, iconSVG, name, content } = props;
   return (
-    <div className="flex gap-2 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
-      <div className="items-center flex gap-3">
-        <div className="p-1">
-          <img
-            src={Images.avatar_admin}
-            alt="avatar_admin"
-            width={45}
-            height={45}
-          />
+    <>
+      <div id="toast-notification" role="alert" className=" rounded-lg">
+        <div className="flex items-center mb-3">
+          <span className="mb-1 text-sm font-semibold text-gray-900">
+            Thông báo mới
+          </span>
         </div>
-        <div>
-          <div className="text-xs font-semibold text-black">
-            Nguyen Viet Thang
+        <div className="flex items-center">
+          <div className="relative inline-block shrink-0">
+            {image}
+            {iconSVG}
           </div>
-          <p className="text-slate-500 text-xs">Đã đặt 1 đơn hàng mới</p>
+          <div className="ms-3 text-sm font-normal">
+            {name}
+            {content}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
