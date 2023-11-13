@@ -402,11 +402,11 @@ export default function Admin() {
                                     message:
                                       "Ít nhất 4 ký tự",
                                   },
-                                  maxLength: {
-                                    value: 25,
-                                    message:
-                                      "Nhiều nhất 25 kí tự",
-                                  },
+                                  // maxLength: {
+                                  //   value: ,
+                                  //   message:
+                                  //     "Nhiều nhất 25 kí tự",
+                                  // },
                                   validate: { // Kiểm tra email có đúng định dạng không 
                                     validEmail: (value) => /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(value) || "Email không hợp lệ",
 
@@ -643,22 +643,22 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
             </div>
           </div>
 
-          <div className="relative ">
-            <table className="w-full text-left ">
+          <div className="relative">
+            <table className="table-auto w-full text-left ">
               <thead className="text-base text-[#4C4C4C] border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-[11px]">
                 <tr>
                   <th
                     scope="col"
                     className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    <Delete />
-                    <p>Xóa</p>
+                    {/* <Delete />
+                    <p>Xóa</p> */}
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Id Admin
+                    Id
                   </th>
                   <th
                     scope="col"
@@ -753,10 +753,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 </li>
                               </ul>
                             </div>
-                            <input
+                            {/* <input
                               type="checkbox"
                               className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                            />
+                            /> */}
 
                           </th>
                           <th
@@ -799,81 +799,52 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                 <>
                   <tbody>
                     <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-                      <th
-                        scope="row"
-                        className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                      ></th>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
 
-                      <td className="px-3 py-5 max-lg:py-3 justify-center">
-                        3999999
-                      </td>
-                      <td
-                        className={`${status == "Hoạt động"
-                          ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                          : "text-[#FF8A00] "
-                          }`}
-                      >
-                        Hoạt động
-                      </td>
                       <th
                         scope="row"
                         className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                      >
-                        <input
-                          type="checkbox"
-                          className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                        />
-                        <div className="dropdown dropdown-right ">
-                          <label
-                            className="max-lg:w-[24px] max-lg:h-[24px]"
-                            tabIndex={1}
-                          >
-                            <Handle />
-                          </label>
-                          <ul
-                            tabIndex={0}
-                            className="dropdown-content menu bg-white rounded-box w-52
-                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                          >
-                            <li>
-                              <button className="flex items-center gap-4">
-                                <Edit />
-                                <p
-                                  className="text-[#EA4B48] text-sm font-medium
-                                            max-[940px]:text-xs "
-                                >
-                                  Sửa
-                                </p>
-                              </button>
-                            </li>
-                            <li>
-                              <button className="flex items-center gap-4">
-                                <RemoveCate />
-                                <p
-                                  className="text-[#EA4B48] text-sm font-medium
-                                             max-[940px]:text-xs "
-                                >
-                                  Xóa
-                                </p>
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
+                      > 
                       </th>
+                      <th
+                        scope="row"
+                        className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
+                      >
+                       
+                      </th>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center">
+
+                      </td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center">
+
+                      </td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center">
+
+                      </td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center">
+
+                      </td>
+
+                      <td className="px-3 py-5 max-lg:py-3 justify-center">
+
+                      </td>
+                      <td
+                        className="text-[#2e34e6] px-3 py-5 max-lg:py-3 justify-center">
+
+                      </td>
+
                     </tr>
+
                   </tbody>
-                  <EmptyPage
-                    title="Danh sách sản phẩm trống"
-                    button="Thêm Ngay"
-                  />
+                  {/* <EmptyPage
+                          title="Danh sách sản phẩm trống"
+                          button="Thêm Ngay"
+                        /> */}
                 </>
+
               )}
             </table>
           </div>
+
         </div>
       </div>
     </Container >

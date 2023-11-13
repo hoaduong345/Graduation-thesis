@@ -10,8 +10,9 @@ import Handle from "../../Assets/TSX/bacham";
 import { userController } from "../../../../../Controllers/UserController";
 import EmptyPage from "../../../../../Helper/Empty/EmptyPage";
 import { toast } from "react-toastify";
+import { shipperController } from "../../../../../Controllers/ShipperController";
 
-export interface users {
+export interface shipper {
   id: number;
   username: string;
   name: string;
@@ -19,51 +20,13 @@ export interface users {
   sex: string;
 }
 
-export default function User() {
-  const active = [
-    {
-      id: "#1334",
-      username: "tranvanA231",
-      email: "tranvanA@gmail.com",
-      sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-    {
-      idUser: "#1335",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-    {
-      idUser: "#1336",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Ngừng Hoạt động",
-    },
-    {
-      idUser: "#1337",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-  ];
-
+export default function Shipper() {
+  
   let status = "Hoạt động";
   const [users, setUsers] = useState<any>({});
-  const getAllUserData = () => {
-    userController
-      .getAllUser()
+  const getAllShipper = () => {
+    shipperController
+      .getAllShipper()
       .then((res) => {
         return res;
       })
@@ -74,20 +37,20 @@ export default function User() {
   };
 
   useEffect(() => {
-    getAllUserData();
+    getAllShipper();
   }, []);
 
   function JumpEditUser(username: any) {
-    window.location.href = `detailuser/${username}`;
+    window.location.href = `detailshipper/${username}`;
   }
 
   const DeleteUser = (id: any) => {
-    userController
-      .deleteUser(id)
+    shipperController
+      .deleteShipperWhereId(id)
       .then((res) => {
         toast.success("Xóa thành công !");
         console.log("res:" + res);
-        getAllUserData();
+        getAllShipper();
       })
       .catch(() => {
         toast.error("Xóa thất bại !");
@@ -106,7 +69,7 @@ export default function User() {
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
                             max-lg:text-xl"
             >
-              QUẢN LÝ DANH SÁCH NGƯỜI DÙNG
+              QUẢN LÝ DANH SÁCH SHIPPER
             </h2>
           </div>
           <div className="flex flex-col gap-[35px]">
@@ -147,7 +110,13 @@ export default function User() {
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Id User
+                    Id
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
+                  >
+                    Tên
                   </th>
                   <th
                     scope="col"
@@ -171,13 +140,13 @@ export default function User() {
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Tổng Số Tiền
+                    Thành phố vận chuyển
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Trạng Thái
+                    Số điện thoại
                   </th>
 
                 </tr>
@@ -194,7 +163,7 @@ export default function User() {
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
 
-                            <div className="dropdown dropdown-right ">
+                            <div className="dropdown dropdown-left">
                               <label
                                 className="max-lg:w-[24px] max-lg:h-[24px]"
                                 tabIndex={1}
@@ -245,6 +214,9 @@ export default function User() {
                             {items.id}
                           </th>
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.name}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
                             {items.username}
                           </td>
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
@@ -257,15 +229,15 @@ export default function User() {
                           </td>
 
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            3999999
+                          {items.city}
                           </td>
                           <td
-                            className={`${status == "Hoạt động"
-                                ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                                : "text-[#FF8A00] "
-                              }`}
+                            className={`
+                                "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
+                                
+                              `}
                           >
-                            Hoạt động
+                            {items.phonenumber}
                           </td>
                           
                         </tr>

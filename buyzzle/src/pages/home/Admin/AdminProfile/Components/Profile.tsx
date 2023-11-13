@@ -226,10 +226,10 @@ export default function UserProfile() {
       iduser: id,
       url: url,
     };
+    console.log("NHucc2:"+JSON.stringify(urlImages.url))
     await axios
-      .put(`${appConfigAdmin.apiUrl}/updateimageadmin/${urlImages.iduser}`, urlImages.url)
-      .then((response) => response.data);
-
+      .put(`${appConfigAdmin.apiUrl}/updateimageadmin/${urlImages.iduser}`, urlImages)
+      .then((response) => "CCCCCCCCCCCC1:"+response);
   }
 
 
@@ -255,7 +255,7 @@ export default function UserProfile() {
           await addImages(FormImage.idadmin, url);
           setCheckImageUrl(true);
         } else {
-          console.log("IDUSER:" + FormImage.idadmin);
+          console.log("IDUSERCCCCCCCCCCCc:" + FormImage.idadmin);
           await EditImages(FormImage.idadmin, url);
 
         }

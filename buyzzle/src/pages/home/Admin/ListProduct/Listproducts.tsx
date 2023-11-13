@@ -39,7 +39,7 @@ export default function ListproductsAdmin() {
       [number, number]
    >([0, 10000]);
    const debouncedInputValuePurchase = useDebounce(sliderPurchaseValues, 400); // Debounce for 300 milliseconds
-
+   const [rating, setRating] = useState(1);
    const [inStock, setinStock] = useState<any>(false);
    const [soldOut, setSoldOut] = useState<any>(false);
    const [showAllProducts, setShowAllProducts] = useState(false);
@@ -245,6 +245,23 @@ export default function ListproductsAdmin() {
       }
    };
 
+   const handleRatingChange= (rate: any) => {
+      setRating(rate);
+      console.log("Rating111111:", rate);
+      getProductsWhereRating(rate);
+   };
+
+   const getProductsWhereRating = (rate:any) => {
+      productController
+        .getProductWhereRatting(rate)
+        .then((res: any) => {
+          console.log("Ratting fillter" + JSON.stringify(res.rows));
+          setProducts(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
    return (
       <>
          <Container>
@@ -448,12 +465,12 @@ export default function ListproductsAdmin() {
                         valuePrice={sliderPriceValues}
                         valueinStock={inStock}
                         valueSoldOut={soldOut}
+                        onRateChange={handleRatingChange}
                         onSoldOut={handleClickSoldOut}
                         oninStock={handleClickinStock}
                         onQuantityRangeChange={handleQuantityRangeChange}
                         onPriceRangeChange={handlePriceRangeChange}
-                        onPurchaseRangeChange={handlePurchaseRangeChange}
-                     />
+                        onPurchaseRangeChange={handlePurchaseRangeChange} />
                   )}
 
                   <div className="grid grid-cols-10 mt-6 items-center">

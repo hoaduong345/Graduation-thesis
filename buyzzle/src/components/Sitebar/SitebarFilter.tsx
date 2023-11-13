@@ -75,7 +75,7 @@ export interface SliderComponentProps {
   onPurchaseRangeChange: (value: [number, number]) => void;
   oninStock: (availability: boolean) => void;
   onSoldOut: (soldOut: boolean) => void;
-
+  
   valueSoldOut?: boolean;
   valueinStock?: boolean;
   valuePrice?: [number, number];

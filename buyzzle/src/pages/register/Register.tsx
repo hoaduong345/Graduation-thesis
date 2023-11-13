@@ -187,7 +187,7 @@ function Register() {
 
               <input
                 placeholder="Mật khẩu"
-                
+                type='password'
                 className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
                 {...register("password")}
               />
