@@ -15,7 +15,12 @@ const arrRating: RatingStar[] = [
   { checked: false, rating: 2 },
   { checked: false, rating: 1 },
 ];
+// export interface RatingStar {
+//   checked: boolean;
+//   rating: number;
 
+//   onChangeFilter?(rating: number): void;
+// }
 export default function FilterListproduct({
   valuePrice: value,
   onPriceRangeChange,
@@ -23,10 +28,12 @@ export default function FilterListproduct({
   onPurchaseRangeChange,
   oninStock,
   onSoldOut,
+  onRateChange,
 }: SliderComponentProps) {
   const [price, setPrice] = useState(false);
   const [purchase, setPurchase] = useState(false);
   const [quantity, setPQuantity] = useState(false);
+  const [rating, setRating] = useState(1);
   const [rangePriceValue, setRangePriceValue] = useState([50000, 300000]);
   const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
@@ -66,7 +73,12 @@ export default function FilterListproduct({
     setSoldOut(!soldOut);
     onSoldOut(SoldOut);
   };
-
+  
+  const handleRateChange = (rate: number) => {
+    console.log("Rating:", rate);
+    setRating(rate);
+    onRateChange(rate);
+  };
   return (
     <div
       className="p-7 shadow mt-3 flex flex-col gap-9 relative 
@@ -281,7 +293,12 @@ export default function FilterListproduct({
 
       <div className="grid grid-cols-5 gap-1">
         {arrRating.map((e) => {
-          return <FilterRateMap rating={e.rating} checked={e.checked} />;
+          return <FilterRateMap rating={e.rating} checked={e.checked} 
+            onChangeFilter={(rating) => {
+            const ratingNum: number = Number(rating);
+            handleRateChange(ratingNum);
+            // onRateChange(ratingNum);
+          }}/>;
         })}
       </div>
     </div>

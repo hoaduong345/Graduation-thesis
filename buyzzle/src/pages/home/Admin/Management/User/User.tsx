@@ -86,7 +86,7 @@ export default function User() {
       .deleteUser(id)
       .then((res) => {
         toast.success("Xóa thành công !");
-        console.log("res:"+res);
+        console.log("res:" + res);
         getAllUserData();
       })
       .catch(() => {
@@ -138,6 +138,13 @@ export default function User() {
                 <tr>
                   <th
                     scope="col"
+                    className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
+                  >
+
+
+                  </th>
+                  <th
+                    scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
                     Id User
@@ -172,13 +179,7 @@ export default function User() {
                   >
                     Trạng Thái
                   </th>
-                  <th
-                    scope="col"
-                    className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
-                  >
-                    <Delete />
-                    <p>Xóa</p>
-                  </th>
+
                 </tr>
               </thead>
 
@@ -188,44 +189,11 @@ export default function User() {
                     <>
                       <tbody>
                         <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-                          <th
-                            scope="row"
-                            className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                          >
-                            {items.id}
-                          </th>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.username}
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.email}
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.sex
-                              ? (items.sex = "Nam")
-                              : (items.sex = "Nữ")}
-                          </td>
-
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            3999999
-                          </td>
-                          <td
-                            className={`${
-                              status == "Hoạt động"
-                                ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                                : "text-[#FF8A00] "
-                            }`}
-                          >
-                            Hoạt động
-                          </td>
-                          <th
+                        <th
                             scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
-                            <input
-                              type="checkbox"
-                              className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                            />
+
                             <div className="dropdown dropdown-right ">
                               <label
                                 className="max-lg:w-[24px] max-lg:h-[24px]"
@@ -270,6 +238,36 @@ export default function User() {
                               </ul>
                             </div>
                           </th>
+                          <th
+                            scope="row"
+                            className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
+                          >
+                            {items.id}
+                          </th>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.username}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.email}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.sex
+                              ? (items.sex = "Nam")
+                              : (items.sex = "Nữ")}
+                          </td>
+
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            3999999
+                          </td>
+                          <td
+                            className={`${status == "Hoạt động"
+                                ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
+                                : "text-[#FF8A00] "
+                              }`}
+                          >
+                            Hoạt động
+                          </td>
+                          
                         </tr>
                       </tbody>
                     </>
@@ -288,69 +286,28 @@ export default function User() {
                       <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
 
                       <td className="px-3 py-5 max-lg:py-3 justify-center">
-                        3999999
+
                       </td>
                       <td
-                        className={`${
-                          status == "Hoạt động"
+                        className={`${status == "Hoạt động"
                             ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
                             : "text-[#FF8A00] "
-                        }`}
+                          }`}
                       >
-                        Hoạt động
+
                       </td>
                       <th
                         scope="row"
                         className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                       >
-                        <input
-                          type="checkbox"
-                          className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                        />
-                        <div className="dropdown dropdown-right ">
-                          <label
-                            className="max-lg:w-[24px] max-lg:h-[24px]"
-                            tabIndex={1}
-                          >
-                            <Handle />
-                          </label>
-                          <ul
-                            tabIndex={0}
-                            className="dropdown-content menu bg-white rounded-box w-52
-                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                          >
-                            <li>
-                              <button className="flex items-center gap-4">
-                                <Edit />
-                                <p
-                                  className="text-[#EA4B48] text-sm font-medium
-                                            max-[940px]:text-xs "
-                                >
-                                  Sửa
-                                </p>
-                              </button>
-                            </li>
-                            <li>
-                              <button className="flex items-center gap-4">
-                                <RemoveCate />
-                                <p
-                                  className="text-[#EA4B48] text-sm font-medium
-                                             max-[940px]:text-xs "
-                                >
-                                  Xóa
-                                </p>
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
+
                       </th>
                     </tr>
                   </tbody>
-                  <EmptyPage
+                  {/* <EmptyPage
                     title="Danh sách sản phẩm trống"
                     button="Thêm Ngay"
-                  />
+                  /> */}
                 </>
               )}
             </table>
