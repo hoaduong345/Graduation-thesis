@@ -32,7 +32,7 @@ const AdminController = {
       const newAdmin = await prisma.admin.create({
         data: {
           username,
-          password: hashedPassword,
+          password: hashedPassword, 
           email,
           name,
           sex,

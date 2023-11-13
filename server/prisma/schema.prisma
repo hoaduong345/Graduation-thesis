@@ -42,7 +42,23 @@ model User {
   invoices             Invoice[]
   savedVouchers        SavedVoucher[]
   usedVouchers         Voucher[]      @relation("UsedBy")
+  ShippingUnit         ShippingUnit[]
+  
 }
+
+model ShippingUnit {
+ id            Int            @id @default(autoincrement())
+ name          String?
+ email         String?
+ password      String?
+ city            String?
+ address       String?
+ phonenumber   String?
+ User       User?   @relation(fields: [UserId], references: [id])
+ UserId     Int?
+  
+}
+
 
 model Voucher {
   id        Int            @id @default(autoincrement())
