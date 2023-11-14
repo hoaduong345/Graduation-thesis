@@ -5,7 +5,7 @@ import { Images } from "../../Assets/TS";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 
-export default function Notification() {
+export default function NotificationAdmin() {
   const [notification, setNotification] = useState<AllNotification[]>([]);
 
   const [changeButton, setChangeButton] = useState([
@@ -62,7 +62,7 @@ export default function Notification() {
   }, []);
   const getAllNoti = async () => {
     await notificationControllers
-      .getAllNotification()
+      .getAllNotificationAdmin()
       .then((res) => {
         console.log(
           "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",

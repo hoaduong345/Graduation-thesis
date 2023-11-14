@@ -1,5 +1,6 @@
 import Bell from "../../Assets/TSX/Bell";
 import Map from "../../Assets/TSX/Map";
+import Notification from "../Notification/NotificationAdmin";
 
 export default function HeaderTopShipping() {
   return (
@@ -21,6 +22,8 @@ export default function HeaderTopShipping() {
                   <div className="border-[1px] border-black " />
                   {/* Noti */}
                   <div className="flex items-center gap-1">
+                    {<Notification />}
+
                     <span className="relative inline-block">
                       <Bell />
                       <span
