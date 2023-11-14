@@ -44,7 +44,11 @@ const listSitebar: SitebarAdmin[] = [
     icon: <Members />,
     pathName: "/admin/usersmanager",
   },
-
+  {
+    title: "Shipper",
+    icon: <Members />,
+    pathName: "/admin/shippermanager",
+  },
   {
     title: "Admin",
     icon: <Members />,
@@ -162,11 +166,11 @@ export default function SitebarAdmin() {
           </>
         );
       })}
-      <a className="ml-3 flex gap-2" href={href}>
+      <a className="flex gap-2" href={href}>
         {image ? (
-          <div className="relative">
+          <div className=" mt-[15px] relative">
             <img
-              className="mt-[15px] w-10 h-10 rounded-2xl border-4 "
+              className="rounded-2xl border-4 w-20 h-10"
               src={image}
               alt=""
             />
