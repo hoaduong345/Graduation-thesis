@@ -1,8 +1,8 @@
-import Container from "../../../../components/container/Container";
 import Back from "../Assets/TSX/Back";
-import ProFile from "../DetailUser/Components/Profile"
-import PaymentAddress from "../DetailUser/Components/PaymentAddress"
-import AccountStatus from "../DetailUser/Components/AccountStatus"
+import ProFile from "../DetailUser/Components/Profile";
+import PaymentAddress from "../DetailUser/Components/PaymentAddress";
+import AccountStatus from "../DetailUser/Components/AccountStatus";
+import Container from "../../../../components/container/Container";
 
 export default function DetailUser() {
   return (
@@ -27,11 +27,11 @@ export default function DetailUser() {
         {/* end back */}
 
         <div className="">
-            <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2">
             <ProFile />
-            <AccountStatus/>
-            </div>
-            <PaymentAddress/>
+            <AccountStatus />
+          </div>
+          <PaymentAddress />
         </div>
       </div>
     </Container>
