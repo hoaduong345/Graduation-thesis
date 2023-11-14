@@ -48,12 +48,18 @@ const AdminShippingController = {
             return res.status(401).json('loi');
           }
       
+          // Lưu username vào local storage
+          // Bạn có thể sử dụng một middleware cookie hoặc jwt để quản lý phiên đăng nhập
+          // ở đây, tôi sử dụng res.cookie để đặt cookie với tên "username" và giá trị là username
+          res.cookie('username', username);
+      
           return res.status(200).json(username);
         } catch (error) {
           console.error('Error', error);
           return res.status(500).json({ error: 'Server Error' });
         }
       },
+      
 
       deleteShipping : async(req, res)=>{
         try {
