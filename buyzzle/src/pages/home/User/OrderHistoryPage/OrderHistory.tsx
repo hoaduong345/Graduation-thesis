@@ -41,7 +41,7 @@ export const getStatusOrder = (status: StatusOrder) => {
       _paymentStatus = "Đã thanh toán";
       break;
     default:
-      _statusOrder = <p className="text-red-700">Yêu Cầu Hủy Đơn</p>;
+      _statusOrder = <p className="text-red-700">Đơn hàng đã được hủy</p>;
       break;
   }
   return {
@@ -92,7 +92,82 @@ export default function OrderHistory() {
     });
     closeModal(idRemove);
   };
-
+  // button filter
+  const [changeButton, setChangeButton] = useState([
+    {
+      id: 0,
+      text: "Tất cả",
+      active: true,
+    },
+    {
+      id: 1,
+      text: "Chờ xác nhận",
+      active: false,
+    },
+    {
+      id: 2,
+      text: "Đã đặt hàng",
+      active: false,
+    },
+    {
+      id: 3,
+      text: "Giao cho ĐVVC",
+      active: false,
+    },
+    {
+      id: 5,
+      text: "Đang giao hàng",
+      active: false,
+    },
+    {
+      id: 6,
+      text: "Giao hàng thành công",
+      active: false,
+    },
+  ]);
+  const handleClick = (id: number) => {
+    console.log("🚀 ~ file: Notification.tsx:27 ~ handleClick ~ id:", id);
+    const updatedButtons = changeButton.map((btn) => {
+      if (btn.id === id) {
+        console.log(
+          "🚀 ~ file: OrderManagement.tsx:91 ~ updatedButtons ~ btn.id:",
+          btn.id
+        );
+        return { ...btn, active: true };
+      } else {
+        return { ...btn, active: false };
+      }
+    });
+    setChangeButton(updatedButtons);
+  };
+  function getBorderColor(id: number) {
+    switch (id) {
+      case 0:
+        return "#570DF8";
+      case 1:
+        return "#3DC0F8";
+      case 2:
+        return "#1DCDBC";
+      case 3:
+        return "#FBC132";
+      case 5:
+        return "#F43FCA";
+      case 6:
+        return "#21CEBD";
+      default:
+        return "#ccc";
+    }
+  }
+  // const getOrderFilter = async (status: number) => {
+  //   notificationControllers
+  //     .getFilterNotification(status)
+  //     .then((res: any) => {
+  //       setNotification(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   return (
     <Container>
       <div
@@ -124,6 +199,30 @@ export default function OrderHistory() {
           <h1 className="text-[32px] font-bold mb-4 max-lg:text-[28px] max-[870px]:text-2xl max-[769px]:text-xl">
             Danh Sách Đơn Hàng
           </h1>
+          {/* button */}
+          <div className="flex my-3 gap-2">
+            {changeButton.map((btnItems) => {
+              return (
+                <button
+                  className={`bg-white items-center max-w-max px-3 rounded-md h-[36px] transition duration-150`}
+                  style={{
+                    backgroundColor: "white ",
+                    borderColor: btnItems.active
+                      ? getBorderColor(btnItems.id)
+                      : "",
+                    color: btnItems.active ? getBorderColor(btnItems.id) : "",
+                    borderWidth: btnItems.active ? "1px" : "",
+                  }}
+                  onClick={() => {
+                    handleClick(btnItems.id);
+                  }}
+                >
+                  {btnItems.text}
+                </button>
+              );
+            })}
+          </div>
+          {/* end button */}
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8 max-lg:text-xs">
               <div className=" ">
@@ -169,7 +268,17 @@ export default function OrderHistory() {
                                     {e.OrderDetail.length} SP)
                                   </div>
                                   <div className="w-[16%] text-center">
-                                    {getStatusOrder(e.status)._statusOrder}
+                                    {e.deletedAt != null ? (
+                                      <p>
+                                        <p className="text-rose-600">
+                                          Đơn hàng đã được hủy
+                                        </p>
+                                      </p>
+                                    ) : (
+                                      <p>
+                                        {getStatusOrder(e.status)._statusOrder}
+                                      </p>
+                                    )}
                                   </div>
                                   <Link
                                     to={`/orderdetail/${e.id}`}

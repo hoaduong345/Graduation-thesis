@@ -292,7 +292,7 @@ model Message {
 model Notification {
   id       Int      @id @default(autoincrement())
   orderId  Int
-  message  String
+  message  String?
   date     DateTime @default(now())
   status   Int?
   seen     Boolean?

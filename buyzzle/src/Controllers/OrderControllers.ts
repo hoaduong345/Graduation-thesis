@@ -68,6 +68,13 @@ class OrderControllers {
         return res.data;
       });
   };
+  getConfirmCancelOrder = async (id: number) => {
+    return await axios
+      .post(`${appConfig.apiShipping}/confirmdelete`, { orderId: id })
+      .then((res) => {
+        return res.data;
+      });
+  };
 }
 
 export const orderControllers = new OrderControllers();
