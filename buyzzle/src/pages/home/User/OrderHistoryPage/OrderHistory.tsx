@@ -2,17 +2,18 @@ import { IonIcon } from "@ionic/react";
 import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
-import { orderControllers } from "../../../../Controllers/OrderControllers";
+import { orderControllers, orderModelController } from "../../../../Controllers/OrderControllers";
+import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { numberFormat } from "../../../../Helper/Format";
-import { OrderModel, StatusOrder } from "../../../../Model/OrderModel";
+import { OrderPanigation, StatusOrder } from "../../../../Model/OrderModel";
 import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
-import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
-import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
-import { toast } from "react-toastify";
+import Sitebar from "../UserProfile/Sitebar/Sitebar";
+import ResponsivePagination from "react-responsive-pagination";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
@@ -51,10 +52,11 @@ export const getStatusOrder = (status: StatusOrder) => {
 };
 
 export default function OrderHistory() {
-  const [order, setOrder] = useState<OrderModel[]>([]);
+  const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
   const [isOrderCancelled, setIsOrderCancelled] = useState(false);
   const [idOrder, setIdOrder] = useState<number | undefined>(0);
   const [open, setOpen] = useState<number>();
+  const [orderAPI, setOrderAPI] = useState<orderModelController>({} as orderModelController);
 
   const idRemove = "removeVoucher";
   const idSitebar = "my_modal_3";
@@ -75,12 +77,17 @@ export default function OrderHistory() {
 
   useEffect(() => {
     getOrder();
-  }, []);
+  }, [orderAPI.page]);
 
   const getOrder = async () => {
-    await orderControllers.getOrderOfUser().then((res) => {
-      setOrder(res.data);
+    await orderControllers.getOrderOfUser(orderAPI.page!).then((res) => {
+      console.log(orderAPI.page)
+      setOrder(res);
     });
+  };
+
+  const handlePageChange = (page: number) => {
+    setOrderAPI({ ...orderAPI, page: page });
   };
 
   const abortOrder = async (id: number) => {
@@ -240,8 +247,8 @@ export default function OrderHistory() {
                   </div>
                 </div>
 
-                {order.length > 0 ? (
-                  order.map((e) => {
+                {order?.data?.length > 0 ? (
+                  order?.data?.map((e) => {
                     return (
                       <>
                         <Accordion open={open === e.id}>
@@ -387,6 +394,7 @@ export default function OrderHistory() {
                 ) : (
                   <EmptyPage title="Chưa có đơn hàng" button="Mua ngay" />
                 )}
+
                 <DialogComfirm
                   onClose={() => closeModal(idRemove)}
                   title="Hủy đơn hàng này"
@@ -397,7 +405,14 @@ export default function OrderHistory() {
                   id={idRemove}
                 />
               </div>
+
             </div>
+            <ResponsivePagination
+              current={orderAPI.page!}
+              total={order.totalPage}
+              onPageChange={handlePageChange}
+              maxWidth={500}
+            />
           </div>
         </div>
       </div>

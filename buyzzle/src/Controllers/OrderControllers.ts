@@ -17,12 +17,14 @@ class OrderControllers {
     return await axios.post(`${appConfig.apiOrder}`, { order: data });
   };
 
-  getOrderOfUser = async () => {
-    return await axios.get(`${appConfig.apiOrder}`, {
+  getOrderOfUser = async (page: number) => {
+    return await axios.post(`${appConfig.apiOrder}/userOrder`, { page: page, pageSize: 6 }, {
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
       withCredentials: true,
+    }).then((res) => {
+      return res.data
     });
   };
 
