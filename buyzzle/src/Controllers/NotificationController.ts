@@ -8,7 +8,7 @@ const appConfig = {
 class NotificationControllers {
   getAllNotification = async (): Promise<NotificationModel> => {
     return await axios
-      .get(`${appConfig.apiShipping}/notification`)
+      .get(`${appConfig.apiShipping}/notificationadmin`)
       .then((res) => {
         return res.data as NotificationModel;
       });
