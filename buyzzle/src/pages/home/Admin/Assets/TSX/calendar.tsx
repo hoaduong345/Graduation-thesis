@@ -10,8 +10,8 @@ export default function Calendar() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M21 4.5C21 4.5 21 3.87868 20.5607 3.43934C20.5607 3.43934 20.1213 3 19.5 3H4.5C4.5 3 3.87868 3 3.43934 3.43934C3.43934 3.43934 3 3.87868 3 4.5V19.5C3 19.5 3 20.1213 3.43934 20.5607C3.43934 20.5607 3.87868 21 4.5 21H19.5C19.5 21 20.1213 21 20.5607 20.5607C20.5607 20.5607 21 20.1213 21 19.5V4.5ZM19.5 4.5V19.5H4.5V4.5H19.5Z"
         fill="#4C4C4C"
       />

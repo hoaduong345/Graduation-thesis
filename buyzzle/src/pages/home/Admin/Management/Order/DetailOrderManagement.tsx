@@ -39,6 +39,14 @@ export default function DetailOrderManagement() {
       toast.success("Thành công");
     });
   };
+  const handleConfirmCancelOrder = () => {
+    orderControllers
+      .getConfirmCancelOrder(idOrder)
+      .then((_) => {
+        getOrder();
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -109,9 +117,17 @@ export default function DetailOrderManagement() {
                 ) : (
                   <></>
                 )}
-                <button className="btn btn-outline btn-sm text-xs hover:bg-[#EA4B48] text-[#EA4B48] hover:text-[#ffffff] hover:outline-none">
-                  Hủy đơn
-                </button>
+                {/* {order.status == 0 ? (
+                  <button
+                    className="btn btn-outline btn-sm text-xs hover:bg-[#ffeded]
+                   text-[#EA4B48] hover:text-[#EA4B48] hover:border-[#EA4B48]"
+                    onClick={() => handleConfirmCancelOrder()}
+                  >
+                    Hủy đơn
+                  </button>
+                ) : (
+                  <></>
+                )} */}
               </div>
             </div>
 
@@ -185,16 +201,7 @@ export default function DetailOrderManagement() {
                             {numberFormat(order.subtotal)}
                           </p>
                         </div>
-                        <div className="flex justify-between border-t-[1px] pt-2">
-                          <p className="text-sm font-medium text-[#393939] max-[870px]:text-[11px]">
-                            Giảm:{" "}
-                          </p>
-                          <div className="flex gap-1">
-                            <p className="text-sm text-[#FFAAAF] line-through max-[870px]:text-[11px]">
-                              {numberFormat(order.discount)}
-                            </p>
-                          </div>
-                        </div>
+
                         <div className="flex justify-between border-t-[1px] pt-2">
                           <p className="text-sm font-medium text-[#393939] max-[870px]:text-[11px]">
                             Phí Giao Hàng:{" "}
@@ -202,6 +209,20 @@ export default function DetailOrderManagement() {
                           <div className="flex gap-1">
                             <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
                               {numberFormat(order.shipping)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex justify-between border-t-[1px] pt-2">
+                          <p className="text-sm font-medium text-[#393939] max-[870px]:text-[11px]">
+                            Giảm:{" "}
+                          </p>
+                          <div className="flex gap-1">
+                            <p className="text-sm text-[#FFAAAF] max-[870px]:text-[11px]">
+                              {order.discount == 0 ? (
+                                numberFormat(order.discount)
+                              ) : (
+                                <p>- {numberFormat(order.discount)}</p>
+                              )}
                             </p>
                           </div>
                         </div>
@@ -223,6 +244,8 @@ export default function DetailOrderManagement() {
                   </div>
                   <div className="px-11 pt-4">
                     <StepperAdmin
+                      confirmCancelOrder={() => handleConfirmCancelOrder()}
+                      deletedAt={order.deletedAt}
                       status={order.status}
                       comfirm={(status) => setStatus(status)}
                     />
@@ -233,7 +256,7 @@ export default function DetailOrderManagement() {
               <div className="col-span-1">
                 <div className="flex flex-col gap-5 px-5 py-8 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                   <div className="text-xl font-semibold text-[#393939]">
-                    <p>Thông Tin User</p>
+                    <p>Thông Tin Khách hàng</p>
                   </div>
 
                   <div className="flex justify-between mb-8">
@@ -246,33 +269,12 @@ export default function DetailOrderManagement() {
 
                       <div>
                         <p className="text-sm">
-                          {order?.name?.length > 0
-                            ? order?.name.substring(0, 11)
-                            : ""}{" "}
+                          {order?.name?.length > 0 ? order?.name : ""}{" "}
                         </p>
 
                         <p className="text-[#12b004] text-[10px]">
-                          {order?.name?.length
-                            ? order?.address.substring(0, 11)
-                            : ""}{" "}
+                          {order?.name?.length ? order?.address : ""}{" "}
                         </p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-3">
-                      <div className="flex justify-end items-centers">
-                        <button
-                          className="text-white text-center text-xs font-bold
-                 bg-[#EA4B48] hover:bg-[#ff6d65] mt-2
-                 rounded-md transition duration-150 cursor-pointer
-                 flex items-center px-2 py-1"
-                        >
-                          <p className="w-full">Chat</p>
-                          <MessageOrderAdmin />
-                        </button>
-                      </div>
-                      <div className=" flex gap-1 items-center text-[10px] text-red-700">
-                        Đang hoạt động
                       </div>
                     </div>
                   </div>
@@ -299,9 +301,6 @@ export default function DetailOrderManagement() {
                           <p>Địa Chỉ</p>
                         </div>
                         <div className="pl-2 border-l-[1px] border-[#FFAAAF] font-semibold">
-                          <p className="text-[#1A1A1A] text-sm">
-                            {order?.name}
-                          </p>
                           <p className="text-[#4C4C4C] text-sm">
                             {order?.address}
                           </p>

@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import ResponsivePagination from "react-responsive-pagination";
+import { ModelAdmin } from "../../../../../Model/AdminModel";
+import {
+  AdminModel,
+  adminController,
+} from "../../../../../Controllers/AdminControllder";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import Container from "../../../../../components/container/Container";
 import SitebarAdmin from "../../Sitebar/Sitebar";
+import PlusSquare from "../../Assets/TSX/PlusSquare";
+import DialogAddAdmin from "../../../../../Helper/Dialog/DialogAddAdmin";
 import Search from "../../../../../Assets/TSX/Search";
 import Download from "../../Assets/TSX/Download";
 import Delete from "../../Assets/TSX/Delete";
-import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Edit from "../../Assets/TSX/Edit";
+import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Handle from "../../Assets/TSX/bacham";
-import { userController } from "../../../../../Controllers/UserController";
 import EmptyPage from "../../../../../Helper/Empty/EmptyPage";
-import { toast } from "react-toastify";
-import { adminController } from "../../../../../Controllers/AdminControllder";
-import PlusSquare from "../../Assets/TSX/PlusSquare";
-import DialogModal from "../../../../../Helper/Dialog/DialogModal";
-import { Controller, useForm } from "react-hook-form";
-import DialogAddAdmin from "../../../../../Helper/Dialog/DialogAddAdmin";
+import useDebounce from "../../../../../useDebounceHook/useDebounce";
 
 export interface admin {
   id: number;
@@ -27,21 +31,23 @@ export interface admin {
 }
 export interface FormValues {
   name: string;
-  username: string
+  username: string;
   email: string;
   password: string;
   dateofbirth: string;
   phonenumber: string;
   sex: string;
-
-
 }
 
 export default function Admin() {
-
   const [sex, setSex] = useState<boolean>();
   let status = "Hoạt động";
-  const [admin, setAdmin] = useState<any>({});
+  const [admin, setAdmin] = useState<ModelAdmin>({} as ModelAdmin);
+  const [adminAPI, setAdminAPI] = useState<AdminModel>({
+    pageSize: 2,
+  });
+  const debouncedInputValueSearch = useDebounce(adminAPI.keyword, 500);
+
   const idAddAdmin = "AddAdmin";
 
   const {
@@ -59,29 +65,29 @@ export default function Admin() {
   };
   const getAllAdmin = () => {
     adminController
-      .getAllAdmin()
+      .getAllAdmin(adminAPI)
       .then((res) => {
         return res;
       })
       .then((res) => {
-
         if (res[0]?.dateofbirth == null) {
           res.dateofbirth = "dd/mm/yyyy";
-
-          console.log("vcl");
         } else {
           res.dateofbirth = (res[0]?.dateofbirth).substring(0, 10);
-          console.log("Test" + res.dateofbirth);
         }
         setAdmin(res);
-
       });
   };
 
   useEffect(() => {
     getAllAdmin();
-  }, []);
-
+  }, [adminAPI.page, debouncedInputValueSearch]);
+  const handlePageChange = (page: number) => {
+    setAdminAPI({ ...adminAPI, page: page });
+  };
+  const handleSearchInput = (value: string) => {
+    setAdminAPI({ ...adminAPI, keyword: value });
+  };
   function JumpEditUser(username: any) {
     window.location.href = `adminprofile/${username}`;
   }
@@ -99,7 +105,8 @@ export default function Admin() {
       });
   };
   const AddAdmin = (data: FormValues) => {
-    adminController.AddAdmin(data)
+    adminController
+      .AddAdmin(data)
       .then((res) => {
         toast.success("Thêm thành công !");
         console.log("res:" + res);
@@ -108,9 +115,9 @@ export default function Admin() {
       .catch(() => {
         toast.error("Thêm thất bại !");
       });
-  }
+  };
   function reformatDate(dateStr: any) {
-    var dArr = dateStr.split("-");  // ex input: "2010-01-18"
+    var dArr = dateStr.split("-"); // ex input: "2010-01-18"
     return dArr[2] + "/" + dArr[1] + "/" + dArr[0].substring(0); //ex output: "18/01/10"
   }
   const openModal = (id: string) => {
@@ -138,7 +145,7 @@ export default function Admin() {
       dateofbirth: "",
       phonenumber: "",
       sex: "",
-    })
+    });
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
       modal.close();
@@ -166,9 +173,7 @@ export default function Admin() {
               <div className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6">
                 <button
                   className="flex gap-3"
-                  onClick={() =>
-                    openModal(idAddAdmin)
-                  }
+                  onClick={() => openModal(idAddAdmin)}
                 >
                   <PlusSquare />
                   <p className="cursor-default text-white text-base font-bold ">
@@ -187,7 +192,7 @@ export default function Admin() {
                 body={
                   <>
                     <div className="grid grid-cols-5 gap-8">
-                      <div className="col-span-3 " >
+                      <div className="col-span-3 ">
                         <div className="flex gap-3  ">
                           <div className="flex flex-col gap-5 max-lg:gap-2">
                             <div className="h-[90px] w-[500px]">
@@ -197,18 +202,15 @@ export default function Admin() {
                                 rules={{
                                   required: {
                                     value: true,
-                                    message:
-                                      "Không để trống",
+                                    message: "Không để trống",
                                   },
                                   minLength: {
                                     value: 4,
-                                    message:
-                                      "Ít nhất 4 ký tự",
+                                    message: "Ít nhất 4 ký tự",
                                   },
                                   maxLength: {
                                     value: 25,
-                                    message:
-                                      "Nhiều nhất 25 kí tự",
+                                    message: "Nhiều nhất 25 kí tự",
                                   },
                                 }}
                                 render={({ field }) => (
@@ -224,26 +226,15 @@ export default function Admin() {
                                       placeholder="Nhập vào tên"
                                       value={field.value}
                                       onChange={(e) => {
-                                        const reg =
-                                          /[!@#$%^&]/;
-                                        const value =
-                                          e.target
-                                            .value;
-                                        field.onChange(
-                                          value.replace(
-                                            reg,
-                                            ""
-                                          )
-                                        );
+                                        const reg = /[!@#$%^&]/;
+                                        const value = e.target.value;
+                                        field.onChange(value.replace(reg, ""));
                                       }}
                                       name="name"
                                     />
                                     {errors.name && (
                                       <p className="text-[11px] text-red-700 mt-0">
-                                        {
-                                          errors.name
-                                            .message
-                                        }
+                                        {errors.name.message}
                                       </p>
                                     )}
                                   </>
@@ -262,18 +253,15 @@ export default function Admin() {
                                 rules={{
                                   required: {
                                     value: true,
-                                    message:
-                                      "Không để trống",
+                                    message: "Không để trống",
                                   },
                                   minLength: {
                                     value: 4,
-                                    message:
-                                      "Ít nhất 4 ký tự",
+                                    message: "Ít nhất 4 ký tự",
                                   },
                                   maxLength: {
                                     value: 25,
-                                    message:
-                                      "Nhiều nhất 25 kí tự",
+                                    message: "Nhiều nhất 25 kí tự",
                                   },
                                 }}
                                 render={({ field }) => (
@@ -289,26 +277,15 @@ export default function Admin() {
                                       placeholder="Nhập vào tên tài khoản"
                                       value={field.value}
                                       onChange={(e) => {
-                                        const reg =
-                                          /[!@#$%^&]/;
-                                        const value =
-                                          e.target
-                                            .value;
-                                        field.onChange(
-                                          value.replace(
-                                            reg,
-                                            ""
-                                          )
-                                        );
+                                        const reg = /[!@#$%^&]/;
+                                        const value = e.target.value;
+                                        field.onChange(value.replace(reg, ""));
                                       }}
                                       name="username"
                                     />
                                     {errors.username && (
                                       <p className="text-[11px] text-red-700 mt-0">
-                                        {
-                                          errors.username
-                                            .message
-                                        }
+                                        {errors.username.message}
                                       </p>
                                     )}
                                   </>
@@ -316,7 +293,6 @@ export default function Admin() {
                               />
                             </div>
                           </div>
-
                         </div>
                         <div className="flex gap-3 ">
                           <div className="flex flex-col gap-5 max-lg:gap-2">
@@ -327,18 +303,15 @@ export default function Admin() {
                                 rules={{
                                   required: {
                                     value: true,
-                                    message:
-                                      "Không để trống",
+                                    message: "Không để trống",
                                   },
                                   minLength: {
                                     value: 4,
-                                    message:
-                                      "Ít nhất 4 ký tự",
+                                    message: "Ít nhất 4 ký tự",
                                   },
                                   maxLength: {
                                     value: 25,
-                                    message:
-                                      "Nhiều nhất 25 kí tự",
+                                    message: "Nhiều nhất 25 kí tự",
                                   },
                                 }}
                                 render={({ field }) => (
@@ -355,26 +328,15 @@ export default function Admin() {
                                       value={field.value}
                                       type="password"
                                       onChange={(e) => {
-                                        const reg =
-                                          /[!@#$%^&]/;
-                                        const value =
-                                          e.target
-                                            .value;
-                                        field.onChange(
-                                          value.replace(
-                                            reg,
-                                            ""
-                                          )
-                                        );
+                                        const reg = /[!@#$%^&]/;
+                                        const value = e.target.value;
+                                        field.onChange(value.replace(reg, ""));
                                       }}
                                       name="password"
                                     />
                                     {errors.password && (
                                       <p className="text-[11px] text-red-700 mt-0">
-                                        {
-                                          errors.password
-                                            .message
-                                        }
+                                        {errors.password.message}
                                       </p>
                                     )}
                                   </>
@@ -382,7 +344,6 @@ export default function Admin() {
                               />
                             </div>
                           </div>
-
                         </div>
 
                         <div className="flex gap-3 ">
@@ -394,24 +355,23 @@ export default function Admin() {
                                 rules={{
                                   required: {
                                     value: true,
-                                    message:
-                                      "Không để trống",
+                                    message: "Không để trống",
                                   },
                                   minLength: {
                                     value: 4,
-                                    message:
-                                      "Ít nhất 4 ký tự",
+                                    message: "Ít nhất 4 ký tự",
                                   },
-                                  // maxLength: {
-                                  //   value: ,
-                                  //   message:
-                                  //     "Nhiều nhất 25 kí tự",
-                                  // },
-                                  validate: { // Kiểm tra email có đúng định dạng không 
-                                    validEmail: (value) => /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(value) || "Email không hợp lệ",
-
+                                  maxLength: {
+                                    value: 25,
+                                    message: "Nhiều nhất 25 kí tự",
                                   },
-
+                                  validate: {
+                                    // Kiểm tra email có đúng định dạng không
+                                    validEmail: (value) =>
+                                      /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(
+                                        value
+                                      ) || "Email không hợp lệ",
+                                  },
                                 }}
                                 render={({ field }) => (
                                   <>
@@ -426,26 +386,15 @@ export default function Admin() {
                                       placeholder="Nhập vào Email"
                                       value={field.value}
                                       onChange={(e) => {
-                                        const reg =
-                                          /[!#$%^&]/;
-                                        const value =
-                                          e.target
-                                            .value;
-                                        field.onChange(
-                                          value.replace(
-                                            reg,
-                                            ""
-                                          )
-                                        );
+                                        const reg = /[!#$%^&]/;
+                                        const value = e.target.value;
+                                        field.onChange(value.replace(reg, ""));
                                       }}
                                       name="email"
                                     />
                                     {errors.email && (
                                       <p className="text-[11px] text-red-700 mt-0">
-                                        {
-                                          errors.email
-                                            .message
-                                        }
+                                        {errors.email.message}
                                       </p>
                                     )}
                                   </>
@@ -453,7 +402,6 @@ export default function Admin() {
                               />
                             </div>
                           </div>
-
                         </div>
                         <div className="w-[500px] flex justify-between">
                           <div className="w-[48%] mb-[15px]">
@@ -517,18 +465,15 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               rules={{
                                 required: {
                                   value: true,
-                                  message:
-                                    "Không để trống",
+                                  message: "Không để trống",
                                 },
                                 minLength: {
                                   value: 4,
-                                  message:
-                                    "Ít nhất 4 ký tự",
+                                  message: "Ít nhất 4 ký tự",
                                 },
                                 maxLength: {
                                   value: 25,
-                                  message:
-                                    "Nhiều nhất 25 kí tự",
+                                  message: "Nhiều nhất 25 kí tự",
                                 },
                               }}
                               render={({ field }) => (
@@ -544,26 +489,15 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     placeholder="Nhập vào số điện thoại"
                                     value={field.value}
                                     onChange={(e) => {
-                                      const reg =
-                                        /[!#$%^&]/;
-                                      const value =
-                                        e.target
-                                          .value;
-                                      field.onChange(
-                                        value.replace(
-                                          reg,
-                                          ""
-                                        )
-                                      );
+                                      const reg = /[!#$%^&]/;
+                                      const value = e.target.value;
+                                      field.onChange(value.replace(reg, ""));
                                     }}
                                     name="phonenumber"
                                   />
                                   {errors.phonenumber && (
                                     <p className="text-[11px] text-red-700 mt-0">
-                                      {
-                                        errors.phonenumber
-                                          .message
-                                      }
+                                      {errors.phonenumber.message}
                                     </p>
                                   )}
                                 </>
@@ -576,14 +510,13 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                           <Controller
                             control={control}
                             name="dateofbirth"
-                            rules={
-                              {
-                                required: {
-                                  value: true,
-                                  message: 'Bạn phải nhập thông tin cho trường dữ liệu này!'
-                                }
-                              }
-                            }
+                            rules={{
+                              required: {
+                                value: true,
+                                message:
+                                  "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                              },
+                            }}
                             render={({ field }) => (
                               <>
                                 <label
@@ -603,7 +536,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     const reg = /[!@#$%^&*]/;
                                     field.onChange(value.replace(reg, ""));
                                   }}
-
                                 />
                                 {!!errors.dateofbirth && (
                                   <p className="text-red-700 mt-2">
@@ -614,7 +546,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                             )}
                           />
                         </div>
-
                       </div>
                     </div>
                   </>
@@ -629,8 +560,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     <Search />
                   </div>
                   <input
-                    className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm"
-                    placeholder="Tìm kiếm..."
+                    className="rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm "
+                    placeholder="Tìm kiếm theo tên đăng nhập"
+                    value={adminAPI.keyword}
+                    style={{ fontSize: "14px" }}
+                    onChange={(e) => handleSearchInput(e.target.value)}
                   />
                 </div>
                 <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
@@ -643,22 +577,22 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
             </div>
           </div>
 
-          <div className="relative">
-            <table className="table-auto w-full text-left ">
+          <div className="relative ">
+            <table className="w-full text-left ">
               <thead className="text-base text-[#4C4C4C] border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-[11px]">
                 <tr>
                   <th
                     scope="col"
                     className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    {/* <Delete />
-                    <p>Xóa</p> */}
+                    <Delete />
+                    <p>Xóa</p>
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Id
+                    Id Admin
                   </th>
                   <th
                     scope="col"
@@ -696,12 +630,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                   >
                     SĐT
                   </th>
-
                 </tr>
               </thead>
 
-              {admin?.length > 0 ? (
-                admin?.map((items: any) => {
+              {admin?.data?.length > 0 ? (
+                admin?.data?.map((items: any) => {
                   return (
                     <>
                       <tbody>
@@ -753,11 +686,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 </li>
                               </ul>
                             </div>
-                            {/* <input
+                            <input
                               type="checkbox"
                               className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                            /> */}
-
+                            />
                           </th>
                           <th
                             scope="row"
@@ -782,14 +714,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
 
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
                             {items.dateofbirth != null
-                              ? (reformatDate((items.dateofbirth).substring(0, 10)))
+                              ? reformatDate(items.dateofbirth.substring(0, 10))
                               : (items.dateofbirth = "dd/mm/yyyy")}
                           </td>
-                          <td
-                            className="text-[#2e34e6] px-3 py-5 max-lg:py-3 justify-center">
+                          <td className="text-[#2e34e6] px-3 py-5 max-lg:py-3 justify-center">
                             {items.phonenumber}
                           </td>
-
                         </tr>
                       </tbody>
                     </>
@@ -799,54 +729,92 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                 <>
                   <tbody>
                     <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-
-                      <th
-                        scope="row"
-                        className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                      > 
-                      </th>
                       <th
                         scope="row"
                         className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                      >
-                       
-                      </th>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center">
-
-                      </td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center">
-
-                      </td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center">
-
-                      </td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center">
-
-                      </td>
+                      ></th>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
 
                       <td className="px-3 py-5 max-lg:py-3 justify-center">
-
+                        3999999
                       </td>
                       <td
-                        className="text-[#2e34e6] px-3 py-5 max-lg:py-3 justify-center">
-
+                        className={`${
+                          status == "Hoạt động"
+                            ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
+                            : "text-[#FF8A00] "
+                        }`}
+                      >
+                        Hoạt động
                       </td>
-
+                      <th
+                        scope="row"
+                        className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
+                      >
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
+                        />
+                        <div className="dropdown dropdown-right ">
+                          <label
+                            className="max-lg:w-[24px] max-lg:h-[24px]"
+                            tabIndex={1}
+                          >
+                            <Handle />
+                          </label>
+                          <ul
+                            tabIndex={0}
+                            className="dropdown-content menu bg-white rounded-box w-52
+                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                          >
+                            <li>
+                              <button className="flex items-center gap-4">
+                                <Edit />
+                                <p
+                                  className="text-[#EA4B48] text-sm font-medium
+                                            max-[940px]:text-xs "
+                                >
+                                  Sửa
+                                </p>
+                              </button>
+                            </li>
+                            <li>
+                              <button className="flex items-center gap-4">
+                                <RemoveCate />
+                                <p
+                                  className="text-[#EA4B48] text-sm font-medium
+                                             max-[940px]:text-xs "
+                                >
+                                  Xóa
+                                </p>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </th>
                     </tr>
-
                   </tbody>
-                  {/* <EmptyPage
-                          title="Danh sách sản phẩm trống"
-                          button="Thêm Ngay"
-                        /> */}
+                  <EmptyPage
+                    title="Danh sách sản phẩm trống"
+                    button="Thêm Ngay"
+                  />
                 </>
-
               )}
             </table>
+            <div className="mt-10">
+              <ResponsivePagination
+                current={adminAPI.page!}
+                total={admin.totalPage}
+                onPageChange={handlePageChange}
+                maxWidth={500}
+              />
+            </div>
           </div>
-
         </div>
       </div>
-    </Container >
+    </Container>
   );
 }

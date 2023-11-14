@@ -4,6 +4,17 @@ export interface OrderPanigation {
   pageSize: number;
   totalPage: number;
   totalOrder: number;
+  statusCounts: StatusCounts;
+  totalOrderShipping: number;
+}
+export interface StatusCounts {
+  orderStatus2: number;
+  orderStatus5: number;
+  orderStatus0: number;
+  orderStatus1: number;
+  orderStatus3: number;
+  orderStatus4: number;
+  orderStatus6: number;
 }
 export interface OrderModel {
   id: number;
@@ -14,6 +25,7 @@ export interface OrderModel {
   amountTotal: number;
   paymentMethod: string;
   createdAt: Date;
+  deletedAt: Date;
   status: StatusOrder;
   _paymentStatus: string;
   invoice: string;
@@ -35,6 +47,7 @@ export interface OrderItems {
 }
 
 export enum StatusOrder {
+  Cancel,
   Comfirm,
   Ordered,
   WaitingCourier, // Giao cho Đơn vị Vận tải (ĐVVT)

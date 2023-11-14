@@ -120,7 +120,7 @@ export default function UserProfile() {
               SetDataUser(res.adminWithImage);
 
               const UserImageArray = JSON.stringify(res.adminWithImage.AdminImage);
-              console.log("HINH:"+UserImageArray);
+              console.log("HINH:" + UserImageArray);
               if (UserImageArray == "[]") {
                 setCheckImageUrl(false);
               } else {
@@ -212,11 +212,11 @@ export default function UserProfile() {
       idadmin: id,
       url: url,
     };
-    console.log("NHucc:"+JSON.stringify(urlImages))
+    console.log("NHucc:" + JSON.stringify(urlImages))
     await axios
       .post(`${appConfigAdmin.apiUrl}/addimageadmin/`, urlImages)
-      .then((response) => 
-      console.log("CCCCCCCCCCCC:"+JSON.stringify(urlImages))
+      .then((response) =>
+        console.log("CCCCCCCCCCCC:" + JSON.stringify(urlImages))
       );
   };
 
@@ -248,7 +248,7 @@ export default function UserProfile() {
       console.log("SERVER:" + JSON.stringify(formData));
       const response = await axios.put(API, formData);
       FormImage.idadmin = parseInt(id);
-      console.log("ID:"+FormImage.idadmin);
+      console.log("ID:" + FormImage.idadmin);
       if (response) {
         console.log("UrlThen" + url);
         if (CheckImageUrl == false) {
@@ -344,8 +344,8 @@ export default function UserProfile() {
                       <div className="col-span-1 max-2xl:hidden">
                         <SitebarAdmin />
                       </div>
-                      
-                        <div className="mt-20 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
+
+                      <div className="mt-20 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
                         <form
                           className="card py-4 px-5 col-span-3  rounded-[6px]
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
@@ -746,14 +746,14 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                           </div>
                         </div>
                       </div>
-                      </div>
                     </div>
-
-
-
-
                   </div>
-            
+
+
+
+
+                </div>
+
               </Container>
             ) : (
               <Container>
@@ -780,9 +780,9 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                         fill="currentColor"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         ></path>
                       </svg>
                       <span>Return Home</span>

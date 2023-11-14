@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { useNavigate } from "react-router-dom";
 import Search from "../../../../../Assets/TSX/Search";
-import { orderControllers } from "../../../../../Controllers/OrderControllers";
+import {
+  orderControllers,
+  orderModelController,
+} from "../../../../../Controllers/OrderControllers";
 import { numberFormat } from "../../../../../Helper/Format";
 import { OrderPanigation } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
@@ -13,6 +16,7 @@ import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import Calendar from "../../Assets/TSX/calendar";
 import Excel from "../../Assets/TSX/excel";
 import SitebarAdmin from "../../Sitebar/Sitebar";
+import useDebounce from "../../../../../useDebounceHook/useDebounce";
 
 export const dateOrder = (date: Date) => {
   return moment(date).format("L");
@@ -23,9 +27,11 @@ export const timeOrder = (date: Date) => {
 
 export default function OrderManagement() {
   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
+  const [orderAPI, setOrderAPI] = useState<orderModelController>({
+    pageSize: 4,
+  });
   const [open, setOpen] = useState(false);
+  const debouncedInputValueSearch = useDebounce(orderAPI.keyword, 500);
 
   const openModal = () => {
     const modal = document.getElementById(
@@ -50,12 +56,12 @@ export default function OrderManagement() {
   );
   const [changeButton, setChangeButton] = useState([
     {
-      id: 1,
+      id: -1,
       text: "Tất cả",
       active: true, // Thêm trường active
     },
     {
-      id: 2,
+      id: 1,
       text: "Chờ xác nhận",
       active: false, // Thêm trường active
     },
@@ -65,12 +71,12 @@ export default function OrderManagement() {
       active: false, // Thêm trường active
     },
     {
-      id: 4,
+      id: 6,
       text: "Giao hàng thành công",
       active: false, // Thêm trường active
     },
     {
-      id: 5,
+      id: 0,
       text: "Yêu Cầu Hủy Đơn",
       active: false, // Thêm trường active
     },
@@ -89,37 +95,52 @@ export default function OrderManagement() {
       }
     });
     setChangeButton(updatedButtons);
+    const selectedButton = updatedButtons.find((btn) => btn.id === id);
+
+    if (selectedButton && selectedButton.id !== -1) {
+      console.log(
+        "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
+        selectedButton.id
+      );
+      setOrderAPI({ ...orderAPI, status: selectedButton.id });
+    } else {
+      setOrderAPI({ ...orderAPI, status: null });
+    }
   };
 
   function getBorderColor(id: number) {
     switch (id) {
+      case -1:
+        return "#570DF8";
       case 1:
-        return "#570DF8"; // Màu biên cho id 1
-      case 2:
-        return "#3DC0F8"; // Màu biên cho id 2
+        return "#3DC0F8";
       case 3:
-        return "#F43FCA"; // Màu biên cho id 3
-      case 4:
-        return "#21CEBD"; // Màu biên cho id 4
-      case 5:
-        return "#FA9595"; // Màu biên cho id 45
+        return "#F43FCA";
+      case 6:
+        return "#21CEBD";
+      case 0:
+        return "#FA9595";
       default:
-        return "#ccc"; // Màu biên mặc định (nếu id không khớp với bất kỳ case nào)
+        return "#ccc";
     }
   }
 
   const getOrder = async () => {
-    await orderControllers.getOrderOfAdmin(currentPage).then((res) => {
+    await orderControllers.getOrderOfAdmin(orderAPI).then((res) => {
       setOrder(res);
     });
   };
 
   useEffect(() => {
     getOrder();
-  }, [currentPage]);
-
+  }, [orderAPI.page, debouncedInputValueSearch, changeButton]);
   const navigate = useNavigate();
-
+  const handlePageChange = (page: number) => {
+    setOrderAPI({ ...orderAPI, page: page });
+  };
+  const handleSearchInput = (value: string) => {
+    setOrderAPI({ ...orderAPI, keyword: value });
+  };
   return (
     <Container>
       <div
@@ -170,29 +191,39 @@ export default function OrderManagement() {
                   onClick={() => handleClick(btnItems.id)}
                 >
                   {btnItems.text}
-                  {btnItems.id == 1 && (
+                  {btnItems.id == -1 && (
                     <div className="badge badge-xs badge-primary badge-outline py-2">
-                      {order?.totalOrder}
+                      {order?.totalOrderShipping !== 0
+                        ? order?.totalOrderShipping
+                        : 0}
                     </div>
                   )}
-                  {btnItems.id == 5 && (
+                  {btnItems.id == 0 && (
                     <div className="badge badge-xs badge-error badge-outline py-2">
-                      {order?.data?.filter((e) => e.status == null).length}
+                      {order?.statusCounts?.orderStatus0 !== 0
+                        ? order?.statusCounts?.orderStatus0
+                        : 0}
                     </div>
                   )}
-                  {btnItems.id == 2 && (
+                  {btnItems.id == 1 && (
                     <div className="badge badge-xs badge-info badge-outline py-2">
-                      {order?.data?.filter((e) => e.status == 0).length}
+                      {order?.statusCounts?.orderStatus1 != 0
+                        ? order?.statusCounts?.orderStatus1
+                        : 0}
                     </div>
                   )}
                   {btnItems.id == 3 && (
                     <div className="badge badge-xs badge-secondary badge-outline py-2">
-                      {order?.data?.filter((e) => e.status == 2).length}
+                      {order?.statusCounts?.orderStatus3 != 0
+                        ? order?.statusCounts?.orderStatus3
+                        : 0}
                     </div>
                   )}
-                  {btnItems.id == 4 && (
+                  {btnItems.id == 6 && (
                     <div className="badge badge-xs badge-accent badge-outline py-2">
-                      {order?.data?.filter((e) => e.status == 5).length}
+                      {order?.statusCounts?.orderStatus6 != 0
+                        ? order?.statusCounts?.orderStatus6
+                        : 0}
                     </div>
                   )}
                 </button>
@@ -216,6 +247,8 @@ export default function OrderManagement() {
                 <input
                   className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm"
                   placeholder="Tìm kiếm..."
+                  value={orderAPI.keyword}
+                  onChange={(e) => handleSearchInput(e.target.value)}
                 />
               </div>
             </div>
@@ -335,7 +368,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                           <p className="font-bold text-xs text-white ">Mới</p>
                         </div> */}
                       </div>
-                      <div className="grid grid-cols-3 mt-4 ">
+                      <div className="grid grid-cols-2 mt-4 ">
                         {e.OrderDetail.map((items) => {
                           return (
                             <>
@@ -387,9 +420,9 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
               );
             })}
             <ResponsivePagination
-              current={currentPage}
+              current={orderAPI.page!}
               total={order.totalPage}
-              onPageChange={setCurrentPage}
+              onPageChange={handlePageChange}
               maxWidth={500}
             />
           </div>
