@@ -216,7 +216,7 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
-
+    // REQUEST and CONFIRM delete order
     requestDeleteOrder: async (req, res) => {
         try {
             const orderId = parseInt(req.body.orderId);
@@ -237,20 +237,29 @@ const ShippingController = {
                     },
                 },
             });
-            if (!order) return res.send('Order is not undifined');
+            const notification = await prisma.notification.findFirst({
+                where: {
+                    orderId: orderId,
+                },
+            });
+            if (!notification) return res.send('Notification is undefined');
+
+            if (!order) return res.send('Order is undifined');
 
             const requestDeleteOrder = await prisma.order.update({
                 where: {
-                    id: order.id,
+                    id: orderId,
                 },
                 data: {
                     status: 0,
                 },
             });
 
-            await prisma.notification.create({
+            await prisma.notification.update({
+                where: {
+                    id: notification.id,
+                },
                 data: {
-                    orderId: order.id,
                     message: 'request delete order',
                     status: 2,
                     seen: false,
@@ -265,7 +274,6 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
-
     confirmDeleteOrder: async (req, res) => {
         try {
             const orderId = parseInt(req.body.orderId);
@@ -274,7 +282,13 @@ const ShippingController = {
                     id: orderId,
                 },
             });
-            if (!order) return res.send('Order is not undifined');
+            const notification = await prisma.notification.findFirst({
+                where: {
+                    orderId: orderId,
+                },
+            });
+            if (!order) return res.send('Order is undifined');
+            if (!notification) return res.send('Notification is undefined');
             await prisma.order.update({
                 where: {
                     id: order.id,
@@ -283,21 +297,42 @@ const ShippingController = {
                     deletedAt: new Date(),
                 },
             });
+            await prisma.notification.create({
+                data: {
+                    orderId : orderId,
+                    message: 'Delete order successfully',
+                    status: 4,
+                    seen: false,
+                },
+            });
+            const io = req.app.get('socketio');
+            io.emit('requestdelete', order);
             res.status(200).json('Delete order successfully');
         } catch (error) {
             errorResponse(res, error);
         }
     },
-    // GET noti lên pop ups thông báo
-    getNotification: async (req, res) => {
+
+    // GET noti lên pop ups thông báo cho admin, đơn vị vận chuyển và người dùng
+    getNotificationAdmin: async (req, res) => {
         try {
+            // Define the whereClause to filter notifications
             const whereClause = {
+                status: {
+                    lte: 2,
+                },
                 deleteAt: null,
             };
+
+            // Define the whereNotSeen to filter unseen notifications
             const whereNotSeen = {
+                status: {
+                    lte: 2,
+                },
                 seen: false,
             };
 
+            // Fetch all notifications based on the specified criteria
             const allNotification = await prisma.notification.findMany({
                 where: whereClause,
                 orderBy: {
@@ -316,19 +351,115 @@ const ShippingController = {
                     },
                 },
             });
+
+            // Count the number of unseen notifications
             const countNotification = await prisma.notification.count({
                 where: whereNotSeen,
             });
+
+            // Prepare the result object
             const result = {
                 allNotification: allNotification,
                 countNotification: countNotification,
             };
+
+            // Send the result as a JSON response with a status code of 200 (OK)
+            res.status(200).json(result);
+        } catch (error) {
+            // Handle any errors that occur during execution and send an error response
+            errorResponse(res, error);
+        }
+    },
+    getNotificationForDelivery: async (req, res) => {
+        try {
+            const status = 3;
+            const whereClause = {
+                status: status,
+                deleteAt: null,
+            };
+
+            // Define the whereNotSeen to filter unseen notifications
+            const whereNotSeen = {
+                status: status,
+                seen: false,
+            };
+
+            // Fetch all notifications based on the specified criteria
+            const allNotification = await prisma.notification.findMany({
+                where: whereClause,
+                orderBy: {
+                    id: 'desc',
+                },
+                include: {
+                    fk_order: {
+                        include: {
+                            User: {
+                                select: {
+                                    name: true,
+                                    image: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+
+            // Count the number of unseen notifications
+            const countNotification = await prisma.notification.count({
+                where: whereNotSeen,
+            });
+
+            // Prepare the result object
+            const result = {
+                allNotification: allNotification,
+                countNotification: countNotification,
+            };
+
+            // Send the result as a JSON response with a status code of 200 (OK)
             res.status(200).json(result);
         } catch (error) {
             errorResponse(res, error);
         }
     },
+    getNotificationForUser: async (req, res) => {
+        try {
+            const status = 4;
+            const whereClause = {
+                status: status,
+                deleteAt: null,
+            };
 
+            // Define the whereNotSeen to filter unseen notifications
+            const whereNotSeen = {
+                status: status,
+                seen: false,
+            };
+
+            // Fetch all notifications based on the specified criteria
+            const allNotification = await prisma.notification.findMany({
+                where: whereClause,
+                orderBy: {
+                    id: 'desc',
+                },
+            });
+
+            // Count the number of unseen notifications
+            const countNotification = await prisma.notification.count({
+                where: whereNotSeen,
+            });
+
+            // Prepare the result object
+            const result = {
+                allNotification: allNotification,
+                countNotification: countNotification,
+            };
+
+            // Send the result as a JSON response with a status code of 200 (OK)
+            res.status(200).json(result);
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
     // Lọc theo status của notification 1 : có đơn hàng mới, 2 : Đơn vị vận chuyển đi lấy hàng, 3 : có yêu cầu huỷ đơn hàng
     filterWithStatusNotification: async (req, res) => {
         try {

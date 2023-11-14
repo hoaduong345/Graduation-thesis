@@ -8,7 +8,9 @@ router.post('/delete', ShippingController.requestDeleteOrder);
 router.post('/confirmdelete', ShippingController.confirmDeleteOrder);
 
 // Notification
-router.get('/notification', ShippingController.getNotification);
+router.get('/notificationadmin', ShippingController.getNotificationAdmin);
+router.get('/notificationdelivery', ShippingController.getNotificationForDelivery)
+router.get('/notificationforuser', ShippingController.getNotificationForUser)
 router.put('/markasread', ShippingController.isMarkAsRead);
 router.post('/filter', ShippingController.filterWithStatusNotification);
 module.exports = router;
