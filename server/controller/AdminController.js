@@ -24,26 +24,53 @@ const AdminController = {
 
   // add
   createAdmin: async (req, res) => {
-    const { username, password , email, name , sex, phonenumber, dateofbirth } = req.body;
+    const { username, password, email, name, sex, phonenumber, dateofbirth } = req.body;
   
     try {
-      const saltRounds = 10; 
+      // Kiểm tra xem email đã tồn tại hay chưa
+      const existingEmail = await prisma.admin.findFirst({
+        where: { email },
+      });
+  
+      if (existingEmail) {
+        return res.status(400).json("Email đã được sử dụng");
+      }
+  
+      // Kiểm tra xem username đã tồn tại hay chưa
+      const existingUsername = await prisma.admin.findFirst({
+        where: { username },
+      });
+  
+      if (existingUsername) {
+        return res.status(400).json("Username đã được sử dụng");
+      }
+
+      const existingphone = await prisma.admin.findFirst({
+        where: { phonenumber },
+      });
+  
+      if (existingphone) {
+        return res.status(400).json("Sdt đã được sử dụng");
+      }
+  
+      // Nếu email và username đều chưa tồn tại, tiếp tục tạo admin mới
+      const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
       const newAdmin = await prisma.admin.create({
         data: {
           username,
-          password: hashedPassword, 
+          password: hashedPassword,
           email,
           name,
           sex,
-          dateofbirth : new Date(),
-          phonenumber
+          dateofbirth: new Date(),
+          phonenumber,
         },
       });
   
       res.json(newAdmin);
     } catch (error) {
-      console.log("loi" + error);
+      console.log("Lỗi: " + error);
       res.status(500).json("Lỗi");
     }
   },

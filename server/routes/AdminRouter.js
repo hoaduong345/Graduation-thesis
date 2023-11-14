@@ -74,27 +74,6 @@ router.post("/login", checkAdminAuthentication, (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 router.get("/getalladmin", AdminController.getAllAdmins);
 router.post("/addadmin", AdminController.createAdmin);
 router.delete("/deleteadmin/:id", AdminController.deleteAdmin);

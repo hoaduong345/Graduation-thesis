@@ -23,6 +23,6 @@ router.put("/updateimageshipping/:idshipping",AdminShippingController.updateImag
 
 router.post("/changepassword/:id", AdminShippingController.ChangePassword);
 
-router.post('/logout', AdminShippingController.logout);
+// router.post('/logout', AdminShippingController.logout);
 
 module.exports = router;

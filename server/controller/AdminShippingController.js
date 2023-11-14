@@ -8,6 +8,30 @@ const AdminShippingController = {
         try {
          
           const { name, email, password, city, address, phonenumber , sex , dateofbirth , username} = req.body;
+
+          const existingEmail = await prisma.shippingUnit.findFirst({
+            where: { email },
+          });
+      
+          if (existingEmail) {
+            return res.status(400).json("Email đã được sử dụng");
+          }
+
+          const existingUsername = await prisma.shippingUnit.findFirst({
+            where: { username },
+          });
+      
+          if (existingUsername) {
+            return res.status(400).json("Username đã được sử dụng");
+          }
+    
+          const existingphone = await prisma.shippingUnit.findFirst({
+            where: { phonenumber },
+          });
+      
+          if (existingphone) {
+            return res.status(400).json("Sdt đã được sử dụng");
+          }
       
           const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -273,17 +297,17 @@ const AdminShippingController = {
       }
     },
 
-    logout: async (req, res) => {
-      try {
+    // logout: async (req, res) => {
+    //   try {
 
-        localStorage.removeItem('username');
+    //     localStorage.removeItem('username');
     
-        res.status(200).send(username);
-      } catch (error) {
-        console.error('Logout failed:', error);
-        res.status(500).send('Logout failed');
-      }
-    },
+    //     res.status(200).send(username);
+    //   } catch (error) {
+    //     console.error('Logout failed:', error);
+    //     res.status(500).send('Logout failed');
+    //   }
+    // },
     
       
       
