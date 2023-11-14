@@ -21,5 +21,8 @@ router.get("/getShipping/:username", AdminShippingController.getShipping);
 router.post("/addimageshipping", AdminShippingController.addImageShipping);
 router.put("/updateimageshipping/:idshipping",AdminShippingController.updateImageShipping);
 
+router.post("/changepassword/:id", AdminShippingController.ChangePassword);
+
+// router.post('/logout', AdminShippingController.logout);
 
 module.exports = router;

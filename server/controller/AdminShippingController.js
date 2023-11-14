@@ -8,6 +8,30 @@ const AdminShippingController = {
         try {
          
           const { name, email, password, city, address, phonenumber , sex , dateofbirth , username} = req.body;
+
+          const existingEmail = await prisma.shippingUnit.findFirst({
+            where: { email },
+          });
+      
+          if (existingEmail) {
+            return res.status(400).json("Email đã được sử dụng");
+          }
+
+          const existingUsername = await prisma.shippingUnit.findFirst({
+            where: { username },
+          });
+      
+          if (existingUsername) {
+            return res.status(400).json("Username đã được sử dụng");
+          }
+    
+          const existingphone = await prisma.shippingUnit.findFirst({
+            where: { phonenumber },
+          });
+      
+          if (existingphone) {
+            return res.status(400).json("Sdt đã được sử dụng");
+          }
       
           const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -48,12 +72,18 @@ const AdminShippingController = {
             return res.status(401).json('loi');
           }
       
+          // Lưu username vào local storage
+          // Bạn có thể sử dụng một middleware cookie hoặc jwt để quản lý phiên đăng nhập
+          // ở đây, tôi sử dụng res.cookie để đặt cookie với tên "username" và giá trị là username
+          res.cookie('username', username);
+      
           return res.status(200).json(username);
         } catch (error) {
           console.error('Error', error);
           return res.status(500).json({ error: 'Server Error' });
         }
       },
+      
 
       deleteShipping : async(req, res)=>{
         try {
@@ -110,7 +140,7 @@ const AdminShippingController = {
 
       ShippingProfile: async (req, res) => {
         try {
-          const shippingName = req.params.username; // Lấy giá trị từ URL
+          const shippingName = req.params.username; 
       
           const updateShipping = {
             name: req.body.name,
@@ -216,6 +246,69 @@ const AdminShippingController = {
             res.status(500).json(error.message);
         }
     },
+
+
+
+    ChangePassword: async (req, res) => {
+      const ShippingId = parseInt(req.params.id);
+      const { oldPassword, newPassword, confirmPassword } = req.body;
+    
+      try {
+        const shipping = await prisma.shippingUnit.findUnique({
+          where: { id: ShippingId },
+        });
+    
+        if (!shipping) {
+          res.status(404).json("Không tìm thấy tài khoản shipping");
+          return;
+        }
+    
+        const oldHashedPassword = shipping.password;
+        // So sánh mật khẩu cũ đã nhập từ người dùng với mật khẩu cũ đã mã hóa
+        const oldPasswordMatch = await bcrypt.compare(oldPassword, oldHashedPassword);
+    
+        if (!oldPasswordMatch) {
+          res.status(401).json("Mật khẩu cũ không chính xác");
+          return;
+        }
+    
+        if (newPassword !== confirmPassword) {
+          res.status(400).json("Mật khẩu mới và xác nhận mật khẩu không khớp");
+          return;
+        }
+        if (oldPassword == newPassword) {
+          res.status(400).json("Mật khẩu cũ và mật khẩu mới không được trùng nhau");
+          return;
+        }
+        // Mã hóa mật khẩu mới
+        const saltRounds = 10; 
+        const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+    
+        const updatedShipping = await prisma.shippingUnit.update({
+          where: { id: ShippingId },
+          data: {
+            password: hashedNewPassword,
+          },
+        });
+    
+        res.json(updatedShipping);
+      } catch (error) {
+        res.status(500).json("Có lỗi xảy ra khi thay đổi mật khẩu");
+      }
+    },
+
+    // logout: async (req, res) => {
+    //   try {
+
+    //     localStorage.removeItem('username');
+    
+    //     res.status(200).send(username);
+    //   } catch (error) {
+    //     console.error('Logout failed:', error);
+    //     res.status(500).send('Logout failed');
+    //   }
+    // },
+    
       
       
       
