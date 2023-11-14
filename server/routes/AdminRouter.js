@@ -6,9 +6,9 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const checkAdminAuthentication = async (req, res, next) => {
-    const adminUsername = process.env.ADMIN_USERNAME;
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    const { username, password } = req.body;
+  const adminUsername = process.env.ADMIN_USERNAME;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const { username, password } = req.body;
 
   if (username === adminUsername && password === adminPassword) {
     // Đăng nhập bằng tài khoản env
@@ -28,23 +28,23 @@ const checkAdminAuthentication = async (req, res, next) => {
         where: { username },
       });
 
-            if (admin) {
-                const passwordMatch = await bcrypt.compare(password, admin.password);
+      if (admin) {
+        const passwordMatch = await bcrypt.compare(password, admin.password);
 
-                if (passwordMatch) {
-                    // login  = data
-                    next();
-                } else {
-                    res.status(401).send('Không thể đăng nhập');
-                }
-            } else {
-                res.status(401).send('Không thể đăng nhập');
-            }
-        } catch (error) {
-            console.error('Lỗi: ' + error);
-            res.status(500).json({ error: 'Lỗi khi xác thực' });
+        if (passwordMatch) {
+          // login  = data
+          next();
+        } else {
+          res.status(401).send('Không thể đăng nhập');
         }
+      } else {
+        res.status(401).send('Không thể đăng nhập');
+      }
+    } catch (error) {
+      console.error('Lỗi: ' + error);
+      res.status(500).json({ error: 'Lỗi khi xác thực' });
     }
+  }
 };
 
 router.post("/login", checkAdminAuthentication, (req, res) => {
@@ -79,9 +79,9 @@ router.put("/adminprofile/:username", AdminController.AdminProfile);
 router.get("/chitietadmin/:username", AdminController.getAdmin);
 
 router.post("/addimageadmin", AdminController.addImageAdmin);
-router.put("/updateimageadmin/:idadmin",AdminController.updateImageAdmin);
+router.put("/updateimageadmin/:idadmin", AdminController.updateImageAdmin);
 
-router.post("/logoutAdmin", AdminController.logoutAdmin);
+// router.post("/logoutAdmin", AdminController.logoutAdmin);
 //ss
 
 module.exports = router;
