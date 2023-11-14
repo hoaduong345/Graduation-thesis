@@ -237,12 +237,6 @@ const ShippingController = {
                     },
                 },
             });
-            const notification = await prisma.notification.findFirst({
-                where: {
-                    orderId: orderId,
-                },
-            });
-            if (!notification) return res.send('Notification is undefined');
 
             if (!order) return res.send('Order is undifined');
 
@@ -255,11 +249,9 @@ const ShippingController = {
                 },
             });
 
-            await prisma.notification.update({
-                where: {
-                    id: notification.id,
-                },
+            await prisma.notification.create({
                 data: {
+                    orderId: order.id,
                     message: 'request delete order',
                     status: 2,
                     seen: false,
@@ -299,7 +291,7 @@ const ShippingController = {
             });
             await prisma.notification.create({
                 data: {
-                    orderId : orderId,
+                    orderId: orderId,
                     message: 'Delete order successfully',
                     status: 4,
                     seen: false,
@@ -460,7 +452,7 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
-    // Lọc theo status của notification 1 : có đơn hàng mới, 2 : Đơn vị vận chuyển đi lấy hàng, 3 : có yêu cầu huỷ đơn hàng
+    // Lọc theo status của notification 1 : có đơn hàng mới,  2 : có yêu cầu huỷ đơn hàng,  3 : Đơn vị vận chuyển đi lấy hàng
     filterWithStatusNotification: async (req, res) => {
         try {
             const status = parseInt(req.body.status);
