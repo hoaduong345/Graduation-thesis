@@ -52,7 +52,7 @@ export default function NotificationUser() {
             notification.map((notiItems) => {
               return (
                 <a
-                  href={`/admin/ordermanagement/${notiItems.orderId}`}
+                  href={`/orderdetail/${notiItems.orderId}`}
                   onClick={() => handleSeenNoti(notiItems.id)}
                 >
                   <>

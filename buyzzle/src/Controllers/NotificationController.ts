@@ -38,5 +38,13 @@ class NotificationControllers {
         return res.data as NotificationModel;
       });
   };
+  // Shipping Notification
+  getAllNotificationShipping = async (): Promise<NotificationModel> => {
+    return await axios
+      .get(`${appConfig.apiShipping}/notificationdelivery`)
+      .then((res) => {
+        return res.data as NotificationModel;
+      });
+  };
 }
 export const notificationControllers = new NotificationControllers();
