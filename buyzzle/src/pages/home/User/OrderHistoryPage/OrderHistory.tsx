@@ -5,7 +5,10 @@ import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
-import { orderControllers, orderModelController } from "../../../../Controllers/OrderControllers";
+import {
+  orderControllers,
+  orderModelController,
+} from "../../../../Controllers/OrderControllers";
 import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 import { numberFormat } from "../../../../Helper/Format";
 import { OrderPanigation, StatusOrder } from "../../../../Model/OrderModel";
@@ -55,7 +58,9 @@ export default function OrderHistory() {
   const [isOrderCancelled, setIsOrderCancelled] = useState(false);
   const [idOrder, setIdOrder] = useState<number | undefined>(0);
   const [open, setOpen] = useState<number>();
-  const [orderAPI, setOrderAPI] = useState<orderModelController>({} as orderModelController);
+  const [orderAPI, setOrderAPI] = useState<orderModelController>(
+    {} as orderModelController
+  );
 
   const idRemove = "removeVoucher";
   const idSitebar = "my_modal_3";
@@ -118,10 +123,12 @@ export default function OrderHistory() {
   }, [orderAPI.page, changeButton]);
 
   const getOrder = async () => {
-    await orderControllers.getOrderOfUser(orderAPI.page!, orderAPI.status!).then((res) => {
-      console.log(orderAPI.page)
-      setOrder(res);
-    });
+    await orderControllers
+      .getOrderOfUser(orderAPI.page!, orderAPI.status!)
+      .then((res) => {
+        console.log(orderAPI.page);
+        setOrder(res);
+      });
   };
 
   const handlePageChange = (page: number) => {
@@ -158,19 +165,19 @@ export default function OrderHistory() {
   function getBorderColor(id: number) {
     switch (id) {
       case 0:
-        return "#570DF8";
+        return "#D80032";
       case 1:
         return "#3DC0F8";
       case 2:
         return "#1DCDBC";
       case 3:
-        return "#FBC132";
+        return "#F43FCA";
       case 5:
         return "#F43FCA";
       case 6:
         return "#21CEBD";
       default:
-        return "#ccc";
+        return "#9F0D7F";
     }
   }
   // const getOrderFilter = async (status: number) => {
@@ -417,7 +424,6 @@ export default function OrderHistory() {
                   id={idRemove}
                 />
               </div>
-
             </div>
             <ResponsivePagination
               current={orderAPI.page!}

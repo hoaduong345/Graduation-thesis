@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
 import Container from "../../../../../components/container/Container";
@@ -12,10 +12,6 @@ import ArrowDown from "../../../../../Assets/TSX/ArrowDown";
 import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
 import Minus from "../../../../../Assets/TSX/Minus";
 import Plus from "../../../../../Assets/TSX/Plus";
-import {
-  ModelCart,
-  cartControllers,
-} from "../../../../../Controllers/CartControllers";
 import { productController } from "../../../../../Controllers/ProductsController";
 import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
@@ -23,7 +19,6 @@ import { stars } from "../../../../../Helper/StarRating/Star";
 import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
 import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
 import { useCart } from "../../../../../hooks/Cart/CartContextProvider";
-import { ThemeContext } from "../../../../../hooks/Context/ThemeContextProvider";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import Cart from "../../../Admin/Assets/TSX/Cart";
 import FB from "../../../Admin/Assets/TSX/FB";
@@ -32,9 +27,8 @@ import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
 import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
 import Share from "../../../Admin/Assets/TSX/Share";
 import TW from "../../../Admin/Assets/TSX/TW";
-import DetailRecommandProduct from "./DetailRecommandProduct";
-import { Products } from "../../FilterPage/FiltersPage";
 import RatingMap from "../RatingAndComments/RatingMap";
+import DetailRecommandProduct from "./DetailRecommandProduct";
 
 export interface ImgOfProduct {
   url: string;
@@ -284,22 +278,24 @@ export default function DetailsProduct() {
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
   };
-
+  const handleArrowUpClick = () => {
+    const newIndex = selectedImageIndex - 1 < 0 ? 0 : selectedImageIndex - 1;
+    setSelectedImageIndex(newIndex);
+  };
+  const handleArrowDownClick = () => {
+    const newIndex = selectedImageIndex + 1 >= 4 ? 4 : selectedImageIndex + 1;
+    setSelectedImageIndex(newIndex);
+  };
   return (
     <>
       <Container>
         <body className="body-detail container mx-auto">
           <div className="grid gap-4 grid-cols-10 mt-24">
             <div className="col-span-4">
-              {/* <img
-                className="w-[533px] h-[388px] object-cover"
-                src={first?.productDetail?.ProductImage[selectedImageIndex].url}
-                alt=""
-              /> */}
               {first?.productDetail && (
                 <div>
                   <img
-                    className="w-[533px] h-[388px] object-cover"
+                    className="w-full h-full object-contain"
                     src={
                       first?.productDetail?.ProductImage?.[selectedImageIndex]
                         ?.url
@@ -316,26 +312,11 @@ export default function DetailsProduct() {
                     className="cursor-pointer absolute border-[1px] left-[20%] 
                                     px-4 py-2 w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md top-[-17px] 
                                     "
-                    onClick={() => handleImageClick(selectedImageIndex - 1)}
+                    onClick={handleArrowUpClick}
                   >
                     <ArrowUp />
                   </div>
-                  {/* {
-                    // first?.ProductImage.filter( e)
-                    first?.productDetail.ProductImage.slice(1, 5).map(
-                      (e, index) => {
-                        return (
-                          <img
-                            key={index}
-                            className="h-[88px] w-[88px]"
-                            src={e.url}
-                            alt=""
-                            onClick={() => handleImageClick(index + 1)}
-                          />
-                        );
-                      }
-                    )
-                  } */}
+
                   {first?.productDetail &&
                     first.productDetail.ProductImage &&
                     first.productDetail.ProductImage.slice(1, 5).map(
@@ -352,67 +333,17 @@ export default function DetailsProduct() {
                       }
                     )}
 
-                  {/* {first?.productDetail && first.productDetail.ProductImage
-                    ? first.productDetail.ProductImage.slice(1, 5).map(
-                        (e, index) => {
-                          return (
-                            <img
-                              key={index}
-                              className="h-[88px] w-[88px]"
-                              src={e.url}
-                              alt=""
-                              onClick={() => handleImageClick(index + 1)}
-                            />
-                          );
-                        }
-                      )
-                    : null} */}
                   <div
                     className="cursor-pointer absolute border-[1px] left-[20%] 
                               px-4 pb-[7.5px] pt-[8px] w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px] 
                                     "
+                    onClick={handleArrowDownClick}
                   >
                     <ArrowDown />
                   </div>
                 </div>
               </div>
             </div>
-            {/* <div className="col-span-4">
-              <img
-                className="w-[533px] h-[388px] object-cover"
-                src={first?.productDetail.ProductImage[selectedImageIndex]?.url}
-                alt=""
-              />
-              <div>
-                <div>
-                  <div className="col-span-2 grid grid-rows-4 grid-flow-col gap-3 relative ">
-                    <div
-                      className="cursor-pointer absolute border-[1px] left-[20%] px-4 py-2 w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md top-[-17px] "
-                      onClick={() => handleImageClick(selectedImageIndex - 1)}
-                    >
-                      <ArrowUp />
-                    </div>
-                    {first?.productDetail.ProductImage.slice(1, 5).map(
-                      (e, index) => (
-                        <img
-                          key={index}
-                          className="h-[88px] w-[88px]"
-                          src={e.url}
-                          alt=""
-                          onClick={() => handleImageClick(index + 1)}
-                        />
-                      )
-                    )}
-                    <div
-                      className="cursor-pointer absolute border-[1px] left-[20%] px-4 pb-[7.5px] pt-[8px] w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px]"
-                      onClick={() => handleImageClick(selectedImageIndex + 1)}
-                    >
-                      <ArrowDown />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
             <div className="col-span-5 ">
               <p className="text-[32px] text-[#393939] font-medium leading-9">
                 {/* {first?.productDetail.name} */}
@@ -470,18 +401,6 @@ export default function DetailsProduct() {
                   <div className="border-r-2 border-[#E0E0E0]"></div>
                 </div>
 
-                {/* <div className="flex col-span-1 ml-[-38px] gap-2 items-center">
-                  <div>
-                    <p className="text-[#1A1A1A] text-base">
-                      {first?.productDetail.soldcount > 0
-                        ? first?.productDetail.soldcount
-                        : 0}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[#4C4C4C] text-sm">Đã bán</p>
-                  </div>
-                </div> */}
                 {first?.productDetail ? (
                   <div className="flex col-span-1 ml-[-38px] gap-2 items-center">
                     {first.productDetail.soldcount > 0 ? (
@@ -504,21 +423,9 @@ export default function DetailsProduct() {
               <div className="w-[100%] bg-[#F8F8F8] rounded-md mt-6 px-6 py-[14px]">
                 <div className="flex justify-between">
                   <div>
-                    {/* <div className="items-center flex">
-                      <p className="text-[36px] text-[#EA4B48] font-bold ">
-                        {numberFormat(
-                          first?.productDetail.price! -
-                            first?.productDetail.price! *
-(first?.productDetail.discount! / 100)
-                        )}
-                      </p>
-                      <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
-                        {numberFormat(first?.productDetail.price!)}đ
-                      </p>
-                    </div> */}
                     {first?.productDetail ? (
                       <div className="items-center flex">
-                        <p className="text-[36px] text-[#EA4B48] font-bold ">
+                        <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
                               first?.productDetail.price! *
@@ -530,11 +437,7 @@ export default function DetailsProduct() {
                         </p>
                       </div>
                     ) : null}
-                    {/* <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mt-[5px]">
-                      <p className="text-[#EA4B48] px-[10px] py-1">
-                        Giảm {first?.productDetail.discount}%
-                      </p>
-                    </div> */}
+
                     {first?.productDetail ? (
                       <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mt-[5px]">
                         <p className="text-[#EA4B48] px-[10px] py-1">
@@ -589,19 +492,13 @@ export default function DetailsProduct() {
                 <div>
                   <LoveProduct />
                 </div>
-                <div className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
-                  <button
-                    onClick={() => {
-                      // addCart({
-                      //   id: Number(id),
-                      //   productId: Number(id),
-                      //   quantity: quantity,
-                      // })
-
-                      addProduct(Number(id), quantity);
-                    }}
-                    className="text-center text-base font-bold text-[#4C4C4C] "
-                  >
+                <div
+                  className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer"
+                  onClick={() => {
+                    addProduct(Number(id), quantity);
+                  }}
+                >
+                  <button className="text-center text-base font-bold text-[#4C4C4C]">
                     Thêm Vào Giỏ Hàng
                   </button>
                   <Cart />
