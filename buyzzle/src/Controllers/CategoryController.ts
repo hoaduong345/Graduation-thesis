@@ -45,6 +45,14 @@ class CategoryController {
         return await axios.post(`${appConfig.apiCategories}`, data)
     }
 
+    updateSubcateLv1 = async (idCate: number, idSubcate: number, nameSubcate: string) => {
+        return await axios.put(`${appConfig.apiCategories}/${idCate}`, { id: idSubcate, name: nameSubcate })
+    }
+
+    removeSubcateLv1 = async (idCate: number) => {
+        return await axios.delete(`${appConfig.apiCategories}/${idCate}`)
+    }
+
     getAllCateAdmin = async () => {
         return await axios.get(`${appConfig.apiCategories}`)
     }

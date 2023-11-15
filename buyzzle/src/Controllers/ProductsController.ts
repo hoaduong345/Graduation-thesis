@@ -67,7 +67,7 @@ class ProductController {
         `${appConfig.apiUrl}/allproducts?keyword=${name}&page=${page}&pageSize=${pageSize}`
       )
       .then((res) => {
-        return res.data as Products[];
+        return res.data.rows as Products[];
       });
   };
   getSortProductbyPriceAndDateCreate = async (options: {

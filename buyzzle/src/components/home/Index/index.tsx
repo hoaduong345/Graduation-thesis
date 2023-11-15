@@ -2,21 +2,19 @@ import { Images } from "../../../Assets/TS";
 import Container from "../../container/Container";
 import Category from "../components/Category";
 
-import axios from "axios";
 import { ReactNode, useEffect, useState } from "react";
-import { Link, createSearchParams, useSearchParams } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Link } from "react-router-dom";
 import LogoVoucherBuyzzle from "../../../Assets/TSX/LogoVoucherBuyzzle";
 import LogoVoucherFreeship from "../../../Assets/TSX/LogoVoucherFreeship";
 import SanVoucher from "../../../Assets/TSX/SanVoucher";
 import VoucherBuyzzle from "../../../Assets/TSX/VoucherBuyzzle";
+import { categoryController } from "../../../Controllers/CategoryController";
 import { productController } from "../../../Controllers/ProductsController";
-import { Row } from "../../../Model/ProductModel";
-import { useScroll } from "../../../hooks/Scroll/useScrollPages";
-import { ImgOfProduct } from "../../../pages/home/User/FilterPage/FiltersPage";
+import { ImgOfProduct, Products } from "../../../pages/home/User/FilterPage/FiltersPage";
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
-import useDebounce from "../../../useDebounceHook/useDebounce";
 
 export type Product = {
   id: number;
@@ -58,34 +56,36 @@ const listVoucherBanner: VoucherBanner[] = [
 ];
 
 function Index() {
-  useScroll();
+  // useScroll();
   const [categoty, setCategory] = useState<Cate[]>([]);
-  const [product, setProducts] = useState<Row[]>([]);
-
+  const [product, setProducts] = useState<Products[]>([]);
+  const [page, setPage] = useState(1);
   const getCategory = () => {
-    axios
-      .get("http://localhost:5000/buyzzle/product/allcategory")
+    categoryController.getAll()
       .then((response) => response.data)
       .then((data) => {
-        console.log("🚀 ~ file: index.tsx:50 ~ .then ~ data:", data);
         setCategory(data);
       })
       .catch((err) => console.log(err));
   };
 
-  const getAllProducts = () => {
-    productController.getAllProducts().then((res: any) => {
-      console.log(
-        "🚀 ~ file: index.tsx:58 ~ productController.getAllProducts ~ res:",
-        res
-      );
-      setProducts(res.rows);
+  const getAllProducts = (page: number) => {
+    productController.getSearchAndPaginationProduct("", page, 2).then((res: Products[]) => {
+      setProducts(res);
     });
   };
   useEffect(() => {
     getCategory();
-    getAllProducts();
+    getAllProducts(page);
   }, []);
+
+  const nextData = () => {
+    setPage(page + 1)
+    productController.getSearchAndPaginationProduct("", page + 1, 2).then((res: Products[]) => {
+      setProducts(product.concat(res));
+    });
+
+  };
 
   return (
     <>
@@ -249,11 +249,19 @@ function Index() {
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
 
-          <div className="flex flex-wrap gap-3 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
-            {product?.map((product) => {
-              return <Productss product={product} />;
-            })}
-          </div>
+          <InfiniteScroll style={{ overflow: 'hidden' }}
+            dataLength={product.length}
+            next={nextData}
+            hasMore={true}
+            loader={<></>}
+          >
+            <div className="flex flex-wrap mb-6 gap-3 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4 ">
+              {product?.map((product) => {
+                return <Productss product={product} />
+              })}
+            </div>
+          </InfiniteScroll>
+
         </div>
       </Container>
     </>

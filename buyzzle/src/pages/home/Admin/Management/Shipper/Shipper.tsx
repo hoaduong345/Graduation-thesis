@@ -7,18 +7,12 @@ import Delete from "../../Assets/TSX/Delete";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Edit from "../../Assets/TSX/Edit";
 import Handle from "../../Assets/TSX/bacham";
-
+import { userController } from "../../../../../Controllers/UserController";
 import EmptyPage from "../../../../../Helper/Empty/EmptyPage";
 import { toast } from "react-toastify";
-import ResponsivePagination from "react-responsive-pagination";
-import useDebounce from "../../../../../useDebounceHook/useDebounce";
-import {
-  userController,
-  userModel,
-} from "../../../../../Controllers/UserController";
-import { ModelUser } from "../../../../../Model/UserModel";
+import { shipperController } from "../../../../../Controllers/ShipperController";
 
-export interface users {
+export interface shipper {
   id: number;
   username: string;
   name: string;
@@ -26,46 +20,37 @@ export interface users {
   sex: string;
 }
 
-export default function User() {
+export default function Shipper() {
+  
   let status = "Hoạt động";
-  const [userAPI, setUserAPI] = useState<userModel>({
-    pageSize: 2,
-  });
-  const debouncedInputValueSearch = useDebounce(userAPI.keyword, 500);
-
-  const [users, setUsers] = useState<ModelUser>({} as ModelUser);
-  const getAllUserData = () => {
-    userController
-      .getAllUser(userAPI)
+  const [users, setUsers] = useState<any>({});
+  const getAllShipper = () => {
+    shipperController
+      .getAllShipper()
       .then((res) => {
         return res;
       })
-      .then((res: any) => {
+      .then((res) => {
         setUsers(res);
         console.log("Test" + JSON.stringify(res));
       });
   };
 
   useEffect(() => {
-    getAllUserData();
-  }, [userAPI.page, debouncedInputValueSearch]);
-  const handlePageChange = (page: number) => {
-    setUserAPI({ ...userAPI, page: page });
-  };
-  const handleSearchInput = (value: string) => {
-    setUserAPI({ ...userAPI, keyword: value });
-  };
+    getAllShipper();
+  }, []);
+
   function JumpEditUser(username: any) {
-    window.location.href = `detailuser/${username}`;
+    window.location.href = `detailshipper/${username}`;
   }
 
   const DeleteUser = (id: any) => {
-    userController
-      .deleteUser(id)
+    shipperController
+      .deleteShipperWhereId(id)
       .then((res) => {
         toast.success("Xóa thành công !");
         console.log("res:" + res);
-        getAllUserData();
+        getAllShipper();
       })
       .catch(() => {
         toast.error("Xóa thất bại !");
@@ -84,7 +69,7 @@ export default function User() {
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
                             max-lg:text-xl"
             >
-              QUẢN LÝ DANH SÁCH NGƯỜI DÙNG
+              QUẢN LÝ DANH SÁCH SHIPPER
             </h2>
           </div>
           <div className="flex flex-col gap-[35px]">
@@ -98,10 +83,7 @@ export default function User() {
                 </div>
                 <input
                   className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm"
-                  placeholder="Tìm kiếm theo tên đăng nhập"
-                  value={userAPI.keyword}
-                  style={{ fontSize: "14px" }}
-                  onChange={(e) => handleSearchInput(e.target.value)}
+                  placeholder="Tìm kiếm..."
                 />
               </div>
               <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
@@ -128,7 +110,13 @@ export default function User() {
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Id User
+                    Id
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
+                  >
+                    Tên
                   </th>
                   <th
                     scope="col"
@@ -152,20 +140,20 @@ export default function User() {
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Tổng Số Tiền
+                    Thành phố vận chuyển
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    Trạng Thái
+                    Số điện thoại
                   </th>
 
                 </tr>
               </thead>
 
-              {users?.data?.length > 0 ? (
-                users?.data?.map((items: any) => {
+              {users?.length > 0 ? (
+                users?.map((items: any) => {
                   return (
                     <>
                       <tbody>
@@ -175,7 +163,7 @@ export default function User() {
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
 
-                            <div className="dropdown dropdown-right ">
+                            <div className="dropdown dropdown-left">
                               <label
                                 className="max-lg:w-[24px] max-lg:h-[24px]"
                                 tabIndex={1}
@@ -226,6 +214,9 @@ export default function User() {
                             {items.id}
                           </th>
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.name}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
                             {items.username}
                           </td>
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
@@ -238,15 +229,15 @@ export default function User() {
                           </td>
 
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            3999999
+                          {items.city}
                           </td>
                           <td
-                            className={`${status == "Hoạt động"
-                                ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                                : "text-[#FF8A00] "
-                              }`}
+                            className={`
+                                "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
+                                
+                              `}
                           >
-                            Hoạt động
+                            {items.phonenumber}
                           </td>
                           
                         </tr>
@@ -292,14 +283,6 @@ export default function User() {
                 </>
               )}
             </table>
-            <div className="mt-10">
-              <ResponsivePagination
-                current={userAPI.page!}
-                total={users.totalPage}
-                onPageChange={handlePageChange}
-                maxWidth={500}
-              />
-            </div>
           </div>
         </div>
       </div>

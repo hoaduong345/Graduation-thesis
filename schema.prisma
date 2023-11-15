@@ -42,31 +42,21 @@ model User {
   invoices             Invoice[]
   savedVouchers        SavedVoucher[]
   usedVouchers         Voucher[]      @relation("UsedBy")
+  ShippingUnit         ShippingUnit[]
   
 }
 
 model ShippingUnit {
  id            Int            @id @default(autoincrement())
  name          String?
- username       String? @unique
  email         String?
  password      String?
  city            String?
  address       String?
  phonenumber   String?
- sex         Boolean?
- dateofbirth DateTime?
- createdAt DateTime?      @default(now())
- updatedAt DateTime?      @default(now())
- deletedAt DateTime?  
- ShippingImage  ShippingImage[]
-}
-model ShippingImage {
-  id            Int       @id @default(autoincrement())
-  url           String?
-  idshipping       Int?      @unique
-  fk_shippingImage ShippingUnit?    @relation(fields: [idshipping], references: [id], onDelete: Cascade)
-  deletedAt     DateTime?
+ User       User?   @relation(fields: [UserId], references: [id])
+ UserId     Int?
+  
 }
 
 
@@ -230,7 +220,7 @@ model Rating {
 }
 
 model Order {
-  id            Int            @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   userId        Int?
   name          String?
   address       String?
@@ -243,12 +233,11 @@ model Order {
   discount      Int?
   amountTotal   Int?
   paymentMethod String?
-  createdAt     DateTime?      @default(now())
-  updatedAt     DateTime?      @default(now())
+  createdAt     DateTime?     @default(now())
+  updatedAt     DateTime?     @default(now())
   deletedAt     DateTime?
   OrderDetail   OrderDetail[]
-  User          User?          @relation(fields: [userId], references: [id])
-  Notification  Notification[]
+  User          User?         @relation(fields: [userId], references: [id])
 }
 
 model OrderDetail {
@@ -313,15 +302,4 @@ model Message {
   receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
   receiverId Int
   createdAt  DateTime @default(now())
-}
-
-model Notification {
-  id       Int      @id @default(autoincrement())
-  orderId  Int
-  message  String?
-  date     DateTime @default(now())
-  status   Int?
-  seen     Boolean?
-  deleteAt DateTime?
-  fk_order Order    @relation(fields: [orderId], references: [id])
 }
