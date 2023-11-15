@@ -65,15 +65,11 @@ export interface SliderComponentProps {
   onQuantityRangeChange: (value: [number, number]) => void;
   onRateChange: (value: number) => void;
   onPurchaseRangeChange: (value: [number, number]) => void;
-  oninStock: (availability: boolean) => void;
-  onSoldOut: (soldOut: boolean) => void;
   nameCate?: string;
-  valueSoldOut?: boolean;
-  valueinStock?: boolean;
   valuePrice?: [number, number];
   valuePurchase?: [number, number];
   valueQuantity?: [number, number];
-  subcate: subCate[];
+  subcate?: subCate[];
   setProductSubcate: (index: number) => void;
 }
 
@@ -122,7 +118,7 @@ export default function SitebarFilter({
               >
                 <div className="mt-[20px]">
                   {/* default-radio-1 */}
-                  {subcate.map((item, index) => {
+                  {subcate?.map((item, index) => {
                     return (
                       <Checkbox
                         checkedCB={false}
@@ -172,10 +168,10 @@ export default function SitebarFilter({
                   // value={rangeValue}
                   // onChange={() => onSliderChange}
                   range
-                // onChange={(e) => {
-                //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
-                //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
-                // }}
+                  // onChange={(e) => {
+                  //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
+                  //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
+                  // }}
                 />
                 <div className="flex mt-[20px] justify-start gap-2 ">
                   <p className="max-w-max">Giá: </p>
