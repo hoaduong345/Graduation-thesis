@@ -11,7 +11,10 @@ import SanVoucher from "../../../Assets/TSX/SanVoucher";
 import VoucherBuyzzle from "../../../Assets/TSX/VoucherBuyzzle";
 import { categoryController } from "../../../Controllers/CategoryController";
 import { productController } from "../../../Controllers/ProductsController";
-import { ImgOfProduct, Products } from "../../../pages/home/User/FilterPage/FiltersPage";
+import {
+  ImgOfProduct,
+  Products,
+} from "../../../pages/home/User/FilterPage/FiltersPage";
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
@@ -48,11 +51,11 @@ const listVoucherBanner: VoucherBanner[] = [
     icon: <LogoVoucherBuyzzle />,
     title: "BUYZZLE",
   },
-  {
-    pathName: "",
-    icon: <LogoVoucherFreeship />,
-    title: "FREESHIP",
-  },
+  // {
+  //   pathName: "",
+  //   icon: <LogoVoucherFreeship />,
+  //   title: "FREESHIP",
+  // },
 ];
 
 function Index() {
@@ -61,7 +64,8 @@ function Index() {
   const [product, setProducts] = useState<Products[]>([]);
   const [page, setPage] = useState(1);
   const getCategory = () => {
-    categoryController.getAll()
+    categoryController
+      .getAll()
       .then((response) => response.data)
       .then((data) => {
         setCategory(data);
@@ -70,9 +74,11 @@ function Index() {
   };
 
   const getAllProducts = (page: number) => {
-    productController.getSearchAndPaginationProduct("", page, 2).then((res: Products[]) => {
-      setProducts(res);
-    });
+    productController
+      .getSearchAndPaginationProduct("", page, 2)
+      .then((res: Products[]) => {
+        setProducts(res);
+      });
   };
   useEffect(() => {
     getCategory();
@@ -80,11 +86,12 @@ function Index() {
   }, []);
 
   const nextData = () => {
-    setPage(page + 1)
-    productController.getSearchAndPaginationProduct("", page + 1, 2).then((res: Products[]) => {
-      setProducts(product.concat(res));
-    });
-
+    setPage(page + 1);
+    productController
+      .getSearchAndPaginationProduct("", page + 1, 2)
+      .then((res: Products[]) => {
+        setProducts(product.concat(res));
+      });
   };
 
   return (
@@ -112,7 +119,7 @@ function Index() {
         </div>
 
         <div className="container my-[60px]">
-          <h1 className="text-2xl font-bold mb-[15px]">Danh mục:</h1>
+          <h1 className="text-2xl font-bold mb-[15px]">Danh mục</h1>
           {/* <div className="flex flex-wrap gap-[35px] justify-center"> */}
           <div className="grid grid-cols-6 gap-[35px] justify-center">
             {categoty.map((e) => {
@@ -156,7 +163,7 @@ function Index() {
         </div>
       </Container>
 
-      <div className="w-full mx-auto my-[60px] bg-[#ffeae9] ">
+      {/* <div className="w-full mx-auto my-[60px] bg-[#ffeae9] ">
         <Container>
           <div className="py-[40px] backGroundImg flex justify-between max-[769px]:flex-col">
             <div className="max-w-[276px] max-[1025px]:hidden">
@@ -222,7 +229,7 @@ function Index() {
             </div>
           </div>
         </Container>
-      </div>
+      </div> */}
 
       <Container>
         <div className="container mt-[60px] ">
@@ -249,7 +256,8 @@ function Index() {
         <div className="container my-[60px]">
           <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
 
-          <InfiniteScroll style={{ overflow: 'hidden' }}
+          <InfiniteScroll
+            style={{ overflow: "hidden" }}
             dataLength={product.length}
             next={nextData}
             hasMore={true}
@@ -257,11 +265,10 @@ function Index() {
           >
             <div className="flex flex-wrap mb-6 gap-3 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4 ">
               {product?.map((product) => {
-                return <Productss product={product} />
+                return <Productss product={product} />;
               })}
             </div>
           </InfiniteScroll>
-
         </div>
       </Container>
     </>
