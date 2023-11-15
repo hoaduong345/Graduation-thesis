@@ -99,6 +99,7 @@ const ShippingController = {
                     contains: keyword,
                 },
                 status: sortStatus,
+                deletedAt: null
             };
             const totalOrdersCount = await prisma.order.count({
                 where: whereClause,
@@ -108,6 +109,7 @@ const ShippingController = {
                 where: {
                     status: {
                         gte: 3,
+                        
                     },
                 },
             });
@@ -175,6 +177,7 @@ const ShippingController = {
 
             const whereClause = {
                 status: sortStatus,
+                deletedAt : null
             };
 
             if (keyword) {
@@ -376,13 +379,11 @@ const ShippingController = {
                 status: status,
                 deleteAt: null,
             };
-
             // Define the whereNotSeen to filter unseen notifications
             const whereNotSeen = {
                 status: status,
                 seen: false,
             };
-
             // Fetch all notifications based on the specified criteria
             const allNotification = await prisma.notification.findMany({
                 where: whereClause,
@@ -402,7 +403,6 @@ const ShippingController = {
                     },
                 },
             });
-
             // Count the number of unseen notifications
             const countNotification = await prisma.notification.count({
                 where: whereNotSeen,
@@ -422,6 +422,8 @@ const ShippingController = {
     },
     getNotificationForUser: async (req, res) => {
         try {
+            const idUser = parseInt(req.cookies.id)
+            const orderId = parseInt(req.body.orderid)
             const status = 4;
             const whereClause = {
                 status: status,
@@ -437,6 +439,15 @@ const ShippingController = {
             // Fetch all notifications based on the specified criteria
             const allNotification = await prisma.notification.findMany({
                 where: whereClause,
+                include: {
+                    fk_order : {
+                        include:{
+                            User: {
+                                select
+                            }
+                        }
+                    }
+                },
                 orderBy: {
                     id: 'desc',
                 },
