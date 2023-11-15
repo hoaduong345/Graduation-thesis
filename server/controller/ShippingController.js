@@ -422,14 +422,30 @@ const ShippingController = {
     getNotificationForUser: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            const status = 5;
+            const orderId = parseInt(req.body.orderid);
+            const status = 4;
             const whereClause = {
                 status: status,
                 deleteAt: null,
             };
-            const notifiForUser = await prisma.order.findMany({
-                where: {
-                    userId: idUser,
+
+            // Define the whereNotSeen to filter unseen notifications
+            const whereNotSeen = {
+                status: status,
+                seen: false,
+            };
+
+            // Fetch all notifications based on the specified criteria
+            const allNotification = await prisma.notification.findMany({
+                where: whereClause,
+                include: {
+                    fk_order: {
+                        include: {
+                            User: {
+                                select,
+                            },
+                        },
+                    },
                 },
                 select: {
                     Notification: true,
