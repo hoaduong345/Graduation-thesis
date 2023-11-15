@@ -46,6 +46,19 @@ const ShippingController = {
                     },
                 });
             }
+            if (statusOrder === 5 ) {
+                const io = req.app.get('socketio');
+                io.emit('deliverysuccessfully', order);
+
+                await prisma.notification.create({
+                    data: {
+                        orderId: orderId,
+                        message: 'Delivery Successfully',
+                        status: 5,
+                        seen: false,
+                    },
+                });
+            }
             await prisma.order.update({
                 where: {
                     id: orderId,
@@ -274,13 +287,7 @@ const ShippingController = {
                     id: orderId,
                 },
             });
-            const notification = await prisma.notification.findFirst({
-                where: {
-                    orderId: orderId,
-                },
-            });
             if (!order) return res.send('Order is undifined');
-            if (!notification) return res.send('Notification is undefined');
             await prisma.order.update({
                 where: {
                     id: order.id,
@@ -298,7 +305,7 @@ const ShippingController = {
                 },
             });
             const io = req.app.get('socketio');
-            io.emit('requestdelete', order);
+            io.emit('confirmdelete', order);
             res.status(200).json('Delete order successfully');
         } catch (error) {
             errorResponse(res, error);
