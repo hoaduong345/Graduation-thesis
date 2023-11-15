@@ -20,6 +20,7 @@ import SlidesFilter from "../../../../components/home/components/slides/SlidesFi
 import useDebounce from "../../../../useDebounceHook/useDebounce";
 import "../../../css/filter.css";
 import Filter from "./Filter";
+import useThrottle from "@rooks/use-throttle";
 export interface Cate {
   id: number;
   name: string;
@@ -234,6 +235,12 @@ export default function FiltersPage() {
         console.log(err);
       });
   };
+
+  const [btnHighToLowThrottle] = useThrottle(handleActiveBTNHighToLowClick, 2000);
+  const [btnLowToHighThrottle] = useThrottle(handleActiveBTNLowToHighClick, 2000);
+  const [btnLatestCreationDateThrottle] = useThrottle(handleActiveBTNLatestCreationDate, 2000);
+
+
   return (
     <Container>
       <body className="body-filter container mx-auto">
@@ -304,7 +311,7 @@ export default function FiltersPage() {
                         max-2xl:py-[5px] max-2xl:text-base
                         max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
                       }
-                      onClick={handleActiveBTNLatestCreationDate}
+                      onClick={btnLatestCreationDateThrottle}
                     >
                       Mới Nhất
                     </button>
@@ -332,7 +339,7 @@ export default function FiltersPage() {
                       type="button"
                       className={
                         activeBtnLowToHigh
-                          ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#ffeced] font-medium
+                          ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
                     rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
                     max-2xl:py-[5px] max-2xl:text-base
                     max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm`
@@ -341,7 +348,7 @@ export default function FiltersPage() {
                     max-2xl:py-[5px] max-2xl:text-base
                     max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
                       }
-                      onClick={handleActiveBTNLowToHighClick}
+                      onClick={btnLowToHighThrottle}
                     >
                       Thấp Nhất
                     </button>
@@ -358,7 +365,7 @@ export default function FiltersPage() {
                     max-2xl:py-[5px] max-2xl:text-base
                     max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
                       }
-                      onClick={handleActiveBTNHighToLowClick}
+                      onClick={btnHighToLowThrottle}
                     >
                       Cao Nhất
                     </button>

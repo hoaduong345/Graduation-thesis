@@ -16,6 +16,7 @@ import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
+import useThrottle from "@rooks/use-throttle";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
@@ -162,6 +163,9 @@ export default function OrderHistory() {
       setOrderAPI({ ...orderAPI, status: null });
     }
   };
+
+  const [btnFiterThrottle] = useThrottle(handleClick, 1000);
+
   function getBorderColor(id: number) {
     switch (id) {
       case 0:
@@ -236,7 +240,7 @@ export default function OrderHistory() {
                     borderWidth: btnItems.active ? "1px" : "",
                   }}
                   onClick={() => {
-                    handleClick(btnItems.id);
+                    btnFiterThrottle(btnItems.id);
                   }}
                 >
                   {btnItems.text}
