@@ -422,49 +422,22 @@ const ShippingController = {
     getNotificationForUser: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            const orderId = parseInt(req.body.orderid);
-            const status = 4;
+            const status = 5;
             const whereClause = {
                 status: status,
                 deleteAt: null,
             };
-
-            // Define the whereNotSeen to filter unseen notifications
-            const whereNotSeen = {
-                status: status,
-                seen: false,
-            };
-
-            // Fetch all notifications based on the specified criteria
-            const allNotification = await prisma.notification.findMany({
-                where: whereClause,
-                include: {
-                    fk_order: {
-                        include: {
-                            User: {
-                                select,
-                            },
-                        },
-                    },
+            const notifiForUser = await prisma.order.findMany({
+                where: {
+                    userId: idUser,
                 },
-                orderBy: {
-                    id: 'desc',
+                select: {
+                    Notification: true,
                 },
             });
-
-            // Count the number of unseen notifications
-            const countNotification = await prisma.notification.count({
-                where: whereNotSeen,
-            });
-
-            // Prepare the result object
-            const result = {
-                allNotification: allNotification,
-                countNotification: countNotification,
-            };
-
+            console.log('nooooo', notifiForUser);
             // Send the result as a JSON response with a status code of 200 (OK)
-            res.status(200).json(result);
+            res.status(200).json(notifiForUser);
         } catch (error) {
             errorResponse(res, error);
         }
