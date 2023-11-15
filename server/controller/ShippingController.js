@@ -422,7 +422,7 @@ const ShippingController = {
     getNotificationForUser: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            const status = 4;
+            const status = 5;
             const whereClause = {
                 status: status,
                 deleteAt: null,
