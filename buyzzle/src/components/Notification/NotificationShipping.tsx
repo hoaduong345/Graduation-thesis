@@ -53,7 +53,7 @@ export default function NotificationShipping() {
                   onClick={() => handleSeenNoti(notiItems.id)}
                 >
                   <>
-                    <div className="flex gap-2 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
+                    <div className="flex gap-9 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
                       <div className="items-center flex gap-3">
                         <div className="p-1 relative">
                           <div
