@@ -1,19 +1,18 @@
 import { IonIcon } from "@ionic/react";
 import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { ReactNode, useEffect, useState } from "react";
+import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
 import { orderControllers, orderModelController } from "../../../../Controllers/OrderControllers";
 import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
-import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { numberFormat } from "../../../../Helper/Format";
 import { OrderPanigation, StatusOrder } from "../../../../Model/OrderModel";
 import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
-import ResponsivePagination from "react-responsive-pagination";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
@@ -61,48 +60,10 @@ export default function OrderHistory() {
   const idRemove = "removeVoucher";
   const idSitebar = "my_modal_3";
 
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-  const openModal = (id: string) => {
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.showModal();
-    }
-  };
-  const closeModal = (id: string) => {
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
-    }
-  };
-
-  useEffect(() => {
-    getOrder();
-  }, [orderAPI.page]);
-
-  const getOrder = async () => {
-    await orderControllers.getOrderOfUser(orderAPI.page!).then((res) => {
-      console.log(orderAPI.page)
-      setOrder(res);
-    });
-  };
-
-  const handlePageChange = (page: number) => {
-    setOrderAPI({ ...orderAPI, page: page });
-  };
-
-  const abortOrder = async (id: number) => {
-    await orderControllers.abortOrder(id);
-    toast.success("Đã xác nhận yêu cầu hủy đơn !", {
-      position: "top-right",
-      autoClose: 3000,
-      theme: "light",
-    });
-    closeModal(idRemove);
-  };
   // button filter
   const [changeButton, setChangeButton] = useState([
     {
-      id: 0,
+      id: -1,
       text: "Tất cả",
       active: true,
     },
@@ -131,21 +92,68 @@ export default function OrderHistory() {
       text: "Giao hàng thành công",
       active: false,
     },
+    {
+      id: 0,
+      text: "Đã hủy",
+      active: false,
+    },
   ]);
+
+  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
+  const openModal = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+  const closeModal = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+  };
+
+  useEffect(() => {
+    getOrder();
+  }, [orderAPI.page, changeButton]);
+
+  const getOrder = async () => {
+    await orderControllers.getOrderOfUser(orderAPI.page!, orderAPI.status!).then((res) => {
+      console.log(orderAPI.page)
+      setOrder(res);
+    });
+  };
+
+  const handlePageChange = (page: number) => {
+    setOrderAPI({ ...orderAPI, page: page });
+  };
+
+  const abortOrder = async (id: number) => {
+    await orderControllers.abortOrder(id);
+    toast.success("Đã xác nhận yêu cầu hủy đơn !", {
+      position: "top-right",
+      autoClose: 3000,
+      theme: "light",
+    });
+    closeModal(idRemove);
+  };
+
   const handleClick = (id: number) => {
-    console.log("🚀 ~ file: Notification.tsx:27 ~ handleClick ~ id:", id);
     const updatedButtons = changeButton.map((btn) => {
       if (btn.id === id) {
-        console.log(
-          "🚀 ~ file: OrderManagement.tsx:91 ~ updatedButtons ~ btn.id:",
-          btn.id
-        );
         return { ...btn, active: true };
       } else {
         return { ...btn, active: false };
       }
     });
     setChangeButton(updatedButtons);
+    const selectedButton = updatedButtons.find((btn) => btn.id === id);
+
+    if (selectedButton && selectedButton.id !== -1) {
+      setOrderAPI({ ...orderAPI, status: selectedButton.id });
+    } else {
+      setOrderAPI({ ...orderAPI, status: null });
+    }
   };
   function getBorderColor(id: number) {
     switch (id) {
@@ -207,7 +215,7 @@ export default function OrderHistory() {
             Danh Sách Đơn Hàng
           </h1>
           {/* button */}
-          <div className="flex my-3 gap-2">
+          <div className="flex my-3 gap-2 justify-around">
             {changeButton.map((btnItems) => {
               return (
                 <button
@@ -392,7 +400,11 @@ export default function OrderHistory() {
                     );
                   })
                 ) : (
-                  <EmptyPage title="Chưa có đơn hàng" button="Mua ngay" />
+                  <>
+                    <div className="flex justify-center p-20">
+                      <p className="text-2xl font-light">Chưa có đơn hàng</p>
+                    </div>
+                  </>
                 )}
 
                 <DialogComfirm
