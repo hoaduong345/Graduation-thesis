@@ -66,10 +66,34 @@ const OderController = {
 
     getOrderUser: async (req, res) => {
         try {
-            const userid = parseInt(req.cookies.id);
+            const userId = parseInt(req.cookies.id);
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
+            const status = parseInt(req.body.status);
+            let skip = (page - 1) * pageSize;
+
+            let sortStatus = {};
+            if (status == 0) {
+                sortStatus = 0;
+            } else if (status) {
+                sortStatus = status;
+            } else {
+                sortStatus = {
+                    gte: 0,
+                };
+            }
+
+            const totalOrderPage = await prisma.order.count({
+                where: {
+                    userId: userId,
+                    status: sortStatus,
+                },
+            });
+
             const order = await prisma.order.findMany({
                 where: {
-                    userId: userid,
+                    userId: userId,
+                    status: sortStatus,
                 },
                 include: {
                     OrderDetail: true,
@@ -77,13 +101,22 @@ const OderController = {
                 orderBy: {
                     id: 'desc',
                 },
+                skip,
+                take: pageSize,
             });
-            res.status(200).json(order);
+
+            res.status(200).json({
+                page: page,
+                pageSize: pageSize,
+                totalPage: Math.ceil(totalOrderPage / pageSize),
+                data: order,
+            });
         } catch (error) {
-            console.log('error', error);
+            console.error('Lỗi: ', error);
             res.status(404).send('Get order failed');
         }
     },
+
 
     getOrderAdmin: async (req, res) => {
         try {

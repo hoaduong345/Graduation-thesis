@@ -198,7 +198,7 @@ const ShippingController = {
                         gte: 0,
                     },
                 },
-            }); 
+            });
             const allOrderAdmin = await prisma.order.findMany({
                 where: whereClause,
                 skip,
@@ -310,7 +310,7 @@ const ShippingController = {
                 },
             });
             const io = req.app.get('socketio');
-            io.emit('confirmdelete', order);
+            io.emit('confirmCancelOrder', order);
             res.status(200).json('Delete order successfully');
         } catch (error) {
             errorResponse(res, error);

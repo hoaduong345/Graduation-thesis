@@ -1,17 +1,14 @@
-import { type } from "os";
+import { Link } from "react-router-dom";
 import { Images } from "../../../Assets/TS";
-import { Product } from "../Index";
-import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
 import {
   formatSoldCount,
   numberFormat,
   roundedNumber,
 } from "../../../Helper/Format";
-import { Link } from "react-router-dom";
-import { Rate, Row } from "../../../Model/ProductModel";
+import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
 
 export type Props = {
-  product: Row;
+  product: Products;
 };
 
 export default function Productss(props: Props) {
@@ -134,9 +131,9 @@ export default function Productss(props: Props) {
             "
               >
                 Đã bán{" "}
-                {product.soldcount == 0
+                {product.soldCount == 0
                   ? "0"
-                  : formatSoldCount(product.soldcount!)}
+                  : (product.soldCount !== undefined ? formatSoldCount(product.soldCount) : "0")}
               </p>
             </div>
           </div>

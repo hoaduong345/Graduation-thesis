@@ -11,7 +11,7 @@ router.post('/addImagesByProductsID', ProductController.addImagesByProductsID);
 
 router.post('/addproduct', MiddleWareProductController.isValidate, ProductController.addProduct);
 
-router.delete('/deleteproduct/:id', ProductController.deleteProduct);
+router.post('/deleteproduct', ProductController.deleteProduct);
 
 router.put('/updateproduct/:id', MiddleWareProductController.isValidate, ProductController.updateProduct);
 
@@ -27,13 +27,9 @@ router.delete('/deleteimagesbyproductid/:id', ProductController.deleteImageByPro
 
 router.put('/updateimagesbyproductid/:id', ProductController.updateImageByProductID);
 
-
-
 router.get('/recommendedproducts/:id', ProductController.getSugggestProduct);
 
 router.get('/getnewproducts', ProductController.getNewProducts);
-
-
 
 router.get('/allproducts/availability', ProductController.getProductAvailability);
 router.get('/allproducts/soldout', ProductController.getProductSoldOut);
@@ -47,7 +43,6 @@ router.delete('/deleteratingcomment/:ratingId', ProductController.deleteRatingan
 router.post('/addimagecomment', ProductController.addImageComment);
 
 router.put('/updateimagecomment/:id', ProductController.updateImageComment);
-
 
 // thêm danh mục
 

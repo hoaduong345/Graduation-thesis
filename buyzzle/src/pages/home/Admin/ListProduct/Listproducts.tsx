@@ -55,24 +55,35 @@ export default function ListproductsAdmin() {
   //       });
   //   }, [search, currentPage]);
 
-  useEffect(() => {
-    getData();
-  }, [debouncedInputValueSearch, currentPage]);
+  // useEffect(() => {
+  //   getData();
+  // }, [debouncedInputValueSearch, currentPage]);
 
-  const getData = () => {
-    productController
-      .getSearchAndPaginationProduct(search, currentPage, 2)
-      .then((res: any) => {
-        setProducts(res);
-      });
-  };
+  // const getData = () => {
+  //   productController
+  //     .getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination(
+  //       search,
+  //       currentPage,
+  //       1
+  //     )
+  //     .then((res: any) => {
+  //       console.log("🚀 ~ file: Listproducts.tsx:66 ~ .then ~ res:", res);
+  //       setProducts(res);
+  //     });
+  // };
 
   const handleRemove = async (id: number) => {
+    const _dataRemove = {
+      id: id,
+      page: currentPage,
+      pageSize: 2,
+    };
     await productController
-      .remove(id)
-      .then((_) => {
+      .remove(_dataRemove)
+      .then((res) => {
+        console.log("🚀 ~ file: Listproducts.tsx:79 ~ .then ~ res:", res);
         toast.success("Xóa thành công !");
-        getData();
+        setProducts(res.data);
       })
       .catch(() => {
         toast.error("Xóa thất bại !");
@@ -120,6 +131,8 @@ export default function ListproductsAdmin() {
     debouncedInputValuePrice,
     debouncedInputValueQuantity,
     debouncedInputValuePurchase,
+    debouncedInputValueSearch,
+    currentPage,
   ]);
   const handleFilter = async (
     priceRange: any,
@@ -135,7 +148,8 @@ export default function ListproductsAdmin() {
         quantityRange[0],
         quantityRange[1],
         purchase[0],
-        purchase[1]
+        purchase[1],
+        search
       )
       .then((res: any) => {
         setProducts(res);
@@ -155,60 +169,6 @@ export default function ListproductsAdmin() {
   const handlePurchaseRangeChange = (purchase: [number, number]) => {
     setSliderPurchaseValues(purchase);
     console.log("price Range:", purchase);
-  };
-  // Hàm gọi API để lấy tất cả sản phẩm
-  // const getProductAll = async () => {
-  //    await productController
-  //       .getSearchAndPaginationProduct("", currentPage, 2)
-  //       .then((res) => {
-  //          setProducts(res);
-  //       })
-  //       .catch((err) => console.log(err));
-  // };
-  // useEffect(() => {
-  //    getProductAll();
-  // }, []);
-  // check con hang API
-  const handleClickinStock = () => {
-    setinStock(!inStock); // Đảo ngược giá trị của biến inStock
-    if (!inStock) {
-      checkedinStock();
-      setSoldOut(false);
-      setShowAllProducts(false); // Đặt hiển thị tất cả sản phẩm thành false
-    } else {
-      getData();
-      setShowAllProducts(true); // Đặt hiển thị tất cả sản phẩm thành true
-    }
-  };
-  const checkedinStock = async () => {
-    await productController
-      .getProductInStockAndSoldOut("inStock")
-      .then((res) => {
-        setProducts(res);
-        console.log("🚀 ~ file: Listproducts.tsx:197 ~ .then ~ res:", res);
-      })
-      .catch((err) => console.log(err));
-  };
-  const handleClickSoldOut = () => {
-    setSoldOut(!soldOut); // Đảo ngược giá trị của biến soldOut
-    if (!soldOut) {
-      checkedSoldOut();
-      setinStock(false);
-      setShowAllProducts(false); // Đặt hiển thị tất cả sản phẩm thành false
-    } else {
-      getData();
-      setShowAllProducts(true); // Đặt hiển thị tất cả sản phẩm thành true
-    }
-  };
-  // check het hang API
-  const checkedSoldOut = async () => {
-    await productController
-      .getProductInStockAndSoldOut("soldOut")
-      .then((res) => {
-        setProducts(res);
-        console.log("🚀 ~ file: Listproducts.tsx:197 ~ .then ~ res:", res);
-      })
-      .catch((err) => console.log(err));
   };
 
   var checkAll: boolean =
@@ -438,14 +398,11 @@ export default function ListproductsAdmin() {
 
             {isShown && (
               <FilterListproduct
+                setProductSubcate={() => console.log("s")}
                 onRateChange={() => console.log("s")}
                 valuePurchase={sliderPurchaseValues}
                 valueQuantity={sliderQuantityValues}
                 valuePrice={sliderPriceValues}
-                valueinStock={inStock}
-                valueSoldOut={soldOut}
-                onSoldOut={handleClickSoldOut}
-                oninStock={handleClickinStock}
                 onQuantityRangeChange={handleQuantityRangeChange}
                 onPriceRangeChange={handlePriceRangeChange}
                 onPurchaseRangeChange={handlePurchaseRangeChange}

@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { Images } from "../../Assets/TS";
 interface ToastCustomModel {
   image?: ReactNode;
   iconSVG: ReactNode;

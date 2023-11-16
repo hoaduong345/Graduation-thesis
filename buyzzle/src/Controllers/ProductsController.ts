@@ -6,12 +6,12 @@ export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_URL || "",
 };
 
-export interface ModelProducts {
-  name?: string;
-  idCate?: string;
-  min?: number;
-  max?: number;
+export interface ModelRemoveProducts {
+  id?: number;
+  page?: number;
+  pageSize?: number;
 }
+
 class ProductController {
   getList = async (
     nameCate: string
@@ -67,7 +67,7 @@ class ProductController {
         `${appConfig.apiUrl}/allproducts?keyword=${name}&page=${page}&pageSize=${pageSize}`
       )
       .then((res) => {
-        return res.data as Products[];
+        return res.data.rows as Products[];
       });
   };
   getSortProductbyPriceAndDateCreate = async (options: {
@@ -123,25 +123,26 @@ class ProductController {
       });
   };
   getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination = async (
-    minPrice: number,
-    maxPrice: number,
-    page: number,
-    pageSize: number,
-    minQuantity: number,
-    maxQuantity: number,
-    minPurchase: number,
-    maxPurchase: number
+    minPrice?: number,
+    maxPrice?: number,
+    page?: number,
+    pageSize?: number,
+    minQuantity?: number,
+    maxQuantity?: number,
+    minPurchase?: number,
+    maxPurchase?: number,
+    name?: string | undefined
   ): Promise<Products[]> => {
     return await axios
       .get(
-        `${appConfig.apiUrl}/allproducts?minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&pageSize=${pageSize}&minQuantity=${minQuantity}&maxQuantity=${maxQuantity}&minPurchase=${minPurchase}&maxPurchase=${maxPurchase}`
+        `${appConfig.apiUrl}/allproducts?minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&pageSize=${pageSize}&minQuantity=${minQuantity}&maxQuantity=${maxQuantity}&minPurchase=${minPurchase}&maxPurchase=${maxPurchase}&keyword=${name}`
       )
       .then((res) => {
         return res.data as Products[];
       });
   };
-  remove = async (id: number) => {
-    return await axios.delete(`${appConfig.apiUrl}/deleteproduct/${id}`);
+  remove = async (data: ModelRemoveProducts) => {
+    return await axios.post(`${appConfig.apiUrl}/deleteproduct`, data);
   };
   update = async (id: number, data: FormValues) => {
     return await axios.put(`${appConfig.apiUrl}/updateproduct/${id}`, data);

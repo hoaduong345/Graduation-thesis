@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { notificationControllers } from "../../Controllers/NotificationController";
 import { AllNotification } from "../../Model/Notification";
 import { Images } from "../../Assets/TS";
+import NewOrder from "../../layout/asset/TSX/NewOrder";
+import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 
-export default function Notification() {
+export default function NotificationAdmin() {
   const [notification, setNotification] = useState<AllNotification[]>([]);
 
   const [changeButton, setChangeButton] = useState([
@@ -60,7 +62,7 @@ export default function Notification() {
   }, []);
   const getAllNoti = async () => {
     await notificationControllers
-      .getAllNotification()
+      .getAllNotificationAdmin()
       .then((res) => {
         console.log(
           "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
@@ -135,17 +137,44 @@ export default function Notification() {
                   <>
                     <div className="flex gap-7 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
                       <div className="items-center flex gap-3">
-                        <div className="p-1">
-                          <img
-                            // src={notiItems.fk_order.User.image}
-                            src={Images.avatar_admin}
-                            alt="avatar_admin"
-                            className={`${
-                              notiItems.seen === false ? "" : "opacity-70"
-                            }`}
-                            width={45}
-                            height={45}
-                          />
+                        <div className="p-1 relative">
+                          {notiItems.status == 1 ? (
+                            <>
+                              <img
+                                // src={notiItems.fk_order.User.image}
+                                src={Images.avatar_admin}
+                                alt="avatar_admin"
+                                className={`w-12 h-12 rounded-full ${
+                                  notiItems.seen === false ? "" : "opacity-70"
+                                }`}
+                              />
+                              <div
+                                className={`${
+                                  notiItems.seen === false ? "" : "opacity-80"
+                                }`}
+                              >
+                                <NewOrder />
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <img
+                                // src={notiItems.fk_order.User.image}
+                                src={Images.avatar_admin}
+                                alt="avatar_admin"
+                                className={`w-12 h-12 rounded-full ${
+                                  notiItems.seen === false ? "" : "opacity-70"
+                                }`}
+                              />
+                              <div
+                                className={`${
+                                  notiItems.seen === false ? "" : "opacity-80"
+                                }`}
+                              >
+                                <CancelOrder />
+                              </div>
+                            </>
+                          )}
                         </div>
                         <div>
                           <div

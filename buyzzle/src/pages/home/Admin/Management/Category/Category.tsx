@@ -3,32 +3,38 @@ import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 import Plus from "../../../../../Assets/TSX/Plus";
 import { categoryController } from "../../../../../Controllers/CategoryController";
 import { storage } from "../../../../../Firebase/Config";
 import DialogComfirm from "../../../../../Helper/Dialog/DialogComfirm";
 import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import Loading from "../../../../../Helper/Loading/Loading";
+import { toastError } from "../../../../../Helper/Toast/Error";
+import { toastSuccess } from "../../../../../Helper/Toast/Success";
+import { toastWarn } from "../../../../../Helper/Toast/Warning";
 import { CategoryModal } from "../../../../../Model/CategoryModel";
 import Container from "../../../../../components/container/Container";
+import ArrowDown from "../../Assets/TSX/ArrowDown";
 import Delete from "../../Assets/TSX/Delete";
+import DeleteCate from "../../Assets/TSX/DeleteCate";
 import Edit from "../../Assets/TSX/Edit";
+import EditCate from "../../Assets/TSX/EditCate";
 import PlusSquare from "../../Assets/TSX/PlusSquare";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import UploadIMG from "../../Assets/TSX/UploadIMG";
 import Handle from "../../Assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import ArrowDown from "../../Assets/TSX/ArrowDown";
-import ArrowNextHistory from "../../../../../Assets/TSX/ArrowNextHistory";
 
 function Category() {
   const idModalCate = "category";
   const idModalSubCateLv1 = "sybCategoryLv1";
   const idRemoveCategory = "comfirm";
   const idRemoveCates = "comfirmCates";
+  const idRemoveSubcate = "comfirmSubcate";
 
   const [idCate, setIdCate] = useState(0);
+  const [idSubcate, setIdSubcate] = useState(0);
 
   const [indexCate, setIndexCate] = useState(0);
 
@@ -130,7 +136,7 @@ function Category() {
 
   const saveModal = (id: string, data: CategoryModal) => {
     if (!url) {
-      toast.error("Thêm Hình", {});
+      toastWarn("Thêm Hình");
       return;
     }
     closeModal(id);
@@ -142,7 +148,7 @@ function Category() {
           image: url,
         })
         .then(() => {
-          toast.success("Cập nhật thành công!!");
+          toastSuccess("Cập nhật thành công!!");
           getList();
           setnull();
           setCheckedCategory([]);
@@ -151,7 +157,7 @@ function Category() {
       categoryController
         .create({ id: data.id, name: data.name, image: url })
         .then(() => {
-          toast.success("Thêm thành công!!");
+          toastSuccess("Thêm thành công!!");
           getList();
           setnull();
           setCheckedCategory([]);
@@ -164,7 +170,7 @@ function Category() {
       .remove(id)
       .then(() => {
         closeModal(idDialog);
-        toast.error("Successfully");
+        toastError("Successfully");
         getList();
       })
       .then(() => {
@@ -180,7 +186,7 @@ function Category() {
         .remove(e.id)
         .then(() => {
           if (index === cate.length - 1 && !successMessageDisplayed) {
-            toast.success("Thành công");
+            toastSuccess("Thành công");
             successMessageDisplayed = true;
           }
           closeModal(idDialog);
@@ -192,18 +198,46 @@ function Category() {
     });
   };
 
-  const createSubcate = async (data: string, idCate: number) => {
-    if (data.length >= 4 && data.length <= 20) {
-      await categoryController.createSubcateLv1(idCate, data).then(() => {
-        setNameCateLv2("");
-        closeModal(idModalSubCateLv1);
-        setCheckedCategory([]);
-        getList();
-      });
+  const createSubcate = async (data: string, idCate: number, idSubcate: number) => {
+    if (idSubcate == 0) {
+      if (data.length >= 4 && data.length <= 20) {
+        await categoryController.createSubcateLv1(idCate, data).then(() => {
+          setNameCateLv2("");
+          closeModal(idModalSubCateLv1);
+          setCheckedCategory([]);
+          getList();
+        }).then(() => {
+          toastSuccess('Thành Công')
+        });
+      } else {
+        toastWarn("Lỗi tên");
+      }
     } else {
-      toast.warn("4 kí tự trở lên");
+      if (data.length >= 4 && data.length <= 20) {
+
+        await categoryController.updateSubcateLv1(idCate, idSubcate, nameCateLv2).then(() => {
+          setNameCateLv2("");
+          closeModal(idModalSubCateLv1);
+          setCheckedCategory([]);
+          getList()
+        }).then(() => {
+          toastSuccess('Thành Công')
+        });
+      } else {
+        toastWarn("Lỗi tên");
+      }
     }
   };
+
+  const removeSubcate = async () => {
+    await categoryController.removeSubcateLv1(idSubcate).then(() => {
+      closeModal(idRemoveSubcate);
+      setCheckedCategory([]);
+      getList()
+    }).then(() => {
+      toastSuccess('Thành Công')
+    });
+  }
 
   useEffect(() => {
     getList();
@@ -219,6 +253,7 @@ function Category() {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
       reset({ name: data.name, id: data.id });
+      setNameCateLv2(data.name)
       setUrl(data.image);
       modal.showModal();
     }
@@ -397,12 +432,16 @@ function Category() {
 
               <div className="grid grid-cols-10 items-center">
                 <div className="col-span-3 py-[15px] pl-16">
-                  <input
-                    checked={checkAll}
-                    className="checkbox checkbox-sm items-center"
-                    type="checkbox"
-                    onChange={(e) => handleCheckedAll(e.target.checked)}
-                  />
+                  {
+                    categorys.length > 0 ?
+                      <input
+                        checked={checkAll}
+                        className="checkbox checkbox-sm items-center"
+                        type="checkbox"
+                        onChange={(e) => handleCheckedAll(e.target.checked)}
+                      />
+                      : <></>
+                  }
                 </div>
                 <div className="flex gap-[28px] col-span-5 ">
                   <p></p>
@@ -413,13 +452,13 @@ function Category() {
                 <div className="flex justify-center col-span-2 max-lg:gap-[30px]">
                   <p
                     onClick={() =>
-                      checkedCategory.length > 0
-                        ? openModal(idRemoveCates, {} as CategoryModal)
-                        : toast.warn("Chưa chọn danh mục")
+                      openModal(idRemoveCates, {} as CategoryModal)
                     }
                     className="pt-[12px] text-[16px] pr-2 max-lg:text-sm"
                   >
-                    <Delete />
+                    {
+                      checkedCategory.length > 0 ? <Delete /> : ''
+                    }
                   </p>
                 </div>
               </div>
@@ -440,11 +479,16 @@ function Category() {
                 onSave={() => removeCates(checkedCategory, idRemoveCates)}
               />
 
+              <DialogComfirm desc="Danh mục Con" id={idRemoveSubcate} title="Xóa danh mục con"
+                onClose={() => closeModal(idRemoveSubcate)}
+                onSave={() => removeSubcate()}
+              />
+
               <DialogModal
                 id={idModalSubCateLv1}
                 title={categorys[indexCate]?.name}
                 onClose={() => closeModal(idModalSubCateLv1)}
-                onSave={() => createSubcate(nameCateLv2, idCate)}
+                onSave={() => createSubcate(nameCateLv2, idCate, idSubcate)}
                 body={
                   <>
                     <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
@@ -505,6 +549,7 @@ function Category() {
                                   {} as CategoryModal
                                 );
                                 setIdCate(e.id);
+                                setIdSubcate(0)
                                 setIndexCate(index);
                               }}
                             >
@@ -568,16 +613,35 @@ function Category() {
                             {e.subCategories?.map((elements) => {
                               return (
                                 <>
-                                  <div key={elements.id} className="grid grid-cols-10">
+                                  <div key={elements.id} className="grid grid-cols-10 group">
                                     <div className="col-span-3"></div>
                                     <div className="col-span-5 border-[#e0e0e0] flex h-5 items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
                                       <p className="text-[16px] font-medium max-lg:text-sm">
                                         {elements.name}
                                       </p>
                                     </div>
-                                    <div className="flex col-span-2 text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
-                                      <Edit />
-                                      <Delete />
+                                    <div className="col-span-2 hidden group-hover:block ">
+
+                                      <div className="flex items-center text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
+                                        <div onClick={() => {
+                                          openModal(
+                                            idModalSubCateLv1,
+                                            { name: elements.name } as CategoryModal
+                                          );
+                                          setIdCate(e.id);
+                                          setIdSubcate(elements.id)
+                                        }}>
+                                          <EditCate />
+                                        </div>
+
+                                        <div onClick={() => {
+                                          openModal(idRemoveSubcate, {} as CategoryModal);
+                                          setIdCate(e.id);
+                                          setIdSubcate(elements.id)
+                                        }}>
+                                          <DeleteCate />
+                                        </div>
+                                      </div>
                                     </div>
                                   </div >
                                 </>

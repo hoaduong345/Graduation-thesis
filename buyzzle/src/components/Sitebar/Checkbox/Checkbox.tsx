@@ -11,20 +11,22 @@ export default function Checkbox(props: CheckboxCategory) {
           type="radio"
           name="colored-radio"
           id="orange-radio"
-          onClick={() => props.getProduct(props.index)}
-          className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
+          className="appearance-none cursor-pointer h-6 w-6 border border-[#CCCCCC] rounded-full 
           checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
           // b1. Xac dinh kieu focus cua inpt la onChange event
           onChange={() => {
             // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
             props.onChangeFilter?.(props.title);
+            props.getProduct(props.index)
           }}
         />
         <div
           className="h-6 w-6 absolute rounded-full pointer-events-none
           peer-checked:border-[#EA4B48] peer-checked:border-2"
         />
-        <div className="max-xl:w-[150px] flex flex-col justify-center px-2 peer-checked:text-[#EA4B48]">
+        <div
+          // onClick={() => props.getProduct(props.index)}
+          className="max-xl:w-[150px] flex flex-col justify-center px-2 peer-checked:text-[#EA4B48]">
           {props.title.length >= 20 ? (
             <label className="truncate block">{props.title}</label>
           ) : (
