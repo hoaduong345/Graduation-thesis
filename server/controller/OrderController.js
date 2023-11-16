@@ -47,6 +47,7 @@ const OderController = {
             });
             await prisma.notification.create({
                 data: {
+                    userId : iduser,
                     orderId: order.id,
                     message: 'New order',
                     status: 1,

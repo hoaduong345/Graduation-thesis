@@ -9,6 +9,7 @@ const errorResponse = (res, error) => {
 const ShippingController = {
     setStatus: async (req, res) => {
         try {
+            const idUser = parseInt(req.cookies.id)
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status);
 
@@ -39,6 +40,7 @@ const ShippingController = {
 
                 await prisma.notification.create({
                     data: {
+                        userId : idUser,
                         orderId: orderId,
                         message: 'new delivery',
                         status: 3,
@@ -52,6 +54,7 @@ const ShippingController = {
 
                 await prisma.notification.create({
                     data: {
+                        userId: idUser,
                         orderId: orderId,
                         message: 'Delivery Successfully',
                         status: 5,
@@ -80,7 +83,7 @@ const ShippingController = {
             const pageSize = parseInt(req.body.pageSize) || 40;
             const keyword = req.body.keyword;
             const status = parseInt(req.body.status);
-
+            
             let skip = (page - 1) * pageSize;
             if (keyword) {
                 skip = 0;
@@ -234,6 +237,7 @@ const ShippingController = {
     // REQUEST and CONFIRM delete order
     requestDeleteOrder: async (req, res) => {
         try {
+            const idUser = parseInt(req.cookies.id)
             const orderId = parseInt(req.body.orderId);
             const order = await prisma.order.findFirst({
                 where: {
@@ -266,6 +270,7 @@ const ShippingController = {
 
             await prisma.notification.create({
                 data: {
+                    userId : idUser,
                     orderId: order.id,
                     message: 'request delete order',
                     status: 2,
@@ -300,6 +305,7 @@ const ShippingController = {
             });
             await prisma.notification.create({
                 data: {
+                    userId : idUser,
                     orderId: orderId,
                     message: 'Delete order successfully',
                     status: 4,
@@ -313,7 +319,6 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
-
     // GET noti lên pop ups thông báo cho admin, đơn vị vận chuyển và người dùng
     getNotificationAdmin: async (req, res) => {
         try {
@@ -421,23 +426,27 @@ const ShippingController = {
     },
     getNotificationForUser: async (req, res) => {
         try {
-            const idUser = parseInt(req.cookies.id);
-            const status = 5;
-            const whereClause = {
-                status: status,
-                deleteAt: null,
-            };
-            const notifiForUser = await prisma.order.findMany({
-                where: {
-                    userId: idUser,
-                },
-                select: {
-                     Notification : true
-                },
-            });
-            console.log('nooooo', notifiForUser);
+            // const idUser = parseInt(req.cookies.id);
+            // const status = 5;
+            // const whereClause = {
+            //     status: status,
+            //     deleteAt: null,
+            // };
+            // const notifiForUser = await prisma.notification.findMany({
+            //     where: whereClause,
+            //     include:{
+            //        fk_order:{
+            //         select:{
+            //             userId:{
+                            
+            //             }
+            //         }
+            //        }
+            //     }
+                
+            // });
             // Send the result as a JSON response with a status code of 200 (OK)
-            res.status(200).json(notifiForUser);
+            // res.status(200).json(notifiForUser);
         } catch (error) {
             errorResponse(res, error);
         }
