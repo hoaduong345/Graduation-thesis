@@ -80,7 +80,7 @@ const ShippingController = {
             const pageSize = parseInt(req.body.pageSize) || 40;
             const keyword = req.body.keyword;
             const status = parseInt(req.body.status);
-            
+
             let skip = (page - 1) * pageSize;
             if (keyword) {
                 skip = 0;
@@ -188,13 +188,29 @@ const ShippingController = {
             const totalOrdersCount = await prisma.order.count({
                 where: whereClause,
             });
-            console.log("🚀 ~ file: ShippingController.js:194 ~ getAllStatusForAdmin: ~ totalOrdersCount:", totalOrdersCount)
+            console.log(
+                '🚀 ~ file: ShippingController.js:194 ~ getAllStatusForAdmin: ~ totalOrdersCount:',
+                totalOrdersCount
+            );
 
             const getAll = await prisma.order.findMany({
                 where: {
                     status: {
                         gte: 0,
                     },
+                    OR: [
+                        {
+                            status: 0,
+                            deletedAt: {
+                                equals: null,
+                            },
+                        },
+                        {
+                            status: {
+                                gt: 0,
+                            },
+                        },
+                    ],
                 },
             });
             const allOrderAdmin = await prisma.order.findMany({
@@ -209,7 +225,7 @@ const ShippingController = {
                 },
             });
             const statusCounts = {};
-            
+
             getAll.forEach((order) => {
                 const orderStatus = order.status;
                 if (!statusCounts[`orderStatus${orderStatus}`]) {
@@ -218,13 +234,14 @@ const ShippingController = {
                     statusCounts[`orderStatus${orderStatus}`]++;
                 }
             });
-            
-            console.log("🚀 ~ file: ShippingController.js:215 ~ getAllStatusForAdmin: ~ statusCounts:", statusCounts)
+
+            console.log('🚀 ~ file: ShippingController.js:215 ~ getAllStatusForAdmin: ~ statusCounts:', statusCounts);
             const results = {
                 page: page,
                 pageSize: pageSize,
                 totalPage: Math.ceil(totalOrdersCount / pageSize),
                 totalOrderShipping: getAll.length,
+                totalOrdersCount: totalOrdersCount,
                 statusCounts: statusCounts,
                 data: allOrderAdmin,
             };
@@ -433,12 +450,10 @@ const ShippingController = {
             //        fk_order:{
             //         select:{
             //             userId:{
-                            
             //             }
             //         }
             //        }
             //     }
-                
             // });
             // Send the result as a JSON response with a status code of 200 (OK)
             // res.status(200).json(notifiForUser);
