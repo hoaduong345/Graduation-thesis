@@ -5,21 +5,23 @@ import { Images } from "../../../../../Assets/TS";
 import Map from "../../../../../Assets/TSX/Map";
 import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
 import { orderControllers } from "../../../../../Controllers/OrderControllers";
+import DialogAbortOrder from "../../../../../Helper/Dialog/DialogAbortOrder";
 import { numberFormat } from "../../../../../Helper/Format";
 import StepperAdmin from "../../../../../Helper/Stepper/StepperAdmin";
 import { OrderModel } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
+import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import Back from "../../Assets/TSX/Back";
-import MessageOrderAdmin from "../../Assets/TSX/MessageOrderAdmin";
 import Paymethod from "../../Assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
 import PrintOrder from "../../Assets/TSX/PrintOrder";
 import { dateOrder, timeOrder } from "./OrderManagement";
-import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 
 export default function DetailOrderManagement() {
   const { id } = useParams();
   const idOrder = Number(id);
+  const idComfirmAbort = "abortModal";
+
 
   const [order, setOrder] = useState<OrderModel>({} as OrderModel);
 
@@ -44,8 +46,22 @@ export default function DetailOrderManagement() {
       .getConfirmCancelOrder(idOrder)
       .then((_) => {
         getOrder();
+        closeComfirmAbort(idComfirmAbort)
       })
       .catch((err) => console.log(err));
+  };
+
+  const openComfirmAbort = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+  const closeComfirmAbort = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
   };
 
   return (
@@ -72,7 +88,7 @@ export default function DetailOrderManagement() {
                 </div>
                 <div className="flex flex-col gap-1">
                   {order.paymentMethod == "Thẻ tín dụng" ||
-                  getStatusOrder(order.status)._paymentStatus ? (
+                    getStatusOrder(order.status)._paymentStatus ? (
                     <div className="badge badge-xs badge-accent text-center py-2 px-3">
                       <p className="font-bold text-xs text-white">
                         Đã thanh toán
@@ -244,13 +260,19 @@ export default function DetailOrderManagement() {
                   </div>
                   <div className="px-11 pt-4">
                     <StepperAdmin
-                      confirmCancelOrder={() => handleConfirmCancelOrder()}
+                      confirmCancelOrder={() => openComfirmAbort(idComfirmAbort)}
                       deletedAt={order.deletedAt}
                       status={order.status}
                       comfirm={(status) => setStatus(status)}
                     />
                   </div>
                 </div>
+                <DialogAbortOrder
+                  id={idComfirmAbort}
+                  onClose={() => closeComfirmAbort(idComfirmAbort)}
+                  onSave={() => handleConfirmCancelOrder()}
+                  desc="Xác nhận chắc chắn muốn hủy đơn hàng này?"
+                  title="Hủy đơn hàng" />
               </div>
 
               <div className="col-span-1">

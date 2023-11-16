@@ -1,5 +1,6 @@
 import { IonIcon } from "@ionic/react";
 import { Accordion, AccordionBody } from "@material-tailwind/react";
+import useThrottle from "@rooks/use-throttle";
 import { ReactNode, useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
@@ -9,14 +10,13 @@ import {
   orderControllers,
   orderModelController,
 } from "../../../../Controllers/OrderControllers";
-import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
+import DialogAbortOrder from "../../../../Helper/Dialog/DialogAbortOrder";
 import { numberFormat } from "../../../../Helper/Format";
 import { OrderPanigation, StatusOrder } from "../../../../Model/OrderModel";
 import Container from "../../../../components/container/Container";
 import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
-import useThrottle from "@rooks/use-throttle";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
@@ -65,6 +65,7 @@ export default function OrderHistory() {
 
   const idRemove = "removeVoucher";
   const idSitebar = "my_modal_3";
+
 
   // button filter
   const [changeButton, setChangeButton] = useState([
@@ -418,14 +419,26 @@ export default function OrderHistory() {
                   </>
                 )}
 
-                <DialogComfirm
+                <DialogAbortOrder
                   onClose={() => closeModal(idRemove)}
                   title="Hủy đơn hàng này"
+                  desc="Bạn chắc chắn muốn hủy đơn hàng này?"
                   onSave={() => {
                     abortOrder(idOrder!);
                     setIsOrderCancelled(true);
                   }}
                   id={idRemove}
+                  input={
+                    <div
+                      className={`flex justify-between items-center rounded-[6px] px-[15px] py-[9px] mb-5 border-[1px] border-[#FFAAAF]`}
+                    >
+                      <input
+                        className="focus:outline-none text-[#333333] text-sm font-medium placeholder-[#7A828A] w-[100%]
+                        max-xl:text-sm  max-lg:text-[13px]"
+                        placeholder="Lý do (Có thể bỏ trống)"
+                      />
+                    </div>
+                  }
                 />
               </div>
             </div>
