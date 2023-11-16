@@ -8,10 +8,21 @@ import { Images } from "../Assets/TS";
 import CustomToast from "../Helper/Toast/CustomToast";
 import CancelOrder from "./asset/TSX/CancelOrder";
 import NewOrder from "./asset/TSX/NewOrder";
+import { User } from "../Model/Notification";
+import { userController } from "../Controllers/UserController";
 
 function AdminLayout() {
   const [deletedOrder, setDeletedOrder] = useState(null);
-
+  const nameUser = localStorage.getItem("nameUser");
+  console.log(
+    "🚀 ~ file: AdminLayout.tsx:19 ~ AdminLayout ~ nameUser:",
+    nameUser
+  );
+  const userData = JSON.parse(nameUser!);
+  console.log(
+    "🚀 ~ file: AdminLayout.tsx:21 ~ AdminLayout ~ username:",
+    userData
+  );
   useEffect(() => {
     const socket = io("http://localhost:5000");
     socket.on("requestdelete", (newOrder) => {
@@ -27,9 +38,7 @@ function AdminLayout() {
           }
           iconSVG={<CancelOrder />}
           name={
-            <p className="text-sm font-semibold text-gray-900 ">
-              Nguyen Viet Thang
-            </p>
+            <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
           }
           content={
             <p className="text-sm font-normal text-red-700">
@@ -39,7 +48,7 @@ function AdminLayout() {
         />,
         {
           position: "bottom-left",
-          autoClose: 10000,
+          autoClose: 100000,
           closeButton: true,
         }
       );
@@ -65,9 +74,7 @@ function AdminLayout() {
           }
           iconSVG={<NewOrder />}
           name={
-            <p className="text-sm font-semibold text-gray-900 ">
-              Nguyen Viet Thang
-            </p>
+            <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
           }
           content={
             <p className="text-sm font-normal text-[#739072]">

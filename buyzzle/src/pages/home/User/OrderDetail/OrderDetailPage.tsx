@@ -316,7 +316,10 @@ export default function OrderDetailPage() {
                 </div>
               </div>
               <div>
-                <StepperPage status={orderDetails.status} />
+                <StepperPage
+                  deletedAt={orderDetails.deletedAt}
+                  status={orderDetails.status}
+                />
               </div>
 
               <div className="flex flex-col gap-3">

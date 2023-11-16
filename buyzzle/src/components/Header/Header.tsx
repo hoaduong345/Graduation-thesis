@@ -73,8 +73,14 @@ export default function Header() {
       const username = userData.username;
       console.log("USERNAME: " + username);
       userController.getUserWhereUsername(username).then((res) => {
+        console.log(
+          "🚀 ~ file: Header.tsx:76 ~ userController.getUserWhereUsername ~ res:",
+          res
+        );
         // setEditUser(res)
         setName(res.name);
+        localStorage.setItem("nameUser", JSON.stringify(res.name));
+        // localStorage.setItem("avatarUser", JSON.stringify(res.name));
         setCheckLogin(true);
         const UserImageArray = JSON.stringify(res.UserImage);
         const urlTaker = JSON.parse(UserImageArray);

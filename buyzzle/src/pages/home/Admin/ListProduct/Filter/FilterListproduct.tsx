@@ -26,8 +26,6 @@ export default function FilterListproduct({
   onPriceRangeChange,
   onQuantityRangeChange,
   onPurchaseRangeChange,
-  oninStock,
-  onSoldOut,
   onRateChange,
 }: SliderComponentProps) {
   const [price, setPrice] = useState(false);
@@ -38,7 +36,6 @@ export default function FilterListproduct({
   const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
   const [availability, setAvailability] = useState<boolean>(false);
-  const [soldOut, setSoldOut] = useState<boolean>(false);
   const handleSliderChangePrice = (price: [number, number]) => {
     console.log(
       "🚀 ~ file: FilterListproduct.tsx:29 ~ handleSliderChangePrice ~ price:",
@@ -63,17 +60,7 @@ export default function FilterListproduct({
     setRangePurchaseValue(quantity);
     onPurchaseRangeChange(quantity);
   };
-  const handleClickAvailability = (Availability: boolean) => {
-    console.log(Availability);
-    setAvailability(!availability);
-    oninStock(Availability);
-  };
-  const handleClickSoldOut = (SoldOut: boolean) => {
-    console.log(SoldOut);
-    setSoldOut(!soldOut);
-    onSoldOut(SoldOut);
-  };
-  
+
   const handleRateChange = (rate: number) => {
     console.log("Rating:", rate);
     setRating(rate);
@@ -282,12 +269,17 @@ export default function FilterListproduct({
 
       <div className="grid grid-cols-5 gap-1">
         {arrRating.map((e) => {
-          return <FilterRateMap rating={e.rating} checked={e.checked} 
-            onChangeFilter={(rating) => {
-            const ratingNum: number = Number(rating);
-            handleRateChange(ratingNum);
-            // onRateChange(ratingNum);
-          }}/>;
+          return (
+            <FilterRateMap
+              rating={e.rating}
+              checked={e.checked}
+              onChangeFilter={(rating) => {
+                const ratingNum: number = Number(rating);
+                handleRateChange(ratingNum);
+                // onRateChange(ratingNum);
+              }}
+            />
+          );
         })}
       </div>
       <div>

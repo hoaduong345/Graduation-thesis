@@ -48,7 +48,7 @@ export default function VoucherUserPage() {
                            getVoucher.map((e) => {
                               return (
                                  <>
-                                    <div className="grid grid-cols-6 border-t-[1px] py-7 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+                                    <div className="grid grid-cols-6 py-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                                        <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
                                           <p
                                              className="font-medium text-base text-[#EA4B48]

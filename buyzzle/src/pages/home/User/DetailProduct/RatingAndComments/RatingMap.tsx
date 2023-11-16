@@ -1,4 +1,3 @@
-import { Editor } from "@tinymce/tinymce-react";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -6,21 +5,13 @@ import { Images } from "../../../../../Assets/TS";
 import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
 import LineCMT from "../../../../../Assets/TSX/LineCMT";
 import Period from "../../../../../Assets/TSX/Period";
-import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import { currentDate, roundedNumber } from "../../../../../Helper/Format";
 import { stars } from "../../../../../Helper/StarRating/Star";
-import { Rate, Ratee, Rating } from "../../../../../Model/ProductModel";
+import { Ratee, Rating } from "../../../../../Model/ProductModel";
 import Edit from "../../../Admin/Assets/TSX/Edit";
 import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
 import Handle from "../../../Admin/Assets/TSX/bacham";
-import EmptyPage from "../../../../../Helper/Empty/EmptyPage";
-import RemoveIMG from "../../../../../Assets/TSX/RemoveIMG";
-import UploadIMG from "../../../Admin/Assets/TSX/UploadIMG";
-import { storage } from "../../../../../Firebase/Config";
-import { ref, uploadBytes } from "firebase/storage";
-import Loading from "../../../../../Helper/Loading/Loading";
-import { productController } from "../../../../../Controllers/ProductsController";
 import { EditImage } from "../DetailProductPage/DetailsProduct";
 interface FormValues {
   id: number;
@@ -53,12 +44,9 @@ type Props = {
 export default function RatingMap(props: Props) {
   const [idRating, setidRating] = useState<number>(0);
 
-  const [url, setUrl] = useState<string[]>([]);
-  const [loadingImage, setLoadingImage] = useState(false);
   const { id } = useParams();
   console.log("idididid", id);
 
-  const editorRef = useRef<any>(null);
   const {
     control,
     handleSubmit,
@@ -94,43 +82,6 @@ export default function RatingMap(props: Props) {
     setValue("ratingValue", rating);
     console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
   };
-
-  // // img firebase
-  // const loadImageFile = async (images: any) => {
-  //   setLoadingImage(true);
-  //   for (let i = 0; i < images.length; i++) {
-  //     const imageRef = ref(storage, `multipleFiles/${images[i].name}`);
-
-  //     await uploadBytes(imageRef, images[i])
-  //       .then(() => {
-  //         storage
-  //           .ref("multipleFiles")
-  //           .child(images[i].name)
-  //           .getDownloadURL()
-  //           .then((url: any) => {
-  //             setUrl((prev) => prev.concat(url));
-  //             return url;
-  //           });
-  //       })
-  //       .catch((err) => {
-  //         alert(err);
-  //       })
-  //       .finally(() => setLoadingImage(false));
-  //   }
-  // };
-
-  // const loading = () => {
-  //   if (loadingImage) {
-  //     return (
-  //       <>
-  //         <div className="absolute left-[65%] top-[50%] z-30">
-  //           <Loading />
-  //         </div>
-  //       </>
-  //     );
-  //   }
-  // };
-
   return (
     <div>
       {props.rateAndcomment?.Rating ? (

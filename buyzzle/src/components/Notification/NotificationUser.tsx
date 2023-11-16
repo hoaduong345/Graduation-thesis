@@ -4,65 +4,17 @@ import { AllNotification } from "../../Model/Notification";
 import { Images } from "../../Assets/TS";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
+import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
 
-export default function Notification() {
+export default function NotificationUser() {
   const [notification, setNotification] = useState<AllNotification[]>([]);
 
-  const [changeButton, setChangeButton] = useState([
-    {
-      id: 0,
-      text: "Tất cả",
-      active: true,
-    },
-    {
-      id: 1,
-      text: "Đặt hàng",
-      active: false,
-    },
-    {
-      id: 2,
-      text: "Hủy hàng",
-      active: false,
-    },
-  ]);
-  const handleClick = (id: number) => {
-    console.log("🚀 ~ file: Notification.tsx:27 ~ handleClick ~ id:", id);
-    const updatedButtons = changeButton.map((btn) => {
-      if (btn.id === id) {
-        console.log(
-          "🚀 ~ file: OrderManagement.tsx:91 ~ updatedButtons ~ btn.id:",
-          btn.id
-        );
-        return { ...btn, active: true };
-      } else {
-        return { ...btn, active: false };
-      }
-    });
-    setChangeButton(updatedButtons);
-    if (id == 0) {
-      getAllNoti();
-    } else {
-      getOrderFilter(id);
-    }
-  };
-  function getBorderColor(id: number) {
-    switch (id) {
-      case 0:
-        return "#570DF8";
-      case 1:
-        return "#3DC0F8";
-      case 2:
-        return "#EA4B48";
-      default:
-        return "#ccc";
-    }
-  }
   useEffect(() => {
     getAllNoti();
   }, []);
   const getAllNoti = async () => {
     await notificationControllers
-      .getAllNotification()
+      .getAllNotificationUser()
       .then((res) => {
         console.log(
           "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
@@ -75,16 +27,6 @@ export default function Notification() {
       });
   };
 
-  const getOrderFilter = async (status: number) => {
-    notificationControllers
-      .getFilterNotification(status)
-      .then((res: any) => {
-        setNotification(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const handleSeenNoti = async (id: number) => {
     await notificationControllers
       .getSeenNotification(id)
@@ -102,28 +44,7 @@ export default function Notification() {
         <p className="font-extrabold text-xl text-[#EA4B48] ">Thông báo</p>
         <div className=" border-b-[1px] mt-2"></div>
         {/* BUTTON */}
-        <div className="flex my-3 gap-2">
-          {changeButton.map((btnItems) => {
-            return (
-              <button
-                className={`bg-white items-center w-[80px] rounded-md h-[36px] transition duration-150`}
-                style={{
-                  backgroundColor: "white ",
-                  borderColor: btnItems.active
-                    ? getBorderColor(btnItems.id)
-                    : "",
-                  color: btnItems.active ? getBorderColor(btnItems.id) : "",
-                  borderWidth: btnItems.active ? "1px" : "",
-                }}
-                onClick={() => {
-                  handleClick(btnItems.id);
-                }}
-              >
-                {btnItems.text}
-              </button>
-            );
-          })}
-        </div>
+
         {/* END BUTTON */}
         <div className="flex flex-col gap-3">
           {/* map Noti */}
@@ -131,23 +52,30 @@ export default function Notification() {
             notification.map((notiItems) => {
               return (
                 <a
-                  href={`/admin/ordermanagement/${notiItems.orderId}`}
+                  href={`/orderdetail/${notiItems.orderId}`}
                   onClick={() => handleSeenNoti(notiItems.id)}
                 >
                   <>
-                    <div className="flex gap-7 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
+                    <div className="flex gap-2 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
                       <div className="items-center flex gap-3">
                         <div className="p-1 relative">
-                          {notiItems.status == 1 ? (
+                          {notiItems.status == 4 ? (
                             <>
-                              <img
+                              {/* <img
                                 // src={notiItems.fk_order.User.image}
                                 src={Images.avatar_admin}
                                 alt="avatar_admin"
-                                className={`w-12 h-12 rounded-full ${
+                                // className={`w-16 h-1w-16 rounded-full ${
+                                //   notiItems.seen === false ? "" : "opacity-70"
+                                // }`}
+                              /> */}
+                              <div
+                                className={`${
                                   notiItems.seen === false ? "" : "opacity-70"
                                 }`}
-                              />
+                              >
+                                <BuyzzleAvt />
+                              </div>
                               <div
                                 className={`${
                                   notiItems.seen === false ? "" : "opacity-80"
@@ -184,9 +112,9 @@ export default function Notification() {
                                 : "text-sm font-semibold text-black opacity-70"
                             }`}
                           >
-                            {notiItems.fk_order.User.name}
+                            Buyzzle thông báo
                           </div>
-                          {notiItems.status === 1 ? (
+                          {notiItems.status === 4 ? (
                             <p
                               className={`${
                                 notiItems.seen === false
@@ -194,7 +122,7 @@ export default function Notification() {
                                   : "text-[#739072] text-xs font-semibold opacity-70"
                               }`}
                             >
-                              Đã đặt 1 đơn hàng mới
+                              Yêu cầu hủy đơn của quý khách đã được xác nhận
                             </p>
                           ) : (
                             <p
@@ -204,42 +132,12 @@ export default function Notification() {
                                   : "text-red-700 text-xs font-semibold opacity-70"
                               }`}
                             >
-                              Yêu cầu hủy đơn hàng
+                              Yêu cầu hủy đơn của quý khách đã bị từ chối
                             </p>
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col items-end gap-1 my-2">
-                        <span
-                          className={`${
-                            notiItems.seen === false
-                              ? "text-slate-500 text-xs inline-flex items-center rounded"
-                              : "text-slate-500 text-xs inline-flex items-center rounded opacity-70"
-                          }`}
-                        >
-                          {notiItems.status === 1 ? (
-                            <svg
-                              className="w-2 h-2 me-1.5"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                            </svg>
-                          ) : (
-                            <svg
-                              className="w-2 h-2 me-1.5"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                            </svg>
-                          )}
-                          2 phút trước
-                        </span>
+                      <div className="my-auto">
                         {notiItems.seen == false ? (
                           <div className="rounded-full border-[5px] w-0 border-[#2E89FF] justify-end"></div>
                         ) : (

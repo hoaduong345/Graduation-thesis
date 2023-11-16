@@ -6,7 +6,8 @@ const appConfig = {
 };
 
 class NotificationControllers {
-  getAllNotification = async (): Promise<NotificationModel> => {
+  // Admin Notification
+  getAllNotificationAdmin = async (): Promise<NotificationModel> => {
     return await axios
       .get(`${appConfig.apiShipping}/notificationadmin`)
       .then((res) => {
@@ -25,6 +26,22 @@ class NotificationControllers {
   getSeenNotification = async (id: number): Promise<NotificationModel> => {
     return await axios
       .put(`${appConfig.apiShipping}/markasread`, { id: id })
+      .then((res) => {
+        return res.data as NotificationModel;
+      });
+  };
+  // User Notification
+  getAllNotificationUser = async (): Promise<NotificationModel> => {
+    return await axios
+      .get(`${appConfig.apiShipping}/notificationforuser`)
+      .then((res) => {
+        return res.data as NotificationModel;
+      });
+  };
+  // Shipping Notification
+  getAllNotificationShipping = async (): Promise<NotificationModel> => {
+    return await axios
+      .get(`${appConfig.apiShipping}/notificationdelivery`)
       .then((res) => {
         return res.data as NotificationModel;
       });
