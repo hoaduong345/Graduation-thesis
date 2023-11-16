@@ -191,6 +191,7 @@ const ShippingController = {
             const totalOrdersCount = await prisma.order.count({
                 where: whereClause,
             });
+            console.log("🚀 ~ file: ShippingController.js:194 ~ getAllStatusForAdmin: ~ totalOrdersCount:", totalOrdersCount)
 
             const getAll = await prisma.order.findMany({
                 where: {
@@ -211,7 +212,7 @@ const ShippingController = {
                 },
             });
             const statusCounts = {};
-
+            
             getAll.forEach((order) => {
                 const orderStatus = order.status;
                 if (!statusCounts[`orderStatus${orderStatus}`]) {
@@ -220,7 +221,8 @@ const ShippingController = {
                     statusCounts[`orderStatus${orderStatus}`]++;
                 }
             });
-
+            
+            console.log("🚀 ~ file: ShippingController.js:215 ~ getAllStatusForAdmin: ~ statusCounts:", statusCounts)
             const results = {
                 page: page,
                 pageSize: pageSize,
@@ -255,7 +257,6 @@ const ShippingController = {
                     },
                 },
             });
-            console.log("aaaaaa", order.User)
             if (!order) return res.send('Order is undifined');
 
             const requestDeleteOrder = await prisma.order.update({
