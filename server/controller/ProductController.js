@@ -3,6 +3,8 @@ const prisma = new PrismaClient();
 
 const multer = require('multer');
 const path = require('path');
+const LoggerHelper = require('../Utils/LoggerHelper');
+const some = new LoggerHelper();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -266,13 +268,17 @@ const ProductController = {
     // xóa sản phẩm
     deleteProduct: async (req, res) => {
         try {
-            const id = parseInt(req.params.id);
+            const id = parseInt(req.body.id);
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
+            let skip = (page - 1) * pageSize;
             const productToDelete = await prisma.product.findFirst({
                 where: {
                     id: id,
                 },
             });
-            console.log('🚀 ~ file: ProductController.js:329 ~ deleteProduct: ~ productToDelete:', productToDelete);
+
+            some.info(`[ProductToDelete] `, `Id: ${req.params.id}`);
             if (productToDelete) {
                 await prisma.product.update({
                     where: {
@@ -282,7 +288,31 @@ const ProductController = {
                         deletedAt: new Date(),
                     },
                 });
-                return res.status(200).json('Xóa sản phẩm và hình ảnh thành công');
+                const whereClause = {
+                    deletedAt: null,
+                };
+                const totalProduct = await prisma.product.count({
+                    where: whereClause,
+                });
+                const result = await prisma.product.findMany({
+                    orderBy: {
+                        soldcount: 'desc',
+                    },
+                    include: {
+                        ProductImage: true,
+                        fK_category: true,
+                        Rating: true,
+                    },
+                    where: whereClause,
+                    skip,
+                    take: pageSize,
+                });
+                const resultProduct = {
+                    currentPage: page,
+                    totalPage: Math.ceil(totalProduct / pageSize),
+                    rows: result,
+                };
+                return res.status(200).json(resultProduct);
             }
 
             return res.status(402).json('San pham khong ton tai');
