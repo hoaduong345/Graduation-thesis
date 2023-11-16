@@ -292,13 +292,13 @@ model Message {
 
 model Notification {
   id       Int       @id @default(autoincrement())
-  userId   Int
+  userId   Int?
   orderId  Int
   message  String?
   date     DateTime  @default(now())
   status   Int?
   seen     Boolean?
   deleteAt DateTime?
-  fk_user  User      @relation(fields: [userId], references: [id])
+  fk_user  User?      @relation(fields: [userId], references: [id])
   fk_order Order     @relation(fields: [orderId], references: [id])
 }

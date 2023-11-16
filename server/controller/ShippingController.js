@@ -237,7 +237,6 @@ const ShippingController = {
     // REQUEST and CONFIRM delete order
     requestDeleteOrder: async (req, res) => {
         try {
-            const idUser = parseInt(req.cookies.id)
             const orderId = parseInt(req.body.orderId);
             const order = await prisma.order.findFirst({
                 where: {
@@ -256,7 +255,7 @@ const ShippingController = {
                     },
                 },
             });
-
+            console.log("aaaaaa", order.User)
             if (!order) return res.send('Order is undifined');
 
             const requestDeleteOrder = await prisma.order.update({
@@ -270,7 +269,6 @@ const ShippingController = {
 
             await prisma.notification.create({
                 data: {
-                    userId : idUser,
                     orderId: order.id,
                     message: 'request delete order',
                     status: 2,
@@ -305,7 +303,6 @@ const ShippingController = {
             });
             await prisma.notification.create({
                 data: {
-                    userId : idUser,
                     orderId: orderId,
                     message: 'Delete order successfully',
                     status: 4,
