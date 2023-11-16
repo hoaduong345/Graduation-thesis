@@ -16,10 +16,13 @@ import SitebarAdmin from "../Sitebar/Sitebar";
 import FilterListproduct from "./Filter/FilterListproduct";
 import ListproductMap from "./ListproductMap";
 import { Link } from "react-router-dom";
+import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 
 export default function ListproductsAdmin() {
+  const idComfirmRemove = "removeModal";
+  const [idProduct, setIdProduct] = useState<number>();
+
   const [products, setProducts] = useState<any>([]);
-  const [productChecked, setProductChecked] = useState<number[]>([]);
   // Xuat excel
   const [search, setSearch] = useState("");
   const debouncedInputValueSearch = useDebounce(search, 1000); // Debounce for 300 milliseconds
@@ -40,48 +43,20 @@ export default function ListproductsAdmin() {
   >([0, 10000]);
   const debouncedInputValuePurchase = useDebounce(sliderPurchaseValues, 400); // Debounce for 300 milliseconds
 
-  const [inStock, setinStock] = useState<any>(false);
-  const [soldOut, setSoldOut] = useState<any>(false);
-  const [showAllProducts, setShowAllProducts] = useState(false);
-
   // pagination
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  //   useEffect(() => {
-  //     productController
-  //       .getSearchAndPaginationProduct(search, currentPage, 2)
-  //       .then((res) => {
-  //         setProducts(res);
-  //       });
-  //   }, [search, currentPage]);
-
-  // useEffect(() => {
-  //   getData();
-  // }, [debouncedInputValueSearch, currentPage]);
-
-  // const getData = () => {
-  //   productController
-  //     .getFilterProductbyPriceAndQuantityAndPurchaseWithinRangePagination(
-  //       search,
-  //       currentPage,
-  //       1
-  //     )
-  //     .then((res: any) => {
-  //       console.log("🚀 ~ file: Listproducts.tsx:66 ~ .then ~ res:", res);
-  //       setProducts(res);
-  //     });
-  // };
 
   const handleRemove = async (id: number) => {
     const _dataRemove = {
       id: id,
       page: currentPage,
-      pageSize: 2,
+      pageSize: 5,
     };
     await productController
       .remove(_dataRemove)
       .then((res) => {
         setSearch("")
+        closeComfirmRemove(idComfirmRemove)
         toast.success("Xóa thành công !");
         setProducts(res.data);
       })
@@ -91,6 +66,7 @@ export default function ListproductsAdmin() {
   };
 
   const [open, setOpen] = useState(false);
+
   const openModal = () => {
     const modal = document.getElementById(
       "my_modal_3"
@@ -108,7 +84,19 @@ export default function ListproductsAdmin() {
       modal.close();
     }
   };
-  // console.log(products.rows);
+
+  const openComfirmRemove = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+  const closeComfirmRemove = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+  };
 
   const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -144,7 +132,7 @@ export default function ListproductsAdmin() {
         priceRange[0],
         priceRange[1],
         currentPage,
-        2,
+        5,
         quantityRange[0],
         quantityRange[1],
         purchase[0],
@@ -171,38 +159,6 @@ export default function ListproductsAdmin() {
     console.log("price Range:", purchase);
   };
 
-  var checkAll: boolean =
-    !!products.rows?.length && productChecked.length === products.rows?.length;
-
-  const handleChecked = (checked: boolean, id: number) => {
-    if (checked) {
-      setProductChecked((prev) => [...prev, id]);
-    } else {
-      let cloneProduct = [...productChecked];
-      let products = cloneProduct.filter((e) => {
-        return e !== id;
-      });
-      setProductChecked(products);
-    }
-  };
-
-  const checked = (id: number) => {
-    const _check = productChecked.findIndex((el) => el == id);
-    return _check !== -1;
-  };
-
-  const handleCheckedAll = (checkedAll: boolean) => {
-    if (checkedAll) {
-      if (products.rows) {
-        setProductChecked(products.rows);
-        products?.row?.map((ele: any) => {
-          checked(ele.id);
-        });
-      }
-    } else {
-      setProductChecked([]);
-    }
-  };
 
   return (
     <>
@@ -410,18 +366,7 @@ export default function ListproductsAdmin() {
               />
             )}
 
-            <div className="grid grid-cols-10 mt-6 items-center">
-              <div className="col-span-1 text-center">
-                <input
-                  id="default-checkbox"
-                  type="checkbox"
-                  className="checkbox checkbox-sm items-center"
-                  checked={checkAll}
-                  onChange={(element) =>
-                    handleCheckedAll(element.target.checked)
-                  }
-                />
-              </div>
+            <div className="grid grid-cols-9 mt-6 items-center">
               <div className="col-span-3 text-center max-lg:w-[40%]">
                 <h3
                   className="text-[#1A1A1A] text-sm font-semibold leading-4
@@ -487,80 +432,35 @@ export default function ListproductsAdmin() {
                   return (
                     <>
                       <ListproductMap
-                        soldOut={soldOut}
-                        HandleXoa={handleRemove}
+                        HandleRemove={(id) => {
+                          openComfirmRemove(idComfirmRemove)
+                          setIdProduct(id)
+                        }}
                         products={items}
-                        handleChecked={(checked: boolean, id: number) =>
-                          handleChecked(checked, id)
-                        }
-                        checked={(id: number) => checked(id)}
                       />
                     </>
                   );
                 })
               ) : (
                 <>
-                  <p>gio hang trong</p>
+                  <p>Trống</p>
                 </>
               )}
             </div>
+
+            <DialogComfirm
+              id={idComfirmRemove}
+              onClose={() => closeComfirmRemove(idComfirmRemove)}
+              onSave={() => handleRemove(idProduct!)}
+              desc="Sản phẩm"
+              title="Xóa sản phẩm" />
+
             <ResponsivePagination
               current={currentPage}
               total={products?.totalPage}
               onPageChange={setCurrentPage}
               maxWidth={500}
             />
-            {/* <Pagination postPer={postPerPage} totalPosts={products.length} /> */}
-            {/* <div className="pagination">
-                     <div className="flex">
-                        <Button
-                           variant="text"
-                           // className="flex items-center gap-2"
-                           className={`${
-                              currentPage == 1
-                                 ? `hidden`
-                                 : `flex items-center gap-2`
-                           }`}
-                           onClick={prev}
-                        >
-                           <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
-                           Previous
-                        </Button>
-                        {[...new Array(products?.totalPage)].map(
-                           (item, index) => {
-                              const page = index + 1;
-                              console.log(item);
-                              return (
-                                 <>
-                                    <IconButton
-                                       className="bg-none"
-                                       {...getItemProps(page)}
-                                    >
-                                       <p className="ml-[-2px] text-sm">
-                                          {page}
-                                       </p>
-                                    </IconButton>
-                                 </>
-                              );
-                           }
-                        )}
-                        <Button
-                           variant="text"
-                           className={`${
-                              currentPage == products?.totalPage
-                                 ? "hidden"
-                                 : "flex items-center gap-2"
-                           }`}
-                           onClick={next}
-                        >
-                           Next
-                           <ArrowRightIcon
-                              strokeWidth={2}
-                              className="h-4 w-4"
-                           />
-                        </Button>
-                     </div>
-                  </div> */}
           </div>
         </div>
       </Container>

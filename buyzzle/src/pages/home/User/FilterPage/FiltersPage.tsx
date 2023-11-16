@@ -37,7 +37,7 @@ export interface Products {
   pricesale: number; // giảm được bao nhiêu đó ( thẻ tag )
   sellingPrice: number; // giá bán
   discount: number; // giảm giá
-  soldCount: number; // đã bán
+  soldcount: number; // đã bán
   quantity: number;
   description: string;
   status: string;
@@ -255,12 +255,7 @@ export default function FiltersPage() {
               onPurchaseRangeChange={function (value: [number, number]): void {
                 throw new Error("Function not implemented.");
               }}
-              oninStock={function (availability: boolean): void {
-                throw new Error("Function not implemented.");
-              }}
-              onSoldOut={function (soldOut: boolean): void {
-                throw new Error("Function not implemented.");
-              }}
+
               subcate={subcate}
               setProductSubcate={(index) => getCate(index)}
             />
