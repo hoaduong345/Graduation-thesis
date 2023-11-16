@@ -9,6 +9,7 @@ const errorResponse = (res, error) => {
 const ShippingController = {
     setStatus: async (req, res) => {
         try {
+            const idUser = parseInt(req.cookies.id)
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status);
 
@@ -39,6 +40,7 @@ const ShippingController = {
 
                 await prisma.notification.create({
                     data: {
+                        userId : idUser,
                         orderId: orderId,
                         message: 'new delivery',
                         status: 3,
@@ -52,6 +54,7 @@ const ShippingController = {
 
                 await prisma.notification.create({
                     data: {
+                        userId: idUser,
                         orderId: orderId,
                         message: 'Delivery Successfully',
                         status: 5,
@@ -80,7 +83,7 @@ const ShippingController = {
             const pageSize = parseInt(req.body.pageSize) || 40;
             const keyword = req.body.keyword;
             const status = parseInt(req.body.status);
-
+            
             let skip = (page - 1) * pageSize;
             if (keyword) {
                 skip = 0;
@@ -188,6 +191,7 @@ const ShippingController = {
             const totalOrdersCount = await prisma.order.count({
                 where: whereClause,
             });
+            console.log("🚀 ~ file: ShippingController.js:194 ~ getAllStatusForAdmin: ~ totalOrdersCount:", totalOrdersCount)
 
             const getAll = await prisma.order.findMany({
                 where: {
@@ -208,7 +212,7 @@ const ShippingController = {
                 },
             });
             const statusCounts = {};
-
+            
             getAll.forEach((order) => {
                 const orderStatus = order.status;
                 if (!statusCounts[`orderStatus${orderStatus}`]) {
@@ -217,7 +221,8 @@ const ShippingController = {
                     statusCounts[`orderStatus${orderStatus}`]++;
                 }
             });
-
+            
+            console.log("🚀 ~ file: ShippingController.js:215 ~ getAllStatusForAdmin: ~ statusCounts:", statusCounts)
             const results = {
                 page: page,
                 pageSize: pageSize,
@@ -252,7 +257,6 @@ const ShippingController = {
                     },
                 },
             });
-
             if (!order) return res.send('Order is undifined');
 
             const requestDeleteOrder = await prisma.order.update({
@@ -313,7 +317,6 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
-
     // GET noti lên pop ups thông báo cho admin, đơn vị vận chuyển và người dùng
     getNotificationAdmin: async (req, res) => {
         try {
@@ -421,39 +424,27 @@ const ShippingController = {
     },
     getNotificationForUser: async (req, res) => {
         try {
-            const idUser = parseInt(req.cookies.id);
-            const orderId = parseInt(req.body.orderid);
-            const status = 4;
-            const whereClause = {
-                status: status,
-                deleteAt: null,
-            };
-
-            // Define the whereNotSeen to filter unseen notifications
-            const whereNotSeen = {
-                status: status,
-                seen: false,
-            };
-
-            // Fetch all notifications based on the specified criteria
-            const allNotification = await prisma.notification.findMany({
-                where: whereClause,
-                include: {
-                    fk_order: {
-                        include: {
-                            User: {
-                                select,
-                            },
-                        },
-                    },
-                },
-                select: {
-                    Notification: true,
-                },
-            });
-            console.log('nooooo', notifiForUser);
+            // const idUser = parseInt(req.cookies.id);
+            // const status = 5;
+            // const whereClause = {
+            //     status: status,
+            //     deleteAt: null,
+            // };
+            // const notifiForUser = await prisma.notification.findMany({
+            //     where: whereClause,
+            //     include:{
+            //        fk_order:{
+            //         select:{
+            //             userId:{
+                            
+            //             }
+            //         }
+            //        }
+            //     }
+                
+            // });
             // Send the result as a JSON response with a status code of 200 (OK)
-            res.status(200).json(notifiForUser);
+            // res.status(200).json(notifiForUser);
         } catch (error) {
             errorResponse(res, error);
         }
