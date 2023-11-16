@@ -81,7 +81,7 @@ export default function ListproductsAdmin() {
     await productController
       .remove(_dataRemove)
       .then((res) => {
-        console.log("🚀 ~ file: Listproducts.tsx:79 ~ .then ~ res:", res);
+        setSearch("")
         toast.success("Xóa thành công !");
         setProducts(res.data);
       })
@@ -303,6 +303,7 @@ export default function ListproductsAdmin() {
                    max-xl:text-sm
                    max-lg:text-xs
                    max-lg:w-[50%]"
+                      value={search}
                       placeholder="Tìm kiếm..."
                       onChange={onChangeSearchInput}
                     />
