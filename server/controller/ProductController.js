@@ -907,46 +907,53 @@ const ProductController = {
 
     RepComment: async (req, res) => {
         try {
-            const ratingId = parseInt(req.params.ratingId);
+            const ratingId = parseInt(req.body.ratingId);
+            const page = parseInt(req.body.page) || 1;
+            const perPage = parseInt(req.body.perPage) || 40;
             const { repComment } = req.body;
-    
+
             const allAdmins = await prisma.admin.findMany();
-    
+
             if (!allAdmins || allAdmins.length === 0) {
                 return res.status(404).json('Không có tài khoản admin nào tồn tại');
             }
-    
+
             // Chọn một tài khoản admin bất kỳ (ở đây chọn tài khoản đầu tiên)
             const randomAdmin = allAdmins[0];
-    
+
             const existingRating = await prisma.rating.findUnique({
                 where: {
                     id: ratingId,
                 },
             });
-    
+
             if (!existingRating) {
                 return res.status(404).json('Đánh giá không tồn tại');
             }
-    
+
             const updatedRating = await prisma.rating.update({
                 where: {
                     id: ratingId,
                 },
                 data: {
                     repComment,
-                    adminId: randomAdmin.id, 
+                    adminId: randomAdmin.id,
                 },
             });
-    
-            res.status(200).json(updatedRating);
+            const ratings = await prisma.rating.findMany({
+                skip: (page - 1) * perPage,
+                take: perPage,
+            });
+            const resultProduct = {
+                updatedRating: updatedRating,
+                Ratings: ratings,
+            };
+            res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json('Cập nhật phản hồi đánh giá không thành công. Lỗi: ' + error.message);
         }
     },
-    
-    
 };
 
 module.exports = ProductController;

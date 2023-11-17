@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { Images } from "../../../../../Assets/TS";
@@ -14,6 +14,11 @@ import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
 import Handle from "../../../Admin/Assets/TSX/bacham";
 import { EditImage } from "../DetailProductPage/DetailsProduct";
 import SendCmt from "../../../../../Assets/TSX/SendCmt";
+import {
+  RepComment,
+  ratingAndCommentController,
+} from "../../../../../Controllers/Rating&Comment";
+import { toast } from "react-toastify";
 interface FormValues {
   id: number;
   idproduct: number;
@@ -41,10 +46,14 @@ type Props = {
   rateAndcomment: Ratee;
   editImages: EditImage[];
   handleRemoveRating: (id: number) => void;
+  setRateAndcomment: React.Dispatch<React.SetStateAction<Ratee | undefined>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  currentPage: number;
 };
 export default function RatingMap(props: Props) {
-  const [isFeedbackClicked, setIsFeedbackClicked] = useState<number>(1);
+  const [isFeedbackClicked, setIsFeedbackClicked] = useState<number | null>(1);
   const [idRating, setidRating] = useState<number>(0);
+  const [repTextCmt, setTextRepCmt] = useState<string>("");
 
   const { id } = useParams();
   console.log("idididid", id);
@@ -85,8 +94,32 @@ export default function RatingMap(props: Props) {
     console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
   };
   const handleFeedbackClick = (ratingId: number) => {
-    // Xử lý hành động khi nút "Phản hồi" được click
-    setIsFeedbackClicked(ratingId);
+    if (isFeedbackClicked === ratingId) {
+      setIsFeedbackClicked(null);
+    } else {
+      setIsFeedbackClicked(ratingId);
+    }
+  };
+
+  const getAdminRepComment = (id: number) => {
+    const _dataRepCmt = {
+      ratingId: id,
+      repComment: repTextCmt,
+      page: props.currentPage,
+      perPage: 2,
+    };
+    ratingAndCommentController
+      .repCommentsFromAdminToUser(_dataRepCmt)
+      .then((res) => {
+        console.log("🚀 ~ file: RatingMap.tsx:110 ~ .then ~ res:", res);
+        props.setRateAndcomment(res.data.Ratings);
+        setTextRepCmt(res.data.repComment);
+        toast.success("Trả lời thành công !");
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTextRepCmt(e.target.value);
   };
   return (
     <div>
@@ -94,8 +127,8 @@ export default function RatingMap(props: Props) {
         props.rateAndcomment.Rating.length > 0 ? (
           props.rateAndcomment?.Rating.map((rating) => {
             console.log(
-              "🚀 ~ file: RatingMap.tsx:96 ~ props.rateAndcomment?.Rating.map ~ rating:",
-              rating.id
+              "🚀 ~ file: RatingMap.tsx:118 ~ props.rateAndcomment?.Rating.map ~ rating:",
+              rating.repComment
             );
             return (
               <>
@@ -236,14 +269,30 @@ export default function RatingMap(props: Props) {
                     </div>
                   </div>
                   {/* text reply */}
-                  <div>
-                    <p
-                      className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
-                      onClick={() => handleFeedbackClick(rating.id)}
-                    >
-                      Phản hồi
-                    </p>
-                  </div>
+                  {rating.repComment ? (
+                    <div>
+                      <p
+                        className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
+                        onClick={() => handleFeedbackClick(rating.id)}
+                      >
+                        {isFeedbackClicked === rating.id
+                          ? "Ẩn phản hồi"
+                          : "Xem phản hồi"}
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <p
+                        className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
+                        onClick={() => handleFeedbackClick(rating.id)}
+                      >
+                        {isFeedbackClicked === rating.id
+                          ? "Ẩn phản hồi"
+                          : "Phản hồi"}
+                      </p>
+                    </div>
+                  )}
+
                   {isFeedbackClicked === rating.id && (
                     <>
                       {/* end text reply */}
@@ -286,37 +335,41 @@ export default function RatingMap(props: Props) {
                       </div>
                       {/* end reply content comment */}
                       {/* input */}
-                      <div
-                        className=" text-[#333333] rounded-[6px] px-[10px] py-[6px] max-xl:text-sm mt-2
-                        border-[1px] border-[#FFAAAF] w-[95%] mx-auto flex"
-                      >
-                        <input
-                          className={`w-full focus:outline-none`}
-                          placeholder={`Trả lời ${rating?.user?.username}`}
-                        />
-                        <div className="pl-2 cursor-pointer">
-                          <SendCmt />
-                        </div>
+
+                      <div>
+                        {rating.repComment != null ? (
+                          <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4">
+                            <p className="text-[#4C4C4C]">
+                              {rating.repComment}
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="text-[#333333] rounded-[6px] px-[10px] py-[6px] max-xl:text-sm mt-2 border-[1px] border-[#FFAAAF] w-[95%] mx-auto flex">
+                            <input
+                              className={`w-full focus:outline-none`}
+                              value={repTextCmt}
+                              placeholder={`Trả lời ${rating?.user?.username}`}
+                              onChange={(e) => handleChange(e)}
+                            />
+                            <div
+                              className="pl-2 cursor-pointer"
+                              onClick={() => {
+                                if (repTextCmt.trim().length !== 0) {
+                                  getAdminRepComment(rating.id);
+                                } else {
+                                  toast.warn("Trống !");
+                                }
+                              }}
+                            >
+                              <SendCmt />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {/* input */}
-                      {/* <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4">
-                        <p className="text-[#4C4C4C]">
-                          Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm
-                          hôm nay mua lại vì hôm đi chơi bị mất. vẫn chất lg như
-                          lần trc esd15 mãi đỉnh , mà chắc do shop uy tín lên
-                          dùng rất tốt âm thanh bass trest chống âm cách tiếng
-                          onf đeo êm tai ko bị đua tai luôn chyaj bộ thể dục
-                          thoải mái nhá ae lên mua thanh anh shop tư vấn hài
-                          lòng vãi
-                        </p>
-                      </div> */}
                       {/* content comment */}
                     </>
                   )}
                 </div>
-                {/* end content comment */}
-
-                {/* end content comment */}
               </>
             );
           })

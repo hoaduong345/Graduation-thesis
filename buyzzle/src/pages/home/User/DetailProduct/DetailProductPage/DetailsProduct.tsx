@@ -21,7 +21,7 @@ import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
 import Minus from "../../../../../Assets/TSX/Minus";
 import Plus from "../../../../../Assets/TSX/Plus";
 import { productController } from "../../../../../Controllers/ProductsController";
-import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
+import { ratingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
 import { stars } from "../../../../../Helper/StarRating/Star";
 import { toastSuccess } from "../../../../../Helper/Toast/Success";
@@ -90,11 +90,7 @@ export interface EditImage {
 export default function DetailsProduct() {
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState("");
-  const { carts, addProduct } = useCart();
-  console.log(
-    "🚀 ~ file: DetailsProduct.tsx:112 ~ DetailsProduct ~ carts 123:",
-    carts
-  );
+  const { addProduct } = useCart();
 
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -119,7 +115,6 @@ export default function DetailsProduct() {
   );
   const [recommandProduct, setRecommandProduct] = useState<Row[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [url, setUrl] = useState<string[]>([]);
 
   const { id } = useParams();
   console.log(id);
@@ -147,7 +142,7 @@ export default function DetailsProduct() {
 
   useEffect(() => {
     if (!id) return;
-    getComment(Number(id));
+    getCommentWhereRating(id);
     getDetailProduct();
     RecommandProductDetailPage(Number(id));
   }, [currentPage]);
@@ -160,8 +155,9 @@ export default function DetailsProduct() {
       setQuantity(quantity - 1);
     }
   };
-  const getCommentWhereRating = (idproduct: any, rating: any) => {
-    RatingAndCommentController.getCommentWhereRating(idproduct, rating)
+  const getCommentWhereRating = (idproduct: any) => {
+    ratingAndCommentController
+      .getCommentWhereRating(idproduct, 1)
       .then((res: any) => {
         setRateAndcomment(res);
         console.log(
@@ -172,10 +168,10 @@ export default function DetailsProduct() {
         console.log(err);
       });
   };
-  const HandleGetCommentWhereRating = (rating: any) => {
+  const HandleGetCommentWhereRating = () => {
     const idproduct = id;
     console.log("IDDDDDDDDDDDD:" + id);
-    getCommentWhereRating(idproduct, rating);
+    getCommentWhereRating(idproduct);
   };
 
   const RecommandProductDetailPage = (id: number) => {
@@ -186,7 +182,6 @@ export default function DetailsProduct() {
     productController
       .getProductSuggest(id)
       .then((res: any) => {
-        getComment(id);
         setRecommandProduct(res);
       })
       .catch((err) => {
@@ -194,14 +189,15 @@ export default function DetailsProduct() {
       });
   };
 
-  const getComment = (id: number) => {
-    console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
-    RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
-      (res: any) => {
-        setRateAndcomment(res);
-      }
-    );
-  };
+  // const getComment = (id: number) => {
+  //   console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
+  //   ratingAndCommentController
+  //     .getRatingAndComment(id, currentPage, 2)
+  //     .then((res: any) => {
+  //       console.log("🚀 ~ file: DetailsProduct.tsx:202 ~ .then ~ res:", res);
+  //       setRateAndcomment(res);
+  //     });
+  // };
 
   const getItemProps = (index: number) =>
     ({
@@ -226,7 +222,8 @@ export default function DetailsProduct() {
     data: Rating,
     idRating: number
   ) => {
-    await RatingAndCommentController.EditRatingAndComment(idRating, data)
+    await ratingAndCommentController
+      .EditRatingAndComment(idRating, data)
       .then(async (res) => {
         toast.success("Đánh giá thành công !");
         const _rateAndComment = rateAndcomment?.Rating.map((item) => {
@@ -263,7 +260,7 @@ export default function DetailsProduct() {
       "🚀 ~ file: DetailsProduct.tsx:235 ~ handleRemoveRating ~ id:",
       id
     );
-    RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
+    ratingAndCommentController.RemoveRatingAndComment(id).then((_) => {
       if (rateAndcomment) {
         const removedRatings = rateAndcomment.Rating.filter(
           (rating) => rating.id !== id
@@ -273,10 +270,8 @@ export default function DetailsProduct() {
           Rating: removedRatings,
         });
         getDetailProduct();
-        // RecommandProductDetailPage(id);
       }
     });
-    // getDetailProduct()
     RecommandProductDetailPage(id);
   };
 
@@ -670,6 +665,9 @@ export default function DetailsProduct() {
                 <div className="col-span-2 ">
                   <div>
                     <RatingMap
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
+                      setRateAndcomment={setRateAndcomment}
                       handleEditProductRating={handleEditProductRating}
                       rateAndcomment={rateAndcomment!}
                       editImages={editImages!}
@@ -743,10 +741,7 @@ export default function DetailsProduct() {
                                 key={index}
                                 checked={item.checked}
                                 rating={item.rating}
-                                onChangeFilter={(rating) => {
-                                  console.log("Ratting:" + rating);
-                                  HandleGetCommentWhereRating(rating);
-                                }}
+                                onChangeFilter={HandleGetCommentWhereRating}
                               />
                             );
                           })}
