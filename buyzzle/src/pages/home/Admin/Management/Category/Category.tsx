@@ -1,4 +1,3 @@
-
 import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
@@ -198,31 +197,40 @@ function Category() {
     });
   };
 
-  const createSubcate = async (data: string, idCate: number, idSubcate: number) => {
+  const createSubcate = async (
+    data: string,
+    idCate: number,
+    idSubcate: number
+  ) => {
     if (idSubcate == 0) {
       if (data.length >= 4 && data.length <= 20) {
-        await categoryController.createSubcateLv1(idCate, data).then(() => {
-          setNameCateLv2("");
-          closeModal(idModalSubCateLv1);
-          setCheckedCategory([]);
-          getList();
-        }).then(() => {
-          toastSuccess('Thành Công')
-        });
+        await categoryController
+          .createSubcateLv1(idCate, data)
+          .then(() => {
+            setNameCateLv2("");
+            closeModal(idModalSubCateLv1);
+            setCheckedCategory([]);
+            getList();
+          })
+          .then(() => {
+            toastSuccess("Thành Công");
+          });
       } else {
         toastWarn("Lỗi tên");
       }
     } else {
       if (data.length >= 4 && data.length <= 20) {
-
-        await categoryController.updateSubcateLv1(idCate, idSubcate, nameCateLv2).then(() => {
-          setNameCateLv2("");
-          closeModal(idModalSubCateLv1);
-          setCheckedCategory([]);
-          getList()
-        }).then(() => {
-          toastSuccess('Thành Công')
-        });
+        await categoryController
+          .updateSubcateLv1(idCate, idSubcate, nameCateLv2)
+          .then(() => {
+            setNameCateLv2("");
+            closeModal(idModalSubCateLv1);
+            setCheckedCategory([]);
+            getList();
+          })
+          .then(() => {
+            toastSuccess("Thành Công");
+          });
       } else {
         toastWarn("Lỗi tên");
       }
@@ -230,14 +238,17 @@ function Category() {
   };
 
   const removeSubcate = async () => {
-    await categoryController.removeSubcateLv1(idSubcate).then(() => {
-      closeModal(idRemoveSubcate);
-      setCheckedCategory([]);
-      getList()
-    }).then(() => {
-      toastSuccess('Thành Công')
-    });
-  }
+    await categoryController
+      .removeSubcateLv1(idSubcate)
+      .then(() => {
+        closeModal(idRemoveSubcate);
+        setCheckedCategory([]);
+        getList();
+      })
+      .then(() => {
+        toastSuccess("Thành Công");
+      });
+  };
 
   useEffect(() => {
     getList();
@@ -253,7 +264,7 @@ function Category() {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
       reset({ name: data.name, id: data.id });
-      setNameCateLv2(data.name)
+      setNameCateLv2(data.name);
       setUrl(data.image);
       modal.showModal();
     }
@@ -309,17 +320,17 @@ function Category() {
 
             <div className="flex flex-col gap-5">
               <div className="flex justify-between">
-                <div className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6">
-                  <button
-                    className="flex gap-3"
-                    onClick={() =>
-                      openModal(idModalCate, {
-                        id: 0,
-                      } as CategoryModal)
-                    }
-                  >
+                <div
+                  className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6 cursor-pointer"
+                  onClick={() =>
+                    openModal(idModalCate, {
+                      id: 0,
+                    } as CategoryModal)
+                  }
+                >
+                  <button className="flex gap-3">
                     <PlusSquare />
-                    <p className="cursor-pointer text-white text-base font-bold">
+                    <p className=" text-white text-base font-bold">
                       Thêm Danh Mục
                     </p>
                   </button>
@@ -432,16 +443,16 @@ function Category() {
 
               <div className="grid grid-cols-10 items-center">
                 <div className="col-span-3 py-[15px] pl-16">
-                  {
-                    categorys.length > 0 ?
-                      <input
-                        checked={checkAll}
-                        className="checkbox checkbox-sm items-center"
-                        type="checkbox"
-                        onChange={(e) => handleCheckedAll(e.target.checked)}
-                      />
-                      : <></>
-                  }
+                  {categorys.length > 0 ? (
+                    <input
+                      checked={checkAll}
+                      className="checkbox checkbox-sm items-center"
+                      type="checkbox"
+                      onChange={(e) => handleCheckedAll(e.target.checked)}
+                    />
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="flex gap-[28px] col-span-5 ">
                   <p></p>
@@ -456,9 +467,7 @@ function Category() {
                     }
                     className="pt-[12px] text-[16px] pr-2 max-lg:text-sm"
                   >
-                    {
-                      checkedCategory.length > 0 ? <Delete /> : ''
-                    }
+                    {checkedCategory.length > 0 ? <Delete /> : ""}
                   </p>
                 </div>
               </div>
@@ -479,7 +488,10 @@ function Category() {
                 onSave={() => removeCates(checkedCategory, idRemoveCates)}
               />
 
-              <DialogComfirm desc="Danh mục Con" id={idRemoveSubcate} title="Xóa danh mục con"
+              <DialogComfirm
+                desc="Danh mục Con"
+                id={idRemoveSubcate}
+                title="Xóa danh mục con"
                 onClose={() => closeModal(idRemoveSubcate)}
                 onSave={() => removeSubcate()}
               />
@@ -511,7 +523,11 @@ function Category() {
                 {categorys.map((e, index) => {
                   return (
                     <>
-                      <Accordion open={open === e.id} className="w-full" key={e.id}>
+                      <Accordion
+                        open={open === e.id}
+                        className="w-full"
+                        key={e.id}
+                      >
                         <div className="grid grid-cols-10">
                           <div className="col-span-8 grid grid-cols-8">
                             <div className="col-span-3 border-[#e0e0e0] flex justify-between items-center pr-6 pl-16">
@@ -525,8 +541,15 @@ function Category() {
                                   }
                                 />
                               </div>
-                              <div onClick={() => handleOpen(e.id)} className="cursor-pointer">
-                                <img className="w-[50px] h-[50px] object-cover" src={e.image} alt="" />
+                              <div
+                                onClick={() => handleOpen(e.id)}
+                                className="cursor-pointer"
+                              >
+                                <img
+                                  className="w-[50px] h-[50px] object-cover"
+                                  src={e.image}
+                                  alt=""
+                                />
                               </div>
                             </div>
                             <div
@@ -536,9 +559,7 @@ function Category() {
                               <p className="text-[16px] font-medium my-auto max-lg:text-sm">
                                 {e.name}
                               </p>
-
                             </div>
-
                           </div>
                           <div className="flex col-span-2 text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
                             <button
@@ -549,7 +570,7 @@ function Category() {
                                   {} as CategoryModal
                                 );
                                 setIdCate(e.id);
-                                setIdSubcate(0)
+                                setIdSubcate(0);
                                 setIndexCate(index);
                               }}
                             >
@@ -597,13 +618,15 @@ function Category() {
                               </ul>
                             </div>
 
-                            <div onClick={() => handleOpen(e.id)} className="cursor-pointer flex items-center">
+                            <div
+                              onClick={() => handleOpen(e.id)}
+                              className="cursor-pointer flex items-center"
+                            >
                               {open === e.id ? (
                                 <ArrowDown />
                               ) : (
                                 <ArrowNextHistory />
                               )}
-
                             </div>
                           </div>
                         </div>
@@ -613,7 +636,10 @@ function Category() {
                             {e.subCategories?.map((elements) => {
                               return (
                                 <>
-                                  <div key={elements.id} className="grid grid-cols-10 group">
+                                  <div
+                                    key={elements.id}
+                                    className="grid grid-cols-10 group"
+                                  >
                                     <div className="col-span-3"></div>
                                     <div className="col-span-5 border-[#e0e0e0] flex h-5 items-center gap-5 pl-[5%] max-lg:h-16 max-lg:py-[7%]">
                                       <p className="text-[16px] font-medium max-lg:text-sm">
@@ -621,36 +647,40 @@ function Category() {
                                       </p>
                                     </div>
                                     <div className="col-span-2 hidden group-hover:block ">
-
                                       <div className="flex items-center text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
-                                        <div onClick={() => {
-                                          openModal(
-                                            idModalSubCateLv1,
-                                            { name: elements.name } as CategoryModal
-                                          );
-                                          setIdCate(e.id);
-                                          setIdSubcate(elements.id)
-                                        }}>
+                                        <div
+                                          onClick={() => {
+                                            openModal(idModalSubCateLv1, {
+                                              name: elements.name,
+                                            } as CategoryModal);
+                                            setIdCate(e.id);
+                                            setIdSubcate(elements.id);
+                                          }}
+                                        >
                                           <EditCate />
                                         </div>
 
-                                        <div onClick={() => {
-                                          openModal(idRemoveSubcate, {} as CategoryModal);
-                                          setIdCate(e.id);
-                                          setIdSubcate(elements.id)
-                                        }}>
+                                        <div
+                                          onClick={() => {
+                                            openModal(
+                                              idRemoveSubcate,
+                                              {} as CategoryModal
+                                            );
+                                            setIdCate(e.id);
+                                            setIdSubcate(elements.id);
+                                          }}
+                                        >
                                           <DeleteCate />
                                         </div>
                                       </div>
                                     </div>
-                                  </div >
+                                  </div>
                                 </>
                               );
                             })}
-
                           </div>
                         </AccordionBody>
-                      </Accordion >
+                      </Accordion>
                     </>
                   );
                 })}
@@ -658,7 +688,7 @@ function Category() {
             </div>
           </div>
         </div>
-      </Container >
+      </Container>
     </>
   );
 }
