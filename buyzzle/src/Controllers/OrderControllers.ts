@@ -78,9 +78,16 @@ class OrderControllers {
       });
   };
 
-  updateQuantity = async (data: UpdateQuantityModal[]) => {
-    console.log(appConfig.apiOrder)
+  quantityCreateOrder = async (data: UpdateQuantityModal[]) => {
     return await axios.post(`${appConfig.apiOrder}/quantityCreateOrder`, data)
+  }
+
+  quantityCancelOrder = async (data: UpdateQuantityModal[]) => {
+    return await axios.post(`${appConfig.apiOrder}/quantityCancelOrder`, data)
+  }
+
+  updateSoldcount = async (data: UpdateQuantityModal[]) => {
+    return await axios.post(`${appConfig.apiOrder}/updateSoldcount`, data)
   }
 }
 

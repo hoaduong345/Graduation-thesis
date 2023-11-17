@@ -7,7 +7,7 @@ import NoteOrderAdmin from "../../../Assets/TSX/NoteOrderAdmin";
 import { orderControllers } from "../../../Controllers/OrderControllers";
 import { numberFormat } from "../../../Helper/Format";
 import StepperShipping from "../../../Helper/Stepper/StepperShipping";
-import { OrderModel } from "../../../Model/OrderModel";
+import { OrderModel, UpdateQuantityModal } from "../../../Model/OrderModel";
 import Container from "../../../components/container/Container";
 import Back from "../Admin/Assets/TSX/Back";
 import Paymethod from "../Admin/Assets/TSX/Paymethod";
@@ -35,9 +35,19 @@ export default function ShippingDetail() {
   }, []);
 
   const setStatus = (status: number) => {
+    let listProductQuantity: UpdateQuantityModal[] = [];
+    order.OrderDetail.map((element) => {
+      listProductQuantity.push({
+        productId: element.productId!,
+        quantity: element.quantity,
+      })
+    })
+
     orderControllers.setStatus(idOrder, status).then(() => {
       getOrder();
       toast.success("Thành công");
+    }).then(() => {
+      orderControllers.updateSoldcount(listProductQuantity)
     });
   };
   return (
@@ -64,7 +74,7 @@ export default function ShippingDetail() {
                 </div>
                 <div className="flex flex-col gap-1">
                   {order.paymentMethod == "Thẻ tín dụng" ||
-                  getStatusOrder(order.status)._paymentStatus ? (
+                    getStatusOrder(order.status)._paymentStatus ? (
                     <div className="badge badge-xs badge-accent text-center py-2 px-3">
                       <p className="font-bold text-xs text-white">
                         Đã thanh toán

@@ -8,7 +8,7 @@ import { orderControllers } from "../../../../../Controllers/OrderControllers";
 import DialogAbortOrder from "../../../../../Helper/Dialog/DialogAbortOrder";
 import { numberFormat } from "../../../../../Helper/Format";
 import StepperAdmin from "../../../../../Helper/Stepper/StepperAdmin";
-import { OrderModel } from "../../../../../Model/OrderModel";
+import { OrderModel, UpdateQuantityModal } from "../../../../../Model/OrderModel";
 import Container from "../../../../../components/container/Container";
 import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import Back from "../../Assets/TSX/Back";
@@ -42,11 +42,22 @@ export default function DetailOrderManagement() {
     });
   };
   const handleConfirmCancelOrder = () => {
+    let listProductQuantity: UpdateQuantityModal[] = [];
+    order.OrderDetail.map((element) => {
+      listProductQuantity.push({
+        productId: element.productId!,
+        quantity: element.quantity,
+      })
+    })
+
     orderControllers
       .getConfirmCancelOrder(idOrder)
       .then((_) => {
         getOrder();
         closeComfirmAbort(idComfirmAbort)
+      })
+      .then(async () => {
+        await orderControllers.quantityCancelOrder(listProductQuantity)
       })
       .catch((err) => console.log(err));
   };

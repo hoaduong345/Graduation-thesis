@@ -65,7 +65,7 @@ export default function PaymentBtn(props: StripePayment) {
                }, 100);
             } else if (method == "cash") {
                let item: OrderItems[] = [];
-               let listProductQuantity: UpdateQuantityModal[] = []
+               let listProductQuantity: UpdateQuantityModal[] = [];
                let subtotal = 0;
 
                cartItems?.map((e) => {
@@ -120,7 +120,7 @@ export default function PaymentBtn(props: StripePayment) {
                         }
                      })
                      .then(() => {
-                        orderControllers.updateQuantity(listProductQuantity)
+                        orderControllers.quantityCreateOrder(listProductQuantity)
                      });
                }, 3000);
             }

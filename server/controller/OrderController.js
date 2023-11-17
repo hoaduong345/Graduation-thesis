@@ -257,7 +257,7 @@ const OderController = {
 
     updateSoldcount: async (req, res) => {
         try {
-            const data = req.body.data;
+            const data = req.body;
 
             await Promise.all(data.map(async (element) => {
 

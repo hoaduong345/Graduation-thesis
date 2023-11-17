@@ -126,7 +126,14 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                 const line_items = await stripe.checkout.sessions.listLineItems(event.data.object.id);
                 const iduser = await stripe.customers.retrieve(event.data.object.customer);
                 const orderItems = await getCartItems(line_items, event.data.object, iduser.metadata);
-                console.log('first', iduser.metadata.voucherId);
+
+                let listProductQuantity = [];
+                orderItems.cartItems.map((element) => {
+                    listProductQuantity.push({
+                        productId: element.productId,
+                        quantity: element.quantity,
+                    })
+                })
 
                 await axios
                     .post('http://localhost:5000/buyzzle/order', { order: orderItems })
@@ -139,6 +146,9 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                         });
                     })
                     .then(() => {
+                        axios.post(`http://localhost:5000/buyzzle/order/quantityCreateOrder`, listProductQuantity);
+                    })
+                    .then(() => {
                         if (parseInt(iduser.metadata.voucherId) != 0) {
                             axios.post(`http://localhost:5000/buyzzle/voucher/usevoucher`, {
                                 userId: parseInt(iduser.metadata.idUser),
@@ -146,7 +156,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                             });
                         }
                     })
-                    .catch((err) => {});
+                    .catch((err) => { });
                 break;
         }
         response.json({ received: true });

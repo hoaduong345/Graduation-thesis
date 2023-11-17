@@ -11,5 +11,6 @@ app.put('/:id', OrderController.isRatingAt);
 // update quantity product
 app.post('/quantityCreateOrder', OrderController.quantityCreateOrder);
 app.post('/quantityCancelOrder', OrderController.quantityCancelOrder);
+app.post('/updateSoldcount', OrderController.updateSoldcount);
 
 module.exports = app;
