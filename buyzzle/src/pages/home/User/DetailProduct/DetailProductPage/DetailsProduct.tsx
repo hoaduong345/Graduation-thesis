@@ -142,7 +142,7 @@ export default function DetailsProduct() {
 
   useEffect(() => {
     if (!id) return;
-    getCommentWhereRating(id);
+    getCommentWhereRating(id, 1);
     getDetailProduct();
     RecommandProductDetailPage(Number(id));
   }, [currentPage]);
@@ -155,10 +155,11 @@ export default function DetailsProduct() {
       setQuantity(quantity - 1);
     }
   };
-  const getCommentWhereRating = (idproduct: any) => {
+  const getCommentWhereRating = (idproduct: any, rating: any) => {
     ratingAndCommentController
-      .getCommentWhereRating(idproduct, 1)
+      .getCommentWhereRating(idproduct, rating)
       .then((res: any) => {
+        console.log("🚀 ~ file: DetailsProduct.tsx:162 ~ .then ~ res:", res);
         setRateAndcomment(res);
         console.log(
           "CCCCCCCCCCCCCCCCCCCCCCc:" + JSON.stringify(rateAndcomment)
@@ -168,10 +169,10 @@ export default function DetailsProduct() {
         console.log(err);
       });
   };
-  const HandleGetCommentWhereRating = () => {
+  const HandleGetCommentWhereRating = (rating: any) => {
     const idproduct = id;
     console.log("IDDDDDDDDDDDD:" + id);
-    getCommentWhereRating(idproduct);
+    getCommentWhereRating(idproduct, rating);
   };
 
   const RecommandProductDetailPage = (id: number) => {
@@ -741,7 +742,10 @@ export default function DetailsProduct() {
                                 key={index}
                                 checked={item.checked}
                                 rating={item.rating}
-                                onChangeFilter={HandleGetCommentWhereRating}
+                                onChangeFilter={(rating) => {
+                                  console.log("Ratting:" + rating);
+                                  HandleGetCommentWhereRating(rating);
+                                }}
                               />
                             );
                           })}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Rate, Rating } from "../Model/ProductModel";
+import { Rate, Ratee, Rating } from "../Model/ProductModel";
 
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_URL || "",
@@ -9,6 +9,8 @@ export interface RepComment {
   repComment?: string; // rep
   page?: number;
   perPage?: number;
+  idproduct?: number;
+  rating?: number;
 }
 class RatingAndComment {
   postRatingAndComment = async (data: any) => {
@@ -86,13 +88,13 @@ class RatingAndComment {
   getCommentWhereRating = async (
     idproduct?: number,
     rating?: number
-  ): Promise<Rate> => {
+  ): Promise<Ratee> => {
     return await axios
       .get(
         `${appConfig.apiUrl}/ratingcomment/${idproduct}?selectedRatingValue=${rating}`
       )
       .then((res) => {
-        return res.data as Rate;
+        return res.data as Ratee;
       });
   };
 
