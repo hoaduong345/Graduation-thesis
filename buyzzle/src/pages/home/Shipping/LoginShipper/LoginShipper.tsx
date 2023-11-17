@@ -80,7 +80,7 @@ function LoginShipper() {
          <div className="w-1/2 flex justify-center items-center min-h-screen bg-white">
             <div className="w-[424px]">
                <form className="registration-form">
-                  <h1 className=" login-a ">ĐĂNG NHẬP SHIPPER</h1>
+                  <h1 className=" login-a ">ĐƠN VỊ VẬN CHUYỂN</h1>
                   <div className="grid grid-cols-5 gap-8">
                      <div className="col-span-3 " >
                         <div className="flex gap-3 ">
