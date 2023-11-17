@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { userController } from "../../../../../Controllers/UserController";
 import { shipperController } from "../../../../../Controllers/ShipperController";
+import secureLocalStorage from "react-secure-storage";
 
 type FormValues = {
   id: number;
@@ -101,7 +102,7 @@ export default function PaymentAddress() {
 
   useEffect(() => {
     function CheckLink() {
-      const user = localStorage.getItem("user");
+      const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
         // console.log("data", data)

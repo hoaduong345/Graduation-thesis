@@ -51,14 +51,7 @@ router.post("/login", checkAdminAuthentication, (req, res) => {
   // Đối tượng req.adminDetails giờ có thêm dữ liệu từ env hoặc database
   const adminDetails = req.adminDetails;
 
-  res.send(`Đăng nhập thành công.
-    Tên người dùng: ${adminDetails.username}
-    Email: ${adminDetails.email}
-    Tên: ${adminDetails.name}
-    Số điện thoại: ${adminDetails.phonenumber}
-    Ngày sinh: ${adminDetails.dateofbirth}
-    Giới tính: ${adminDetails.sex}
-  `);
+  res.send(adminDetails);
 });
 
 router.post('/getalladmin', AdminController.getAllAdmins);

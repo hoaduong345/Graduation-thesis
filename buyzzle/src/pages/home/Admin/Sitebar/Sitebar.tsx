@@ -13,6 +13,8 @@ import { Link, useLocation } from "react-router-dom";
 import CategoryIcon from "../Assets/Icon/CategoryIcon";
 import { adminController } from "../../../../Controllers/AdminControllder";
 import { title } from "process";
+import secureLocalStorage from "react-secure-storage";
+import Logout from "../../../../Assets/TSX/Logout";
 export interface SitebarAdmin {
   title: ReactNode;
   icon: ReactNode;
@@ -69,11 +71,11 @@ const listSitebar: SitebarAdmin[] = [
     icon: <MessagesIcon />,
     pathName: "",
   },
-  // {
-  //   title: "Cài Đặt",
-  //   icon: <SettingsIcon />,
-  //   pathName: "",
-  // },
+  {
+    title: "Đăng xuất",
+    icon: <Logout />,
+    pathName: "/admin/loginadmin",
+  },
 
 ];
 
@@ -92,35 +94,45 @@ export default function SitebarAdmin() {
       );
     }
   };
-  function ImageLoad() {
+  // function ImageLoad() {
 
-  }
+  // }
+  useEffect(() => {
+    let user = secureLocalStorage.getItem("admin");
+    if(user == null){
+      console.log("VCLLLLLLLLLLLLLLLLLll");
+      window.location.href = "/admin/loginadmin";
+    }
+
+  }, [])
   useEffect(() => {
     const fetchData = async () => {
-      const user = localStorage.getItem("user");
+      // const user = secureLocalStorage.getItem("admin");
+      let user = JSON.stringify(secureLocalStorage.getItem("admin"));
+      // console.log("LOCAL:"+user);
       try {
         if (user != null) {
-          const UserData = (JSON.parse(user));
+          let UserData = JSON.parse(user);
+          // UserData = JSON.parse(user);
           const username = UserData.username;
-          console.log("USERNAME: " + JSON.stringify(username));
+          // console.log("USERNAME: " + JSON.stringify(UserData));
           await adminController.getAdminWhereUsername(username)
             .then((res) => {
 
+
               const name = res.adminWithImage.name;
-          
+
               const email = res.adminWithImage.email;
               // const pathName = `/admin/adminprofile/${username}`
               setHref(`/admin/adminprofile/${username}`);
               setName(name);
               setEmail(email);
-              if(res.adminWithImage.AdminImage != undefined){
+              if (res.adminWithImage.AdminImage != undefined) {
                 const Image = res.adminWithImage.AdminImage[0].url;
                 setImage(Image);
-              }else{
+              } else {
                 console.log("k co hinh");
               }
-             
-
               return res;
             })
 
@@ -129,6 +141,15 @@ export default function SitebarAdmin() {
         }
 
       } catch (error) {
+        if (user != null) {
+          let UserData = JSON.parse(user);
+          // UserData = JSON.parse(UserData);
+          const username = UserData.username;
+          setName(username);
+          setEmail(UserData.email);
+          console.log("VCLLLl ");
+        }
+
         console.log(
           "ERROR", error
         );
@@ -195,7 +216,7 @@ export default function SitebarAdmin() {
         </div>
 
       </a>
-
+      {/* <button>Đăng xuất</button> */}
     </div>
   );
 }
