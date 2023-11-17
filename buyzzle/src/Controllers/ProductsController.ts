@@ -1,7 +1,6 @@
 import axios from "axios";
 import { FormValues } from "../pages/home/Admin/EditProduct/EditProductMap";
 import { Products } from "../pages/home/User/FilterPage/FiltersPage";
-import { UpdateQuantityModal } from "../Model/OrderModel";
 
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_URL || "",
@@ -190,10 +189,6 @@ class ProductController {
         return res.data as Products[];
       });
   };
-
-  updateQuantity = async (data: UpdateQuantityModal[]) => {
-    return await axios.put(`${appConfig.apiUrl}/updateQuantity`, { data: data })
-  }
 }
 
 export const productController = new ProductController();

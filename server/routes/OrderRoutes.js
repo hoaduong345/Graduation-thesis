@@ -8,4 +8,8 @@ app.get('/:id', OrderController.getOrderDetails);
 app.get('/admin/listOrder', OrderController.getOrderAdmin);
 app.put('/:id', OrderController.isRatingAt);
 
+// update quantity product
+app.post('/quantityCreateOrder', OrderController.quantityCreateOrder);
+app.post('/quantityCancelOrder', OrderController.quantityCancelOrder);
+
 module.exports = app;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { OrderModel } from "../Model/OrderModel";
+import { OrderModel, UpdateQuantityModal } from "../Model/OrderModel";
 
 const appConfig = {
   apiOrder: import.meta.env.VITE_BACKEND_ORDER_URL || "",
@@ -77,6 +77,11 @@ class OrderControllers {
         return res.data;
       });
   };
+
+  updateQuantity = async (data: UpdateQuantityModal[]) => {
+    console.log(appConfig.apiOrder)
+    return await axios.post(`${appConfig.apiOrder}/quantityCreateOrder`, data)
+  }
 }
 
 export const orderControllers = new OrderControllers();

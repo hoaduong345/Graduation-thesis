@@ -145,6 +145,7 @@ export default function OrderHistory() {
       theme: "light",
     });
     closeModal(idRemove);
+    getOrder()
   };
 
   const handleClick = (id: number) => {
