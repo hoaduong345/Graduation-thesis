@@ -6,6 +6,8 @@ const MiddleWareProductController = require('../middleware/MiddleWareProductCont
 
 const router = require('express').Router();
 
+
+
 // thêm sản phẩm
 router.post('/addImagesByProductsID', ProductController.addImagesByProductsID);
 
@@ -43,6 +45,8 @@ router.delete('/deleteratingcomment/:ratingId', ProductController.deleteRatingan
 router.post('/addimagecomment', ProductController.addImageComment);
 
 router.put('/updateimagecomment/:id', ProductController.updateImageComment);
+
+router.put('/repComment/:ratingId', ProductController.RepComment);
 
 // thêm danh mục
 

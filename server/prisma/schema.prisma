@@ -221,8 +221,11 @@ model Rating {
   product      Product?       @relation(fields: [idproduct], references: [id])
   iduser       Int?
   user         User?          @relation(fields: [iduser], references: [id])
+  adminId      Int?          
+  admin        Admin?         @relation(fields: [adminId], references: [id])
   ratingValue  Int?
   comment      String?
+  repComment    String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
   CommentImage CommentImage[]
@@ -293,6 +296,7 @@ model Admin {
   phonenumber String?
   dateofbirth DateTime?
   AdminImage  AdminImage[]
+  ratings     Rating[]
   // sentMessages ChatMessage[]@relation("SentMessagess")
   // receivedMessages ChatMessage[] @relation("ReceivedMessagess")
 }
