@@ -106,7 +106,6 @@ export default function RatingMap(props: Props) {
       ratingId: id,
       repComment: repTextCmt,
       page: props.currentPage,
-      perPage: 2,
     };
     ratingAndCommentController
       .repCommentsFromAdminToUser(_dataRepCmt)

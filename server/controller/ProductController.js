@@ -941,9 +941,27 @@ const ProductController = {
                 },
             });
             const ratings = await prisma.rating.findMany({
+                include: {
+                    user: {
+                        select: {
+                            username: true,
+                        },
+                    },
+                    product: {
+                        select: {
+                            quantity: true,
+                        },
+                    },
+                    CommentImage: {
+                        select: {
+                            url: true,
+                        },
+                    },
+                },
                 skip: (page - 1) * perPage,
                 take: perPage,
             });
+
             const resultProduct = {
                 updatedRating: updatedRating,
                 Ratings: ratings,
