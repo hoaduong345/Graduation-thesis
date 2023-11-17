@@ -14,6 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import * as yup from "yup";
 import { shipperController } from "../../../../Controllers/ShipperController";
+import secureLocalStorage from "react-secure-storage";
 export interface FormLoginValues {
    username: string;
    password: string;
@@ -44,7 +45,8 @@ function LoginShipper() {
          // console.log(accessToken);
          const UserData = {username};
          // const Token = {accessToken}; 
-         localStorage.setItem('shippername', JSON.stringify(UserData));
+         secureLocalStorage.setItem('shippername', JSON.stringify(UserData));
+         // .setItem('admin', UserData);
          setTimeout(() => {
             window.location.href = "/shipping/management";
          }, 2000);

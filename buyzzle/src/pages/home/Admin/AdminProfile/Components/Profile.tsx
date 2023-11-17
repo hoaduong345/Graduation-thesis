@@ -15,6 +15,7 @@ import { replace } from "lodash";
 import { stringify } from "querystring";
 import { adminController } from "../../../../../Controllers/AdminControllder";
 import SitebarAdmin from "../../Sitebar/Sitebar";
+import secureLocalStorage from "react-secure-storage";
 
 export type FormValues = {
   username: string;
@@ -55,9 +56,6 @@ export default function UserProfile() {
   const [sex, setSex] = useState<boolean>();
   const [emailThen, setEmailThen] = useState<string>("");
   const [sdtThen, setSdtThen] = useState<string>("");
-
-
-
   const [loading, setLoading] = useState(true);
 
   // const [UserData1, setUserData1] = useState<UserData1>();
@@ -84,7 +82,7 @@ export default function UserProfile() {
           console.log("USERNAME: " + username);
           await adminController.getAdminWhereUsername(username)
             .then((res) => {
-              console.log((res.adminWithImage.phonenumber));
+              console.log("WTF is happening"+JSON.stringify(res));
               if (res.adminWithImage.dateofbirth == null) {
                 res.adminWithImage.dateofbirth = "dd/mm/yyyy";
               } else {
@@ -150,7 +148,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     function CheckLink() {
-      const user = localStorage.getItem("user");
+      const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
       } else {
@@ -161,7 +159,7 @@ export default function UserProfile() {
   }, [param]);
 
   const SetDataUser = (data: any) => {
-    const user = localStorage.getItem("user");
+    const user = JSON.stringify(secureLocalStorage.getItem("admin"));
     if (user != null) {
       const Username = (JSON.parse(user));
 

@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { adminController } from "../../../../../Controllers/AdminControllder";
+import secureLocalStorage from "react-secure-storage";
 
 export interface FormValues1 {
   oldPassword: string;
@@ -36,7 +37,7 @@ export default function ChangePassword() {
 
   useEffect(() => {
     function CheckLink() {
-      const user = localStorage.getItem("user");
+      const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
         // console.log("data", data)
@@ -100,7 +101,6 @@ export default function ChangePassword() {
   }, [])
   const onSubmit2 = async (formData: FormValues1) => {
     // console.log("DATA:"+JSON.stringify(formData))
-
     try {
       await adminController.ChangePasswordAdmin(id1, formData)
         .then((res) => {
