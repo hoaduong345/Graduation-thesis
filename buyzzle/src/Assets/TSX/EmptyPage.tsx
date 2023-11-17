@@ -65,21 +65,21 @@ export default function EmptyUI() {
             cy="84.488"
             r="11.172"
             stroke="#E0E0E0"
-            stroke-width="2"
+            strokeWidth="2"
          />
          <circle
             cx="80.2677"
             cy="289.98"
             r="11.172"
             stroke="#E0E0E0"
-            stroke-width="2"
+            strokeWidth="2"
          />
          <circle
             cx="373.112"
             cy="229.12"
             r="11.172"
             stroke="#E0E0E0"
-            stroke-width="2"
+            strokeWidth="2"
          />
          <circle cx="40.172" cy="96.66" r="12.172" fill="#EA4B48" />
          <circle cx="360.94" cy="38.224" r="12.172" fill="#EA4B48" />

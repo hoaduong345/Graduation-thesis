@@ -16,8 +16,8 @@ export default function useCartContext() {
       };
       cartControllers
          .addCart(data)
-         .then((res) => {
-            setCarts(res.data);
+         .then((_) => {
+            getCart()
             toastSuccess("Thêm thành công");
          })
          .catch((err) => {

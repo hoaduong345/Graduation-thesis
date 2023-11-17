@@ -1,36 +1,68 @@
 /* eslint-disable no-var */
-import { KeyboardEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Bell from "../../Assets/TSX/Bell";
-import Chevron_down from "../../Assets/TSX/Chevron-down";
-import Globe from "../../Assets/TSX/Globe";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import {
+  Link,
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import LogoWeb from "../../Assets/TSX/LogoWeb";
-import Map from "../../Assets/TSX/Map";
 import Search from "../../Assets/TSX/Search";
-import Headphones from "../../Assets/TSX/headphones";
+import { productController } from "../../Controllers/ProductsController";
 import { userController } from "../../Controllers/UserController";
-import { useSearch } from "../../hooks/Search/SearchContextProvider";
+import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
+import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import Container from "../container/Container";
+import HeaderTopUser from "../HeaderTop/HeaderTopUser";
 
 export default function Header() {
-  const {
-    data,
-    handleKeyPress,
-    hideSuggestions,
-    handleChange,
-    productSearch,
-    showSuggestions,
-    isSearch,
-    setIsSearch,
-    setShowSuggestions,
-    navigate,
-    // text,
-  } = useSearch();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const navigate = useNavigate();
+  const [text, setText] = useState("");
+
+  const [productSearch, setProductSearch] = useState<Products[]>([]);
+  const [isSearch, setIsSearch] = useState(false);
 
   const user = localStorage.getItem("user");
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
 
+  // using UseSearchParams
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchValue = searchParams.get("keyword");
+
+  const debouncedSearchParams = useDebounce(text, 500);
+  // Slider Price SiteBarFilterPages
+  const [sliderValues, setSliderValues] = useState<[number, number]>([
+    0, 10000000,
+  ]);
+  const urlSliderValues = searchParams.get("sliderValues");
+  useEffect(() => {
+    // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
+    if (urlSliderValues) {
+      const [min, max] = urlSliderValues.split(",").map(Number);
+      setSliderValues([min, max]);
+    }
+  }, [urlSliderValues]);
+
+  const getSearhvalue = async () => {
+    await productController.getAllProductsSearch(text).then((res: any) => {
+      setProductSearch(res.rows);
+    });
+  };
+
+  useEffect(() => {
+    if (text != "") {
+      getSearhvalue();
+      setSearchParams(
+        createSearchParams({
+          keyword: text,
+          // min: sliderValues[0].toString(),
+          // max: sliderValues[1].toString(),
+        })
+      );
+    }
+  }, [debouncedSearchParams]);
   var username;
   const [name, setName] = useState("");
   const [img, setImg] = useState("");
@@ -41,7 +73,14 @@ export default function Header() {
       const username = userData.username;
       console.log("USERNAME: " + username);
       userController.getUserWhereUsername(username).then((res) => {
+        console.log(
+          "🚀 ~ file: Header.tsx:76 ~ userController.getUserWhereUsername ~ res:",
+          res
+        );
+        // setEditUser(res)
         setName(res.name);
+        localStorage.setItem("nameUser", JSON.stringify(res.name));
+        // localStorage.setItem("avatarUser", JSON.stringify(res.name));
         setCheckLogin(true);
         const UserImageArray = JSON.stringify(res.UserImage);
         const urlTaker = JSON.parse(UserImageArray);
@@ -60,40 +99,34 @@ export default function Header() {
   }
   const href = `/userprofilepage/${username}`;
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setShowSuggestions(true);
+    setText(e.target.value);
+  };
+  // Function to hide suggestions
+  const hideSuggestions = () => {
+    setShowSuggestions(false);
+  };
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      navigate({
+        pathname: `/FiltersPage/`,
+        search: createSearchParams({
+          keyword: searchValue?.toString()!,
+          minPrice: sliderValues[0].toString(),
+          maxPrice: sliderValues[1].toString(),
+        }).toString(),
+      });
+      setShowSuggestions(false);
+    }
+  };
+
   return (
     <>
       <header className="Header">
         <Container>
-          <div className="Header-top bg-white">
-            <div className="container mx-auto">
-              <div className="Header-top-content flex justify-between max-[426px]:text-[8px]">
-                <div className="content-left flex py-2">
-                  <Map />
-                  <span className="text-[#4C4C4C] pl-2">Buon Ma Thuot</span>
-                </div>
-
-                <div className="content-right flex items-center gap-2  ">
-                  <div className="content-left flex items-center">
-                    <Globe />
-                    <span className="text-[#4C4C4C] pl-2">EN</span>
-                  </div>
-                  <div className="content-left flex py-2 gap-2 ">
-                    <div className="pt-1">
-                      <Chevron_down />
-                    </div>
-                    <div className="border-[1px] border-black " />
-                    <div className="flex items-center pl-3">
-                      <Bell />
-                      <span className="text-[#4C4C4C] pl-2">Thong bao</span>
-                    </div>
-                    <div className="flex items-center pl-3">
-                      <Headphones />
-                      <span className="text-[#4C4C4C] pl-2">Ho tro</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="my-1">
+            <HeaderTopUser />
           </div>
         </Container>
 
@@ -195,7 +228,7 @@ export default function Header() {
                               Từ khóa
                             </h1>
                             <p className="text-base cursor-default p-1 pl-2 font-normal">
-                              {data == "" ? "" : `"${data}"`}
+                              {text == "" ? "" : `"${text}"`}
                             </p>
                           </div>
                         </div>

@@ -35,37 +35,34 @@ const VoucherController = {
 
     getAdmin: async (req, res) => {
         try {
-            const pageCurr = parseInt(req.query.page);
-            const keyword = req.query.keyword;
-            const limit = 100;
-            const startIndex = (pageCurr - 1) * limit;
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
+            const keyword = req.body.keyword;
+            let skip = (page - 1) * pageSize;
+            if (keyword) {
+                skip = 0;
+            }
             const whereClause = {
                 deletedAt: null,
+                code: {
+                    contains: keyword,
+                },
             };
-            const totalProduct = (await prisma.voucher.findMany()).length;
+            const totalProduct = await prisma.voucher.count({
+                where: whereClause,
+            });
 
             const products = await prisma.voucher.findMany({
-                where: {
-                    AND: [
-                        whereClause,
-                        {
-                            code: {
-                                contains: keyword
-                            }
-                        }
-                    ]
-                },
-                // skip: startIndex,
-                // skip: 0,
-                take: limit,
+                where: whereClause,
+                skip,
+                take: pageSize,
             });
 
             const results = {
-                page: pageCurr,
-                pageSize: limit,
-                totalPage: totalProduct / limit,
+                page: page,
+                pageSize: pageSize,
+                totalPage: Math.ceil(totalProduct / pageSize),
                 data: products,
-                // name: keyword?.toLowerCase(),
             };
 
             return res.status(200).json(results ?? []);
@@ -307,7 +304,7 @@ const VoucherController = {
                     },
                 },
                 include: {
-                    voucher: true
+                    voucher: true,
                 },
             });
 

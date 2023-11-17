@@ -1,21 +1,25 @@
-import { useParams } from "react-router-dom";
-import { Images } from "../../../../Assets/TS";
+import { useEffect, useState } from "react";
+import {
+  createSearchParams,
+  useSearchParams
+} from "react-router-dom";
 import BookOff from "../../../../Assets/TSX/BookOff";
 import FoodLogo from "../../../../Assets/TSX/FoodLogo";
 import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
 import MangoLogo from "../../../../Assets/TSX/MangoLogo";
 import Series from "../../../../Assets/TSX/Series";
 import StepsLogo from "../../../../Assets/TSX/StepsLogo";
+import { categoryController } from "../../../../Controllers/CategoryController";
+import { productController } from "../../../../Controllers/ProductsController";
+import { roundedNumber } from "../../../../Helper/Format";
+import { subCate } from "../../../../Model/CategoryModel";
+import { Rate, Row } from "../../../../Model/ProductModel";
 import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
 import Container from "../../../../components/container/Container";
 import SlidesFilter from "../../../../components/home/components/slides/SlidesFilter/SlidesFilter";
-import { useSearch } from "../../../../hooks/Search/SearchContextProvider";
+import useDebounce from "../../../../useDebounceHook/useDebounce";
 import "../../../css/filter.css";
 import Filter from "./Filter";
-import Lightbulb from "../../../../Assets/TSX/Light-bulb";
-import { productController } from "../../../../Controllers/ProductsController";
-import { useState } from "react";
-import { Row } from "../../../../Model/ProductModel";
 export interface Cate {
   id: number;
   name: string;
@@ -41,25 +45,13 @@ export interface Products {
   fK_category: Cate;
   ProductImage: ImgOfProduct[];
 }
-interface TProductResponse {
-  currentPage?: number;
-  totalpage?: number;
-  rows?: Products[];
-  createdAt?: string;
-  ProductImage?: ImgOfProduct[];
-}
 
 export type Props = {
   minPrice: number;
   maxPrice: number;
   onChangeSlider(min: number, max: number): void;
 };
-export interface RatingStar {
-  checked: boolean;
-  rating: number;
 
-  onChangeFilter(tittle: string): void;
-}
 export interface PriceRangeFilterPage {
   minPrice: number;
   maxPrice: number;
@@ -67,45 +59,188 @@ export interface PriceRangeFilterPage {
   // b4. goi lai ham callbacks va truyen vao truong minh muon chuyen di
   onChangeSlider(min: number, max: number): void;
 }
+
 export default function FiltersPage() {
-  const { id } = useParams();
-  // const [product, setProducts] = useState<Row[]>([]);
-  const {
-    searchValue,
-    handleSliderChange,
-    handleActiveBTNLatestCreationDate,
-    handleActiveBTNHighToLowClick,
-    handleActiveBTNLowToHighClick,
-    getProductsWhereRating,
-    activeBtnLatestCreationDate,
-    activeBtnHighToLow,
-    activeBtnLowToHigh,
-    starsnumber,
-    products,
-    sliderValues,
-    nameCate,
-  } = useSearch();
+  const [products, setProducts] = useState<Row[]>([]);
+  const [stars, setStars] = useState<Rate>();
+  const [starsnumber, setStarsnumber] = useState(0);
+  // Button FIlterPage
+  const [activeBtnLowToHigh, setActiveBtnLowToHigh] = useState(true);
+  const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
+  const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
+    useState(true);
 
-  // const getProductsWhereRating = (rate: any) => {
-  //   productController
-  //     .getProductWhereRatting(rate)
-  //     .then((res: any) => {
+  // Slider Price SiteBarFilterPages
+  const [sliderValues, setSliderValues] = useState<[number, number]>([
+    0, 10000000,
+  ]);
+  const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchValue = searchParams.get("keyword");
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:88 ~ FiltersPage ~ searchValue:",
+    searchValue
+  );
+  const nameCateValue = searchParams.get("nameCate");
+  console.log(
+    "🚀 ~ file: FiltersPage.tsx:90 ~ FiltersPage ~ nameCateValue:",
+    nameCateValue
+  );
 
-  //       console.log("Ratting fillter" + JSON.stringify(res));
-  //       setProducts(res.rows);
+  const urlSliderValues = searchParams.get("sliderValues");
 
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
+  const [subcate, setSubcate] = useState<subCate[]>([])
 
+  const getCate = (index: number) => {
+    categoryController.getCateFilter(nameCateValue?.toString()).then((res) => {
+      setSubcate(res)
+      console.log(index)
+      setProducts(res[index].productId)
+    })
+  }
+  useEffect(() => {
+    getCate(NaN)
+  }, [])
+
+  useEffect(() => {
+    // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
+    if (urlSliderValues) {
+      const [min, max] = urlSliderValues.split(",").map(Number);
+      setSliderValues([min, max]);
+    }
+  }, [urlSliderValues]);
+
+  useEffect(() => {
+    if (nameCateValue != undefined) {
+      setSearchParams(
+        createSearchParams({
+          nameCate: nameCateValue?.toString()!,
+          minPrice: sliderValues[0].toString(),
+          maxPrice: sliderValues[1].toString(),
+        })
+      );
+    }
+  }, [sliderValues]);
+
+  // useEffect(() => {
+  //   getProductInNameCate();
+  // }, [nameCateValue?.toString()]);
+
+  // const getProductInNameCate = () => {
+  //   productController.getList(nameCateValue?.toString()!).then((res: any) => {
+  //     setStars(res.data);
+  //     setProducts(res.rows);
+  //   });
+  // };
+
+  // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
+  useEffect(() => {
+    if (stars) {
+      setStarsnumber(roundedNumber(stars.averageRating));
+    }
+  }, [stars]);
+
+  const handleActiveBTNLowToHighClick = () => {
+    const filterOptions = {
+      key: "asc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
+    productController
+      .getSortProductbyPriceAndDateCreate(filterOptions)
+      .then((res: any) => {
+        setActiveBtnLowToHigh(false);
+        setActiveBtnHighToLow(true);
+        setProducts(res.rows);
+      });
+  };
+  const handleActiveBTNHighToLowClick = () => {
+    const filterOptions = {
+      key: "desc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
+
+    productController
+      .getSortProductbyPriceAndDateCreate(filterOptions)
+      .then((res: any) => {
+        setActiveBtnLowToHigh(true);
+        setActiveBtnHighToLow(false);
+        setProducts(res.rows);
+      });
+  };
+  const handleActiveBTNLatestCreationDate = () => {
+    setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
+    const filterOptions = {
+      key: "desc",
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
+    productController
+      .getSortProductbyPriceAndDateCreate(filterOptions)
+      .then((res: any) => {
+        setProducts(res.rows);
+      });
+  };
+  const getProductSearch = () => {
+    productController
+      .getSearchAndPaginationProduct(searchValue?.toString())
+      .then((res: any) => {
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    if (searchValue?.toString()) {
+      getProductSearch();
+    }
+  }, [searchValue?.toString()]);
+
+  // Slider Price SiteBarFilterPages
+  useEffect(() => {
+    if (debouncedInputValue) {
+      handleFilter(debouncedInputValue);
+    }
+  }, [debouncedInputValue]);
+
+  const handleFilter = async (debouncedInputValue: any) => {
+    const filterOptions = {
+      minPrice: debouncedInputValue[0],
+      maxPrice: debouncedInputValue[1],
+      categoryName: nameCateValue?.toString(),
+      keyword: searchValue?.toString(),
+    };
+
+    await productController
+      .getFilterProductWithinRangeIDCategory(filterOptions)
+      .then((res: any) => {
+        setStars(res.data);
+        setProducts(res.rows);
+      });
+  };
+  function handleSliderChange(price: [number, number]): void {
+    setSliderValues(price);
+  }
+
+  const getProductsWhereRating = (rate: any) => {
+    productController
+      .getProductWhereRatting(rate)
+      .then((res: any) => {
+        setProducts(res.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
           <div className="col-span-1 max-2xl:hidden">
             <SitebarFilter
+              nameCate={nameCateValue?.toString()}
               valuePrice={sliderValues}
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
@@ -119,6 +254,8 @@ export default function FiltersPage() {
               onSoldOut={function (soldOut: boolean): void {
                 throw new Error("Function not implemented.");
               }}
+              subcate={subcate}
+              setProductSubcate={(index) => getCate(index)}
             />
           </div>
           {/* content-right-filter */}
@@ -228,7 +365,21 @@ export default function FiltersPage() {
                   </div>
                 </div>
               </div>
-
+              {nameCateValue ? (
+                <div className="flex gap-2 mt-3 items-center">
+                  <p className="text-lg font-bold">Danh mục: </p>
+                  <p className="text-base font-medium text-[#4C4C4C]">
+                    ' {nameCateValue} '
+                  </p>
+                </div>
+              ) : (
+                <div className="flex gap-2 mt-3 items-center">
+                  <p className="text-lg font-bold">Tìm kiếm với từ khóa: </p>
+                  <p className="text-base font-medium text-[#4C4C4C]">
+                    ' {searchValue} '
+                  </p>
+                </div>
+              )}
               <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
                 {products?.map((items) => {
                   return <Filter starsnumber={starsnumber} product={items} />;

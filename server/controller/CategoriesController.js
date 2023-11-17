@@ -11,7 +11,7 @@ const CategoriesController = {
             const category = await prisma.category.findUnique({
                 where: { id: categoryId },
             });
-         
+
             if (!category) {
                 return res.status(404).json('Category not found');
             }
@@ -21,7 +21,7 @@ const CategoriesController = {
                     name: name,
                 },
             });
-      
+
             res.status(201).json(newSubcategory);
         } catch (error) {
             console.error(error);
@@ -37,7 +37,7 @@ const CategoriesController = {
             // });
             // if (!category) return res.json('Category is undefined');
             const whereClause = {
-                deletedAt : null
+                deletedAt: null
             }
             const subcategories = await prisma.category.findMany({
                 where: whereClause,
@@ -53,18 +53,16 @@ const CategoriesController = {
 
     getProductFromSubcategories: async (req, res) => {
         try {
-            const categoriesId = parseInt(req.params.id);
-            const subCategoriesId = parseInt(req.body.categoriesId);
+            const nameCate = req.params.id;
 
             const category = await prisma.category.findFirst({
-                where: { id: categoriesId },
+                where: { name: nameCate },
             });
             if (!category) return res.json('Category is undefined');
 
-            const product = await prisma.subCategoriesMultiLv2.findMany({
+            const subCate = await prisma.subCategoriesMultiLv2.findMany({
                 where: {
-                    categoryid: categoriesId,
-                    id: subCategoriesId,
+                    categoryid: category.id,
                 },
                 include: {
                     productId: {
@@ -74,7 +72,8 @@ const CategoriesController = {
                     },
                 },
             });
-            res.status(200).json(product);
+
+            res.status(200).json(subCate);
         } catch (error) {
             console.log(error);
             res.status(404).json(error.message);
@@ -83,19 +82,11 @@ const CategoriesController = {
 
     DeleteSubcategories: async (req, res) => {
         try {
-            const categoryId = parseInt(req.params.id);
-            const subCategoriesId = parseInt(req.body.id);
-            const category = await prisma.category.findFirst({
-                where: {
-                    id: categoryId,
-                },
-            });
-            if (!category) return res.status(404).send('Category not found');
+            const subCategoriesId = parseInt(req.params.id);
 
             await prisma.subCategoriesMultiLv2.delete({
                 where: {
                     id: subCategoriesId,
-                    categoryid: category.id,
                 },
             });
             res.status(200).json('Delete Sub Categories Successfull');

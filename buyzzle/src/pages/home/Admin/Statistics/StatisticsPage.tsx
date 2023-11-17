@@ -16,15 +16,15 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import moment from "moment";
 import { Bar, Line } from "react-chartjs-2";
 import { animated, useSpring } from "react-spring";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import ArrowFall from "../../../../Assets/TSX/ArrowFall";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
-import { FilterChart, dataFilter } from "../../../../Helper/Date/DataHelper";
-import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
+import { FilterChart } from "../../../../Helper/Date/DataHelper";
+import { numberFormat } from "../../../../Helper/Format";
 import { HotProductsInRange, Statistics } from "../../../../Model/StatsModels";
-import moment from "moment";
 
 ChartJS.register(
   ArcElement,
@@ -54,7 +54,7 @@ const optionsChartVertical = {
     },
     title: {
       display: true,
-      text: "Doanh thu trong tuần",
+      text: "Doanh thu trong 7 ngày trước",
       font: {
         size: 20,
       },
@@ -76,6 +76,10 @@ interface selectStats {
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
+  console.log(
+    "🚀 ~ file: StatisticsPage.tsx:79 ~ StatisticsPage ~ stats:",
+    stats
+  );
   const [filterState, setFilterState] = useState<FilterChart>({
     filterValue: {
       from: moment().startOf("date").add(-4, "d").toDate(),
@@ -87,22 +91,29 @@ export default function StatisticsPage() {
   const [isLoadMoreComplete, setIsLoadMoreComplete] = useState(false);
 
   // Lấy ra từng cái label từ datasets
-  const dataSetsLineChart = stats.initialDataChartLine?.datasets?.map(
-    (dataLineChart, index) => {
-      return {
-        label: dataLineChart.label,
-        data: dataLineChart.data,
-        borderColor:
-          index === 0 ? "#FFB6B9" : index === 1 ? "#687EFF" : "#2E97A7",
-        backgroundColor:
-          index === 0 ? "#FFE2E2" : index === 1 ? "#80B3FF" : "#64CCC5",
-      };
-    }
-  );
+  const dataSetsLineChart = stats.initialDataChartLine?.datasets
+    ?.sort((a, b) => {
+      const reduceA = a.data.reduce((a, b) => a + b, 0);
+      const reduceB = b.data.reduce((acc, val) => acc + val, 0);
+
+      return reduceB - reduceA;
+    })
+    .slice(0, 3);
+
+  const chartData = dataSetsLineChart?.map((dataLineChart, index) => {
+    return {
+      label: dataLineChart.label,
+      data: dataLineChart.data,
+      borderColor:
+        index === 0 ? "#FFB6B9" : index === 1 ? "#687EFF" : "#2E97A7",
+      backgroundColor:
+        index === 0 ? "#FFE2E2" : index === 1 ? "#80B3FF" : "#64CCC5",
+    };
+  });
 
   const dataWithTransformedLabels = {
     labels: stats.initialDataChartLine?.labels || [],
-    datasets: dataSetsLineChart ?? [],
+    datasets: chartData ?? [],
   };
   const transformedLabelsLineChart = dataWithTransformedLabels.labels.map(
     (label) => {
@@ -220,7 +231,6 @@ export default function StatisticsPage() {
           setIsLoadMoreComplete(true);
         }
       })
-
       .catch((err) => console.log(err.response?.data?.message));
   };
 
@@ -276,10 +286,34 @@ export default function StatisticsPage() {
           </div>
           <div className="content-right-filter mt-[34px] col-span-4 max-2xl:col-span-5 ">
             {/* h2 */}
-            <div>
+            <div className="flex justify-between items-center">
               <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">
                 THỐNG KÊ BUYZZLE
               </h2>
+              <button
+                className="btn btn-outline items-center btn-sm text-xs hover:bg-[#eefff8]
+               text-green-600 hover:text-green-600 hover:border-[#16A46D] flex"
+                // onClick={() => {
+                //   const csv = generateCsv(csvConfig)(stats.); // Xuat excel
+                //   download(csvConfig)(csv);
+                // }}
+              >
+                Xuất excel
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                  />
+                </svg>
+              </button>
             </div>
             <div className="mt-[52px] flex">
               {/* dateTimePicker */}
@@ -388,7 +422,9 @@ export default function StatisticsPage() {
                   <div className="items-center grid grid-cols-4">
                     <div className="col-span-2">
                       <p className="text-[#1C1C1C] font-semibold text-xl">
-                        {numberStast(stats.totalRevenueInRange)}
+                        {numberFormat(
+                          Number(numberStast(stats.totalRevenueInRange))
+                        )}
                       </p>
                     </div>
                     <div className="col-end-6 flex gap-1 ">
@@ -405,7 +441,7 @@ export default function StatisticsPage() {
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="bg-[#F7F9FB] rounded-2xl p-6 col-span-1">
                 <p className="text-xl font-bold text-[#6E6E6E] text-center w-full mx-auto content-center">
-                  Top loại sản phẩm
+                  Top 3 danh mục có số lượng sản phẩm bán ra cao nhất
                 </p>
                 <div>
                   <Line

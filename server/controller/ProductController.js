@@ -3,6 +3,8 @@ const prisma = new PrismaClient();
 
 const multer = require('multer');
 const path = require('path');
+const LoggerHelper = require('../Utils/LoggerHelper');
+const some = new LoggerHelper();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -128,11 +130,11 @@ const ProductController = {
                         whereClause,
                         {
                             name: {
-                                contains: keyword
-                            }
-                        }
-                    ]
-                }
+                                contains: keyword,
+                            },
+                        },
+                    ],
+                },
             });
             res.status(200).json(AllCategory);
         } catch (error) {
@@ -222,20 +224,11 @@ const ProductController = {
 
     addProduct: async (req, res) => {
         try {
-            const {
-                name,
-                price,
-                rate,
-                discount,
-                quantity,
-                description,
-                status,
-                categoryID,
-                subcategoriesID,
-            } = req.body;
+            const { name, price, rate, discount, quantity, description, status, categoryID, subcategoriesID } =
+                req.body;
 
-            console.log("aaa", categoryID)
-            console.log("bbbbb", subcategoriesID)
+            console.log('aaa', categoryID);
+            console.log('bbbbb', subcategoriesID);
             const SellingPrice = price - price * (discount / 100);
             const Pricesale = price * (discount / 100);
 
@@ -275,13 +268,17 @@ const ProductController = {
     // xóa sản phẩm
     deleteProduct: async (req, res) => {
         try {
-            const id = parseInt(req.params.id);
+            const id = parseInt(req.body.id);
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
+            let skip = (page - 1) * pageSize;
             const productToDelete = await prisma.product.findFirst({
                 where: {
                     id: id,
                 },
             });
-            console.log('🚀 ~ file: ProductController.js:329 ~ deleteProduct: ~ productToDelete:', productToDelete);
+
+            some.info(`[ProductToDelete] `, `Id: ${req.params.id}`);
             if (productToDelete) {
                 await prisma.product.update({
                     where: {
@@ -291,7 +288,31 @@ const ProductController = {
                         deletedAt: new Date(),
                     },
                 });
-                return res.status(200).json('Xóa sản phẩm và hình ảnh thành công');
+                const whereClause = {
+                    deletedAt: null,
+                };
+                const totalProduct = await prisma.product.count({
+                    where: whereClause,
+                });
+                const result = await prisma.product.findMany({
+                    orderBy: {
+                        soldcount: 'desc',
+                    },
+                    include: {
+                        ProductImage: true,
+                        fK_category: true,
+                        Rating: true,
+                    },
+                    where: whereClause,
+                    skip,
+                    take: pageSize,
+                });
+                const resultProduct = {
+                    currentPage: page,
+                    totalPage: Math.ceil(totalProduct / pageSize),
+                    rows: result,
+                };
+                return res.status(200).json(resultProduct);
             }
 
             return res.status(402).json('San pham khong ton tai');
@@ -309,7 +330,7 @@ const ProductController = {
             const {
                 name,
                 price,
-                // rate,    
+                // rate,
                 discount,
                 // soldcount,
                 quantity,
@@ -338,7 +359,7 @@ const ProductController = {
                 // createdAt: new Date(),
                 updatedAt: new Date(),
                 categoryID: parseInt(categoryID),
-                subcateId: parseInt(subcateId)
+                subcateId: parseInt(subcateId),
             };
 
             const updatedProduct = await prisma.product.update({
@@ -348,7 +369,7 @@ const ProductController = {
                 data: {
                     ...updatedProductData,
                     categoryID: parseInt(categoryID),
-                    subcateId: parseInt(subcateId)
+                    subcateId: parseInt(subcateId),
                 },
             });
 
@@ -598,14 +619,17 @@ const ProductController = {
                 take: 3,
             });
 
-            const skip = (page - 1) * pageSize;
+            let skip = (page - 1) * pageSize;
+            if (keyword) {
+                skip = 0;
+            }
             const whereClause = {
                 name: {
                     contains: keyword,
                 },
                 deletedAt: null,
             };
-            const totalProduct = await prisma.product.findMany({
+            const totalProduct = await prisma.product.count({
                 where: whereClause,
             });
 
@@ -728,7 +752,7 @@ const ProductController = {
                 const resultProduct = {
                     FlashsaleProducts: FlashsaleProducts,
                     currentPage: page,
-                    totalPage: Math.ceil(totalProduct.length / pageSize),
+                    totalPage: Math.ceil(totalProduct / pageSize),
                     rows: result,
                     Rating: ratings,
                 };

@@ -10,16 +10,16 @@ export default function CloseComfirm() {
          <path
             d="M18.5 6L6.5 18"
             stroke="#4C4C4C"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
          />
          <path
             d="M6.5 6L18.5 18"
             stroke="#4C4C4C"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
          />
       </svg>
    );

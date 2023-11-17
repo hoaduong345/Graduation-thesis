@@ -20,7 +20,6 @@ export default function Cart() {
    const {
       carts,
       setCarts,
-      // getCart,
       setIdProduct,
       idProduct,
       productChecked,
@@ -241,12 +240,12 @@ export default function Cart() {
                                        onClick={() => {
                                           e.quantity < e.product.quantity
                                              ? plusThrottled({
-                                                  productId: e.productid,
-                                                  cartId: e.cartid,
-                                               })
+                                                productId: e.productid,
+                                                cartId: e.cartid,
+                                             })
                                              : toastWarn(
-                                                  `Chỉ còn ${e.product.quantity} sản phẩm`
-                                               );
+                                                `Chỉ còn ${e.product.quantity} sản phẩm`
+                                             );
                                        }}
                                     >
                                        <Plus />
@@ -345,9 +344,8 @@ export default function Cart() {
                            <ArrowUp />
                         </div>
                         <Link
-                           to={`${
-                              productChecked.length == 0 ? "" : "/checkout"
-                           }`}
+                           to={`${productChecked.length == 0 ? "" : "/checkout"
+                              }`}
                            onClick={handleBuyNow}
                            className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 

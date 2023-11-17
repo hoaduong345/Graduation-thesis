@@ -1,53 +1,57 @@
-
-import Globe from "../../Assets/TSX/Globe";
-import Chevron_down from "../../Assets/TSX/Chevron-down";
-import Bell from "../../Assets/TSX/Bell";
-import Headphones from "../../Assets/TSX/headphones";
+import React, { ReactNode } from "react";
 import Map from "../../Assets/TSX/Map";
-import Container from "../container/Container";
+import Bell from "../../Assets/TSX/Bell";
 
-
-
-export default function HeaderTop() {
+interface HeaderTop {
+  noti: ReactNode;
+  countNoti: ReactNode;
+}
+export default function HeaderTop(props: HeaderTop) {
+  const { countNoti, noti } = props;
   return (
-    <>
-      <header className="Header">
-        <Container >
+    <header className="Header">
+      <div className="Header-top bg-white">
+        <div className="container mx-auto">
+          <div className="Header-top-content flex justify-between">
+            <div className="content-left flex py-2">
+              <Map />
+              <span className="text-[#4C4C4C] pl-2">Buôn Ma Thuột</span>
+            </div>
 
-        <div className="Header-top bg-white">
-          <div className="container mx-auto">
-            <div className="Header-top-content flex justify-between">
-              <div className="content-left flex py-2">
-                <Map />
-                <span className="text-[#4C4C4C] pl-2">Buon Ma Thuot</span>
+            <div className="content-right flex items-center gap-2 ">
+              <div className="content-left flex items-center">
+                <span className="text-[#4C4C4C] pl-2">Việt Nam</span>
               </div>
+              <div className="content-left flex py-2 gap-2 ">
+                <div className="border-[1px] border-black " />
+                {/* Noti */}
+                <div className="flex items-center relative">
+                  <div className=" header-hover justify-start items-center flex gap-3">
+                    {noti}
+                    <span className=" inline-block">
+                      <Bell />
 
-              <div className="content-right flex items-center gap-2 ">
-                <div className="content-left flex items-center">
-                  <Globe />
-                  <span className="text-[#4C4C4C] pl-2">EN</span>
-                </div>
-                <div className="content-left flex py-2 gap-2 ">
-                  <div className="pt-1">
-                    <Chevron_down />
-                  </div>
-                  <div className="border-[1px] border-black " />
-                  <div className="flex items-center pl-3">
-                    <Bell />
-                    <span className="text-[#4C4C4C] pl-2">Thong bao</span>
-                  </div>
-                  <div className="flex items-center pl-3">
-                    <Headphones />
-                    <span className="text-[#4C4C4C] pl-2">Ho tro</span>
+                      <span
+                        className={`absolute top-0 inline-flex items-center justify-center px-[5px] py-1 text-xs cursor-default
+                        font-medium leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full 
+                        ${countNoti == 0 ? "hidden" : ""}
+                        `}
+                      >
+                        {countNoti}
+                      </span>
+                    </span>
+                    <span className="text-[#4C4C4C] pl-2 cursor-default">
+                      Thông báo
+                    </span>
                   </div>
                 </div>
+
+                {/* end Noti */}
               </div>
             </div>
           </div>
         </div>
-        </Container>
-        <div className="border-2 border-[#E6E6E6]" />
-      </header>
-    </>
+      </div>
+    </header>
   );
 }

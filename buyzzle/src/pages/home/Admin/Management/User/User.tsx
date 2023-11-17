@@ -7,9 +7,16 @@ import Delete from "../../Assets/TSX/Delete";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Edit from "../../Assets/TSX/Edit";
 import Handle from "../../Assets/TSX/bacham";
-import { userController } from "../../../../../Controllers/UserController";
+
 import EmptyPage from "../../../../../Helper/Empty/EmptyPage";
 import { toast } from "react-toastify";
+import ResponsivePagination from "react-responsive-pagination";
+import useDebounce from "../../../../../useDebounceHook/useDebounce";
+import {
+  userController,
+  userModel,
+} from "../../../../../Controllers/UserController";
+import { ModelUser } from "../../../../../Model/UserModel";
 
 export interface users {
   id: number;
@@ -20,54 +27,20 @@ export interface users {
 }
 
 export default function User() {
-  const active = [
-    {
-      id: "#1334",
-      username: "tranvanA231",
-      email: "tranvanA@gmail.com",
-      sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-    {
-      idUser: "#1335",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-    {
-      idUser: "#1336",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Ngừng Hoạt động",
-    },
-    {
-      idUser: "#1337",
-      userName: "tranvanA231",
-      EmailOrSđt: "tranvanA@gmail.com",
-      Sex: "Nam",
-      idCart: 102,
-      totalAmount: 3999999,
-      status: "Hoạt động",
-    },
-  ];
-
   let status = "Hoạt động";
-  const [users, setUsers] = useState<any>({});
+  const [userAPI, setUserAPI] = useState<userModel>({
+    pageSize: 2,
+  });
+  const debouncedInputValueSearch = useDebounce(userAPI.keyword, 500);
+
+  const [users, setUsers] = useState<ModelUser>({} as ModelUser);
   const getAllUserData = () => {
     userController
-      .getAllUser()
+      .getAllUser(userAPI)
       .then((res) => {
         return res;
       })
-      .then((res) => {
+      .then((res: any) => {
         setUsers(res);
         console.log("Test" + JSON.stringify(res));
       });
@@ -75,8 +48,13 @@ export default function User() {
 
   useEffect(() => {
     getAllUserData();
-  }, []);
-
+  }, [userAPI.page, debouncedInputValueSearch]);
+  const handlePageChange = (page: number) => {
+    setUserAPI({ ...userAPI, page: page });
+  };
+  const handleSearchInput = (value: string) => {
+    setUserAPI({ ...userAPI, keyword: value });
+  };
   function JumpEditUser(username: any) {
     window.location.href = `detailuser/${username}`;
   }
@@ -120,7 +98,10 @@ export default function User() {
                 </div>
                 <input
                   className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm"
-                  placeholder="Tìm kiếm..."
+                  placeholder="Tìm kiếm theo tên đăng nhập"
+                  value={userAPI.keyword}
+                  style={{ fontSize: "14px" }}
+                  onChange={(e) => handleSearchInput(e.target.value)}
                 />
               </div>
               <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
@@ -183,8 +164,8 @@ export default function User() {
                 </tr>
               </thead>
 
-              {users?.length > 0 ? (
-                users?.map((items: any) => {
+              {users?.data?.length > 0 ? (
+                users?.data?.map((items: any) => {
                   return (
                     <>
                       <tbody>
@@ -311,6 +292,14 @@ export default function User() {
                 </>
               )}
             </table>
+            <div className="mt-10">
+              <ResponsivePagination
+                current={userAPI.page!}
+                total={users.totalPage}
+                onPageChange={handlePageChange}
+                maxWidth={500}
+              />
+            </div>
           </div>
         </div>
       </div>

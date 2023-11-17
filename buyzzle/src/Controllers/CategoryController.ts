@@ -1,5 +1,5 @@
 import axios from "axios"
-import { CategoryModal } from "../Model/CategoryModel"
+import { CategoryModal, subCate } from "../Model/CategoryModel"
 
 export const appConfig = {
     apiUrl: import.meta.env.VITE_BACKEND_URL || '',
@@ -45,8 +45,22 @@ class CategoryController {
         return await axios.post(`${appConfig.apiCategories}`, data)
     }
 
-    getAllCate = async () => {
+    updateSubcateLv1 = async (idCate: number, idSubcate: number, nameSubcate: string) => {
+        return await axios.put(`${appConfig.apiCategories}/${idCate}`, { id: idSubcate, name: nameSubcate })
+    }
+
+    removeSubcateLv1 = async (idCate: number) => {
+        return await axios.delete(`${appConfig.apiCategories}/${idCate}`)
+    }
+
+    getAllCateAdmin = async () => {
         return await axios.get(`${appConfig.apiCategories}`)
+    }
+
+    getCateFilter = async (nameCate: string | undefined) => {
+        return await axios.get(`${appConfig.apiCategories}/${nameCate}`).then((res) => {
+            return res.data as subCate[]
+        })
     }
 }
 

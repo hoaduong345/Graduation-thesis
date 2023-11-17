@@ -183,11 +183,10 @@ export default function PaymentAddress() {
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.username
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                            ${!!errors.username
+                                      ? "border-[2px] border-red-900"
+                                      : "border-[1px] border-[#FFAAAF]"
+                                    }`}
                                   value={field.value}
                                 />
                               </>
@@ -264,11 +263,10 @@ export default function PaymentAddress() {
                               <input
                                 className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                            ${
-                                              !!errors.specificaddress
-                                                ? "border-[2px] border-red-900"
-                                                : "border-[1px] border-[#FFAAAF]"
-                                            }`}
+                                            ${!!errors.specificaddress
+                                    ? "border-[2px] border-red-900"
+                                    : "border-[1px] border-[#FFAAAF]"
+                                  }`}
                                 value={field.value}
                               />
                             </>
@@ -316,9 +314,9 @@ export default function PaymentAddress() {
                   fill="currentColor"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
                 <span>Return Home</span>

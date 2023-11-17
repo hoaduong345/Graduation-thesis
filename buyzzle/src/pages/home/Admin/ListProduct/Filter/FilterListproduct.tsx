@@ -26,8 +26,6 @@ export default function FilterListproduct({
   onPriceRangeChange,
   onQuantityRangeChange,
   onPurchaseRangeChange,
-  oninStock,
-  onSoldOut,
   onRateChange,
 }: SliderComponentProps) {
   const [price, setPrice] = useState(false);
@@ -38,7 +36,6 @@ export default function FilterListproduct({
   const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
   const [availability, setAvailability] = useState<boolean>(false);
-  const [soldOut, setSoldOut] = useState<boolean>(false);
   const handleSliderChangePrice = (price: [number, number]) => {
     console.log(
       "🚀 ~ file: FilterListproduct.tsx:29 ~ handleSliderChangePrice ~ price:",
@@ -63,17 +60,7 @@ export default function FilterListproduct({
     setRangePurchaseValue(quantity);
     onPurchaseRangeChange(quantity);
   };
-  const handleClickAvailability = (Availability: boolean) => {
-    console.log(Availability);
-    setAvailability(!availability);
-    oninStock(Availability);
-  };
-  const handleClickSoldOut = (SoldOut: boolean) => {
-    console.log(SoldOut);
-    setSoldOut(!soldOut);
-    onSoldOut(SoldOut);
-  };
-  
+
   const handleRateChange = (rate: number) => {
     console.log("Rating:", rate);
     setRating(rate);
@@ -132,7 +119,7 @@ export default function FilterListproduct({
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <p className="text-[#4C4C4C] text-sm font-medium max-xl:text-[13px]">
               Danh Mục Sản Phẩm Hot
             </p>
@@ -144,7 +131,7 @@ export default function FilterListproduct({
                 <option>Chọn Danh Mục</option>
               </select>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-1 flex flex-col gap-6">
@@ -173,7 +160,7 @@ export default function FilterListproduct({
               onChange={(e: any) => handleSliderChangeBoughtQuantity(e)}
               range
             />
-            <div className="flex justify-start gap-2">
+            <div className="flex mt-[20px] justify-start gap-2">
               <p
                 className={`max-w-max text-sm max-xl:text-[13px]
                               ${
@@ -193,7 +180,7 @@ export default function FilterListproduct({
             </div>
           </div>
 
-          <div className="flex flex-col gap-5">
+          {/* <div className="flex flex-col gap-5">
             <p className="text-[#4C4C4C] text-sm font-medium max-xl:text-[13px]">
               Tình Trạng Sản Phẩm
             </p>
@@ -224,7 +211,7 @@ export default function FilterListproduct({
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-1 flex flex-col gap-6">
@@ -277,29 +264,33 @@ export default function FilterListproduct({
               </div>
             </div>
           </div>
-
-          <div className="mt-[21px] max-[900px]:mt-[30px]">
-            <button
-              className="bg-[#EA4B48] text-white p-4 justify-center
-                         rounded-md flex gap-3 items-center w-full text-base font-bold
-                         max-xl:p-[10px] max-xl:text-sm max-[900px]:text-xs max-[900px]:p-[8px]"
-            >
-              Xóa Bộ Lọc
-              <DeleteWhite />
-            </button>
-          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-5 gap-1">
         {arrRating.map((e) => {
-          return <FilterRateMap rating={e.rating} checked={e.checked} 
-            onChangeFilter={(rating) => {
-            const ratingNum: number = Number(rating);
-            handleRateChange(ratingNum);
-            // onRateChange(ratingNum);
-          }}/>;
+          return (
+            <FilterRateMap
+              rating={e.rating}
+              checked={e.checked}
+              onChangeFilter={(rating) => {
+                const ratingNum: number = Number(rating);
+                handleRateChange(ratingNum);
+                // onRateChange(ratingNum);
+              }}
+            />
+          );
         })}
+      </div>
+      <div>
+        <button
+          className="bg-[#EA4B48] text-white p-3 px-10 justify-center hover:bg-red-400 duration-300
+                         rounded-md flex gap-3 items-center text-base font-bold
+                         max-xl:p-[10px] max-xl:text-sm max-[900px]:text-xs max-[900px]:p-[8px]"
+        >
+          Xóa bộ lọc
+          <DeleteWhite />
+        </button>
       </div>
     </div>
   );

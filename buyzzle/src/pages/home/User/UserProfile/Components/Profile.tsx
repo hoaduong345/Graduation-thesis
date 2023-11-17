@@ -75,7 +75,7 @@ export default function UserProfile() {
     mode: "all",
     // defaultValues: UserData1
   });
-  
+
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
   useEffect(() => {
     const fetchData = async () => {
@@ -112,7 +112,7 @@ export default function UserProfile() {
               Bruh2 = Bruh2.replace(res.phonenumber[5], "*")
               Bruh2 = Bruh2.replace(res.phonenumber[6], "*")
               let phonenumberDef = Bruh2;
-              
+
 
               setSdtThen(res.phonenumber);
 
@@ -144,7 +144,7 @@ export default function UserProfile() {
           "ERROR", error
         );
       }
-     
+
     };
 
     // Call the fetchData function
@@ -245,7 +245,7 @@ export default function UserProfile() {
       formData.sex = JSON.parse(formData.sex);
       formData.email = emailThen;
       formData.phonenumber = sdtThen;
-      console.log("SERVER:"+JSON.stringify(formData));
+      console.log("SERVER:" + JSON.stringify(formData));
       const response = await axios.put(API, formData);
       FormImage.id = parseInt(id);
       if (response) {
@@ -779,9 +779,9 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                         fill="currentColor"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         ></path>
                       </svg>
                       <span>Return Home</span>

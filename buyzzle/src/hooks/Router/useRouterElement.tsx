@@ -6,7 +6,6 @@ import Login from "../../pages/login/Login";
 import ListproductsAdmin from "../../pages/home/Admin/ListProduct/Listproducts";
 import HomePage from "../../pages/home/User/HomePage";
 import ProductsPage from "../../pages/home/User/ProductsPage";
-import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
 // import Addproducts from "../pages/home/Admin/Addproducts";
 import Editproducts from "../../pages/home/Admin/EditProduct/Editproducts";
 // import Detailproducts from "../pages/home/Admin/Detailproducts";
@@ -42,6 +41,9 @@ import RegisterShipper from "../../pages/home/Shipping/RegisterShipper/RegisterS
 import LoginShipper from "../../pages/home/Shipping/LoginShipper/LoginShipper";
 import Shipper from "../../pages/home/Admin/Management/Shipper/Shipper";
 import DetailShipper from "../../pages/home/Admin/DetailShipper/DetailShipper";
+import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
+import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
+import CustomToast from "../../Helper/Toast/CustomToast";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -52,7 +54,6 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-
     {
       path: "/userprofilepage/:username",
       element: (
@@ -61,7 +62,14 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-
+    {
+      path: "/custom",
+      element: (
+        <MainLayout>
+          <CustomToast />
+        </MainLayout>
+      ),
+    },
     {
       path: "/products",
       element: (
@@ -71,21 +79,13 @@ export default function useRouterEmelent() {
       ),
     },
     {
-      path: "/FiltersPage/",
+      path: "/FiltersPage",
       element: (
         <MainLayout>
           <FiltersPage />
         </MainLayout>
       ),
     },
-    // {
-    //   path: "/FiltersPage/:text",
-    //   element: (
-    //     <MainLayout>
-    //       <FiltersPage />
-    //     </MainLayout>
-    //   ),
-    // },
 
     {
       path: "/register",
@@ -144,14 +144,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
+
     {
       path: path.confirmAccount,
       element: (
@@ -296,14 +289,6 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
 
     {
       path: path.confirmAccount,
@@ -377,14 +362,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
+
     {
       path: path.confirmAccount,
       element: (
@@ -441,14 +419,7 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
-    {
-      path: "orderdetail",
-      element: (
-        <MainLayout>
-          <OrderDetailPage />
-        </MainLayout>
-      ),
-    },
+
     {
       path: path.confirmAccount,
       element: (
@@ -513,11 +484,12 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
+
     {
-      path: "orderdetail",
+      path: "favorite",
       element: (
         <MainLayout>
-          <OrderDetailPage />
+          <FavoritePage />
         </MainLayout>
       ),
     },

@@ -3,10 +3,14 @@ import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 
 import Search from "../../../Assets/TSX/Search";
-import { orderControllers } from "../../../Controllers/OrderControllers";
+import {
+  orderControllers,
+  orderModelController,
+} from "../../../Controllers/OrderControllers";
 import { numberFormat } from "../../../Helper/Format";
 import { OrderPanigation } from "../../../Model/OrderModel";
 import Container from "../../../components/container/Container";
+import useDebounce from "../../../useDebounceHook/useDebounce";
 import Calendar from "../Admin/Assets/TSX/calendar";
 import Excel from "../Admin/Assets/TSX/excel";
 import {
@@ -16,25 +20,30 @@ import {
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 export default function ShippingPage() {
   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [orderAPI, setOrderAPI] = useState<orderModelController>({
+    pageSize: 4,
+  });
+
+  const debouncedInputValueSearch = useDebounce(orderAPI.keyword, 1000); // Debounce for 300 milliseconds
+
   const [changeButton, setChangeButton] = useState([
     {
-      id: 1,
+      id: -1,
       text: "Tất cả",
       active: true, // Thêm trường active
     },
     {
-      id: 2,
+      id: 4,
       text: "Đã nhận hàng",
       active: false, // Thêm trường active
     },
     {
-      id: 3,
+      id: 5,
       text: "Đang Giao Hàng",
       active: false, // Thêm trường active
     },
     {
-      id: 4,
+      id: 6,
       text: "Giao Hàng Thành công",
       active: false, // Thêm trường active
     },
@@ -43,43 +52,57 @@ export default function ShippingPage() {
   const handleClick = (id: number) => {
     const updatedButtons = changeButton.map((btn) => {
       if (btn.id === id) {
-        console.log(
-          "🚀 ~ file: OrderManagement.tsx:91 ~ updatedButtons ~ btn.id:",
-          btn.id
-        );
         return { ...btn, active: true };
       } else {
         return { ...btn, active: false };
       }
     });
     setChangeButton(updatedButtons);
+    const selectedButton = updatedButtons.find((btn) => btn.id === id);
+
+    if (selectedButton && selectedButton.id !== -1) {
+      console.log(
+        "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
+        selectedButton.id
+      );
+      setOrderAPI({ ...orderAPI, status: selectedButton.id });
+    } else {
+      setOrderAPI({ ...orderAPI, status: null });
+    }
   };
 
   function getBorderColor(id: number) {
     switch (id) {
-      case 1:
-        return "#570DF8"; // Màu biên cho id 1
-      case 2:
-        return "#FBC132"; // Màu biên cho id 2
-      case 3:
-        return "#F43FCA"; // Màu biên cho id 3
+      case -1:
+        return "#570DF8";
       case 4:
-        return "#21CEBD"; // Màu biên cho id 4
+        return "#FBC132";
+      case 5:
+        return "#F43FCA";
+      case 6:
+        return "#21CEBD";
       default:
-        return "#ccc"; // Màu biên mặc định (nếu id không khớp với bất kỳ case nào)
+        return "#ccc";
     }
   }
 
   const getOrder = async () => {
-    await orderControllers.getOrderOfShipping(currentPage).then((res) => {
+    await orderControllers.getOrderOfShipping(orderAPI).then((res) => {
       setOrder(res);
+      console.log(res);
     });
   };
 
   useEffect(() => {
     getOrder();
-  }, [currentPage]);
+  }, [orderAPI.page, debouncedInputValueSearch, changeButton]);
 
+  const handlePageChange = (page: number) => {
+    setOrderAPI({ ...orderAPI, page: page });
+  };
+  const handleSearchInput = (value: string) => {
+    setOrderAPI({ ...orderAPI, keyword: value });
+  };
   return (
     <Container>
       <div className="grid grid-cols-5">
@@ -107,24 +130,24 @@ export default function ShippingPage() {
                   onClick={() => handleClick(btnItems.id)}
                 >
                   {btnItems.text}
-                  {btnItems.id == 1 && (
+                  {btnItems.id == -1 && (
                     <div className="badge badge-xs badge-primary badge-outline py-2">
-                      {order?.data?.length}
-                    </div>
-                  )}
-                  {btnItems.id == 2 && (
-                    <div className="badge badge-xs badge-warning badge-outline py-2">
-                      {order?.data?.filter((e) => e.status == 3).length}
-                    </div>
-                  )}
-                  {btnItems.id == 3 && (
-                    <div className="badge badge-xs badge-secondary badge-outline py-2">
-                      {order?.data?.filter((e) => e.status == 4).length}
+                      {order?.totalOrderShipping}
                     </div>
                   )}
                   {btnItems.id == 4 && (
+                    <div className="badge badge-xs badge-warning badge-outline py-2">
+                      {order?.statusCounts?.orderStatus4}
+                    </div>
+                  )}
+                  {btnItems.id == 5 && (
+                    <div className="badge badge-xs badge-secondary badge-outline py-2">
+                      {order?.statusCounts?.orderStatus5}
+                    </div>
+                  )}
+                  {btnItems.id == 6 && (
                     <div className="badge badge-xs badge-accent badge-outline py-2">
-                      {order?.data?.filter((e) => e.status == 5).length}
+                      {order?.statusCounts?.orderStatus6}
                     </div>
                   )}
                 </button>
@@ -148,6 +171,8 @@ export default function ShippingPage() {
                 <input
                   className=" rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm"
                   placeholder="Tìm kiếm..."
+                  value={orderAPI.keyword}
+                  onChange={(e) => handleSearchInput(e.target.value)}
                 />
               </div>
             </div>
@@ -252,7 +277,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                           <p className="font-bold text-xs text-white ">Mới</p>
                         </div> */}
                         </div>
-                        <div className="grid grid-cols-3 mt-4 ">
+                        <div className="grid grid-cols-2 mt-4 ">
                           {e.OrderDetail.map((items) => {
                             return (
                               <>
@@ -308,9 +333,9 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
               </>
             )}
             <ResponsivePagination
-              current={currentPage}
+              current={orderAPI.page!}
               total={order.totalPage}
-              onPageChange={setCurrentPage}
+              onPageChange={handlePageChange}
               maxWidth={500}
             />
           </div>

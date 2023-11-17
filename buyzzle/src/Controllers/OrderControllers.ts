@@ -6,26 +6,26 @@ const appConfig = {
   apiShipping: import.meta.env.VITE_BACKEND_SHIPPING_URL || "",
 };
 
+export interface orderModelController {
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
+  status?: number | null;
+}
 class OrderControllers {
   create = async (data: any) => {
     return await axios.post(`${appConfig.apiOrder}`, { order: data });
   };
 
-  getOrderOfUser = async () => {
-    return await axios.get(`${appConfig.apiOrder}`, {
+  getOrderOfUser = async (page: number, status: number) => {
+    return await axios.post(`${appConfig.apiOrder}/userOrder`, { page: page, pageSize: 6, status: status }, {
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
       withCredentials: true,
+    }).then((res) => {
+      return res.data
     });
-  };
-
-  getOrderOfAdmin = async (page: number) => {
-    return await axios
-      .get(`${appConfig.apiOrder}/admin/listOrder?page=${page}`)
-      .then((res) => {
-        return res.data;
-      });
   };
 
   getDetails = async (id: number): Promise<OrderModel> => {
@@ -46,22 +46,33 @@ class OrderControllers {
   };
 
   setStatus = async (id: number, status: number) => {
-    return await axios.post(`${appConfig.apiShipping}`, {
+    return await axios.post(`${appConfig.apiShipping}/setStatus`, {
       id: id,
       status: status,
     });
   };
 
   abortOrder = async (id: number) => {
-    return await axios.post(`${appConfig.apiShipping}`, {
-      id: id,
-      status: null,
+    return await axios.post(`${appConfig.apiShipping}/delete`, {
+      orderId: id,
     });
   };
 
-  getOrderOfShipping = async (page: number) => {
+  getOrderOfShipping = async (data: orderModelController) => {
+    return await axios.post(`${appConfig.apiShipping}`, data).then((res) => {
+      return res.data;
+    });
+  };
+  getOrderOfAdmin = async (data: orderModelController) => {
     return await axios
-      .get(`${appConfig.apiShipping}?page=${page}`)
+      .post(`${appConfig.apiShipping}/manager`, data)
+      .then((res) => {
+        return res.data;
+      });
+  };
+  getConfirmCancelOrder = async (id: number) => {
+    return await axios
+      .post(`${appConfig.apiShipping}/confirmdelete`, { orderId: id })
       .then((res) => {
         return res.data;
       });
