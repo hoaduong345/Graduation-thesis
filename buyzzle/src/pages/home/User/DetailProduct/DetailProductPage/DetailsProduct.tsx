@@ -381,7 +381,6 @@ export default function DetailsProduct() {
               {/* Thống kê */}
               <div className="grid grid-cols-4 mt-8">
                 <div className="flex col-span-1 gap-4">
-                  {/* <p className="text-[#1A1A1A] text-base">(100)</p> */}
                   {/* rating  */}
                   <div>
                     <div className="flex items-center justify-start gap-2 ">
@@ -439,7 +438,9 @@ export default function DetailsProduct() {
                           <p className="text-[#4C4C4C] text-sm">Đã bán</p>
                         </div>
                       </>
-                    ) : null}
+                    ) : (
+                      <p>0 Đã bán</p>
+                    )}
                   </div>
                 ) : null}
               </div>
@@ -472,28 +473,33 @@ export default function DetailsProduct() {
                     ) : null}
                   </div>
                   {/* Tăng giảm số lượng */}
-                  <div className=" flex items-center ">
-                    {/* Giảm số lượng */}
-                    <div
-                      className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
-                      onClick={minusQuantity}
-                    >
-                      <Minus />
+                  <div className="flex flex-col my-3 justify-between">
+                    <div className="flex">
+                      {/* Giảm số lượng */}
+                      <div
+                        className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
+                        onClick={minusQuantity}
+                      >
+                        <Minus />
+                      </div>
+                      {/* end Giảm số lượng */}
+                      {/* Số lượng */}
+                      <div>
+                        <p className="text-base mx-2 font-medium">{quantity}</p>
+                      </div>
+                      {/* end Số lượng */}
+                      {/* Tăng số lượng */}
+                      <div
+                        className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
+                        onClick={plusQuantity}
+                      >
+                        <Plus />
+                      </div>
+                      {/* end Tăng số lượng */}
                     </div>
-                    {/* end Giảm số lượng */}
-                    {/* Số lượng */}
-                    <div>
-                      <p className="text-base mx-2 font-medium">{quantity}</p>
+                    <div className="flex justify-start gap-2 text-[#7A828A]">
+                      Số lượng còn lại: {first?.productDetail.quantity}
                     </div>
-                    {/* end Số lượng */}
-                    {/* Tăng số lượng */}
-                    <div
-                      className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
-                      onClick={plusQuantity}
-                    >
-                      <Plus />
-                    </div>
-                    {/* end Tăng số lượng */}
                   </div>
                   {/* end Tăng giảm số lượng */}
                 </div>

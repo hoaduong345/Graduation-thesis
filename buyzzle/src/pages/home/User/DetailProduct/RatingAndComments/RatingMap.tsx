@@ -43,6 +43,7 @@ type Props = {
   handleRemoveRating: (id: number) => void;
 };
 export default function RatingMap(props: Props) {
+  const [isFeedbackClicked, setIsFeedbackClicked] = useState<number>(1);
   const [idRating, setidRating] = useState<number>(0);
 
   const { id } = useParams();
@@ -83,14 +84,25 @@ export default function RatingMap(props: Props) {
     setValue("ratingValue", rating);
     console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
   };
+  const handleFeedbackClick = (ratingId: number) => {
+    // Xử lý hành động khi nút "Phản hồi" được click
+    setIsFeedbackClicked(ratingId);
+  };
   return (
     <div>
       {props.rateAndcomment?.Rating ? (
         props.rateAndcomment.Rating.length > 0 ? (
           props.rateAndcomment?.Rating.map((rating) => {
+            console.log(
+              "🚀 ~ file: RatingMap.tsx:96 ~ props.rateAndcomment?.Rating.map ~ rating:",
+              rating.id
+            );
             return (
               <>
-                <div className="border-t-[1px] border-[#EA4B48] px-11 py-8">
+                <div
+                  key={rating.id}
+                  className="border-t-[1px] border-[#EA4B48] px-11 py-8"
+                >
                   {/* header comment */}
                   <div className=" justify-between flex mb-4">
                     <div className="flex items-center gap-3">
@@ -144,11 +156,6 @@ export default function RatingMap(props: Props) {
                           </p>
                         </div>
                         {/* end rating */}
-                        {/* quatity */}
-                        <p className="text-[#4C4C4C] font-normal text-sm">
-                          Số lượng: {rating.product.quantity}
-                        </p>
-                        {/* end quatity */}
                       </div>{" "}
                       {/* end thong tin users */}
                     </div>
@@ -230,77 +237,86 @@ export default function RatingMap(props: Props) {
                   </div>
                   {/* text reply */}
                   <div>
-                    <p className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max">
-                      Trả lời
+                    <p
+                      className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
+                      onClick={() => handleFeedbackClick(rating.id)}
+                    >
+                      Phản hồi
                     </p>
                   </div>
-                  {/* end text reply */}
-                  {/* end content comment */}
-                  {/* reply content comment */}
-                  <div className="mx-3 my-2 flex">
-                    <div className="ml-2">
-                      <LineCMT />
-                    </div>
-                    {/* shop reply cmt */}
-                    <div className="flex items-center mt-1 ml-3 gap-3">
-                      {/* hinh anh */}
-                      <div className="relative">
-                        <CircleAvrCMT />
-                        <span className="top-0 left-5 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-                      </div>
-                      {/* end hinh anh */}
-                      {/* thong tin admin */}
-                      <div>
-                        {/* name - period - date */}
-                        <div className="flex items-center">
-                          {/* name */}{" "}
-                          <p className="text-[#1A1A1A] text-base font-medium">
-                            ShopTaiNghe
-                          </p>
-                          {/* end name */}
-                          {/* period */}
-                          <Period /> {/* end period */}
-                          {/* date */}{" "}
-                          <p className="text-[#4C4C4C] text-[12px]">
-                            12-10-2023
-                          </p>
-                          {/* end date */}
+                  {isFeedbackClicked === rating.id && (
+                    <>
+                      {/* end text reply */}
+                      {/* reply content comment */}
+                      <div className="mx-3 my-2 flex">
+                        <div className="ml-2">
+                          <LineCMT />
                         </div>
-                        {/* end name - period - date */}
-                      </div>{" "}
-                      {/* end thong tin admin */}
-                    </div>
+                        {/* shop reply cmt */}
+                        <div className="flex items-center mt-1 ml-3 gap-3">
+                          {/* hinh anh */}
+                          <div className="relative">
+                            <CircleAvrCMT />
+                            <span className="top-0 left-5 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                          </div>
+                          {/* end hinh anh */}
+                          {/* thong tin admin */}
+                          <div>
+                            {/* name - period - date */}
+                            <div className="flex items-center">
+                              {/* name */}{" "}
+                              <p className="text-[#1A1A1A] text-base font-medium">
+                                ShopTaiNghe
+                              </p>
+                              {/* end name */}
+                              {/* period */}
+                              <Period /> {/* end period */}
+                              {/* date */}{" "}
+                              <p className="text-[#4C4C4C] text-[12px]">
+                                12-10-2023
+                              </p>
+                              {/* end date */}
+                            </div>
+                            {/* end name - period - date */}
+                          </div>{" "}
+                          {/* end thong tin admin */}
+                        </div>
 
-                    {/* shop reply cmt */}
-                  </div>
-                  {/* end reply content comment */}
-                  {/* input */}
-                  <div
-                    className=" text-[#333333] rounded-[6px] px-[10px] py-[6px] max-xl:text-sm mt-2
+                        {/* shop reply cmt */}
+                      </div>
+                      {/* end reply content comment */}
+                      {/* input */}
+                      <div
+                        className=" text-[#333333] rounded-[6px] px-[10px] py-[6px] max-xl:text-sm mt-2
                         border-[1px] border-[#FFAAAF] w-[95%] mx-auto flex"
-                  >
-                    <input
-                      className={`w-full focus:outline-none`}
-                      placeholder={`Trả lời ${rating?.user?.username}`}
-                    />
-                    <div className="pl-2">
-                      <SendCmt />
-                    </div>
-                  </div>
-                  {/* input */}
-                  {/* content comment */}
-                  {/* <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4"> */}
-                  {/* <p className="text-[#4C4C4C]">
-                      Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm hôm
-                      nay mua lại vì hôm đi chơi bị mất. vẫn chất lg như lần trc
-                      esd15 mãi đỉnh , mà chắc do shop uy tín lên dùng rất tốt
-                      âm thanh bass trest chống âm cách tiếng onf đeo êm tai ko
-                      bị đua tai luôn chyaj bộ thể dục thoải mái nhá ae lên mua
-                      thanh anh shop tư vấn hài lòng vãi
-                    </p> */}
-                  {/* </div> */}
-                  {/* end content comment */}
+                      >
+                        <input
+                          className={`w-full focus:outline-none`}
+                          placeholder={`Trả lời ${rating?.user?.username}`}
+                        />
+                        <div className="pl-2 cursor-pointer">
+                          <SendCmt />
+                        </div>
+                      </div>
+                      {/* input */}
+                      {/* <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4">
+                        <p className="text-[#4C4C4C]">
+                          Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm
+                          hôm nay mua lại vì hôm đi chơi bị mất. vẫn chất lg như
+                          lần trc esd15 mãi đỉnh , mà chắc do shop uy tín lên
+                          dùng rất tốt âm thanh bass trest chống âm cách tiếng
+                          onf đeo êm tai ko bị đua tai luôn chyaj bộ thể dục
+                          thoải mái nhá ae lên mua thanh anh shop tư vấn hài
+                          lòng vãi
+                        </p>
+                      </div> */}
+                      {/* content comment */}
+                    </>
+                  )}
                 </div>
+                {/* end content comment */}
+
+                {/* end content comment */}
               </>
             );
           })
