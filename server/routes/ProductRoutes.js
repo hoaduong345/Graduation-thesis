@@ -54,4 +54,8 @@ router.put('/updatecategory/:id', ProductController.updateCategory);
 
 router.get('/allcategory', ProductController.getAllCategory);
 
+// update quantity
+
+router.put('/updateQuantity', ProductController.updateQuantity);
+
 module.exports = router;

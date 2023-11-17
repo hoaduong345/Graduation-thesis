@@ -1069,6 +1069,68 @@ const ProductController = {
             res.status(500).json(error.message);
         }
     },
+
+    updateQuantity: async (req, res) => {
+        try {
+            const data = req.body.data;
+
+            await Promise.all(data.map(async (element) => {
+
+                const currentProduct = await prisma.product.findUnique({
+                    where: {
+                        id: parseInt(element.productId),
+                    },
+                });
+
+                const newQuantity = currentProduct.quantity - parseInt(element.quantity);
+
+                await prisma.product.update({
+                    where: {
+                        id: parseInt(element.productId)
+                    },
+                    data: {
+                        quantity: newQuantity
+                    }
+                })
+            }))
+
+            res.status(200).json('Trừ số lượng thành công');
+
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
+    },
+
+    updateSoldcount: async (req, res) => {
+        try {
+            const data = req.body.data;
+
+            await Promise.all(data.map(async (element) => {
+
+                const currentProduct = await prisma.product.findUnique({
+                    where: {
+                        id: parseInt(element.productId),
+                    },
+                });
+
+                const newSoldcount = currentProduct.soldcount + parseInt(element.quantity);
+
+                await prisma.product.update({
+                    where: {
+                        id: parseInt(element.productId)
+                    },
+                    data: {
+                        soldcount: newSoldcount
+                    }
+                })
+            }))
+
+            res.status(200).json('Trừ số lượng thành công');
+
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
+    }
 };
 
 module.exports = ProductController;
