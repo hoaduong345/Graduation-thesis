@@ -6,9 +6,7 @@ export interface Statistics {
   revenuePercentageInRange: number;
   percentageQuantitySold: number;
   hotProductsInRange: HotProductsInRange[];
-
   initialDataChartLine: InitialDataChartLine;
-
   initialDataChartBar: InitialDataChartBar;
 }
 export interface HotProductsInRange {

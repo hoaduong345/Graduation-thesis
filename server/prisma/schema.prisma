@@ -42,7 +42,7 @@ model User {
   invoices             Invoice[]
   savedVouchers        SavedVoucher[]
   usedVouchers         Voucher[]      @relation("UsedBy")
-  
+  Notification         Notification[]
 }
 
 model ShippingUnit {
@@ -316,12 +316,14 @@ model Message {
 }
 
 model Notification {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
+  userId   Int?
   orderId  Int
   message  String?
-  date     DateTime @default(now())
+  date     DateTime  @default(now())
   status   Int?
   seen     Boolean?
   deleteAt DateTime?
-  fk_order Order    @relation(fields: [orderId], references: [id])
+  fk_user  User?      @relation(fields: [userId], references: [id])
+  fk_order Order     @relation(fields: [orderId], references: [id])
 }
