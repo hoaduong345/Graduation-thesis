@@ -15,6 +15,7 @@ import { Images } from "../../../../../Assets/TS";
 import Contact from "../../Assets/TSX/Contact";
 import { currentDate, numberFormat } from "../../../../../Helper/Format";
 import { shipperController } from "../../../../../Controllers/ShipperController";
+import secureLocalStorage from "react-secure-storage";
 
 
 export interface userStatus {
@@ -97,7 +98,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     function CheckLink() {
-      const user = localStorage.getItem("user");
+      const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
 

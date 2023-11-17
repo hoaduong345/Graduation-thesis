@@ -7,35 +7,32 @@ import { ToastContainer, toast } from "react-toastify";
 import bg from "../../Assets/PNG/NewProject.png";
 
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../utils/rules";
+export interface FormValues {
+  name: string;
+  username: string
+  email: string;
+  password: string;
+  confirmpassword: string;
+  phonenumber: string;
 
+
+}
 function Register() {
   const [msg, setMsg] = useState("");
 
-  const SignInSchema = schema.omit([
-    "category",
-    "color",
-    "details",
-    "image",
-    "price",
-    "size",
-    "quantity",
-
-
-  ]);
-  const { handleSubmit, register, formState: { errors } } = useForm({
-    defaultValues: {
-      name: '',
-      username: '',
-      password: '',
-      confirmpassword: '',
-      email: '',
-      phonenumber: '',
-      // termsAgreement: false,
-    },
-    resolver: yupResolver(SignInSchema)
+  const {
+    control,
+    handleSubmit,
+    register,
+    reset,
+    getValues, // add this line
+    formState: { errors, isDirty, isValid },
+  } = useForm<FormValues>({
+    mode: "all",
+    // defaultValues: UserData1
   });
 
 
@@ -80,7 +77,7 @@ function Register() {
           console.log(`Lỗi2: ${responseData.error}`);
           const errorMessageUsername = responseData.error.username;
           const errorMessageEmail = responseData.error.email;
-          const errorMessagePhoneNumber= responseData.error.phonenumber;
+          const errorMessagePhoneNumber = responseData.error.phonenumber;
           if (errorMessageUsername) {
             toast.warning(
               errorMessageUsername,
@@ -99,7 +96,7 @@ function Register() {
 
               }
             );
-          }else if(errorMessagePhoneNumber){
+          } else if (errorMessagePhoneNumber) {
             toast.warning(
               errorMessagePhoneNumber,
               {
@@ -132,8 +129,11 @@ function Register() {
     <div className='register-bg flex max-xl:flex-wrap'>
       <div className='relative p-4 max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]'>
 
-        <img src={bg} className='img'
+        <img
+          src={Images.bgRegisterIcon}
           alt="bgRegisterIcon"
+          width={"924px"}
+          height={"1083px"}
         />
 
         <div className="absolute inset-0 flex justify-center items-center ">
@@ -146,102 +146,404 @@ function Register() {
         </div>
 
       </div>
-
       <div className='w-1/2 flex justify-center items-center min-h-screen bg-white '>
         <div className='w-[424px]'>
 
-          <form onSubmit={onSubmit} className="registration-form">
+          <form className="registration-form">
             <h2>ĐĂNG KÝ</h2>
-            <div className='mb-[15px]'>
-              <label>Tên:</label>
+            <div className="grid grid-cols-5 gap-8">
+              <div className="col-span-3 " >
+                <div className="flex gap-3 ">
+                  <div className="flex flex-col  max-lg:gap-2">
+                    <div className="h-[90px] w-[424px]">
+                      <Controller
+                        name="name"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: true,
+                            message:
+                              "Không để trống",
+                          },
+                          minLength: {
+                            value: 4,
+                            message:
+                              "Ít nhất 6 ký tự",
+                          },
+                          maxLength: {
+                            value: 25,
+                            message:
+                              "Nhiều nhất 25 kí tự",
+                          },
+                        }}
+                        render={({ field }) => (
+                          <>
+                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                              Tên
+                            </label>
+                            <input
+                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                              placeholder="Nhập vào tên của bạn"
+                              value={field.value}
+                              type="text"
+                              onChange={(e) => {
+                                const reg =
+                                  /[!@#$%^&]/;
+                                const value =
+                                  e.target
+                                    .value;
+                                field.onChange(
+                                  value.replace(
+                                    reg,
+                                    ""
+                                  )
+                                );
+                              }}
+                              name="name"
+                            />
+                            {errors.name && (
+                              <p className="text-[11px] text-red-700 mt-0">
+                                {
+                                  errors.name
+                                    .message
+                                }
+                              </p>
+                            )}
+                          </>
+                        )}
+                      />
+                    </div><div className="h-[90px] w-[424px]">
+                      <Controller
+                        name="username"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: true,
+                            message:
+                              "Không để trống",
+                          },
+                          minLength: {
+                            value: 4,
+                            message:
+                              "Ít nhất 4 ký tự",
+                          },
+                          maxLength: {
+                            value: 25,
+                            message:
+                              "Nhiều nhất 25 kí tự",
+                          },
+                        }}
+                        render={({ field }) => (
+                          <>
+                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                              Tên tài khoản
+                            </label>
+                            <input
+                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                              placeholder="Nhập vào tên tài khoản"
+                              value={field.value}
+                              type="text"
+                              onChange={(e) => {
+                                const reg =
+                                  /[!@#$%^&]/;
+                                const value =
+                                  e.target
+                                    .value;
+                                field.onChange(
+                                  value.replace(
+                                    reg,
+                                    ""
+                                  )
+                                );
+                              }}
+                              name="username"
+                            />
+                            {errors.username && (
+                              <p className="text-[11px] text-red-700 mt-0">
+                                {
+                                  errors.username
+                                    .message
+                                }
+                              </p>
+                            )}
+                          </>
+                        )}
+                      />
+                    </div>
+                    <div className="h-[90px] w-[424px]">
+                      <Controller
+                        name="password"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: true,
+                            message:
+                              "Không để trống",
+                          },
+                          minLength: {
+                            value: 4,
+                            message:
+                              "Ít nhất 4 ký tự",
+                          },
+                          maxLength: {
+                            value: 25,
+                            message:
+                              "Nhiều nhất 25 kí tự",
+                          },
+                        }}
+                        render={({ field }) => (
+                          <>
+                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                              Mật khẩu
+                            </label>
+                            <input
+                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                              placeholder="Nhập vào mật khẩu"
+                              value={field.value}
+                              type="password"
+                              onChange={(e) => {
+                                const reg =
+                                  /[!@#$%^&]/;
+                                const value =
+                                  e.target
+                                    .value;
+                                field.onChange(
+                                  value.replace(
+                                    reg,
+                                    ""
+                                  )
+                                );
+                              }}
+                              name="password"
+                            />
+                            {errors.password && (
+                              <p className="text-[11px] text-red-700 mt-0">
+                                {
+                                  errors.password
+                                    .message
+                                }
+                              </p>
+                            )}
+                          </>
+                        )}
+                      />
+                    </div>
 
-              <input
-                placeholder="Tên đầy đủ"
-                type="text"
-                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                {...register("name")}
+                    <div className="h-[90px] w-[424px]">
+                      <Controller
+                        name="confirmpassword"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: true,
+                            message:
+                              "Không để trống",
+                          },
+                          minLength: {
+                            value: 4,
+                            message:
+                              "Ít nhất 4 ký tự",
+                          },
+                          maxLength: {
+                            value: 25,
+                            message:
+                              "Nhiều nhất 25 kí tự",
+                          },
+                          validate: value =>
+                            value === getValues("password") || "Mật khẩu không khớp"
+                        }}
+                        render={({ field }) => (
+                          <>
+                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                              Lặp lại mật khẩu
+                            </label>
+                            <input
+                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                              placeholder="Nhập vào mật khẩu"
+                              value={field.value}
+                              type="password"
+                              onChange={(e) => {
+                                const reg =
+                                  /[!@#$%^&]/;
+                                const value =
+                                  e.target
+                                    .value;
+                                field.onChange(
+                                  value.replace(
+                                    reg,
+                                    ""
+                                  )
+                                );
+                              }}
+                              name="confirmpassword"
+                            />
+                            {errors.confirmpassword && (
+                              <p className="text-[11px] text-red-700 mt-0">
+                                {
+                                  errors.confirmpassword
+                                    .message
+                                }
+                              </p>
+                            )}
+                          </>
+                        )}
+                      />
+                    </div>
+                  </div>
 
-              />
-              {errors.username && (
-                <span className="text-red-500 text-xs">
-                  {errors.username.message}
-                </span>
-              )}
-            </div>
-            <div className='mb-[15px]'>
-              <label>Tên tài khoản:</label>
-              <input
-                placeholder="Email/ Số điện thoại/ Tên đăng nhập"
-                type="text"
-                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                {...register("username")}
-              />
-              {errors.name && (
-                <span className="text-red-500 text-xs">
-                  {errors.name.message}
-                </span>
-              )}
-            </div>
-            <div className='mb-[15px]'>
-              <label>Mật khẩu:</label>
+                </div>
 
-              <input
-                placeholder="Mật khẩu"
-                type='password'
-                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                {...register("password")}
-              />
+                <div className="flex gap-3 ">
+                  <div className="flex flex-col gap-5 max-lg:gap-2">
+                    <div className="h-[90px] w-[424px]">
+                      <Controller
+                        name="email"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: true,
+                            message:
+                              "Không để trống",
+                          },
+                          minLength: {
+                            value: 4,
+                            message:
+                              "Ít nhất 4 ký tự",
+                          },
+                          // maxLength: {
+                          //   value: ,
+                          //   message:
+                          //     "Nhiều nhất 25 kí tự",
+                          // },
+                          validate: { // Kiểm tra email có đúng định dạng không 
+                            validEmail: (value) => /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(value) || "Email không hợp lệ",
 
-              {errors.password && (
-                <span className="text-red-500 text-xs">
-                  {errors.password.message}
-                </span>
-              )}
-            </div>
+                          },
 
-            <div className='mb-[15px]'>
-              <label>Xác nhận mật khẩu:</label>
-              <input
-                placeholder="Nhập lại mật khẩu"
-                type="password"
-                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                {...register("confirmpassword")}
-              />
-              {errors.confirmpassword && (
-                <span className="text-red-500 text-xs">
-                  {errors.confirmpassword.message}
-                </span>
-              )}
-            </div>
-            <div className='mb-[15px]'>
-              <label>Email:</label>
-              <input
-                type="text"
-                placeholder="Địa chỉ Email"
-                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                {...register("email")}
+                        }}
+                        render={({ field }) => (
+                          <>
+                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                              Email
+                            </label>
+                            <input
+                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                              placeholder="Nhập vào Email"
+                              value={field.value}
+                              onChange={(e) => {
+                                const reg =
+                                  /[!#$%^&]/;
+                                const value =
+                                  e.target
+                                    .value;
+                                field.onChange(
+                                  value.replace(
+                                    reg,
+                                    ""
+                                  )
+                                );
+                              }}
+                              name="email"
+                            />
+                            {errors.email && (
+                              <p className="text-[11px] text-red-700 mt-0">
+                                {
+                                  errors.email
+                                    .message
+                                }
+                              </p>
+                            )}
+                          </>
+                        )}
+                      />
+                    </div>
+                  </div>
 
-              />
-              {errors.email && (
-                <span className="text-red-500 text-xs">
-                  {errors.email.message}
-                </span>
-              )}
-            </div>
-            <div className='mb-[15px]'>
-              <label>Số điện thoại:</label>
-              <input
-                type="text"
-                placeholder="Số điện thoại"
-                className='input hover:border-2 border-[#EA4B48] focus:outline-none focus:ring focus:ring-[#f38482]'
-                {...register("phonenumber")}
+                </div>
+                <div className="flex gap-3 ">
+                  <div className="flex flex-col gap-5 max-lg:gap-2">
+                    <div className="h-[90px] w-[424px]">
+                      <Controller
+                        name="phonenumber"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: true,
+                            message:
+                              "Không để trống",
+                          },
+                          minLength: {
+                            value: 4,
+                            message:
+                              "Ít nhất 4 ký tự",
+                          },
+                          maxLength: {
+                            value: 11,
+                            message:
+                              "Nhiều nhất 11 kí tự",
+                          },
+                          
 
-              />
-              {errors.phonenumber && (
-                <span className="text-red-500 text-xs">
-                  {errors.phonenumber.message}
-                </span>
-              )}
+                        }}
+                        render={({ field }) => (
+                          <>
+                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                              Số điện thoại
+                            </label>
+                            <input
+                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                              placeholder="Nhập vào số điện thoại"
+                              value={field.value}
+                              onChange={(e) => {
+                                const reg =
+                                  /[!#$%^&]/;
+                                const value =
+                                  e.target
+                                    .value;
+                                field.onChange(
+                                  value.replace(
+                                    reg,
+                                    ""
+                                  )
+                                );
+                              }}
+                              name="phonenumber"
+                            />
+                            {errors.phonenumber && (
+                              <p className="text-[11px] text-red-700 mt-0">
+                                {
+                                  errors.phonenumber
+                                    .message
+                                }
+                              </p>
+                            )}
+                          </>
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
             </div>
             <div className="checkbox-container">
               <input
@@ -253,7 +555,9 @@ function Register() {
               />
               <label htmlFor="termsAgreement">Tôi đã đọc và đồng ý với <a href='#'>Điều Khoản</a></label>
             </div>
-            <button type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[75px]">Đăng ký</button>
+            <button onClick={handleSubmit((formData: any) => {
+              onSubmit(formData);
+            })} type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[50px]">Đăng ký</button>
             {/* <ToastContainer
               position="top-right"
               // Custom theme for the toast container
@@ -288,7 +592,6 @@ function Register() {
 
       </div>
     </div>
-
   );
 };
 

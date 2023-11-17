@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Images } from '../../../../Assets/TS';
 // import LogoWeb from "../../Assets/TSX/LogoWeb";
 // import { localStorage } from 'localStorage';
@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import LogoGoogle from "../../../../Assets/PNG/lgG.png";
 import LogoApple from "../../../../Assets/PNG/lgApple.png";
 import LogoFace from "../../../../Assets/PNG/lgFace.png";
+import secureLocalStorage from "react-secure-storage";
 // import { schema } from "../../utils/rules";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
@@ -36,6 +37,9 @@ function LoginAdmin() {
     });
 
 
+    useEffect(() => {
+        secureLocalStorage.removeItem('admin');
+    }, [])
 
     const API = "http://localhost:5000/admin/login";
 
@@ -58,23 +62,20 @@ function LoginAdmin() {
 
                     }
                 );
-                
-                localStorage.removeItem("user");
-                const jsonString: string = JSON.stringify(data);
-                const jsonObject = JSON.parse(jsonString);
-                // console.log("aaaaaaaaaa"+response)
-                // // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
-              
-                // Truy cập các giá trị trong jsonObject
 
-                const username = jsonObject.username;
-                console.log(username);
-                // const accessToken = jsonObject.accessToken;
-                // console.log(accessToken);
-                const UserData = {username};
-                // const Token = {accessToken}; 
-                localStorage.setItem('user', JSON.stringify(UserData));
-                // localStorage.setItem("accessToken", JSON.stringify(Token));
+                localStorage.removeItem("user");
+
+                const UserData = {
+                    username: response.data.username,
+                    email: response.data.email,
+                    name: response.data.name,
+                    phonenumber: response.data.phonenumber,
+                    dateofbirth: response.data.dateofbirth,
+                    sex: response.data.sex,
+                };
+
+                secureLocalStorage.setItem('admin', UserData);
+
 
                 setTimeout(() => {
                     window.location.href = "/admin/ListproductsAdmin";
@@ -98,23 +99,23 @@ function LoginAdmin() {
                 console.log(responseData);
                 // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
                 if (responseData) {
-                //   const errorMessage = responseData.error.password;
-                  console.log(`Lỗi1:1 ${responseData}`);
-                  toast.warning(
-                    responseData,
-                    {
-                      position: "top-right",
-                      autoClose: 5000,
-            
-                    }
-                  );
+                    //   const errorMessage = responseData.error.password;
+                    console.log(`Lỗi1:1 ${responseData}`);
+                    toast.warning(
+                        responseData,
+                        {
+                            position: "top-right",
+                            autoClose: 5000,
+
+                        }
+                    );
                 } else {
-                  console.log('Lỗi không xác định từ server');
+                    console.log('Lỗi không xác định từ server');
                 }
-              } else {
+            } else {
                 console.error('Lỗi gửi yêu cầu không thành công', error);
-               
-              }
+
+            }
         }
 
     });
@@ -149,7 +150,7 @@ function LoginAdmin() {
                                 id="username"
                                 // value={formData.email}
                                 className="w-full h-[46px] p-2 font-sans login-a4 focus:outline-none focus:ring focus:ring-[#FFAAAF] login-input login-a4"
-                                placeholder="Email"
+                                placeholder="Tên đăng nhập"
                                 {...register("username")}
                             />
                             {errors.username && (

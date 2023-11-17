@@ -13,6 +13,7 @@ import Edit from "../../../Admin/Assets/TSX/Edit";
 import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
 import Handle from "../../../Admin/Assets/TSX/bacham";
 import { EditImage } from "../DetailProductPage/DetailsProduct";
+import SendCmt from "../../../../../Assets/TSX/SendCmt";
 interface FormValues {
   id: number;
   idproduct: number;
@@ -209,7 +210,7 @@ export default function RatingMap(props: Props) {
                   {/* end header comment */}
                   {/* content comment */}
 
-                  <div className="border-t-[1px] border-[#E0E0E0] py-2">
+                  <div className="border-t-[1px] border-[#E0E0E0] pt-2">
                     <p className="text-[#4C4C4C]">{rating.comment}</p>
                     <div className=" flex flex-1 mt-2">
                       <div className="inline-grid grid-cols-8 gap-4 relative ">
@@ -227,10 +228,16 @@ export default function RatingMap(props: Props) {
                       </div>
                     </div>
                   </div>
-
+                  {/* text reply */}
+                  <div>
+                    <p className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max">
+                      Trả lời
+                    </p>
+                  </div>
+                  {/* end text reply */}
                   {/* end content comment */}
                   {/* reply content comment */}
-                  <div className="mx-3 my-2  flex">
+                  <div className="mx-3 my-2 flex">
                     <div className="ml-2">
                       <LineCMT />
                     </div>
@@ -242,7 +249,7 @@ export default function RatingMap(props: Props) {
                         <span className="top-0 left-5 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                       </div>
                       {/* end hinh anh */}
-                      {/* thong tin users */}
+                      {/* thong tin admin */}
                       <div>
                         {/* name - period - date */}
                         <div className="flex items-center">
@@ -260,30 +267,40 @@ export default function RatingMap(props: Props) {
                           {/* end date */}
                         </div>
                         {/* end name - period - date */}
-                        {/* quatity */}
-                        <p className="text-[#4C4C4C] text-[12px]">
-                          Số lượng: 10
-                        </p>
-                        {/* end quatity */}
                       </div>{" "}
-                      {/* end thong tin users */}
+                      {/* end thong tin admin */}
                     </div>
+
                     {/* shop reply cmt */}
                   </div>
                   {/* end reply content comment */}
+                  {/* input */}
+                  <div
+                    className=" text-[#333333] rounded-[6px] px-[10px] py-[6px] max-xl:text-sm mt-2
+                        border-[1px] border-[#FFAAAF] w-[95%] mx-auto flex"
+                  >
+                    <input
+                      className={`w-full focus:outline-none`}
+                      placeholder={`Trả lời ${rating?.user?.username}`}
+                    />
+                    <div className="pl-2">
+                      <SendCmt />
+                    </div>
+                  </div>
+                  {/* input */}
                   {/* content comment */}
-                  <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7">
-                    <p className="text-[#4C4C4C]">
+                  {/* <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4"> */}
+                  {/* <p className="text-[#4C4C4C]">
                       Đã mua em nó shop này 1 lần dùng gần 1 năm rồi ok lắm hôm
                       nay mua lại vì hôm đi chơi bị mất. vẫn chất lg như lần trc
                       esd15 mãi đỉnh , mà chắc do shop uy tín lên dùng rất tốt
                       âm thanh bass trest chống âm cách tiếng onf đeo êm tai ko
                       bị đua tai luôn chyaj bộ thể dục thoải mái nhá ae lên mua
                       thanh anh shop tư vấn hài lòng vãi
-                    </p>
-                  </div>
+                    </p> */}
+                  {/* </div> */}
+                  {/* end content comment */}
                 </div>
-                {/* end content comment */}
               </>
             );
           })

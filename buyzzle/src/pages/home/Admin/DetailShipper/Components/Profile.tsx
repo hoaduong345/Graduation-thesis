@@ -11,6 +11,7 @@ import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../Firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { shipperController } from "../../../../../Controllers/ShipperController";
+import secureLocalStorage from "react-secure-storage";
 
 
 
@@ -101,7 +102,7 @@ export default function UserProfile() {
   useEffect(() => {
 
     function CheckLink() {
-      const user = localStorage.getItem("user");
+      const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
       } else {
