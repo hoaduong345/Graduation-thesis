@@ -54,6 +54,13 @@ function AdminLayout() {
       );
       setDeletedOrder(newOrder);
     });
+    socket.on("disconnect", () => {
+      console.log(socket.id);
+    });
+  }, []);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
     socket.on("newOrder", (newOrder) => {
       console.log("Received deleted order data:", newOrder);
       toast(
@@ -87,7 +94,6 @@ function AdminLayout() {
       console.log(socket.id);
     });
   }, []);
-
   return (
     <div>
       <HeaderAdmin />
