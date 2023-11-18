@@ -18,6 +18,8 @@ import {
   timeOrder,
 } from "../Admin/Management/Order/OrderManagement";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
+import useThrottle from "@rooks/use-throttle";
+
 export default function ShippingPage() {
   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
   const [orderAPI, setOrderAPI] = useState<orderModelController>({
@@ -70,6 +72,7 @@ export default function ShippingPage() {
       setOrderAPI({ ...orderAPI, status: null });
     }
   };
+  const [btnFiterThrottle] = useThrottle(handleClick, 1000);
 
   function getBorderColor(id: number) {
     switch (id) {
@@ -127,7 +130,7 @@ export default function ShippingPage() {
                       : "",
                     borderWidth: btnItems.active ? "1px" : "",
                   }}
-                  onClick={() => handleClick(btnItems.id)}
+                  onClick={() => btnFiterThrottle(btnItems.id)}
                 >
                   {btnItems.text}
                   {btnItems.id == -1 && (
@@ -237,7 +240,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                               </p>
                               <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
                               {e.paymentMethod == "Thẻ tín dụng" ||
-                              getStatusOrder(e.status)._paymentStatus ? (
+                                getStatusOrder(e.status)._paymentStatus ? (
                                 <div className="badge badge-xs badge-accent text-center py-2 px-3">
                                   <p className="font-bold text-xs text-white">
                                     Đã thanh toán
