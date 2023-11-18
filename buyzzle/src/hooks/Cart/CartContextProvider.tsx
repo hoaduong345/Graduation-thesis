@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 export default function useCartContext() {
    const [loading, setLoading] = useState(true);
    const [idProduct, setIdProduct] = useState(0);
+   const [warning, setWarning] = useState<string>('')
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
    const [carts, setCarts] = useState<CartProduct>({} as CartProduct);
    let listProductQuantity: UpdateQuantityModal[] = [];
@@ -27,7 +28,8 @@ export default function useCartContext() {
             toastSuccess("Thêm thành công");
          })
          .catch((err) => {
-            toastWarn(err.response?.data);
+            setWarning(err.response?.data);
+            openModal('idWarningQuantity')
          });
    };
 
@@ -131,6 +133,7 @@ export default function useCartContext() {
       removeAllCart,
       idItemCart,
       idAllCart,
+      warning,
    };
 }
 type CartContextType = ReturnType<typeof useCartContext>;

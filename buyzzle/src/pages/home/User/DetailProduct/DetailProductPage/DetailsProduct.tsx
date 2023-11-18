@@ -35,6 +35,7 @@ import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
 import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
+import WarningQuantityCart from "../../../../../Helper/Dialog/WarningQuantityCart";
 export interface ImgOfProduct {
   url: string;
 }
@@ -88,7 +89,8 @@ export interface EditImage {
 export default function DetailsProduct() {
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState("");
-  const { addProduct } = useCart();
+  const { addProduct, warning, closeModal } = useCart();
+  const idWarningQuantity = 'idWarningQuantity';
 
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -428,8 +430,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                              first?.productDetail.price! *
-                                (first?.productDetail.discount! / 100)
+                            first?.productDetail.price! *
+                            (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -553,6 +555,9 @@ export default function DetailsProduct() {
               {/* end Mua ngay */}
             </div>
           </div>
+
+          <WarningQuantityCart id={idWarningQuantity} title={warning} onClose={() => closeModal(idWarningQuantity)} />
+
           {/* Sản phẩm của shop */}
           <div className="grid grid-cols-3 mt-24">
             <div className="col-span-1 ">
@@ -585,11 +590,10 @@ export default function DetailsProduct() {
         <div className="justify-center gap-6 flex mt-10">
           <div>
             <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "descriptions"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "descriptions"
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
+                }`}
               onClick={() => handleTabClick("descriptions")}
               role="tab"
               aria-selected={activeTab === "descriptions" ? "true" : "false"}
@@ -600,11 +604,10 @@ export default function DetailsProduct() {
           </div>
           <div>
             <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "Rating"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "Rating"
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
+                }`}
               onClick={() => handleTabClick("Rating")}
               role="tab"
               aria-selected={activeTab === "Rating" ? "true" : "false"}
@@ -619,9 +622,8 @@ export default function DetailsProduct() {
       <Container>
         <div data-tab-content className="p-5">
           <div
-            className={` ${
-              activeTab === "descriptions" ? "visible" : "hidden"
-            }`}
+            className={` ${activeTab === "descriptions" ? "visible" : "hidden"
+              }`}
             id="descriptions"
             role="tabpanel"
           >
@@ -651,7 +653,7 @@ export default function DetailsProduct() {
                       handleRemoveRating={handleRemoveRating}
                     />
                   </div>
-                  {}
+                  { }
                   <div className="mt-10">
                     <ResponsivePagination
                       current={rateAndcomment.currentPage!}
