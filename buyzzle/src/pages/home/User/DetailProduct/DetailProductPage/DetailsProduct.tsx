@@ -498,7 +498,7 @@ export default function DetailsProduct() {
                       {/* end Tăng số lượng */}
                     </div>
                     <div className="flex justify-start gap-2 text-[#7A828A]">
-                      Số lượng còn lại: {first?.productDetail.quantity}
+                      Còn {first?.productDetail.quantity} sản phẩm
                     </div>
                   </div>
                   {/* end Tăng giảm số lượng */}
