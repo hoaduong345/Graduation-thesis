@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import Location from "../../../../Assets/TSX/Location";
 import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 import { orderControllers } from "../../../../Controllers/OrderControllers";
-import { RatingAndCommentController } from "../../../../Controllers/Rating&Comment";
+import { ratingAndCommentController } from "../../../../Controllers/Rating&Comment";
 import { storage } from "../../../../Firebase/Config";
 import DialogModal from "../../../../Helper/Dialog/DialogModal";
 import { numberFormat } from "../../../../Helper/Format";
@@ -80,9 +80,9 @@ export default function OrderDetailPage() {
   const addImages = async (url: string, id: number) => {
     console.log(url, id);
 
-    await RatingAndCommentController.addImagesComment(url, id).then((_) =>
-      console.log("thanh cong")
-    );
+    await ratingAndCommentController
+      .addImagesComment(url, id)
+      .then((_) => console.log("thanh cong"));
   };
 
   const resetImages = () => {
@@ -164,7 +164,8 @@ export default function OrderDetailPage() {
       ratingValue: data.ratingValue,
       comment: data.comment,
     };
-    RatingAndCommentController.postRatingAndComment(_data)
+    ratingAndCommentController
+      .postRatingAndComment(_data)
       .then(async (data) => {
         // setValue("iduser", data.iduser);
         // console.log(

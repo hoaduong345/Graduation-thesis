@@ -87,6 +87,7 @@ export interface Rating {
   ratingValue: number;
   comment: string;
   createdAt: string;
+  repComment: string;
   product: {
     quantity: number;
     ProductImage: ProductImage[];
@@ -108,9 +109,9 @@ export interface Product {
 }
 
 export interface Ratee {
-  currentPage: number;
-  perPage: number;
-  totalRatings: number;
-  averageRating: number;
-  Rating: Rating[];
+  currentPage?: number;
+  perPage?: number;
+  totalRatings?: number;
+  averageRating?: number;
+  Rating?: Rating[];
 }
