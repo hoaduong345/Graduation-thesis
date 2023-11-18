@@ -69,11 +69,11 @@ export default function useCartContext() {
    }, []);
 
    const handleBuyNow = async () => {
-      await getCart();
 
       if (productChecked.length == 0) {
          toastWarn("Chưa chọn sản phẩm");
       } else {
+         await getCart();
          sessionStorage.setItem("cartBuyzzle", JSON.stringify(productChecked));
          navigate('/checkout')
       }

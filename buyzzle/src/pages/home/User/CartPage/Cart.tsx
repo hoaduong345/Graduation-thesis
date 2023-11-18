@@ -53,15 +53,19 @@ export default function Cart() {
          cartControllers.decreaseCart(data).then((res) => {
             setCarts(res.data);
          });
-         const indexProduct = productChecked.findIndex(
-            (item) => item.productid === data.productId
-         );
-         const _productChecked = [...productChecked];
-         _productChecked[indexProduct].quantity -= 1;
 
-         setProductChecked(_productChecked);
-      } else {
-         return;
+         if (productChecked.length > 0) {
+
+            const indexProduct = productChecked.findIndex(
+               (item) => item.productid === data.productId
+            );
+            const _productChecked = [...productChecked];
+            _productChecked[indexProduct].quantity -= 1;
+
+            setProductChecked(_productChecked);
+         } else {
+            return;
+         }
       }
    };
 
@@ -74,7 +78,6 @@ export default function Cart() {
 
    // 2 array : 1 array cart, 1 array cart checked
    const handleChecked = (checked: boolean, item: CartItem) => {
-      console.log(checked);
       if (checked) {
          setProductChecked((prev) => [...prev, item]);
       } else {
@@ -166,7 +169,7 @@ export default function Cart() {
                </div>
             </div>
             <div>
-               <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[430px] mt-8 flex flex-col gap-5 overflow-x-hidden">
+               <div className={`overscroll-auto md:overscroll-contain lg:overscroll-none mt-8 flex flex-col gap-5 overflow-x-hidden ${carts?.item?.length > 5 ? `h-[1000px]` : ``}`}>
                   {carts.item?.length > 0 ? (
                      (carts.item ?? []).map((e) => {
                         return (
