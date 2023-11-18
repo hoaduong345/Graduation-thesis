@@ -47,7 +47,9 @@ export default function ShippingDetail() {
       getOrder();
       toast.success("Thành công");
     }).then(() => {
-      orderControllers.updateSoldcount(listProductQuantity)
+      if (status == 6) {
+        orderControllers.updateSoldcount(listProductQuantity)
+      }
     });
   };
   return (
