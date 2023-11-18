@@ -151,7 +151,9 @@ export default function DetailsProduct() {
   }, [rateAndcomment.currentPage]);
 
   const plusQuantity = () => {
-    setQuantity(quantity + 1);
+    if (quantity < first?.productDetail?.quantity!) {
+      setQuantity(quantity + 1);
+    }
   };
   const minusQuantity = () => {
     if (quantity > 1) {
@@ -470,7 +472,7 @@ export default function DetailsProduct() {
                       {/* end Tăng số lượng */}
                     </div>
                     <div className="flex justify-start gap-2 text-[#7A828A]">
-                      Số lượng còn lại: {first?.productDetail.quantity}
+                      Còn {first?.productDetail.quantity} sản phẩm
                     </div>
                   </div>
                   {/* end Tăng giảm số lượng */}
