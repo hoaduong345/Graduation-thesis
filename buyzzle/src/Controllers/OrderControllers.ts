@@ -1,5 +1,5 @@
 import axios from "axios";
-import { OrderModel } from "../Model/OrderModel";
+import { OrderModel, UpdateQuantityModal } from "../Model/OrderModel";
 
 const appConfig = {
   apiOrder: import.meta.env.VITE_BACKEND_ORDER_URL || "",
@@ -49,6 +49,10 @@ class OrderControllers {
     return await axios.post(`${appConfig.apiShipping}/setStatus`, {
       id: id,
       status: status,
+    }, {
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      }, withCredentials: true
     });
   };
 
@@ -72,11 +76,27 @@ class OrderControllers {
   };
   getConfirmCancelOrder = async (id: number) => {
     return await axios
-      .post(`${appConfig.apiShipping}/confirmdelete`, { orderId: id })
+      .post(`${appConfig.apiShipping}/confirmdelete`, { orderId: id }, {
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        }, withCredentials: true
+      })
       .then((res) => {
         return res.data;
       });
   };
+
+  quantityCreateOrder = async (data: UpdateQuantityModal[]) => {
+    return await axios.post(`${appConfig.apiOrder}/quantityCreateOrder`, data)
+  }
+
+  quantityCancelOrder = async (data: UpdateQuantityModal[]) => {
+    return await axios.post(`${appConfig.apiOrder}/quantityCancelOrder`, data)
+  }
+
+  updateSoldcount = async (data: UpdateQuantityModal[]) => {
+    return await axios.post(`${appConfig.apiOrder}/updateSoldcount`, data)
+  }
 }
 
 export const orderControllers = new OrderControllers();
