@@ -9,8 +9,6 @@ export interface RepComment {
   repComment?: string; // rep
   page?: number;
   perPage?: number;
-  idproduct?: number;
-  rating?: number;
 }
 class RatingAndComment {
   postRatingAndComment = async (data: any) => {
@@ -87,11 +85,13 @@ class RatingAndComment {
   };
   getCommentWhereRating = async (
     idproduct?: number,
-    rating?: number
+    rating?: number,
+    page?: number,
+    perPage?: number
   ): Promise<Ratee> => {
     return await axios
       .get(
-        `${appConfig.apiUrl}/ratingcomment/${idproduct}?selectedRatingValue=${rating}`
+        `${appConfig.apiUrl}/ratingcomment/${idproduct}?selectedRatingValue=${rating}&page=${page}&perPage=${perPage}`
       )
       .then((res) => {
         return res.data as Ratee;

@@ -54,13 +54,6 @@ function AdminLayout() {
       );
       setDeletedOrder(newOrder);
     });
-    socket.on("disconnect", () => {
-      console.log(socket.id);
-    });
-  }, []);
-
-  useEffect(() => {
-    const socket = io("http://localhost:5000");
     socket.on("newOrder", (newOrder) => {
       console.log("Received deleted order data:", newOrder);
       toast(
@@ -94,6 +87,42 @@ function AdminLayout() {
       console.log(socket.id);
     });
   }, []);
+
+  // useEffect(() => {
+  //   const socket = io("http://localhost:5000");
+  //   socket.on("newOrder", (newOrder) => {
+  //     console.log("Received deleted order data:", newOrder);
+  //     toast(
+  //       <CustomToast
+  //         image={
+  //           <img
+  //             className="w-12 h-12 rounded-full"
+  //             src={Images.avatar_admin}
+  //             alt="avatar_admin"
+  //           />
+  //         }
+  //         iconSVG={<NewOrder />}
+  //         name={
+  //           <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
+  //         }
+  //         content={
+  //           <p className="text-sm font-normal text-[#739072]">
+  //             Có 1 đơn hàng mới
+  //           </p>
+  //         }
+  //       />,
+  //       {
+  //         position: "bottom-left",
+  //         autoClose: 10000,
+  //         closeButton: true,
+  //       }
+  //     );
+  //     setDeletedOrder(newOrder);
+  //   });
+  //   socket.on("disconnect", () => {
+  //     console.log(socket.id);
+  //   });
+  // }, []);
   return (
     <div>
       <HeaderAdmin />

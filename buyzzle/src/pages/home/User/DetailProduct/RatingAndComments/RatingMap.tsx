@@ -44,19 +44,17 @@ type Props = {
     idRating: number
   ) => Promise<void>;
   rateAndcomment: Ratee;
-  editImages: EditImage[];
   handleRemoveRating: (id: number) => void;
-  setRateAndcomment: React.Dispatch<React.SetStateAction<Ratee | undefined>>;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  currentPage: number;
+  setRateAndcomment: React.Dispatch<React.SetStateAction<Ratee>>;
+  getCommentWhereRating: (idproduct: any, rating: any) => void;
 };
 export default function RatingMap(props: Props) {
   const [isFeedbackClicked, setIsFeedbackClicked] = useState<number | null>(1);
   const [idRating, setidRating] = useState<number>(0);
   const [repTextCmt, setTextRepCmt] = useState<string>("");
 
-  const { id } = useParams();
-  console.log("idididid", id);
+  const { id: idProduct } = useParams();
+  console.log("idididid", idProduct);
 
   const {
     control,
@@ -105,14 +103,13 @@ export default function RatingMap(props: Props) {
     const _dataRepCmt = {
       ratingId: id,
       repComment: repTextCmt,
-      page: props.currentPage,
+      page: props.rateAndcomment.currentPage,
     };
     ratingAndCommentController
       .repCommentsFromAdminToUser(_dataRepCmt)
-      .then((res) => {
-        console.log("🚀 ~ file: RatingMap.tsx:110 ~ .then ~ res:", res);
-        props.setRateAndcomment(res.data.Ratings);
-        setTextRepCmt(res.data.repComment);
+      .then((_) => {
+        props.getCommentWhereRating(idProduct, 1);
+        setTextRepCmt("");
         toast.success("Trả lời thành công !");
       })
       .catch((err) => console.log(err));
