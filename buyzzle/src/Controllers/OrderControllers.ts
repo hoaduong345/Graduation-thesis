@@ -49,6 +49,10 @@ class OrderControllers {
     return await axios.post(`${appConfig.apiShipping}/setStatus`, {
       id: id,
       status: status,
+    }, {
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      }, withCredentials: true
     });
   };
 
@@ -72,7 +76,11 @@ class OrderControllers {
   };
   getConfirmCancelOrder = async (id: number) => {
     return await axios
-      .post(`${appConfig.apiShipping}/confirmdelete`, { orderId: id })
+      .post(`${appConfig.apiShipping}/confirmdelete`, { orderId: id }, {
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        }, withCredentials: true
+      })
       .then((res) => {
         return res.data;
       });
