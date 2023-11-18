@@ -719,8 +719,8 @@ const ProductController = {
         try {
             const productId = parseInt(req.params.productId);
             const page = parseInt(req.query.page) || 1;
-            const perPage = parseInt(req.query.perPage) || 40;
-            const selectedRatingValue = parseInt(req.query.selectedRatingValue);
+            const perPage = parseInt(req.query.perPage) || 2;
+            const selectedRatingValue = parseInt(req.query.selectedRatingValue) || 1;
 
             const ratings = await prisma.rating.findMany({
                 where: {
@@ -728,6 +728,9 @@ const ProductController = {
                     ratingValue: {
                         gte: selectedRatingValue, // Sử dụng lọc "greater than or equal to" (lớn hơn hoặc bằng)
                     },
+                },
+                orderBy: {
+                    id: 'desc',
                 },
                 include: {
                     user: {
@@ -958,11 +961,16 @@ const ProductController = {
                         },
                     },
                 },
+                orderBy: {
+                    id: 'desc',
+                },
                 skip: (page - 1) * perPage,
                 take: perPage,
             });
 
             const resultProduct = {
+                perPage: perPage,
+                page: page,
                 updatedRating: updatedRating,
                 Ratings: ratings,
             };

@@ -109,9 +109,9 @@ export interface Product {
 }
 
 export interface Ratee {
-  currentPage: number;
-  perPage: number;
-  totalRatings: number;
-  averageRating: number;
-  Rating: Rating[];
+  currentPage?: number;
+  perPage?: number;
+  totalRatings?: number;
+  averageRating?: number;
+  Rating?: Rating[];
 }

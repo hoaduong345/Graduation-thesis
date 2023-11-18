@@ -1,8 +1,7 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import { Button, IconButton } from "@material-tailwind/react";
 import axios from "axios";
 import copy from "copy-to-clipboard";
 import { useEffect, useState } from "react";
+import ResponsivePagination from "react-responsive-pagination";
 import { useParams } from "react-router-dom";
 import {
   FacebookIcon,
@@ -20,11 +19,11 @@ import ArrowDown from "../../../../../Assets/TSX/ArrowDown";
 import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
 import Minus from "../../../../../Assets/TSX/Minus";
 import Plus from "../../../../../Assets/TSX/Plus";
+import SuccessIcon from "../../../../../Assets/TSX/SuccessIcon";
 import { productController } from "../../../../../Controllers/ProductsController";
 import { ratingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
 import { stars } from "../../../../../Helper/StarRating/Star";
-import { toastSuccess } from "../../../../../Helper/Toast/Success";
 import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
 import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
 import Container from "../../../../../components/container/Container";
@@ -36,7 +35,6 @@ import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
 import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
-import SuccessIcon from "../../../../../Assets/TSX/SuccessIcon";
 export interface ImgOfProduct {
   url: string;
 }
@@ -94,8 +92,9 @@ export default function DetailsProduct() {
 
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
-  const [editImages, setEditImages] = useState<EditImage[]>([]);
-  const [rateAndcomment, setRateAndcomment] = useState<Ratee>();
+  const [rateAndcomment, setRateAndcomment] = useState<Ratee>({
+    perPage: 2,
+  });
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("descriptions"); // Mặc định là tab "App"
 
@@ -114,7 +113,6 @@ export default function DetailsProduct() {
     quantity
   );
   const [recommandProduct, setRecommandProduct] = useState<Row[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const { id } = useParams();
   console.log(id);
@@ -142,28 +140,36 @@ export default function DetailsProduct() {
 
   useEffect(() => {
     if (!id) return;
-    getCommentWhereRating(id, 1);
+    getCommentWhereRating(
+      id,
+      1,
+      rateAndcomment.currentPage,
+      rateAndcomment.perPage
+    );
     getDetailProduct();
     RecommandProductDetailPage(Number(id));
-  }, [currentPage]);
+  }, [rateAndcomment.currentPage]);
 
   const plusQuantity = () => {
-    setQuantity(quantity + 1);
+    if (quantity < first?.productDetail?.quantity!) {
+      setQuantity(quantity + 1);
+    }
   };
   const minusQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
   };
-  const getCommentWhereRating = (idproduct: any, rating: any) => {
+  const getCommentWhereRating = (
+    idproduct?: any,
+    rating?: number,
+    page?: number,
+    perPage?: number
+  ) => {
     ratingAndCommentController
-      .getCommentWhereRating(idproduct, rating)
-      .then((res: any) => {
-        console.log("🚀 ~ file: DetailsProduct.tsx:162 ~ .then ~ res:", res);
+      .getCommentWhereRating(idproduct, rating, page, perPage)
+      .then((res) => {
         setRateAndcomment(res);
-        console.log(
-          "CCCCCCCCCCCCCCCCCCCCCCc:" + JSON.stringify(rateAndcomment)
-        );
       })
       .catch((err) => {
         console.log(err);
@@ -189,34 +195,6 @@ export default function DetailsProduct() {
         console.log(err);
       });
   };
-
-  // const getComment = (id: number) => {
-  //   console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
-  //   ratingAndCommentController
-  //     .getRatingAndComment(id, currentPage, 2)
-  //     .then((res: any) => {
-  //       console.log("🚀 ~ file: DetailsProduct.tsx:202 ~ .then ~ res:", res);
-  //       setRateAndcomment(res);
-  //     });
-  // };
-
-  const getItemProps = (index: number) =>
-    ({
-      variant: currentPage === index ? "filled" : "text",
-      color: "gray",
-      onClick: () => setCurrentPage(index),
-    } as any);
-  const next = () => {
-    if (currentPage === 999) return;
-
-    setCurrentPage(currentPage + 1);
-  };
-
-  const prev = () => {
-    if (currentPage === 1) return;
-
-    setCurrentPage(currentPage - 1);
-  };
   //Sửa đánh giá
   const handleEditProductRating = async (
     id: string,
@@ -227,7 +205,7 @@ export default function DetailsProduct() {
       .EditRatingAndComment(idRating, data)
       .then(async (res) => {
         toast.success("Đánh giá thành công !");
-        const _rateAndComment = rateAndcomment?.Rating.map((item) => {
+        const _rateAndComment = rateAndcomment?.Rating?.map((item) => {
           if (item.id === res.data?.id) {
             return {
               ...item,
@@ -263,7 +241,7 @@ export default function DetailsProduct() {
     );
     ratingAndCommentController.RemoveRatingAndComment(id).then((_) => {
       if (rateAndcomment) {
-        const removedRatings = rateAndcomment.Rating.filter(
+        const removedRatings = rateAndcomment.Rating?.filter(
           (rating) => rating.id !== id
         );
         setRateAndcomment({
@@ -275,12 +253,6 @@ export default function DetailsProduct() {
     });
     RecommandProductDetailPage(id);
   };
-
-  console.log(
-    "🚀 ~ file: DetailsProduct.tsx:550 ~ DetailsProduct ~ first?.totalRatings:",
-    rateAndcomment?.totalRatings
-  );
-
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
   };
@@ -306,7 +278,13 @@ export default function DetailsProduct() {
       setMessage("");
     }, 2000);
   };
-
+  const handlePageChange = (page: number) => {
+    setRateAndcomment({ ...rateAndcomment, currentPage: page });
+    console.log(
+      "🚀 ~ file: DetailsProduct.tsx:275 ~ handlePageChange ~ rateAndcomment:",
+      rateAndcomment
+    );
+  };
   return (
     <>
       <Container>
@@ -666,60 +644,21 @@ export default function DetailsProduct() {
                 <div className="col-span-2 ">
                   <div>
                     <RatingMap
-                      currentPage={currentPage}
-                      setCurrentPage={setCurrentPage}
+                      getCommentWhereRating={getCommentWhereRating}
                       setRateAndcomment={setRateAndcomment}
                       handleEditProductRating={handleEditProductRating}
                       rateAndcomment={rateAndcomment!}
-                      editImages={editImages!}
                       handleRemoveRating={handleRemoveRating}
                     />
                   </div>
                   {}
-                  <div className="pagination">
-                    <div className="flex">
-                      <Button
-                        variant="text"
-                        // className="flex items-center gap-2"
-                        className={`${
-                          currentPage == 1
-                            ? `hidden`
-                            : `flex items-center gap-2`
-                        }`}
-                        onClick={prev}
-                      >
-                        <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />{" "}
-                        Previous
-                      </Button>
-                      {[...new Array(rateAndcomment?.totalRatings)].map(
-                        (item, index) => {
-                          const page = index + 1;
-                          console.log(item);
-                          return (
-                            <>
-                              <IconButton
-                                className="bg-none"
-                                {...getItemProps(page)}
-                              >
-                                <p className="ml-[-2px] text-sm">{page}</p>
-                              </IconButton>
-                            </>
-                          );
-                        }
-                      )}
-                      <Button
-                        variant="text"
-                        className={`${
-                          currentPage == rateAndcomment?.totalRatings
-                            ? "hidden"
-                            : "flex items-center gap-2"
-                        }`}
-                        onClick={next}
-                      >
-                        Next
-                        <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-                      </Button>
-                    </div>
+                  <div className="mt-10">
+                    <ResponsivePagination
+                      current={rateAndcomment.currentPage!}
+                      total={rateAndcomment.totalRatings!}
+                      onPageChange={handlePageChange}
+                      maxWidth={500}
+                    />
                   </div>
                   {/* ///////////////////////////////////////////////////// */}
                 </div>

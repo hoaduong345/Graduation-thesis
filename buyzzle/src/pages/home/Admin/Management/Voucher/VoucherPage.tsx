@@ -63,10 +63,6 @@ export default function VoucherPage() {
   const getVoucher = async () => {
     await voucherControllers.getAdmin(voucherAPI).then((res) => {
       setVoucher(res);
-      console.log(
-        "🚀 ~ file: VoucherPage.tsx:60 ~ awaitvoucherControllers.getAdmin ~ res:",
-        res
-      );
     });
   };
   const handlePageChange = (page: number) => {
