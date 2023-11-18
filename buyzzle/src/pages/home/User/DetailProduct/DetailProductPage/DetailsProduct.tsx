@@ -21,7 +21,7 @@ import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
 import Minus from "../../../../../Assets/TSX/Minus";
 import Plus from "../../../../../Assets/TSX/Plus";
 import { productController } from "../../../../../Controllers/ProductsController";
-import { RatingAndCommentController } from "../../../../../Controllers/Rating&Comment";
+import { ratingAndCommentController } from "../../../../../Controllers/Rating&Comment";
 import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
 import { stars } from "../../../../../Helper/StarRating/Star";
 import { toastSuccess } from "../../../../../Helper/Toast/Success";
@@ -90,11 +90,7 @@ export interface EditImage {
 export default function DetailsProduct() {
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState("");
-  const { carts, addProduct } = useCart();
-  console.log(
-    "🚀 ~ file: DetailsProduct.tsx:112 ~ DetailsProduct ~ carts 123:",
-    carts
-  );
+  const { addProduct } = useCart();
 
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -119,7 +115,6 @@ export default function DetailsProduct() {
   );
   const [recommandProduct, setRecommandProduct] = useState<Row[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [url, setUrl] = useState<string[]>([]);
 
   const { id } = useParams();
   console.log(id);
@@ -147,7 +142,7 @@ export default function DetailsProduct() {
 
   useEffect(() => {
     if (!id) return;
-    getComment(Number(id));
+    getCommentWhereRating(id, 1);
     getDetailProduct();
     RecommandProductDetailPage(Number(id));
   }, [currentPage]);
@@ -161,8 +156,10 @@ export default function DetailsProduct() {
     }
   };
   const getCommentWhereRating = (idproduct: any, rating: any) => {
-    RatingAndCommentController.getCommentWhereRating(idproduct, rating)
+    ratingAndCommentController
+      .getCommentWhereRating(idproduct, rating)
       .then((res: any) => {
+        console.log("🚀 ~ file: DetailsProduct.tsx:162 ~ .then ~ res:", res);
         setRateAndcomment(res);
         console.log(
           "CCCCCCCCCCCCCCCCCCCCCCc:" + JSON.stringify(rateAndcomment)
@@ -186,7 +183,6 @@ export default function DetailsProduct() {
     productController
       .getProductSuggest(id)
       .then((res: any) => {
-        getComment(id);
         setRecommandProduct(res);
       })
       .catch((err) => {
@@ -194,14 +190,15 @@ export default function DetailsProduct() {
       });
   };
 
-  const getComment = (id: number) => {
-    console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
-    RatingAndCommentController.getRatingAndComment(id, currentPage, 2).then(
-      (res: any) => {
-        setRateAndcomment(res);
-      }
-    );
-  };
+  // const getComment = (id: number) => {
+  //   console.log("🚀 ~ file: DetailsProduct.tsx:176 ~ getComment ~ id:", id);
+  //   ratingAndCommentController
+  //     .getRatingAndComment(id, currentPage, 2)
+  //     .then((res: any) => {
+  //       console.log("🚀 ~ file: DetailsProduct.tsx:202 ~ .then ~ res:", res);
+  //       setRateAndcomment(res);
+  //     });
+  // };
 
   const getItemProps = (index: number) =>
     ({
@@ -226,7 +223,8 @@ export default function DetailsProduct() {
     data: Rating,
     idRating: number
   ) => {
-    await RatingAndCommentController.EditRatingAndComment(idRating, data)
+    await ratingAndCommentController
+      .EditRatingAndComment(idRating, data)
       .then(async (res) => {
         toast.success("Đánh giá thành công !");
         const _rateAndComment = rateAndcomment?.Rating.map((item) => {
@@ -263,7 +261,7 @@ export default function DetailsProduct() {
       "🚀 ~ file: DetailsProduct.tsx:235 ~ handleRemoveRating ~ id:",
       id
     );
-    RatingAndCommentController.RemoveRatingAndComment(id).then((_) => {
+    ratingAndCommentController.RemoveRatingAndComment(id).then((_) => {
       if (rateAndcomment) {
         const removedRatings = rateAndcomment.Rating.filter(
           (rating) => rating.id !== id
@@ -273,10 +271,8 @@ export default function DetailsProduct() {
           Rating: removedRatings,
         });
         getDetailProduct();
-        // RecommandProductDetailPage(id);
       }
     });
-    // getDetailProduct()
     RecommandProductDetailPage(id);
   };
 
@@ -381,7 +377,6 @@ export default function DetailsProduct() {
               {/* Thống kê */}
               <div className="grid grid-cols-4 mt-8">
                 <div className="flex col-span-1 gap-4">
-                  {/* <p className="text-[#1A1A1A] text-base">(100)</p> */}
                   {/* rating  */}
                   <div>
                     <div className="flex items-center justify-start gap-2 ">
@@ -439,7 +434,9 @@ export default function DetailsProduct() {
                           <p className="text-[#4C4C4C] text-sm">Đã bán</p>
                         </div>
                       </>
-                    ) : null}
+                    ) : (
+                      <p>0 Đã bán</p>
+                    )}
                   </div>
                 ) : null}
               </div>
@@ -472,28 +469,33 @@ export default function DetailsProduct() {
                     ) : null}
                   </div>
                   {/* Tăng giảm số lượng */}
-                  <div className=" flex items-center ">
-                    {/* Giảm số lượng */}
-                    <div
-                      className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
-                      onClick={minusQuantity}
-                    >
-                      <Minus />
+                  <div className="flex flex-col my-3 justify-between">
+                    <div className="flex">
+                      {/* Giảm số lượng */}
+                      <div
+                        className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
+                        onClick={minusQuantity}
+                      >
+                        <Minus />
+                      </div>
+                      {/* end Giảm số lượng */}
+                      {/* Số lượng */}
+                      <div>
+                        <p className="text-base mx-2 font-medium">{quantity}</p>
+                      </div>
+                      {/* end Số lượng */}
+                      {/* Tăng số lượng */}
+                      <div
+                        className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
+                        onClick={plusQuantity}
+                      >
+                        <Plus />
+                      </div>
+                      {/* end Tăng số lượng */}
                     </div>
-                    {/* end Giảm số lượng */}
-                    {/* Số lượng */}
-                    <div>
-                      <p className="text-base mx-2 font-medium">{quantity}</p>
+                    <div className="flex justify-start gap-2 text-[#7A828A]">
+                      Số lượng còn lại: {first?.productDetail.quantity}
                     </div>
-                    {/* end Số lượng */}
-                    {/* Tăng số lượng */}
-                    <div
-                      className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
-                      onClick={plusQuantity}
-                    >
-                      <Plus />
-                    </div>
-                    {/* end Tăng số lượng */}
                   </div>
                   {/* end Tăng giảm số lượng */}
                 </div>
@@ -664,6 +666,9 @@ export default function DetailsProduct() {
                 <div className="col-span-2 ">
                   <div>
                     <RatingMap
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
+                      setRateAndcomment={setRateAndcomment}
                       handleEditProductRating={handleEditProductRating}
                       rateAndcomment={rateAndcomment!}
                       editImages={editImages!}

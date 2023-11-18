@@ -907,7 +907,9 @@ const ProductController = {
 
     RepComment: async (req, res) => {
         try {
-            const ratingId = parseInt(req.params.ratingId);
+            const ratingId = parseInt(req.body.ratingId);
+            const page = parseInt(req.body.page) || 1;
+            const perPage = parseInt(req.body.perPage) || 40;
             const { repComment } = req.body;
 
             const allAdmins = await prisma.admin.findMany();
@@ -938,8 +940,33 @@ const ProductController = {
                     adminId: randomAdmin.id,
                 },
             });
+            const ratings = await prisma.rating.findMany({
+                include: {
+                    user: {
+                        select: {
+                            username: true,
+                        },
+                    },
+                    product: {
+                        select: {
+                            quantity: true,
+                        },
+                    },
+                    CommentImage: {
+                        select: {
+                            url: true,
+                        },
+                    },
+                },
+                skip: (page - 1) * perPage,
+                take: perPage,
+            });
 
-            res.status(200).json(updatedRating);
+            const resultProduct = {
+                updatedRating: updatedRating,
+                Ratings: ratings,
+            };
+            res.status(200).json(resultProduct);
         } catch (error) {
             console.error(error);
             res.status(500).json('Cập nhật phản hồi đánh giá không thành công. Lỗi: ' + error.message);

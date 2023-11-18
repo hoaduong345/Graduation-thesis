@@ -87,6 +87,7 @@ export interface Rating {
   ratingValue: number;
   comment: string;
   createdAt: string;
+  repComment: string;
   product: {
     quantity: number;
     ProductImage: ProductImage[];
