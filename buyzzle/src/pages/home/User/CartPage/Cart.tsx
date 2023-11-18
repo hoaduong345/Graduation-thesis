@@ -74,12 +74,14 @@ export default function Cart() {
    //check box
 
    var checkAll: boolean =
-      !!carts.item?.length && productChecked.length === carts.item?.length;
+      !!carts.item?.length && productChecked.length === carts.item?.filter((e) => e.product.quantity > 0).length;
 
    // 2 array : 1 array cart, 1 array cart checked
    const handleChecked = (checked: boolean, item: CartItem) => {
       if (checked) {
-         setProductChecked((prev) => [...prev, item]);
+         if (item.product.quantity > 0) {
+            setProductChecked((prev) => [...prev, item]);
+         }
       } else {
          let cloneProduct = [...productChecked];
          let products = cloneProduct.filter((e) => {
@@ -92,7 +94,8 @@ export default function Cart() {
    const handleCheckedAll = (checked: boolean) => {
       if (checked) {
          if (carts.item) {
-            setProductChecked(carts.item);
+            const _data = carts.item?.filter((e) => e.product.quantity > 0)
+            setProductChecked(_data);
          }
       } else {
          setProductChecked([]);

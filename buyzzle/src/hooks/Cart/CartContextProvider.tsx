@@ -16,7 +16,7 @@ export default function useCartContext() {
    let listProductQuantity: UpdateQuantityModal[] = [];
    const navigate = useNavigate();
 
-   const addProduct = (productId: number, productQuantities: number) => {
+   const addProduct = (productId: number, productQuantities: number, type: boolean) => {
       const data: ModelCart = {
          productId: productId,
          quantity: productQuantities,
@@ -25,6 +25,9 @@ export default function useCartContext() {
          .addCart(data)
          .then((_) => {
             getCart()
+            if (type) {
+               navigate('/cart');
+            }
             toastSuccess("Thêm thành công");
          })
          .catch((err) => {

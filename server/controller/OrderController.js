@@ -205,7 +205,7 @@ const OderController = {
                         id: element.productId, // id của itemCart
                     },
                     data: {
-                        quantity: element.quantity
+                        quantity: parseInt(element.quantity) == 0 ? 1 : parseInt(element.quantity),
                     }
                 })
             }))

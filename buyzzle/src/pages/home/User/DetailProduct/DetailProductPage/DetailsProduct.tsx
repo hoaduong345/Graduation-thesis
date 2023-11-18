@@ -22,6 +22,7 @@ import Plus from "../../../../../Assets/TSX/Plus";
 import SuccessIcon from "../../../../../Assets/TSX/SuccessIcon";
 import { productController } from "../../../../../Controllers/ProductsController";
 import { ratingAndCommentController } from "../../../../../Controllers/Rating&Comment";
+import WarningQuantityCart from "../../../../../Helper/Dialog/WarningQuantityCart";
 import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
 import { stars } from "../../../../../Helper/StarRating/Star";
 import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
@@ -35,7 +36,6 @@ import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
 import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
-import WarningQuantityCart from "../../../../../Helper/Dialog/WarningQuantityCart";
 export interface ImgOfProduct {
   url: string;
 }
@@ -110,14 +110,9 @@ export default function DetailsProduct() {
     }
   }, [first]);
   const [quantity, setQuantity] = useState(1);
-  console.log(
-    "🚀 ~ file: DetailsProduct.tsx:114 ~ DetailsProduct ~ quantity:",
-    quantity
-  );
   const [recommandProduct, setRecommandProduct] = useState<Row[]>([]);
 
   const { id } = useParams();
-  console.log(id);
 
   const getDetailProduct = async () => {
     await axios
@@ -287,6 +282,9 @@ export default function DetailsProduct() {
       rateAndcomment
     );
   };
+
+  const isSoldOut = first?.productDetail?.quantity == 0
+
   return (
     <>
       <Container>
@@ -533,23 +531,25 @@ export default function DetailsProduct() {
                   <LoveProduct />
                 </div>
                 <div
-                  className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer"
-                  onClick={() => {
-                    addProduct(Number(id), quantity);
-                  }}
+                  className={`${isSoldOut ? `cursor-not-allowed` : 'cursor-pointer'} flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
+                  onClick={() => !isSoldOut && addProduct(Number(id), quantity, false)}
                 >
-                  <button className="text-center text-base font-bold text-[#4C4C4C]">
+                  <div className="text-center text-base font-bold text-[#4C4C4C]">
                     Thêm Vào Giỏ Hàng
-                  </button>
+                  </div>
                   <Cart />
                 </div>
                 <div
-                  className=" flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
-                                transition duration-150 bg-[#EA4B48] justify-evenly cursor-pointer"
+                  className={`${isSoldOut ? `cursor-not-allowed` : 'cursor-pointer'} flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
+                  transition duration-150 bg-[#EA4B48] justify-evenly`}
+                  onClick={() => {
+                    if (isSoldOut) return;
+                    return addProduct(Number(id), quantity, true);
+                  }}
                 >
-                  <button className="text-center text-base font-bold text-white ">
+                  <p className="text-center text-base font-bold text-white ">
                     Mua ngay
-                  </button>
+                  </p>
                 </div>
               </div>
               {/* end Mua ngay */}
@@ -584,7 +584,7 @@ export default function DetailsProduct() {
           </div>
           {/* end Sản phẩm của shop */}
         </body>
-      </Container>
+      </Container >
       <Container>
         {/* Chi tiết và đánh giá */}
         <div className="justify-center gap-6 flex mt-10">
