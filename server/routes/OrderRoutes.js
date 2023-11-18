@@ -13,4 +13,6 @@ app.post('/quantityCreateOrder', OrderController.quantityCreateOrder);
 app.post('/quantityCancelOrder', OrderController.quantityCancelOrder);
 app.post('/updateSoldcount', OrderController.updateSoldcount);
 
+// update quantity cart
+app.post('/updateQuantityCart', OrderController.updateQuantityItemcarts);
 module.exports = app;

@@ -37,13 +37,16 @@ export default function Cart() {
       cartControllers.increaseCart(data).then((res) => {
          setCarts(res.data);
       });
-      const indexProduct = productChecked.findIndex(
-         (item) => item.productid === data.productId
-      );
-      const _productChecked = [...productChecked];
-      _productChecked[indexProduct].quantity += 1;
+      if (productChecked.length > 0) {
 
-      setProductChecked(_productChecked);
+         const indexProduct = productChecked.findIndex(
+            (item) => item.productid === data.productId
+         );
+         const _productChecked = [...productChecked];
+         _productChecked[indexProduct].quantity += 1;
+
+         setProductChecked(_productChecked);
+      }
    };
    const handleDecreaseQuantity = (quantity: number, data: UpdateCart) => {
       if (quantity > 1) {
@@ -219,37 +222,42 @@ export default function Cart() {
                                     </div>
                                  </div>
                                  <div className=" flex items-center col-span-2 justify-center gap-1">
-                                    <div
-                                       className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                       onClick={() =>
-                                          minusThrottled(e.quantity, {
-                                             productId: e.productid,
-                                             cartId: e.cartid,
-                                          })
-                                       }
-                                    >
-                                       <Minus />
-                                    </div>
-                                    <div>
-                                       <p className="text-base mx-2 font-medium">
-                                          {e.quantity}
-                                       </p>
-                                    </div>
-                                    <div
-                                       className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                       onClick={() => {
-                                          e.quantity < e.product.quantity
-                                             ? plusThrottled({
-                                                productId: e.productid,
-                                                cartId: e.cartid,
-                                             })
-                                             : toastWarn(
-                                                `Chỉ còn ${e.product.quantity} sản phẩm`
-                                             );
-                                       }}
-                                    >
-                                       <Plus />
-                                    </div>
+                                    {
+                                       e.product.quantity > 0 ? (
+                                          <>
+                                             <div
+                                                className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
+                                                onClick={() =>
+                                                   minusThrottled(e.quantity, {
+                                                      productId: e.productid,
+                                                      cartId: e.cartid,
+                                                   })
+                                                }
+                                             >
+                                                <Minus />
+                                             </div>
+                                             <div>
+                                                <p className="text-base mx-2 font-medium">
+                                                   {e.quantity}
+                                                </p>
+                                             </div>
+                                             <div
+                                                className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
+                                                onClick={() => {
+                                                   e.quantity < e.product.quantity
+                                                      ? plusThrottled({
+                                                         productId: e.productid,
+                                                         cartId: e.cartid,
+                                                      })
+                                                      : toastWarn(
+                                                         `Chỉ còn ${e.product.quantity} sản phẩm`
+                                                      );
+                                                }}
+                                             >
+                                                <Plus />
+                                             </div>
+                                          </>) : (<><p>Hết hàng</p></>)
+                                    }
                                  </div>
                                  <div className="col-span-2 flex justify-center">
                                     <p className="text-[#EA4B48] text-xl">
@@ -343,9 +351,9 @@ export default function Cart() {
                            </div>
                            <ArrowUp />
                         </div>
-                        <Link
-                           to={`${productChecked.length == 0 ? "" : "/checkout"
-                              }`}
+                        <button
+                           // to={`${productChecked.length == 0 ? "" : "/checkout"
+                           //    }`}
                            onClick={handleBuyNow}
                            className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 
@@ -353,7 +361,7 @@ export default function Cart() {
                         >
                            <Buyzzle />
                            <p>Mua ngay</p>
-                        </Link>
+                        </button>
                         <DialogComfirm
                            desc="toàn bộ Giỏ hàng"
                            id={idAllCart}

@@ -195,6 +195,27 @@ const OderController = {
         }
     },
 
+    updateQuantityItemcarts: async (req, res) => {
+        try {
+            const data = req.body;
+            await Promise.all(data?.map(async (element) => {
+
+                await prisma.itemCart.update({
+                    where: {
+                        id: element.productId, // id của itemCart
+                    },
+                    data: {
+                        quantity: element.quantity
+                    }
+                })
+            }))
+
+            res.status(200).json('Cập nhật số lượng Giỏ hàng thành công');
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
+    },
+
     quantityCreateOrder: async (req, res) => {
         try {
             const data = req.body;
