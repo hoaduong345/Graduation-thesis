@@ -14,6 +14,7 @@ import InforUser from "../../Assets/TSX/InforUser";
 import { Images } from "../../../../../Assets/TS";
 import Contact from "../../Assets/TSX/Contact";
 import { currentDate, numberFormat } from "../../../../../Helper/Format";
+import secureLocalStorage from "react-secure-storage";
 
 
 export interface userStatus {
@@ -55,13 +56,13 @@ export default function UserProfile() {
   const isDisabled = !(isValid && isDirty);
 
   const getUserData = () => {
-    const user = localStorage.getItem("user");
+    const user = param.username;
     if (user != null) {
-      const userData = JSON.parse(user);
-      const username = userData.username;
-      console.log("USERNAME1: " + username);
+      // const userData = JSON.parse(user);
+      // const username = userData.username;
+      console.log("USERNAME1: " + user);
       userController
-        .getUserWhereUsername(username)
+        .getUserWhereUsername(user)
         .then((res) => {
           return res;
         })
@@ -95,7 +96,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     function CheckLink() {
-      const user = localStorage.getItem("user");
+      const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
 

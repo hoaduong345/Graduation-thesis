@@ -14,6 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import * as yup from "yup";
 import { shipperController } from "../../../../Controllers/ShipperController";
+import secureLocalStorage from "react-secure-storage";
 export interface FormLoginValues {
    username: string;
    password: string;
@@ -44,7 +45,8 @@ function LoginShipper() {
          // console.log(accessToken);
          const UserData = {username};
          // const Token = {accessToken}; 
-         localStorage.setItem('shippername', JSON.stringify(UserData));
+         secureLocalStorage.setItem('shippername', JSON.stringify(UserData));
+         // .setItem('admin', UserData);
          setTimeout(() => {
             window.location.href = "/shipping/management";
          }, 2000);
@@ -78,7 +80,7 @@ function LoginShipper() {
          <div className="w-1/2 flex justify-center items-center min-h-screen bg-white">
             <div className="w-[424px]">
                <form className="registration-form">
-                  <h1 className=" login-a ">ĐĂNG NHẬP SHIPPER</h1>
+                  <h1 className=" login-a ">ĐƠN VỊ VẬN CHUYỂN</h1>
                   <div className="grid grid-cols-5 gap-8">
                      <div className="col-span-3 " >
                         <div className="flex gap-3 ">
@@ -119,7 +121,7 @@ function LoginShipper() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
                                              max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
                                             `}
-                                             placeholder="Nhập vào username"
+                                             placeholder="Tên tài khoản"
                                              value={field.value}
                                              onChange={(e) => {
                                                 const reg =
@@ -185,7 +187,7 @@ function LoginShipper() {
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
                                              max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
                                             `}
-                                             placeholder="Nhập vào mật khẩu"
+                                             placeholder="Mật khẩu"
                                              value={field.value}
                                              type="password"
                                              onChange={(e) => {

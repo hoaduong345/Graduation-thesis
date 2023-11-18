@@ -191,12 +191,24 @@ const ShippingController = {
                 where: whereClause,
             });
 
-
             const getAll = await prisma.order.findMany({
                 where: {
                     status: {
                         gte: 0,
                     },
+                    OR: [
+                        {
+                            status: 0,
+                            deletedAt: {
+                                equals: null,
+                            },
+                        },
+                        {
+                            status: {
+                                gt: 0,
+                            },
+                        },
+                    ],
                 },
             });
             const allOrderAdmin = await prisma.order.findMany({
@@ -227,6 +239,7 @@ const ShippingController = {
                 pageSize: pageSize,
                 totalPage: Math.ceil(totalOrdersCount / pageSize),
                 totalOrderShipping: getAll.length,
+                totalOrdersCount: totalOrdersCount,
                 statusCounts: statusCounts,
                 data: allOrderAdmin,
             };

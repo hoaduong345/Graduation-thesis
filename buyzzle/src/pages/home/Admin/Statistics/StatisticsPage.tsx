@@ -16,15 +16,15 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import moment from "moment";
 import { Bar, Line } from "react-chartjs-2";
 import { animated, useSpring } from "react-spring";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 import ArrowFall from "../../../../Assets/TSX/ArrowFall";
 import { statsControllers } from "../../../../Controllers/StatsControllers";
-import { FilterChart, dataFilter } from "../../../../Helper/Date/DataHelper";
-import { formatDateYYYY, numberFormat } from "../../../../Helper/Format";
+import { FilterChart } from "../../../../Helper/Date/DataHelper";
+import { numberFormat } from "../../../../Helper/Format";
 import { HotProductsInRange, Statistics } from "../../../../Model/StatsModels";
-import moment from "moment";
 
 ChartJS.register(
   ArcElement,
@@ -290,10 +290,28 @@ export default function StatisticsPage() {
               <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">
                 THỐNG KÊ BUYZZLE
               </h2>
-              <button className="btn btn-outline items-center btn-sm text-xs hover:bg-[#eefff8] text-green-600 hover:text-green-600 hover:border-[#16A46D] flex">
+              <button
+                className="btn btn-outline items-center btn-sm text-xs hover:bg-[#eefff8]
+               text-green-600 hover:text-green-600 hover:border-[#16A46D] flex"
+                // onClick={() => {
+                //   const csv = generateCsv(csvConfig)(stats.); // Xuat excel
+                //   download(csvConfig)(csv);
+                // }}
+              >
                 Xuất excel
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                  />
                 </svg>
               </button>
             </div>

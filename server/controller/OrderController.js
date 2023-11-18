@@ -47,7 +47,7 @@ const OderController = {
             });
             await prisma.notification.create({
                 data: {
-                    userId : iduser,
+                    userId: iduser,
                     orderId: order.id,
                     message: 'New order',
                     status: 1,
@@ -117,7 +117,6 @@ const OderController = {
         }
     },
 
-
     getOrderAdmin: async (req, res) => {
         try {
             const page = parseInt(req.query.page);
@@ -169,6 +168,7 @@ const OderController = {
 
     isRatingAt: async (req, res) => {
         try {
+            const id = parseInt(req.params.id);
             const productId = parseInt(req.body.productId);
             const orderDetailId = parseInt(req.body.orderDetailId);
             const existingCategory = await prisma.orderDetail.findMany({
@@ -190,6 +190,97 @@ const OderController = {
                 return res.status(200).json('Đánh giá thành công');
             }
             return res.status(404).json('Đánh giá thất bại');
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
+    },
+
+    quantityCreateOrder: async (req, res) => {
+        try {
+            const data = req.body;
+            await Promise.all(data?.map(async (element) => {
+
+                const currentProduct = await prisma.product.findUnique({
+                    where: {
+                        id: parseInt(element.productId),
+                    },
+                });
+
+                const newQuantity = currentProduct.quantity - parseInt(element.quantity);
+
+                await prisma.product.update({
+                    where: {
+                        id: parseInt(element.productId)
+                    },
+                    data: {
+                        quantity: newQuantity
+                    }
+                })
+            }))
+
+            res.status(200).json('Trừ số lượng thành công');
+
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
+    },
+
+    quantityCancelOrder: async (req, res) => {
+        try {
+            const data = req.body;
+            await Promise.all(data?.map(async (element) => {
+
+                const currentProduct = await prisma.product.findUnique({
+                    where: {
+                        id: parseInt(element.productId),
+                    },
+                });
+
+                const newQuantity = currentProduct.quantity + parseInt(element.quantity);
+
+                await prisma.product.update({
+                    where: {
+                        id: parseInt(element.productId)
+                    },
+                    data: {
+                        quantity: newQuantity
+                    }
+                })
+            }))
+
+            res.status(200).json('Cộng số lượng thành công');
+
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
+    },
+
+    updateSoldcount: async (req, res) => {
+        try {
+            const data = req.body;
+
+            await Promise.all(data.map(async (element) => {
+
+                const currentProduct = await prisma.product.findUnique({
+                    where: {
+                        id: parseInt(element.productId),
+                    },
+                });
+
+                const newSoldcount = currentProduct.soldcount + parseInt(element.quantity);
+
+                await prisma.product.update({
+                    where: {
+                        id: parseInt(element.productId)
+                    },
+                    data: {
+                        soldcount: newSoldcount
+                    }
+                })
+            }))
+
+            res.status(200).json('Cộng đã bán thành công');
+
         } catch (error) {
             res.status(500).json(error.message);
         }

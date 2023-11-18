@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { userController } from "../../../../../Controllers/UserController";
+import secureLocalStorage from "react-secure-storage";
 
 type FormValues = {
   id: number;
@@ -100,7 +101,7 @@ export default function PaymentAddress() {
 
   useEffect(() => {
     function CheckLink() {
-      const user = localStorage.getItem("user");
+      const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
         // console.log("data", data)
@@ -112,20 +113,20 @@ export default function PaymentAddress() {
   }, [param]);
 
   const getUserData = () => {
-    const user = localStorage.getItem("user");
+    const user = param.username;
     if (user != null) {
-      const userData = JSON.parse(user);
-      const username = userData.username;
-      console.log("USERNAME1: " + username);
+      // const userData = JSON.parse(user);
+      // const username = userData.username;
+      // console.log("USERNAME1: " + username);
       userController
-        .getUserWhereUsername2(username)
+        .getUserWhereUsername2(user)
         .then((res) => {
           console.log("TEST " + JSON.stringify(res));
           return res;
         })
         .then((res) => {
           reset({
-            username: userData.username,
+            username: user,
             addresstype: res.addresstype,
             address: res.address,
             specificaddress: res.specificaddress,
