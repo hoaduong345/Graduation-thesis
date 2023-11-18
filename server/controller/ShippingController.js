@@ -9,6 +9,7 @@ const errorResponse = (res, error) => {
 const ShippingController = {
     setStatus: async (req, res) => {
         try {
+            const userId = parseInt(req.body.id)
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status);
 
@@ -52,6 +53,7 @@ const ShippingController = {
 
                 await prisma.notification.create({
                     data: {
+                        user: userId,
                         orderId: orderId,
                         message: 'Delivery Successfully',
                         status: 5,
@@ -284,6 +286,7 @@ const ShippingController = {
     },
     confirmDeleteOrder: async (req, res) => {
         try {
+            const userId = parseInt(req.cookies.userId)
             const orderId = parseInt(req.body.orderId);
             const order = await prisma.order.findFirst({
                 where: {
@@ -301,6 +304,7 @@ const ShippingController = {
             });
             await prisma.notification.create({
                 data: {
+                    userId : userId,
                     orderId: orderId,
                     message: 'Delete order successfully',
                     status: 4,
