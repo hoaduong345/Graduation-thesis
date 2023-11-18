@@ -151,7 +151,9 @@ export default function DetailsProduct() {
   }, [rateAndcomment.currentPage]);
 
   const plusQuantity = () => {
-    setQuantity(quantity + 1);
+    if (quantity < first?.productDetail?.quantity!) {
+      setQuantity(quantity + 1);
+    }
   };
   const minusQuantity = () => {
     if (quantity > 1) {
