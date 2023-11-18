@@ -44,6 +44,8 @@ router.post('/addimagecomment', ProductController.addImageComment);
 
 router.put('/updateimagecomment/:id', ProductController.updateImageComment);
 
+router.put('/repComment', ProductController.RepComment);
+
 // thêm danh mục
 
 router.post('/addcategory', ProductController.addCategory);

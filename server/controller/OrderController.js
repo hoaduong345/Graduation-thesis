@@ -47,7 +47,7 @@ const OderController = {
             });
             await prisma.notification.create({
                 data: {
-                    userId : iduser,
+                    userId: iduser,
                     orderId: order.id,
                     message: 'New order',
                     status: 1,
@@ -117,7 +117,6 @@ const OderController = {
         }
     },
 
-
     getOrderAdmin: async (req, res) => {
         try {
             const page = parseInt(req.query.page);
@@ -169,6 +168,7 @@ const OderController = {
 
     isRatingAt: async (req, res) => {
         try {
+            const id = parseInt(req.params.id);
             const productId = parseInt(req.body.productId);
             const orderDetailId = parseInt(req.body.orderDetailId);
             const existingCategory = await prisma.orderDetail.findMany({

@@ -5,7 +5,8 @@ export default function RateDetailCMT(props: RatingStarDetail) {
     <div className="flex items-center mb-4 justify-start gap-3 ">
       <div className="form-control">
         {/* <label className="label cursor-pointer"> */}
-          <input type="radio"
+        <input
+          type="radio"
           name="colored-radio"
           id="orange-radio"
           className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
@@ -14,9 +15,8 @@ export default function RateDetailCMT(props: RatingStarDetail) {
             // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
             props.onChangeFilter?.(props.rating);
           }}
-          
-          />
-           <div
+        />
+        <div
           className="h-6 w-6 absolute rounded-full pointer-events-none
           peer-checked:border-[#EA4B48] peer-checked:border-2"
         />
