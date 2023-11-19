@@ -279,6 +279,9 @@ const CartController = {
                                 },
                             },
                         },
+                        orderBy: {
+                            id: "desc"
+                        }
                     },
                 },
             });
@@ -329,6 +332,9 @@ const CartController = {
                                 },
                             },
                         },
+                        orderBy: {
+                            id: "desc"
+                        }
                     },
                 },
             });
@@ -360,6 +366,9 @@ const CartController = {
                                 },
                             },
                         },
+                        orderBy: {
+                            id: 'desc'
+                        }
                     },
                 },
             });

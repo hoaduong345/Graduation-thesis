@@ -32,7 +32,6 @@ import { appConfig } from "../../../../../configsEnv";
 import { useCart } from "../../../../../hooks/Cart/CartContextProvider";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import Cart from "../../../Admin/Assets/TSX/Cart";
-import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
 import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
@@ -526,31 +525,45 @@ export default function DetailsProduct() {
               </div>
               {/* end icon */}
               {/* Mua ngay */}
-              <div className="w-[100%] flex mt-9 px-5 items-center gap-6">
-                <div>
+              <div className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`} mt-9 items-center gap-6`}>
+                {/* <div>
                   <LoveProduct />
-                </div>
-                <div
-                  className={`${isSoldOut ? `cursor-not-allowed` : 'cursor-pointer'} flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
-                  onClick={() => !isSoldOut && addProduct(Number(id), quantity, false)}
-                >
-                  <div className="text-center text-base font-bold text-[#4C4C4C]">
-                    Thêm Vào Giỏ Hàng
-                  </div>
-                  <Cart />
-                </div>
-                <div
-                  className={`${isSoldOut ? `cursor-not-allowed` : 'cursor-pointer'} flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
+                </div> */}
+
+                {
+                  isSoldOut ? <>
+                    <div
+                      className={`flex items-center w-[268px] bg-[#EA4B48] rounded-md h-[58px] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}>
+                      <p className="text-center text-base font-bold text-white">
+                        Hết hàng
+                      </p>
+                    </div>
+                  </> : <>
+
+                    <div
+                      className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
+                      onClick={() => !isSoldOut && addProduct(Number(id), quantity, false)}
+                    >
+                      <div className="text-center text-base font-bold text-[#4C4C4C]">
+                        Thêm Vào Giỏ Hàng
+                      </div>
+                      <Cart />
+                    </div>
+                    <div
+                      className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
                   transition duration-150 bg-[#EA4B48] justify-evenly`}
-                  onClick={() => {
-                    if (isSoldOut) return;
-                    return addProduct(Number(id), quantity, true);
-                  }}
-                >
-                  <p className="text-center text-base font-bold text-white ">
-                    Mua ngay
-                  </p>
-                </div>
+                      onClick={() => {
+                        if (isSoldOut) return;
+                        return addProduct(Number(id), quantity, true);
+                      }}
+                    >
+                      <p className="text-center text-base font-bold text-white ">
+                        Mua ngay
+                      </p>
+                    </div>
+                  </>
+                }
+
               </div>
               {/* end Mua ngay */}
             </div>
