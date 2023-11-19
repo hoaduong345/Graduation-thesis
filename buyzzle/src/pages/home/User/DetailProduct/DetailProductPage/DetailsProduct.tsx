@@ -433,7 +433,7 @@ export default function DetailsProduct() {
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
-                          {numberFormat(first.productDetail.price)}đ
+                          {numberFormat(first.productDetail.price)}
                         </p>
                       </div>
                     ) : null}

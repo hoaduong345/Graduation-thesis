@@ -1,40 +1,11 @@
-import React, { useEffect, useState } from "react";
-import CancelOrder from "../../layout/asset/TSX/CancelOrder";
-import { Images } from "../../Assets/TS";
-import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { useNotificationShipping } from "../../hooks/Notification/NotificationContextShipping";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
-import { AllNotification } from "../../Model/Notification";
-import { notificationControllers } from "../../Controllers/NotificationController";
+import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { handleSeenNoti } from "./components/SeenNoti";
 
 export default function NotificationShipping() {
-  const [notification, setNotification] = useState<AllNotification[]>([]);
+  const { notificationShipping } = useNotificationShipping();
 
-  useEffect(() => {
-    getAllNoti();
-  }, []);
-  const getAllNoti = async () => {
-    await notificationControllers
-      .getAllNotificationShipping()
-      .then((res) => {
-        console.log(
-          "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
-          res
-        );
-        setNotification(res.allNotification);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleSeenNoti = async (id: number) => {
-    await notificationControllers
-      .getSeenNotification(id)
-      .then((_) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <div className="header-view top-full absolute w-[355px] invisible z-20 overflow-y-auto h-[600px] scroll-smooth">
       <div
@@ -45,8 +16,8 @@ export default function NotificationShipping() {
         <div className=" border-b-[1px] mt-2"></div>
         <div className="flex flex-col gap-3">
           {/* map Noti */}
-          {notification.length > 0 ? (
-            notification.map((notiItems) => {
+          {notificationShipping?.length > 0 ? (
+            notificationShipping.map((notiItems) => {
               return (
                 <a
                   href={`/shipping/detail/${notiItems.orderId}`}
