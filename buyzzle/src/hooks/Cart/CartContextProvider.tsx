@@ -26,10 +26,6 @@ export default function useCartContext() {
          .then((_) => {
             getCart()
 
-            if (type) {
-               navigate('/cart');
-            }
-
             if (productChecked.length > 0) {
                const indexProduct = productChecked.findIndex(
                   (item) => item.productid === data.productId
@@ -37,6 +33,10 @@ export default function useCartContext() {
                const _productChecked = [...productChecked];
                _productChecked[indexProduct].quantity += productQuantities;
                setProductChecked(_productChecked);
+            }
+
+            if (type) {
+               navigate('/cart');
             }
 
             toastSuccess("Thêm thành công");
