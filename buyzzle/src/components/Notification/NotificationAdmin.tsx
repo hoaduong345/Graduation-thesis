@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Images } from "../../Assets/TS";
 import { notificationControllers } from "../../Controllers/NotificationController";
 import { useNotificationAdmin } from "../../hooks/Notification/NotificationContextAdmin";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import { handleSeenNoti } from "./components/SeenNoti";
+import moment from "moment";
+import "moment/locale/vi";
 
 export default function NotificationAdmin() {
+  moment.locale("vi");
+
   const [changeButton, setChangeButton] = useState([
     {
       id: 0,
@@ -70,7 +74,6 @@ export default function NotificationAdmin() {
         console.log(err);
       });
   };
-
   return (
     <div className="header-view top-full absolute w-[355px] invisible z-20 overflow-y-auto h-[600px] scroll-smooth">
       <div
@@ -216,7 +219,7 @@ export default function NotificationAdmin() {
                               <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
                             </svg>
                           )}
-                          2 phút trước
+                          {moment(notiItems.date).locale("vi").fromNow()}
                         </span>
                         {notiItems.seen == false ? (
                           <div className="rounded-full border-[5px] w-0 border-[#2E89FF] justify-end"></div>
