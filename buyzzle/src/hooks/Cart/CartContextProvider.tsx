@@ -3,12 +3,18 @@ import { ModelCart, cartControllers } from "../../Controllers/CartControllers";
 import { toastSuccess } from "../../Helper/Toast/Success";
 import { toastWarn } from "../../Helper/Toast/Warning";
 import { CartItem, CartProduct } from "../../Model/CartModel";
+import { orderControllers } from "../../Controllers/OrderControllers";
+import { UpdateQuantityModal } from "../../Model/OrderModel";
+import { useNavigate } from 'react-router-dom';
 
 export default function useCartContext() {
    const [loading, setLoading] = useState(true);
    const [idProduct, setIdProduct] = useState(0);
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
    const [carts, setCarts] = useState<CartProduct>({} as CartProduct);
+   let listProductQuantity: UpdateQuantityModal[] = [];
+   const navigate = useNavigate();
+
    const addProduct = (productId: number, productQuantities: number) => {
       const data: ModelCart = {
          productId: productId,
@@ -25,28 +31,53 @@ export default function useCartContext() {
          });
    };
 
-   const getCart = () => {
+   const getCart = async () => {
       setLoading(true);
-      cartControllers
+      await cartControllers
          .getCart()
          .then((res) => {
             setCarts(res.data);
+            return res.data
+         }).then((data) => {
+            data.item.map((e) => {
+               if (e.quantity > e.product.quantity) {
+                  listProductQuantity.push({
+                     productId: e.id!,
+                     quantity: e.product.quantity,
+                  })
+               }
+
+            })
+         })
+         .then(() => {
+            updateQuantityCart()
          })
          .finally(() => setLoading(false));
    };
+
+   const updateQuantityCart = async () => {
+      if (listProductQuantity.length > 0) {
+         await orderControllers.updateQuantityCart(listProductQuantity);
+         await cartControllers.getCart()
+            .then((res) => {
+               setCarts(res.data);
+            });
+      }
+   }
    useEffect(() => {
       getCart();
    }, []);
 
-   const handleBuyNow = () => {
+   const handleBuyNow = async () => {
+
       if (productChecked.length == 0) {
          toastWarn("Chưa chọn sản phẩm");
       } else {
+         await getCart();
          sessionStorage.setItem("cartBuyzzle", JSON.stringify(productChecked));
+         navigate('/checkout')
       }
    };
-
-   // asdasd
 
    // open - close modal
    const openModal = (id: string) => {

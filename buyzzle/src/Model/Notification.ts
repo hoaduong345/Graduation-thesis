@@ -27,7 +27,7 @@ export interface FkOrder {
   discount: number;
   amountTotal: number;
   paymentMethod: string;
-  createdAt: string;
+  createdAt: Date;
   updatedAt: string;
   User: User;
 }
