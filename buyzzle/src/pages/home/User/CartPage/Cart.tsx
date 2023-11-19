@@ -206,7 +206,6 @@ export default function Cart() {
                                     <div>
                                        <Link
                                           to={`/Detailproducts/${e.productid}`}
-                                          onClick={() => setProductChecked([])}
                                        >
                                           <p className="text-[#1A1A1A] text-base font-medium mx-3">
                                              {e.product.name}

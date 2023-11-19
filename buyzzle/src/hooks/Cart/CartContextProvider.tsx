@@ -25,9 +25,20 @@ export default function useCartContext() {
          .addCart(data)
          .then((_) => {
             getCart()
+
             if (type) {
                navigate('/cart');
             }
+
+            if (productChecked.length > 0) {
+               const indexProduct = productChecked.findIndex(
+                  (item) => item.productid === data.productId
+               );
+               const _productChecked = [...productChecked];
+               _productChecked[indexProduct].quantity += productQuantities;
+               setProductChecked(_productChecked);
+            }
+
             toastSuccess("Thêm thành công");
          })
          .catch((err) => {
