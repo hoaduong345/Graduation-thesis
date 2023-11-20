@@ -160,6 +160,9 @@ function Category() {
           getList();
           setnull();
           setCheckedCategory([]);
+        })
+        .catch(() => {
+          toastWarn('Tối đa 6 danh mục')
         });
     }
   };
