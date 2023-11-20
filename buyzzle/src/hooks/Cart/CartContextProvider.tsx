@@ -10,12 +10,13 @@ import { useNavigate } from 'react-router-dom';
 export default function useCartContext() {
    const [loading, setLoading] = useState(true);
    const [idProduct, setIdProduct] = useState(0);
+   const [warning, setWarning] = useState<string>('')
    const [productChecked, setProductChecked] = useState<CartItem[]>([]);
    const [carts, setCarts] = useState<CartProduct>({} as CartProduct);
    let listProductQuantity: UpdateQuantityModal[] = [];
    const navigate = useNavigate();
 
-   const addProduct = (productId: number, productQuantities: number) => {
+   const addProduct = (productId: number, productQuantities: number, type: boolean) => {
       const data: ModelCart = {
          productId: productId,
          quantity: productQuantities,
@@ -24,10 +25,25 @@ export default function useCartContext() {
          .addCart(data)
          .then((_) => {
             getCart()
+
+            if (productChecked.length > 0) {
+               const indexProduct = productChecked.findIndex(
+                  (item) => item.productid === data.productId
+               );
+               const _productChecked = [...productChecked];
+               _productChecked[indexProduct].quantity += productQuantities;
+               setProductChecked(_productChecked);
+            }
+
+            if (type) {
+               navigate('/cart');
+            }
+
             toastSuccess("Thêm thành công");
          })
          .catch((err) => {
-            toastWarn(err.response?.data);
+            setWarning(err.response?.data);
+            openModal('idWarningQuantity')
          });
    };
 
@@ -131,6 +147,7 @@ export default function useCartContext() {
       removeAllCart,
       idItemCart,
       idAllCart,
+      warning,
    };
 }
 type CartContextType = ReturnType<typeof useCartContext>;

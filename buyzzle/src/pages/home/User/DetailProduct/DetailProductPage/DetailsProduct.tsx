@@ -22,6 +22,7 @@ import Plus from "../../../../../Assets/TSX/Plus";
 import SuccessIcon from "../../../../../Assets/TSX/SuccessIcon";
 import { productController } from "../../../../../Controllers/ProductsController";
 import { ratingAndCommentController } from "../../../../../Controllers/Rating&Comment";
+import WarningQuantityCart from "../../../../../Helper/Dialog/WarningQuantityCart";
 import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
 import { stars } from "../../../../../Helper/StarRating/Star";
 import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
@@ -31,7 +32,6 @@ import { appConfig } from "../../../../../configsEnv";
 import { useCart } from "../../../../../hooks/Cart/CartContextProvider";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import Cart from "../../../Admin/Assets/TSX/Cart";
-import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
 import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
@@ -88,7 +88,8 @@ export interface EditImage {
 export default function DetailsProduct() {
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState("");
-  const { addProduct } = useCart();
+  const { addProduct, warning, closeModal } = useCart();
+  const idWarningQuantity = 'idWarningQuantity';
 
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -108,14 +109,9 @@ export default function DetailsProduct() {
     }
   }, [first]);
   const [quantity, setQuantity] = useState(1);
-  console.log(
-    "🚀 ~ file: DetailsProduct.tsx:114 ~ DetailsProduct ~ quantity:",
-    quantity
-  );
   const [recommandProduct, setRecommandProduct] = useState<Row[]>([]);
 
   const { id } = useParams();
-  console.log(id);
 
   const getDetailProduct = async () => {
     await axios
@@ -285,6 +281,9 @@ export default function DetailsProduct() {
       rateAndcomment
     );
   };
+
+  const isSoldOut = first?.productDetail?.quantity == 0
+
   return (
     <>
       <Container>
@@ -345,7 +344,6 @@ export default function DetailsProduct() {
             </div>
             <div className="col-span-5">
               <p className="text-[32px] text-[#393939] font-medium leading-9">
-                {/* {first?.productDetail.name} */}
                 {first?.productDetail ? (
                   <p className="text-[32px] text-[#393939] font-medium leading-9">
                     {first.productDetail.name}
@@ -428,8 +426,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                              first?.productDetail.price! *
-                                (first?.productDetail.discount! / 100)
+                            first?.productDetail.price! *
+                            (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -526,33 +524,53 @@ export default function DetailsProduct() {
               </div>
               {/* end icon */}
               {/* Mua ngay */}
-              <div className="w-[100%] flex mt-9 px-5 items-center gap-6">
-                <div>
+              <div className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`} mt-9 items-center gap-6`}>
+                {/* <div>
                   <LoveProduct />
-                </div>
-                <div
-                  className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer"
-                  onClick={() => {
-                    addProduct(Number(id), quantity);
-                  }}
-                >
-                  <button className="text-center text-base font-bold text-[#4C4C4C]">
-                    Thêm Vào Giỏ Hàng
-                  </button>
-                  <Cart />
-                </div>
-                <div
-                  className=" flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
-                                transition duration-150 bg-[#EA4B48] justify-evenly cursor-pointer"
-                >
-                  <button className="text-center text-base font-bold text-white ">
-                    Mua ngay
-                  </button>
-                </div>
+                </div> */}
+
+                {
+                  isSoldOut ?
+                    <>
+                      <div
+                        className={`flex items-center w-[268px] bg-[#EA4B48] rounded-md h-[58px] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}>
+                        <p className="text-center text-base font-bold text-white">
+                          Hết hàng
+                        </p>
+                      </div>
+                    </> :
+                    <>
+                      <div
+                        className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
+                        onClick={() => !isSoldOut && addProduct(Number(id), quantity, false)}
+                      >
+                        <div className="text-center text-base font-bold text-[#4C4C4C]">
+                          Thêm Vào Giỏ Hàng
+                        </div>
+                        <Cart />
+                      </div>
+                      <div
+                        className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
+                          transition duration-150 bg-[#EA4B48] justify-evenly`}
+                        onClick={() => {
+                          if (isSoldOut) return;
+                          return addProduct(Number(id), quantity, true);
+                        }}
+                      >
+                        <p className="text-center text-base font-bold text-white ">
+                          Mua ngay
+                        </p>
+                      </div>
+                    </>
+                }
+
               </div>
               {/* end Mua ngay */}
             </div>
           </div>
+
+          <WarningQuantityCart id={idWarningQuantity} title={warning} onClose={() => closeModal(idWarningQuantity)} />
+
           {/* Sản phẩm của shop */}
           <div className="grid grid-cols-3 mt-24">
             <div className="col-span-1 ">
@@ -579,17 +597,16 @@ export default function DetailsProduct() {
           </div>
           {/* end Sản phẩm của shop */}
         </body>
-      </Container>
+      </Container >
       <Container>
         {/* Chi tiết và đánh giá */}
         <div className="justify-center gap-6 flex mt-10">
           <div>
             <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "descriptions"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "descriptions"
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
+                }`}
               onClick={() => handleTabClick("descriptions")}
               role="tab"
               aria-selected={activeTab === "descriptions" ? "true" : "false"}
@@ -600,11 +617,10 @@ export default function DetailsProduct() {
           </div>
           <div>
             <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "Rating"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "Rating"
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
+                }`}
               onClick={() => handleTabClick("Rating")}
               role="tab"
               aria-selected={activeTab === "Rating" ? "true" : "false"}
@@ -619,9 +635,8 @@ export default function DetailsProduct() {
       <Container>
         <div data-tab-content className="p-5">
           <div
-            className={` ${
-              activeTab === "descriptions" ? "visible" : "hidden"
-            }`}
+            className={` ${activeTab === "descriptions" ? "visible" : "hidden"
+              }`}
             id="descriptions"
             role="tabpanel"
           >
@@ -651,7 +666,7 @@ export default function DetailsProduct() {
                       handleRemoveRating={handleRemoveRating}
                     />
                   </div>
-                  {}
+                  { }
                   <div className="mt-10">
                     <ResponsivePagination
                       current={rateAndcomment.currentPage!}

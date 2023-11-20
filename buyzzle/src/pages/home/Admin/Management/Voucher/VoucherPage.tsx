@@ -10,48 +10,35 @@ import {
 import DialogComfirm from "../../../../../Helper/Dialog/DialogComfirm";
 import DialogModal from "../../../../../Helper/Dialog/DialogModal";
 import { toastSuccess } from "../../../../../Helper/Toast/Success";
-import { toastWarn } from "../../../../../Helper/Toast/Warning";
 // import { Voucher, VoucherModel } from "../../../../../Model/VoucherModel";
+import { Voucher, VoucherModel } from "../../../../../Model/VoucherModel";
 import Container from "../../../../../components/container/Container";
-import Delete from "../../Assets/TSX/Delete";
+import useDebounce from "../../../../../useDebounceHook/useDebounce";
 import Edit from "../../Assets/TSX/Edit";
 import PlusSquare from "../../Assets/TSX/PlusSquare";
 import RemoveCate from "../../Assets/TSX/RemoveCate";
 import Handle from "../../Assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import { Voucher, VoucherModel } from "../../../../../Model/VoucherModel";
-import useDebounce from "../../../../../useDebounceHook/useDebounce";
 
 type FormValues = {
   id: number;
-  discount: number;
+  discount: string;
   startDate: string;
   endDate: string;
-  quantity: number;
+  quantity: string;
   voucherCode: string;
 };
 
 export default function VoucherPage() {
   const idModal = "voucher";
   const idRemove = "removeVoucher";
-  const idRemoveVouchers = "removeVouchers";
 
   const [vouchers, setVoucher] = useState<Voucher>({} as Voucher);
   const [voucherAPI, setVoucherAPI] = useState<voucherModel>({
     pageSize: 4,
   });
-  console.log(
-    "🚀 ~ file: VoucherPage.tsx:42 ~ VoucherPage ~ voucherAPI:",
-    voucherAPI
-  );
   const [idVoucher, setIdVoucher] = useState<number | undefined>(0);
-  const [checkedVoucher, setCheckedVoucher] = useState<VoucherModel[]>([]);
   const debouncedInputValueSearch = useDebounce(voucherAPI.keyword, 500);
-
-  var checkAll: boolean =
-    vouchers.data?.length > 0
-      ? checkedVoucher.length === vouchers?.data?.length
-      : false;
 
   const currentDate = (date: Date) => {
     return moment(date).format("L");
@@ -75,27 +62,6 @@ export default function VoucherPage() {
     await voucherControllers.remove(id);
     getVoucher();
     closeModal(idRemove);
-    setCheckedVoucher([]);
-  };
-
-  const removeVouchers = (data: VoucherModel[], idModal: string) => {
-    let successMessageDisplayed = false;
-
-    data.map((e, index) => {
-      voucherControllers
-        .remove(e.id)
-        .then(() => {
-          if (index === data.length - 1 && !successMessageDisplayed) {
-            toastSuccess("Thành công");
-            successMessageDisplayed = true;
-          }
-          closeModal(idModal);
-          getVoucher();
-        })
-        .then(() => {
-          setCheckedVoucher([]);
-        });
-    });
   };
 
   const {
@@ -109,26 +75,17 @@ export default function VoucherPage() {
     mode: "all",
     defaultValues: {
       id: 0,
-      discount: undefined,
-      quantity: undefined,
+      discount: "",
+      quantity: "",
       voucherCode: "",
       startDate: "",
       endDate: "",
     },
   });
 
-  const openModal = async (id: string, data: FormValues) => {
+  const openModal = async (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      reset({
-        id: data.id,
-        voucherCode: data.voucherCode,
-        discount: data.discount,
-        quantity: data.quantity,
-        startDate: moment(data.startDate).format("YYYY-MM-DD"),
-        endDate: moment(data.endDate).format("YYYY-MM-DD"),
-      });
-      console.log(data);
       modal.showModal();
     }
   };
@@ -157,34 +114,15 @@ export default function VoucherPage() {
       voucherControllers.add(dataForm).then(() => {
         getVoucher();
         toastSuccess("Thành Công");
-        setCheckedVoucher([]);
       });
     } else {
       voucherControllers.update(dataForm.id, dataForm).then(() => {
         getVoucher();
         toastSuccess("Thành Công");
-        setCheckedVoucher([]);
       });
     }
 
     reset({});
-  };
-
-  const handleChecked = (checked: boolean, data: VoucherModel) => {
-    if (checked) {
-      setCheckedVoucher((prev) => [...prev, data]);
-    } else {
-      const cloneVoucher = [...checkedVoucher];
-      const cloneVouchers = cloneVoucher.filter((e) => e.id !== data.id);
-      setCheckedVoucher(cloneVouchers);
-    }
-  };
-  const handleCheckedAll = (checked: boolean) => {
-    if (checked) {
-      setCheckedVoucher(vouchers.data);
-    } else {
-      setCheckedVoucher([]);
-    }
   };
 
   return (
@@ -207,7 +145,7 @@ export default function VoucherPage() {
             <div className="flex flex-col gap-[35px]">
               <div className="flex justify-between">
                 <button
-                  onClick={() => openModal(idModal, { id: 0 } as FormValues)}
+                  onClick={() => { openModal(idModal), reset({ id: 0 }) }}
                   className="flex gap-3 items-center bg-[#EA4B48] border-[#FFAAAF] border-[1px] px-4 rounded-md h-[46px]"
                 >
                   <PlusSquare />
@@ -253,6 +191,10 @@ export default function VoucherPage() {
                                     value: 20,
                                     message: "Nhiều nhất 20 ký tự",
                                   },
+                                  minLength: {
+                                    value: 4,
+                                    message: "Ít nhất 4 ký tự"
+                                  }
                                 }}
                                 render={({ field }) => (
                                   <>
@@ -393,7 +335,7 @@ export default function VoucherPage() {
                                 rules={{
                                   required: {
                                     value: true,
-                                    message: "Vui lòng chọn",
+                                    message: "Hãy nhập số",
                                   },
                                   maxLength: {
                                     value: 2,
@@ -439,8 +381,12 @@ export default function VoucherPage() {
                                 rules={{
                                   required: {
                                     value: true,
-                                    message: "Không để trống",
+                                    message: "Hãy nhập số",
                                   },
+                                  maxLength: {
+                                    value: 4,
+                                    message: "Nhỏ hơn 10000",
+                                  }
                                 }}
                                 render={({ field }) => (
                                   <>
@@ -487,67 +433,30 @@ export default function VoucherPage() {
               </div>
 
               <div className="">
-                <div className="grid grid-cols-7 pb-7">
-                  <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
-                    <input
-                      checked={checkAll}
-                      onChange={(e) => handleCheckedAll(e.target.checked)}
-                      type="checkbox"
-                      className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                    />
-                  </div>
-                  <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                <div className="grid grid-cols-9 pb-7">
+                  <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                     <p>Mã Voucher</p>
                   </div>
-                  <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                  <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                     <p>Giảm Giá</p>
                   </div>
                   <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                     <p>Thời Gian</p>
                   </div>
-                  <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                  <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                     <p>Đã dùng / Còn Lại</p>
                   </div>
                   <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
-                    <p
-                      onClick={() =>
-                        checkedVoucher.length > 0
-                          ? openModal(idRemoveVouchers, {} as FormValues)
-                          : toastWarn("Chưa chọn Voucher để xóa")
-                      }
-                    >
-                      <Delete />
-                    </p>
+
                   </div>
                 </div>
-
-                <DialogComfirm
-                  id={idRemoveVouchers}
-                  desc="Các voucher này"
-                  title="Các voucher này"
-                  onClose={() => closeModal(idRemoveVouchers)}
-                  onSave={() => {
-                    removeVouchers(checkedVoucher, idRemoveVouchers);
-                  }}
-                />
 
                 <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                   {vouchers.data?.map((e) => {
                     return (
                       <>
-                        <div className="grid grid-cols-7 border-t-[1px] py-4">
-                          <div className="col-span-1 flex gap-2 text-base text-[#4C4C4C] mx-auto items-center">
-                            <input
-                              type="checkbox"
-                              className="w-5 h-5 accent-[#EA4B48] checkbox checkbox-sm items-center  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                              checked={checkedVoucher.includes(e)}
-                              onChange={(element) =>
-                                handleChecked(element.target.checked, e)
-                              }
-                            />
-                          </div>
-
-                          <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                        <div className="grid grid-cols-9 border-t-[1px] py-4">
+                          <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
                             <p
                               className="font-medium text-base text-[#EA4B48]
                                  max-[940px]:text-xs "
@@ -555,7 +464,7 @@ export default function VoucherPage() {
                               {e.code}
                             </p>
                           </div>
-                          <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                          <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
                             <p
                               className="font-medium text-base text-[#1A1A1A] 
                                     max-[940px]:text-xs "
@@ -572,7 +481,7 @@ export default function VoucherPage() {
                               {currentDate(e.endDay)}
                             </p>
                           </div>
-                          <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                          <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
                             <p
                               className="font-medium text-base text-[#1A1A1A]
                                  max-[940px]:text-xs "
@@ -580,7 +489,7 @@ export default function VoucherPage() {
                               0/{e.quantity}
                             </p>
                           </div>
-                          <div className="col-span-1 flex justify-end mr-5">
+                          <div className="col-span-1 flex justify-center mr-5">
                             <div className="dropdown dropdown-left">
                               <label tabIndex={0}>
                                 <Handle />
@@ -593,15 +502,18 @@ export default function VoucherPage() {
                               >
                                 <li>
                                   <button
-                                    onClick={() =>
-                                      openModal(idModal, {
+                                    onClick={() => {
+                                      openModal(idModal)
+                                      reset({
                                         id: e.id,
-                                        discount: e.discount,
-                                        startDate: e.startDay.toString(),
-                                        endDate: e.endDay.toString(),
-                                        quantity: e.quantity,
+                                        discount: e.discount.toString(),
+                                        startDate: moment(e.startDay).format("YYYY-MM-DD"),
+                                        endDate: moment(e.endDay).format("YYYY-MM-DD"),
+                                        quantity: e.quantity.toString(),
                                         voucherCode: e.code,
                                       })
+
+                                    }
                                     }
                                     className="flex items-center gap-4"
                                   >
@@ -617,7 +529,7 @@ export default function VoucherPage() {
                                 <li>
                                   <button
                                     onClick={() => {
-                                      openModal(idRemove, {} as FormValues);
+                                      openModal(idRemove);
                                       setIdVoucher(e.id);
                                     }}
                                     className="flex items-center gap-4"

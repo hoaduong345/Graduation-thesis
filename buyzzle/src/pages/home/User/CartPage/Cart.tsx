@@ -73,13 +73,16 @@ export default function Cart() {
    const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
    //check box
 
+   const cartLength = carts.item?.filter((e) => e.product.quantity > 0);
    var checkAll: boolean =
-      !!carts.item?.length && productChecked.length === carts.item?.length;
+      cartLength?.length > 0 ? !!carts.item?.length && productChecked?.length === cartLength?.length : false;
 
    // 2 array : 1 array cart, 1 array cart checked
    const handleChecked = (checked: boolean, item: CartItem) => {
       if (checked) {
-         setProductChecked((prev) => [...prev, item]);
+         if (item.product.quantity > 0) {
+            setProductChecked((prev) => [...prev, item]);
+         }
       } else {
          let cloneProduct = [...productChecked];
          let products = cloneProduct.filter((e) => {
@@ -92,7 +95,8 @@ export default function Cart() {
    const handleCheckedAll = (checked: boolean) => {
       if (checked) {
          if (carts.item) {
-            setProductChecked(carts.item);
+            const _data = cartLength
+            setProductChecked(_data);
          }
       } else {
          setProductChecked([]);
