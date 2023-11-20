@@ -822,28 +822,35 @@ const ProductController = {
 
     deleteRatingandComment: async (req, res) => {
         try {
-            const ratingId = parseInt(req.params.ratingId);
-
+            const userId = parseInt(req.cookies.id);
+            const { ratingId } = req.params;
+    
+         
             const existingRating = await prisma.rating.findUnique({
                 where: {
-                    id: ratingId,
+                    id: parseInt(ratingId),
                 },
             });
-
+    
             if (!existingRating) {
-                return res.status(404).json('Đánh giá không tồn tại');
+                return res.status(404).json("Đánh giá không tồn tại");
             }
-
+    
+            
+            if (existingRating.iduser !== userId) {
+                return res.status(403).json("Bạn không có quyền xóa đánh giá này");
+            }
+    
             await prisma.rating.delete({
                 where: {
-                    id: ratingId,
+                    id: parseInt(ratingId),
                 },
             });
-
-            res.status(200).json('Xóa đánh giá sản phẩm thành công');
+    
+            res.status(200).json("Xóa đánh giá thành công");
         } catch (error) {
             console.error(error);
-            res.status(500).json('Xóa đánh giá sản phẩm không thành công');
+            res.status(500).json("Lỗi khi xóa đánh giá");
         }
     },
 
