@@ -1,14 +1,14 @@
 import { useState } from "react";
-import Buyzzle from "../../../../Assets/TSX/Buyzzle";
-import { paymentControllers } from "../../../../Controllers/PaymentControllers";
-import { CartItem } from "../../../../Model/CartModel";
-import { PaymentMethod } from "./CheckOut";
-import { OrderItems } from "../../../../Model/OrderModel";
-import { orderControllers } from "../../../../Controllers/OrderControllers";
-import { cartControllers } from "../../../../Controllers/CartControllers";
 import { toast } from "react-toastify";
-import { VoucherModel } from "../../../../Model/VoucherModel";
+import Buyzzle from "../../../../Assets/TSX/Buyzzle";
+import { cartControllers } from "../../../../Controllers/CartControllers";
+import { orderControllers } from "../../../../Controllers/OrderControllers";
+import { paymentControllers } from "../../../../Controllers/PaymentControllers";
 import { voucherControllers } from "../../../../Controllers/VoucherControllers";
+import { CartItem } from "../../../../Model/CartModel";
+import { OrderItems, UpdateQuantityModal } from "../../../../Model/OrderModel";
+import { VoucherModel } from "../../../../Model/VoucherModel";
+import { PaymentMethod } from "./CheckOut";
 
 export interface StripePayment {
    cartItems: CartItem[];
@@ -65,9 +65,10 @@ export default function PaymentBtn(props: StripePayment) {
                }, 100);
             } else if (method == "cash") {
                let item: OrderItems[] = [];
+               let listProductQuantity: UpdateQuantityModal[] = [];
                let subtotal = 0;
 
-               cartItems?.map(async (e) => {
+               cartItems?.map((e) => {
                   subtotal += e.product.sellingPrice * e.quantity;
                   item.push({
                      productId: e.product.id,
@@ -77,8 +78,11 @@ export default function PaymentBtn(props: StripePayment) {
                      quantity: e.quantity,
                      total: e.product.sellingPrice * e.quantity,
                   });
+                  listProductQuantity.push({
+                     productId: e.product.id,
+                     quantity: e.quantity,
+                  })
                });
-
                let order = {
                   iduser: Number(idUser),
                   method: "Thanh toán khi nhận hàng",
@@ -108,10 +112,15 @@ export default function PaymentBtn(props: StripePayment) {
                         });
                      })
                      .then(() => {
-                        voucherControllers.useVoucher(
-                           Number(idUser),
-                           voucher.id
-                        );
+                        if (voucher.id != 0) {
+                           voucherControllers.useVoucher(
+                              Number(idUser),
+                              voucher.id
+                           );
+                        }
+                     })
+                     .then(() => {
+                        orderControllers.quantityCreateOrder(listProductQuantity)
                      });
                }, 3000);
             }

@@ -131,9 +131,9 @@ export default function Productss(props: Props) {
             "
               >
                 Đã bán{" "}
-                {product.soldCount == 0
+                {product.soldcount == 0
                   ? "0"
-                  : (product.soldCount !== undefined ? formatSoldCount(product.soldCount) : "0")}
+                  : (product.soldcount !== undefined ? formatSoldCount(product.soldcount) : "0")}
               </p>
             </div>
           </div>

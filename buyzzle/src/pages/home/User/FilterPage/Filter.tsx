@@ -12,8 +12,13 @@ type Props = {
   product: Row;
   starsnumber: number;
 };
+
 const Filter = (props: Props) => {
   const { product } = props;
+  console.log(
+    "🚀 ~ file: Filter.tsx:129 ~ Filter ~ formatSoldCount(product.soldcount!):",
+    formatSoldCount(product.soldcount!)
+  );
 
   return (
     <Link to={`/Detailproducts/${product.id}`}>
@@ -125,7 +130,12 @@ const Filter = (props: Props) => {
             max-lg:text-base
             "
               >
-                Đã bán {formatSoldCount(product.soldcount!)}
+                Đã bán{" "}
+                {product.soldcount == 0
+                  ? "0"
+                  : product.soldcount !== undefined
+                  ? formatSoldCount(product.soldcount)
+                  : "0"}
               </p>
             </div>
           </div>

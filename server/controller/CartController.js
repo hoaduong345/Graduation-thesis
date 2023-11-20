@@ -25,11 +25,11 @@ const CartController = {
 
             if (existingCartItem) {
                 if ((existingCartItem.quantity + quantity) > product.quantity) {
-                    return res.status(500).json('Sản phẩm trong giỏ hàng tối đa')
+                    return res.status(500).json(`Bạn đã có ${existingCartItem.quantity} sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`);
                 }
             } else {
                 if (quantity > product.quantity) {
-                    return res.status(500).json('Sản phẩm trong giỏ hàng tối đa')
+                    return res.status(500).json(`Bạn đã có ${existingCartItem.quantity} sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`);
                 }
             }
 
@@ -279,6 +279,9 @@ const CartController = {
                                 },
                             },
                         },
+                        orderBy: {
+                            id: "desc"
+                        }
                     },
                 },
             });
@@ -329,6 +332,9 @@ const CartController = {
                                 },
                             },
                         },
+                        orderBy: {
+                            id: "desc"
+                        }
                     },
                 },
             });
@@ -360,6 +366,9 @@ const CartController = {
                                 },
                             },
                         },
+                        orderBy: {
+                            id: 'desc'
+                        }
                     },
                 },
             });

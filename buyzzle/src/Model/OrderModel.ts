@@ -55,3 +55,8 @@ export enum StatusOrder {
   Shipping, //Đang trên đường giao hàng
   Succed, // Giao hàng thành công
 }
+
+export interface UpdateQuantityModal {
+  productId: number,
+  quantity: number
+}

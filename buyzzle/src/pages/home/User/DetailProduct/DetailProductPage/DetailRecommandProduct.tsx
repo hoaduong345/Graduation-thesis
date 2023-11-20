@@ -16,6 +16,11 @@ export default function DetailRecommandProduct(props: Props) {
     "🚀 ~ file: DetailRecommandProduct.tsx:112 ~ DetailRecommandProduct ~ productRecommand.rate:",
     productRecommand.rate
   );
+  console.log(
+    "🚀 ~ file: DetailRecommandProduct.tsx:123 ~ DetailRecommandProduct ~ productRecommand.soldcount!:",
+    productRecommand.soldcount!
+  );
+
   return (
     <>
       <Link to={`/Detailproducts/${productRecommand.id}`}>
@@ -119,7 +124,12 @@ export default function DetailRecommandProduct(props: Props) {
             max-lg:text-base
             "
               >
-                Đã bán {formatSoldCount(productRecommand.soldcount!)}
+                Đã bán{" "}
+                {productRecommand.soldcount == 0
+                  ? "0"
+                  : productRecommand.soldcount !== undefined
+                  ? formatSoldCount(productRecommand.soldcount)
+                  : "0"}
               </p>
             </div>
           </div>

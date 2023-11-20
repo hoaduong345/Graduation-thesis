@@ -37,28 +37,35 @@ export default function Cart() {
       cartControllers.increaseCart(data).then((res) => {
          setCarts(res.data);
       });
-      const indexProduct = productChecked.findIndex(
-         (item) => item.productid === data.productId
-      );
-      const _productChecked = [...productChecked];
-      _productChecked[indexProduct].quantity += 1;
+      if (productChecked.length > 0) {
 
-      setProductChecked(_productChecked);
+         const indexProduct = productChecked.findIndex(
+            (item) => item.productid === data.productId
+         );
+         const _productChecked = [...productChecked];
+         _productChecked[indexProduct].quantity += 1;
+
+         setProductChecked(_productChecked);
+      }
    };
    const handleDecreaseQuantity = (quantity: number, data: UpdateCart) => {
       if (quantity > 1) {
          cartControllers.decreaseCart(data).then((res) => {
             setCarts(res.data);
          });
-         const indexProduct = productChecked.findIndex(
-            (item) => item.productid === data.productId
-         );
-         const _productChecked = [...productChecked];
-         _productChecked[indexProduct].quantity -= 1;
 
-         setProductChecked(_productChecked);
-      } else {
-         return;
+         if (productChecked.length > 0) {
+
+            const indexProduct = productChecked.findIndex(
+               (item) => item.productid === data.productId
+            );
+            const _productChecked = [...productChecked];
+            _productChecked[indexProduct].quantity -= 1;
+
+            setProductChecked(_productChecked);
+         } else {
+            return;
+         }
       }
    };
 
@@ -66,14 +73,16 @@ export default function Cart() {
    const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
    //check box
 
+   const cartLength = carts.item?.filter((e) => e.product.quantity > 0);
    var checkAll: boolean =
-      !!carts.item?.length && productChecked.length === carts.item?.length;
+      cartLength?.length > 0 ? !!carts.item?.length && productChecked?.length === cartLength?.length : false;
 
    // 2 array : 1 array cart, 1 array cart checked
    const handleChecked = (checked: boolean, item: CartItem) => {
-      console.log(checked);
       if (checked) {
-         setProductChecked((prev) => [...prev, item]);
+         if (item.product.quantity > 0) {
+            setProductChecked((prev) => [...prev, item]);
+         }
       } else {
          let cloneProduct = [...productChecked];
          let products = cloneProduct.filter((e) => {
@@ -86,7 +95,8 @@ export default function Cart() {
    const handleCheckedAll = (checked: boolean) => {
       if (checked) {
          if (carts.item) {
-            setProductChecked(carts.item);
+            const _data = cartLength
+            setProductChecked(_data);
          }
       } else {
          setProductChecked([]);
@@ -163,7 +173,7 @@ export default function Cart() {
                </div>
             </div>
             <div>
-               <div className="overscroll-auto md:overscroll-contain lg:overscroll-none h-[430px] mt-8 flex flex-col gap-5 overflow-x-hidden">
+               <div className={`overscroll-auto md:overscroll-contain lg:overscroll-none mt-8 flex flex-col gap-5 overflow-x-hidden ${carts?.item?.length > 5 ? `h-[1000px]` : ``}`}>
                   {carts.item?.length > 0 ? (
                      (carts.item ?? []).map((e) => {
                         return (
@@ -219,37 +229,42 @@ export default function Cart() {
                                     </div>
                                  </div>
                                  <div className=" flex items-center col-span-2 justify-center gap-1">
-                                    <div
-                                       className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                       onClick={() =>
-                                          minusThrottled(e.quantity, {
-                                             productId: e.productid,
-                                             cartId: e.cartid,
-                                          })
-                                       }
-                                    >
-                                       <Minus />
-                                    </div>
-                                    <div>
-                                       <p className="text-base mx-2 font-medium">
-                                          {e.quantity}
-                                       </p>
-                                    </div>
-                                    <div
-                                       className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                       onClick={() => {
-                                          e.quantity < e.product.quantity
-                                             ? plusThrottled({
-                                                productId: e.productid,
-                                                cartId: e.cartid,
-                                             })
-                                             : toastWarn(
-                                                `Chỉ còn ${e.product.quantity} sản phẩm`
-                                             );
-                                       }}
-                                    >
-                                       <Plus />
-                                    </div>
+                                    {
+                                       e.product.quantity > 0 ? (
+                                          <>
+                                             <div
+                                                className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
+                                                onClick={() =>
+                                                   minusThrottled(e.quantity, {
+                                                      productId: e.productid,
+                                                      cartId: e.cartid,
+                                                   })
+                                                }
+                                             >
+                                                <Minus />
+                                             </div>
+                                             <div>
+                                                <p className="text-base mx-2 font-medium">
+                                                   {e.quantity}
+                                                </p>
+                                             </div>
+                                             <div
+                                                className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
+                                                onClick={() => {
+                                                   e.quantity < e.product.quantity
+                                                      ? plusThrottled({
+                                                         productId: e.productid,
+                                                         cartId: e.cartid,
+                                                      })
+                                                      : toastWarn(
+                                                         `Chỉ còn ${e.product.quantity} sản phẩm`
+                                                      );
+                                                }}
+                                             >
+                                                <Plus />
+                                             </div>
+                                          </>) : (<><p>Hết hàng</p></>)
+                                    }
                                  </div>
                                  <div className="col-span-2 flex justify-center">
                                     <p className="text-[#EA4B48] text-xl">
@@ -343,9 +358,9 @@ export default function Cart() {
                            </div>
                            <ArrowUp />
                         </div>
-                        <Link
-                           to={`${productChecked.length == 0 ? "" : "/checkout"
-                              }`}
+                        <button
+                           // to={`${productChecked.length == 0 ? "" : "/checkout"
+                           //    }`}
                            onClick={handleBuyNow}
                            className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 
@@ -353,7 +368,7 @@ export default function Cart() {
                         >
                            <Buyzzle />
                            <p>Mua ngay</p>
-                        </Link>
+                        </button>
                         <DialogComfirm
                            desc="toàn bộ Giỏ hàng"
                            id={idAllCart}

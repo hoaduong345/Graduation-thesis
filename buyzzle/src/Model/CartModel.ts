@@ -11,6 +11,7 @@ export interface CartProduct {
     item: CartItem[]
 }
 export interface CartItem {
+    id?: number,
     productid: number,
     quantity: number,
     cartid: number,
