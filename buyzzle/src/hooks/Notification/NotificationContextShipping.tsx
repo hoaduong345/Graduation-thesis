@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import { notificationControllers } from "../../Controllers/NotificationController";
-import CustomToast from "../../Helper/Toast/CustomToast";
-import { AllNotification, NotificationModel } from "../../Model/Notification";
+import { notificationControllers } from "../../controllers/NotificationController";
+import CustomToast from "../../helper/Toast/CustomToast";
+import { AllNotification, NotificationModel } from "../../model/Notification";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
 import Shipping from "../../layout/asset/TSX/Shipping";
 

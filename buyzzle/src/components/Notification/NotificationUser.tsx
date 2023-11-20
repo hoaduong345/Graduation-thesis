@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { notificationControllers } from "../../Controllers/NotificationController";
-import { AllNotification } from "../../Model/Notification";
-import { Images } from "../../Assets/TS";
+import { notificationControllers } from "../../controllers/NotificationController";
+import { AllNotification } from "../../model/Notification";
+import { Images } from "../../assets/TS";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";

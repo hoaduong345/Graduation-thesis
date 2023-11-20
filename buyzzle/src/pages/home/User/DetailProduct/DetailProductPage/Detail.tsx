@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Products } from "../../FilterPage/FiltersPage";
-import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
-import ArrowDown from "../../../../../Assets/TSX/ArrowDown";
-import { numberFormat } from "../../../../../Helper/Format";
-import Minus from "../../../../../Assets/TSX/Minus";
-import Plus from "../../../../../Assets/TSX/Plus";
-import FB from "../../../Admin/Assets/TSX/FB";
-import TW from "../../../Admin/Assets/TSX/TW";
-import Insta from "../../../Admin/Assets/TSX/Insta";
-import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
-import Share from "../../../Admin/Assets/TSX/Share";
-import LoveProduct from "../../../Admin/Assets/TSX/LoveProduct";
+import ArrowUp from "../../../../../assets/TSX/ArrowUp";
+import ArrowDown from "../../../../../assets/TSX/ArrowDown";
+import { numberFormat } from "../../../../../helper/Format";
+import Minus from "../../../../../assets/TSX/Minus";
+import Plus from "../../../../../assets/TSX/Plus";
+import FB from "../../../admin/assets/TSX/FB";
+import TW from "../../../admin/assets/TSX/TW";
+import Insta from "../../../admin/assets/TSX/Insta";
+import SaveLink from "../../../admin/assets/TSX/SaveLink";
+import Share from "../../../admin/assets/TSX/Share";
+import LoveProduct from "../../../admin/assets/TSX/LoveProduct";
 import axios from "axios";
 import {
   ModelCart,
   cartControllers,
-} from "../../../../../Controllers/CartControllers";
+} from "../../../../../controllers/CartControllers";
 import { useParams } from "react-router-dom";
 import { appConfig } from "../../../../../configsEnv";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import NotificationUser from "../Notification/NotificationUser";
 import HeaderTop from "./HeaderTop";
-import { NotificationModel } from "../../Model/Notification";
-import { notificationControllers } from "../../Controllers/NotificationController";
+import { NotificationModel } from "../../model/Notification";
+import { notificationControllers } from "../../controllers/NotificationController";
 
 export default function HeaderTopUser() {
   const [countNotification, setCountNotification] = useState<NotificationModel>(

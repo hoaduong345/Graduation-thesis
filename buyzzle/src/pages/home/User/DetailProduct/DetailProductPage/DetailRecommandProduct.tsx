@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { Images } from "../../../../../Assets/TS";
+import { Images } from "../../../../../assets/TS";
 import {
   formatSoldCount,
   numberFormat,
   roundedNumber,
-} from "../../../../../Helper/Format";
-import { Row } from "../../../../../Model/ProductModel";
+} from "../../../../../helper/Format";
+import { Row } from "../../../../../model/ProductModel";
 type Props = {
   productRecommand: Row;
 };

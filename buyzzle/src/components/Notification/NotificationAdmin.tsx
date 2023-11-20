@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Images } from "../../Assets/TS";
-import { notificationControllers } from "../../Controllers/NotificationController";
+import { Images } from "../../assets/TS";
+import { notificationControllers } from "../../controllers/NotificationController";
 import { useNotificationAdmin } from "../../hooks/Notification/NotificationContextAdmin";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";

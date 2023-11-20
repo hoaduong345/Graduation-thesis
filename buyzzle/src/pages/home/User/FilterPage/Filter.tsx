@@ -1,13 +1,13 @@
 import { Products } from "./FiltersPage";
-import { Images } from "../../../../Assets/TS";
+import { Images } from "../../../../assets/TS";
 import { Link } from "react-router-dom";
 import {
   formatSoldCount,
   numberFormat,
   roundedNumber,
-} from "../../../../Helper/Format";
-import { Rate, Row } from "../../../../Model/ProductModel";
-import { stars } from "../../../../Helper/StarRating/Star";
+} from "../../../../helper/Format";
+import { Rate, Row } from "../../../../model/ProductModel";
+import { stars } from "../../../../helper/StarRating/Star";
 type Props = {
   product: Row;
   starsnumber: number;

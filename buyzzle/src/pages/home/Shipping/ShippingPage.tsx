@@ -2,21 +2,21 @@ import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 
-import Search from "../../../Assets/TSX/Search";
+import Search from "../../../assets/TSX/Search";
 import {
   orderControllers,
   orderModelController,
-} from "../../../Controllers/OrderControllers";
-import { numberFormat } from "../../../Helper/Format";
-import { OrderPanigation } from "../../../Model/OrderModel";
+} from "../../../controllers/OrderControllers";
+import { numberFormat } from "../../../helper/Format";
+import { OrderPanigation } from "../../../model/OrderModel";
 import Container from "../../../components/container/Container";
 import useDebounce from "../../../useDebounceHook/useDebounce";
-import Calendar from "../Admin/Assets/TSX/calendar";
-import Excel from "../Admin/Assets/TSX/excel";
+import Calendar from "../admin/assets/TSX/calendar";
+import Excel from "../admin/assets/TSX/excel";
 import {
   dateOrder,
   timeOrder,
-} from "../Admin/Management/Order/OrderManagement";
+} from "../admin/Management/Order/OrderManagement";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 import useThrottle from "@rooks/use-throttle";
 
@@ -240,7 +240,7 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                               </p>
                               <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
                               {e.paymentMethod == "Thẻ tín dụng" ||
-                                getStatusOrder(e.status)._paymentStatus ? (
+                              getStatusOrder(e.status)._paymentStatus ? (
                                 <div className="badge badge-xs badge-accent text-center py-2 px-3">
                                   <p className="font-bold text-xs text-white">
                                     Đã thanh toán

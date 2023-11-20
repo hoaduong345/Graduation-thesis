@@ -5,18 +5,19 @@ import { ReactNode, useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
+import ArrowNextHistory from "../../../../assets/TSX/ArrowNextHistory";
 import {
   orderControllers,
   orderModelController,
-} from "../../../../Controllers/OrderControllers";
-import DialogAbortOrder from "../../../../Helper/Dialog/DialogAbortOrder";
-import { numberFormat } from "../../../../Helper/Format";
-import { OrderPanigation, StatusOrder } from "../../../../Model/OrderModel";
+} from "../../../../controllers/OrderControllers";
+import DialogAbortOrder from "../../../../helper/Dialog/DialogAbortOrder";
+import { numberFormat } from "../../../../helper/Format";
+import { OrderPanigation, StatusOrder } from "../../../../model/OrderModel";
 import Container from "../../../../components/container/Container";
-import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
-import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
+
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
+import { dateOrder } from "../../admin/Management/Order/OrderManagement";
+import ArrowDown from "../../admin/assets/TSX/ArrowDown";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
@@ -65,7 +66,6 @@ export default function OrderHistory() {
 
   const idRemove = "removeVoucher";
   const idSitebar = "my_modal_3";
-
 
   // button filter
   const [changeButton, setChangeButton] = useState([
@@ -145,7 +145,7 @@ export default function OrderHistory() {
       theme: "light",
     });
     closeModal(idRemove);
-    getOrder()
+    getOrder();
   };
 
   const handleClick = (id: number) => {

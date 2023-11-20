@@ -1,18 +1,16 @@
-import React, { useState } from "react";
-import { Images } from "../../Assets/TS/index";
-import LogoWeb from "../../Assets/TSX/LogoWeb";
+import { useState } from "react";
+import { Images } from "../../assets/TS/index";
 // import { localStorage } from 'localStorage';
-import "./Login.css";
-import { ToastContainer, toast } from "react-toastify";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import LogoGoogle from "../../Assets/PNG/lgG.png";
-import LogoApple from "../../Assets/PNG/lgApple.png";
-import LogoFace from "../../Assets/PNG/lgFace.png";
-import { schema } from "../../utils/rules";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import * as yup from "yup";
+import LogoApple from "../../assets/PNG/lgApple.png";
+import LogoFace from "../../assets/PNG/lgFace.png";
+import LogoGoogle from "../../assets/PNG/lgG.png";
+import "./Login.css";
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
 

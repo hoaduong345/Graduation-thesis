@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import { Images } from "../../Assets/TS";
-import { notificationControllers } from "../../Controllers/NotificationController";
-import CustomToast from "../../Helper/Toast/CustomToast";
-import { AllNotification, NotificationModel } from "../../Model/Notification";
+import { Images } from "../../assets/TS";
+import { notificationControllers } from "../../controllers/NotificationController";
+import CustomToast from "../../helper/Toast/CustomToast";
+import { AllNotification, NotificationModel } from "../../model/Notification";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 

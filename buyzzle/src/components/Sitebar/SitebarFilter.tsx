@@ -8,9 +8,9 @@ import {
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useState } from "react";
-import { Images } from "../../Assets/TS";
-import { numberFormat } from "../../Helper/Format";
-import { subCate } from "../../Model/CategoryModel";
+import { Images } from "../../assets/TS";
+import { numberFormat } from "../../helper/Format";
+import { subCate } from "../../model/CategoryModel";
 import Checkbox from "./Checkbox/Checkbox";
 import Rate from "./Rate/Rate";
 // rati star

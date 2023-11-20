@@ -1,9 +1,9 @@
 import "./Footer.css";
-import BuyzzyFooterLogo from "../../Assets/TSX/BuyzzyFooterLogo";
-import IconJCB from "../../Assets/TSX/IconJCB";
-import Cham from "../../Assets/TSX/Cham";
-import Express from "../../Assets/TSX/Express";
-import { Images } from "../../Assets/TS";
+import BuyzzyFooterLogo from "../../assets/TSX/BuyzzyFooterLogo";
+import IconJCB from "../../assets/TSX/IconJCB";
+import Cham from "../../assets/TSX/Cham";
+import Express from "../../assets/TSX/Express";
+import { Images } from "../../assets/TS";
 import Container from "../container/Container";
 
 export default function Footer() {
@@ -37,9 +37,12 @@ export default function Footer() {
                     <img src={Images.ghn} width={60} height={30} />{" "}
                     <img src={Images.viettelpost} width={60} height={30} />{" "}
                     <img src={Images.bestex} width={60} height={30} />{" "}
-                    <img src={Images.GHTK} width={60} height={30} />{""}
-                    <img src={Images.JT} width={60} height={30} />{""}
-                    <img src={Images.vnpost} width={60} height={30} />{""}
+                    <img src={Images.GHTK} width={60} height={30} />
+                    {""}
+                    <img src={Images.JT} width={60} height={30} />
+                    {""}
+                    <img src={Images.vnpost} width={60} height={30} />
+                    {""}
                   </div>
                 </div>
                 <div className="w-full lg:w-1/2 xl:w-1/5">
