@@ -96,7 +96,6 @@ const VoucherController = {
                     savedBy: {
                         where: {
                             userId: userIdFromCookies,
-                            used: false
                         },
                         select: {
                             used: true

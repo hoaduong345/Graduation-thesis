@@ -1,8 +1,9 @@
 import useThrottle from "@rooks/use-throttle";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
-import Minus from "../../../../Assets/TSX/Minus";
-import Plus from "../../../../Assets/TSX/Plus";
+import MinusCart from "../../../../Assets/TSX/MinusCart";
+import PlusCart from "../../../../Assets/TSX/PlusCart";
 import {
    UpdateCart,
    cartControllers,
@@ -10,12 +11,11 @@ import {
 import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
 import EmptyPage from "../../../../Helper/Empty/EmptyPage";
 import { numberFormat } from "../../../../Helper/Format";
+import { toastWarn } from "../../../../Helper/Toast/Warning";
 import { CartItem } from "../../../../Model/CartModel";
 import Container from "../../../../components/container/Container";
 import { useCart } from "../../../../hooks/Cart/CartContextProvider";
-import ArrowUp from "../../Admin/Assets/TSX/ArrowUp";
 import Delete from "../../Admin/Assets/TSX/Delete";
-import { toastWarn } from "../../../../Helper/Toast/Warning";
 export default function Cart() {
    const {
       carts,
@@ -34,9 +34,16 @@ export default function Cart() {
       handleChecked,
    } = useCart();
 
+   const [waitQuantity, setWaitQuantity] = useState(false)
+
    const handleIncreaseQuantity = (data: UpdateCart) => {
+      setWaitQuantity(true)
       cartControllers.increaseCart(data).then((res) => {
          setCarts(res.data);
+      }).finally(() => {
+         setTimeout(() => {
+            setWaitQuantity(false)
+         }, 300)
       });
       if (productChecked.length > 0) {
 
@@ -51,8 +58,13 @@ export default function Cart() {
    };
    const handleDecreaseQuantity = (quantity: number, data: UpdateCart) => {
       if (quantity > 1) {
+         setWaitQuantity(true)
          cartControllers.decreaseCart(data).then((res) => {
             setCarts(res.data);
+         }).finally(() => {
+            setTimeout(() => {
+               setWaitQuantity(false)
+            }, 300)
          });
 
          if (productChecked.length > 0) {
@@ -70,8 +82,8 @@ export default function Cart() {
       }
    };
 
-   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 500);
-   const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
+   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 300);
+   const [minusThrottled] = useThrottle(handleDecreaseQuantity, 300);
    //check box
 
    const cartLength = carts.item?.filter((e) => e.product.quantity > 0);
@@ -228,10 +240,10 @@ export default function Cart() {
                                                    })
                                                 }
                                              >
-                                                <Minus />
+                                                <MinusCart wait={waitQuantity} />
                                              </div>
                                              <div>
-                                                <p className="text-base mx-2 font-medium">
+                                                <p className={`${waitQuantity && `text-[#D6D6D6]`} text-base mx-2 font-medium`}>
                                                    {e.quantity}
                                                 </p>
                                              </div>
@@ -248,7 +260,7 @@ export default function Cart() {
                                                       );
                                                 }}
                                              >
-                                                <Plus />
+                                                <PlusCart wait={waitQuantity} />
                                              </div>
                                           </>) : (<><p>Hết hàng</p></>)
                                     }

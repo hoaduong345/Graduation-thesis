@@ -55,6 +55,7 @@ export default function VoucherHomePage() {
 
             <div className="grid grid-cols-3 gap-5">
                {voucher.map((e) => {
+                  let isSave: boolean = e.savedBy?.length! > 0;
                   return (
                      <>
                         <div className="col-span-1 relative ">
@@ -67,12 +68,12 @@ export default function VoucherHomePage() {
                               <p className="text-[#4C4C4C] text-lg font-semibold bg-[#FFEAE9] w-full text-center py-1">
                                  #{e.code}
                               </p>
-                              <div className="flex items-center gap-6">
+                              <div className={`flex items-center ${isSave ? `gap-[9px]` : `gap-6`}`}>
                                  <button
-                                    onClick={() => savedVoucher(e.id)}
-                                    className="py-1 px-5 rounded text-white font-bold bg-[#F7755F] hover:bg-[#ec8f7f] text-base"
+                                    onClick={() => isSave ? `` : savedVoucher(e.id)}
+                                    className={`${isSave && `cursor-not-allowed`} py-1 px-5 rounded text-white font-bold bg-[#F7755F] hover:bg-[#ec8f7f] text-base`}
                                  >
-                                    {e.savedBy?.length! > 0 ? 'Đã lưu' : 'Lưu'}
+                                    {isSave ? e.savedBy![0].used ? 'Đã dùng' : 'Đã lưu' : 'Lưu'}
                                  </button>
                                  <p className="text-sm font-medium text-[#EA4B48]">
                                     {formatDate(e.startDay)} -{" "}
@@ -82,7 +83,7 @@ export default function VoucherHomePage() {
                            </div>
 
                            <div className="absolute right-[10%] top-[17%] flex flex-col items-center gap-1">
-                              <p className="text-white font-bold text-xl blinking-text">
+                              <p className="text-white font-bold text-xl">
                                  BUYZZLE
                               </p>
                               <LogoVoucher />
