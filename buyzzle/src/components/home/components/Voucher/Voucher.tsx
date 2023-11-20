@@ -72,7 +72,7 @@ export default function VoucherHomePage() {
                                     onClick={() => savedVoucher(e.id)}
                                     className="py-1 px-5 rounded text-white font-bold bg-[#F7755F] hover:bg-[#ec8f7f] text-base"
                                  >
-                                    Lưu
+                                    {e.savedBy?.length! > 0 ? 'Đã lưu' : 'Lưu'}
                                  </button>
                                  <p className="text-sm font-medium text-[#EA4B48]">
                                     {formatDate(e.startDay)} -{" "}

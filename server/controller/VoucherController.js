@@ -74,11 +74,9 @@ const VoucherController = {
     getUser: async (req, res) => {
         try {
             const pageCurr = parseInt(req.query.page);
-
+            const userIdFromCookies = parseInt(req.cookies.id);
             const limit = 100;
-
             const startIndex = (pageCurr - 1) * limit;
-
             const totalProduct = (await prisma.voucher.findMany()).length;
 
             const voucher = await prisma.voucher.findMany({
@@ -90,15 +88,27 @@ const VoucherController = {
                         gte: new Date(),
                     },
                     deletedAt: null,
+
                 },
                 skip: startIndex,
                 take: limit,
+                include: {
+                    savedBy: {
+                        where: {
+                            userId: userIdFromCookies,
+                            used: false
+                        },
+                        select: {
+                            used: true
+                        }
+                    }
+                }
             });
 
             const results = {
                 page: pageCurr,
                 pageSize: limit,
-                totalPage: totalProduct / limit,
+                totalPage: Math.ceil(totalProduct / limit),
                 data: voucher,
             };
 
@@ -145,7 +155,6 @@ const VoucherController = {
                 data: newVoucher,
             });
 
-            console.log(neww);
             res.status(200).json(neww);
         } catch (error) {
             console.error(error);
@@ -345,6 +354,19 @@ const VoucherController = {
                         used: true,
                     },
                 }),
+                prisma.voucher.update({
+                    where: {
+                        id: voucherId,
+                    },
+                    data: {
+                        used: {
+                            increment: 1,
+                        },
+                        quantity: {
+                            decrement: 1,
+                        }
+                    }
+                })
             ]);
 
             res.status(200).json({ message: 'Sử dụng voucher thành công.' });

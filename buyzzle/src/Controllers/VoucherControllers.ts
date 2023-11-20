@@ -20,7 +20,12 @@ class VoucherControllers {
 
   getUser = async (page: number): Promise<Voucher> => {
     return await axios
-      .get(`${appConfig.apiUrl}/pageUser?page=${page}`)
+      .get(`${appConfig.apiUrl}/pageUser?page=${page}`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        withCredentials: true,
+      })
       .then((res) => {
         return res.data as Voucher;
       });
