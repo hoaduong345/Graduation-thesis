@@ -31,6 +31,7 @@ export default function Cart() {
       removeAllCart,
       idItemCart,
       idAllCart,
+      handleChecked,
    } = useCart();
 
    const handleIncreaseQuantity = (data: UpdateCart) => {
@@ -77,21 +78,6 @@ export default function Cart() {
    var checkAll: boolean =
       cartLength?.length > 0 ? !!carts.item?.length && productChecked?.length === cartLength?.length : false;
 
-   // 2 array : 1 array cart, 1 array cart checked
-   const handleChecked = (checked: boolean, item: CartItem) => {
-      if (checked) {
-         if (item.product.quantity > 0) {
-            setProductChecked((prev) => [...prev, item]);
-         }
-      } else {
-         let cloneProduct = [...productChecked];
-         let products = cloneProduct.filter((e) => {
-            return e.productid !== item.productid;
-         });
-         setProductChecked(products);
-      }
-   };
-
    const handleCheckedAll = (checked: boolean) => {
       if (checked) {
          if (carts.item) {
@@ -102,6 +88,7 @@ export default function Cart() {
          setProductChecked([]);
       }
    };
+
    const calculatePrice = () => {
       let totalCart = 0;
       let sale = 0;
@@ -356,11 +343,8 @@ export default function Cart() {
                                  </p>
                               </div>
                            </div>
-                           <ArrowUp />
                         </div>
                         <button
-                           // to={`${productChecked.length == 0 ? "" : "/checkout"
-                           //    }`}
                            onClick={handleBuyNow}
                            className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 

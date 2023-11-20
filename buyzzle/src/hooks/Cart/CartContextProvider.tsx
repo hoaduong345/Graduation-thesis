@@ -23,20 +23,32 @@ export default function useCartContext() {
       };
       cartControllers
          .addCart(data)
-         .then((_) => {
+         .then((res) => {
             getCart()
 
-            if (productChecked.length > 0) {
-               const indexProduct = productChecked.findIndex(
-                  (item) => item.productid === data.productId
-               );
-               const _productChecked = [...productChecked];
-               _productChecked[indexProduct].quantity += productQuantities;
-               setProductChecked(_productChecked);
-            }
-
             if (type) {
+               setProductChecked([])
+               const buynowChecked = res.data.item.find((e) => e.productid == data.productId)
+               const _buynowChecked: CartItem = {
+                  id: buynowChecked?.id,
+                  productid: buynowChecked?.productid!,
+                  quantity: buynowChecked?.quantity!,
+                  cartid: buynowChecked?.cartid!,
+                  product: buynowChecked?.product!,
+                  total: buynowChecked?.total!,
+               }
+               handleChecked(true, _buynowChecked)
                navigate('/cart');
+               return
+            } else {
+               if (productChecked.length > 0) {
+                  const indexProduct = productChecked.findIndex(
+                     (item) => item.productid === data.productId
+                  );
+                  const _productChecked = [...productChecked];
+                  _productChecked[indexProduct].quantity += productQuantities;
+                  setProductChecked(_productChecked);
+               }
             }
 
             toastSuccess("Thêm thành công");
@@ -109,8 +121,10 @@ export default function useCartContext() {
          modal.close();
       }
    };
+
    const idItemCart = "confirmCart";
    const idAllCart = "confirmAllCart";
+
    const removeItemCart = (id: number) => {
       cartControllers.removeItemCart(idProduct).then(() => {
          getCart();
@@ -122,12 +136,27 @@ export default function useCartContext() {
          setProductChecked(Product);
       });
    };
+
    const removeAllCart = () => {
       cartControllers.removeAllCart().then(() => {
          getCart();
          setProductChecked([]);
          closeModal(idAllCart);
       });
+   };
+
+   const handleChecked = (checked: boolean, item: CartItem) => {
+      if (checked) {
+         if (item.product.quantity > 0) {
+            setProductChecked((prev) => [...prev, item]);
+         }
+      } else {
+         let cloneProduct = [...productChecked];
+         let products = cloneProduct.filter((e) => {
+            return e.productid !== item.productid;
+         });
+         setProductChecked(products);
+      }
    };
    return {
       carts,
@@ -148,6 +177,7 @@ export default function useCartContext() {
       idItemCart,
       idAllCart,
       warning,
+      handleChecked,
    };
 }
 type CartContextType = ReturnType<typeof useCartContext>;
