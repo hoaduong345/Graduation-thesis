@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -78,7 +78,6 @@ export default function RatingMap(props: Props) {
   const openDialog = (id: string, idRating: number, comment: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      console.log("idRating idRating", idRating);
       reset({ comment: comment });
       modal.showModal();
     }
@@ -94,7 +93,11 @@ export default function RatingMap(props: Props) {
       setIsFeedbackClicked(ratingId);
     }
   };
-
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>, id: number) => {
+    if (e.key == "Enter") {
+      getAdminRepComment(id);
+    }
+  };
   const getAdminRepComment = (id: number) => {
     const _dataRepCmt = {
       ratingId: id,
@@ -118,10 +121,6 @@ export default function RatingMap(props: Props) {
       {props.rateAndcomment?.Rating ? (
         props.rateAndcomment.Rating.length > 0 ? (
           props.rateAndcomment?.Rating.map((rating) => {
-            console.log(
-              "🚀 ~ file: RatingMap.tsx:118 ~ props.rateAndcomment?.Rating.map ~ rating:",
-              rating.repComment
-            );
             return (
               <>
                 <div
@@ -342,6 +341,9 @@ export default function RatingMap(props: Props) {
                               value={repTextCmt}
                               placeholder={`Trả lời ${rating?.user?.username}`}
                               onChange={(e) => handleChange(e)}
+                              onKeyDown={(e: any) =>
+                                handleKeyPress(e, rating.id)
+                              }
                             />
                             <div
                               className="pl-2 cursor-pointer"

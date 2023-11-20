@@ -12,15 +12,6 @@ type Props = {
 export default function DetailRecommandProduct(props: Props) {
   const { productRecommand } = props;
   const stars = Array(5).fill(0);
-  console.log(
-    "🚀 ~ file: DetailRecommandProduct.tsx:112 ~ DetailRecommandProduct ~ productRecommand.rate:",
-    productRecommand.rate
-  );
-  console.log(
-    "🚀 ~ file: DetailRecommandProduct.tsx:123 ~ DetailRecommandProduct ~ productRecommand.soldcount!:",
-    productRecommand.soldcount!
-  );
-
   return (
     <>
       <Link to={`/Detailproducts/${productRecommand.id}`}>

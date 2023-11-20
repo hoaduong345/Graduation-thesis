@@ -15,28 +15,26 @@ import {
 } from "react-share";
 import { toast } from "react-toastify";
 import { Images } from "../../../../../assets/TS";
-import ArrowDown from "../../../../../assets/TSX/ArrowDown";
-import ArrowUp from "../../../../../assets/TSX/ArrowUp";
 import Minus from "../../../../../assets/TSX/Minus";
 import Plus from "../../../../../assets/TSX/Plus";
 import SuccessIcon from "../../../../../assets/TSX/SuccessIcon";
+import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
+import Container from "../../../../../components/container/Container";
+import { appConfig } from "../../../../../configsEnv";
 import { productController } from "../../../../../controllers/ProductsController";
 import { ratingAndCommentController } from "../../../../../controllers/Rating&Comment";
 import WarningQuantityCart from "../../../../../helper/Dialog/WarningQuantityCart";
 import { numberFormat, roundedNumber } from "../../../../../helper/Format";
 import { stars } from "../../../../../helper/StarRating/Star";
-import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
-import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
-import Container from "../../../../../components/container/Container";
-import { appConfig } from "../../../../../configsEnv";
 import { useCart } from "../../../../../hooks/Cart/CartContextProvider";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
+import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
 
-import RatingMap from "../RatingAndComments/RatingMap";
-import DetailRecommandProduct from "./DetailRecommandProduct";
 import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
 import Cart from "../../../admin/assets/TSX/Cart";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
+import RatingMap from "../RatingAndComments/RatingMap";
+import DetailRecommandProduct from "./DetailRecommandProduct";
 export interface ImgOfProduct {
   url: string;
 }
@@ -179,10 +177,6 @@ export default function DetailsProduct() {
   };
 
   const RecommandProductDetailPage = (id: number) => {
-    console.log(
-      "🚀 ~ file: Detailproducts.tsx:76 ~ RecommandProductDetailPage ~ id:",
-      id
-    );
     productController
       .getProductSuggest(id)
       .then((res: any) => {
@@ -232,10 +226,6 @@ export default function DetailsProduct() {
   }, [first]);
   //Xóa comment
   const handleRemoveRating = (id: number) => {
-    console.log(
-      "🚀 ~ file: DetailsProduct.tsx:235 ~ handleRemoveRating ~ id:",
-      id
-    );
     ratingAndCommentController.RemoveRatingAndComment(id).then((_) => {
       if (rateAndcomment) {
         const removedRatings = rateAndcomment.Rating?.filter(
@@ -270,10 +260,6 @@ export default function DetailsProduct() {
   };
   const handlePageChange = (page: number) => {
     setRateAndcomment({ ...rateAndcomment, currentPage: page });
-    console.log(
-      "🚀 ~ file: DetailsProduct.tsx:275 ~ handlePageChange ~ rateAndcomment:",
-      rateAndcomment
-    );
   };
 
   const isSoldOut = first?.productDetail?.quantity == 0;
@@ -578,10 +564,6 @@ export default function DetailsProduct() {
             <div className="mt-11 col-span-2 ">
               <div className="flex flex-wrap gap-3 ">
                 {recommandProduct.slice(0, 8).map((items) => {
-                  console.log(
-                    "🚀 ~ file: Detailproducts.tsx:247 ~ recommandProduct?.rows?.map ~ itemsssss:",
-                    items
-                  );
                   return (
                     <>
                       <DetailRecommandProduct productRecommand={items} />
@@ -720,10 +702,6 @@ export default function DetailsProduct() {
           <div className="mt-11 col-span-2 ">
             <div className="flex flex-wrap gap-3 ">
               {recommandProduct.map((items) => {
-                console.log(
-                  "🚀 ~ file: Detailproducts.tsx:247 ~ recommandProduct?.rows?.map ~ itemsssss:",
-                  items
-                );
                 return (
                   <>
                     <DetailRecommandProduct productRecommand={items} />
