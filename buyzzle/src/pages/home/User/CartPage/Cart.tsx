@@ -1,9 +1,9 @@
 import useThrottle from "@rooks/use-throttle";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Buyzzle from "../../../../assets/TSX/Buyzzle";
-import MinusCart from "../../../../assets/TSX/MinusCart";
-import PlusCart from "../../../../assets/TSX/PlusCart";
+import Minus from "../../../../assets/TSX/Minus";
+import Plus from "../../../../assets/TSX/Plus";
+import Container from "../../../../components/container/Container";
 import {
    UpdateCart,
    cartControllers,
@@ -12,12 +12,9 @@ import DialogComfirm from "../../../../helper/Dialog/DialogComfirm";
 import EmptyPage from "../../../../helper/Empty/EmptyPage";
 import { numberFormat } from "../../../../helper/Format";
 import { toastWarn } from "../../../../helper/Toast/Warning";
-import { CartItem } from "../../../../model/CartModel";
-import Container from "../../../../components/container/Container";
 import { useCart } from "../../../../hooks/Cart/CartContextProvider";
+import { CartItem } from "../../../../model/CartModel";
 import Delete from "../../admin/assets/TSX/Delete";
-
-type WaitQuantity = Record<string | number, boolean>;
 
 export default function Cart() {
    const {
@@ -37,22 +34,9 @@ export default function Cart() {
       handleChecked,
    } = useCart();
 
-   const [waitQuantity, setWaitQuantity] = useState<WaitQuantity>({});
-
    const handleIncreaseQuantity = (data: UpdateCart) => {
       cartControllers.increaseCart(data).then((res) => {
          setCarts(res.data);
-      }).finally(() => {
-         setWaitQuantity({
-            ...waitQuantity,
-            [data.productId]: true,
-         });
-         setTimeout(() => {
-            setWaitQuantity({
-               ...waitQuantity,
-               [data.productId]: true,
-            });
-         }, 50)
       });
       if (productChecked.length > 0) {
 
@@ -69,17 +53,6 @@ export default function Cart() {
       if (quantity > 1) {
          cartControllers.decreaseCart(data).then((res) => {
             setCarts(res.data);
-         }).finally(() => {
-            setWaitQuantity({
-               ...waitQuantity,
-               [data.productId]: true,
-            });
-            setTimeout(() => {
-               setWaitQuantity({
-                  ...waitQuantity,
-                  [data.productId]: true,
-               });
-            }, 50)
          });
 
          if (productChecked.length > 0) {
@@ -137,15 +110,6 @@ export default function Cart() {
       );
       return _check !== -1;
    };
-
-   useEffect(() => {
-      if (waitQuantity) {
-         const timeoutId = setTimeout(() => {
-            setWaitQuantity({});
-         }, 200);
-         return () => clearTimeout(timeoutId);
-      }
-   }, [waitQuantity]);
 
    return (
       <Container>
@@ -265,11 +229,11 @@ export default function Cart() {
                                                 }
                                                 }
                                              >
-                                                <MinusCart wait={waitQuantity[e.productid]} />
+                                                <Minus />
                                              </div>
                                              <div>
                                                 <p
-                                                   className={` ${waitQuantity[e.productid] ? `text-[#D6D6D6]` : `text-[#4c4c4c]`} text-base mx-2 font-medium`}>
+                                                   className={`text-base mx-2 font-medium`}>
                                                    {e.quantity}
                                                 </p>
                                              </div>
@@ -287,7 +251,7 @@ export default function Cart() {
                                                    setIdProduct(e.productid)
                                                 }}
                                              >
-                                                <PlusCart wait={waitQuantity[e.productid]} />
+                                                <Plus />
                                              </div>
                                           </>) : (<><p>Hết hàng</p></>)
                                     }

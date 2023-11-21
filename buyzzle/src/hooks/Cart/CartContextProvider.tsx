@@ -68,19 +68,15 @@ export default function useCartContext() {
          .getCart()
          .then((res) => {
             setCarts(res.data);
-            return res.data
-         }).then((data) => {
-            data.item.map((e) => {
+            res.data.item.map((e) => {
                if (e.quantity > e.product.quantity) {
                   listProductQuantity.push({
                      productId: e.id!,
                      quantity: e.product.quantity,
                   })
                }
-
             })
-         })
-         .then(() => {
+         }).then(() => {
             updateQuantityCart()
          })
          .finally(() => setLoading(false));
@@ -89,28 +85,32 @@ export default function useCartContext() {
    const updateQuantityCart = async () => {
       if (listProductQuantity.length > 0) {
          await orderControllers.updateQuantityCart(listProductQuantity);
-         await cartControllers.getCart()
+         return await cartControllers.getCart()
             .then((res) => {
                setCarts(res.data);
+               return res.data.item;
             });
       }
    }
+
    useEffect(() => {
       getCart();
    }, []);
 
    const handleBuyNow = async () => {
-
       if (productChecked.length == 0) {
          toastWarn("Chưa chọn sản phẩm");
       } else {
          await getCart();
-         sessionStorage.setItem("cartBuyzzle", JSON.stringify(productChecked));
-         navigate('/checkout')
+         await updateQuantityCart().then((res) => {
+            const listCheckout = res!.filter((e) => productChecked.some(ele => ele.productid == e.productid))
+            sessionStorage.setItem("cartBuyzzle", JSON.stringify(listCheckout));
+            setProductChecked(listCheckout)
+         });
+         navigate('/checkout');
       }
    };
 
-   // open - close modal
    const openModal = (id: string) => {
       const modal = document.getElementById(id) as HTMLDialogElement | null;
       if (modal) {
@@ -164,6 +164,7 @@ export default function useCartContext() {
          setProductChecked(products);
       }
    };
+
    return {
       carts,
       setCarts,
