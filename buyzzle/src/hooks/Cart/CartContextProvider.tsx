@@ -42,12 +42,15 @@ export default function useCartContext() {
                return
             } else {
                if (productChecked.length > 0) {
-                  const indexProduct = productChecked.findIndex(
-                     (item) => item.productid === data.productId
-                  );
-                  const _productChecked = [...productChecked];
-                  _productChecked[indexProduct].quantity += productQuantities;
-                  setProductChecked(_productChecked);
+                  const isCheck = productChecked.find((item) => item.productid == productId)
+                  if (isCheck) {
+                     const indexProduct = productChecked.findIndex(
+                        (item) => item.productid === data.productId
+                     );
+                     const _productChecked = [...productChecked];
+                     _productChecked[indexProduct].quantity += productQuantities;
+                     setProductChecked(_productChecked);
+                  }
                }
             }
 
@@ -138,11 +141,14 @@ export default function useCartContext() {
    };
 
    const removeAllCart = () => {
-      cartControllers.removeAllCart().then(() => {
-         getCart();
-         setProductChecked([]);
-         closeModal(idAllCart);
-      });
+      productChecked.length > 0 &&
+         productChecked.map((e) => {
+            cartControllers.removeItemCart(e.productid).then(() => {
+               getCart();
+               setProductChecked([]);
+               closeModal(idAllCart);
+            })
+         });
    };
 
    const handleChecked = (checked: boolean, item: CartItem) => {

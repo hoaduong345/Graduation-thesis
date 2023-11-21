@@ -1,5 +1,5 @@
 import useThrottle from "@rooks/use-throttle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import MinusCart from "../../../../Assets/TSX/MinusCart";
@@ -16,6 +16,9 @@ import { CartItem } from "../../../../Model/CartModel";
 import Container from "../../../../components/container/Container";
 import { useCart } from "../../../../hooks/Cart/CartContextProvider";
 import Delete from "../../Admin/Assets/TSX/Delete";
+
+type WaitQuantity = Record<string | number, boolean>;
+
 export default function Cart() {
    const {
       carts,
@@ -34,16 +37,22 @@ export default function Cart() {
       handleChecked,
    } = useCart();
 
-   const [waitQuantity, setWaitQuantity] = useState(false)
+   const [waitQuantity, setWaitQuantity] = useState<WaitQuantity>({});
 
    const handleIncreaseQuantity = (data: UpdateCart) => {
-      setWaitQuantity(true)
       cartControllers.increaseCart(data).then((res) => {
          setCarts(res.data);
       }).finally(() => {
+         setWaitQuantity({
+            ...waitQuantity,
+            [data.productId]: true,
+         });
          setTimeout(() => {
-            setWaitQuantity(false)
-         }, 300)
+            setWaitQuantity({
+               ...waitQuantity,
+               [data.productId]: true,
+            });
+         }, 50)
       });
       if (productChecked.length > 0) {
 
@@ -58,13 +67,19 @@ export default function Cart() {
    };
    const handleDecreaseQuantity = (quantity: number, data: UpdateCart) => {
       if (quantity > 1) {
-         setWaitQuantity(true)
          cartControllers.decreaseCart(data).then((res) => {
             setCarts(res.data);
          }).finally(() => {
+            setWaitQuantity({
+               ...waitQuantity,
+               [data.productId]: true,
+            });
             setTimeout(() => {
-               setWaitQuantity(false)
-            }, 300)
+               setWaitQuantity({
+                  ...waitQuantity,
+                  [data.productId]: true,
+               });
+            }, 50)
          });
 
          if (productChecked.length > 0) {
@@ -84,7 +99,6 @@ export default function Cart() {
 
    const [plusThrottled] = useThrottle(handleIncreaseQuantity, 300);
    const [minusThrottled] = useThrottle(handleDecreaseQuantity, 300);
-   //check box
 
    const cartLength = carts.item?.filter((e) => e.product.quantity > 0);
    var checkAll: boolean =
@@ -123,6 +137,15 @@ export default function Cart() {
       );
       return _check !== -1;
    };
+
+   useEffect(() => {
+      if (waitQuantity) {
+         const timeoutId = setTimeout(() => {
+            setWaitQuantity({});
+         }, 200);
+         return () => clearTimeout(timeoutId);
+      }
+   }, [waitQuantity]);
 
    return (
       <Container>
@@ -233,17 +256,20 @@ export default function Cart() {
                                           <>
                                              <div
                                                 className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                                                onClick={() =>
+                                                onClick={() => {
                                                    minusThrottled(e.quantity, {
                                                       productId: e.productid,
                                                       cartId: e.cartid,
                                                    })
+                                                   setIdProduct(e.productid)
+                                                }
                                                 }
                                              >
-                                                <MinusCart wait={waitQuantity} />
+                                                <MinusCart wait={waitQuantity[e.productid]} />
                                              </div>
                                              <div>
-                                                <p className={`${waitQuantity && `text-[#D6D6D6]`} text-base mx-2 font-medium`}>
+                                                <p
+                                                   className={` ${waitQuantity[e.productid] ? `text-[#D6D6D6]` : `text-[#4c4c4c]`} text-base mx-2 font-medium`}>
                                                    {e.quantity}
                                                 </p>
                                              </div>
@@ -258,9 +284,10 @@ export default function Cart() {
                                                       : toastWarn(
                                                          `Chỉ còn ${e.product.quantity} sản phẩm`
                                                       );
+                                                   setIdProduct(e.productid)
                                                 }}
                                              >
-                                                <PlusCart wait={waitQuantity} />
+                                                <PlusCart wait={waitQuantity[e.productid]} />
                                              </div>
                                           </>) : (<><p>Hết hàng</p></>)
                                     }
@@ -284,7 +311,7 @@ export default function Cart() {
                                        <Delete />
                                     </button>
                                  </div>
-                              </div>
+                              </div >
                            </>
                         );
                      })
@@ -328,12 +355,17 @@ export default function Cart() {
                            className="rounded-full shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]
                         "
                         >
-                           <div
-                              onClick={() => openModal(idAllCart)}
-                              className="p-3"
-                           >
-                              <Delete />
-                           </div>
+                           {
+                              productChecked.length > 0 && (<>
+                                 <div
+                                    onClick={() => openModal(idAllCart)}
+                                    className="p-3"
+                                 >
+                                    <Delete />
+                                 </div>
+
+                              </>)
+                           }
                         </div>
                      </div>
                      <div className="flex items-center justify-between w-[55%] p-4">
@@ -366,11 +398,11 @@ export default function Cart() {
                            <p>Mua ngay</p>
                         </button>
                         <DialogComfirm
-                           desc="toàn bộ Giỏ hàng"
+                           desc="các sản phẩm"
                            id={idAllCart}
                            onClose={() => closeModal(idAllCart)}
                            onSave={() => removeAllCart()}
-                           title="Xóa toàn bộ Giỏ hàng!"
+                           title="Xóa các sản phẩm đã chọn!"
                         />
                      </div>
                   </div>
