@@ -47,20 +47,20 @@ const ShippingController = {
                     },
                 });
             }
-            if (statusOrder === 5) {
-                const io = req.app.get('socketio');
-                io.emit('deliverysuccessfully', order);
+            // if (statusOrder === 5) {
+            //     const io = req.app.get('socketio');
+            //     io.emit('deliverysuccessfully', order);
 
-                await prisma.notification.create({
-                    data: {
-                        user: userId,
-                        orderId: orderId,
-                        message: 'Delivery Successfully',
-                        status: 5,
-                        seen: false,
-                    },
-                });
-            }
+            //     await prisma.notification.create({
+            //         data: {
+            //             user: userId,
+            //             orderId: orderId,
+            //             message: 'Delivery Successfully',
+            //             status: 5,
+            //             seen: false,
+            //         },
+            //     });
+            // }
             await prisma.order.update({
                 where: {
                     id: orderId,
@@ -451,7 +451,7 @@ const ShippingController = {
             });
             if (!user) return res.status(404).send('AccessToken is expried');
             const status = {
-                gte : 4
+                gte: 4,
             };
             const whereClause = {
                 userId: userId,

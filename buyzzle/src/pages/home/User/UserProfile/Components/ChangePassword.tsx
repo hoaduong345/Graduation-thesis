@@ -1,8 +1,8 @@
 import { Fragment, useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
 import { Controller, useForm } from "react-hook-form";
-import HidePass from "../../../../../Assets/TSX/HidePass";
-import ShowPass from "../../../../../Assets/TSX/ShowPass";
+import HidePass from "../../../../../assets/TSX/HidePass";
+import ShowPass from "../../../../../assets/TSX/ShowPass";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";

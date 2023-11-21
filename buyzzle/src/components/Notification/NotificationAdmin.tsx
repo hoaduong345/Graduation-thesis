@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import { notificationControllers } from "../../Controllers/NotificationController";
-import { AllNotification } from "../../Model/Notification";
-import { Images } from "../../Assets/TS";
-import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { Images } from "../../assets/TS";
+import { notificationControllers } from "../../controllers/NotificationController";
+import { useNotificationAdmin } from "../../hooks/Notification/NotificationContextAdmin";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
+import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { handleSeenNoti } from "./components/SeenNoti";
+import moment from "moment";
+import "moment/locale/vi";
 
 export default function NotificationAdmin() {
-  const [notification, setNotification] = useState<AllNotification[]>([]);
+  moment.locale("vi");
 
   const [changeButton, setChangeButton] = useState([
     {
@@ -25,6 +28,9 @@ export default function NotificationAdmin() {
       active: false,
     },
   ]);
+  const { getAllNotiAdmin, notificationAdmin, setNotification } =
+    useNotificationAdmin();
+
   const handleClick = (id: number) => {
     console.log("🚀 ~ file: Notification.tsx:27 ~ handleClick ~ id:", id);
     const updatedButtons = changeButton.map((btn) => {
@@ -40,7 +46,7 @@ export default function NotificationAdmin() {
     });
     setChangeButton(updatedButtons);
     if (id == 0) {
-      getAllNoti();
+      getAllNotiAdmin();
     } else {
       getOrderFilter(id);
     }
@@ -57,23 +63,6 @@ export default function NotificationAdmin() {
         return "#ccc";
     }
   }
-  useEffect(() => {
-    getAllNoti();
-  }, []);
-  const getAllNoti = async () => {
-    await notificationControllers
-      .getAllNotificationAdmin()
-      .then((res) => {
-        console.log(
-          "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
-          res
-        );
-        setNotification(res.allNotification);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const getOrderFilter = async (status: number) => {
     notificationControllers
@@ -81,14 +70,6 @@ export default function NotificationAdmin() {
       .then((res: any) => {
         setNotification(res);
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const handleSeenNoti = async (id: number) => {
-    await notificationControllers
-      .getSeenNotification(id)
-      .then((_) => {})
       .catch((err) => {
         console.log(err);
       });
@@ -127,8 +108,8 @@ export default function NotificationAdmin() {
         {/* END BUTTON */}
         <div className="flex flex-col gap-3">
           {/* map Noti */}
-          {notification.length > 0 ? (
-            notification.map((notiItems) => {
+          {notificationAdmin.length > 0 ? (
+            notificationAdmin.map((notiItems) => {
               return (
                 <a
                   href={`/admin/ordermanagement/${notiItems.orderId}`}
@@ -238,7 +219,7 @@ export default function NotificationAdmin() {
                               <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
                             </svg>
                           )}
-                          2 phút trước
+                          {moment(notiItems.date).locale("vi").fromNow()}
                         </span>
                         {notiItems.seen == false ? (
                           <div className="rounded-full border-[5px] w-0 border-[#2E89FF] justify-end"></div>

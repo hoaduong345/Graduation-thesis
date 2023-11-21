@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
-import { Images } from "../../Assets/TS/index";
+import React, { useState } from "react";
+import { Images } from "../../assets/TS/index";
 import "./Register.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import bg from "../../Assets/PNG/NewProject.png";
-
+import bg from "../../assets/PNG/NewProject.png";
 
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../utils/rules";
 export interface FormValues {
   name: string;
-  username: string
+  username: string;
   email: string;
   password: string;
   confirmpassword: string;
   phonenumber: string;
-
-
 }
 function Register() {
   const [msg, setMsg] = useState("");
@@ -35,11 +32,10 @@ function Register() {
     // defaultValues: UserData1
   });
 
-
   const API = "http://localhost:5000/buyzzle/auth/register";
   const onSubmit = handleSubmit(async (data) => {
     // const response = await axios.post(API, data);
-    //   console.log("server: ", response); 
+    //   console.log("server: ", response);
 
     try {
       console.log("checker", data);
@@ -53,19 +49,14 @@ function Register() {
           {
             position: "top-right",
             autoClose: 5000,
-
           }
         );
       } else {
         console.log("Sign-in Failed!");
-        toast.warning(
-          "Sign-in failed",
-          {
-            position: "top-right",
-            autoClose: 5000,
-
-          }
-        );
+        toast.warning("Sign-in failed", {
+          position: "top-right",
+          autoClose: 5000,
+        });
       }
     } catch (error) {
       // console.log("Them that bai", error);
@@ -79,56 +70,33 @@ function Register() {
           const errorMessageEmail = responseData.error.email;
           const errorMessagePhoneNumber = responseData.error.phonenumber;
           if (errorMessageUsername) {
-            toast.warning(
-              errorMessageUsername,
-              {
-                position: "top-right",
-                autoClose: 5000,
-
-              }
-            );
+            toast.warning(errorMessageUsername, {
+              position: "top-right",
+              autoClose: 5000,
+            });
           } else if (errorMessageEmail) {
-            toast.warning(
-              errorMessageEmail,
-              {
-                position: "top-right",
-                autoClose: 5000,
-
-              }
-            );
+            toast.warning(errorMessageEmail, {
+              position: "top-right",
+              autoClose: 5000,
+            });
           } else if (errorMessagePhoneNumber) {
-            toast.warning(
-              errorMessagePhoneNumber,
-              {
-                position: "top-right",
-                autoClose: 5000,
-
-              }
-            );
+            toast.warning(errorMessagePhoneNumber, {
+              position: "top-right",
+              autoClose: 5000,
+            });
           }
-
         } else {
-          console.log('Lỗi không xác định từ server');
+          console.log("Lỗi không xác định từ server");
         }
       } else {
-        console.error('Lỗi gửi yêu cầu không thành công', error);
-
+        console.error("Lỗi gửi yêu cầu không thành công", error);
       }
     }
-
   });
 
-
-
-
-
-
-
   return (
-
-    <div className='register-bg flex max-xl:flex-wrap'>
-      <div className='relative p-4 max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]'>
-
+    <div className="register-bg flex max-xl:flex-wrap">
+      <div className="relative p-4 max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]">
         <img
           src={Images.bgRegisterIcon}
           alt="bgRegisterIcon"
@@ -138,21 +106,21 @@ function Register() {
 
         <div className="absolute inset-0 flex justify-center items-center ">
           <Link to="/">
-            <img src={Images.logoSlogan}
+            <img
+              src={Images.logoSlogan}
               alt="logo"
               width={"90%"}
-              height={"90%"} />
+              height={"90%"}
+            />
           </Link>
         </div>
-
       </div>
-      <div className='w-1/2 flex justify-center items-center min-h-screen bg-white '>
-        <div className='w-[424px]'>
-
+      <div className="w-1/2 flex justify-center items-center min-h-screen bg-white ">
+        <div className="w-[424px]">
           <form className="registration-form">
             <h2>ĐĂNG KÝ</h2>
             <div className="grid grid-cols-5 gap-8">
-              <div className="col-span-3 " >
+              <div className="col-span-3 ">
                 <div className="flex gap-3 ">
                   <div className="flex flex-col  max-lg:gap-2">
                     <div className="h-[90px] w-[424px]">
@@ -162,18 +130,15 @@ function Register() {
                         rules={{
                           required: {
                             value: true,
-                            message:
-                              "Không để trống",
+                            message: "Không để trống",
                           },
                           minLength: {
                             value: 4,
-                            message:
-                              "Ít nhất 6 ký tự",
+                            message: "Ít nhất 6 ký tự",
                           },
                           maxLength: {
                             value: 25,
-                            message:
-                              "Nhiều nhất 25 kí tự",
+                            message: "Nhiều nhất 25 kí tự",
                           },
                         }}
                         render={({ field }) => (
@@ -190,50 +155,37 @@ function Register() {
                               value={field.value}
                               type="text"
                               onChange={(e) => {
-                                const reg =
-                                  /[!@#$%^&]/;
-                                const value =
-                                  e.target
-                                    .value;
-                                field.onChange(
-                                  value.replace(
-                                    reg,
-                                    ""
-                                  )
-                                );
+                                const reg = /[!@#$%^&]/;
+                                const value = e.target.value;
+                                field.onChange(value.replace(reg, ""));
                               }}
                               name="name"
                             />
                             {errors.name && (
                               <p className="text-[11px] text-red-700 mt-0">
-                                {
-                                  errors.name
-                                    .message
-                                }
+                                {errors.name.message}
                               </p>
                             )}
                           </>
                         )}
                       />
-                    </div><div className="h-[90px] w-[424px]">
+                    </div>
+                    <div className="h-[90px] w-[424px]">
                       <Controller
                         name="username"
                         control={control}
                         rules={{
                           required: {
                             value: true,
-                            message:
-                              "Không để trống",
+                            message: "Không để trống",
                           },
                           minLength: {
                             value: 4,
-                            message:
-                              "Ít nhất 4 ký tự",
+                            message: "Ít nhất 4 ký tự",
                           },
                           maxLength: {
                             value: 25,
-                            message:
-                              "Nhiều nhất 25 kí tự",
+                            message: "Nhiều nhất 25 kí tự",
                           },
                         }}
                         render={({ field }) => (
@@ -250,26 +202,15 @@ function Register() {
                               value={field.value}
                               type="text"
                               onChange={(e) => {
-                                const reg =
-                                  /[!@#$%^&]/;
-                                const value =
-                                  e.target
-                                    .value;
-                                field.onChange(
-                                  value.replace(
-                                    reg,
-                                    ""
-                                  )
-                                );
+                                const reg = /[!@#$%^&]/;
+                                const value = e.target.value;
+                                field.onChange(value.replace(reg, ""));
                               }}
                               name="username"
                             />
                             {errors.username && (
                               <p className="text-[11px] text-red-700 mt-0">
-                                {
-                                  errors.username
-                                    .message
-                                }
+                                {errors.username.message}
                               </p>
                             )}
                           </>
@@ -283,18 +224,15 @@ function Register() {
                         rules={{
                           required: {
                             value: true,
-                            message:
-                              "Không để trống",
+                            message: "Không để trống",
                           },
                           minLength: {
                             value: 4,
-                            message:
-                              "Ít nhất 4 ký tự",
+                            message: "Ít nhất 4 ký tự",
                           },
                           maxLength: {
                             value: 25,
-                            message:
-                              "Nhiều nhất 25 kí tự",
+                            message: "Nhiều nhất 25 kí tự",
                           },
                         }}
                         render={({ field }) => (
@@ -311,26 +249,15 @@ function Register() {
                               value={field.value}
                               type="password"
                               onChange={(e) => {
-                                const reg =
-                                  /[!@#$%^&]/;
-                                const value =
-                                  e.target
-                                    .value;
-                                field.onChange(
-                                  value.replace(
-                                    reg,
-                                    ""
-                                  )
-                                );
+                                const reg = /[!@#$%^&]/;
+                                const value = e.target.value;
+                                field.onChange(value.replace(reg, ""));
                               }}
                               name="password"
                             />
                             {errors.password && (
                               <p className="text-[11px] text-red-700 mt-0">
-                                {
-                                  errors.password
-                                    .message
-                                }
+                                {errors.password.message}
                               </p>
                             )}
                           </>
@@ -345,21 +272,19 @@ function Register() {
                         rules={{
                           required: {
                             value: true,
-                            message:
-                              "Không để trống",
+                            message: "Không để trống",
                           },
                           minLength: {
                             value: 4,
-                            message:
-                              "Ít nhất 4 ký tự",
+                            message: "Ít nhất 4 ký tự",
                           },
                           maxLength: {
                             value: 25,
-                            message:
-                              "Nhiều nhất 25 kí tự",
+                            message: "Nhiều nhất 25 kí tự",
                           },
-                          validate: value =>
-                            value === getValues("password") || "Mật khẩu không khớp"
+                          validate: (value) =>
+                            value === getValues("password") ||
+                            "Mật khẩu không khớp",
                         }}
                         render={({ field }) => (
                           <>
@@ -375,26 +300,15 @@ function Register() {
                               value={field.value}
                               type="password"
                               onChange={(e) => {
-                                const reg =
-                                  /[!@#$%^&]/;
-                                const value =
-                                  e.target
-                                    .value;
-                                field.onChange(
-                                  value.replace(
-                                    reg,
-                                    ""
-                                  )
-                                );
+                                const reg = /[!@#$%^&]/;
+                                const value = e.target.value;
+                                field.onChange(value.replace(reg, ""));
                               }}
                               name="confirmpassword"
                             />
                             {errors.confirmpassword && (
                               <p className="text-[11px] text-red-700 mt-0">
-                                {
-                                  errors.confirmpassword
-                                    .message
-                                }
+                                {errors.confirmpassword.message}
                               </p>
                             )}
                           </>
@@ -402,7 +316,6 @@ function Register() {
                       />
                     </div>
                   </div>
-
                 </div>
 
                 <div className="flex gap-3 ">
@@ -414,24 +327,24 @@ function Register() {
                         rules={{
                           required: {
                             value: true,
-                            message:
-                              "Không để trống",
+                            message: "Không để trống",
                           },
                           minLength: {
                             value: 4,
-                            message:
-                              "Ít nhất 4 ký tự",
+                            message: "Ít nhất 4 ký tự",
                           },
                           // maxLength: {
                           //   value: ,
                           //   message:
                           //     "Nhiều nhất 25 kí tự",
                           // },
-                          validate: { // Kiểm tra email có đúng định dạng không 
-                            validEmail: (value) => /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(value) || "Email không hợp lệ",
-
+                          validate: {
+                            // Kiểm tra email có đúng định dạng không
+                            validEmail: (value) =>
+                              /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(
+                                value
+                              ) || "Email không hợp lệ",
                           },
-
                         }}
                         render={({ field }) => (
                           <>
@@ -446,26 +359,15 @@ function Register() {
                               placeholder="Nhập vào Email"
                               value={field.value}
                               onChange={(e) => {
-                                const reg =
-                                  /[!#$%^&]/;
-                                const value =
-                                  e.target
-                                    .value;
-                                field.onChange(
-                                  value.replace(
-                                    reg,
-                                    ""
-                                  )
-                                );
+                                const reg = /[!#$%^&]/;
+                                const value = e.target.value;
+                                field.onChange(value.replace(reg, ""));
                               }}
                               name="email"
                             />
                             {errors.email && (
                               <p className="text-[11px] text-red-700 mt-0">
-                                {
-                                  errors.email
-                                    .message
-                                }
+                                {errors.email.message}
                               </p>
                             )}
                           </>
@@ -473,7 +375,6 @@ function Register() {
                       />
                     </div>
                   </div>
-
                 </div>
                 <div className="flex gap-3 ">
                   <div className="flex flex-col gap-5 max-lg:gap-2">
@@ -484,21 +385,16 @@ function Register() {
                         rules={{
                           required: {
                             value: true,
-                            message:
-                              "Không để trống",
+                            message: "Không để trống",
                           },
                           minLength: {
                             value: 4,
-                            message:
-                              "Ít nhất 4 ký tự",
+                            message: "Ít nhất 4 ký tự",
                           },
                           maxLength: {
                             value: 11,
-                            message:
-                              "Nhiều nhất 11 kí tự",
+                            message: "Nhiều nhất 11 kí tự",
                           },
-                          
-
                         }}
                         render={({ field }) => (
                           <>
@@ -513,26 +409,15 @@ function Register() {
                               placeholder="Nhập vào số điện thoại"
                               value={field.value}
                               onChange={(e) => {
-                                const reg =
-                                  /[!#$%^&]/;
-                                const value =
-                                  e.target
-                                    .value;
-                                field.onChange(
-                                  value.replace(
-                                    reg,
-                                    ""
-                                  )
-                                );
+                                const reg = /[!#$%^&]/;
+                                const value = e.target.value;
+                                field.onChange(value.replace(reg, ""));
                               }}
                               name="phonenumber"
                             />
                             {errors.phonenumber && (
                               <p className="text-[11px] text-red-700 mt-0">
-                                {
-                                  errors.phonenumber
-                                    .message
-                                }
+                                {errors.phonenumber.message}
                               </p>
                             )}
                           </>
@@ -540,9 +425,7 @@ function Register() {
                       />
                     </div>
                   </div>
-
                 </div>
-
               </div>
             </div>
             <div className="checkbox-container">
@@ -551,48 +434,57 @@ function Register() {
                 name="termsAgreement"
                 className="custom-checkbox"
                 required
-
               />
-              <label htmlFor="termsAgreement">Tôi đã đọc và đồng ý với <a href='#'>Điều Khoản</a></label>
+              <label htmlFor="termsAgreement">
+                Tôi đã đọc và đồng ý với <a href="#">Điều Khoản</a>
+              </label>
             </div>
-            <button onClick={handleSubmit((formData: any) => {
-              onSubmit(formData);
-            })} type="submit" className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[50px]">Đăng ký</button>
+            <button
+              onClick={handleSubmit((formData: any) => {
+                onSubmit(formData);
+              })}
+              type="submit"
+              className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[50px]"
+            >
+              Đăng ký
+            </button>
             {/* <ToastContainer
               position="top-right"
               // Custom theme for the toast container
               theme="dark"
             /> */}
-            <div className='flex items-center my-4'>
-              <div className='grow h-px bg-slate-300'></div>
-              <div className='mx-2 text-white-500'>Hoặc</div>
-              <div className='grow h-px bg-slate-300'></div>
+            <div className="flex items-center my-4">
+              <div className="grow h-px bg-slate-300"></div>
+              <div className="mx-2 text-white-500">Hoặc</div>
+              <div className="grow h-px bg-slate-300"></div>
             </div>
-            <div className='flex justify-center space-x-3'>
-              <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2' >
-                <img src={Images.logoGoogle} alt='Google' className='w-6 h-6' />
+            <div className="flex justify-center space-x-3">
+              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
+                <img src={Images.logoGoogle} alt="Google" className="w-6 h-6" />
               </button>
-              <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2'>
-                <img src={Images.logoApple} alt='Apple' className='w-6 h-6' />
+              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
+                <img src={Images.logoApple} alt="Apple" className="w-6 h-6" />
               </button>
-              <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2'>
-                <img src={Images.logoFace} alt='Facebook' className='w-6 h-6' />
+              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
+                <img src={Images.logoFace} alt="Facebook" className="w-6 h-6" />
               </button>
             </div>
-            <div className='mt-6 text-center'>
-              <span className='text-gray-600'>Bạn đã có tài khoản Buyzzle? </span>
-              <Link to={`/login`} className="text-black font-semibold items-start">
+            <div className="mt-6 text-center">
+              <span className="text-gray-600">
+                Bạn đã có tài khoản Buyzzle?{" "}
+              </span>
+              <Link
+                to={`/login`}
+                className="text-black font-semibold items-start"
+              >
                 Back to login{" "}
               </Link>
             </div>
           </form>
         </div>
-
-
-
       </div>
     </div>
   );
-};
+}
 
 export default Register;

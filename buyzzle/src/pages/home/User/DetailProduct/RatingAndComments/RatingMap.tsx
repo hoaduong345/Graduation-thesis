@@ -1,24 +1,20 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { Images } from "../../../../../Assets/TS";
-import CircleAvrCMT from "../../../../../Assets/TSX/CircleAvrCMT";
-import LineCMT from "../../../../../Assets/TSX/LineCMT";
-import Period from "../../../../../Assets/TSX/Period";
-import DialogModal from "../../../../../Helper/Dialog/DialogModal";
-import { currentDate, roundedNumber } from "../../../../../Helper/Format";
-import { stars } from "../../../../../Helper/StarRating/Star";
-import { Ratee, Rating } from "../../../../../Model/ProductModel";
-import Edit from "../../../Admin/Assets/TSX/Edit";
-import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
-import Handle from "../../../Admin/Assets/TSX/bacham";
-import { EditImage } from "../DetailProductPage/DetailsProduct";
-import SendCmt from "../../../../../Assets/TSX/SendCmt";
-import {
-  RepComment,
-  ratingAndCommentController,
-} from "../../../../../Controllers/Rating&Comment";
 import { toast } from "react-toastify";
+import { Images } from "../../../../../assets/TS";
+import CircleAvrCMT from "../../../../../assets/TSX/CircleAvrCMT";
+import LineCMT from "../../../../../assets/TSX/LineCMT";
+import Period from "../../../../../assets/TSX/Period";
+import SendCmt from "../../../../../assets/TSX/SendCmt";
+import { ratingAndCommentController } from "../../../../../controllers/Rating&Comment";
+import DialogModal from "../../../../../helper/Dialog/DialogModal";
+import { currentDate, roundedNumber } from "../../../../../helper/Format";
+import { stars } from "../../../../../helper/StarRating/Star";
+import { Ratee, Rating } from "../../../../../model/ProductModel";
+import Edit from "../../../admin/assets/TSX/Edit";
+import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
+import Handle from "../../../admin/assets/TSX/bacham";
 interface FormValues {
   id: number;
   idproduct: number;
@@ -82,7 +78,6 @@ export default function RatingMap(props: Props) {
   const openDialog = (id: string, idRating: number, comment: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      console.log("idRating idRating", idRating);
       reset({ comment: comment });
       modal.showModal();
     }
@@ -98,7 +93,11 @@ export default function RatingMap(props: Props) {
       setIsFeedbackClicked(ratingId);
     }
   };
-
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>, id: number) => {
+    if (e.key == "Enter") {
+      getAdminRepComment(id);
+    }
+  };
   const getAdminRepComment = (id: number) => {
     const _dataRepCmt = {
       ratingId: id,
@@ -122,10 +121,6 @@ export default function RatingMap(props: Props) {
       {props.rateAndcomment?.Rating ? (
         props.rateAndcomment.Rating.length > 0 ? (
           props.rateAndcomment?.Rating.map((rating) => {
-            console.log(
-              "🚀 ~ file: RatingMap.tsx:118 ~ props.rateAndcomment?.Rating.map ~ rating:",
-              rating.repComment
-            );
             return (
               <>
                 <div
@@ -346,6 +341,9 @@ export default function RatingMap(props: Props) {
                               value={repTextCmt}
                               placeholder={`Trả lời ${rating?.user?.username}`}
                               onChange={(e) => handleChange(e)}
+                              onKeyDown={(e: any) =>
+                                handleKeyPress(e, rating.id)
+                              }
                             />
                             <div
                               className="pl-2 cursor-pointer"

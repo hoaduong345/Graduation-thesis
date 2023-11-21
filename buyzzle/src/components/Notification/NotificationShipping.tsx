@@ -1,40 +1,12 @@
-import React, { useEffect, useState } from "react";
-import CancelOrder from "../../layout/asset/TSX/CancelOrder";
-import { Images } from "../../Assets/TS";
-import NewOrder from "../../layout/asset/TSX/NewOrder";
+import moment from "moment";
+import { useNotificationShipping } from "../../hooks/Notification/NotificationContextShipping";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
-import { AllNotification } from "../../Model/Notification";
-import { notificationControllers } from "../../Controllers/NotificationController";
+import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { handleSeenNoti } from "./components/SeenNoti";
 
 export default function NotificationShipping() {
-  const [notification, setNotification] = useState<AllNotification[]>([]);
+  const { notificationShipping } = useNotificationShipping();
 
-  useEffect(() => {
-    getAllNoti();
-  }, []);
-  const getAllNoti = async () => {
-    await notificationControllers
-      .getAllNotificationShipping()
-      .then((res) => {
-        console.log(
-          "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
-          res
-        );
-        setNotification(res.allNotification);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleSeenNoti = async (id: number) => {
-    await notificationControllers
-      .getSeenNotification(id)
-      .then((_) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <div className="header-view top-full absolute w-[355px] invisible z-20 overflow-y-auto h-[600px] scroll-smooth">
       <div
@@ -45,15 +17,15 @@ export default function NotificationShipping() {
         <div className=" border-b-[1px] mt-2"></div>
         <div className="flex flex-col gap-3">
           {/* map Noti */}
-          {notification.length > 0 ? (
-            notification.map((notiItems) => {
+          {notificationShipping?.length > 0 ? (
+            notificationShipping.map((notiItems) => {
               return (
                 <a
                   href={`/shipping/detail/${notiItems.orderId}`}
                   onClick={() => handleSeenNoti(notiItems.id)}
                 >
                   <>
-                    <div className="flex gap-9 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
+                    <div className="flex gap-4 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
                       <div className="items-center flex gap-3">
                         <div className="p-1 relative">
                           <div
@@ -92,7 +64,37 @@ export default function NotificationShipping() {
                           </p>
                         </div>
                       </div>
-                      <div className="my-auto">
+                      <div className="flex flex-col items-end gap-1 my-2">
+                        <span
+                          className={`${
+                            notiItems.seen === false
+                              ? "text-slate-500 text-xs inline-flex items-center rounded"
+                              : "text-slate-500 text-xs inline-flex items-center rounded opacity-70"
+                          }`}
+                        >
+                          {notiItems.status === 1 ? (
+                            <svg
+                              className="w-2 h-2 me-1.5"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                            </svg>
+                          ) : (
+                            <svg
+                              className="w-2 h-2 me-1.5"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                            </svg>
+                          )}
+                          {moment(notiItems.date).locale("vi").fromNow()}
+                        </span>
                         {notiItems.seen == false ? (
                           <div className="rounded-full border-[5px] w-0 border-[#2E89FF] justify-end"></div>
                         ) : (

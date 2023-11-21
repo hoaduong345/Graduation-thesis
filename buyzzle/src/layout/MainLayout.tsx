@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import CustomToast from "../Helper/Toast/CustomToast";
+import CustomToast from "../helper/Toast/CustomToast";
 import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 import useCartContext, { CartContext } from "../hooks/Cart/CartContextProvider";
-import ThemeContextProvider from "../hooks/Context/ThemeContextProvider";
 import BuyzzleAvt from "./asset/TSX/BuyzzleAvt";
 import NewOrder from "./asset/TSX/NewOrder";
 
@@ -49,15 +48,13 @@ function MainLayout({ children }: Props) {
     });
   }, []);
   return (
-    <ThemeContextProvider>
-      <CartContext.Provider value={cartCtx}>
-        <div>
-          <Header />
-          {children}
-          <Footer />
-        </div>
-      </CartContext.Provider>
-    </ThemeContextProvider>
+    <CartContext.Provider value={cartCtx}>
+      <div>
+        <Header />
+        {children}
+        <Footer />
+      </div>
+    </CartContext.Provider>
   );
 }
 
