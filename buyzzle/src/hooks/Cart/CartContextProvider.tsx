@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { ModelCart, cartControllers } from "../../Controllers/CartControllers";
-import { toastSuccess } from "../../Helper/Toast/Success";
-import { toastWarn } from "../../Helper/Toast/Warning";
-import { CartItem, CartProduct } from "../../Model/CartModel";
-import { orderControllers } from "../../Controllers/OrderControllers";
-import { UpdateQuantityModal } from "../../Model/OrderModel";
+import { ModelCart, cartControllers } from "../../controllers/CartControllers";
+import { toastSuccess } from "../../helper/Toast/Success";
+import { toastWarn } from "../../helper/Toast/Warning";
+import { CartItem, CartProduct } from "../../model/CartModel";
+import { orderControllers } from "../../controllers/OrderControllers";
+import { UpdateQuantityModal } from "../../model/OrderModel";
 import { useNavigate } from 'react-router-dom';
 
 export default function useCartContext() {

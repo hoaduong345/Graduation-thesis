@@ -1,21 +1,21 @@
 import useThrottle from "@rooks/use-throttle";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Buyzzle from "../../../../Assets/TSX/Buyzzle";
-import MinusCart from "../../../../Assets/TSX/MinusCart";
-import PlusCart from "../../../../Assets/TSX/PlusCart";
+import Buyzzle from "../../../../assets/TSX/Buyzzle";
+import MinusCart from "../../../../assets/TSX/MinusCart";
+import PlusCart from "../../../../assets/TSX/PlusCart";
 import {
    UpdateCart,
    cartControllers,
-} from "../../../../Controllers/CartControllers";
-import DialogComfirm from "../../../../Helper/Dialog/DialogComfirm";
-import EmptyPage from "../../../../Helper/Empty/EmptyPage";
-import { numberFormat } from "../../../../Helper/Format";
-import { toastWarn } from "../../../../Helper/Toast/Warning";
-import { CartItem } from "../../../../Model/CartModel";
+} from "../../../../controllers/CartControllers";
+import DialogComfirm from "../../../../helper/Dialog/DialogComfirm";
+import EmptyPage from "../../../../helper/Empty/EmptyPage";
+import { numberFormat } from "../../../../helper/Format";
+import { toastWarn } from "../../../../helper/Toast/Warning";
+import { CartItem } from "../../../../model/CartModel";
 import Container from "../../../../components/container/Container";
 import { useCart } from "../../../../hooks/Cart/CartContextProvider";
-import Delete from "../../Admin/Assets/TSX/Delete";
+import Delete from "../../admin/assets/TSX/Delete";
 
 type WaitQuantity = Record<string | number, boolean>;
 
