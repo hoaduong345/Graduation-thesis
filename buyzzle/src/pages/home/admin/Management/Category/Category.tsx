@@ -24,6 +24,7 @@ import RemoveCate from "../../assets/TSX/RemoveCate";
 import UploadIMG from "../../assets/TSX/UploadIMG";
 import Handle from "../../assets/TSX/bacham";
 import SitebarAdmin from "../../Sitebar/Sitebar";
+import { IonIcon } from "@ionic/react";
 
 function Category() {
   const idModalCate = "category";
@@ -107,10 +108,7 @@ function Category() {
           <UploadIMG />
           <div id="images" className="text-center mt-2">
             <p className="text-[#5D5FEF] text-center text-base -tracking-tighter font-bold max-xl:text-xs max-lg:text-[8px]">
-              Click to upload
-              <p className="text-[#1A1A1A] font-normal text-base tracking-widest max-xl:text-xs max-lg:text-[8px]">
-                or drag and drop
-              </p>
+              Tải hình ảnh lên
             </p>
           </div>
         </>
@@ -304,10 +302,46 @@ function Category() {
     }
   };
 
+  const [isOpenSitebar, setIsOpenSitebar] = useState(false);
+  const openSitebar = () => {
+    const modal = document.getElementById(
+      "my_modal_3"
+    ) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+      setIsOpenSitebar(!isOpenSitebar);
+    }
+  };
+  const closeSitebar = () => {
+    const modal = document.getElementById(
+      "my_modal_3"
+    ) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+  };
+
   return (
     <>
       <Container>
+        <div
+          className="float-right cursor-pointer max-[1920px]:invisible max-2xl:visible"
+          onClick={() => openSitebar()}
+        >
+          <IonIcon className="text-[2rem]" name={"menu"}></IonIcon>
+        </div>
         <div className="grid grid-cols-5">
+          <dialog id="my_modal_3" className="max-2xl:modal">
+            <div className="relative">
+              <button
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-[120px]"
+                onClick={closeSitebar}
+              >
+                ✕
+              </button>
+              <SitebarAdmin />
+            </div>
+          </dialog>
           <div className="col-span-1 max-2xl:hidden">
             <SitebarAdmin />
           </div>
