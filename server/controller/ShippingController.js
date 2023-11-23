@@ -10,8 +10,6 @@ const errorResponse = (res, error) => {
 const ShippingController = {
     setStatus: async (req, res) => {
         try {
-            const userId = parseInt(req.cookies.id);
-            console.log('🚀 ~ file: ShippingController.js:13 ~ setStatus: ~ userId:', userId);
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status);
 
@@ -36,6 +34,7 @@ const ShippingController = {
             if (!order) {
                 return res.status(404).send('Order is undefined');
             }
+            console.log("aaaaaa",order.userId)
             if (statusOrder === 3) {
                 const io = req.app.get('socketio');
                 io.emit('setstatus', order);
@@ -55,7 +54,7 @@ const ShippingController = {
 
                 await prisma.notification.create({
                     data: {
-                        userId: userId,
+                        userId: order.userId,
                         orderId: orderId,
                         message: 'Delivery Successfully',
                         status: 5,
@@ -299,22 +298,13 @@ const ShippingController = {
     },
     confirmDeleteOrder: async (req, res) => {
         try {
-            const userId = parseInt(req.cookies.id);
-            console.log('🚀 ~ file: ShippingController.js:301 ~ confirmDeleteOrder: ~ userId:', userId);
             const orderId = parseInt(req.body.orderId);
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: userId,
-                },
-            });
             const order = await prisma.order.findFirst({
                 where: {
                     id: orderId,
                 },
             });
-
             if (!order) return res.send('Order is undifined');
-            if (!user) return res.send('AccessToken is expried');
             await prisma.order.update({
                 where: {
                     id: order.id,
@@ -323,9 +313,9 @@ const ShippingController = {
                     deletedAt: new Date(),
                 },
             });
-            const noti = await prisma.notification.create({
+             await prisma.notification.create({
                 data: {
-                    userId: user.id,
+                    userId: order.userId,
                     orderId: orderId,
                     message: 'Delete order successfully',
                     status: 4,
@@ -333,7 +323,7 @@ const ShippingController = {
                 },
             });
             const io = req.app.get('socketio');
-            io.to().emit('confirmCancelOrder', order);
+            io.emit('confirmCancelOrder', order);
             res.status(200).json('Delete order successfully');
         } catch (error) {
             errorResponse(res, error);
