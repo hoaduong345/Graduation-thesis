@@ -21,6 +21,10 @@ export default function useNotificationContextAdmin() {
   }, []);
   const getCountNoti = async () => {
     await notificationControllers.getAllNotificationAdmin().then((res) => {
+      console.log(
+        "🚀 ~ file: NotificationContextAdmin.tsx:24 ~ awaitnotificationControllers.getAllNotificationAdmin ~ res:",
+        res
+      );
       setCountNotificationAdmin(res);
     });
   };

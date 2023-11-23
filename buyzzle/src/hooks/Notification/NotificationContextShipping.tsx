@@ -34,7 +34,7 @@ export default function useNotificationContextShippping() {
       .getAllNotificationShipping()
       .then((res) => {
         console.log(
-          "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
+          "🚀 ~ file: NotificationContextShipping.tsx:36 ~ .then ~ res:",
           res
         );
         setNotificationShipping(res.allNotification);

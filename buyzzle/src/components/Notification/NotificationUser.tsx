@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { notificationControllers } from "../../controllers/NotificationController";
-import { AllNotification } from "../../model/Notification";
 import { Images } from "../../assets/TS";
-import NewOrder from "../../layout/asset/TSX/NewOrder";
-import CancelOrder from "../../layout/asset/TSX/CancelOrder";
+import { notificationControllers } from "../../controllers/NotificationController";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
+import CancelOrder from "../../layout/asset/TSX/CancelOrder";
+import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { AllNotification } from "../../model/Notification";
 
 export default function NotificationUser() {
   const [notification, setNotification] = useState<AllNotification[]>([]);
@@ -48,7 +48,7 @@ export default function NotificationUser() {
         {/* END BUTTON */}
         <div className="flex flex-col gap-3">
           {/* map Noti */}
-          {notification.length > 0 ? (
+          {notification?.length > 0 ? (
             notification.map((notiItems) => {
               return (
                 <a

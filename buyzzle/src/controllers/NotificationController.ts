@@ -33,7 +33,12 @@ class NotificationControllers {
   // User Notification
   getAllNotificationUser = async (): Promise<NotificationModel> => {
     return await axios
-      .get(`${appConfig.apiShipping}/notificationforuser`)
+      .get(`${appConfig.apiShipping}/notificationforuser`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        withCredentials: true,
+      })
       .then((res) => {
         return res.data as NotificationModel;
       });

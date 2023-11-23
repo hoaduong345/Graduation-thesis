@@ -13,6 +13,10 @@ export default function HeaderTopUser() {
   }, []);
   const getCountNoti = async () => {
     await notificationControllers.getAllNotificationUser().then((res) => {
+      console.log(
+        "🚀 ~ file: HeaderTopUser.tsx:16 ~ awaitnotificationControllers.getAllNotificationUser ~ res:",
+        res
+      );
       setCountNotification(res);
     });
   };
