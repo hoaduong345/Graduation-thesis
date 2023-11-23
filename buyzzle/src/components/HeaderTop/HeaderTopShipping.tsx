@@ -8,7 +8,11 @@ export default function HeaderTopShipping() {
   return (
     <>
       <HeaderTop
-        countNoti={countNotificationShipping.countNotification}
+        countNoti={
+          countNotificationShipping
+            ? countNotificationShipping.countNotification
+            : 0
+        }
         noti={<NotificationShipping />}
       />
     </>

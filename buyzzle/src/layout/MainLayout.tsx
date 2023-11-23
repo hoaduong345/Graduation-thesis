@@ -1,82 +1,24 @@
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { io } from "socket.io-client";
-import CustomToast from "../helper/Toast/CustomToast";
 import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 import useCartContext, { CartContext } from "../hooks/Cart/CartContextProvider";
-import BuyzzleAvt from "./asset/TSX/BuyzzleAvt";
-import NewOrder from "./asset/TSX/NewOrder";
+import useNotificationContextUser, {
+  NotificationContextUser,
+} from "../hooks/Notification/NotificationContextUser";
 
 interface Props {
   children?: React.ReactNode;
 }
 function MainLayout({ children }: Props) {
   const cartCtx = useCartContext();
-  //socket Noti adminRole confirmRequestcancelOrder
-  const [deletedOrder, setDeletedOrder] = useState(null);
-  const [deliverySuccess, setDeliverySuccess ] = useState(null)
-  useEffect(() => {
-    const socket = io("http://localhost:5000");
-    socket.on("confirmCancelOrder", (newOrder) => {
-      toast(
-        <CustomToast
-          image={<BuyzzleAvt />}
-          iconSVG={<NewOrder />}
-          name={
-            <p className="text-sm font-semibold text-gray-900 ">
-              Buyzzle thông báo
-            </p>
-          }
-          content={
-            <p className="text-sm font-normal text-[#739072]">
-              Yêu cầu hủy đơn của quý khách đã được xác nhận
-            </p>
-          }
-        />,
-        {
-          position: "bottom-left",
-          autoClose: 10000,
-          closeButton: true,
-        }
-      );
-      setDeletedOrder(newOrder);
-    });
-    socket.on("deliverysuccessfully", (delivery) => {
-      toast(
-        <CustomToast
-          image={<BuyzzleAvt />}
-          iconSVG={<NewOrder />}
-          name={
-            <p className="text-sm font-semibold text-gray-900 ">
-              Buyzzle thông báo
-            </p>
-          }
-          content={
-            <p className="text-sm font-normal text-[#739072]">
-              Đã giao hàng thành công
-            </p>
-          }
-        />,
-        {
-          position: "bottom-left",
-          autoClose: 10000,
-          closeButton: true,
-        }
-      );
-      setDeliverySuccess(delivery);
-    });
-    socket.on("disconnect", () => {
-      console.log(socket.id);
-    });
-  }, []);
+  const notiContext = useNotificationContextUser();
+
   return (
     <CartContext.Provider value={cartCtx}>
-      <div>
+      <NotificationContextUser.Provider value={notiContext}>
         <Header />
         {children}
         <Footer />
-      </div>
+      </NotificationContextUser.Provider>
     </CartContext.Provider>
   );
 }

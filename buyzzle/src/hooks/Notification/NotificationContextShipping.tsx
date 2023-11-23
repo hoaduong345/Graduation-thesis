@@ -45,8 +45,8 @@ export default function useNotificationContextShippping() {
   };
   useEffect(() => {
     const socket = io("http://localhost:5000");
-    socket.on("setstatus", (newOrder) => {
-      console.log("Received deleted order data:", newOrder);
+    socket.on("setstatus", (setstatus) => {
+      console.log("Received deleted order data:", setstatus);
       toast(
         <CustomToast
           image={<BuyzzleAvt />}
@@ -73,7 +73,7 @@ export default function useNotificationContextShippping() {
         countNotification: prevState.countNotification + 1,
       }));
       getAllNotiShipping();
-      setDeletedOrder(newOrder);
+      setDeletedOrder(setstatus);
     });
     socket.on("disconnect", () => {
       console.log(socket.id);

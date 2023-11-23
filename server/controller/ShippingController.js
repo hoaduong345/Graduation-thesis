@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { or } = require('mathjs');
 const { Socket } = require('socket.io');
 const prisma = new PrismaClient();
 
@@ -34,7 +35,7 @@ const ShippingController = {
             if (!order) {
                 return res.status(404).send('Order is undefined');
             }
-            console.log("aaaaaa",order.userId)
+            console.log('aaaaaa', order.userId);
             if (statusOrder === 3) {
                 const io = req.app.get('socketio');
                 io.emit('setstatus', order);
@@ -50,7 +51,7 @@ const ShippingController = {
             }
             if (statusOrder === 5) {
                 const io = req.app.get('socketio');
-                io.emit('deliverysuccessfully', order);
+                io.emit(`deliverysuccessfully/${order.userId}`, order);
 
                 await prisma.notification.create({
                     data: {
@@ -313,7 +314,7 @@ const ShippingController = {
                     deletedAt: new Date(),
                 },
             });
-             await prisma.notification.create({
+            await prisma.notification.create({
                 data: {
                     userId: order.userId,
                     orderId: orderId,
@@ -322,8 +323,9 @@ const ShippingController = {
                     seen: false,
                 },
             });
+            console.log(order.userId);
             const io = req.app.get('socketio');
-            io.emit('confirmCancelOrder', order);
+            io.emit(`confirmCancelOrder/${order.userId}`, order);
             res.status(200).json('Delete order successfully');
         } catch (error) {
             errorResponse(res, error);

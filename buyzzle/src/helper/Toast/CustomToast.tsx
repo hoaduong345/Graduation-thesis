@@ -9,6 +9,7 @@ export default function CustomToast(props: ToastCustomModel) {
   const { image, iconSVG, name, content } = props;
   return (
     <>
+      {/* <a  href={`/orderdetail/${notiItems.orderId}`}> */}
       <div id="toast-notification" role="alert" className=" rounded-lg">
         <div className="flex items-center mb-3">
           <span className="mb-1 text-sm font-semibold text-gray-900">
@@ -26,6 +27,7 @@ export default function CustomToast(props: ToastCustomModel) {
           </div>
         </div>
       </div>
+      {/* </a> */}
     </>
   );
 }

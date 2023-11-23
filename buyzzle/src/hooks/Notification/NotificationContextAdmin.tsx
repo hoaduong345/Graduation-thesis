@@ -53,8 +53,8 @@ export default function useNotificationContextAdmin() {
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
     const socket = io("http://localhost:5000");
-    socket.on("requestdelete", (newOrder) => {
-      console.log("Received deleted order data:", newOrder);
+    socket.on("requestdelete", (requestdelete) => {
+      console.log("Received deleted order data:", requestdelete);
       toast(
         <CustomToast
           image={
@@ -85,7 +85,7 @@ export default function useNotificationContextAdmin() {
         countNotification: prevState.countNotification + 1,
       }));
       getAllNotiAdmin();
-      setDeletedOrder(newOrder);
+      setDeletedOrder(requestdelete);
     });
     socket.on("newOrder", (newOrder) => {
       console.log("Received deleted order data newOrder:", newOrder);

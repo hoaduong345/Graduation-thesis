@@ -8,7 +8,9 @@ export default function HeaderTopAdmin() {
   return (
     <>
       <HeaderTop
-        countNoti={countNotificationAdmin.countNotification}
+        countNoti={
+          countNotificationAdmin ? countNotificationAdmin.countNotification : 0
+        }
         noti={<NotificationAdmin />}
       />
     </>
