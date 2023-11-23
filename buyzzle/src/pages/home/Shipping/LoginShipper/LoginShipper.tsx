@@ -36,7 +36,7 @@ function LoginShipper() {
       shipperController.loginShipper(formData).then((res) => {
          toast.success("Đăng nhập thành công !");
          console.log("res:" + res);
-         localStorage.removeItem("user");
+         // localStorage.removeItem("user");
          const jsonString: string = JSON.stringify(res);
          const jsonObject = JSON.parse(jsonString);
          const username = jsonObject.username;

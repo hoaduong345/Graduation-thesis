@@ -21,12 +21,12 @@ export type FormValues = {
   sex: string;
   phonenumber: string;
   dateOfBirth: string;
-
+  image: string,
 };
 export type FormImage = {
 
   id: number;
-  UserImage: string[];
+  UserImage: string;
 
 }
 type UserData1 = {
@@ -36,6 +36,7 @@ type UserData1 = {
   sex: string,
   phonenumber: string,
   dateOfBirth: string,
+
 }
 export default function UserProfile() {
 
@@ -44,7 +45,7 @@ export default function UserProfile() {
   const [CheckImageUrl, setCheckImageUrl] = useState<boolean>(false);
   const param = useParams();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
@@ -59,7 +60,7 @@ export default function UserProfile() {
   const [email, setEmail] = useState<string>("");
   const [phonenumber, setPhonenumber] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
-
+  // const [isDisabled1,setIsDisable1] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
   // const [UserData1, setUserData1] = useState<UserData1>();
@@ -75,7 +76,8 @@ export default function UserProfile() {
     mode: "all",
     // defaultValues: UserData1
   });
-
+  let isDisabled = !(isValid && isDirty)
+  // setIsDisable(!(isValid && isDirty));
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
   useEffect(() => {
     const fetchData = async () => {
@@ -176,6 +178,7 @@ export default function UserProfile() {
         // sex: JSON.stringify(data?.sex),
         phonenumber: " " + data?.phonenumber,
         dateOfBirth: data?.dateOfBirth,
+
       });
     }
   }
@@ -203,7 +206,8 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-      // console.log("URL IMAGE: "+url);
+      console.log("URL IMAGE: " + url);
+      // FormImage.id = parseInt(id);
       return url;
     } catch (error) {
       console.error(error);
@@ -226,9 +230,10 @@ export default function UserProfile() {
       iduser: id,
       url: url,
     };
+    console.log("IDDDDDDĐ:", urlImages.iduser);
     await axios
-      .put(`${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`, urlImages.url)
-      .then((response) => response.data);
+      .put(`${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`, urlImages)
+      .then((response) => console.log("edithinh" + response.data));
 
   }
 
@@ -245,7 +250,7 @@ export default function UserProfile() {
       formData.sex = JSON.parse(formData.sex);
       formData.email = emailThen;
       formData.phonenumber = sdtThen;
-      console.log("SERVER:" + JSON.stringify(formData));
+      // console.log("SERVER:" + JSON.stringify(formData));
       const response = await axios.put(API, formData);
       FormImage.id = parseInt(id);
       if (response) {
@@ -255,7 +260,7 @@ export default function UserProfile() {
           await addImages(FormImage.id, url);
           setCheckImageUrl(true);
         } else {
-          console.log("IDUSER:" + FormImage.id);
+          console.log("Ao that day:" + FormImage.id);
           await EditImages(FormImage.id, url);
 
         }
@@ -312,20 +317,23 @@ export default function UserProfile() {
     }
   };
 
-
-  const onChangeImage = (e: any) => {
+  // console.log("isDisabled:"+isDisabled)
+  const onChangeImage = (e :any) => {
     const file = e.target.files?.[0];
     if (file) {
       console.log(`Selected file: ${file}`);
       setSelectedFile(file);
       setImage(file);
+
+      // console.log("isDisabled:"+isDisabled)
     } else {
       setSelectedFile(null); // Reset the selectedFile state when no file is selected
-      setImage("" + null); // Reset the imageURL state
+      setImage(null); // Reset the imageURL state
       console.log("No file selected");
     }
   };
-  const isDisabled = !(isValid && isDirty);
+
+
 
   return (
 
@@ -731,16 +739,29 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   }
                                 }}
                               >
-                                <input
-                                  type="file"
-                                  onChange={onChangeImage}
-                                  id="images"
-                                  multiple
-                                  className="hidden"
+                                <Controller
+                                  control={control}
+                                  name="image"
+                                  render={({ field }) => (
+                                    <>
+                                      <input
+                                        type="file"
+                                        onChange={(e) =>{
+                                          onChangeImage(e.target.files);
+                                          field.onChange(e.target.files);
+                                        }
+                                        }
+                                      id="images"
+                                      multiple
+                                      className="hidden"
+                                      />
+                                      <button className="text-center text-sm font-bold text-[#1A1A1A] ">
+                                        Thay đổi ảnh
+                                      </button>
+                                    </>
+                                  )}
                                 />
-                                <button className="text-center text-sm font-bold text-[#1A1A1A] ">
-                                  Thay đổi ảnh
-                                </button>
+
                               </div>
                             </label>
                           </div>

@@ -26,7 +26,7 @@ export default function NotificationAdmin() {
   ]);
   const { getAllNotiAdmin, notificationAdmin, setNotification } =
     useNotificationAdmin();
-
+  // console.log("VCLLLLLLLLl:"+JSON.stringify(notificationAdmin));
   const handleClick = (id: number) => {
     console.log("🚀 ~ file: Notification.tsx:27 ~ handleClick ~ id:", id);
     const updatedButtons = changeButton.map((btn) => {
@@ -59,12 +59,13 @@ export default function NotificationAdmin() {
         return "#ccc";
     }
   }
-
+  // const ImageUser = JSON.parse(localStorage.getItem("avatarUser")!);
   const getOrderFilter = async (status: number) => {
     notificationControllers
       .getFilterNotification(status)
       .then((res: any) => {
         setNotification(res);
+        console.log("CHECKIMGNOT:" + JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
@@ -118,36 +119,61 @@ export default function NotificationAdmin() {
                         <div className="p-1 relative">
                           {notiItems.status == 1 ? (
                             <>
-                              <img
-                                // src={notiItems.fk_order.User.image}
-                                src={Images.avatar_admin}
-                                alt="avatar_admin"
-                                className={`w-12 h-12 rounded-full ${
-                                  notiItems.seen === false ? "" : "opacity-70"
-                                }`}
-                              />
+                              {notiItems.fk_order.User.UserImage?.[0]?.url ? (
+                                <img
+                                  // src={notiItems.fk_order.User.image}
+                                  src={`${notiItems.fk_order.User.UserImage?.[0].url}`}
+                                  alt="avatar_admin"
+                                  className={`w-12 h-12 rounded-full ${notiItems.seen === false ? "" : "opacity-70"
+                                    }`}
+                                />
+                              ) : (
+                                <div
+                                  // src={notiItems.fk_order.User.image}
+                                  // src={`${notiItems.fk_order.User.UserImage?.[0].url}`}
+                                  // alt="avatar_admin"
+                                  className={`w-12 h-12 border-4  rounded-full bg-red-500 pt-2 pb-2 ps-3.5 pe-3.5 ${notiItems.seen === false ? "" : "opacity-70"
+                                    }`}
+                                >
+                                  <p className="text-1xl text-stone-50">
+                                  {(notiItems.fk_order.User.name).substring(0, 1).toUpperCase()}
+                                  </p>
+                                </div>
+                              )}
                               <div
-                                className={`${
-                                  notiItems.seen === false ? "" : "opacity-80"
-                                }`}
+                                className={`${notiItems.seen === false ? "" : "opacity-80"
+                                  }`}
                               >
                                 <NewOrder />
                               </div>
                             </>
                           ) : (
                             <>
-                              <img
-                                // src={notiItems.fk_order.User.image}
-                                src={Images.avatar_admin}
-                                alt="avatar_admin"
-                                className={`w-12 h-12 rounded-full ${
-                                  notiItems.seen === false ? "" : "opacity-70"
-                                }`}
-                              />
+                              {notiItems.fk_order.User.UserImage?.[0]?.url ? (
+                                <img
+                                  // src={notiItems.fk_order.User.image}
+                                  src={`${notiItems.fk_order.User.UserImage?.[0].url}`}
+                                  alt="avatar_admin"
+                                  className={`w-12 h-12 rounded-full ${notiItems.seen === false ? "" : "opacity-70"
+                                    }`}
+                                />
+                              ) : (
+                                <div
+                                  // src={notiItems.fk_order.User.image}
+                                  // src={`${notiItems.fk_order.User.UserImage?.[0].url}`}
+                                  // alt="avatar_admin"
+                                  className={`w-12 h-12 border-4  rounded-full bg-red-500 pt-2 pb-2 ps-3.5 pe-3.5 ${notiItems.seen === false ? "" : "opacity-70"
+                                    }`}
+                                >
+                                  <p className="text-1xl text-stone-50">
+                                  {(notiItems.fk_order.User.name).substring(0, 1).toUpperCase()}
+                                  </p>
+                                </div>
+                              )}
+
                               <div
-                                className={`${
-                                  notiItems.seen === false ? "" : "opacity-80"
-                                }`}
+                                className={`${notiItems.seen === false ? "" : "opacity-80"
+                                  }`}
                               >
                                 <CancelOrder />
                               </div>
@@ -156,31 +182,28 @@ export default function NotificationAdmin() {
                         </div>
                         <div>
                           <div
-                            className={`${
-                              notiItems.seen === false
-                                ? "text-sm font-semibold text-black"
-                                : "text-sm font-semibold text-black opacity-70"
-                            }`}
+                            className={`${notiItems.seen === false
+                              ? "text-sm font-semibold text-black"
+                              : "text-sm font-semibold text-black opacity-70"
+                              }`}
                           >
                             {notiItems.fk_order.User.name}
                           </div>
                           {notiItems.status === 1 ? (
                             <p
-                              className={`${
-                                notiItems.seen === false
-                                  ? "text-[#739072] text-xs font-semibold"
-                                  : "text-[#739072] text-xs font-semibold opacity-70"
-                              }`}
+                              className={`${notiItems.seen === false
+                                ? "text-[#739072] text-xs font-semibold"
+                                : "text-[#739072] text-xs font-semibold opacity-70"
+                                }`}
                             >
                               Đã đặt 1 đơn hàng mới
                             </p>
                           ) : (
                             <p
-                              className={`${
-                                notiItems.seen === false
-                                  ? "text-red-700 text-xs font-semibold"
-                                  : "text-red-700 text-xs font-semibold opacity-70"
-                              }`}
+                              className={`${notiItems.seen === false
+                                ? "text-red-700 text-xs font-semibold"
+                                : "text-red-700 text-xs font-semibold opacity-70"
+                                }`}
                             >
                               Yêu cầu hủy đơn hàng
                             </p>
@@ -189,11 +212,10 @@ export default function NotificationAdmin() {
                       </div>
                       <div className="flex flex-col items-end gap-1 my-2">
                         <span
-                          className={`${
-                            notiItems.seen === false
-                              ? "text-slate-500 text-xs inline-flex items-center rounded"
-                              : "text-slate-500 text-xs inline-flex items-center rounded opacity-70"
-                          }`}
+                          className={`${notiItems.seen === false
+                            ? "text-slate-500 text-xs inline-flex items-center rounded"
+                            : "text-slate-500 text-xs inline-flex items-center rounded opacity-70"
+                            }`}
                         >
                           {notiItems.status === 1 ? (
                             <svg

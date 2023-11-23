@@ -5,15 +5,17 @@ const OderController = {
     createOrder: async (req, res) => {
         try {
             const orderData = req.body.order;
-            const iduser = req.cookies.id;
+            // const iduser = req.cookies.id;
+            // console.log("Ngucxl:", iduser);
             const user = await prisma.user.findFirst({
                 where: {
-                    id: iduser,
+                    id: orderData.iduser,
                 },
                 select: {
                     name: true,
-                    image: true,
+                    username : true,
                 },
+             
             });
 
             const order = await prisma.order.create({
@@ -47,7 +49,7 @@ const OderController = {
             });
             await prisma.notification.create({
                 data: {
-                    userId: iduser,
+                    userId: order.userId,
                     orderId: order.id,
                     message: 'New order',
                     status: 1,
@@ -57,6 +59,7 @@ const OderController = {
 
             const io = req.app.get('socketio');
             io.emit('newOrder', user);
+            // console.log("Testing123:", iduser);
             res.status(200).json(order ?? {});
         } catch (error) {
             console.log(error);
@@ -156,7 +159,15 @@ const OderController = {
                 },
                 include: {
                     OrderDetail: true,
-                    User: true,
+                    User: {
+                        include:{
+                            UserImage:{
+                                select:{
+                                    url: true,
+                                }
+                            }
+                        }
+                    },
                 },
             });
             res.status(200).json(order);
