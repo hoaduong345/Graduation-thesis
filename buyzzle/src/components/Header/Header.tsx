@@ -80,12 +80,13 @@ export default function Header() {
         // setEditUser(res)
         setName(res.name);
         localStorage.setItem("nameUser", JSON.stringify(res.name));
-        // localStorage.setItem("avatarUser", JSON.stringify(res.name));
+        
         setCheckLogin(true);
         const UserImageArray = JSON.stringify(res.UserImage);
         const urlTaker = JSON.parse(UserImageArray);
         setImg(urlTaker[0].url);
         console.log("ID: " + img);
+        localStorage.setItem("avatarUser", JSON.stringify(urlTaker[0].url));    
       });
     } else {
       console.log("Chua Dang Nhap Dung");
@@ -252,7 +253,7 @@ export default function Header() {
                     {checkLogin ? (
                       <a className=" flex gap-2" href={href}>
                         <div className="font-medium flex items-center justify-center">
-                          {username}
+                          {name}
                         </div>
                         {img ? (
                           <div className="relative">

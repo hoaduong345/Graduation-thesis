@@ -304,6 +304,14 @@ const ShippingController = {
                 where: {
                     id: orderId,
                 },
+                include:{
+                    User:{
+                        select:{
+                            name: true,
+                            username: true,
+                        }
+                    }
+                }
             });
             if (!order) return res.send('Order is undifined');
             await prisma.order.update({
@@ -358,11 +366,19 @@ const ShippingController = {
                     fk_order: {
                         include: {
                             User: {
-                                select: {
-                                    name: true,
-                                    image: true,
-                                },
+                                // select: {
+                                //     name: true,
+                                //     username: true,
+                                // },
+                                include:{
+                                    UserImage:{
+                                        select:{
+                                            url: true,
+                                        }
+                                    }
+                                }
                             },
+                         
                         },
                     },
                 },
@@ -454,7 +470,8 @@ const ShippingController = {
             const notifi = await prisma.notification.findMany({
                 where: whereClause,
             });
-            res.status(200).json(notifi);
+            res.status(200).send(notifi);
+            console.log(userId);
         } catch (error) {
             errorResponse(res, error);
         }

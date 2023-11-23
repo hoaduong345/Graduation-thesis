@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import { Images } from "../../assets/TS";
-import { notificationControllers } from "../../controllers/NotificationController";
-import CustomToast from "../../helper/Toast/CustomToast";
-import { AllNotification, NotificationModel } from "../../model/Notification";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { AllNotification, NotificationModel } from "../../model/Notification";
+import { notificationControllers } from "../../controllers/NotificationController";
+import CustomToast from "../../helper/Toast/CustomToast";
+import { userController } from "../../controllers/UserController";
 
 export default function useNotificationContextAdmin() {
   const [countNotificationAdmin, setCountNotificationAdmin] =
@@ -15,7 +15,6 @@ export default function useNotificationContextAdmin() {
   const [notificationAdmin, setNotificationAdmin] = useState<AllNotification[]>(
     []
   );
-
   useEffect(() => {
     getCountNoti();
   }, []);
@@ -29,9 +28,6 @@ export default function useNotificationContextAdmin() {
     });
   };
 
-  const nameUser = localStorage.getItem("nameUser");
-  const userData = JSON.parse(nameUser!);
-
   //   ================================================ SOCKET IO NOTIFICATION ADMIN ================================================
   useEffect(() => {
     getAllNotiAdmin();
@@ -42,7 +38,7 @@ export default function useNotificationContextAdmin() {
       .then((res) => {
         console.log(
           "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
-          res
+          JSON.stringify(res)
         );
         setNotificationAdmin(res.allNotification);
       })
@@ -50,74 +46,95 @@ export default function useNotificationContextAdmin() {
         console.log(err);
       });
   };
+
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
     const socket = io("http://localhost:5000");
-    socket.on("requestdelete", (requestdelete) => {
-      console.log("Received deleted order data:", requestdelete);
+    socket.on("requestdelete", (older) => {
+      console.log("Received deleted order dataaaaaaaaaaaaaa:", older);
+      const urlTaker = older.User.UserImage;
+
       toast(
-        <a href={`/admin/ordermanagement/${requestdelete.id}`}>
-          <CustomToast
-            image={
-              <img
-                className="w-12 h-12 rounded-full"
-                src={Images.avatar_admin}
-                alt="avatar_admin"
-              />
-            }
-            iconSVG={<CancelOrder />}
-            name={
-              <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
-            }
-            content={
-              <p className="text-sm font-normal text-red-700">
-                Đã gửi yêu cầu hủy hàng
-              </p>
-            }
-          />
-        </a>,
+        <CustomToast
+          image={
+            <img
+              className="w-12 h-12 rounded-full"
+              src={`${
+                urlTaker?.length > 0
+                  ? urlTaker[0]?.url
+                  : "https://media.istockphoto.com/id/1223671392/vi/vec-to/%E1%BA%A3nh-h%E1%BB%93-s%C6%A1-m%E1%BA%B7c-%C4%91%E1%BB%8Bnh-h%C3%ACnh-%C4%91%E1%BA%A1i-di%E1%BB%87n-ch%E1%BB%97-d%C3%A0nh-s%E1%BA%B5n-cho-%E1%BA%A3nh-minh-h%E1%BB%8Da-vect%C6%A1.jpg?s=612x612&w=0&k=20&c=l9x3h9RMD16-z4kNjo3z7DXVEORzkxKCMn2IVwn9liI="
+              }`}
+              alt="avatar_admin"
+            />
+          }
+          iconSVG={<CancelOrder />}
+          name={
+            <p className="text-sm font-semibold text-gray-900 ">{older.name}</p>
+          }
+          content={
+            <p className="text-sm font-normal text-red-700">
+              Đã gửi yêu cầu hủy hàng
+            </p>
+          }
+        />,
         {
           position: "bottom-left",
           autoClose: 100000,
           closeButton: true,
         }
       );
+      // });
+
       setCountNotificationAdmin((prevState) => ({
         ...prevState,
         countNotification: prevState.countNotification + 1,
       }));
       getAllNotiAdmin();
-      setDeletedOrder(requestdelete);
+      setDeletedOrder(older);
     });
     socket.on("newOrder", (newOrder) => {
-      console.log("Received deleted order data newOrder:", newOrder);
-      toast(
-        <a href={`/admin/ordermanagement/${newOrder.id}`}>
+      console.log("NewOrderr:", newOrder);
+      userController.getUserWhereUsername(newOrder.username).then((res) => {
+        console.log(
+          "🚀 ~ file: Header.tsx:76 ~ userController.getUserWhereUsername ~ res:",
+          res
+        );
+        const UserImageArray = JSON.stringify(res.UserImage);
+        const urlTaker = JSON.parse(UserImageArray);
+
+        toast(
           <CustomToast
             image={
               <img
                 className="w-12 h-12 rounded-full"
-                src={Images.avatar_admin}
+                src={`${
+                  urlTaker?.length > 0
+                    ? urlTaker[0]?.url
+                    : "https://media.istockphoto.com/id/1223671392/vi/vec-to/%E1%BA%A3nh-h%E1%BB%93-s%C6%A1-m%E1%BA%B7c-%C4%91%E1%BB%8Bnh-h%C3%ACnh-%C4%91%E1%BA%A1i-di%E1%BB%87n-ch%E1%BB%97-d%C3%A0nh-s%E1%BA%B5n-cho-%E1%BA%A3nh-minh-h%E1%BB%8Da-vect%C6%A1.jpg?s=612x612&w=0&k=20&c=l9x3h9RMD16-z4kNjo3z7DXVEORzkxKCMn2IVwn9liI="
+                }`}
                 alt="avatar_admin"
               />
             }
             iconSVG={<NewOrder />}
             name={
-              <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
+              <p className="text-sm font-semibold text-gray-900 ">
+                {newOrder.name}
+              </p>
             }
             content={
               <p className="text-sm font-normal text-[#739072]">
                 Có 1 đơn hàng mới
               </p>
             }
-          />
-        </a>,
-        {
-          position: "bottom-left",
-          autoClose: 10000,
-          closeButton: true,
-        }
-      );
+          />,
+          {
+            position: "bottom-left",
+            autoClose: 10000,
+            closeButton: true,
+          }
+        );
+      });
+
       setCountNotificationAdmin((prevState) => ({
         ...prevState,
         countNotification: prevState.countNotification + 1,
@@ -135,6 +152,7 @@ export default function useNotificationContextAdmin() {
     // admin
     notificationAdmin,
     countNotificationAdmin,
+    // ImgUser,
     getAllNotiAdmin,
   };
 }
