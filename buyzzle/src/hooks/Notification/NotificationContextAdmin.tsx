@@ -50,59 +50,12 @@ export default function useNotificationContextAdmin() {
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
     const socket = io("http://localhost:5000");
-    socket.on("requestdelete", (older) => {
-      console.log("Received deleted order dataaaaaaaaaaaaaa:", older);
-      const urlTaker = older.User.UserImage;
+    socket.on("requestdelete", (requestdelete) => {
+      console.log("Received deleted order dataaaaaaaaaaaaaa:", requestdelete);
+      const urlTaker = requestdelete.User.UserImage;
 
       toast(
-        <CustomToast
-          image={
-            <img
-              className="w-12 h-12 rounded-full"
-              src={`${
-                urlTaker?.length > 0
-                  ? urlTaker[0]?.url
-                  : "https://media.istockphoto.com/id/1223671392/vi/vec-to/%E1%BA%A3nh-h%E1%BB%93-s%C6%A1-m%E1%BA%B7c-%C4%91%E1%BB%8Bnh-h%C3%ACnh-%C4%91%E1%BA%A1i-di%E1%BB%87n-ch%E1%BB%97-d%C3%A0nh-s%E1%BA%B5n-cho-%E1%BA%A3nh-minh-h%E1%BB%8Da-vect%C6%A1.jpg?s=612x612&w=0&k=20&c=l9x3h9RMD16-z4kNjo3z7DXVEORzkxKCMn2IVwn9liI="
-              }`}
-              alt="avatar_admin"
-            />
-          }
-          iconSVG={<CancelOrder />}
-          name={
-            <p className="text-sm font-semibold text-gray-900 ">{older.name}</p>
-          }
-          content={
-            <p className="text-sm font-normal text-red-700">
-              Đã gửi yêu cầu hủy hàng
-            </p>
-          }
-        />,
-        {
-          position: "bottom-left",
-          autoClose: 100000,
-          closeButton: true,
-        }
-      );
-      // });
-
-      setCountNotificationAdmin((prevState) => ({
-        ...prevState,
-        countNotification: prevState.countNotification + 1,
-      }));
-      getAllNotiAdmin();
-      setDeletedOrder(older);
-    });
-    socket.on("newOrder", (newOrder) => {
-      console.log("NewOrderr:", newOrder);
-      userController.getUserWhereUsername(newOrder.username).then((res) => {
-        console.log(
-          "🚀 ~ file: Header.tsx:76 ~ userController.getUserWhereUsername ~ res:",
-          res
-        );
-        const UserImageArray = JSON.stringify(res.UserImage);
-        const urlTaker = JSON.parse(UserImageArray);
-
-        toast(
+        <a href={`/admin/ordermanagement/${requestdelete.id}`}>
           <CustomToast
             image={
               <img
@@ -115,18 +68,70 @@ export default function useNotificationContextAdmin() {
                 alt="avatar_admin"
               />
             }
-            iconSVG={<NewOrder />}
+            iconSVG={<CancelOrder />}
             name={
               <p className="text-sm font-semibold text-gray-900 ">
-                {newOrder.name}
+                {requestdelete.name}
               </p>
             }
             content={
-              <p className="text-sm font-normal text-[#739072]">
-                Có 1 đơn hàng mới
+              <p className="text-sm font-normal text-red-700">
+                Đã gửi yêu cầu hủy hàng
               </p>
             }
-          />,
+          />
+        </a>,
+        {
+          position: "bottom-left",
+          autoClose: 100000,
+          closeButton: true,
+        }
+      );
+
+      setCountNotificationAdmin((prevState) => ({
+        ...prevState,
+        countNotification: prevState.countNotification + 1,
+      }));
+      getAllNotiAdmin();
+      setDeletedOrder(requestdelete);
+    });
+    socket.on("newOrder", (newOrder) => {
+      console.log("NewOrderr:", newOrder);
+      userController.getUserWhereUsername(newOrder.username).then((res) => {
+        console.log(
+          "🚀 ~ file: Header.tsx:76 ~ userController.getUserWhereUsername ~ res:",
+          res
+        );
+        const UserImageArray = JSON.stringify(res.UserImage);
+        const urlTaker = JSON.parse(UserImageArray);
+
+        toast(
+          <a href={`/admin/ordermanagement/${newOrder.id}`}>
+            <CustomToast
+              image={
+                <img
+                  className="w-12 h-12 rounded-full"
+                  src={`${
+                    urlTaker?.length > 0
+                      ? urlTaker[0]?.url
+                      : "https://media.istockphoto.com/id/1223671392/vi/vec-to/%E1%BA%A3nh-h%E1%BB%93-s%C6%A1-m%E1%BA%B7c-%C4%91%E1%BB%8Bnh-h%C3%ACnh-%C4%91%E1%BA%A1i-di%E1%BB%87n-ch%E1%BB%97-d%C3%A0nh-s%E1%BA%B5n-cho-%E1%BA%A3nh-minh-h%E1%BB%8Da-vect%C6%A1.jpg?s=612x612&w=0&k=20&c=l9x3h9RMD16-z4kNjo3z7DXVEORzkxKCMn2IVwn9liI="
+                  }`}
+                  alt="avatar_admin"
+                />
+              }
+              iconSVG={<NewOrder />}
+              name={
+                <p className="text-sm font-semibold text-gray-900 ">
+                  {newOrder.name}
+                </p>
+              }
+              content={
+                <p className="text-sm font-normal text-[#739072]">
+                  Có 1 đơn hàng mới
+                </p>
+              }
+            />
+          </a>,
           {
             position: "bottom-left",
             autoClose: 10000,
