@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { Socket } = require('socket.io');
 const prisma = new PrismaClient();
 
 const errorResponse = (res, error) => {
@@ -9,7 +10,8 @@ const errorResponse = (res, error) => {
 const ShippingController = {
     setStatus: async (req, res) => {
         try {
-            const userId = parseInt(req.body.id);
+            const userId = parseInt(req.cookies.id);
+            console.log('🚀 ~ file: ShippingController.js:13 ~ setStatus: ~ userId:', userId);
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status);
 
@@ -47,20 +49,20 @@ const ShippingController = {
                     },
                 });
             }
-            // if (statusOrder === 5) {
-            //     const io = req.app.get('socketio');
-            //     io.emit('deliverysuccessfully', order);
+            if (statusOrder === 5) {
+                const io = req.app.get('socketio');
+                io.emit('deliverysuccessfully', order);
 
-            //     await prisma.notification.create({
-            //         data: {
-            //             user: userId,
-            //             orderId: orderId,
-            //             message: 'Delivery Successfully',
-            //             status: 5,
-            //             seen: false,
-            //         },
-            //     });
-            // }
+                await prisma.notification.create({
+                    data: {
+                        userId: userId,
+                        orderId: orderId,
+                        message: 'Delivery Successfully',
+                        status: 5,
+                        seen: false,
+                    },
+                });
+            }
             await prisma.order.update({
                 where: {
                     id: orderId,
@@ -330,9 +332,8 @@ const ShippingController = {
                     seen: false,
                 },
             });
-            console.log('🚀 ~ file: ShippingController.js:333 ~ confirmDeleteOrder: ~ noti:', noti);
             const io = req.app.get('socketio');
-            io.emit('confirmCancelOrder', order);
+            io.to().emit('confirmCancelOrder', order);
             res.status(200).json('Delete order successfully');
         } catch (error) {
             errorResponse(res, error);

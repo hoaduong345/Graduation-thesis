@@ -15,11 +15,10 @@ function MainLayout({ children }: Props) {
   const cartCtx = useCartContext();
   //socket Noti adminRole confirmRequestcancelOrder
   const [deletedOrder, setDeletedOrder] = useState(null);
-
+  const [deliverySuccess, setDeliverySuccess ] = useState(null)
   useEffect(() => {
     const socket = io("http://localhost:5000");
     socket.on("confirmCancelOrder", (newOrder) => {
-      console.log("Received deleted order data:", newOrder);
       toast(
         <CustomToast
           image={<BuyzzleAvt />}
@@ -42,6 +41,30 @@ function MainLayout({ children }: Props) {
         }
       );
       setDeletedOrder(newOrder);
+    });
+    socket.on("deliverysuccessfully", (delivery) => {
+      toast(
+        <CustomToast
+          image={<BuyzzleAvt />}
+          iconSVG={<NewOrder />}
+          name={
+            <p className="text-sm font-semibold text-gray-900 ">
+              Buyzzle thông báo
+            </p>
+          }
+          content={
+            <p className="text-sm font-normal text-[#739072]">
+              Đã giao hàng thành công
+            </p>
+          }
+        />,
+        {
+          position: "bottom-left",
+          autoClose: 10000,
+          closeButton: true,
+        }
+      );
+      setDeliverySuccess(delivery);
     });
     socket.on("disconnect", () => {
       console.log(socket.id);

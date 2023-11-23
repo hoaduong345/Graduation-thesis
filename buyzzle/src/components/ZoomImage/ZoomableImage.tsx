@@ -1,4 +1,3 @@
-import ReactImageMagnify from "react-image-magnify";
 import Zoom from "react-img-zoom";
 
 interface Zoomable {

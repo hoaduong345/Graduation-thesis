@@ -2,8 +2,11 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const morgan = require('morgan');
+const redis = require('redis');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const bodyParser = require('body-parser');
+
 const AuthRouter = require('./routes/AuthRoutes');
 const CartRouter = require('./routes/CartRoutes');
 const UserRouter = require('./routes/UserRoutes');
@@ -16,12 +19,13 @@ const VoucherRouter = require('./routes/VoucherRoutes');
 const SripeRouter = require('./routes/StripeRoutes');
 const OrderRouter = require('./routes/OrderRoutes');
 const AdminShippingRouter = require('./routes/AdminShippingRouter');
-
 const AdminRouter = require('./routes/AdminRouter');
-const cookieParser = require('cookie-parser');
+
 const { createServer } = require('http');
 const { Server } = require('socket.io');
-
+const redisClient = redis.createClient({
+    url: process.env.REDIS_URI,
+});
 dotenv.config();
 
 const app = express();
@@ -33,7 +37,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan('common'));
 
-const whitelist = ['http://localhost:5173', 'https://www.getpostman.com', 'https://app.getpostman.com', 'http://localhost:5000'];
+const whitelist = [
+    'http://localhost:5173',
+    'https://www.getpostman.com',
+    'https://app.getpostman.com',
+    'http://localhost:5000',
+];
 const corsOptions = {
     origin: (origin, callback) => {
         if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -69,24 +78,35 @@ app.use('/shipping/management', AdminShippingRouter);
 
 // Setup socket.io
 const io = new Server(httpServer, {
-    cors :{
+    cors: {
         origin: ['http://localhost:5000', 'http://localhost:5173'],
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
     },
-    allowEIO3: true
+    allowEIO3: true,
 });
 
 app.set('socketio', io);
+
+// await client.connect();
+redisClient.on('error', err => console.log('Redis Client Error', err));
+
+redisClient.on('ready', () => {
+    console.log('Redis client connected and ready to process commands');
+});
+
+
 io.on('connection', (socket) => {
-    console.log(`user ${socket.id} connected`);
-    
+    const socketId = socket.id;
+    console.log(`user ${socketId} connected`);
     socket.on('disconnect', () => {
-        console.log(`user ${socket.id} disconnected`);
+        console.log(`user ${socketId} disconnected`);
+ 
     });
 });
 
 httpServer.listen(process.env.APP_PORT || 5000, () => {
     console.log('Server up and running on port ' + process.env.APP_PORT);
 });
+
