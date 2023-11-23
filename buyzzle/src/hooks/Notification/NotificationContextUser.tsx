@@ -81,20 +81,22 @@ export default function useNotificationContextUser() {
     });
     socket.on(`deliverysuccessfully/${idUser}`, (deliverysuccessfully) => {
       toast(
-        <CustomToast
-          image={<BuyzzleAvt />}
-          iconSVG={<NewOrder />}
-          name={
-            <p className="text-sm font-semibold text-gray-900 ">
-              Buyzzle thông báo
-            </p>
-          }
-          content={
-            <p className="text-sm font-normal text-[#739072]">
-              Đã giao hàng thành công
-            </p>
-          }
-        />,
+        <a href={`/orderdetail/${deliverysuccessfully.id}`}>
+          <CustomToast
+            image={<BuyzzleAvt />}
+            iconSVG={<NewOrder />}
+            name={
+              <p className="text-sm font-semibold text-gray-900 ">
+                Buyzzle thông báo
+              </p>
+            }
+            content={
+              <p className="text-sm font-normal text-[#739072]">
+                Đã giao hàng thành công
+              </p>
+            }
+          />
+        </a>,
         {
           position: "bottom-left",
           autoClose: 10000,

@@ -48,20 +48,22 @@ export default function useNotificationContextShippping() {
     socket.on("setstatus", (setstatus) => {
       console.log("Received deleted order data:", setstatus);
       toast(
-        <CustomToast
-          image={<BuyzzleAvt />}
-          iconSVG={<Shipping />}
-          name={
-            <p className="text-sm font-semibold text-gray-900 ">
-              Buyzzle thông báo
-            </p>
-          }
-          content={
-            <p className="text-sm font-normal text-[#739072]">
-              Có đơn hàng mới từ chúng tôi
-            </p>
-          }
-        />,
+        <a href={`/shipping/detail/${setstatus.id}`}>
+          <CustomToast
+            image={<BuyzzleAvt />}
+            iconSVG={<Shipping />}
+            name={
+              <p className="text-sm font-semibold text-gray-900 ">
+                Buyzzle thông báo
+              </p>
+            }
+            content={
+              <p className="text-sm font-normal text-[#739072]">
+                Có đơn hàng mới từ chúng tôi
+              </p>
+            }
+          />
+        </a>,
         {
           position: "bottom-left",
           autoClose: 100000,

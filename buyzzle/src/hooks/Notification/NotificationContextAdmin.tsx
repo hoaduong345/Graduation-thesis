@@ -56,24 +56,26 @@ export default function useNotificationContextAdmin() {
     socket.on("requestdelete", (requestdelete) => {
       console.log("Received deleted order data:", requestdelete);
       toast(
-        <CustomToast
-          image={
-            <img
-              className="w-12 h-12 rounded-full"
-              src={Images.avatar_admin}
-              alt="avatar_admin"
-            />
-          }
-          iconSVG={<CancelOrder />}
-          name={
-            <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
-          }
-          content={
-            <p className="text-sm font-normal text-red-700">
-              Đã gửi yêu cầu hủy hàng
-            </p>
-          }
-        />,
+        <a href={`/admin/ordermanagement/${requestdelete.id}`}>
+          <CustomToast
+            image={
+              <img
+                className="w-12 h-12 rounded-full"
+                src={Images.avatar_admin}
+                alt="avatar_admin"
+              />
+            }
+            iconSVG={<CancelOrder />}
+            name={
+              <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
+            }
+            content={
+              <p className="text-sm font-normal text-red-700">
+                Đã gửi yêu cầu hủy hàng
+              </p>
+            }
+          />
+        </a>,
         {
           position: "bottom-left",
           autoClose: 100000,
@@ -90,24 +92,26 @@ export default function useNotificationContextAdmin() {
     socket.on("newOrder", (newOrder) => {
       console.log("Received deleted order data newOrder:", newOrder);
       toast(
-        <CustomToast
-          image={
-            <img
-              className="w-12 h-12 rounded-full"
-              src={Images.avatar_admin}
-              alt="avatar_admin"
-            />
-          }
-          iconSVG={<NewOrder />}
-          name={
-            <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
-          }
-          content={
-            <p className="text-sm font-normal text-[#739072]">
-              Có 1 đơn hàng mới
-            </p>
-          }
-        />,
+        <a href={`/admin/ordermanagement/${newOrder.id}`}>
+          <CustomToast
+            image={
+              <img
+                className="w-12 h-12 rounded-full"
+                src={Images.avatar_admin}
+                alt="avatar_admin"
+              />
+            }
+            iconSVG={<NewOrder />}
+            name={
+              <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
+            }
+            content={
+              <p className="text-sm font-normal text-[#739072]">
+                Có 1 đơn hàng mới
+              </p>
+            }
+          />
+        </a>,
         {
           position: "bottom-left",
           autoClose: 10000,
