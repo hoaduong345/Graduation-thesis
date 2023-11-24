@@ -1,13 +1,12 @@
 .register-bg {
-  background-image: url("../../Assets/PNG/NewProject.png");
+  background-image: url("../../assets/PNG/NewProject.png");
   /* max-height: 1083px;
     max-width: 963px;*/
-   height: 1083px;
+  height: 1083px;
 }
 
 .registerform-bg {
   background-color: #ffffff;
-
 }
 
 .registration-form {
@@ -29,23 +28,20 @@
   height: 46px;
   padding: 10px;
   /* margin-bottom: 15px; */
-  border: 1px solid #FFAAAF;
+  border: 1px solid #ffaaaf;
   border-radius: 6px;
 }
 
-
 /* Kiểu cho phần tử button */
-
 
 /* Kiểu cho tiêu đề form */
 .registration-form h2 {
   margin-bottom: 15px;
   text-align: center;
-  color: #FFAAAF;
+  color: #ffaaaf;
   font-weight: 700;
   font-size: 50px;
   line-height: 38px;
-
 }
 
 /* Kiểu cho checkbox */
@@ -72,14 +68,13 @@
 
 /* Kiểu cho checkbox khi đã được chọn */
 .custom-checkbox:checked {
-  background-color: #EA4B48;
-  border-color: #FFAAAF;
+  background-color: #ea4b48;
+  border-color: #ffaaaf;
 }
-
 
 /* Kiểu cho dấu check (tick) trong checkbox khi đã được chọn */
 .custom-checkbox:checked::before {
-  content: '\2713';
+  content: "\2713";
   /* Dấu check (tick) Unicode */
   color: white;
   position: absolute;

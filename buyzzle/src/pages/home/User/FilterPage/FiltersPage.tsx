@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import {
-  createSearchParams,
-  useSearchParams
-} from "react-router-dom";
-import BookOff from "../../../../Assets/TSX/BookOff";
-import FoodLogo from "../../../../Assets/TSX/FoodLogo";
-import FoodLogoo from "../../../../Assets/TSX/FoodLogoo";
-import MangoLogo from "../../../../Assets/TSX/MangoLogo";
-import Series from "../../../../Assets/TSX/Series";
-import StepsLogo from "../../../../Assets/TSX/StepsLogo";
-import { categoryController } from "../../../../Controllers/CategoryController";
-import { productController } from "../../../../Controllers/ProductsController";
-import { roundedNumber } from "../../../../Helper/Format";
-import { subCate } from "../../../../Model/CategoryModel";
-import { Rate, Row } from "../../../../Model/ProductModel";
+import { createSearchParams, useSearchParams } from "react-router-dom";
+import BookOff from "../../../../assets/TSX/BookOff";
+import FoodLogo from "../../../../assets/TSX/FoodLogo";
+import FoodLogoo from "../../../../assets/TSX/FoodLogoo";
+import MangoLogo from "../../../../assets/TSX/MangoLogo";
+import Series from "../../../../assets/TSX/Series";
+import StepsLogo from "../../../../assets/TSX/StepsLogo";
+import { categoryController } from "../../../../controllers/CategoryController";
+import { productController } from "../../../../controllers/ProductsController";
+import { roundedNumber } from "../../../../helper/Format";
+import { subCate } from "../../../../model/CategoryModel";
+import { Rate, Row } from "../../../../model/ProductModel";
 import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
 import Container from "../../../../components/container/Container";
 import SlidesFilter from "../../../../components/home/components/slides/SlidesFilter/SlidesFilter";
@@ -90,18 +87,18 @@ export default function FiltersPage() {
 
   const urlSliderValues = searchParams.get("sliderValues");
 
-  const [subcate, setSubcate] = useState<subCate[]>([])
+  const [subcate, setSubcate] = useState<subCate[]>([]);
 
   const getCate = (index: number) => {
     categoryController.getCateFilter(nameCateValue?.toString()).then((res) => {
-      setSubcate(res)
-      console.log(index)
-      setProducts(res[index].productId)
-    })
-  }
+      setSubcate(res);
+      console.log(index);
+      setProducts(res[index].productId);
+    });
+  };
   useEffect(() => {
-    getCate(NaN)
-  }, [])
+    getCate(NaN);
+  }, []);
 
   useEffect(() => {
     // Kiểm tra nếu giá trị slider thay đổi thì mới cập nhật URL
@@ -236,10 +233,18 @@ export default function FiltersPage() {
       });
   };
 
-  const [btnHighToLowThrottle] = useThrottle(handleActiveBTNHighToLowClick, 2000);
-  const [btnLowToHighThrottle] = useThrottle(handleActiveBTNLowToHighClick, 2000);
-  const [btnLatestCreationDateThrottle] = useThrottle(handleActiveBTNLatestCreationDate, 2000);
-
+  const [btnHighToLowThrottle] = useThrottle(
+    handleActiveBTNHighToLowClick,
+    2000
+  );
+  const [btnLowToHighThrottle] = useThrottle(
+    handleActiveBTNLowToHighClick,
+    2000
+  );
+  const [btnLatestCreationDateThrottle] = useThrottle(
+    handleActiveBTNLatestCreationDate,
+    2000
+  );
 
   return (
     <Container>
@@ -255,7 +260,6 @@ export default function FiltersPage() {
               onPurchaseRangeChange={function (value: [number, number]): void {
                 throw new Error("Function not implemented.");
               }}
-
               subcate={subcate}
               setProductSubcate={(index) => getCate(index)}
             />

@@ -1,4 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
+const { or } = require('mathjs');
+const { Socket } = require('socket.io');
 const prisma = new PrismaClient();
 
 const errorResponse = (res, error) => {
@@ -9,7 +11,6 @@ const errorResponse = (res, error) => {
 const ShippingController = {
     setStatus: async (req, res) => {
         try {
-            const userId = parseInt(req.body.id);
             const orderId = parseInt(req.body.id);
             const statusOrder = parseInt(req.body.status);
 
@@ -34,6 +35,7 @@ const ShippingController = {
             if (!order) {
                 return res.status(404).send('Order is undefined');
             }
+            console.log('aaaaaa', order.userId);
             if (statusOrder === 3) {
                 const io = req.app.get('socketio');
                 io.emit('setstatus', order);
@@ -47,20 +49,20 @@ const ShippingController = {
                     },
                 });
             }
-            // if (statusOrder === 5) {
-            //     const io = req.app.get('socketio');
-            //     io.emit('deliverysuccessfully', order);
+            if (statusOrder === 5) {
+                const io = req.app.get('socketio');
+                io.emit(`deliverysuccessfully/${order.userId}`, order);
 
-            //     await prisma.notification.create({
-            //         data: {
-            //             user: userId,
-            //             orderId: orderId,
-            //             message: 'Delivery Successfully',
-            //             status: 5,
-            //             seen: false,
-            //         },
-            //     });
-            // }
+                await prisma.notification.create({
+                    data: {
+                        userId: order.userId,
+                        orderId: orderId,
+                        message: 'Delivery Successfully',
+                        status: 5,
+                        seen: false,
+                    },
+                });
+            }
             await prisma.order.update({
                 where: {
                     id: orderId,
@@ -297,22 +299,21 @@ const ShippingController = {
     },
     confirmDeleteOrder: async (req, res) => {
         try {
-            const userId = parseInt(req.cookies.id);
-            console.log('🚀 ~ file: ShippingController.js:301 ~ confirmDeleteOrder: ~ userId:', userId);
             const orderId = parseInt(req.body.orderId);
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: userId,
-                },
-            });
             const order = await prisma.order.findFirst({
                 where: {
                     id: orderId,
                 },
+                include: {
+                    User: {
+                        select: {
+                            name: true,
+                            username: true,
+                        },
+                    },
+                },
             });
-
             if (!order) return res.send('Order is undifined');
-            if (!user) return res.send('AccessToken is expried');
             await prisma.order.update({
                 where: {
                     id: order.id,
@@ -321,18 +322,18 @@ const ShippingController = {
                     deletedAt: new Date(),
                 },
             });
-            const noti = await prisma.notification.create({
+            await prisma.notification.create({
                 data: {
-                    userId: user.id,
+                    userId: order.userId,
                     orderId: orderId,
                     message: 'Delete order successfully',
                     status: 4,
                     seen: false,
                 },
             });
-            console.log('🚀 ~ file: ShippingController.js:333 ~ confirmDeleteOrder: ~ noti:', noti);
+            console.log(order.userId);
             const io = req.app.get('socketio');
-            io.emit('confirmCancelOrder', order);
+            io.emit(`confirmCancelOrder/${order.userId}`, order);
             res.status(200).json('Delete order successfully');
         } catch (error) {
             errorResponse(res, error);
@@ -365,9 +366,16 @@ const ShippingController = {
                     fk_order: {
                         include: {
                             User: {
-                                select: {
-                                    name: true,
-                                    image: true,
+                                // select: {
+                                //     name: true,
+                                //     username: true,
+                                // },
+                                include: {
+                                    UserImage: {
+                                        select: {
+                                            url: true,
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -417,7 +425,11 @@ const ShippingController = {
                             User: {
                                 select: {
                                     name: true,
-                                    image: true,
+                                    UserImage: {
+                                        select: {
+                                            url: true,
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -460,8 +472,31 @@ const ShippingController = {
             };
             const notifi = await prisma.notification.findMany({
                 where: whereClause,
+                orderBy: {
+                    id: 'desc',
+                },
+                include: {
+                    fk_user: {
+                        select: {
+                            name: true,
+                            UserImage: {
+                                select: {
+                                    url: true,
+                                },
+                            },
+                        },
+                    },
+                },
             });
-            res.status(200).json(notifi);
+            const countNotification = await prisma.notification.count({
+                where: whereClause,
+            });
+
+            const result = {
+                allNotification: notifi,
+                countNotification: countNotification,
+            };
+            res.status(200).json(result);
         } catch (error) {
             errorResponse(res, error);
         }

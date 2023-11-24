@@ -14,25 +14,25 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import { toast } from "react-toastify";
-import { Images } from "../../../../../Assets/TS";
-import ArrowDown from "../../../../../Assets/TSX/ArrowDown";
-import ArrowUp from "../../../../../Assets/TSX/ArrowUp";
-import Minus from "../../../../../Assets/TSX/Minus";
-import Plus from "../../../../../Assets/TSX/Plus";
-import SuccessIcon from "../../../../../Assets/TSX/SuccessIcon";
-import { productController } from "../../../../../Controllers/ProductsController";
-import { ratingAndCommentController } from "../../../../../Controllers/Rating&Comment";
-import WarningQuantityCart from "../../../../../Helper/Dialog/WarningQuantityCart";
-import { numberFormat, roundedNumber } from "../../../../../Helper/Format";
-import { stars } from "../../../../../Helper/StarRating/Star";
-import { Rate, Ratee, Rating, Row } from "../../../../../Model/ProductModel";
+import { Images } from "../../../../../assets/TS";
+import Minus from "../../../../../assets/TSX/Minus";
+import Plus from "../../../../../assets/TSX/Plus";
+import SuccessIcon from "../../../../../assets/TSX/SuccessIcon";
 import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
 import Container from "../../../../../components/container/Container";
 import { appConfig } from "../../../../../configsEnv";
+import { productController } from "../../../../../controllers/ProductsController";
+import { ratingAndCommentController } from "../../../../../controllers/Rating&Comment";
+import WarningQuantityCart from "../../../../../helper/Dialog/WarningQuantityCart";
+import { numberFormat, roundedNumber } from "../../../../../helper/Format";
+import { stars } from "../../../../../helper/StarRating/Star";
 import { useCart } from "../../../../../hooks/Cart/CartContextProvider";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
-import Cart from "../../../Admin/Assets/TSX/Cart";
-import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
+import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
+
+import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
+import Cart from "../../../admin/assets/TSX/Cart";
+import SaveLink from "../../../admin/assets/TSX/SaveLink";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 export interface ImgOfProduct {
@@ -105,6 +105,7 @@ export default function DetailsProduct() {
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (first) {
+      setSelectedImageIndex(0);
       setSelectedRating(roundedNumber(first.averageRating));
     }
   }, [first]);
@@ -176,10 +177,6 @@ export default function DetailsProduct() {
   };
 
   const RecommandProductDetailPage = (id: number) => {
-    console.log(
-      "🚀 ~ file: Detailproducts.tsx:76 ~ RecommandProductDetailPage ~ id:",
-      id
-    );
     productController
       .getProductSuggest(id)
       .then((res: any) => {
@@ -229,10 +226,6 @@ export default function DetailsProduct() {
   }, [first]);
   //Xóa comment
   const handleRemoveRating = (id: number) => {
-    console.log(
-      "🚀 ~ file: DetailsProduct.tsx:235 ~ handleRemoveRating ~ id:",
-      id
-    );
     ratingAndCommentController.RemoveRatingAndComment(id).then((_) => {
       if (rateAndcomment) {
         const removedRatings = rateAndcomment.Rating?.filter(
@@ -250,14 +243,7 @@ export default function DetailsProduct() {
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
   };
-  const handleArrowUpClick = () => {
-    const newIndex = selectedImageIndex - 1 < 0 ? 0 : selectedImageIndex - 1;
-    setSelectedImageIndex(newIndex);
-  };
-  const handleArrowDownClick = () => {
-    const newIndex = selectedImageIndex + 1 >= 4 ? 4 : selectedImageIndex + 1;
-    setSelectedImageIndex(newIndex);
-  };
+
   const coppyLink = (link: string) => {
     copy(link, {
       debug: true,
@@ -274,10 +260,6 @@ export default function DetailsProduct() {
   };
   const handlePageChange = (page: number) => {
     setRateAndcomment({ ...rateAndcomment, currentPage: page });
-    console.log(
-      "🚀 ~ file: DetailsProduct.tsx:275 ~ handlePageChange ~ rateAndcomment:",
-      rateAndcomment
-    );
   };
 
   const isSoldOut = first?.productDetail?.quantity == 0;
@@ -287,11 +269,11 @@ export default function DetailsProduct() {
       <Container>
         <body className="body-detail container mx-auto">
           <div className="grid gap-4 grid-cols-10 mt-24 h-full">
-            <div className="col-span-4">
-              {first?.productDetail && (
+            <div className="col-span-4 z-10">
+              {/* {first?.productDetail && (
                 <div>
                   <img
-                    className="w-[533px] h-[388px] object-contain"
+                    className="w-[600px] h-[430px] object-contain"
                     src={
                       first?.productDetail?.ProductImage?.[selectedImageIndex]
                         ?.url
@@ -299,45 +281,37 @@ export default function DetailsProduct() {
                     alt=""
                   />
                 </div>
+              )} */}
+              {first?.productDetail && (
+                <ZoomableImage
+                  images={
+                    first?.productDetail?.ProductImage?.[selectedImageIndex]
+                      ?.url
+                  }
+                />
               )}
             </div>
-            <div>
-              <div>
-                <div className="col-span-2 grid grid-rows-4 grid-flow-col gap-3 relative ">
-                  <div
-                    className="cursor-pointer absolute border-[1px] left-[20%] 
-                                    px-4 py-2 w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md top-[-17px] 
-                                    "
-                    onClick={handleArrowUpClick}
-                  >
-                    <ArrowUp />
-                  </div>
-
-                  {first?.productDetail &&
-                    first.productDetail.ProductImage &&
-                    first.productDetail.ProductImage.slice(1, 5).map(
-                      (e, index) => {
-                        return (
-                          <img
-                            key={index}
-                            className="h-[88px] w-[88px]"
-                            src={e.url}
-                            alt=""
-                            onClick={() => handleImageClick(index + 1)}
-                          />
-                        );
-                      }
-                    )}
-
-                  <div
-                    className="cursor-pointer absolute border-[1px] left-[20%] 
-                              px-4 pb-[7.5px] pt-[8px] w-11 opacity-50 bg-[#CACACD] border-[#EA4B48] rounded-md bottom-[-17px] 
-                                    "
-                    onClick={handleArrowDownClick}
-                  >
-                    <ArrowDown />
-                  </div>
-                </div>
+            <div className="my-auto">
+              <div className="col-span-1 grid gap-3">
+                {first?.productDetail &&
+                  first.productDetail.ProductImage &&
+                  first.productDetail.ProductImage.slice(0, 5).map(
+                    (e, index) => {
+                      return (
+                        <img
+                          key={index}
+                          className={`h-[75px] w-[75px] ${
+                            selectedImageIndex === index
+                              ? "border-2 border-blue-500"
+                              : ""
+                          }`}
+                          src={e.url}
+                          alt=""
+                          onClick={() => handleImageClick(index)}
+                        />
+                      );
+                    }
+                  )}
               </div>
             </div>
             <div className="col-span-5">
@@ -590,10 +564,6 @@ export default function DetailsProduct() {
             <div className="mt-11 col-span-2 ">
               <div className="flex flex-wrap gap-3 ">
                 {recommandProduct.slice(0, 8).map((items) => {
-                  console.log(
-                    "🚀 ~ file: Detailproducts.tsx:247 ~ recommandProduct?.rows?.map ~ itemsssss:",
-                    items
-                  );
                   return (
                     <>
                       <DetailRecommandProduct productRecommand={items} />
@@ -732,10 +702,6 @@ export default function DetailsProduct() {
           <div className="mt-11 col-span-2 ">
             <div className="flex flex-wrap gap-3 ">
               {recommandProduct.map((items) => {
-                console.log(
-                  "🚀 ~ file: Detailproducts.tsx:247 ~ recommandProduct?.rows?.map ~ itemsssss:",
-                  items
-                );
                 return (
                   <>
                     <DetailRecommandProduct productRecommand={items} />

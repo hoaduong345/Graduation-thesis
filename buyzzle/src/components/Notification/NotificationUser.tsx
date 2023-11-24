@@ -1,40 +1,12 @@
-import { useEffect, useState } from "react";
-import { notificationControllers } from "../../Controllers/NotificationController";
-import { AllNotification } from "../../Model/Notification";
-import { Images } from "../../Assets/TS";
-import NewOrder from "../../layout/asset/TSX/NewOrder";
-import CancelOrder from "../../layout/asset/TSX/CancelOrder";
+import moment from "moment";
+import { useNotificationUser } from "../../hooks/Notification/NotificationContextUser";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
+import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { handleSeenNoti } from "./components/SeenNoti";
 
 export default function NotificationUser() {
-  const [notification, setNotification] = useState<AllNotification[]>([]);
+  const { notificationUser } = useNotificationUser();
 
-  useEffect(() => {
-    getAllNoti();
-  }, []);
-  const getAllNoti = async () => {
-    await notificationControllers
-      .getAllNotificationUser()
-      .then((res) => {
-        console.log(
-          "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
-          res
-        );
-        setNotification(res.allNotification);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleSeenNoti = async (id: number) => {
-    await notificationControllers
-      .getSeenNotification(id)
-      .then((_) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <div className="header-view top-full absolute w-[355px] invisible z-20 overflow-y-auto h-[600px] scroll-smooth">
       <div
@@ -48,8 +20,8 @@ export default function NotificationUser() {
         {/* END BUTTON */}
         <div className="flex flex-col gap-3">
           {/* map Noti */}
-          {notification.length > 0 ? (
-            notification.map((notiItems) => {
+          {notificationUser?.length > 0 ? (
+            notificationUser.map((notiItems) => {
               return (
                 <a
                   href={`/orderdetail/${notiItems.orderId}`}
@@ -61,14 +33,6 @@ export default function NotificationUser() {
                         <div className="p-1 relative">
                           {notiItems.status == 4 ? (
                             <>
-                              {/* <img
-                                // src={notiItems.fk_order.User.image}
-                                src={Images.avatar_admin}
-                                alt="avatar_admin"
-                                // className={`w-16 h-1w-16 rounded-full ${
-                                //   notiItems.seen === false ? "" : "opacity-70"
-                                // }`}
-                              /> */}
                               <div
                                 className={`${
                                   notiItems.seen === false ? "" : "opacity-70"
@@ -86,20 +50,19 @@ export default function NotificationUser() {
                             </>
                           ) : (
                             <>
-                              <img
-                                // src={notiItems.fk_order.User.image}
-                                src={Images.avatar_admin}
-                                alt="avatar_admin"
-                                className={`w-12 h-12 rounded-full ${
+                              <div
+                                className={`${
                                   notiItems.seen === false ? "" : "opacity-70"
                                 }`}
-                              />
+                              >
+                                <BuyzzleAvt />
+                              </div>
                               <div
                                 className={`${
                                   notiItems.seen === false ? "" : "opacity-80"
                                 }`}
                               >
-                                <CancelOrder />
+                                <NewOrder />
                               </div>
                             </>
                           )}
@@ -118,8 +81,8 @@ export default function NotificationUser() {
                             <p
                               className={`${
                                 notiItems.seen === false
-                                  ? "text-[#739072] text-xs font-semibold"
-                                  : "text-[#739072] text-xs font-semibold opacity-70"
+                                  ? "text-red-700 text-xs font-semibold"
+                                  : "text-red-700 text-xs font-semibold opacity-70"
                               }`}
                             >
                               Yêu cầu hủy đơn của quý khách đã được xác nhận
@@ -128,16 +91,53 @@ export default function NotificationUser() {
                             <p
                               className={`${
                                 notiItems.seen === false
-                                  ? "text-red-700 text-xs font-semibold"
-                                  : "text-red-700 text-xs font-semibold opacity-70"
+                                  ? "text-[#739072] text-xs font-semibold"
+                                  : "text-[#739072] text-xs font-semibold opacity-70"
                               }`}
                             >
-                              Yêu cầu hủy đơn của quý khách đã bị từ chối
+                              Đơn hàng đã được giao thành công
                             </p>
                           )}
                         </div>
                       </div>
-                      <div className="my-auto">
+                      {/* <div className="my-auto">
+                        {notiItems.seen == false ? (
+                          <div className="rounded-full border-[5px] w-0 border-[#2E89FF] justify-end"></div>
+                        ) : (
+                          <div className="invisible"></div>
+                        )}
+                      </div> */}
+                      <div className="flex flex-col items-end gap-1 my-2">
+                        <span
+                          className={`${
+                            notiItems.seen === false
+                              ? "text-slate-500 text-xs inline-flex items-center rounded"
+                              : "text-slate-500 text-xs inline-flex items-center rounded opacity-70"
+                          }`}
+                        >
+                          {notiItems.status === 1 ? (
+                            <svg
+                              className="w-2 h-2 me-1.5"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                            </svg>
+                          ) : (
+                            <svg
+                              className="w-2 h-2 me-1.5"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                            </svg>
+                          )}
+                          {moment(notiItems.date).locale("vi").fromNow()}
+                        </span>
                         {notiItems.seen == false ? (
                           <div className="rounded-full border-[5px] w-0 border-[#2E89FF] justify-end"></div>
                         ) : (
@@ -150,7 +150,9 @@ export default function NotificationUser() {
               );
             })
           ) : (
-            <></>
+            <>
+              <p className="mt-2 text-[#808080]">Chưa có thông báo</p>
+            </>
           )}
           {/* end map Noti */}
         </div>

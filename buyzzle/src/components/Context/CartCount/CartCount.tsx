@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Shoppingcart from "../../../Assets/TSX/Shopping-cart";
+import Shoppingcart from "../../../assets/TSX/Shopping-cart";
 import { useCart } from "../../../hooks/Cart/CartContextProvider";
 
 export default function CartCount() {

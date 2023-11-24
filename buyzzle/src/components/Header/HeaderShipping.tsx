@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
 
 import { Link } from "react-router-dom";
-import LogoWeb from "../../Assets/TSX/LogoWeb";
+import LogoWeb from "../../assets/TSX/LogoWeb";
 import HeaderTopShipping from "../HeaderTop/HeaderTopShipping";
 import Container from "../container/Container";
 

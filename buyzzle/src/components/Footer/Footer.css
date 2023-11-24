@@ -1,5 +1,5 @@
 .footer-bg {
-  background-image: url("../../Assets/Images/bgFooter.jpg");
+  background-image: url("../../assets/Images/bgFooter.jpg");
 }
 
 @media screen and (max-width: 768px) {

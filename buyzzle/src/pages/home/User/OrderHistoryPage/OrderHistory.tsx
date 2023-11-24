@@ -5,47 +5,48 @@ import { ReactNode, useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
+import ArrowNextHistory from "../../../../assets/TSX/ArrowNextHistory";
 import {
   orderControllers,
   orderModelController,
-} from "../../../../Controllers/OrderControllers";
-import DialogAbortOrder from "../../../../Helper/Dialog/DialogAbortOrder";
-import { numberFormat } from "../../../../Helper/Format";
-import { OrderPanigation, StatusOrder } from "../../../../Model/OrderModel";
+} from "../../../../controllers/OrderControllers";
+import DialogAbortOrder from "../../../../helper/Dialog/DialogAbortOrder";
+import { numberFormat } from "../../../../helper/Format";
+import { OrderPanigation, StatusOrder } from "../../../../model/OrderModel";
 import Container from "../../../../components/container/Container";
-import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
-import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
+
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
+import { dateOrder } from "../../admin/Management/Order/OrderManagement";
+import ArrowDown from "../../admin/assets/TSX/ArrowDown";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
   let _paymentStatus: string | undefined;
   switch (status) {
     case StatusOrder.Cancel:
-      _statusOrder = <p className="text-red-700">Yêu Cầu Hủy Đơn</p>;
+      _statusOrder = <p className="text-red-600">Yêu Cầu Hủy Đơn</p>;
       break;
     case StatusOrder.Comfirm:
       _statusOrder = <p className="text-[#3DC0F8]">Chờ xác nhận</p>;
       break;
     case StatusOrder.Ordered:
-      _statusOrder = <p className="text-teal-700">Đã đặt hàng</p>;
+      _statusOrder = <p className="text-[#3DC0F8]">Đã đặt hàng</p>;
       break;
     case StatusOrder.WaitingCourier:
-      _statusOrder = <p className="text-[#F43FCA]">Giao cho ĐVVC</p>;
+      _statusOrder = <p className="text-[#FBC132]">Giao cho ĐVVC</p>;
       break;
     case StatusOrder.recievedCourier:
       _statusOrder = <p className="text-[#FBC132]">ĐVVT đã nhận hàng</p>;
       break;
     case StatusOrder.Shipping:
-      _statusOrder = <p className="text-[#F43FCA]">Đang giao hàng</p>;
+      _statusOrder = <p className="text-[#FBC132]">Đang giao hàng</p>;
       break;
     case StatusOrder.Succed:
-      _statusOrder = <p className="text-[#21CEBD]">Giao hàng thành công</p>;
+      _statusOrder = <p className="text-[#2fce21]">Giao hàng thành công</p>;
       _paymentStatus = "Đã thanh toán";
       break;
     default:
-      _statusOrder = <p className="text-red-700">Đơn hàng đã được hủy</p>;
+      _statusOrder = <p className="text-red-600">Đơn hàng đã được hủy</p>;
       break;
   }
   return {
@@ -65,7 +66,6 @@ export default function OrderHistory() {
 
   const idRemove = "removeVoucher";
   const idSitebar = "my_modal_3";
-
 
   // button filter
   const [changeButton, setChangeButton] = useState([
@@ -145,7 +145,7 @@ export default function OrderHistory() {
       theme: "light",
     });
     closeModal(idRemove);
-    getOrder()
+    getOrder();
   };
 
   const handleClick = (id: number) => {
@@ -175,15 +175,15 @@ export default function OrderHistory() {
       case 1:
         return "#3DC0F8";
       case 2:
-        return "#1DCDBC";
+        return "#3DC0F8";
       case 3:
-        return "#F43FCA";
+        return "#FBC132";
       case 5:
-        return "#F43FCA";
+        return "#FBC132";
       case 6:
-        return "#21CEBD";
+        return "#2fce21";
       default:
-        return "#9F0D7F";
+        return "#D80032";
     }
   }
   // const getOrderFilter = async (status: number) => {
@@ -298,7 +298,7 @@ export default function OrderHistory() {
                                   <div className="w-[16%] text-center">
                                     {e.deletedAt != null ? (
                                       <p>
-                                        <p className="text-rose-600">
+                                        <p className="text-red-600">
                                           Đơn hàng đã được hủy
                                         </p>
                                       </p>

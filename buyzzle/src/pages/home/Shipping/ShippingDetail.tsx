@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../Assets/TS";
-import Map from "../../../Assets/TSX/Map";
-import NoteOrderAdmin from "../../../Assets/TSX/NoteOrderAdmin";
-import { orderControllers } from "../../../Controllers/OrderControllers";
-import { numberFormat } from "../../../Helper/Format";
-import StepperShipping from "../../../Helper/Stepper/StepperShipping";
-import { OrderModel, UpdateQuantityModal } from "../../../Model/OrderModel";
+import { Images } from "../../../assets/TS";
+import Map from "../../../assets/TSX/Map";
+import NoteOrderAdmin from "../../../assets/TSX/NoteOrderAdmin";
+import { orderControllers } from "../../../controllers/OrderControllers";
+import { numberFormat } from "../../../helper/Format";
+import StepperShipping from "../../../helper/Stepper/StepperShipping";
+import { OrderModel, UpdateQuantityModal } from "../../../model/OrderModel";
 import Container from "../../../components/container/Container";
-import Back from "../Admin/Assets/TSX/Back";
-import Paymethod from "../Admin/Assets/TSX/Paymethod";
-import PhoneOrderAdmin from "../Admin/Assets/TSX/PhoneOrderAdmin";
+import Back from "../admin/assets/TSX/Back";
+import Paymethod from "../admin/assets/TSX/Paymethod";
+import PhoneOrderAdmin from "../admin/assets/TSX/PhoneOrderAdmin";
 import {
   dateOrder,
   timeOrder,
-} from "../Admin/Management/Order/OrderManagement";
+} from "../admin/Management/Order/OrderManagement";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 
 export default function ShippingDetail() {
@@ -40,17 +40,20 @@ export default function ShippingDetail() {
       listProductQuantity.push({
         productId: element.productId!,
         quantity: element.quantity,
-      })
-    })
-
-    orderControllers.setStatus(idOrder, status).then(() => {
-      getOrder();
-      toast.success("Thành công");
-    }).then(() => {
-      if (status == 6) {
-        orderControllers.updateSoldcount(listProductQuantity)
-      }
+      });
     });
+
+    orderControllers
+      .setStatus(idOrder, status)
+      .then(() => {
+        getOrder();
+        toast.success("Thành công");
+      })
+      .then(() => {
+        if (status == 6) {
+          orderControllers.updateSoldcount(listProductQuantity);
+        }
+      });
   };
   return (
     <>
@@ -76,7 +79,7 @@ export default function ShippingDetail() {
                 </div>
                 <div className="flex flex-col gap-1">
                   {order.paymentMethod == "Thẻ tín dụng" ||
-                    getStatusOrder(order.status)._paymentStatus ? (
+                  getStatusOrder(order.status)._paymentStatus ? (
                     <div className="badge badge-xs badge-accent text-center py-2 px-3">
                       <p className="font-bold text-xs text-white">
                         Đã thanh toán
@@ -225,11 +228,21 @@ export default function ShippingDetail() {
 
                   <div className="flex justify-between mb-8">
                     <div className="flex gap-1">
-                      <img
-                        className="w-[40px] h-[40px] object-cover rounded-full border-4"
-                        src={Images.avatar_admin}
-                        alt=""
-                      />
+                      {order.User && order.User.UserImage?.[0]?.url ? (
+                        <img
+                          className="w-[40px] h-[40px] object-cover rounded-full border-4"
+                          src={order.User.UserImage?.[0].url}
+                          alt=""
+                        />
+                      ) : (
+                        <div  className="w-[40px] h-[40px] object-cover rounded-full border-4 bg-red-500 pt-1 pb-2 ps-3 pe-3">
+                          <p className="text-1xl text-stone-50">
+                              {/* {name.substring(0, 1).toUpperCase()} */}
+                              {order?.name?.length > 0 ? (order?.name).substring(0, 1).toUpperCase() : ""}{" "}
+                            </p>
+                        </div>
+                      )}
+
 
                       <div>
                         <p className="text-sm">

@@ -1,16 +1,16 @@
-import { Images } from "../../../Assets/TS";
+import { Images } from "../../../assets/TS";
 import Container from "../../container/Container";
 import Category from "../components/Category";
 
 import { ReactNode, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
-import LogoVoucherBuyzzle from "../../../Assets/TSX/LogoVoucherBuyzzle";
-import LogoVoucherFreeship from "../../../Assets/TSX/LogoVoucherFreeship";
-import SanVoucher from "../../../Assets/TSX/SanVoucher";
-import VoucherBuyzzle from "../../../Assets/TSX/VoucherBuyzzle";
-import { categoryController } from "../../../Controllers/CategoryController";
-import { productController } from "../../../Controllers/ProductsController";
+import LogoVoucherBuyzzle from "../../../assets/TSX/LogoVoucherBuyzzle";
+import LogoVoucherFreeship from "../../../assets/TSX/LogoVoucherFreeship";
+import SanVoucher from "../../../assets/TSX/SanVoucher";
+import VoucherBuyzzle from "../../../assets/TSX/VoucherBuyzzle";
+import { categoryController } from "../../../controllers/CategoryController";
+import { productController } from "../../../controllers/ProductsController";
 import {
   ImgOfProduct,
   Products,
