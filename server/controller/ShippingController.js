@@ -304,14 +304,14 @@ const ShippingController = {
                 where: {
                     id: orderId,
                 },
-                include:{
-                    User:{
-                        select:{
+                include: {
+                    User: {
+                        select: {
                             name: true,
                             username: true,
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             });
             if (!order) return res.send('Order is undifined');
             await prisma.order.update({
@@ -370,15 +370,14 @@ const ShippingController = {
                                 //     name: true,
                                 //     username: true,
                                 // },
-                                include:{
-                                    UserImage:{
-                                        select:{
+                                include: {
+                                    UserImage: {
+                                        select: {
                                             url: true,
-                                        }
-                                    }
-                                }
+                                        },
+                                    },
+                                },
                             },
-                         
                         },
                     },
                 },
@@ -426,7 +425,11 @@ const ShippingController = {
                             User: {
                                 select: {
                                     name: true,
-                                    image: true,
+                                    UserImage: {
+                                        select: {
+                                            url: true,
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -469,9 +472,28 @@ const ShippingController = {
             };
             const notifi = await prisma.notification.findMany({
                 where: whereClause,
+                include: {
+                    fk_user: {
+                        select: {
+                            name: true,
+                            UserImage: {
+                                select: {
+                                    url: true,
+                                },
+                            },
+                        },
+                    },
+                },
             });
-            res.status(200).send(notifi);
-            console.log(userId);
+            const countNotification = await prisma.notification.count({
+                where: whereClause,
+            });
+
+            const result = {
+                notification: notifi,
+                countNotification: countNotification,
+            };
+            res.status(200).json(result);
         } catch (error) {
             errorResponse(res, error);
         }
