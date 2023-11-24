@@ -790,19 +790,27 @@ const ProductController = {
 
     updateRatingandComment: async (req, res) => {
         try {
+            const userId = parseInt(req.cookies.id);
             const ratingId = parseInt(req.params.ratingId);
             const { ratingValue, comment } = req.body;
-
+    
+            // Kiểm tra xem đánh giá có tồn tại không
             const existingRating = await prisma.rating.findUnique({
                 where: {
                     id: ratingId,
                 },
             });
-
+    
             if (!existingRating) {
                 return res.status(404).json('Đánh giá không tồn tại');
             }
-
+    
+            // Kiểm tra xem người dùng hiện tại có quyền cập nhật đánh giá hay không
+            if (existingRating.iduser !== userId) {
+                return res.status(403).json('Bạn không có quyền cập nhật đánh giá này');
+            }
+    
+            // Thực hiện cập nhật đánh giá
             const updatedRating = await prisma.rating.update({
                 where: {
                     id: ratingId,
@@ -812,7 +820,7 @@ const ProductController = {
                     comment,
                 },
             });
-
+    
             res.status(200).json(updatedRating);
         } catch (error) {
             console.error(error);
