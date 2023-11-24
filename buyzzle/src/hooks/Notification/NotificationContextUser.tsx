@@ -77,6 +77,11 @@ export default function useNotificationContextUser() {
           closeButton: true,
         }
       );
+      setCountNotificationUser((prevState) => ({
+        ...prevState,
+        countNotification: prevState.countNotification + 1,
+      }));
+      getAllNotiUser();
       setsocketUser(confirmCancelOrder);
     });
     socket.on(`deliverysuccessfully/${idUser}`, (deliverysuccessfully) => {
@@ -103,6 +108,11 @@ export default function useNotificationContextUser() {
           closeButton: true,
         }
       );
+      setCountNotificationUser((prevState) => ({
+        ...prevState,
+        countNotification: prevState.countNotification + 1,
+      }));
+      getAllNotiUser();
       setsocketUser(deliverysuccessfully);
     });
     socket.on("disconnect", () => {
