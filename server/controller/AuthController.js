@@ -320,9 +320,7 @@ const AuthController = {
 
             if (user.forgotpassword_token == null) {
                 const forgot_pasword_token_JWT = AuthController.generateForgotPasswordToken(user.email);
-                console.log('jwt', forgot_pasword_token_JWT);
                 const forgot_password_token_base64 = Buffer.from(forgot_pasword_token_JWT).toString('base64');
-                console.log('Base64', forgot_password_token_base64);
                 await prisma.user.update({
                     where: {
                         email: user.email,
@@ -472,7 +470,6 @@ const AuthController = {
                     refresh_token: null,
                 },
             });
-            console.log('user', user);
             res.clearCookie('refreshtoken');
             res.clearCookie('accesstoken');
             res.clearCookie('id');
