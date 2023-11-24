@@ -43,6 +43,7 @@ import Shipper from "../../pages/home/admin/Management/Shipper/Shipper";
 import StatisticsPage from "../../pages/home/admin/Statistics/StatisticsPage";
 import Admin from "../../pages/home/admin/Management/Admin/Admin";
 import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
+import Province from "../../components/page/Province";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -61,6 +62,14 @@ export default function useRouterEmelent() {
         </MainLayout>
       ),
     },
+    // {
+    //   path: "/Province",
+    //   element: (
+    //     <MainLayout>
+    //       <Province />
+    //     </MainLayout>
+    //   ),
+    // },
 
     {
       path: "/products",
