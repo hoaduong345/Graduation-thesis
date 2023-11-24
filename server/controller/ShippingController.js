@@ -491,7 +491,7 @@ const ShippingController = {
             });
 
             const result = {
-                notification: notifi,
+                allNotification: notifi,
                 countNotification: countNotification,
             };
             res.status(200).json(result);
