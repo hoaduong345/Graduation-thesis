@@ -143,7 +143,7 @@ const UserController = {
 
     PaymentAddress: async (req, res) => {
         try {
-            const username = req.body.username;
+            const id = req.body.id;
 
             const updatedPaymentAddress = {
                 username: req.body.username,
@@ -156,7 +156,7 @@ const UserController = {
 
             const update = await prisma.user.update({
                 where: {
-                    username: username,
+                    id: id,
                 },
                 data: updatedPaymentAddress,
             });
