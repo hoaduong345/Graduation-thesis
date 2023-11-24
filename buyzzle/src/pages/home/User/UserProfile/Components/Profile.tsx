@@ -39,7 +39,7 @@ export default function UserProfile() {
   const [CheckImageUrl, setCheckImageUrl] = useState<boolean>(false);
   const param = useParams();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
@@ -54,7 +54,7 @@ export default function UserProfile() {
   const [email, setEmail] = useState<string>("");
   const [phonenumber, setPhonenumber] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
-
+  // const [isDisabled1,setIsDisable1] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
   // const [UserData1, setUserData1] = useState<UserData1>();
@@ -69,7 +69,8 @@ export default function UserProfile() {
     mode: "all",
     // defaultValues: UserData1
   });
-
+  let isDisabled = !(isValid && isDirty);
+  // setIsDisable(!(isValid && isDirty));
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
   useEffect(() => {
     const fetchData = async () => {
@@ -188,7 +189,8 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-      // console.log("URL IMAGE: "+url);
+      console.log("URL IMAGE: " + url);
+      // FormImage.id = parseInt(id);
       return url;
     } catch (error) {
       console.error(error);
@@ -210,6 +212,7 @@ export default function UserProfile() {
       iduser: id,
       url: url,
     };
+    console.log("IDDDDDDĐ:", urlImages.iduser);
     await axios
       .put(
         `${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`,
@@ -230,7 +233,7 @@ export default function UserProfile() {
       formData.sex = JSON.parse(formData.sex);
       formData.email = emailThen;
       formData.phonenumber = sdtThen;
-      console.log("SERVER:" + JSON.stringify(formData));
+      // console.log("SERVER:" + JSON.stringify(formData));
       const response = await axios.put(API, formData);
       FormImage.id = parseInt(id);
       if (response) {
@@ -240,7 +243,7 @@ export default function UserProfile() {
           await addImages(FormImage.id, url);
           setCheckImageUrl(true);
         } else {
-          console.log("IDUSER:" + FormImage.id);
+          console.log("Ao that day:" + FormImage.id);
           await EditImages(FormImage.id, url);
         }
       }
@@ -300,13 +303,14 @@ export default function UserProfile() {
       console.log(`Selected file: ${file}`);
       setSelectedFile(file);
       setImage(file);
+
+      // console.log("isDisabled:"+isDisabled)
     } else {
       setSelectedFile(null); // Reset the selectedFile state when no file is selected
-      setImage("" + null); // Reset the imageURL state
+      setImage(null); // Reset the imageURL state
       console.log("No file selected");
     }
   };
-  const isDisabled = !(isValid && isDirty);
 
   return (
     <Fragment>

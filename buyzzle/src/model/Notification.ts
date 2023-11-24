@@ -34,5 +34,12 @@ export interface FkOrder {
 
 export interface User {
   name: string;
-  image: string;
+  username: string;
+  UserImage: UserImage[];
+}
+
+export interface UserImage {
+  // name: string;
+  url: string;
+ 
 }

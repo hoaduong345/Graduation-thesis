@@ -5,14 +5,15 @@ const OderController = {
     createOrder: async (req, res) => {
         try {
             const orderData = req.body.order;
-            const iduser = req.cookies.id;
+            // const iduser = req.cookies.id;
+            // console.log("Ngucxl:", iduser);
             const user = await prisma.user.findFirst({
                 where: {
-                    id: iduser,
+                    id: orderData.iduser,
                 },
                 select: {
                     name: true,
-                    image: true,
+                    username: true,
                 },
             });
 
@@ -25,6 +26,7 @@ const OderController = {
                     amountTotal: orderData.amount_total,
                     paymentMethod: orderData.method,
                     note: orderData.note,
+                    id: orderData.id,
                     invoice: orderData.invoice.toString(),
                     name: orderData.name,
                     address: orderData.address,
@@ -33,22 +35,25 @@ const OderController = {
                 },
             });
             console.log('🚀 ~ file: OrderController.js:35 ~ createOrder: ~ order:', order);
-            orderData.cartItems.map(async (e) => {
-                await prisma.orderDetail.create({
-                    data: {
-                        orderId: order.id,
-                        productId: e.productId,
-                        name: e.name,
-                        image: e.image,
-                        price: e.price,
-                        quantity: e.quantity,
-                        total: e.total,
-                    },
-                });
+
+            let a = orderData.cartItems.map((e) => {
+                return {
+                    orderId: order.id,
+                    productId: e.productId,
+                    name: e.name,
+                    image: e.image,
+                    price: e.price,
+                    quantity: e.quantity,
+                    total: e.total,
+                };
+            });
+            console.log({ a });
+            await prisma.orderDetail.createMany({
+                data: a,
             });
             await prisma.notification.create({
                 data: {
-                    userId: iduser,
+                    userId: order.userId,
                     orderId: order.id,
                     message: 'New order',
                     status: 1,
@@ -157,7 +162,15 @@ const OderController = {
                 },
                 include: {
                     OrderDetail: true,
-                    User: true,
+                    User: {
+                        include: {
+                            UserImage: {
+                                select: {
+                                    url: true,
+                                },
+                            },
+                        },
+                    },
                 },
             });
             res.status(200).json(order);

@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import { Images } from "../../assets/TS";
-import { notificationControllers } from "../../controllers/NotificationController";
-import CustomToast from "../../helper/Toast/CustomToast";
-import { AllNotification, NotificationModel } from "../../model/Notification";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { AllNotification, NotificationModel } from "../../model/Notification";
+import { notificationControllers } from "../../controllers/NotificationController";
+import CustomToast from "../../helper/Toast/CustomToast";
+import { userController } from "../../controllers/UserController";
+import AvtDefautl from "./assets/AvtDefautl";
 
 export default function useNotificationContextAdmin() {
   const [countNotificationAdmin, setCountNotificationAdmin] =
@@ -15,7 +16,6 @@ export default function useNotificationContextAdmin() {
   const [notificationAdmin, setNotificationAdmin] = useState<AllNotification[]>(
     []
   );
-
   useEffect(() => {
     getCountNoti();
   }, []);
@@ -29,9 +29,6 @@ export default function useNotificationContextAdmin() {
     });
   };
 
-  const nameUser = localStorage.getItem("nameUser");
-  const userData = JSON.parse(nameUser!);
-
   //   ================================================ SOCKET IO NOTIFICATION ADMIN ================================================
   useEffect(() => {
     getAllNotiAdmin();
@@ -42,7 +39,7 @@ export default function useNotificationContextAdmin() {
       .then((res) => {
         console.log(
           "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
-          res
+          JSON.stringify(res)
         );
         setNotificationAdmin(res.allNotification);
       })
@@ -50,24 +47,35 @@ export default function useNotificationContextAdmin() {
         console.log(err);
       });
   };
+
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
     const socket = io("http://localhost:5000");
     socket.on("requestdelete", (requestdelete) => {
-      console.log("Received deleted order data:", requestdelete);
+      console.log("Received deleted order dataaaaaaaaaaaaaa:", requestdelete);
+      const urlTaker = requestdelete.User.UserImage;
+
       toast(
         <a href={`/admin/ordermanagement/${requestdelete.id}`}>
           <CustomToast
             image={
-              <img
-                className="w-12 h-12 rounded-full"
-                src={Images.avatar_admin}
-                alt="avatar_admin"
-              />
+              <>
+                {urlTaker?.length > 0 ? (
+                  <img
+                    className="w-12 h-12 rounded-full"
+                    src={`${urlTaker[0]?.url}`}
+                    alt="avatar_admin"
+                  />
+                ) : (
+                  <AvtDefautl />
+                )}
+              </>
             }
             iconSVG={<CancelOrder />}
             name={
-              <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
+              <p className="text-sm font-semibold text-gray-900 ">
+                {requestdelete.name}
+              </p>
             }
             content={
               <p className="text-sm font-normal text-red-700">
@@ -82,6 +90,7 @@ export default function useNotificationContextAdmin() {
           closeButton: true,
         }
       );
+
       setCountNotificationAdmin((prevState) => ({
         ...prevState,
         countNotification: prevState.countNotification + 1,
@@ -90,34 +99,52 @@ export default function useNotificationContextAdmin() {
       setDeletedOrder(requestdelete);
     });
     socket.on("newOrder", (newOrder) => {
-      console.log("Received deleted order data newOrder:", newOrder);
-      toast(
-        <a href={`/admin/ordermanagement/${newOrder.id}`}>
-          <CustomToast
-            image={
-              <img
-                className="w-12 h-12 rounded-full"
-                src={Images.avatar_admin}
-                alt="avatar_admin"
-              />
-            }
-            iconSVG={<NewOrder />}
-            name={
-              <p className="text-sm font-semibold text-gray-900 ">{userData}</p>
-            }
-            content={
-              <p className="text-sm font-normal text-[#739072]">
-                Có 1 đơn hàng mới
-              </p>
-            }
-          />
-        </a>,
-        {
-          position: "bottom-left",
-          autoClose: 10000,
-          closeButton: true,
-        }
-      );
+      console.log("NewOrderr:", newOrder);
+      userController.getUserWhereUsername(newOrder.username).then((res) => {
+        console.log(
+          "🚀 ~ file: Header.tsx:76 ~ userController.getUserWhereUsername ~ res:",
+          res
+        );
+        const UserImageArray = JSON.stringify(res.UserImage);
+        const urlTaker = JSON.parse(UserImageArray);
+
+        toast(
+          <a href={`/admin/ordermanagement/${newOrder.id}`}>
+            <CustomToast
+              image={
+                <>
+                  {urlTaker?.length > 0 ? (
+                    <img
+                      className="w-12 h-12 rounded-full"
+                      src={`${urlTaker[0]?.url}`}
+                      alt="avatar_admin"
+                    />
+                  ) : (
+                    <AvtDefautl />
+                  )}
+                </>
+              }
+              iconSVG={<NewOrder />}
+              name={
+                <p className="text-sm font-semibold text-gray-900 ">
+                  {newOrder.name}
+                </p>
+              }
+              content={
+                <p className="text-sm font-normal text-[#739072]">
+                  Có 1 đơn hàng mới
+                </p>
+              }
+            />
+          </a>,
+          {
+            position: "bottom-left",
+            autoClose: 10000,
+            closeButton: true,
+          }
+        );
+      });
+
       setCountNotificationAdmin((prevState) => ({
         ...prevState,
         countNotification: prevState.countNotification + 1,
@@ -135,6 +162,7 @@ export default function useNotificationContextAdmin() {
     // admin
     notificationAdmin,
     countNotificationAdmin,
+    // ImgUser,
     getAllNotiAdmin,
   };
 }

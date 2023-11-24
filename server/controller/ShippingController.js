@@ -308,11 +308,7 @@ const ShippingController = {
                     User: {
                         select: {
                             name: true,
-                            UserImage: {
-                                select: {
-                                    url: true,
-                                },
-                            },
+                            username: true,
                         },
                     },
                 },
@@ -370,8 +366,11 @@ const ShippingController = {
                     fk_order: {
                         include: {
                             User: {
-                                select: {
-                                    name: true,
+                                // select: {
+                                //     name: true,
+                                //     username: true,
+                                // },
+                                include: {
                                     UserImage: {
                                         select: {
                                             url: true,

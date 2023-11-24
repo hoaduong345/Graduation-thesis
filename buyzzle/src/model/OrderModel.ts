@@ -34,6 +34,8 @@ export interface OrderModel {
   address: string;
   phoneNumber: number;
   OrderDetail: OrderItems[];
+  User:User;
+  
 }
 export interface OrderItems {
   id?: number;
@@ -59,4 +61,15 @@ export enum StatusOrder {
 export interface UpdateQuantityModal {
   productId: number,
   quantity: number
+}
+export interface User {
+  name: string;
+  username: string;
+  UserImage: UserImage[];
+}
+
+export interface UserImage {
+  // name: string;
+  url: string;
+ 
 }
