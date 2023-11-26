@@ -11,6 +11,28 @@ const decode = require('jwt-decode');
 dotenv.config();
 
 const AuthController = {
+    // CHECK EXPRIED REFRESH TOKEN
+    isRefreshTokenExpired: (refreshToken) => {
+        const decoded = jwt.decode(refreshToken);
+
+        if (decoded && decoded.exp) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            return decoded.exp > currentTime;
+        }
+
+        return true; // Treat as expired if there's no expiration claim
+    },
+    // CHECK EXPRIED ACCESS TOKEN
+    isAccessTokenExpired: (accesstoken) => {
+        const decoded = jwt.decode(accesstoken);
+
+        if (decoded && decoded.exp) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            return decoded.exp > currentTime;
+        }
+
+        return true; // Treat as expired if there's no expiration claim
+    },
     // GENERATE ACCESS TOKEN
     genereateAccessToken: (email) => {
         return jwt.sign(
@@ -28,7 +50,7 @@ const AuthController = {
                 email: email,
             },
             process.env.JWT_REFRESH_TOKEN,
-            { expiresIn: '30m' }
+            { expiresIn: '30d' }
         );
     },
     generateForgotPasswordToken: (email) => {
@@ -40,6 +62,66 @@ const AuthController = {
             { algorithm: 'HS256' },
             { expiresIn: '15m' }
         );
+    },
+    // GENERATE A NEW ACCESSTOKEN IF IT'S EXPRIED
+    generateNewAccessToken: async (req, res) => {
+        try {
+            const idUser = parseInt(req.cookies.id);
+            const accessToken = req.cookies.accesstoken;
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: idUser,
+                },
+            });
+            if (!user) return res.status(404).send('User is undifined');
+            if (AuthController.isRefreshTokenExpired(user.refresh_token) == false)
+                return res.status(404).send('Refresh token is expried');
+
+            if (AuthController.isAccessTokenExpired(accessToken) == false) {
+                let newAccessToken = AuthController.genereateAccessToken(user.email);
+                const expirationDate = new Date();
+                expirationDate.setDate(expirationDate.getDate() + 30);
+
+                res.cookie('accesstoken', newAccessToken, {
+                    httpOnly: true,
+                    secure: false,
+                    path: '/',
+                    sameSite: 'strict',
+                    expires: expirationDate,
+                });
+                return res.status(200).json({ newAccessToken, message: 'Access token renewed' });
+            }else{
+                return res.status(200).json('Access token still expried');
+
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(404).send(error);
+        }
+    },
+    // RETURN REFRESH TOKEN TO FE 
+    checkRefreshToken : async(req,res) =>{
+        try {
+            const idUser = parseInt(req.cookies.id)
+            const refreshToken = req.cookies.refreshtoken
+            const user = await prisma.user.findFirst({
+                where: {
+                    id : idUser
+                }
+            })
+            if(!user) return res.send("user is undifined")
+            if(AuthController.isRefreshTokenExpired(refreshToken) == false){
+                res.clearCookie('id');
+                res.clearCookie('refreshtoken');
+                res.clearCookie('accesstoken')
+                res.status(300).json(refreshToken)
+            }else{
+                res.send("Refresh token still expried")
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(404).send(error);
+        }
     },
     // REGISTER
     register: async (req, res) => {
@@ -129,7 +211,7 @@ const AuthController = {
                 dateOfBirth: new Date(req.body.dateOfBirth),
             };
 
-            const updatedUserResponse = await prisma.user.update({
+            await prisma.user.update({
                 where: {
                     username: userId,
                 },
@@ -221,15 +303,28 @@ const AuthController = {
             }
 
             if (user.email && validPassword) {
-                const accessToken = AuthController.genereateAccessToken(user.email);
-                const refreshToken = AuthController.genereateRefreshToken(user.email);
+                let accessToken = AuthController.genereateAccessToken(user.email);
+                let refreshToken = AuthController.genereateRefreshToken(user.email);
+
                 if (!user.refresh_token) {
-                    // Save refresh token to the user's record in the database
                     await prisma.user.update({
                         where: { id: user.id },
                         data: { refresh_token: refreshToken },
                     });
+                } else {
+                    const refreshTokenExpires = AuthController.isRefreshTokenExpired(user.refresh_token);
+                    if (refreshTokenExpires == false) {
+                        await prisma.user.update({
+                            where: {
+                                id: user.id,
+                            },
+                            data: {
+                                refresh_token: refreshToken,
+                            },
+                        });
+                    }
                 }
+
                 const expirationDate = new Date();
                 expirationDate.setDate(expirationDate.getDate() + 30);
                 res.cookie('refreshtoken', refreshToken, {
@@ -255,6 +350,7 @@ const AuthController = {
                     sameSite: 'strict',
                     expires: expirationDate, // Set an expiration date
                 });
+
                 const { password, ...others } = user;
                 return res.status(200).json({ accessToken, ...others });
             }
@@ -320,9 +416,7 @@ const AuthController = {
 
             if (user.forgotpassword_token == null) {
                 const forgot_pasword_token_JWT = AuthController.generateForgotPasswordToken(user.email);
-                console.log('jwt', forgot_pasword_token_JWT);
                 const forgot_password_token_base64 = Buffer.from(forgot_pasword_token_JWT).toString('base64');
-                console.log('Base64', forgot_password_token_base64);
                 await prisma.user.update({
                     where: {
                         email: user.email,
@@ -472,7 +566,6 @@ const AuthController = {
                     refresh_token: null,
                 },
             });
-            console.log('user', user);
             res.clearCookie('refreshtoken');
             res.clearCookie('accesstoken');
             res.clearCookie('id');

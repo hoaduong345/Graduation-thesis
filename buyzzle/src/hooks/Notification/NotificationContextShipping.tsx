@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import { notificationControllers } from "../../Controllers/NotificationController";
-import CustomToast from "../../Helper/Toast/CustomToast";
-import { AllNotification, NotificationModel } from "../../Model/Notification";
+import { notificationControllers } from "../../controllers/NotificationController";
+import CustomToast from "../../helper/Toast/CustomToast";
+import { AllNotification, NotificationModel } from "../../model/Notification";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
 import Shipping from "../../layout/asset/TSX/Shipping";
 
@@ -34,7 +34,7 @@ export default function useNotificationContextShippping() {
       .getAllNotificationShipping()
       .then((res) => {
         console.log(
-          "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
+          "🚀 ~ file: NotificationContextShipping.tsx:36 ~ .then ~ res:",
           res
         );
         setNotificationShipping(res.allNotification);
@@ -45,23 +45,25 @@ export default function useNotificationContextShippping() {
   };
   useEffect(() => {
     const socket = io("http://localhost:5000");
-    socket.on("setstatus", (newOrder) => {
-      console.log("Received deleted order data:", newOrder);
+    socket.on("setstatus", (setstatus) => {
+      console.log("Received deleted order data:", setstatus);
       toast(
-        <CustomToast
-          image={<BuyzzleAvt />}
-          iconSVG={<Shipping />}
-          name={
-            <p className="text-sm font-semibold text-gray-900 ">
-              Buyzzle thông báo
-            </p>
-          }
-          content={
-            <p className="text-sm font-normal text-[#739072]">
-              Có đơn hàng mới từ chúng tôi
-            </p>
-          }
-        />,
+        <a href={`/shipping/detail/${setstatus.id}`}>
+          <CustomToast
+            image={<BuyzzleAvt />}
+            iconSVG={<Shipping />}
+            name={
+              <p className="text-sm font-semibold text-gray-900 ">
+                Buyzzle thông báo
+              </p>
+            }
+            content={
+              <p className="text-sm font-normal text-[#739072]">
+                Có đơn hàng mới từ chúng tôi
+              </p>
+            }
+          />
+        </a>,
         {
           position: "bottom-left",
           autoClose: 100000,
@@ -73,7 +75,7 @@ export default function useNotificationContextShippping() {
         countNotification: prevState.countNotification + 1,
       }));
       getAllNotiShipping();
-      setDeletedOrder(newOrder);
+      setDeletedOrder(setstatus);
     });
     socket.on("disconnect", () => {
       console.log(socket.id);

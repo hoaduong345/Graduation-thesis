@@ -52,4 +52,9 @@ router.post(
   MiddleWareController.verifyAuthenticate,
   AuthController.logout
 );
+// GENERATE NEW ACCESSTOKEN 
+router.post("/", AuthController.generateNewAccessToken)
+// CHECK REFRESH TOKEN EXPRIED
+router.post("/refresh", AuthController.checkRefreshToken)
+
 module.exports = router;

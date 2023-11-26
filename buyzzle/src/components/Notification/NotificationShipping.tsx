@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useNotificationShipping } from "../../hooks/Notification/NotificationContextShipping";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
@@ -24,7 +25,7 @@ export default function NotificationShipping() {
                   onClick={() => handleSeenNoti(notiItems.id)}
                 >
                   <>
-                    <div className="flex gap-9 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
+                    <div className="flex gap-4 hover:bg-slate-200 hover:rounded-md hover:duration-500 cursor-default">
                       <div className="items-center flex gap-3">
                         <div className="p-1 relative">
                           <div
@@ -63,7 +64,37 @@ export default function NotificationShipping() {
                           </p>
                         </div>
                       </div>
-                      <div className="my-auto">
+                      <div className="flex flex-col items-end gap-1 my-2">
+                        <span
+                          className={`${
+                            notiItems.seen === false
+                              ? "text-slate-500 text-xs inline-flex items-center rounded"
+                              : "text-slate-500 text-xs inline-flex items-center rounded opacity-70"
+                          }`}
+                        >
+                          {notiItems.status === 1 ? (
+                            <svg
+                              className="w-2 h-2 me-1.5"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                            </svg>
+                          ) : (
+                            <svg
+                              className="w-2 h-2 me-1.5"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                            </svg>
+                          )}
+                          {moment(notiItems.date).locale("vi").fromNow()}
+                        </span>
                         {notiItems.seen == false ? (
                           <div className="rounded-full border-[5px] w-0 border-[#2E89FF] justify-end"></div>
                         ) : (

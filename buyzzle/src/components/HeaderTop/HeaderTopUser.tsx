@@ -1,25 +1,16 @@
-import { useEffect, useState } from "react";
+import { useNotificationUser } from "../../hooks/Notification/NotificationContextUser";
 import NotificationUser from "../Notification/NotificationUser";
 import HeaderTop from "./HeaderTop";
-import { NotificationModel } from "../../Model/Notification";
-import { notificationControllers } from "../../Controllers/NotificationController";
 
 export default function HeaderTopUser() {
-  const [countNotification, setCountNotification] = useState<NotificationModel>(
-    {} as NotificationModel
-  );
-  useEffect(() => {
-    getCountNoti();
-  }, []);
-  const getCountNoti = async () => {
-    await notificationControllers.getAllNotificationUser().then((res) => {
-      setCountNotification(res);
-    });
-  };
+  const { countNotificationUser } = useNotificationUser();
+
   return (
     <>
       <HeaderTop
-        countNoti={countNotification.countNotification}
+        countNoti={
+          countNotificationUser ? countNotificationUser.countNotification : 0
+        }
         noti={<NotificationUser />}
       />
     </>

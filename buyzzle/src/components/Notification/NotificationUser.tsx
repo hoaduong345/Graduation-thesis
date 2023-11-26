@@ -1,40 +1,13 @@
-import { useEffect, useState } from "react";
-import { notificationControllers } from "../../Controllers/NotificationController";
-import { AllNotification } from "../../Model/Notification";
-import { Images } from "../../Assets/TS";
-import NewOrder from "../../layout/asset/TSX/NewOrder";
-import CancelOrder from "../../layout/asset/TSX/CancelOrder";
+import { Images } from "../../assets/TS";
+import { useNotificationUser } from "../../hooks/Notification/NotificationContextUser";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
+import CancelOrder from "../../layout/asset/TSX/CancelOrder";
+import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { handleSeenNoti } from "./components/SeenNoti";
 
 export default function NotificationUser() {
-  const [notification, setNotification] = useState<AllNotification[]>([]);
+  const { notificationUser } = useNotificationUser();
 
-  useEffect(() => {
-    getAllNoti();
-  }, []);
-  const getAllNoti = async () => {
-    await notificationControllers
-      .getAllNotificationUser()
-      .then((res) => {
-        console.log(
-          "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
-          res
-        );
-        setNotification(res.allNotification);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleSeenNoti = async (id: number) => {
-    await notificationControllers
-      .getSeenNotification(id)
-      .then((_) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <div className="header-view top-full absolute w-[355px] invisible z-20 overflow-y-auto h-[600px] scroll-smooth">
       <div
@@ -48,8 +21,8 @@ export default function NotificationUser() {
         {/* END BUTTON */}
         <div className="flex flex-col gap-3">
           {/* map Noti */}
-          {notification.length > 0 ? (
-            notification.map((notiItems) => {
+          {notificationUser?.length > 0 ? (
+            notificationUser.map((notiItems) => {
               return (
                 <a
                   href={`/orderdetail/${notiItems.orderId}`}
@@ -61,14 +34,6 @@ export default function NotificationUser() {
                         <div className="p-1 relative">
                           {notiItems.status == 4 ? (
                             <>
-                              {/* <img
-                                // src={notiItems.fk_order.User.image}
-                                src={Images.avatar_admin}
-                                alt="avatar_admin"
-                                // className={`w-16 h-1w-16 rounded-full ${
-                                //   notiItems.seen === false ? "" : "opacity-70"
-                                // }`}
-                              /> */}
                               <div
                                 className={`${
                                   notiItems.seen === false ? "" : "opacity-70"

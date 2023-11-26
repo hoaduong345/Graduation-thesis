@@ -9,7 +9,7 @@ import "./stylesFilter.css";
 
 // import required modules
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import { Images } from "../../../../../Assets/TS";
+import { Images } from "../../../../../assets/TS";
 
 export default function SlidesFilter() {
   return (
@@ -28,8 +28,7 @@ export default function SlidesFilter() {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
-
-        <SwiperSlide >
+        <SwiperSlide>
           <img src={Images.banner} alt="" />
         </SwiperSlide>
 
@@ -40,7 +39,6 @@ export default function SlidesFilter() {
         <SwiperSlide>
           <img src={Images.bannerFilter} alt="" />
         </SwiperSlide>
-
       </Swiper>
     </>
   );

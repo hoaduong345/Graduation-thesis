@@ -6,10 +6,10 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import LogoWeb from "../../Assets/TSX/LogoWeb";
-import Search from "../../Assets/TSX/Search";
-import { productController } from "../../Controllers/ProductsController";
-import { userController } from "../../Controllers/UserController";
+import LogoWeb from "../../assets/TSX/LogoWeb";
+import Search from "../../assets/TSX/Search";
+import { productController } from "../../controllers/ProductsController";
+import { userController } from "../../controllers/UserController";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";

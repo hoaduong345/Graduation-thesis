@@ -1,21 +1,17 @@
 import { Link } from "react-router-dom";
-import { Images } from "../../../../../Assets/TS";
+import { Images } from "../../../../../assets/TS";
 import {
   formatSoldCount,
   numberFormat,
   roundedNumber,
-} from "../../../../../Helper/Format";
-import { Row } from "../../../../../Model/ProductModel";
+} from "../../../../../helper/Format";
+import { Row } from "../../../../../model/ProductModel";
 type Props = {
   productRecommand: Row;
 };
 export default function DetailRecommandProduct(props: Props) {
   const { productRecommand } = props;
   const stars = Array(5).fill(0);
-  console.log(
-    "🚀 ~ file: DetailRecommandProduct.tsx:112 ~ DetailRecommandProduct ~ productRecommand.rate:",
-    productRecommand.rate
-  );
   return (
     <>
       <Link to={`/Detailproducts/${productRecommand.id}`}>
@@ -119,7 +115,12 @@ export default function DetailRecommandProduct(props: Props) {
             max-lg:text-base
             "
               >
-                Đã bán {formatSoldCount(productRecommand.soldcount!)}
+                Đã bán{" "}
+                {productRecommand.soldcount == 0
+                  ? "0"
+                  : productRecommand.soldcount !== undefined
+                  ? formatSoldCount(productRecommand.soldcount)
+                  : "0"}
               </p>
             </div>
           </div>

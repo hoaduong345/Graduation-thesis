@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { Images } from "../../../Assets/TS";
+import { Images } from "../../../assets/TS";
 import {
   formatSoldCount,
   numberFormat,
   roundedNumber,
-} from "../../../Helper/Format";
+} from "../../../helper/Format";
 import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
 
 export type Props = {
@@ -133,7 +133,9 @@ export default function Productss(props: Props) {
                 Đã bán{" "}
                 {product.soldcount == 0
                   ? "0"
-                  : (product.soldcount !== undefined ? formatSoldCount(product.soldcount) : "0")}
+                  : product.soldcount !== undefined
+                  ? formatSoldCount(product.soldcount)
+                  : "0"}
               </p>
             </div>
           </div>
