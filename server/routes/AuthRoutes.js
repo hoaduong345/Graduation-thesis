@@ -19,7 +19,6 @@ router.put("/userprofile/:username", AuthController.UserProfile);
 router.put("/updatepassword/:id", AuthController.UpdatePassword);
 
 // LOGIN
-router.post("/", AuthController.requestRefreshToken);
 router.post(
   "/login",
   MiddleWareController.loginvalidator,

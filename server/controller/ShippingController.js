@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
-const { or } = require('mathjs');
-const { Socket } = require('socket.io');
+
 const prisma = new PrismaClient();
+const cron = require('node-cron');
 
 const errorResponse = (res, error) => {
     console.error(error);
@@ -35,7 +35,6 @@ const ShippingController = {
             if (!order) {
                 return res.status(404).send('Order is undefined');
             }
-            console.log('aaaaaa', order.userId);
             if (statusOrder === 3) {
                 const io = req.app.get('socketio');
                 io.emit('setstatus', order);
@@ -545,6 +544,30 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
-};
 
+};
+// cron.schedule('0 0 * * *', async () => {
+//     // Run the task daily at midnight (adjust the cron expression as needed)
+  
+//     const thirtyDaysAgo = new Date();
+//     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  
+//     try {
+//       await prisma.notification.deleteMany({
+//         where: {
+//           createdAt: {
+//             lt: thirtyDaysAgo,
+//           },
+//         },
+//       });
+//       console.log('Scheduled task: Deleted notifications older than 30 days.');
+//     } catch (error) {
+//       console.error('Error in scheduled task:', error);
+//     }
+//   });
+  
+//   // Close the Prisma client to avoid resource leaks
+//   process.on('beforeExit', async () => {
+//     await prisma.$disconnect();
+//   });
 module.exports = ShippingController;

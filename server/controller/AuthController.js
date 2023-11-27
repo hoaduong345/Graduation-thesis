@@ -7,7 +7,6 @@ const dotenv = require('dotenv');
 const SendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
 const decode = require('jwt-decode');
-
 dotenv.config();
 
 const AuthController = {
@@ -25,9 +24,11 @@ const AuthController = {
     // CHECK EXPRIED ACCESS TOKEN
     isAccessTokenExpired: (accesstoken) => {
         const decoded = jwt.decode(accesstoken);
+        console.log("🚀 ~ file: AuthController.js:27 ~ decoded:", decoded)
 
         if (decoded && decoded.exp) {
             const currentTime = Math.floor(Date.now() / 1000);
+            console.log("🚀 ~ file: AuthController.js:31 ~ currentTime:", currentTime)
             return decoded.exp > currentTime;
         }
 
@@ -40,7 +41,7 @@ const AuthController = {
                 email: email,
             },
             process.env.SECRECT_KEY,
-            { expiresIn: '1h' }
+            { expiresIn: '30m' }
         );
     },
     // GENERATE REFRESH TOKEN
@@ -50,7 +51,7 @@ const AuthController = {
                 email: email,
             },
             process.env.JWT_REFRESH_TOKEN,
-            { expiresIn: '30d' }
+            { expiresIn: '10s' }
         );
     },
     generateForgotPasswordToken: (email) => {
@@ -90,36 +91,33 @@ const AuthController = {
                     expires: expirationDate,
                 });
                 return res.status(200).json({ newAccessToken, message: 'Access token renewed' });
-            }else{
+            } else {
                 return res.status(200).json('Access token still expried');
-
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(404).send(error);
         }
     },
-    // RETURN REFRESH TOKEN TO FE 
-    checkRefreshToken : async(req,res) =>{
+    // RETURN REFRESH TOKEN TO FE
+    checkRefreshToken: async (req, res) => {
         try {
-            const idUser = parseInt(req.cookies.id)
-            const refreshToken = req.cookies.refreshtoken
+            const idUser = parseInt(req.cookies.id);
             const user = await prisma.user.findFirst({
                 where: {
-                    id : idUser
-                }
-            })
-            if(!user) return res.send("user is undifined")
-            if(AuthController.isRefreshTokenExpired(refreshToken) == false){
+                    id: idUser,
+                },
+            });
+            if (!user) return res.send('user is undifined');
+            if (AuthController.isRefreshTokenExpired(user.refresh_token) == false) {
                 res.clearCookie('id');
-                res.clearCookie('refreshtoken');
-                res.clearCookie('accesstoken')
-                res.status(300).json(refreshToken)
-            }else{
-                res.send("Refresh token still expried")
+                res.clearCookie('accesstoken');
+                res.status(300).json("AccessToken is expried, login again");
+            } else {
+                res.send('Refresh token still expried');
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(404).send(error);
         }
     },
@@ -327,13 +325,6 @@ const AuthController = {
 
                 const expirationDate = new Date();
                 expirationDate.setDate(expirationDate.getDate() + 30);
-                res.cookie('refreshtoken', refreshToken, {
-                    httpOnly: true,
-                    secure: false,
-                    path: '/',
-                    sameSite: 'strict',
-                    expires: expirationDate, // Set an expiration date
-                });
 
                 res.cookie('accesstoken', accessToken, {
                     httpOnly: true,
