@@ -16,6 +16,7 @@ import { useCart } from "../../../../hooks/Cart/CartContextProvider";
 import ArrowUp from "../../admin/assets/TSX/ArrowUp";
 import Delete from "../../admin/assets/TSX/Delete";
 import { toastWarn } from "../../../../helper/Toast/Warning";
+import { userController } from "../../../../controllers/UserController";
 export default function Cart() {
   const {
     carts,
@@ -32,6 +33,23 @@ export default function Cart() {
     idItemCart,
     idAllCart,
   } = useCart();
+
+  const CheckToken = async () => {
+    userController.CheckToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  }
+  const CheckRefreshToken = async () => {
+    userController.CheckRefreshToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  }
+  const muti = () => {
+    CheckToken();
+    handleBuyNow();
+    CheckRefreshToken();
+    console.log("AOTHATDAY");
+  }
 
   const handleIncreaseQuantity = (data: UpdateCart) => {
     cartControllers.increaseCart(data).then((res) => {
@@ -339,7 +357,7 @@ export default function Cart() {
                 <button
                   // to={`${productChecked.length == 0 ? "" : "/checkout"
                   //    }`}
-                  onClick={handleBuyNow}
+                  onClick={muti}
                   className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 
                                 transition duration-150 bg-[#EA4B48] cursor-pointer"

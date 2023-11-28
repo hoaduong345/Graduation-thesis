@@ -30,11 +30,12 @@ import { useCart } from "../../../../../hooks/Cart/CartContextProvider";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
 
-import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
+// import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
 import Cart from "../../../admin/assets/TSX/Cart";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
+import { userController } from "../../../../../controllers/UserController";
 export interface ImgOfProduct {
   url: string;
 }
@@ -263,7 +264,26 @@ export default function DetailsProduct() {
   };
 
   const isSoldOut = first?.productDetail?.quantity == 0;
+  const CheckToken = async () => {
+    userController.CheckToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  }
+  const CheckRefreshToken = async () => {
 
+    userController.CheckRefreshToken().then((res) => {
+      console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
+
+    });
+
+
+
+  }
+  const muti = () => {
+    CheckToken();
+    CheckRefreshToken();
+    console.log("AOTHATDAY");
+  }
   return (
     <>
       <Container>
@@ -282,14 +302,15 @@ export default function DetailsProduct() {
                   />
                 </div>
               )} */}
-              {first?.productDetail && (
-                <ZoomableImage
-                  images={
-                    first?.productDetail?.ProductImage?.[selectedImageIndex]
-                      ?.url
-                  }
-                />
-              )}
+              {/* {first?.productDetail && (
+                // <ZoomableImage
+                //   images={
+                //     first?.productDetail?.ProductImage?.[selectedImageIndex]
+                //       ?.url
+                //   }
+                // />
+              )} */}
+
             </div>
             <div className="my-auto">
               <div className="col-span-1 grid gap-3">
@@ -300,11 +321,10 @@ export default function DetailsProduct() {
                       return (
                         <img
                           key={index}
-                          className={`h-[75px] w-[75px] ${
-                            selectedImageIndex === index
-                              ? "border-2 border-blue-500"
-                              : ""
-                          }`}
+                          className={`h-[75px] w-[75px] ${selectedImageIndex === index
+                            ? "border-2 border-blue-500"
+                            : ""
+                            }`}
                           src={e.url}
                           alt=""
                           onClick={() => handleImageClick(index)}
@@ -398,8 +418,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                              first?.productDetail.price! *
-                                (first?.productDetail.discount! / 100)
+                            first?.productDetail.price! *
+                            (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -497,9 +517,8 @@ export default function DetailsProduct() {
               {/* end icon */}
               {/* Mua ngay */}
               <div
-                className={`w-[100%] flex ${
-                  isSoldOut ? `justify-start` : `justify-end`
-                } mt-9 items-center gap-6`}
+                className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`
+                  } mt-9 items-center gap-6`}
               >
                 {/* <div>
                   <LoveProduct />
@@ -517,29 +536,34 @@ export default function DetailsProduct() {
                   </>
                 ) : (
                   <>
-                    <div
-                      className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
-                      onClick={() =>
-                        !isSoldOut && addProduct(Number(id), quantity, false)
-                      }
-                    >
-                      <div className="text-center text-base font-bold text-[#4C4C4C]">
-                        Thêm Vào Giỏ Hàng
+                    <a onClick={CheckToken}>
+                      <div
+                        className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
+                        onClick={() =>
+                          !isSoldOut && addProduct(Number(id), quantity, false)
+                        }
+                      >
+                        <div className="text-center text-base font-bold text-[#4C4C4C]">
+                          Thêm Vào Giỏ Hàng
+                        </div>
+                        <Cart />
                       </div>
-                      <Cart />
-                    </div>
-                    <div
-                      className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
+                    </a>
+                    <a onClick={muti}>
+                      <div
+                        className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
                           transition duration-150 bg-[#EA4B48] justify-evenly`}
-                      onClick={() => {
-                        if (isSoldOut) return;
-                        return addProduct(Number(id), quantity, true);
-                      }}
-                    >
-                      <p className="text-center text-base font-bold text-white ">
-                        Mua ngay
-                      </p>
-                    </div>
+                        onClick={() => {
+                          if (isSoldOut) return;
+                          return addProduct(Number(id), quantity, true);
+                        }}
+                      >
+                        <p className="text-center text-base font-bold text-white ">
+                          Mua ngay
+                        </p>
+                      </div>
+                    </a>
+
                   </>
                 )}
               </div>
@@ -581,11 +605,10 @@ export default function DetailsProduct() {
         <div className="justify-center gap-6 flex mt-10">
           <div>
             <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "descriptions"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "descriptions"
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
+                }`}
               onClick={() => handleTabClick("descriptions")}
               role="tab"
               aria-selected={activeTab === "descriptions" ? "true" : "false"}
@@ -596,11 +619,10 @@ export default function DetailsProduct() {
           </div>
           <div>
             <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "Rating"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
+              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "Rating"
+                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
+                : ""
+                }`}
               onClick={() => handleTabClick("Rating")}
               role="tab"
               aria-selected={activeTab === "Rating" ? "true" : "false"}
@@ -615,9 +637,8 @@ export default function DetailsProduct() {
       <Container>
         <div data-tab-content className="p-5">
           <div
-            className={` ${
-              activeTab === "descriptions" ? "visible" : "hidden"
-            }`}
+            className={` ${activeTab === "descriptions" ? "visible" : "hidden"
+              }`}
             id="descriptions"
             role="tabpanel"
           >
@@ -647,7 +668,7 @@ export default function DetailsProduct() {
                       handleRemoveRating={handleRemoveRating}
                     />
                   </div>
-                  {}
+                  { }
                   <div className="mt-10">
                     <ResponsivePagination
                       current={rateAndcomment.currentPage!}

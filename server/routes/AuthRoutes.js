@@ -53,7 +53,7 @@ router.post(
   AuthController.logout
 );
 // GENERATE NEW ACCESSTOKEN 
-router.post("/", AuthController.generateNewAccessToken)
+router.post("/1", AuthController.generateNewAccessToken)
 // CHECK REFRESH TOKEN EXPRIED
 router.post("/refresh", AuthController.checkRefreshToken)
 

@@ -15,6 +15,8 @@ import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import Container from "../container/Container";
 import HeaderTopUser from "../HeaderTop/HeaderTopUser";
+import axios from "axios";
+import { useCookies } from 'react-cookie';
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -121,6 +123,28 @@ export default function Header() {
       setShowSuggestions(false);
     }
   };
+  
+  const CheckToken = async() =>{
+    userController.CheckToken().then((res)=>{
+      console.log(JSON.stringify(res));
+    });
+  }
+  const CheckRefreshToken = async () => {
+
+    userController.CheckRefreshToken().then((res) => {
+      console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
+
+    });
+
+
+
+  }
+  const muti = () => {
+    CheckToken();
+    CheckRefreshToken();
+    console.log("AOTHATDAY");
+  }
+  
 
   return (
     <>
@@ -137,9 +161,9 @@ export default function Header() {
             <div className="container mx-auto">
               <div className="flex items-center justify-between">
                 <div className="p-[10px]  max-[426px]:p-[1px]">
-                  <Link to="/">
+                  <a href="/" onClick={CheckToken}>
                     <LogoWeb />
-                  </Link>
+                  </a>
                 </div>
                 {/* input */}
                 <div className="items-center flex flex-1 max-w-[755px] max-2xl:ml-10 max-xl:max-w-[700px] max-xl:ml-5">
@@ -248,10 +272,11 @@ export default function Header() {
                 </div>
 
                 <div className="items-center flex relative gap-2">
-                  <CartCount />
+                  <a onClick={CheckToken}><CartCount /></a>
+                 
                   <div className="items-center">
                     {checkLogin ? (
-                      <a className=" flex gap-2" href={href}>
+                      <a className=" flex gap-2" href={href} onClick={muti}>
                         <div className="font-medium flex items-center justify-center">
                           {name}
                         </div>

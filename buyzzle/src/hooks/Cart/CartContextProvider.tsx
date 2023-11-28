@@ -48,6 +48,7 @@ export default function useCartContext() {
       .catch((err) => {
         setWarning(err.response?.data);
         openModal("idWarningQuantity");
+        navigate("/login");
       });
   };
 

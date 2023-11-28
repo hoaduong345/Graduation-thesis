@@ -40,7 +40,7 @@ const AuthController = {
                 email: email,
             },
             process.env.SECRECT_KEY,
-            { expiresIn: '1h' }
+            { expiresIn: '15s' }
         );
     },
     // GENERATE REFRESH TOKEN
@@ -50,7 +50,7 @@ const AuthController = {
                 email: email,
             },
             process.env.JWT_REFRESH_TOKEN,
-            { expiresIn: '30d' }
+            { expiresIn: '15s' }
         );
     },
     generateForgotPasswordToken: (email) => {
@@ -446,7 +446,7 @@ const AuthController = {
     // REQUEST REFRESH AND ACCESS TOKEN
     requestRefreshToken: async (req, res) => {
         // take refresh token from user
-        const refreshToken = req.cookies.refreshToken;
+        const refreshToken = req.cookies.refreshtoken;
         if (!refreshToken) return res.status(401).json('You are not authenticated');
         jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN, (err, email) => {
             if (err) {
@@ -455,8 +455,11 @@ const AuthController = {
             // create new access token, refresh token
             const newAccesstoken = AuthController.genereateAccessToken(email);
             const newRefrestoken = AuthController.genereateRefreshToken(email);
-        });
-        res.status(200).json({ accessToken: newAccesstoken });
+            res.status(200).json({ accesstoken: newAccesstoken });
+           
+        }); 
+      
+       
     },
 
     // VERIFY ACCOUNT WHEN REGISTER WITH EMAIL
