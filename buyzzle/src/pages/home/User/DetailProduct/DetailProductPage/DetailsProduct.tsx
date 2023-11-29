@@ -35,6 +35,7 @@ import Cart from "../../../admin/assets/TSX/Cart";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
+import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
 export interface ImgOfProduct {
   url: string;
 }
@@ -283,8 +284,8 @@ export default function DetailsProduct() {
                 </div>
               )} */}
               {first?.productDetail && (
-                <ZoomableImage
-                  images={
+                <ImageMagnifier
+                  src={
                     first?.productDetail?.ProductImage?.[selectedImageIndex]
                       ?.url
                   }
