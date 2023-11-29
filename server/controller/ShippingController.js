@@ -471,6 +471,9 @@ const ShippingController = {
             };
             const notifi = await prisma.notification.findMany({
                 where: whereClause,
+                orderBy: {
+                    id: 'desc',
+                },
                 include: {
                     fk_user: {
                         select: {

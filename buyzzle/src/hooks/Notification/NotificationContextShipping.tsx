@@ -3,9 +3,9 @@ import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { notificationControllers } from "../../controllers/NotificationController";
 import CustomToast from "../../helper/Toast/CustomToast";
-import { AllNotification, NotificationModel } from "../../model/Notification";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
-import Shipping from "../../layout/asset/TSX/Shipping";
+import NewOrder from "../../layout/asset/TSX/NewOrder";
+import { AllNotification, NotificationModel } from "../../model/Notification";
 
 export default function useNotificationContextShippping() {
   const [countNotificationShipping, setCountNotificationShipping] =
@@ -51,7 +51,7 @@ export default function useNotificationContextShippping() {
         <a href={`/shipping/detail/${setstatus.id}`}>
           <CustomToast
             image={<BuyzzleAvt />}
-            iconSVG={<Shipping />}
+            iconSVG={<NewOrder />}
             name={
               <p className="text-sm font-semibold text-gray-900 ">
                 Buyzzle thông báo
