@@ -65,6 +65,7 @@ export default function Sitebar() {
       const reponse = await instance.post(API);
       console.log(reponse);
       localStorage.removeItem("user");
+      localStorage.removeItem("nameUser");
       window.location.href = "/";
     } catch (error) {
       console.log(error);

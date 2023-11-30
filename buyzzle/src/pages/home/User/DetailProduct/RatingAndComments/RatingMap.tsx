@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,7 +14,14 @@ import { stars } from "../../../../../helper/StarRating/Star";
 import { Ratee, Rating } from "../../../../../model/ProductModel";
 import Edit from "../../../admin/assets/TSX/Edit";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
+// import eyeslide from "../../../Admin/assets/TSX/EyeSlide";
 import Handle from "../../../admin/assets/TSX/bacham";
+import AvtDefautl from "../../../../../hooks/Notification/assets/AvtDefautl";
+import secureLocalStorage from "react-secure-storage";
+import { adminController } from "../../../../../controllers/AdminControllder";
+import User from "../../../admin/Management/User/User";
+import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
+
 interface FormValues {
   id: number;
   idproduct: number;
@@ -48,7 +55,10 @@ export default function RatingMap(props: Props) {
   const [isFeedbackClicked, setIsFeedbackClicked] = useState<number | null>(1);
   const [idRating, setidRating] = useState<number>(0);
   const [repTextCmt, setTextRepCmt] = useState<string>("");
-
+  const [AdminAvt, setAdminAvt] = useState<any>("");
+  const [AdminName, setAdminName] = useState<any>("");
+  // const [AdminAvt, setAdminAvt] = useState<any>("");
+  const [Username, setUsername] = useState<any>("");
   const { id: idProduct } = useParams();
   console.log("idididid", idProduct);
 
@@ -116,6 +126,57 @@ export default function RatingMap(props: Props) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTextRepCmt(e.target.value);
   };
+
+  useEffect(() => {
+    let user = secureLocalStorage.getItem("admin");
+    if (user == null) {
+      // console.log("VCLLLLLLLLLLLLLLLLLll");
+      setAdminName(null);
+      setAdminAvt(null);
+    } else {
+      const fetchData = async () => {
+        user = JSON.stringify(secureLocalStorage.getItem("admin"));
+        let UserData = JSON.parse(user);
+        const username = UserData.username;
+        await adminController.getAdminWhereUsername(username).then((res) => {
+          const name = res.adminWithImage.name;
+
+          // const email = res.adminWithImage.email;
+          setAdminName(name);
+          // setAdminAvt(null);
+          // const pathName = `/admin/adminprofile/${username}`
+          // setHref(`/admin/adminprofile/${username}`);
+          // setName(name);
+          // setEmail(email);
+          if (res.adminWithImage.AdminImage != undefined) {
+            const Image = res.adminWithImage.AdminImage[0].url;
+            setAdminAvt(Image);
+          } else {
+            console.log("k co hinh");
+          }
+          console.log("ADMIN DATA:" + AdminName, AdminAvt)
+          return res;
+        });
+
+      }
+      fetchData();
+
+    }
+
+  }, []);
+  useEffect(() => {
+    let user = localStorage.getItem("nameUser");
+    if (user == null) {
+      setUsername(null);
+    } else {
+      const userData = JSON.parse(user);
+      const username = userData;
+      console.log("USERNAME: " + username);
+      setUsername(username);
+      console.log("NameUser:"+ Username)
+    }
+  }, [])
+  // console.log("ADMIN DATA2:"+AdminName, AdminAvt)
   return (
     <div>
       {props.rateAndcomment?.Rating ? (
@@ -132,11 +193,30 @@ export default function RatingMap(props: Props) {
                     <div className="flex items-center gap-3">
                       {/* hinh anh */}
                       <div className="relative">
-                        <img
-                          className="w-10 h-10 rounded-full"
-                          src={Images.Avtcmt}
-                          alt="Avtcmt"
-                        />
+
+
+                        {rating?.user?.UserImage?.length > 0 ? (
+                          <img
+                            className="w-10 h-10 rounded-full"
+                            src={`${rating?.user?.UserImage?.[0].url}`}
+                            alt="Avtcmt"
+                          />
+                        ) : (
+                          <div
+                            // src={notiItems.fk_order.User.image}
+                            // src={`${notiItems.fk_order.User.UserImage?.[0].url}`}
+                            // alt="avatar_admin"
+                            className={`w-12 h-12 border-4  rounded-full bg-red-500 pt-2 pb-2 ps-3.5 pe-3.5}`}>
+                            <p className="text-1xl text-stone-50">
+                              {(rating?.user?.name).substring(0, 1).toUpperCase()}
+                            </p>
+                          </div>
+
+                        )}
+
+
+
+
                         <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                       </div>
                       {/* end hinh anh */}
@@ -146,7 +226,7 @@ export default function RatingMap(props: Props) {
                         <div className="flex items-center">
                           {/* name */}{" "}
                           <p className="text-[#1A1A1A] text-xl font-medium">
-                            {rating?.user?.username}
+                            {rating?.user?.name}
                           </p>
                           {/* end name */}
                           {/* period */}
@@ -185,56 +265,101 @@ export default function RatingMap(props: Props) {
                     </div>
                     <div className="items-center">
                       <div className="dropdown dropdown-right ">
-                        <label
-                          className="max-lg:w-[24px] max-lg:h-[24px]"
-                          tabIndex={1}
-                        >
-                          <Handle />
-                        </label>
-                        <ul
-                          tabIndex={0}
-                          className="dropdown-content menu bg-white rounded-box w-52
+                        {Username == rating?.user?.name ? (
+                          <>
+                            <label
+                              className="max-lg:w-[24px] max-lg:h-[24px]"
+                              tabIndex={1}
+                            >
+                              <Handle />
+                            </label>
+                            <ul
+                              tabIndex={0}
+                              className="dropdown-content menu bg-white rounded-box w-52
                                     shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                     max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                        >
-                          <li>
-                            <button
-                              className="flex items-center gap-4"
-                              onClick={() => {
-                                openDialog(
-                                  idDialogRating,
-                                  rating.id,
-                                  rating.comment
-                                );
-                                setidRating(rating.id);
-                              }}
                             >
-                              <Edit />
-                              <p
-                                className="text-[#EA4B48] text-sm font-medium
+                              <li>
+                                <button
+                                  className="flex items-center gap-4"
+                                  onClick={() => {
+                                    openDialog(
+                                      idDialogRating,
+                                      rating.id,
+                                      rating.comment
+                                    );
+                                    setidRating(rating.id);
+                                  }}
+                                >
+                                  <Edit />
+                                  <p
+                                    className="text-[#EA4B48] text-sm font-medium
                                 max-[940px]:text-xs "
-                              >
-                                Chỉnh sửa
-                              </p>
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              className="flex items-center gap-4"
-                              onClick={() =>
-                                props.handleRemoveRating(rating.id)
-                              }
-                            >
-                              <RemoveCate />
-                              <p
-                                className="text-[#EA4B48] text-sm font-medium
+                                  >
+                                    Chỉnh sửa
+                                  </p>
+                                </button>
+                              </li>
+                              <li>
+                                <button
+                                  className="flex items-center gap-4"
+                                  onClick={() =>
+                                    props.handleRemoveRating(rating.id)
+                                  }
+                                >
+                                  <RemoveCate />
+                                  <p
+                                    className="text-[#EA4B48] text-sm font-medium
                                  max-[940px]:text-xs "
-                              >
-                                Xóa
-                              </p>
-                            </button>
-                          </li>
-                        </ul>
+                                  >
+                                    Xóa
+                                  </p>
+                                </button>
+                              </li>
+                            </ul>
+                          </>
+
+                        ) : (
+                          <>
+                            {AdminName ? (
+                              <>
+                                <label
+                                  className="max-lg:w-[24px] max-lg:h-[24px]"
+                                  tabIndex={1}
+                                >
+                                  <Handle />
+                                </label>
+                                <ul
+                                  tabIndex={0}
+                                  className="dropdown-content menu bg-white rounded-box w-52
+                                    shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                    max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                                >
+
+                                  <li>
+                                    <button
+                                      className="flex items-center gap-4"
+                                      onClick={() =>
+                                        props.handleRemoveRating(rating.id)
+                                      }
+                                    >
+                                      <EyeSlide />
+                                      <p
+                                        className="text-[#EA4B48] text-sm font-medium
+                                 max-[940px]:text-xs "
+                                      >
+                                        Ẩn bình luận
+                                      </p>
+                                    </button>
+                                  </li>
+                                </ul>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        )}
+
                       </div>
                     </div>
                   </div>
@@ -260,104 +385,221 @@ export default function RatingMap(props: Props) {
                     </div>
                   </div>
                   {/* text reply */}
-                  {rating.repComment ? (
-                    <div>
-                      <p
-                        className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
-                        onClick={() => handleFeedbackClick(rating.id)}
-                      >
-                        {isFeedbackClicked === rating.id
-                          ? "Ẩn phản hồi"
-                          : "Xem phản hồi"}
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p
-                        className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
-                        onClick={() => handleFeedbackClick(rating.id)}
-                      >
-                        {isFeedbackClicked === rating.id
-                          ? "Ẩn phản hồi"
-                          : "Phản hồi"}
-                      </p>
-                    </div>
-                  )}
+
+                  <> {
+                    rating.repComment ? (
+                      <div>
+                        <p
+                          className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
+                          onClick={() => handleFeedbackClick(rating.id)}
+                        >
+                          {isFeedbackClicked === rating.id
+                            ? "Ẩn phản hồi"
+                            : "Xem phản hồi"}
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        {AdminName ? (
+                          <div>
+                            <p
+                              className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
+                              onClick={() => handleFeedbackClick(rating.id)}
+                            >
+                              {isFeedbackClicked === rating.id
+                                ? "Ẩn phản hồi"
+                                : "Phản hồi"}
+                            </p>
+                          </div>
+                        ) : (
+                          <div></div>
+                        )}
+                      </>
+
+                    )
+                  }</>
+
+
+
 
                   {isFeedbackClicked === rating.id && (
                     <>
-                      {/* end text reply */}
-                      {/* reply content comment */}
-                      <div className="mx-3 my-2 flex">
-                        <div className="ml-2">
-                          <LineCMT />
-                        </div>
-                        {/* shop reply cmt */}
-                        <div className="flex items-center mt-1 ml-3 gap-3">
-                          {/* hinh anh */}
-                          <div className="relative">
-                            <CircleAvrCMT />
-                            <span className="top-0 left-5 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-                          </div>
-                          {/* end hinh anh */}
-                          {/* thong tin admin */}
-                          <div>
-                            {/* name - period - date */}
-                            <div className="flex items-center">
-                              {/* name */}{" "}
-                              <p className="text-[#1A1A1A] text-base font-medium">
-                                ShopTaiNghe
-                              </p>
-                              {/* end name */}
-                              {/* period */}
-                              <Period /> {/* end period */}
-                              {/* date */}{" "}
-                              <p className="text-[#4C4C4C] text-[12px]">
-                                12-10-2023
-                              </p>
-                              {/* end date */}
-                            </div>
-                            {/* end name - period - date */}
-                          </div>{" "}
-                          {/* end thong tin admin */}
-                        </div>
 
-                        {/* shop reply cmt */}
-                      </div>
+
+
                       {/* end reply content comment */}
                       {/* input */}
 
                       <div>
+                        {/* end text reply */}
+                        {/* reply content comment */}
+
                         {rating.repComment != null ? (
-                          <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4">
-                            <p className="text-[#4C4C4C]">
-                              {rating.repComment}
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="text-[#333333] rounded-[6px] px-[10px] py-[6px] max-xl:text-sm mt-2 border-[1px] border-[#FFAAAF] w-[95%] mx-auto flex">
-                            <input
-                              className={`w-full focus:outline-none`}
-                              value={repTextCmt}
-                              placeholder={`Trả lời ${rating?.user?.username}`}
-                              onChange={(e) => handleChange(e)}
-                              onKeyDown={(e: any) =>
-                                handleKeyPress(e, rating.id)
-                              }
-                            />
-                            <div
-                              className="pl-2 cursor-pointer"
-                              onClick={() => {
-                                if (repTextCmt.trim().length !== 0) {
-                                  getAdminRepComment(rating.id);
-                                } else {
-                                  toast.warn("Trống !");
-                                }
-                              }}
-                            >
-                              <SendCmt />
+                          <>{AdminName ? (
+                            <div className="mx-3 my-2 flex">
+                              <div className="ml-2">
+                                <LineCMT />
+                              </div>
+                              {/* shop reply cmt */}
+                              <div className="flex items-center mt-1 ml-3 gap-3">
+                                {/* hinh anh */}
+                                <div className="relative ">
+                                  <img
+                                    className="w-10 h-10 rounded-full"
+                                    src={`${AdminAvt}`}
+                                    alt="Avtcmt"
+                                  />
+                                  {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
+                                  <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                                </div>
+                                {/* end hinh anh */}
+                                {/* thong tin admin */}
+                                <div>
+                                  {/* name - period - date */}
+                                  <div className="flex items-center">
+                                    {/* name */}{" "}
+                                    <p className="text-[#1A1A1A] text-base font-medium">
+                                      {AdminName}
+                                    </p>
+                                    {/* end name */}
+                                    {/* period */}
+                                    <Period /> {/* end period */}
+                                    {/* date */}{" "}
+                                    <p className="text-[#4C4C4C] text-[12px]">
+                                      12-10-2023
+                                    </p>
+                                    {/* end date */}
+                                  </div>
+                                  {/* end name - period - date */}
+                                </div>{" "}
+                                {/* end thong tin admin */}
+                              </div>
+
+                              {/* shop reply cmt */}
                             </div>
-                          </div>
+                          ) : (
+                            <div className="mx-3 my-2 flex">
+                              <div className="ml-2">
+                                <LineCMT />
+                              </div>
+                              {/* shop reply cmt */}
+                              <div className="flex items-center mt-1 ml-3 gap-3">
+                                {/* hinh anh */}
+                                <div className="relative ">
+                                  <img
+                                    className="w-10 h-10 rounded-full"
+                                    src={`${rating?.admin?.AdminImage?.[0].url}`}
+                                    alt="Avtcmt"
+                                  />
+                                  {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
+                                  <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                                </div>
+                                {/* end hinh anh */}
+                                {/* thong tin admin */}
+                                <div>
+                                  {/* name - period - date */}
+                                  <div className="flex items-center">
+                                    {/* name */}{" "}
+                                    <p className="text-[#1A1A1A] text-base font-medium">
+                                      {rating?.admin?.name}
+                                    </p>
+                                    {/* end name */}
+                                    {/* period */}
+                                    <Period /> {/* end period */}
+                                    {/* date */}{" "}
+                                    <p className="text-[#4C4C4C] text-[12px]">
+                                      12-10-2023
+                                    </p>
+                                    {/* end date */}
+                                  </div>
+                                  {/* end name - period - date */}
+                                </div>{" "}
+                                {/* end thong tin admin */}
+                              </div>
+
+                              {/* shop reply cmt */}
+                            </div>
+                          )}
+                            <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4">
+                              <p className="text-[#4C4C4C]">
+                                {rating.repComment}
+                              </p>
+                            </div></>
+
+                        ) : (
+                          <>
+                            {AdminName ? (
+                              <> <div className="mx-3 my-2 flex">
+                                <div className="ml-2">
+                                  <LineCMT />
+                                </div>
+                                {/* shop reply cmt */}
+                                <div className="flex items-center mt-1 ml-3 gap-3">
+                                  {/* hinh anh */}
+                                  <div className="relative ">
+                                    <img
+                                      className="w-10 h-10 rounded-full"
+                                      src={`${AdminAvt}`}
+                                      alt="Avtcmt"
+                                    />
+                                    {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
+                                    <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                                  </div>
+                                  {/* end hinh anh */}
+                                  {/* thong tin admin */}
+                                  <div>
+                                    {/* name - period - date */}
+                                    <div className="flex items-center">
+                                      {/* name */}{" "}
+                                      <p className="text-[#1A1A1A] text-base font-medium">
+                                        {AdminName}
+                                      </p>
+                                      {/* end name */}
+                                      {/* period */}
+                                      <Period /> {/* end period */}
+                                      {/* date */}{" "}
+                                      <p className="text-[#4C4C4C] text-[12px]">
+                                        12-10-2023
+                                      </p>
+                                      {/* end date */}
+                                    </div>
+                                    {/* end name - period - date */}
+                                  </div>{" "}
+                                  {/* end thong tin admin */}
+                                </div>
+
+                                {/* shop reply cmt */}
+                              </div>
+                                <div className="text-[#333333] rounded-[6px] px-[10px] py-[6px] max-xl:text-sm mt-2 border-[1px] border-[#FFAAAF] w-[95%] mx-auto flex">
+                                  <input
+                                    className={`w-full focus:outline-none`}
+                                    value={repTextCmt}
+                                    placeholder={`Trả lời ${rating?.user?.name}`}
+                                    onChange={(e) => handleChange(e)}
+                                    onKeyDown={(e: any) =>
+                                      handleKeyPress(e, rating.id)
+                                    }
+                                  />
+                                  <div
+                                    className="pl-2 cursor-pointer"
+                                    onClick={() => {
+                                      if (repTextCmt.trim().length !== 0) {
+                                        getAdminRepComment(rating.id);
+                                      } else {
+                                        toast.warn("Trống !");
+                                      }
+                                    }}
+                                  >
+                                    <SendCmt />
+                                  </div>
+                                </div></>
+
+                            ) : (
+                              <div></div>
+                            )}
+                          </>
+
+
                         )}
                       </div>
                       {/* content comment */}
@@ -368,7 +610,7 @@ export default function RatingMap(props: Props) {
             );
           })
         ) : (
-          <p>trong</p>
+          <></>
         )
       ) : null}
       <DialogModal
@@ -429,7 +671,7 @@ export default function RatingMap(props: Props) {
                             message: "",
                           },
                         }}
-                        render={({}) => (
+                        render={({ }) => (
                           <>
                             {[1, 2, 3, 4, 5].map((rating) => (
                               <input
@@ -438,7 +680,7 @@ export default function RatingMap(props: Props) {
                                 name="rating-5"
                                 className="mask mask-star-2 bg-orange-400"
                                 onClick={() => handleRatingClick(rating)}
-                                // ref={register}
+                              // ref={register}
                               />
                             ))}
                           </>

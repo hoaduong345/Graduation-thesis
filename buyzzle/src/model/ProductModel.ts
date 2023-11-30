@@ -93,17 +93,28 @@ export interface Rating {
     ProductImage: ProductImage[];
   };
   user: {
-    username: string;
+    name: string;
+    UserImage: UserImage[];
   };
   CommentImage: {
     url: string;
   }[];
+  admin: admin;
 }
-
+export interface admin{
+  name: string;
+  AdminImage: AdminImage[];
+}
+export interface AdminImage{
+  url: string;
+}
 export interface User {
-  username: string;
+  name: string;
+  UserImage: UserImage[];
 }
-
+export interface UserImage{
+  url: string;
+}
 export interface Product {
   quantity: number;
 }

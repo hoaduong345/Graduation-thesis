@@ -31,16 +31,23 @@ import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
 
 // import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
-import Cart from "../../../admin/assets/TSX/Cart";
-import SaveLink from "../../../admin/assets/TSX/SaveLink";
+
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { userController } from "../../../../../controllers/UserController";
+import SaveLink from "../../../Admin/assets/TSX/SaveLink";
+
+import DialogLogin from "../../../../../helper/Dialog/DialogLogin";
+import { Controller, useForm } from "react-hook-form";
+import Cart from "../../../admin/assets/TSX/Cart";
 export interface ImgOfProduct {
   url: string;
 }
 [];
-
+export type LoginForm = {
+  email: string;
+  password: string;
+}
 export type FormValues = {
   idproduct: number;
   name: string;
@@ -99,7 +106,7 @@ export default function DetailsProduct() {
   });
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("descriptions"); // Mặc định là tab "App"
-
+  const [Logined, setLogined] = useState<boolean>();
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
   };
@@ -166,6 +173,7 @@ export default function DetailsProduct() {
       .getCommentWhereRating(idproduct, rating, page, perPage)
       .then((res) => {
         setRateAndcomment(res);
+        console.log("RATING:" + JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
@@ -275,15 +283,78 @@ export default function DetailsProduct() {
       console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
 
     });
-
-
+  }
+  const CheckLogin = async () => {
+    const user = localStorage.getItem("user");
+    if (user == null) {
+      setLogined(false);
+      openModal(idAddAdmin)
+    } else {
+      setLogined(true);
+      CheckToken();
+      CheckRefreshToken();
+      console.log("AOTHATDAY");
+    }
 
   }
   const muti = () => {
-    CheckToken();
-    CheckRefreshToken();
-    console.log("AOTHATDAY");
+    CheckLogin();
+
   }
+  const {
+    control,
+    handleSubmit,
+    clearErrors,
+    reset,
+    register,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    mode: "all",
+  });
+  const param = useParams();
+  const idAddAdmin = "AddAdmin";
+  const Login = async (data: LoginForm) => {
+    console.log("LoginData:" + data)
+    userController.Login(data).then((res) => {
+      console.log("LoginTHanhCong:" + JSON.stringify(res.username))
+      const username = res.username;
+      const accessToken = res.accessToken;
+      console.log(accessToken);
+      const UserData = { username };
+      const Token = { accessToken };
+      localStorage.setItem("idUser", JSON.stringify(res.id));
+      localStorage.setItem("user", JSON.stringify(UserData));
+      localStorage.setItem("accessToken", JSON.stringify(Token));
+      // const id = param.id;
+      setTimeout(() => {
+        window.location.href = `/Detailproducts/${param.id}`;
+      }, 2000);
+    })
+  }
+  const openModal = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+  const closeModal2 = async (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+  };
+  const saveModal = (id: string, data: LoginForm) => {
+    Login(data);
+    reset({
+      email: "",
+      password: "",
+    });
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+    console.log("Data:" + JSON.stringify(data));
+  };
   return (
     <>
       <Container>
@@ -536,33 +607,193 @@ export default function DetailsProduct() {
                   </>
                 ) : (
                   <>
-                    <a onClick={CheckToken}>
-                      <div
-                        className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
-                        onClick={() =>
-                          !isSoldOut && addProduct(Number(id), quantity, false)
-                        }
-                      >
-                        <div className="text-center text-base font-bold text-[#4C4C4C]">
-                          Thêm Vào Giỏ Hàng
+                    <a onClick={muti}>
+                      {Logined ? (
+                        <div
+                          className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
+                          onClick={() =>
+                            !isSoldOut && addProduct(Number(id), quantity, false)
+                          }
+                        >
+                          <div className="text-center text-base font-bold text-[#4C4C4C]">
+                            Thêm Vào Giỏ Hàng
+                          </div>
+                          <Cart />
                         </div>
-                        <Cart />
-                      </div>
+                      ) : (
+                        <div
+                          className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
+                          onClick={() =>
+                            openModal
+                          }
+                        >
+                          <div className="text-center text-base font-bold text-[#4C4C4C]">
+                            Thêm Vào Giỏ Hàng
+                          </div>
+                          <Cart />
+                        </div>
+                      )}
+
                     </a>
                     <a onClick={muti}>
-                      <div
-                        className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
-                          transition duration-150 bg-[#EA4B48] justify-evenly`}
-                        onClick={() => {
-                          if (isSoldOut) return;
-                          return addProduct(Number(id), quantity, true);
-                        }}
-                      >
-                        <p className="text-center text-base font-bold text-white ">
-                          Mua ngay
-                        </p>
-                      </div>
+                      {Logined ? (
+                        <div
+                          className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
+   transition duration-150 bg-[#EA4B48] justify-evenly`}
+                          onClick={() => {
+                            if (isSoldOut) return;
+                            return addProduct(Number(id), quantity, true);
+                          }}
+                        >
+                          <p className="text-center text-base font-bold text-white ">
+                            Mua ngay
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
+   transition duration-150 bg-[#EA4B48] justify-evenly`}
+                          onClick={() => {
+                            openModal
+                          }}
+                        >
+                          <p className="text-center text-base font-bold text-white ">
+                            Mua ngay
+                          </p>
+                        </div>
+                      )}
+
                     </a>
+                    <div>
+                      <DialogLogin
+                        id={idAddAdmin}
+                        onClose={() => closeModal2(idAddAdmin)}
+                        onSave={handleSubmit((data: any) => {
+                          saveModal(idAddAdmin, data);
+                        })}
+                        title="Đăng Nhập"
+                        body={
+                          <>
+                            <div className="grid grid-cols-5 gap-8">
+                              <div className="col-span-3 ">
+                                <div className="flex gap-3  ">
+                                  <div className="flex flex-col gap-5 max-lg:gap-2">
+                                    <div className="h-[90px] w-[500px]">
+                                      <Controller
+                                        name="email"
+                                        control={control}
+                                        rules={{
+                                          required: {
+                                            value: true,
+                                            message: "Không để trống",
+                                          },
+                                          minLength: {
+                                            value: 4,
+                                            message: "Ít nhất 4 ký tự",
+                                          },
+                                          // maxLength: {
+                                          //   value: ,
+                                          //   message:
+                                          //     "Nhiều nhất 25 kí tự",
+                                          // },
+                                          validate: {
+                                            // Kiểm tra email có đúng định dạng không
+                                            validEmail: (value) =>
+                                              /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(
+                                                value
+                                              ) || "Email không hợp lệ",
+                                          },
+                                        }}
+                                        render={({ field }) => (
+                                          <>
+                                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                                              Email
+                                            </label>
+                                            <input
+                                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                                              placeholder="Nhập vào email của bạn"
+                                              value={field.value}
+                                              onChange={(e) => {
+                                                const reg = /[!#$%^&]/;
+                                                const value = e.target.value;
+                                                field.onChange(value.replace(reg, ""));
+                                              }}
+                                              name="email"
+                                            />
+                                            {errors.email && (
+                                              <p className="text-[11px] text-red-700 mt-0">
+                                                {errors.email.message}
+                                              </p>
+                                            )}
+                                          </>
+                                        )}
+                                      />
+                                    </div>
+                                  </div>
+
+                                </div>
+                                <div className="flex gap-3  ">
+                                  <div className="flex flex-col gap-5 max-lg:gap-2">
+                                    <div className="h-[90px] w-[500px]">
+                                      <Controller
+                                        name="password"
+                                        control={control}
+                                        rules={{
+                                          required: {
+                                            value: true,
+                                            message: "Không để trống",
+                                          },
+                                          minLength: {
+                                            value: 4,
+                                            message: "Ít nhất 4 ký tự",
+                                          },
+                                          maxLength: {
+                                            value: 25,
+                                            message: "Nhiều nhất 25 kí tự",
+                                          },
+                                        }}
+                                        render={({ field }) => (
+                                          <>
+                                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                                              Mật khẩu
+                                            </label>
+                                            <input
+                                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                                              type="password"
+                                              placeholder="Nhập vào mật khẩu"
+                                              value={field.value}
+                                              onChange={(e) => {
+                                                const reg = /[!@#$%^&]/;
+                                                const value = e.target.value;
+                                                field.onChange(value.replace(reg, ""));
+                                              }}
+                                              name="password"
+                                            />
+                                            {errors.password && (
+                                              <p className="text-[11px] text-red-700 mt-0">
+                                                {errors.password.message}
+                                              </p>
+                                            )}
+                                          </>
+                                        )}
+                                      />
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        }
+                      />
+
+                    </div>
 
                   </>
                 )}

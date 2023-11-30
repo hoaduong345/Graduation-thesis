@@ -735,7 +735,12 @@ const ProductController = {
                 include: {
                     user: {
                         select: {
-                            username: true,
+                            name: true,
+                            UserImage: {
+                                select:{
+                                    url:true,
+                                }
+                            },
                         },
                     },
                     product: {
@@ -748,6 +753,16 @@ const ProductController = {
                             url: true,
                         },
                     },
+                    admin: {
+                        select: {
+                            name: true,
+                            AdminImage: {
+                                select:{
+                                    url:true,
+                                }
+                            },
+                        }
+                    }
                 },
                 skip: (page - 1) * perPage,
                 take: perPage,
@@ -960,6 +975,16 @@ const ProductController = {
                             url: true,
                         },
                     },
+                    admin: {
+                        select: {
+                            name: true,
+                            AdminImage: {
+                                select:{
+                                    url:true,
+                                }
+                            },
+                        }
+                    }
                 },
                 orderBy: {
                     id: 'desc',
