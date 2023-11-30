@@ -40,7 +40,7 @@ const AuthController = {
                 email: email,
             },
             process.env.SECRECT_KEY,
-            { expiresIn: '15s' }
+            { expiresIn: '30m' }
         );
     },
     // GENERATE REFRESH TOKEN
@@ -50,7 +50,7 @@ const AuthController = {
                 email: email,
             },
             process.env.JWT_REFRESH_TOKEN,
-            { expiresIn: '15s' }
+            { expiresIn: '30d' }
         );
     },
     generateForgotPasswordToken: (email) => {
