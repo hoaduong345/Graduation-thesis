@@ -186,7 +186,7 @@ export default function RatingMap(props: Props) {
               <>
                 <div
                   key={rating.id}
-                  className="border-t-[1px] border-[#EA4B48] px-11 py-8"
+                  className="border-t-[1.5px] border-gray-300 px-11 py-8 bg-white mb-5 rounded-md"
                 >
                   {/* header comment */}
                   <div className=" justify-between flex mb-4">

@@ -40,6 +40,7 @@ import SaveLink from "../../../Admin/assets/TSX/SaveLink";
 import DialogLogin from "../../../../../helper/Dialog/DialogLogin";
 import { Controller, useForm } from "react-hook-form";
 import Cart from "../../../admin/assets/TSX/Cart";
+import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
 export interface ImgOfProduct {
   url: string;
 }
@@ -373,15 +374,14 @@ export default function DetailsProduct() {
                   />
                 </div>
               )} */}
-              {/* {first?.productDetail && (
-                // <ZoomableImage
-                //   images={
-                //     first?.productDetail?.ProductImage?.[selectedImageIndex]
-                //       ?.url
-                //   }
-                // />
-              )} */}
-
+              {first?.productDetail && (
+                <ImageMagnifier
+                  src={
+                    first?.productDetail?.ProductImage?.[selectedImageIndex]
+                      ?.url
+                  }
+                />
+              )}
             </div>
             <div className="my-auto">
               <div className="col-span-1 grid gap-3">
@@ -831,117 +831,105 @@ export default function DetailsProduct() {
           {/* end Sản phẩm của shop */}
         </body>
       </Container>
+      <Container>{/* Chi tiết và đánh giá */}</Container>
+      {/* <div className="border-[1px] border-[#E0E0E0] mt-[-2px]"></div> */}
       <Container>
-        {/* Chi tiết và đánh giá */}
-        <div className="justify-center gap-6 flex mt-10">
-          <div>
-            <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "descriptions"
-                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                : ""
-                }`}
-              onClick={() => handleTabClick("descriptions")}
-              role="tab"
-              aria-selected={activeTab === "descriptions" ? "true" : "false"}
-              aria-controls="descriptions"
-            >
-              <span className="ml-1">Chi tiết sản phẩm</span>
-            </a>
+        {/* chi tiết sản phẩm */}
+
+        <div className="p-5">
+          <div className=" shadow-gray-200 rounded-md mt-10 p-10">
+            <div className="justify-start gap-6 flex">
+              <div>
+                <a className="active cursor-pointer font-semibold border-[#1A1A1A] text-2xl">
+                  <span className="ml-1">CHI TIẾT SẢN PHẨM</span>
+                </a>
+              </div>
+            </div>
+            <div id="descriptions" role="tabpanel">
+              <div
+                className="pl-[43px] text-[16px] break-all shadow-gray-50 rounded-md py-4 bg-white"
+                dangerouslySetInnerHTML={{
+                  __html: first?.productDetail?.description as any,
+                }}
+              ></div>
+            </div>
           </div>
-          <div>
-            <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${activeTab === "Rating"
-                ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                : ""
-                }`}
-              onClick={() => handleTabClick("Rating")}
-              role="tab"
-              aria-selected={activeTab === "Rating" ? "true" : "false"}
-              aria-controls="Rating"
-            >
-              <span className="ml-1">Đánh giá</span>
-            </a>
-          </div>
-        </div>
-      </Container>
-      <div className="border-[1px] border-[#E0E0E0] mt-[-2px]"></div>
-      <Container>
-        <div data-tab-content className="p-5">
+
           <div
-            className={` ${activeTab === "descriptions" ? "visible" : "hidden"
-              }`}
-            id="descriptions"
-            role="tabpanel"
-          >
-            <div
-              className="px-[113px] py-[78px] text-sm break-all"
-              dangerouslySetInnerHTML={{
-                __html: first?.productDetail?.description as any,
-              }}
-            ></div>
-          </div>
-          <div
-            className={` ${activeTab === "Rating" ? "visible" : "hidden"}`}
+            // className={` ${activeTab === "Rating" ? "visible" : "hidden"}`}
             id="Rating"
             role="tabpanel"
           >
             {/* <Rating /> */}
-            <div className="mt-5 ">
-              <div className="grid gap-4 grid-cols-3">
-                {/* Left Comment */}
-                <div className="col-span-2 ">
-                  <div>
-                    <RatingMap
-                      getCommentWhereRating={getCommentWhereRating}
-                      setRateAndcomment={setRateAndcomment}
-                      handleEditProductRating={handleEditProductRating}
-                      rateAndcomment={rateAndcomment!}
-                      handleRemoveRating={handleRemoveRating}
-                    />
-                  </div>
-                  { }
-                  <div className="mt-10">
-                    <ResponsivePagination
-                      current={rateAndcomment.currentPage!}
-                      total={rateAndcomment.totalRatings!}
-                      onPageChange={handlePageChange}
-                      maxWidth={500}
-                    />
-                  </div>
-                  {/* ///////////////////////////////////////////////////// */}
-                </div>
-                {/* end Left Comment */}
-                {/* Right rating */}
+            <div className="mt-10 ">
+              <div className=" shadow-gray-100 rounded-md p-10 ">
                 <div>
-                  <div
-                    className="col-span-1 w-[312px] h-auto p-4 float-right
-                        shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                  <a
+                    className="active cursor-pointer font-semibold  border-[#1A1A1A] text-2xl"
+                    // onClick={() => handleTabClick("Rating")}
+                    // role="tab"
+                    aria-selected={activeTab === "Rating" ? "true" : "false"}
+                    aria-controls="Rating"
                   >
-                    <div className="py-5">
-                      <p className="text-[#1A1A1A] text-xl text-center font-medium">
-                        Tìm Kiếm
-                      </p>
-                      <div className="rate flex justify-center mt-3">
-                        <div className="mt-3">
-                          {arrRating.map((item, index) => {
-                            return (
-                              <RateDetailCMT
-                                key={index}
-                                checked={item.checked}
-                                rating={item.rating}
-                                onChangeFilter={(rating) => {
-                                  console.log("Ratting:" + rating);
-                                  HandleGetCommentWhereRating(rating);
-                                }}
-                              />
-                            );
-                          })}
+                    <span className="ml-1">ĐÁNH GIÁ</span>
+                  </a>
+                </div>
+                <div className="grid gap-4 grid-cols-3">
+                  {/* Left Comment */}
+                  <div className="col-span-2 ">
+                    <div>
+                      <RatingMap
+                        getCommentWhereRating={getCommentWhereRating}
+                        setRateAndcomment={setRateAndcomment}
+                        handleEditProductRating={handleEditProductRating}
+                        rateAndcomment={rateAndcomment!}
+                        handleRemoveRating={handleRemoveRating}
+                      />
+                    </div>
+                    {}
+                    <div className="mt-10">
+                      <ResponsivePagination
+                        current={rateAndcomment.currentPage!}
+                        total={rateAndcomment.totalRatings!}
+                        onPageChange={handlePageChange}
+                        maxWidth={500}
+                      />
+                    </div>
+                    {/* ///////////////////////////////////////////////////// */}
+                  </div>
+                  {/* end Left Comment */}
+                  {/* Right rating */}
+                  <div>
+                    <div
+                      className="col-span-1 w-[312px] h-auto p-4 float-right bg-white rounded-md
+                        shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                    >
+                      <div className="py-5">
+                        <p className="text-[#1A1A1A] text-xl text-center font-medium">
+                          Tìm Kiếm
+                        </p>
+                        <div className="rate flex justify-center mt-3">
+                          <div className="mt-3">
+                            {arrRating.map((item, index) => {
+                              return (
+                                <RateDetailCMT
+                                  key={index}
+                                  checked={item.checked}
+                                  rating={item.rating}
+                                  onChangeFilter={(rating) => {
+                                    console.log("Ratting:" + rating);
+                                    HandleGetCommentWhereRating(rating);
+                                  }}
+                                />
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  {/* end Right rating */}
                 </div>
-                {/* end Right rating */}
               </div>
             </div>
           </div>

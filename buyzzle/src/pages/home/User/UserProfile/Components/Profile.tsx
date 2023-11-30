@@ -638,6 +638,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                         </div>
                         {/* button */}
                         <div
+                          onClick={handleSubmit(
+                            (formData: any, FormImage: any) => {
+                              onSubmit(formData, FormImage);
+                            }
+                          )}
                           className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
                             isDisabled
                               ? "bg-[#aeaeae] cursor-not-allowed"
@@ -647,11 +652,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                         >
                           <button
                             disabled={isDisabled}
-                            onClick={handleSubmit(
-                              (formData: any, FormImage: any) => {
-                                onSubmit(formData, FormImage);
-                              }
-                            )}
                             className={`text-center text-base font-bold text-[#FFFFFF]
                     ${
                       isDisabled ? "cursor-not-allowed" : "cursor-pointer"
@@ -697,7 +697,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       </>
                                     ) : (
                                       <p className=" flex flex-col items-center my-16">
-                                        No file selected
+                                        Chọn ảnh
                                       </p>
                                     )}
                                   </div>
@@ -744,10 +744,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     404
                   </p>
                   <p className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wider text-gray-300 mt-2">
-                    Page Not Found
+                    Trang không tồn tại
                   </p>
                   <p className="text-lg md:text-xl lg:text-2xl text-gray-500 my-12">
-                    Sorry, the page you are looking for could not be found.
+                    Xin lỗi, trang bạn đang tìm kiếm không thể được tìm thấy.
                   </p>
                   <a
                     href="#"
