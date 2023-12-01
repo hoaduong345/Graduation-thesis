@@ -51,7 +51,7 @@ const AuthController = {
                 email: email,
             },
             process.env.JWT_REFRESH_TOKEN,
-            { expiresIn: '10s' }
+            { expiresIn: '30d' }
         );
     },
     generateForgotPasswordToken: (email) => {

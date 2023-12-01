@@ -16,31 +16,53 @@ export interface userModel {
 }
 
 class UserController {
-  Login = async (data: LoginForm) =>{
-    return await axios
-    .post(`${appConfigAuth.apiUrl}/login`, data,{
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-      withCredentials: true,
-    })
-    .then((res) => {
-      if (res.status === 200) {
-        console.log("Login successfully");
-        toast.success("Login successfully", {
-          position: "top-right",
-          autoClose: 5000,
-        });
+  Login = async (data: LoginForm) => {
+    try {
+      return await axios
+        .post(`${appConfigAuth.apiUrl}/login`, data, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          withCredentials: true,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("Login successfully");
+            toast.success("Login successfully", {
+              position: "top-right",
+              autoClose: 5000,
+            });
 
-      } else {
-        console.log("Login Failed!");
-        toast.warning("Login failed", {
-          position: "top-right",
-          autoClose: 5000,
+          } else {
+            console.log("Login Failed!");
+            toast.warning("Login failed", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+          return res.data;
         });
+    } catch (error) {
+      // console.log(error);
+      if (axios.isAxiosError(error) && error.response) {
+        const responseData = error.response.data;
+        console.log(responseData);
+        // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
+        if (responseData) {
+          //   const errorMessage = responseData.error.password;
+          console.log(`Lỗi1:1 ${responseData}`);
+          toast.warning(responseData, {
+            position: "top-right",
+            autoClose: 5000,
+          });
+        } else {
+          console.log("Lỗi không xác định từ server");
+        }
+      } else {
+        console.error("Lỗi gửi yêu cầu không thành công", error);
       }
-      return res.data;
-    });
+    }
+
   }
 
   getUserWhereUsername = async (username: string | undefined) => {
