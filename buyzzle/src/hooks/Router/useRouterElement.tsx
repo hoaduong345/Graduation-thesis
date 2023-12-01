@@ -43,6 +43,7 @@ import Shipper from "../../pages/home/admin/Management/Shipper/Shipper";
 import StatisticsPage from "../../pages/home/admin/Statistics/StatisticsPage";
 import Admin from "../../pages/home/admin/Management/Admin/Admin";
 import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
+import VouchersPage from "../../components/home/components/Voucher/VouchersPage";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -253,7 +254,7 @@ export default function useRouterEmelent() {
       path: "voucher",
       element: (
         <MainLayout>
-          <VoucherHomePage />
+          <VouchersPage />
         </MainLayout>
       ),
     },
