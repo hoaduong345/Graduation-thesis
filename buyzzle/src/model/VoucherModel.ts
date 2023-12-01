@@ -12,4 +12,10 @@ export interface VoucherModel {
   startDay: Date;
   endDay: Date;
   discount: number;
+  used?: number,
+  savedBy?: savedBy[];
+}
+
+interface savedBy {
+  used?: boolean,
 }
