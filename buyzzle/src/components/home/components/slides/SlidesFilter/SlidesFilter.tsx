@@ -10,8 +10,25 @@ import "./stylesFilter.css";
 // import required modules
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Images } from "../../../../../assets/TS";
+import { useEffect, useState } from "react";
+import { BannerModel } from "../../../../../model/BannerModel";
+import { bannerController } from "../../../../../controllers/BannerController";
+
+
+
 
 export default function SlidesFilter() {
+const [banner, setBanner] = useState<BannerModel[]>([]);
+
+  const getAllBaner = async () => {
+    await bannerController.getAll().then((res: any) => {
+      setBanner(res);
+    });
+  };
+  
+  useEffect(() => {
+    getAllBaner();
+  }, []);
   return (
     <>
       <Swiper
@@ -28,18 +45,19 @@ export default function SlidesFilter() {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <img src={Images.banner} alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <img src={Images.banner1} alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <img src={Images.bannerFilter} alt="" />
-        </SwiperSlide>
+        {banner?.map((items) => {
+          return (
+            <>
+              <SwiperSlide>
+                <img src={items.image} alt="" />
+              </SwiperSlide>
+            </>
+          );
+        })}
       </Swiper>
     </>
   );
+}
+{
+
 }

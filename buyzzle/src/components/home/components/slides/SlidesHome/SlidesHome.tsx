@@ -1,18 +1,31 @@
-
 // Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
-import './styles.css';
+import "./styles.css";
 
 // import required modules
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { BannerHomeModel } from "../../../../../model/BannerHomeModel";
+import { bannerhomeController } from "../../../../../controllers/BannerHomeController";
+import { useEffect, useState } from "react";
 
 export default function SlidesHome() {
+  const [banner, setBanner] = useState<BannerHomeModel[]>([]);
+
+  const getAllBaner = async () => {
+    await bannerhomeController.getAll().then((res: any) => {
+      setBanner(res);
+    });
+  };
+
+  useEffect(() => {
+    getAllBaner();
+  }, []);
   return (
     <>
       <Swiper
@@ -29,8 +42,16 @@ export default function SlidesHome() {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper max-[1023px]:hidden"
       >
-
-        <SwiperSlide className='max-[769px]:max-w-[648px]'>
+        {banner?.map((items) => {
+          return (
+            <>
+              <SwiperSlide className="max-[769px]:max-w-[648px]">
+                <img src={items.image} alt="" />
+              </SwiperSlide>
+            </>
+          );
+        })}
+        {/* <SwiperSlide className='max-[769px]:max-w-[648px]'>
           <img className='object-cover' src='https://lzd-img-global.slatic.net/g/icms/images/ims-web/36e0d44b-5402-402e-94a7-0591142bba62.jpg_2200x2200q90.jpg_.webp' alt="" />
         </SwiperSlide>
 
@@ -40,8 +61,7 @@ export default function SlidesHome() {
 
         <SwiperSlide className='max-[769px]:max-w-[648px]'>
           <img src='https://icms-image.slatic.net/images/ims-web/e6360b2f-4a80-42da-9118-016a658cb63b.jpg' alt="" />
-        </SwiperSlide>
-
+        </SwiperSlide> */}
       </Swiper>
     </>
   );

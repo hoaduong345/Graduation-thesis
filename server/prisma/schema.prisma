@@ -338,3 +338,24 @@ model Notification {
   fk_user  User?      @relation(fields: [userId], references: [id])
   fk_order Order     @relation(fields: [orderId], references: [id])
 }
+
+model ImageLogo {
+  id    Int  @id @default(autoincrement())
+  image String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+  
+}
+
+model ImageBanner {
+  id    Int  @id @default(autoincrement())
+  image String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+}
+model ImageBannerHome {
+  id    Int  @id @default(autoincrement())
+  image String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+}

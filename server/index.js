@@ -21,6 +21,10 @@ const OrderRouter = require('./routes/OrderRoutes');
 const AdminShippingRouter = require('./routes/AdminShippingRouter');
 const AdminRouter = require('./routes/AdminRouter');
 
+const LogoRouter = require('./routes/LogoRouter');
+const BannerRouter = require('./routes/BannerRouter');
+const BannerHomeRouter = require('./routes/BannerHomeRouter');
+
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const redisClient = redis.createClient({
@@ -75,6 +79,11 @@ app.use('/buyzzle/order', OrderRouter);
 app.use('/admin', AdminRouter);
 
 app.use('/shipping/management', AdminShippingRouter);
+
+app.use('/buyzzle/logo', LogoRouter);
+app.use('/buyzzle/banner', BannerRouter);
+app.use('/buyzzle/bannerhome', BannerHomeRouter );
+
 
 // Setup socket.io
 const io = new Server(httpServer, {

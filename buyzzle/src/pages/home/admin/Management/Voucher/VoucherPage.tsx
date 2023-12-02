@@ -26,7 +26,7 @@ type FormValues = {
   startDate: string;
   endDate: string;
   quantity: string;
-  voucherCode: string;
+  oucherCode: string;
 };
 
 export default function VoucherPage() {

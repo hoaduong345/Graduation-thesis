@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { createSearchParams, useSearchParams } from "react-router-dom";
-import BookOff from "../../../../assets/TSX/BookOff";
-import FoodLogo from "../../../../assets/TSX/FoodLogo";
-import FoodLogoo from "../../../../assets/TSX/FoodLogoo";
-import MangoLogo from "../../../../assets/TSX/MangoLogo";
-import Series from "../../../../assets/TSX/Series";
-import StepsLogo from "../../../../assets/TSX/StepsLogo";
+
+
 import { categoryController } from "../../../../controllers/CategoryController";
 import { productController } from "../../../../controllers/ProductsController";
 import { roundedNumber } from "../../../../helper/Format";
@@ -18,6 +14,10 @@ import useDebounce from "../../../../useDebounceHook/useDebounce";
 import "../../../css/filter.css";
 import Filter from "./Filter";
 import useThrottle from "@rooks/use-throttle";
+import { LogoModel } from "../../../../model/LogoModel";
+import { logoesController } from "../../../../controllers/LogoController";
+import { BannerModel } from "../../../../model/BannerModel";
+import { bannerController } from "../../../../controllers/BannerController";
 export interface Cate {
   id: number;
   name: string;
@@ -88,6 +88,31 @@ export default function FiltersPage() {
   const urlSliderValues = searchParams.get("sliderValues");
 
   const [subcate, setSubcate] = useState<subCate[]>([]);
+
+  const [logo, setLogo] = useState<LogoModel[]>([]);
+  // const [banner, setBanner] = useState<BannerModel[]>([]);
+
+  const getAllLogo = async () => {
+    await logoesController.getAll().then((res: any) => {
+      setLogo(res);
+    });
+  };
+
+  useEffect(() => {
+    getAllLogo();
+  }, []);
+
+
+  // const getAllBaner = async () => {
+  //   await bannerController.getAll().then((res: any) => {
+  //     setBanner(res);
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   getAllBaner();
+  // }, []);
+
 
   const getCate = (index: number) => {
     categoryController.getCateFilter(nameCateValue?.toString()).then((res) => {
@@ -397,32 +422,18 @@ export default function FiltersPage() {
         </div>
 
         <div className="Logo-square-bottom border border-[#FFEAE9] flex justify-evenly my-24 w-[100%] py-[60px] ">
-          <div className="cursor-pointer">
-            <StepsLogo />
-          </div>
-          <div className="border-[1px] border-[#E6E6E6] " />
-          <div className="cursor-pointer">
-            <MangoLogo />
-          </div>
-
-          <div className="border-[1px] border-[#E6E6E6] " />
-          <div className="cursor-pointer">
-            <FoodLogo />
-          </div>
-
-          <div className="border-[1px] border-[#E6E6E6] " />
-          <div className="cursor-pointer">
-            <FoodLogoo />
-          </div>
-
-          <div className="border-[1px] border-[#E6E6E6] " />
-          <div className="cursor-pointer">
-            <BookOff />
-          </div>
-
-          <div className="border-[1px] border-[#E6E6E6] " />
-          <div className="cursor-pointer">
-            <Series />
+          <div className="cursor-pointer flex">
+            {logo?.map((items) => {
+              return (
+                <>
+                      <img
+                           className="w-[120%] h-[60px] ml-7"
+                        src={items.image}
+                        alt=""
+                      />
+                </>
+              );
+            })}
           </div>
         </div>
       </body>
