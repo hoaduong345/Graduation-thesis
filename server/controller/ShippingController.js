@@ -487,8 +487,13 @@ const ShippingController = {
                     },
                 },
             });
+            const whereClauseSeen = {
+                userId: userId,
+                status: status,
+                seen: false,
+            };
             const countNotification = await prisma.notification.count({
-                where: whereClause,
+                where: whereClauseSeen,
             });
 
             const result = {
@@ -531,30 +536,70 @@ const ShippingController = {
         }
     },
     // đánh dấu đã đọc
-    isMarkAsRead: async (req, res) => {
+    isMarkAsReadUser: async (req, res) => {
         try {
-            const mark = req.body.id;
-            await prisma.notification.update({
+            const idUser = parseInt(req.cookies.id);
+    
+            const notifi =  await prisma.notification.updateMany({
                 where: {
-                    id: mark,
+                    userId: idUser,
+                    seen: false
                 },
                 data: {
                     seen: true,
                 },
             });
-            res.send('Mark as read successfully');
+    
+            res.status(200).send(notifi);
         } catch (error) {
             errorResponse(res, error);
         }
     },
-
+    isMarkAsReadAdmin: async (req, res) => {
+        try {
+            const whereClause = {
+                status: {
+                    lte: 2,
+                },
+                deleteAt: null,
+            };
+             await prisma.notification.updateMany({
+                where: whereClause,
+                data: {
+                    seen: true,
+                },
+            });
+            res.send('Mark as read for admin successfully');
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+    isMarkAsReadDelivery: async (req, res) => {
+        try {
+            const whereClause = {
+                status: {
+                    gte: 3,
+                },
+                deleteAt: null,
+            };
+             await prisma.notification.updateMany({
+                where: whereClause,
+                data: {
+                    seen: true,
+                },
+            });
+            res.send('Mark as read for admin successfully');
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
 };
 // cron.schedule('0 0 * * *', async () => {
 //     // Run the task daily at midnight (adjust the cron expression as needed)
-  
+
 //     const thirtyDaysAgo = new Date();
 //     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  
+
 //     try {
 //       await prisma.notification.deleteMany({
 //         where: {
@@ -568,7 +613,7 @@ const ShippingController = {
 //       console.error('Error in scheduled task:', error);
 //     }
 //   });
-  
+
 //   // Close the Prisma client to avoid resource leaks
 //   process.on('beforeExit', async () => {
 //     await prisma.$disconnect();

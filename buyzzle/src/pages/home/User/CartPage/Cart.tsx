@@ -15,6 +15,7 @@ import { toastWarn } from "../../../../helper/Toast/Warning";
 import { useCart } from "../../../../hooks/Cart/CartContextProvider";
 import { CartItem } from "../../../../model/CartModel";
 import Delete from "../../admin/assets/TSX/Delete";
+import { userController } from "../../../../controllers/UserController";
 
 export default function Cart() {
   const {
@@ -67,7 +68,22 @@ export default function Cart() {
       }
     }
   };
-
+  const CheckToken = async () => {
+    userController.CheckToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  };
+  const CheckRefreshToken = async () => {
+    userController.CheckRefreshToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  };
+  const muti = () => {
+    CheckToken();
+    handleBuyNow();
+    CheckRefreshToken();
+    console.log("AOTHATDAY");
+  };
   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 300);
   const [minusThrottled] = useThrottle(handleDecreaseQuantity, 300);
 
@@ -328,7 +344,9 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                   </div>
                 </div>
                 <button
-                  onClick={handleBuyNow}
+                  // to={`${productChecked.length == 0 ? "" : "/checkout"
+                  //    }`}
+                  onClick={muti}
                   className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 
                                 transition duration-150 bg-[#EA4B48] cursor-pointer"
