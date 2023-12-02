@@ -46,6 +46,7 @@ import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
 import Logoes from "../../pages/home/Admin/Management/Logo/Logoes";
 import Banner from "../../pages/home/Admin/Management/Banner/Banner";
 import BannerHome from "../../pages/home/Admin/Management/Banner/BannerHome";
+import VouchersPage from "../../components/home/components/Voucher/VouchersPage";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -256,7 +257,7 @@ export default function useRouterEmelent() {
       path: "voucher",
       element: (
         <MainLayout>
-          <VoucherHomePage />
+          <VouchersPage />
         </MainLayout>
       ),
     },

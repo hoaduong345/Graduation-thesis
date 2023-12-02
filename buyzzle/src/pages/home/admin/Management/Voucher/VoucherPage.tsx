@@ -35,7 +35,7 @@ export default function VoucherPage() {
 
   const [vouchers, setVoucher] = useState<Voucher>({} as Voucher);
   const [voucherAPI, setVoucherAPI] = useState<voucherModel>({
-    pageSize: 4,
+    pageSize: 6,
   });
   const [idVoucher, setIdVoucher] = useState<number | undefined>(0);
   const debouncedInputValueSearch = useDebounce(voucherAPI.keyword, 500);
@@ -435,18 +435,21 @@ export default function VoucherPage() {
               </div>
 
               <div className="">
-                <div className="grid grid-cols-9 pb-7">
+                <div className="grid grid-cols-8 pb-7">
                   <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                     <p>Mã Voucher</p>
                   </div>
-                  <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                  <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                     <p>Giảm Giá</p>
                   </div>
                   <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
                     <p>Thời Gian</p>
                   </div>
-                  <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
-                    <p>Đã dùng / Còn Lại</p>
+                  <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                    <p>Đã Dùng</p>
+                  </div>
+                  <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm">
+                    <p>Còn Lại</p>
                   </div>
                   <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm"></div>
                 </div>
@@ -455,7 +458,7 @@ export default function VoucherPage() {
                   {vouchers.data?.map((e) => {
                     return (
                       <>
-                        <div className="grid grid-cols-9 border-t-[1px] py-4">
+                        <div className="grid grid-cols-8 border-t-[1px] py-4">
                           <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
                             <p
                               className="font-medium text-base text-[#EA4B48]
@@ -464,7 +467,7 @@ export default function VoucherPage() {
                               {e.code}
                             </p>
                           </div>
-                          <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
+                          <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
                             <p
                               className="font-medium text-base text-[#1A1A1A] 
                                     max-[940px]:text-xs "
@@ -481,12 +484,20 @@ export default function VoucherPage() {
                               {currentDate(e.endDay)}
                             </p>
                           </div>
-                          <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
+                          <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
                             <p
                               className="font-medium text-base text-[#1A1A1A]
                                  max-[940px]:text-xs "
                             >
-                              0/{e.quantity}
+                              {e.used!}
+                            </p>
+                          </div>
+                          <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                            <p
+                              className="font-medium text-base text-[#1A1A1A]
+                                 max-[940px]:text-xs "
+                            >
+                              {e.quantity}
                             </p>
                           </div>
                           <div className="col-span-1 flex justify-center mr-5">

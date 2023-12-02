@@ -1,8 +1,7 @@
 export default function VoucherManageItem() {
   return (
     <svg
-      width="428"
-      height="163"
+      width="320"
       viewBox="0 0 321 122"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

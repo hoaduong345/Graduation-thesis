@@ -69,7 +69,17 @@ const CartController = {
                     },
                 },
             },
-            include: { item: true },
+            include: {
+                item: {
+                    include: {
+                        product: {
+                            include: {
+                                ProductImage: true
+                            }
+                        }
+                    }
+                }
+            },
         });
     },
 
@@ -112,7 +122,17 @@ const CartController = {
         return prisma.cart.update({
             where: { id: cart.id },
             data: { subtotal: updatedSubtotal },
-            include: { item: true },
+            include: {
+                item: {
+                    include: {
+                        product: {
+                            include: {
+                                ProductImage: true
+                            }
+                        }
+                    }
+                }
+            },
         });
     },
     // DELETE ITEM FROM CART
