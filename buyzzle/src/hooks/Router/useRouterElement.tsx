@@ -48,6 +48,7 @@ import Banner from "../../pages/home/Admin/Management/Banner/Banner";
 import BannerHome from "../../pages/home/Admin/Management/Banner/BannerHome";
 import VouchersPage from "../../components/home/components/Voucher/VouchersPage";
 import LogoHome from "../../pages/home/Admin/Management/Logo/Logohome";
+import LogoHome1 from "../../pages/home/Admin/Management/Logo/LogoHome1";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -586,6 +587,16 @@ export default function useRouterEmelent() {
         {
           path: "logo",
           element: <Logoes />,
+        },
+
+        {
+          path: "logohome",
+          element: <LogoHome />,
+        },
+
+        {
+          path: "logohome1",
+          element: <LogoHome1 />,
         },
 
        

@@ -347,7 +347,6 @@ model ImageLogo {
   updatedAt    DateTime? @default(now())
   
 }
-
 model ImageBanner {
   id    Int  @id @default(autoincrement())
   image String?
@@ -364,6 +363,13 @@ model ImageBannerHome {
 }
 
 model ImageLogoHome {
+  id    Int  @id @default(autoincrement())
+  image String?
+  linkgoogle  String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+}
+model ImageLogoHome1 {
   id    Int  @id @default(autoincrement())
   image String?
   linkgoogle  String?

@@ -44,15 +44,27 @@ const listSitebar: SitebarAdmin[] = [
   },
 
   {
-    title: "Logo",
+    title: "LogoFilter",
     icon: <Logo />,
     pathName: "/admin/logo",
+  },
+
+  {
+    title: "LogoHome",
+    icon: <Logo />,
+    pathName: "/admin/logohome",
+  },
+
+  {
+    title: "LogoHome1",
+    icon: <Logo />,
+    pathName: "/admin/logohome1",
   },
 
  
 
   {
-    title: "Banner",
+    title: "BannerFilter",
     icon: <Logo />,
     pathName: "/admin/banner",
   },

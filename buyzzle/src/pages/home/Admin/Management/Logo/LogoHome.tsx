@@ -20,11 +20,13 @@ import { id } from "@material-tailwind/react/types/components/tabs";
 import { Any } from "react-spring";
 import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
 import { Accordion } from "@chakra-ui/react";
+import { LogoHomeModel } from "../../../../../model/LogoHomeModel";
+import { logohomeController } from "../../../../../controllers/LogoHomeController";
 type FormValues = {
   id: number;
   images: string;
 };
-export default function Logoes() {
+export default function LogoHome() {
   const idModal = "logo";
   const idRemove = "removeLogo";
   const [loading, setLoading] = useState(false);
@@ -33,11 +35,11 @@ export default function Logoes() {
   const [open, setOpen] = useState<number>();
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
-  const [logo, setLogo] = useState<LogoModel[]>([]);
+  const [logo, setLogo] = useState<LogoHomeModel[]>([]);
   const [logoToDelete, setLogoToDelete] = useState(0);
-  const [checkedCategory, setCheckedCategory] = useState<LogoModel[]>([]);
+  const [checkedCategory, setCheckedCategory] = useState<LogoHomeModel[]>([]);
   const getAllLogo = async () => {
-    await logoesController.getAll().then((res: any) => {
+    await logohomeController.getAll().then((res: any) => {
       setLogo(res);
     });
   };
@@ -53,20 +55,20 @@ export default function Logoes() {
     watch,
     clearErrors,
     formState: { errors },
-  } = useForm<LogoModel>({
+  } = useForm<LogoHomeModel>({
     mode: "all",
     defaultValues: {
-      id : 0,
-      image : "",
-      linkgoogle : ""
+      id: 0,
+      image: "",
+      linkgoogle: "",
     },
   });
 
-  const openModal = async (id: string, data : LogoModel) => {
+  const openModal = async (id: string, data: LogoHomeModel) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      reset({id: data.id});
-      setUrl(data.image)
+      reset({ id: data.id });
+      setUrl(data.image);
       modal.showModal();
     }
   };
@@ -80,14 +82,14 @@ export default function Logoes() {
     }
   };
 
-  const saveModal = (id: string, data: LogoModel) => {
+  const saveModal = (id: string, data: LogoHomeModel) => {
     if (!url) {
       toastWarn("Thêm Hình");
       return;
     }
     closeModal(id);
     if (data.id != 0) {
-      logoesController
+      logohomeController
         .update(data.id, {
           id: data.id,
           image: url,
@@ -100,16 +102,18 @@ export default function Logoes() {
           setCheckedCategory([]);
         });
     } else {
-      logoesController.add({ id: data.id, image: url, linkgoogle: data.linkgoogle }).then(() => {
-        toastSuccess("Thêm thành công!!");
-        getAllLogo();
-      });
+      logohomeController
+        .add({ id: data.id, image: url, linkgoogle: data.linkgoogle })
+        .then(() => {
+          toastSuccess("Thêm thành công!!");
+          getAllLogo();
+        });
     }
   };
 
   const removee = (id: number, idDialog: string) => {
     console.log("xoa", id);
-    logoesController
+    logohomeController
       .remove(id)
       .then(() => {
         closeModal(idDialog);
@@ -121,11 +125,11 @@ export default function Logoes() {
       });
   };
 
-    const setnull = async () => {
-      reset({ id: 0, image: "" , linkgoogle : ""});
-      
-      setUrl("");
-    };
+  const setnull = async () => {
+    reset({ id: 0, image: "", linkgoogle: "" });
+
+    setUrl("");
+  };
 
   const loadImageFile = async (images: any) => {
     for (let i = 0; i < 1; i++) {
@@ -190,7 +194,6 @@ export default function Logoes() {
     }
   };
 
- 
   return (
     <Container>
       <div className="grid grid-cols-5">
@@ -270,50 +273,47 @@ export default function Logoes() {
                           />
                         </div>
                         <div className="mt-5">
-                                <Controller
-                                  name="linkgoogle"
-                                  control={control}
-                                  rules={{
-                                    required: {
-                                      value: true,
-                                      message: "Không để trống",
-                                    },
-                                    minLength: {
-                                      value: 4,
-                                      message: "Ít nhất 4 ký tự",
-                                    },
-                                   
-                                  }}
-                                  render={({ field }) => (
-                                    <>
-                                      <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
-                                      Nhập đường dẫn hình ảnh*
-                                      </label>
-                                      <input
-                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                          <Controller
+                            name="linkgoogle"
+                            control={control}
+                            rules={{
+                              required: {
+                                value: true,
+                                message: "Không để trống",
+                              },
+                              minLength: {
+                                value: 4,
+                                message: "Ít nhất 4 ký tự",
+                              },
+                            }}
+                            render={({ field }) => (
+                              <>
+                                <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                  Nhập đường dẫn hình ảnh*
+                                </label>
+                                <input
+                                  className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                        placeholder="Nhập đường dẫn hình ảnh"
-                                        value={field.value}
-                                        onChange={(e) => {
-                                          const reg = /[!@#$%^&]/;
-                                          const value = e.target.value;
-                                          field.onChange(
-                                            value.replace(reg, "")
-                                          );
-                                        }}
-                                        name="name"
-                                      />
-                                      {errors.linkgoogle && (
-                                        <p className="text-[11px] text-red-700 mt-2">
-                                          {errors.linkgoogle.message}
-                                        </p>
-                                      )}
-                                    </>
-                                  )}
+                                  placeholder="Nhập đường dẫn hình ảnh"
+                                  value={field.value}
+                                  onChange={(e) => {
+                                    const reg = /[!@#$%^&]/;
+                                    const value = e.target.value;
+                                    field.onChange(value.replace(reg, ""));
+                                  }}
+                                  name="name"
                                 />
-                              </div>
+                                {errors.linkgoogle && (
+                                  <p className="text-[11px] text-red-700 mt-2">
+                                    {errors.linkgoogle.message}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          />
+                        </div>
                       </div>
                     </>
                   }
@@ -326,10 +326,10 @@ export default function Logoes() {
                 <div className="col-span-2 text-base text-[#4c4c4c] mx-auto max-[940px]:text-sm">
                   <p>ID</p>
                 </div>
-                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30 ml-4">
+                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30">
                   <p>HÌNH ẢNH</p>
                 </div>
-                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30 ml-1">
+                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30">
                   <p>LINK</p>
                 </div>
 
@@ -338,42 +338,31 @@ export default function Logoes() {
 
               <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                 {logo?.map((items) => {
-                  console.log("🚀 ~ file: Logoes.tsx:340 ~ {logo?.map ~ items:", items)
+                  console.log(
+                    "🚀 ~ file: Logoes.tsx:340 ~ {logo?.map ~ items:",
+                    items
+                  );
                   return (
-                    <>
-                     
-                      <div className="grid grid-cols-9 border-t-[1px] py-4">
+                    <div key={items.id} className="border-t-[1px] py-4">
+                      <div className="grid grid-cols-9">
                         <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
-                          <p
-                            className="font-medium text-base text-[#EA4B48]
-                             max-[940px]:text-xs "
-                          >
+                          <p className="font-medium text-base text-[#EA4B48] max-[940px]:text-xs">
                             {items.id}
                           </p>
                         </div>
-                        <div
-                          // onClick={() => handleOpen(items.id)}
-                          className="cursor-pointer"
-                        >
+                        <div className="col-span-2 cursor-pointer">
                           <img
-                            className="w-[200px] h-[50px] object-cover ml--5"
+                            className="w-[150px] h-[100px] object-cover ml-5"
                             src={items.image}
                             alt=""
                           />
                         </div>
-
                         <div className="col-span-2 text-base text-[#4C4C4C] mx-auto ">
-                          <p
-                            className="font-medium text-base text-[#070702]
-                             max-[40px]:text-xs ml-7"
-                          >
+                          <p className="font-medium text-base text-[#070702] max-[940px]:text-xs ml-20">
                             {items.linkgoogle}
                           </p>
                         </div>
-
-                     
-
-                        <div className="col-span-1 flex justify-center mr-5">
+                        <div className="col-span-1 flex justify-center">
                           <div className="dropdown dropdown-left">
                             <label tabIndex={0}>
                               <Handle />
@@ -381,21 +370,21 @@ export default function Logoes() {
                             <ul
                               tabIndex={0}
                               className="dropdown-content menu bg-white rounded-box w-52
-                                            shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                            max-2xl:right-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                            shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                            max-2xl:right-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
                             >
                               <li>
                                 <button
-                                  onClick={() =>{
-                                    openModal(idModal, items)
-                                    // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle}) 
-                                  }}   
+                                  onClick={() => {
+                                    openModal(idModal, items);
+                                    // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle})
+                                  }}
                                   className="flex items-center gap-4"
                                 >
                                   <Edit />
                                   <p
                                     className="text-[#EA4B48] text-sm font-medium
-                                        max-[940px]:text-xs "
+                            max-[940px]:text-xs"
                                   >
                                     Sửa
                                   </p>
@@ -412,7 +401,7 @@ export default function Logoes() {
                                   <RemoveCate />
                                   <p
                                     className="text-[#EA4B48] text-sm font-medium
-                                         max-[940px]:text-xs "
+                             max-[940px]:text-xs"
                                   >
                                     Xóa
                                   </p>
@@ -422,7 +411,7 @@ export default function Logoes() {
                           </div>
                         </div>
                       </div>
-                    </>
+                    </div>
                   );
                 })}
               </div>
@@ -433,7 +422,6 @@ export default function Logoes() {
                 onClose={() => closeModal(idRemove)}
                 title="Xóa Logo này"
                 onSave={() => removee(logoToDelete, idRemove)}
-               
               />
             </div>
           </div>
