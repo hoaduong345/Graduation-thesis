@@ -309,7 +309,22 @@ export default function CheckOut() {
     getVoucherUser();
     getUserAddress();
   }, []);
-
+  const CheckToken = async () => {
+    userController.CheckToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  }
+  const CheckRefreshToken = async () => {
+    userController.CheckRefreshToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  }
+  const muti = () => {
+    CheckToken();
+    // handleBuyNow();
+    CheckRefreshToken();
+    console.log("AOTHATDAY");
+  }
   return (
     <>
       <Container>
@@ -471,11 +486,10 @@ export default function CheckOut() {
                                       <input
                                         className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                    rounded-[6px] px-[10px] py-[10.5px] w-[100%] mt-2
-                                                  ${
-                                                    !!errors.name
-                                                      ? "border-[2px] border-red-900"
-                                                      : "border-[1px] border-[#FFAAAF]"
-                                                  }`}
+                                                  ${!!errors.name
+                                            ? "border-[2px] border-red-900"
+                                            : "border-[1px] border-[#FFAAAF]"
+                                          }`}
                                         placeholder="Họ và tên"
                                         value={field.value}
                                       />
@@ -603,11 +617,10 @@ export default function CheckOut() {
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                    rounded-[6px] px-[10px] py-[12px] w-[100%]
-                                                  ${
-                                                    !!errors.specificaddress
-                                                      ? "border-[2px] border-red-900"
-                                                      : "border-[1px] border-[#FFAAAF]"
-                                                  }`}
+                                                  ${!!errors.specificaddress
+                                          ? "border-[2px] border-red-900"
+                                          : "border-[1px] border-[#FFAAAF]"
+                                        }`}
                                       placeholder="Địa chỉ cụ thể"
                                       onChange={(e) => {
                                         const value = e.target.value;
@@ -778,7 +791,7 @@ export default function CheckOut() {
                                 -{" "}
                                 {numberFormat(
                                   calculatePrice() *
-                                    (itemVoucher.discount / 100)
+                                  (itemVoucher.discount / 100)
                                 )}
                               </p>
                             )
@@ -797,11 +810,11 @@ export default function CheckOut() {
                       <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
                         {itemVoucher.discount
                           ? numberFormat(
-                              calculatePrice() -
-                                calculatePrice() *
-                                  (itemVoucher.discount / 100) +
-                                30000
-                            )
+                            calculatePrice() -
+                            calculatePrice() *
+                            (itemVoucher.discount / 100) +
+                            30000
+                          )
                           : numberFormat(calculatePrice() + 30000)}
                       </p>
                     </div>
@@ -837,11 +850,10 @@ export default function CheckOut() {
                                 />
                               </div>
                               <p
-                                className={`max-lg:text-[10px] ${
-                                  selectedPaymentMethod === element.type
+                                className={`max-lg:text-[10px] ${selectedPaymentMethod === element.type
                                     ? "inherit"
                                     : "text-[#9c9c9c]"
-                                } cursor-pointer`}
+                                  } cursor-pointer`}
                                 onClick={() => {
                                   setSelectedPaymentMethod(element.type);
                                 }}
@@ -863,16 +875,15 @@ export default function CheckOut() {
                       onChange={(e) => setInvoice(e.target.checked)}
                     />
                     <p
-                      className={`text-[15px] max-[870px]:text-[13px] cursor-pointer ${
-                        invoice ? `inherit` : `text-[#9c9c9c]`
-                      }`}
+                      className={`text-[15px] max-[870px]:text-[13px] cursor-pointer ${invoice ? `inherit` : `text-[#9c9c9c]`
+                        }`}
                       onClick={() => setInvoice(!invoice)}
                     >
                       Xuất hóa đơn
                     </p>
                   </div>
-
-                  <PaymentBtn
+                  <a onClick={muti}>
+                    <PaymentBtn
                     idUser={idUser}
                     cartItems={listLocalCart}
                     method={selectedPaymentMethod}
@@ -883,6 +894,8 @@ export default function CheckOut() {
                     name={user.name}
                     phoneNumber={user.phonenumber}
                   />
+                  </a>
+
                 </div>
               </div>
             </div>

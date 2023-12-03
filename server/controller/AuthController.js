@@ -7,10 +7,33 @@ const dotenv = require('dotenv');
 const SendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
 const decode = require('jwt-decode');
-
 dotenv.config();
 
 const AuthController = {
+    // CHECK EXPRIED REFRESH TOKEN
+    isRefreshTokenExpired: (refreshToken) => {
+        const decoded = jwt.decode(refreshToken);
+
+        if (decoded && decoded.exp) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            return decoded.exp > currentTime;
+        }
+
+        return true; // Treat as expired if there's no expiration claim
+    },
+    // CHECK EXPRIED ACCESS TOKEN
+    isAccessTokenExpired: (accesstoken) => {
+        const decoded = jwt.decode(accesstoken);
+        console.log("🚀 ~ file: AuthController.js:27 ~ decoded:", decoded)
+
+        if (decoded && decoded.exp) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            console.log("🚀 ~ file: AuthController.js:31 ~ currentTime:", currentTime)
+            return decoded.exp > currentTime;
+        }
+
+        return true; // Treat as expired if there's no expiration claim
+    },
     // GENERATE ACCESS TOKEN
     genereateAccessToken: (email) => {
         return jwt.sign(
@@ -18,7 +41,7 @@ const AuthController = {
                 email: email,
             },
             process.env.SECRECT_KEY,
-            { expiresIn: '1h' }
+            { expiresIn: '30m' }
         );
     },
     // GENERATE REFRESH TOKEN
@@ -28,7 +51,7 @@ const AuthController = {
                 email: email,
             },
             process.env.JWT_REFRESH_TOKEN,
-            { expiresIn: '30m' }
+            { expiresIn: '30d' }
         );
     },
     generateForgotPasswordToken: (email) => {
@@ -40,6 +63,63 @@ const AuthController = {
             { algorithm: 'HS256' },
             { expiresIn: '15m' }
         );
+    },
+    // GENERATE A NEW ACCESSTOKEN IF IT'S EXPRIED
+    generateNewAccessToken: async (req, res) => {
+        try {
+            const idUser = parseInt(req.cookies.id);
+            const accessToken = req.cookies.accesstoken;
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: idUser,
+                },
+            });
+            if (!user) return res.status(404).send('User is undifined');
+            if (AuthController.isRefreshTokenExpired(user.refresh_token) == false)
+                return res.status(404).send('Refresh token is expried');
+
+            if (AuthController.isAccessTokenExpired(accessToken) == false) {
+                let newAccessToken = AuthController.genereateAccessToken(user.email);
+                const expirationDate = new Date();
+                expirationDate.setDate(expirationDate.getDate() + 30);
+
+                res.cookie('accesstoken', newAccessToken, {
+                    httpOnly: true,
+                    secure: false,
+                    path: '/',
+                    sameSite: 'strict',
+                    expires: expirationDate,
+                });
+                return res.status(200).json({ newAccessToken, message: 'Access token renewed' });
+            } else {
+                return res.status(200).json('Access token still expried');
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(404).send(error);
+        }
+    },
+    // RETURN REFRESH TOKEN TO FE
+    checkRefreshToken: async (req, res) => {
+        try {
+            const idUser = parseInt(req.cookies.id);
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: idUser,
+                },
+            });
+            if (!user) return res.send('user is undifined');
+            if (AuthController.isRefreshTokenExpired(user.refresh_token) == false) {
+                res.clearCookie('id');
+                res.clearCookie('accesstoken');
+                res.status(300).json("AccessToken is expried, login again");
+            } else {
+                res.send('Refresh token still expried');
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(404).send(error);
+        }
     },
     // REGISTER
     register: async (req, res) => {
@@ -129,7 +209,7 @@ const AuthController = {
                 dateOfBirth: new Date(req.body.dateOfBirth),
             };
 
-            const updatedUserResponse = await prisma.user.update({
+            await prisma.user.update({
                 where: {
                     username: userId,
                 },
@@ -221,24 +301,30 @@ const AuthController = {
             }
 
             if (user.email && validPassword) {
-                const accessToken = AuthController.genereateAccessToken(user.email);
-                const refreshToken = AuthController.genereateRefreshToken(user.email);
+                let accessToken = AuthController.genereateAccessToken(user.email);
+                let refreshToken = AuthController.genereateRefreshToken(user.email);
+
                 if (!user.refresh_token) {
-                    // Save refresh token to the user's record in the database
                     await prisma.user.update({
                         where: { id: user.id },
                         data: { refresh_token: refreshToken },
                     });
+                } else {
+                    const refreshTokenExpires = AuthController.isRefreshTokenExpired(user.refresh_token);
+                    if (refreshTokenExpires == false) {
+                        await prisma.user.update({
+                            where: {
+                                id: user.id,
+                            },
+                            data: {
+                                refresh_token: refreshToken,
+                            },
+                        });
+                    }
                 }
+
                 const expirationDate = new Date();
                 expirationDate.setDate(expirationDate.getDate() + 30);
-                res.cookie('refreshtoken', refreshToken, {
-                    httpOnly: true,
-                    secure: false,
-                    path: '/',
-                    sameSite: 'strict',
-                    expires: expirationDate, // Set an expiration date
-                });
 
                 res.cookie('accesstoken', accessToken, {
                     httpOnly: true,
@@ -255,6 +341,7 @@ const AuthController = {
                     sameSite: 'strict',
                     expires: expirationDate, // Set an expiration date
                 });
+
                 const { password, ...others } = user;
                 return res.status(200).json({ accessToken, ...others });
             }
@@ -320,9 +407,7 @@ const AuthController = {
 
             if (user.forgotpassword_token == null) {
                 const forgot_pasword_token_JWT = AuthController.generateForgotPasswordToken(user.email);
-                console.log('jwt', forgot_pasword_token_JWT);
                 const forgot_password_token_base64 = Buffer.from(forgot_pasword_token_JWT).toString('base64');
-                console.log('Base64', forgot_password_token_base64);
                 await prisma.user.update({
                     where: {
                         email: user.email,
@@ -338,7 +423,7 @@ const AuthController = {
                 console.log('Generated URL:', url);
             }
 
-            const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${forgot_password_token}`;
+            const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
             console.log('Generated URL:', url);
             // await SendEmail(user.email, "Forgot Password", url);
 
@@ -352,7 +437,7 @@ const AuthController = {
     // REQUEST REFRESH AND ACCESS TOKEN
     requestRefreshToken: async (req, res) => {
         // take refresh token from user
-        const refreshToken = req.cookies.refreshToken;
+        const refreshToken = req.cookies.refreshtoken;
         if (!refreshToken) return res.status(401).json('You are not authenticated');
         jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN, (err, email) => {
             if (err) {
@@ -361,8 +446,11 @@ const AuthController = {
             // create new access token, refresh token
             const newAccesstoken = AuthController.genereateAccessToken(email);
             const newRefrestoken = AuthController.genereateRefreshToken(email);
-        });
-        res.status(200).json({ accessToken: newAccesstoken });
+            res.status(200).json({ accesstoken: newAccesstoken });
+           
+        }); 
+      
+       
     },
 
     // VERIFY ACCOUNT WHEN REGISTER WITH EMAIL
@@ -472,7 +560,6 @@ const AuthController = {
                     refresh_token: null,
                 },
             });
-            console.log('user', user);
             res.clearCookie('refreshtoken');
             res.clearCookie('accesstoken');
             res.clearCookie('id');

@@ -42,6 +42,7 @@ export default function Detail() {
       });
     useScroll();
   }, [id]);
+  
   const plusQuantity = () => {
     setQuantity(quantity + 1);
   };

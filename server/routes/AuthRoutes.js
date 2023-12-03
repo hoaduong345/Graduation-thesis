@@ -19,7 +19,6 @@ router.put("/userprofile/:username", AuthController.UserProfile);
 router.put("/updatepassword/:id", AuthController.UpdatePassword);
 
 // LOGIN
-router.post("/", AuthController.requestRefreshToken);
 router.post(
   "/login",
   MiddleWareController.loginvalidator,
@@ -52,4 +51,9 @@ router.post(
   MiddleWareController.verifyAuthenticate,
   AuthController.logout
 );
+// GENERATE NEW ACCESSTOKEN 
+router.post("/1", AuthController.generateNewAccessToken)
+// CHECK REFRESH TOKEN EXPRIED
+router.post("/refresh", AuthController.checkRefreshToken)
+
 module.exports = router;
