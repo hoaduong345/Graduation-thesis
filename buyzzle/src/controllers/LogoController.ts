@@ -9,10 +9,12 @@ export const appConfig = {
 
 
 class LogoController {
-    add = async (data:LogoModel) => {
+    add = async (data:LogoModel): Promise<LogoModel> => {
       return await axios.post(
         `${appConfig.apiUrl}/addlogo`,data
-      );
+      ).then((res)=>{
+        return res.data as LogoModel;
+      });
     };
 
     getAll = async (): Promise<LogoModel> =>{

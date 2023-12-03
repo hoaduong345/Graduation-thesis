@@ -5,11 +5,12 @@ const bcrypt = require('bcrypt');
 const LogoController = {
     AddLogo: async (req, res) => {
       try {
-        const { image } = req.body;
+        const { image, linkgoogle } = req.body;
   
         const createdLogo = await prisma.imageLogo.create({
           data: {
             image,
+            linkgoogle,
           },
         });
   
@@ -42,6 +43,7 @@ const LogoController = {
       try {
         const { id } = req.params;
         const { image } = req.body;
+        const { linkgoogle } = req.body;
   
         const updatedLogo = await prisma.imageLogo.update({
           where: {
@@ -49,6 +51,7 @@ const LogoController = {
           },
           data: {
             image,
+            linkgoogle,
           },
         });
   

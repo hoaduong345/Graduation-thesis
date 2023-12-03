@@ -9,10 +9,12 @@ export const appConfig = {
 
 
 class BannerController {
-    add = async (data:BannerModel) => {
+    add = async (data:BannerModel): Promise<BannerModel> => {
       return await axios.post(
         `${appConfig.apiUrl}/addbanner`,data
-      );
+      ).then((res)=>{
+        return res.data as BannerModel;
+      });
     };
 
     getAll = async (): Promise<BannerModel> =>{

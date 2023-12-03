@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 
-
 import { categoryController } from "../../../../controllers/CategoryController";
 import { productController } from "../../../../controllers/ProductsController";
 import { roundedNumber } from "../../../../helper/Format";
@@ -102,7 +101,6 @@ export default function FiltersPage() {
     getAllLogo();
   }, []);
 
-
   // const getAllBaner = async () => {
   //   await bannerController.getAll().then((res: any) => {
   //     setBanner(res);
@@ -112,7 +110,6 @@ export default function FiltersPage() {
   // useEffect(() => {
   //   getAllBaner();
   // }, []);
-
 
   const getCate = (index: number) => {
     categoryController.getCateFilter(nameCateValue?.toString()).then((res) => {
@@ -426,11 +423,18 @@ export default function FiltersPage() {
             {logo?.map((items) => {
               return (
                 <>
-                      <img
-                           className="w-[120%] h-[60px] ml-7"
-                        src={items.image}
-                        alt=""
-                      />
+                  <a
+                    href={`${items.linkgoogle}`}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "60px",
+                      margin: "1rem",
+                    }}
+                  >
+                    <img className="w-full h-full" src={items.image} alt="" />
+                  </a>
                 </>
               );
             })}

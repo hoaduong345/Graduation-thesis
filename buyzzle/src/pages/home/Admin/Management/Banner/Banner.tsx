@@ -8,7 +8,7 @@ import Container from "../../../../../components/container/Container";
 import { logoesController } from "../../../../../controllers/LogoController";
 import { storage } from "../../../../../firebase/Config";
 import Loading from "../../../../../helper/Loading/Loading";
-import { BannerModel } from "../../../../../model/BannerModel";
+import { LogoModel } from "../../../../../model/LogoModel";
 import SitebarAdmin from "../../Sitebar/Sitebar";
 import Edit from "../../assets/TSX/Edit";
 import PlusSquare from "../../assets/TSX/PlusSquare";
@@ -20,6 +20,7 @@ import { id } from "@material-tailwind/react/types/components/tabs";
 import { Any } from "react-spring";
 import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
 import { Accordion } from "@chakra-ui/react";
+import { BannerModel } from "../../../../../model/BannerModel";
 import { bannerController } from "../../../../../controllers/BannerController";
 type FormValues = {
   id: number;
@@ -39,7 +40,7 @@ export default function Banner() {
   const [checkedCategory, setCheckedCategory] = useState<BannerModel[]>([]);
   const getAllBanner = async () => {
     await bannerController.getAll().then((res: any) => {
-        setBanner(res);
+      setBanner(res);
     });
   };
 
@@ -54,11 +55,12 @@ export default function Banner() {
     watch,
     clearErrors,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<BannerModel>({
     mode: "all",
     defaultValues: {
-      id: 0,
-      images: "",
+      id : 0,
+      image : "",
+      linkgoogle : ""
     },
   });
 
@@ -91,6 +93,7 @@ export default function Banner() {
         .update(data.id, {
           id: data.id,
           image: url,
+          linkgoogle: data.linkgoogle,
         })
         .then(() => {
           toastSuccess("Cập nhật thành công!!");
@@ -99,7 +102,7 @@ export default function Banner() {
           setCheckedCategory([]);
         });
     } else {
-      bannerController.add({ id: data.id, image: url }).then(() => {
+      bannerController.add({ id: data.id, image: url, linkgoogle: data.linkgoogle }).then(() => {
         toastSuccess("Thêm thành công!!");
         getAllBanner();
       });
@@ -120,10 +123,11 @@ export default function Banner() {
       });
   };
 
-  const setnull = async () => {
-    reset({ id: 0, images: "" });
-    setUrl("");
-  };
+    const setnull = async () => {
+      reset({ id: 0, image: "" , linkgoogle : ""});
+      
+      setUrl("");
+    };
 
   const loadImageFile = async (images: any) => {
     for (let i = 0; i < 1; i++) {
@@ -187,6 +191,8 @@ export default function Banner() {
       );
     }
   };
+
+ 
   return (
     <Container>
       <div className="grid grid-cols-5">
@@ -200,7 +206,7 @@ export default function Banner() {
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
                             max-lg:text-xl"
             >
-              QUẢN LÝ BANNER TRANG FILTERS
+              QUẢN LÝ LOGO TRANG FILTER
             </h2>
           </div>
           <div className="flex flex-col gap-[35px]">
@@ -209,13 +215,13 @@ export default function Banner() {
                 onClick={() =>
                   openModal(idModal, {
                     id: 0,
-                  } as BannerModel)
+                  } as LogoModel)
                 }
                 className="flex gap-3 items-center bg-[#EA4B48] border-[#FFAAAF] border-[1px] px-4 rounded-md h-[46px]"
               >
                 <PlusSquare />
                 <p className="cursor-pointer text-white text-base font-bold max-[940px]:text-sm ">
-                  Thêm Banner
+                  Thêm Hình Ảnh
                 </p>
               </button>
             </div>
@@ -228,18 +234,18 @@ export default function Banner() {
                   onSave={handleSubmit((data: any) => {
                     saveModal(idModal, data);
                   })}
-                  title="Quản lý banner"
+                  title="Quản lý hình ảnh Buyzzle"
                   body={
                     <>
                       <div className="justify-center">
                         <div className="max-w-max items-center">
                           <Controller
                             control={control}
-                            name="images"
+                            name="image"
                             render={({ field }) => (
                               <>
                                 <label htmlFor="images">
-                                  <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-16 cursor-pointer max-lg:p-2 ml-4 ">
+                                  <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-32 cursor-pointer max-lg:p-2 ml-2 ">
                                     {load()}
                                     <input
                                       value={field.value}
@@ -254,9 +260,9 @@ export default function Banner() {
                                     />
 
                                     {renderImg()}
-                                    {errors.images && (
+                                    {errors.image && (
                                       <p className="text-[13px] text-red-600 mt-2">
-                                        {errors.images.message}
+                                        {errors.image.message}
                                       </p>
                                     )}
                                   </div>
@@ -265,6 +271,51 @@ export default function Banner() {
                             )}
                           />
                         </div>
+                        <div className="mt-5">
+                                <Controller
+                                  name="linkgoogle"
+                                  control={control}
+                                  rules={{
+                                    required: {
+                                      value: true,
+                                      message: "Không để trống",
+                                    },
+                                    minLength: {
+                                      value: 4,
+                                      message: "Ít nhất 4 ký tự",
+                                    },
+                                   
+                                  }}
+                                  render={({ field }) => (
+                                    <>
+                                      <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                      Nhập đường dẫn hình ảnh*
+                                      </label>
+                                      <input
+                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                        placeholder="Nhập đường dẫn hình ảnh"
+                                        value={field.value}
+                                        onChange={(e) => {
+                                          const reg = /[!@#$%^&]/;
+                                          const value = e.target.value;
+                                          field.onChange(
+                                            value.replace(reg, "")
+                                          );
+                                        }}
+                                        name="name"
+                                      />
+                                      {errors.linkgoogle && (
+                                        <p className="text-[11px] text-red-700 mt-2">
+                                          {errors.linkgoogle.message}
+                                        </p>
+                                      )}
+                                    </>
+                                  )}
+                                />
+                              </div>
                       </div>
                     </>
                   }
@@ -280,12 +331,16 @@ export default function Banner() {
                 <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30">
                   <p>HÌNH ẢNH</p>
                 </div>
+                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30">
+                  <p>LINK</p>
+                </div>
 
                 <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm"></div>
               </div>
 
               <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                 {banner?.map((items) => {
+                  console.log("🚀 ~ file: Logoes.tsx:340 ~ {logo?.map ~ items:", items)
                   return (
                     <>
                      
@@ -303,11 +358,22 @@ export default function Banner() {
                           className="cursor-pointer"
                         >
                           <img
-                            className="w-[100%] h-[100px] object-cover ml-5"
+                            className="w-[150px] h-[100px] object-cover ml-5"
                             src={items.image}
                             alt=""
                           />
                         </div>
+
+                        <div className="col-span-2 text-base text-[#4C4C4C] mx-auto ">
+                          <p
+                            className="font-medium text-base text-[#070702]
+                             max-[940px]:text-xs ml-20"
+                          >
+                            {items.linkgoogle}
+                          </p>
+                        </div>
+
+                     
 
                         <div className="col-span-1 flex justify-center mr-5">
                           <div className="dropdown dropdown-left">
@@ -322,9 +388,10 @@ export default function Banner() {
                             >
                               <li>
                                 <button
-                                  onClick={() => openModal(idModal, items)}
-                                    
-                                 
+                                  onClick={() =>{
+                                    openModal(idModal, items)
+                                    // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle}) 
+                                  }}   
                                   className="flex items-center gap-4"
                                 >
                                   <Edit />
@@ -363,10 +430,10 @@ export default function Banner() {
               </div>
 
               <DialogComfirm
-                desc="banner"
+                desc="logo"
                 id={idRemove}
                 onClose={() => closeModal(idRemove)}
-                title="Xóa Banner này"
+                title="Xóa Logo này"
                 onSave={() => removee(bannerToDelete, idRemove)}
                
               />

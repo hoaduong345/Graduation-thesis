@@ -53,11 +53,12 @@ export default function Logoes() {
     watch,
     clearErrors,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<LogoModel>({
     mode: "all",
     defaultValues: {
-      id: 0,
-      images: "",
+      id : 0,
+      image : "",
+      linkgoogle : ""
     },
   });
 
@@ -90,6 +91,7 @@ export default function Logoes() {
         .update(data.id, {
           id: data.id,
           image: url,
+          linkgoogle: data.linkgoogle,
         })
         .then(() => {
           toastSuccess("Cập nhật thành công!!");
@@ -98,7 +100,7 @@ export default function Logoes() {
           setCheckedCategory([]);
         });
     } else {
-      logoesController.add({ id: data.id, image: url }).then(() => {
+      logoesController.add({ id: data.id, image: url, linkgoogle: data.linkgoogle }).then(() => {
         toastSuccess("Thêm thành công!!");
         getAllLogo();
       });
@@ -119,10 +121,11 @@ export default function Logoes() {
       });
   };
 
-  const setnull = async () => {
-    reset({ id: 0, images: "" });
-    setUrl("");
-  };
+    const setnull = async () => {
+      reset({ id: 0, image: "" , linkgoogle : ""});
+      
+      setUrl("");
+    };
 
   const loadImageFile = async (images: any) => {
     for (let i = 0; i < 1; i++) {
@@ -186,6 +189,8 @@ export default function Logoes() {
       );
     }
   };
+
+ 
   return (
     <Container>
       <div className="grid grid-cols-5">
@@ -227,18 +232,18 @@ export default function Logoes() {
                   onSave={handleSubmit((data: any) => {
                     saveModal(idModal, data);
                   })}
-                  title="Quản lý hình ảnh"
+                  title="Quản lý hình ảnh Buyzzle"
                   body={
                     <>
                       <div className="justify-center">
                         <div className="max-w-max items-center">
                           <Controller
                             control={control}
-                            name="images"
+                            name="image"
                             render={({ field }) => (
                               <>
                                 <label htmlFor="images">
-                                  <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-16 cursor-pointer max-lg:p-2 ml-4 ">
+                                  <div className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-32 cursor-pointer max-lg:p-2 ml-2 ">
                                     {load()}
                                     <input
                                       value={field.value}
@@ -253,9 +258,9 @@ export default function Logoes() {
                                     />
 
                                     {renderImg()}
-                                    {errors.images && (
+                                    {errors.image && (
                                       <p className="text-[13px] text-red-600 mt-2">
-                                        {errors.images.message}
+                                        {errors.image.message}
                                       </p>
                                     )}
                                   </div>
@@ -264,6 +269,51 @@ export default function Logoes() {
                             )}
                           />
                         </div>
+                        <div className="mt-5">
+                                <Controller
+                                  name="linkgoogle"
+                                  control={control}
+                                  rules={{
+                                    required: {
+                                      value: true,
+                                      message: "Không để trống",
+                                    },
+                                    minLength: {
+                                      value: 4,
+                                      message: "Ít nhất 4 ký tự",
+                                    },
+                                   
+                                  }}
+                                  render={({ field }) => (
+                                    <>
+                                      <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                      Nhập đường dẫn hình ảnh*
+                                      </label>
+                                      <input
+                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                             max-xl:text-xs max-lg:text-[10px]
+                                            `}
+                                        placeholder="Nhập đường dẫn hình ảnh"
+                                        value={field.value}
+                                        onChange={(e) => {
+                                          const reg = /[!@#$%^&]/;
+                                          const value = e.target.value;
+                                          field.onChange(
+                                            value.replace(reg, "")
+                                          );
+                                        }}
+                                        name="name"
+                                      />
+                                      {errors.linkgoogle && (
+                                        <p className="text-[11px] text-red-700 mt-2">
+                                          {errors.linkgoogle.message}
+                                        </p>
+                                      )}
+                                    </>
+                                  )}
+                                />
+                              </div>
                       </div>
                     </>
                   }
@@ -279,12 +329,16 @@ export default function Logoes() {
                 <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30">
                   <p>HÌNH ẢNH</p>
                 </div>
+                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30">
+                  <p>LINK</p>
+                </div>
 
                 <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm"></div>
               </div>
 
               <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                 {logo?.map((items) => {
+                  console.log("🚀 ~ file: Logoes.tsx:340 ~ {logo?.map ~ items:", items)
                   return (
                     <>
                      
@@ -308,6 +362,17 @@ export default function Logoes() {
                           />
                         </div>
 
+                        <div className="col-span-2 text-base text-[#4C4C4C] mx-auto ">
+                          <p
+                            className="font-medium text-base text-[#070702]
+                             max-[940px]:text-xs ml-20"
+                          >
+                            {items.linkgoogle}
+                          </p>
+                        </div>
+
+                     
+
                         <div className="col-span-1 flex justify-center mr-5">
                           <div className="dropdown dropdown-left">
                             <label tabIndex={0}>
@@ -321,9 +386,10 @@ export default function Logoes() {
                             >
                               <li>
                                 <button
-                                  onClick={() => openModal(idModal, items)}
-                                    
-                                 
+                                  onClick={() =>{
+                                    openModal(idModal, items)
+                                    // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle}) 
+                                  }}   
                                   className="flex items-center gap-4"
                                 >
                                   <Edit />

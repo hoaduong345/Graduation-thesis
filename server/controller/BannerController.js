@@ -6,11 +6,12 @@ const BannerController = {
 /////////// CRUD BANNER
 AddBanner: async (req, res) => {
   try {
-    const { image } = req.body;
+    const { image, linkgoogle } = req.body;
 
     const createdbanner = await prisma.imageBanner.create({
       data: {
         image,
+        linkgoogle,
       },
     });
 
@@ -42,7 +43,7 @@ DeleteBanner: async (req, res) => {
 UpdateBanner: async (req, res) => {
   try {
     const { id } = req.params;
-    const { image } = req.body;
+    const { image, linkgoogle } = req.body;
 
     const updatedbanner = await prisma.imageBanner.update({
       where: {
@@ -50,6 +51,7 @@ UpdateBanner: async (req, res) => {
       },
       data: {
         image,
+        linkgoogle,
       },
     });
 

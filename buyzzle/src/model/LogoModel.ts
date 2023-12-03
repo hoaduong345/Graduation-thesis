@@ -1,4 +1,5 @@
 export type LogoModel = {
-    id: number;
+   id: number;
    image:string;
+   linkgoogle: string;
   }

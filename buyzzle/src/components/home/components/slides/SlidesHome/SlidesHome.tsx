@@ -45,8 +45,14 @@ export default function SlidesHome() {
         {banner?.map((items) => {
           return (
             <>
-              <SwiperSlide className="max-[769px]:max-w-[648px]">
-                <img src={items.image} alt="" />
+              <SwiperSlide className="max-[769px]:max-w-[648px] max-h-[400px] flex items-center justify-center">
+                <a href={`${items.linkgoogle}`} style={{ height: "100%" }}>
+                  <img
+                    src={items.image}
+                    alt=""
+                    style={{ maxHeight: "100%", maxWidth: "100%" }}
+                  />
+                </a>
               </SwiperSlide>
             </>
           );

@@ -14,18 +14,15 @@ import { useEffect, useState } from "react";
 import { BannerModel } from "../../../../../model/BannerModel";
 import { bannerController } from "../../../../../controllers/BannerController";
 
-
-
-
 export default function SlidesFilter() {
-const [banner, setBanner] = useState<BannerModel[]>([]);
+  const [banner, setBanner] = useState<BannerModel[]>([]);
 
   const getAllBaner = async () => {
     await bannerController.getAll().then((res: any) => {
       setBanner(res);
     });
   };
-  
+
   useEffect(() => {
     getAllBaner();
   }, []);
@@ -48,8 +45,21 @@ const [banner, setBanner] = useState<BannerModel[]>([]);
         {banner?.map((items) => {
           return (
             <>
-              <SwiperSlide>
-                <img src={items.image} alt="" />
+              <SwiperSlide
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "400px",
+                }}
+              >
+                <a href={`${items.linkgoogle}`} style={{ height: "100%" }}>
+                  <img
+                    src={items.image}
+                    alt=""
+                    style={{ maxHeight: "100%", maxWidth: "100%" }}
+                  />
+                </a>
               </SwiperSlide>
             </>
           );
@@ -59,5 +69,4 @@ const [banner, setBanner] = useState<BannerModel[]>([]);
   );
 }
 {
-
 }
