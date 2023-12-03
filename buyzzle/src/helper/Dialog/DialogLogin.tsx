@@ -1,8 +1,9 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { Images } from "../../assets/TS";
 import { Link } from "react-router-dom";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-
+import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import MyCustomButton from "./MyCustomButton";
+// import { useGoogleLogin } from '@react-oauth/google';
 type Props = {
   title: ReactNode;
   body: ReactNode;
@@ -13,7 +14,17 @@ type Props = {
 
 export default function DialogLogin(props: Props) {
   const { title, id, body, onClose, onSave } = props;
+  const GoogleLoginButton = () => {
+    const login = useGoogleLogin({
+      onSuccess: (tokenResponse) => console.log(tokenResponse),
+    });
 
+    return (
+      <MyCustomButton onClick={() => login()}>
+        Sign in with Google 🚀
+      </MyCustomButton>
+    );
+  };
   return (
     <>
       <dialog id={id} className="modal ">
@@ -84,20 +95,11 @@ export default function DialogLogin(props: Props) {
                     </button>
 
                     <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
-                      <GoogleLogin
-
-                        cancel_on_tap_outside
-                        size="medium"
-                        onSuccess={(credentialResponse) => {
-                          console.log(credentialResponse);
-                        }}
-                        onError={() => {
-                          console.log("Login Failed");
-                        }}
-
-                      />
+                      <div>
+                        <GoogleLoginButton />
+                      </div>
                     </GoogleOAuthProvider>
-           
+
                     <button
                       className="flex flex-wrap justify-center w-full border border-gray-300 hover:border-gray-500 px-2 py-1.5 rounded-md"
                       onClick={() => onClose()}
