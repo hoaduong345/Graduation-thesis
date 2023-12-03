@@ -1021,6 +1021,42 @@ const ProductController = {
             res.status(500).json('Cập nhật phản hồi đánh giá không thành công. Lỗi: ' + error.message);
         }
     },
+    // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
+    suggestProductBySex: async (req, res) => {
+        try {
+            const idUser = parseInt(req.cookies.id);
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: idUser,
+                },
+            });
+
+            const whereClause = {
+                deletedAt: null,
+            };
+            const product = await prisma.product.findMany({
+                where : whereClause
+            })
+            const productsWithMale = product.filter(product => product.name.toLowerCase().includes('nam'));
+            const productsWithFemale = product.filter(product => product.name.toLowerCase().includes('nữ'));
+            const productsWithoutSex = product.filter(product => !product.name.toLowerCase().includes('nam') && !product.name.toLowerCase().includes('nữ'));
+
+            const mergedProductsMale = productsWithMale.concat(productsWithMale, productsWithoutSex);
+            const mergedProductsFemale = productsWithFemale.concat(productsWithFemale, productsWithoutSex);
+            const mergedProductsWithoutSex = productsWithoutSex.concat(productsWithFemale,productsWithMale, productsWithoutSex);
+
+            if(user.sex == 0){
+                return res.status(200).send(mergedProductsFemale)
+            }else if(user.sex == 1){
+                return res.status(200).send(mergedProductsMale)
+            }else{
+                return res.status(200).send(mergedProductsWithoutSex)
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json('Something when wrong ' + error.message);
+        }
+    },
 };
 
 module.exports = ProductController;
