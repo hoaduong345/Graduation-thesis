@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Images } from "../../../../assets/TS";
-// import LogoWeb from "../../assets/TSX/LogoWeb";
+// import LogoWeb from "../../Assets/TSX/LogoWeb";
 // import { localStorage } from 'localStorage';
 import "./AdminLogin.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import LogoGoogle from "../../../../assets/PNG/lgG.png";
-import LogoApple from "../../../../assets/PNG/lgApple.png";
-import LogoFace from "../../../../assets/PNG/lgFace.png";
+import LogoGoogle from "../../../../Assets/PNG/lgG.png";
+import LogoApple from "../../../../Assets/PNG/lgApple.png";
+import LogoFace from "../../../../Assets/PNG/lgFace.png";
 import secureLocalStorage from "react-secure-storage";
 // import { schema } from "../../utils/rules";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import * as yup from "yup";
+import { Images } from "../../../../assets/TS";
 function LoginAdmin() {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -58,7 +58,7 @@ function LoginAdmin() {
           autoClose: 5000,
         });
 
-        localStorage.removeItem("user");
+        // localStorage.removeItem("user");
 
         const UserData = {
           username: response.data.username,

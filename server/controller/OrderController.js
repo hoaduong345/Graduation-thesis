@@ -5,8 +5,7 @@ const OderController = {
     createOrder: async (req, res) => {
         try {
             const orderData = req.body.order;
-            // const iduser = req.cookies.id;
-            // console.log("Ngucxl:", iduser);
+
             const user = await prisma.user.findFirst({
                 where: {
                     id: orderData.iduser,
@@ -34,7 +33,6 @@ const OderController = {
                     status: 1,
                 },
             });
-            console.log('🚀 ~ file: OrderController.js:35 ~ createOrder: ~ order:', order);
 
             let a = orderData.cartItems.map((e) => {
                 return {
@@ -60,9 +58,9 @@ const OderController = {
                     seen: false,
                 },
             });
-
+            order.user = user
             const io = req.app.get('socketio');
-            io.emit('newOrder', { order: order, user: user });
+            io.emit('newOrder', order);
             res.status(200).json(order ?? {});
         } catch (error) {
             console.log(error);

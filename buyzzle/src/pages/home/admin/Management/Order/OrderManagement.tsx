@@ -17,6 +17,7 @@ import Calendar from "../../assets/TSX/calendar";
 import Excel from "../../assets/TSX/excel";
 import SitebarAdmin from "../../Sitebar/Sitebar";
 import useThrottle from "@rooks/use-throttle";
+import secureLocalStorage from "react-secure-storage";
 
 export const dateOrder = (date: Date) => {
   return moment(date).format("L");
@@ -54,6 +55,14 @@ export default function OrderManagement() {
     "🚀 ~ file: OrderManagement.tsx:39 ~ OrderManagement ~ order?.totalOrder;:",
     order?.totalOrder
   );
+  useEffect(() => {
+    let user = secureLocalStorage.getItem("shippername");
+    if(user == null){
+      console.log("VCLLLLLLLLLLLLLLLLLll");
+      window.location.href = "/shipping/loginShipper";
+    }
+
+  }, [])
   const [changeButton, setChangeButton] = useState([
     {
       id: -1,

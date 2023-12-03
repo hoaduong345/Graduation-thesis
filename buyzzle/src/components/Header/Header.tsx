@@ -13,8 +13,9 @@ import { userController } from "../../controllers/UserController";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
-import Container from "../container/Container";
 import HeaderTopUser from "../HeaderTop/HeaderTopUser";
+import Container from "../container/Container";
+import { Top8product } from "../../model/ProductModel";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -22,6 +23,7 @@ export default function Header() {
   const [text, setText] = useState("");
 
   const [productSearch, setProductSearch] = useState<Products[]>([]);
+  const [topProduct, settopProduct] = useState<Top8product[]>([]);
   const [isSearch, setIsSearch] = useState(false);
 
   const user = localStorage.getItem("user");
@@ -47,11 +49,17 @@ export default function Header() {
 
   const getSearhvalue = async () => {
     await productController.getAllProductsSearch(text).then((res: any) => {
+      console.log(
+        "🚀 ~ file: Header.tsx:50 ~ awaitproductController.getAllProductsSearch ~ res:",
+        res
+      );
       setProductSearch(res.rows);
+      settopProduct(res.top8products);
     });
   };
 
   useEffect(() => {
+    getSearhvalue();
     if (text != "") {
       getSearhvalue();
       setSearchParams(
@@ -80,13 +88,13 @@ export default function Header() {
         // setEditUser(res)
         setName(res.name);
         localStorage.setItem("nameUser", JSON.stringify(res.name));
-        
+
         setCheckLogin(true);
         const UserImageArray = JSON.stringify(res.UserImage);
         const urlTaker = JSON.parse(UserImageArray);
         setImg(urlTaker[0].url);
         console.log("ID: " + img);
-        localStorage.setItem("avatarUser", JSON.stringify(urlTaker[0].url));    
+        localStorage.setItem("avatarUser", JSON.stringify(urlTaker[0].url));
       });
     } else {
       console.log("Chua Dang Nhap Dung");
@@ -122,6 +130,22 @@ export default function Header() {
     }
   };
 
+  const CheckToken = async () => {
+    userController.CheckToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  };
+  const CheckRefreshToken = async () => {
+    userController.CheckRefreshToken().then((res) => {
+      console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
+    });
+  };
+  const muti = () => {
+    CheckToken();
+    CheckRefreshToken();
+    console.log("AOTHATDAY");
+  };
+
   return (
     <>
       <header className="Header">
@@ -137,9 +161,9 @@ export default function Header() {
             <div className="container mx-auto">
               <div className="flex items-center justify-between">
                 <div className="p-[10px]  max-[426px]:p-[1px]">
-                  <Link to="/">
+                  <a href="/" onClick={CheckToken}>
                     <LogoWeb />
-                  </Link>
+                  </a>
                 </div>
                 {/* input */}
                 <div className="items-center flex flex-1 max-w-[755px] max-2xl:ml-10 max-xl:max-w-[700px] max-xl:ml-5">
@@ -248,10 +272,13 @@ export default function Header() {
                 </div>
 
                 <div className="items-center flex relative gap-2">
-                  <CartCount />
+                  <a onClick={CheckToken}>
+                    <CartCount />
+                  </a>
+
                   <div className="items-center">
                     {checkLogin ? (
-                      <a className=" flex gap-2" href={href}>
+                      <a className=" flex gap-2" href={href} onClick={muti}>
                         <div className="font-medium flex items-center justify-center">
                           {name}
                         </div>
@@ -288,41 +315,17 @@ export default function Header() {
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
             <div className="container mx-auto">
-              <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
-                <li>
-                  <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link>
-                </li>
-                <li>
-                  <Link to="/admin/category">categoryAdmin</Link>
-                </li>
-                <li>
-                  <Link to="/admin/voucher">voucherAdmin</Link>
-                </li>
-                <li>
-                  <Link to="/admin/usersmanager">usersmanagerAdmin</Link>
-                </li>
-                <li>
-                  <a href="/admin/statisticsPage">thongke</a>
-                </li>
-                <li>
-                  <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
-                </li>
-                <li>
-                  <a href="/admin/ordermanagement">ordermanagement</a>
-                </li>
-                <li>
-                  <Link to="/orderhistory">orderhistory</Link>
-                </li>
-                <li>
-                  <a href="/checkout">check out</a>
-                </li>
-                <li>
-                  <a href="/orderdetail">orderdetail</a>
-                </li>
-
-                {/*  <li>
-                  <a href="#">Sữa Baby</a>
-                </li> */}
+              <ul className="flex gap-[3%] h-[60px] font-medium text-[#45474B] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
+                {/* <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link> */}
+                {topProduct.map((items) => {
+                  return (
+                    <>
+                      <Link to={`/Detailproducts/${items.id}`}>
+                        <li className="hover:text-[#1F1717] ">{items.name}</li>
+                      </Link>
+                    </>
+                  );
+                })}
               </ul>
             </div>
           </Container>

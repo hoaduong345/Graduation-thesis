@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
-const { or } = require('mathjs');
-const { Socket } = require('socket.io');
+
 const prisma = new PrismaClient();
+const cron = require('node-cron');
 
 const errorResponse = (res, error) => {
     console.error(error);
@@ -35,7 +35,6 @@ const ShippingController = {
             if (!order) {
                 return res.status(404).send('Order is undefined');
             }
-            console.log('aaaaaa', order.userId);
             if (statusOrder === 3) {
                 const io = req.app.get('socketio');
                 io.emit('setstatus', order);
@@ -488,8 +487,13 @@ const ShippingController = {
                     },
                 },
             });
+            const whereClauseSeen = {
+                userId: userId,
+                status: status,
+                seen: false,
+            };
             const countNotification = await prisma.notification.count({
-                where: whereClause,
+                where: whereClauseSeen,
             });
 
             const result = {
@@ -532,22 +536,86 @@ const ShippingController = {
         }
     },
     // đánh dấu đã đọc
-    isMarkAsRead: async (req, res) => {
+    isMarkAsReadUser: async (req, res) => {
         try {
-            const mark = req.body.id;
-            await prisma.notification.update({
+            const idUser = parseInt(req.cookies.id);
+    
+            const notifi =  await prisma.notification.updateMany({
                 where: {
-                    id: mark,
+                    userId: idUser,
+                    seen: false
                 },
                 data: {
                     seen: true,
                 },
             });
-            res.send('Mark as read successfully');
+    
+            res.status(200).send(notifi);
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+    isMarkAsReadAdmin: async (req, res) => {
+        try {
+            const whereClause = {
+                status: {
+                    lte: 2,
+                },
+                deleteAt: null,
+            };
+             await prisma.notification.updateMany({
+                where: whereClause,
+                data: {
+                    seen: true,
+                },
+            });
+            res.send('Mark as read for admin successfully');
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+    isMarkAsReadDelivery: async (req, res) => {
+        try {
+            const whereClause = {
+                status: {
+                    gte: 3,
+                },
+                deleteAt: null,
+            };
+             await prisma.notification.updateMany({
+                where: whereClause,
+                data: {
+                    seen: true,
+                },
+            });
+            res.send('Mark as read for admin successfully');
         } catch (error) {
             errorResponse(res, error);
         }
     },
 };
+// cron.schedule('0 0 * * *', async () => {
+//     // Run the task daily at midnight (adjust the cron expression as needed)
 
+//     const thirtyDaysAgo = new Date();
+//     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+//     try {
+//       await prisma.notification.deleteMany({
+//         where: {
+//           createdAt: {
+//             lt: thirtyDaysAgo,
+//           },
+//         },
+//       });
+//       console.log('Scheduled task: Deleted notifications older than 30 days.');
+//     } catch (error) {
+//       console.error('Error in scheduled task:', error);
+//     }
+//   });
+
+//   // Close the Prisma client to avoid resource leaks
+//   process.on('beforeExit', async () => {
+//     await prisma.$disconnect();
+//   });
 module.exports = ShippingController;

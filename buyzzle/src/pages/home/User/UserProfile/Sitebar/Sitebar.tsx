@@ -37,21 +37,21 @@ const listSitebar: SitebarUser[] = [
     pathName: "/uservoucherstorage",
     title: "Voucher",
   },
-  {
-    icon: <Cart />,
-    pathName: "/cart",
-    title: "Giỏ hàng",
-  },
+  // {
+  //   icon: <Cart />,
+  //   pathName: "/cart",
+  //   title: "Giỏ hàng",
+  // },
   {
     icon: <Heart />,
     pathName: "/favorite",
     title: "Sản phẩm yêu thích",
   },
-  {
-    icon: <Setting />,
-    pathName: "",
-    title: "Cài đặt",
-  },
+  // {
+  //   icon: <Setting />,
+  //   pathName: "",
+  //   title: "Cài đặt",
+  // },
 ];
 const instance = axios.create({
   withCredentials: true,
@@ -65,6 +65,7 @@ export default function Sitebar() {
       const reponse = await instance.post(API);
       console.log(reponse);
       localStorage.removeItem("user");
+      localStorage.removeItem("nameUser");
       window.location.href = "/";
     } catch (error) {
       console.log(error);

@@ -30,17 +30,26 @@ import { useCart } from "../../../../../hooks/Cart/CartContextProvider";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
 
-import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
-import Cart from "../../../admin/assets/TSX/Cart";
-import SaveLink from "../../../admin/assets/TSX/SaveLink";
+// import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
+
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
+import { userController } from "../../../../../controllers/UserController";
+
+import DialogLogin from "../../../../../helper/Dialog/DialogLogin";
+import { Controller, useForm } from "react-hook-form";
+import Cart from "../../../admin/assets/TSX/Cart";
 import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
+import SaveLink from "../../../admin/assets/TSX/SaveLink";
 export interface ImgOfProduct {
   url: string;
 }
 [];
 
+export type LoginForm = {
+  email: string;
+  password: string;
+};
 export type FormValues = {
   idproduct: number;
   name: string;
@@ -99,7 +108,7 @@ export default function DetailsProduct() {
   });
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("descriptions"); // Mặc định là tab "App"
-
+  const [Logined, setLogined] = useState<boolean>();
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
   };
@@ -166,6 +175,7 @@ export default function DetailsProduct() {
       .getCommentWhereRating(idproduct, rating, page, perPage)
       .then((res) => {
         setRateAndcomment(res);
+        console.log("RATING:" + JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
@@ -264,8 +274,88 @@ export default function DetailsProduct() {
   };
 
   const isSoldOut = first?.productDetail?.quantity == 0;
-
+  const CheckToken = async () => {
+    userController.CheckToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  };
+  const CheckRefreshToken = async () => {
+    userController.CheckRefreshToken().then((res) => {
+      console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
+    });
+  };
+  const CheckLogin = async () => {
+    const user = localStorage.getItem("user");
+    if (user == null) {
+      setLogined(false);
+      openModal(idAddAdmin);
+    } else {
+      setLogined(true);
+      CheckToken();
+      CheckRefreshToken();
+      console.log("AOTHATDAY");
+    }
+  };
+  const muti = () => {
+    CheckLogin();
+  };
+  const {
+    control,
+    handleSubmit,
+    clearErrors,
+    reset,
+    register,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    mode: "all",
+  });
+  
+  const param = useParams();
+  const idAddAdmin = "AddAdmin";
+  const Login = async (data: LoginForm) => {
+    console.log("LoginData:" + data);
+    userController.Login(data).then((res) => {
+      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
+      const username = res.username;
+      const accessToken = res.accessToken;
+      console.log(accessToken);
+      const UserData = { username };
+      const Token = { accessToken };
+      localStorage.setItem("idUser", JSON.stringify(res.id));
+      localStorage.setItem("user", JSON.stringify(UserData));
+      localStorage.setItem("accessToken", JSON.stringify(Token));
+      // const id = param.id;
+      setTimeout(() => {
+        window.location.href = `/Detailproducts/${param.id}`;
+      }, 2000);
+    });
+  };
+  const openModal = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+  const closeModal2 = async (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+  };
+  const saveModal = (id: string, data: LoginForm) => {
+    Login(data);
+    reset({
+      email: "",
+      password: "",
+    });
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+    console.log("Data:" + JSON.stringify(data));
+  };
   return (
+    
     <>
       <Container>
         <body className="body-detail container mx-auto">
@@ -518,28 +608,190 @@ export default function DetailsProduct() {
                   </>
                 ) : (
                   <>
-                    <div
-                      className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
-                      onClick={() =>
-                        !isSoldOut && addProduct(Number(id), quantity, false)
-                      }
-                    >
-                      <div className="text-center text-base font-bold text-[#4C4C4C]">
-                        Thêm Vào Giỏ Hàng
-                      </div>
-                      <Cart />
-                    </div>
-                    <div
-                      className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
-                          transition duration-150 bg-[#EA4B48] justify-evenly`}
-                      onClick={() => {
-                        if (isSoldOut) return;
-                        return addProduct(Number(id), quantity, true);
-                      }}
-                    >
-                      <p className="text-center text-base font-bold text-white ">
-                        Mua ngay
-                      </p>
+                    <a onClick={muti}>
+                      {Logined ? (
+                        <div
+                          className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
+                          onClick={() =>
+                            !isSoldOut &&
+                            addProduct(Number(id), quantity, false)
+                          }
+                        >
+                          <div className="text-center text-base font-bold text-[#4C4C4C]">
+                            Thêm Vào Giỏ Hàng
+                          </div>
+                          <Cart />
+                        </div>
+                      ) : (
+                        <div
+                          className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
+                          onClick={() => openModal}
+                        >
+                          <div className="text-center text-base font-bold text-[#4C4C4C]">
+                            Thêm Vào Giỏ Hàng
+                          </div>
+                          <Cart />
+                        </div>
+                      )}
+                    </a>
+                    <a onClick={muti}>
+                      {Logined ? (
+                        <div
+                          className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
+   transition duration-150 bg-[#EA4B48] justify-evenly`}
+                          onClick={() => {
+                            if (isSoldOut) return;
+                            return addProduct(Number(id), quantity, true);
+                          }}
+                        >
+                          <p className="text-center text-base font-bold text-white ">
+                            Mua ngay
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
+   transition duration-150 bg-[#EA4B48] justify-evenly`}
+                          onClick={() => {
+                            openModal;
+                          }}
+                        >
+                          <p className="text-center text-base font-bold text-white ">
+                            Mua ngay
+                          </p>
+                        </div>
+                      )}
+                    </a>
+                    <div>
+                      <DialogLogin
+                        id={idAddAdmin}
+                        onClose={() => closeModal2(idAddAdmin)}
+                        onSave={handleSubmit((data: any) => {
+                          saveModal(idAddAdmin, data);
+                        })}
+                        title="Đăng Nhập"
+                        body={
+                          <>
+                            <div className="grid grid-cols-5 gap-8">
+                              <div className="col-span-3 ">
+                                <div className="flex gap-3  ">
+                                  <div className="flex flex-col gap-5 max-lg:gap-2">
+                                    <div className="h-[90px] w-[455px]">
+                                      <Controller
+                                        name="email"
+                                        control={control}
+                                        rules={{
+                                          required: {
+                                            value: true,
+                                            message: "Không để trống",
+                                          },
+                                          minLength: {
+                                            value: 4,
+                                            message: "Ít nhất 4 ký tự",
+                                          },
+                                          // maxLength: {
+                                          //   value: ,
+                                          //   message:
+                                          //     "Nhiều nhất 25 kí tự",
+                                          // },
+                                          validate: {
+                                            // Kiểm tra email có đúng định dạng không
+                                            validEmail: (value) =>
+                                              /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(
+                                                value
+                                              ) || "Email không hợp lệ",
+                                          },
+                                        }}
+                                        render={({ field }) => (
+                                          <>
+                                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                                              Email
+                                            </label>
+                                            <input
+                                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                                              placeholder="Nhập vào email của bạn"
+                                              value={field.value}
+                                              onChange={(e) => {
+                                                const reg = /[!#$%^&]/;
+                                                const value = e.target.value;
+                                                field.onChange(
+                                                  value.replace(reg, "")
+                                                );
+                                              }}
+                                              name="email"
+                                            />
+                                            {errors.email && (
+                                              <p className="text-[11px] text-red-700 mt-0">
+                                                {errors.email.message}
+                                              </p>
+                                            )}
+                                          </>
+                                        )}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex gap-3  ">
+                                  <div className="flex flex-col gap-5 max-lg:gap-2">
+                                    <div className="h-[90px] w-[455px]">
+                                      <Controller
+                                        name="password"
+                                        control={control}
+                                        rules={{
+                                          required: {
+                                            value: true,
+                                            message: "Không để trống",
+                                          },
+                                          minLength: {
+                                            value: 4,
+                                            message: "Ít nhất 4 ký tự",
+                                          },
+                                          maxLength: {
+                                            value: 25,
+                                            message: "Nhiều nhất 25 kí tự",
+                                          },
+                                        }}
+                                        render={({ field }) => (
+                                          <>
+                                            <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                                              Mật khẩu
+                                            </label>
+                                            <input
+                                              className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                                              type="password"
+                                              placeholder="Nhập vào mật khẩu"
+                                              value={field.value}
+                                              onChange={(e) => {
+                                                const reg = /[!@#$%^&]/;
+                                                const value = e.target.value;
+                                                field.onChange(
+                                                  value.replace(reg, "")
+                                                );
+                                              }}
+                                              name="password"
+                                            />
+                                            {errors.password && (
+                                              <p className="text-[11px] text-red-700 mt-0">
+                                                {errors.password.message}
+                                              </p>
+                                            )}
+                                          </>
+                                        )}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        }
+                      />
                     </div>
                   </>
                 )}
@@ -577,120 +829,105 @@ export default function DetailsProduct() {
           {/* end Sản phẩm của shop */}
         </body>
       </Container>
+      {/* <div className="border-[1px] border-[#E0E0E0] mt-[-2px]"></div> */}
       <Container>
-        {/* Chi tiết và đánh giá */}
-        <div className="justify-center gap-6 flex mt-10">
-          <div>
-            <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "descriptions"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
-              onClick={() => handleTabClick("descriptions")}
-              role="tab"
-              aria-selected={activeTab === "descriptions" ? "true" : "false"}
-              aria-controls="descriptions"
-            >
-              <span className="ml-1">Chi tiết sản phẩm</span>
-            </a>
+        {/* chi tiết sản phẩm */}
+
+        <div className="p-5">
+          <div className=" shadow-gray-200 rounded-md mt-10 p-10">
+            <div className="justify-start gap-6 flex">
+              <div>
+                <a className="active cursor-pointer font-semibold border-[#1A1A1A] text-2xl">
+                  <span className="ml-1">CHI TIẾT SẢN PHẨM</span>
+                </a>
+              </div>
+            </div>
+            <div id="descriptions" role="tabpanel">
+              <div
+                className="pl-[43px] text-[19px] leading-10 break-all shadow-gray-50 rounded-md py-4 bg-white"
+                dangerouslySetInnerHTML={{
+                  __html: first?.productDetail?.description as any,
+                }}
+                // style={{ color: 'blue', textDecoration: 'underline' }}
+              ></div>
+            </div>
           </div>
-          <div>
-            <a
-              className={`text-[#1A1A1A] uppercase text-base cursor-pointer${
-                activeTab === "Rating"
-                  ? "active cursor-pointer font-semibold border-b-[1px] border-[#1A1A1A]"
-                  : ""
-              }`}
-              onClick={() => handleTabClick("Rating")}
-              role="tab"
-              aria-selected={activeTab === "Rating" ? "true" : "false"}
-              aria-controls="Rating"
-            >
-              <span className="ml-1">Đánh giá</span>
-            </a>
-          </div>
-        </div>
-      </Container>
-      <div className="border-[1px] border-[#E0E0E0] mt-[-2px]"></div>
-      <Container>
-        <div data-tab-content className="p-5">
+
           <div
-            className={` ${
-              activeTab === "descriptions" ? "visible" : "hidden"
-            }`}
-            id="descriptions"
-            role="tabpanel"
-          >
-            <div
-              className="px-[113px] py-[78px] text-sm break-all"
-              dangerouslySetInnerHTML={{
-                __html: first?.productDetail?.description as any,
-              }}
-            ></div>
-          </div>
-          <div
-            className={` ${activeTab === "Rating" ? "visible" : "hidden"}`}
+            // className={` ${activeTab === "Rating" ? "visible" : "hidden"}`}
             id="Rating"
             role="tabpanel"
           >
             {/* <Rating /> */}
-            <div className="mt-5 ">
-              <div className="grid gap-4 grid-cols-3">
-                {/* Left Comment */}
-                <div className="col-span-2 ">
-                  <div>
-                    <RatingMap
-                      getCommentWhereRating={getCommentWhereRating}
-                      setRateAndcomment={setRateAndcomment}
-                      handleEditProductRating={handleEditProductRating}
-                      rateAndcomment={rateAndcomment!}
-                      handleRemoveRating={handleRemoveRating}
-                    />
-                  </div>
-                  {}
-                  <div className="mt-10">
-                    <ResponsivePagination
-                      current={rateAndcomment.currentPage!}
-                      total={rateAndcomment.totalRatings!}
-                      onPageChange={handlePageChange}
-                      maxWidth={500}
-                    />
-                  </div>
-                  {/* ///////////////////////////////////////////////////// */}
-                </div>
-                {/* end Left Comment */}
-                {/* Right rating */}
+            <div className="mt-10 ">
+              <div className=" shadow-gray-100 rounded-md p-10 ">
                 <div>
-                  <div
-                    className="col-span-1 w-[312px] h-auto p-4 float-right
-                        shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                  <a
+                    className="active cursor-pointer font-semibold  border-[#1A1A1A] text-2xl"
+                    // onClick={() => handleTabClick("Rating")}
+                    // role="tab"
+                    aria-selected={activeTab === "Rating" ? "true" : "false"}
+                    aria-controls="Rating"
                   >
-                    <div className="py-5">
-                      <p className="text-[#1A1A1A] text-xl text-center font-medium">
-                        Tìm Kiếm
-                      </p>
-                      <div className="rate flex justify-center mt-3">
-                        <div className="mt-3">
-                          {arrRating.map((item, index) => {
-                            return (
-                              <RateDetailCMT
-                                key={index}
-                                checked={item.checked}
-                                rating={item.rating}
-                                onChangeFilter={(rating) => {
-                                  console.log("Ratting:" + rating);
-                                  HandleGetCommentWhereRating(rating);
-                                }}
-                              />
-                            );
-                          })}
+                    <span className="ml-1">ĐÁNH GIÁ</span>
+                  </a>
+                </div>
+                <div className="grid gap-4 grid-cols-3">
+                  {/* Left Comment */}
+                  <div className="col-span-2 ">
+                    <div>
+                      <RatingMap
+                        getCommentWhereRating={getCommentWhereRating}
+                        setRateAndcomment={setRateAndcomment}
+                        handleEditProductRating={handleEditProductRating}
+                        rateAndcomment={rateAndcomment!}
+                        handleRemoveRating={handleRemoveRating}
+                      />
+                    </div>
+                    {}
+                    <div className="mt-10">
+                      <ResponsivePagination
+                        current={rateAndcomment.currentPage!}
+                        total={rateAndcomment.totalRatings!}
+                        onPageChange={handlePageChange}
+                        maxWidth={500}
+                      />
+                    </div>
+                    {/* ///////////////////////////////////////////////////// */}
+                  </div>
+                  {/* end Left Comment */}
+                  {/* Right rating */}
+                  <div>
+                    <div
+                      className="col-span-1 w-[312px] h-auto p-4 float-right bg-white rounded-md
+                        shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                    >
+                      <div className="py-5">
+                        <p className="text-[#1A1A1A] text-xl text-center font-medium">
+                          Tìm Kiếm
+                        </p>
+                        <div className="rate flex justify-center mt-3">
+                          <div className="mt-3">
+                            {arrRating.map((item, index) => {
+                              return (
+                                <RateDetailCMT
+                                  key={index}
+                                  checked={item.checked}
+                                  rating={item.rating}
+                                  onChangeFilter={(rating) => {
+                                    console.log("Ratting:" + rating);
+                                    HandleGetCommentWhereRating(rating);
+                                  }}
+                                />
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  {/* end Right rating */}
                 </div>
-                {/* end Right rating */}
               </div>
             </div>
           </div>

@@ -654,7 +654,7 @@ export default function useRouterEmelent() {
       element: (
         <RegisterLoginLayout>
           <ChangePassword />
-          <ConfirmAccount />
+          {/* <ConfirmAccount /> */}
         </RegisterLoginLayout>
       ),
     },

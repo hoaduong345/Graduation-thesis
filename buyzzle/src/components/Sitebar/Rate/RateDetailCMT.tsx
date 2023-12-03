@@ -2,7 +2,7 @@ import { RatingStarDetail } from "../../../pages/home/User/DetailProduct/DetailP
 
 export default function RateDetailCMT(props: RatingStarDetail) {
   return (
-    <div className="flex items-center mb-4 justify-start gap-3 ">
+    <div className="flex items-center mb-4 justify-start gap-3">
       <div className="form-control">
         {/* <label className="label cursor-pointer"> */}
         <input
