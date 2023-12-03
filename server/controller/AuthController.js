@@ -24,11 +24,9 @@ const AuthController = {
     // CHECK EXPRIED ACCESS TOKEN
     isAccessTokenExpired: (accesstoken) => {
         const decoded = jwt.decode(accesstoken);
-        console.log("🚀 ~ file: AuthController.js:27 ~ decoded:", decoded)
 
         if (decoded && decoded.exp) {
             const currentTime = Math.floor(Date.now() / 1000);
-            console.log("🚀 ~ file: AuthController.js:31 ~ currentTime:", currentTime)
             return decoded.exp > currentTime;
         }
 

@@ -45,6 +45,7 @@ export interface ImgOfProduct {
   url: string;
 }
 [];
+
 export type LoginForm = {
   email: string;
   password: string;
@@ -308,6 +309,7 @@ export default function DetailsProduct() {
   } = useForm<LoginForm>({
     mode: "all",
   });
+  
   const param = useParams();
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
@@ -353,6 +355,7 @@ export default function DetailsProduct() {
     console.log("Data:" + JSON.stringify(data));
   };
   return (
+    
     <>
       <Container>
         <body className="body-detail container mx-auto">
@@ -841,10 +844,11 @@ export default function DetailsProduct() {
             </div>
             <div id="descriptions" role="tabpanel">
               <div
-                className="pl-[43px] text-[16px] break-all shadow-gray-50 rounded-md py-4 bg-white"
+                className="pl-[43px] text-[19px] leading-10 break-all shadow-gray-50 rounded-md py-4 bg-white"
                 dangerouslySetInnerHTML={{
                   __html: first?.productDetail?.description as any,
                 }}
+                // style={{ color: 'blue', textDecoration: 'underline' }}
               ></div>
             </div>
           </div>

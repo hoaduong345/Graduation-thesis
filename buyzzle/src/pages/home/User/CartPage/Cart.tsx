@@ -331,9 +331,13 @@ export default function Cart() {
                   className="rounded-full shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]
                         "
                 >
-                  <div onClick={() => openModal(idAllCart)} className="p-3">
-                    <Delete />
-                  </div>
+                  {productChecked.length > 0 && (
+                    <>
+                      <div onClick={() => openModal(idAllCart)} className="p-3">
+                        <Delete />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-between w-[55%] p-4">
@@ -352,7 +356,6 @@ export default function Cart() {
                       </p>
                     </div>
                   </div>
-                  <ArrowUp />
                 </div>
                 <button
                   // to={`${productChecked.length == 0 ? "" : "/checkout"
