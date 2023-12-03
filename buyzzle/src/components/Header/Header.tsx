@@ -27,7 +27,7 @@ export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
   const [text, setText] = useState("");
-
+  const [Logined, setLogined] = useState<boolean>();
   const [productSearch, setProductSearch] = useState<Products[]>([]);
   const [topProduct, settopProduct] = useState<Top8product[]>([]);
   const [isSearch, setIsSearch] = useState(false);
@@ -83,6 +83,7 @@ export default function Header() {
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user != null) {
+      setLogined(true);
       const userData = JSON.parse(user);
       const username = userData.username;
       console.log("USERNAME: " + username);
@@ -104,6 +105,7 @@ export default function Header() {
       });
     } else {
       console.log("Chua Dang Nhap Dung");
+      setLogined(false);
     }
   }, []);
 
@@ -154,14 +156,14 @@ export default function Header() {
   //   CheckRefreshToken();
   //   console.log("AOTHATDAY");
   // }
-  const [Logined, setLogined] = useState<boolean>();
+  
   const CheckLogin = async () => {
-    const user = localStorage.getItem("user");
-    if (user == null) {
-      setLogined(false);
+    // const user = localStorage.getItem("user");
+    if (Logined == false) {
+      // setLogined(false);
       openModal(idAddAdmin)
     } else {
-      setLogined(true);
+      // setLogined(true);
       CheckToken();
       CheckRefreshToken();
       console.log("AOTHATDAY");
@@ -485,7 +487,7 @@ export default function Header() {
                 </div>
 
                 <div className="items-center flex relative gap-2">
-                  <a onClick={CheckLogin}>
+                  <a onClick={CheckLogin1}>
                     {Logined ? (
                       <CartCount />
                     ) : (

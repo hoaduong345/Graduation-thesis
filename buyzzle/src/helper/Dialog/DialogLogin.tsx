@@ -83,9 +83,10 @@ export default function DialogLogin(props: Props) {
                       Đăng Nhập
                     </button>
 
-                    <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com">
+                    <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
                       <GoogleLogin
-                        cancel_on_tap_outside 
+
+                        cancel_on_tap_outside
                         size="medium"
                         onSuccess={(credentialResponse) => {
                           console.log(credentialResponse);
@@ -93,10 +94,10 @@ export default function DialogLogin(props: Props) {
                         onError={() => {
                           console.log("Login Failed");
                         }}
-                        
+
                       />
                     </GoogleOAuthProvider>
-
+           
                     <button
                       className="flex flex-wrap justify-center w-full border border-gray-300 hover:border-gray-500 px-2 py-1.5 rounded-md"
                       onClick={() => onClose()}
