@@ -1010,6 +1010,28 @@ const ProductController = {
             res.status(500).json('Cập nhật phản hồi đánh giá không thành công. Lỗi: ' + error.message);
         }
     },
+    // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
+    suggestProductBySex : async(req,res) =>{
+        try {
+            const whereClauseUser = {
+                deletedAt : null
+            }   
+            const user = await prisma.user.findMany({
+                where: whereClauseUser
+            })
+            const whereClauseProduct = {
+                deletedAt : null
+            }
+            const product = await prisma.product.findMany({
+                where : whereClauseProduct
+            })
+           
+            
+        } catch (error) {
+            console.error(error);
+            res.status(500).json('Something when wrong ' + error.message);
+        }
+    }
 };
 
 module.exports = ProductController;
