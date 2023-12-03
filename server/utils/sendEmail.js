@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const SendEmail = async (email, subject, text) => {
+const SendEmail = async (email, subject, text, next) => {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
@@ -18,13 +18,17 @@ const SendEmail = async (email, subject, text) => {
     await transporter.sendMail({
       from: process.env.USER,
       to: email,
-      subject: subject,
-      text: text,
+      // subject: subject,
+      // text: text,
+      subject: 'dang ki tai khoan thanh cong',
+      text: 'Cam on ban da su dung dich vu cua chung toi',
     });
 
     console.log("Email sent Successfully");
 
-    next();
+    if (next) {
+      next();
+    }
   } catch (error) {
     console.log("Email not sent");
     console.error(error);
