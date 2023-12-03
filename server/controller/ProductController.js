@@ -42,9 +42,9 @@ const ProductController = {
             const { image } = req.body;
 
             const categoryCount = await prisma.category.count();
-                  if (categoryCount >= 6) {
-            return res.status(400).json('du 6 danh muc');
-        }
+            if (categoryCount >= 6) {
+                return res.status(400).json('du 6 danh muc');
+            }
 
             // Tạo danh mục mới
             const newCategory = await prisma.category.create({
@@ -523,6 +523,12 @@ const ProductController = {
                     },
                 },
             });
+            const top8products = await prisma.product.findMany({
+                take: 8,
+                orderBy: {
+                    soldcount: 'desc',
+                },
+            });
             const result = await prisma.product.findMany({
                 orderBy: [{ sellingPrice: sortByPrice }, { createdAt: sortByDateCreate }, { soldcount: 'desc' }],
                 include: {
@@ -595,6 +601,7 @@ const ProductController = {
                     totalPage: Math.ceil(totalProduct / pageSize),
                     rows: result,
                     Rating: ratings,
+                    top8products: top8products,
                 };
                 res.status(200).json(resultProduct);
             }
@@ -742,9 +749,9 @@ const ProductController = {
                         select: {
                             name: true,
                             UserImage: {
-                                select:{
-                                    url:true,
-                                }
+                                select: {
+                                    url: true,
+                                },
                             },
                         },
                     },
@@ -762,12 +769,12 @@ const ProductController = {
                         select: {
                             name: true,
                             AdminImage: {
-                                select:{
-                                    url:true,
-                                }
+                                select: {
+                                    url: true,
+                                },
                             },
-                        }
-                    }
+                        },
+                    },
                 },
                 skip: (page - 1) * perPage,
                 take: perPage,
@@ -984,12 +991,12 @@ const ProductController = {
                         select: {
                             name: true,
                             AdminImage: {
-                                select:{
-                                    url:true,
-                                }
+                                select: {
+                                    url: true,
+                                },
                             },
-                        }
-                    }
+                        },
+                    },
                 },
                 orderBy: {
                     id: 'desc',
