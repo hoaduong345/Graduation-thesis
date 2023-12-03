@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Buyzzle from "../../../../assets/TSX/Buyzzle";
 import Minus from "../../../../assets/TSX/Minus";
 import Plus from "../../../../assets/TSX/Plus";
-import Container from "../../../../components/container/Container";
 import {
   UpdateCart,
   cartControllers,
@@ -11,12 +10,13 @@ import {
 import DialogComfirm from "../../../../helper/Dialog/DialogComfirm";
 import EmptyPage from "../../../../helper/Empty/EmptyPage";
 import { numberFormat } from "../../../../helper/Format";
-import { toastWarn } from "../../../../helper/Toast/Warning";
-import { useCart } from "../../../../hooks/Cart/CartContextProvider";
 import { CartItem } from "../../../../model/CartModel";
+import Container from "../../../../components/container/Container";
+import { useCart } from "../../../../hooks/Cart/CartContextProvider";
+import ArrowUp from "../../admin/assets/TSX/ArrowUp";
 import Delete from "../../admin/assets/TSX/Delete";
+import { toastWarn } from "../../../../helper/Toast/Warning";
 import { userController } from "../../../../controllers/UserController";
-
 export default function Cart() {
   const {
     carts,
@@ -32,8 +32,24 @@ export default function Cart() {
     removeAllCart,
     idItemCart,
     idAllCart,
-    handleChecked,
   } = useCart();
+
+  const CheckToken = async () => {
+    userController.CheckToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  };
+  const CheckRefreshToken = async () => {
+    userController.CheckRefreshToken().then((res) => {
+      console.log(JSON.stringify(res));
+    });
+  };
+  const muti = () => {
+    CheckToken();
+    handleBuyNow();
+    CheckRefreshToken();
+    console.log("AOTHATDAY");
+  };
 
   const handleIncreaseQuantity = (data: UpdateCart) => {
     cartControllers.increaseCart(data).then((res) => {
@@ -68,30 +84,31 @@ export default function Cart() {
       }
     }
   };
-  const CheckToken = async () => {
-    userController.CheckToken().then((res) => {
-      console.log(JSON.stringify(res));
-    });
-  };
-  const CheckRefreshToken = async () => {
-    userController.CheckRefreshToken().then((res) => {
-      console.log(JSON.stringify(res));
-    });
-  };
-  const muti = () => {
-    CheckToken();
-    handleBuyNow();
-    CheckRefreshToken();
-    console.log("AOTHATDAY");
-  };
-  const [plusThrottled] = useThrottle(handleIncreaseQuantity, 300);
-  const [minusThrottled] = useThrottle(handleDecreaseQuantity, 300);
+
+  const [plusThrottled] = useThrottle(handleIncreaseQuantity, 500);
+  const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
+  //check box
 
   const cartLength = carts.item?.filter((e) => e.product.quantity > 0);
   var checkAll: boolean =
     cartLength?.length > 0
       ? !!carts.item?.length && productChecked?.length === cartLength?.length
       : false;
+
+  // 2 array : 1 array cart, 1 array cart checked
+  const handleChecked = (checked: boolean, item: CartItem) => {
+    if (checked) {
+      if (item.product.quantity > 0) {
+        setProductChecked((prev) => [...prev, item]);
+      }
+    } else {
+      let cloneProduct = [...productChecked];
+      let products = cloneProduct.filter((e) => {
+        return e.productid !== item.productid;
+      });
+      setProductChecked(products);
+    }
+  };
 
   const handleCheckedAll = (checked: boolean) => {
     if (checked) {
@@ -103,7 +120,6 @@ export default function Cart() {
       setProductChecked([]);
     }
   };
-
   const calculatePrice = () => {
     let totalCart = 0;
     let sale = 0;
@@ -173,7 +189,7 @@ export default function Cart() {
                     <div
                       key={e.productid}
                       className="bg-white h-auto rounded-md items-center py-[30px]
-shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
+                              shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
                                  grid grid-cols-12"
                     >
                       <div className="col-span-1 text-center leading-none	">
@@ -220,18 +236,17 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                           <>
                             <div
                               className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                              onClick={() => {
+                              onClick={() =>
                                 minusThrottled(e.quantity, {
                                   productId: e.productid,
                                   cartId: e.cartid,
-                                });
-                                setIdProduct(e.productid);
-                              }}
+                                })
+                              }
                             >
                               <Minus />
                             </div>
                             <div>
-                              <p className={`text-base mx-2 font-medium`}>
+                              <p className="text-base mx-2 font-medium">
                                 {e.quantity}
                               </p>
                             </div>
@@ -246,7 +261,6 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                   : toastWarn(
                                       `Chỉ còn ${e.product.quantity} sản phẩm`
                                     );
-                                setIdProduct(e.productid);
                               }}
                             >
                               <Plus />
@@ -355,11 +369,11 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                   <p>Mua ngay</p>
                 </button>
                 <DialogComfirm
-                  desc="các sản phẩm"
+                  desc="toàn bộ Giỏ hàng"
                   id={idAllCart}
                   onClose={() => closeModal(idAllCart)}
                   onSave={() => removeAllCart()}
-                  title="Xóa các sản phẩm đã chọn!"
+                  title="Xóa toàn bộ Giỏ hàng!"
                 />
               </div>
             </div>

@@ -24,8 +24,27 @@ export interface Rate {
   rows: Row[];
   averageRating: number;
   Rating: Rating[];
+  top8products: Top8product[];
 }
-
+export interface Top8product {
+  id: number;
+  name: string;
+  price: number;
+  rate?: number;
+  pricesale: number;
+  sellingPrice: number;
+  discount: number;
+  soldcount: number;
+  quantity: number;
+  description: string;
+  status: any;
+  date: string;
+  deletedAt: any;
+  createdAt: string;
+  updatedAt: string;
+  categoryID: number;
+  subcateId: number;
+}
 export interface FlashsaleProduct {
   id: number;
   name: string;
@@ -101,18 +120,18 @@ export interface Rating {
   }[];
   admin: admin;
 }
-export interface admin{
+export interface admin {
   name: string;
   AdminImage: AdminImage[];
 }
-export interface AdminImage{
+export interface AdminImage {
   url: string;
 }
 export interface User {
   name: string;
   UserImage: UserImage[];
 }
-export interface UserImage{
+export interface UserImage {
   url: string;
 }
 export interface Product {
