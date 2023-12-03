@@ -35,20 +35,21 @@ import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
 import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { userController } from "../../../../../controllers/UserController";
-import SaveLink from "../../../Admin/assets/TSX/SaveLink";
 
 import DialogLogin from "../../../../../helper/Dialog/DialogLogin";
 import { Controller, useForm } from "react-hook-form";
 import Cart from "../../../admin/assets/TSX/Cart";
 import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
+import SaveLink from "../../../admin/assets/TSX/SaveLink";
 export interface ImgOfProduct {
   url: string;
 }
 [];
+
 export type LoginForm = {
   email: string;
   password: string;
-}
+};
 export type FormValues = {
   idproduct: number;
   name: string;
@@ -277,31 +278,27 @@ export default function DetailsProduct() {
     userController.CheckToken().then((res) => {
       console.log(JSON.stringify(res));
     });
-  }
+  };
   const CheckRefreshToken = async () => {
-
     userController.CheckRefreshToken().then((res) => {
       console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
-
     });
-  }
+  };
   const CheckLogin = async () => {
     const user = localStorage.getItem("user");
     if (user == null) {
       setLogined(false);
-      openModal(idAddAdmin)
+      openModal(idAddAdmin);
     } else {
       setLogined(true);
       CheckToken();
       CheckRefreshToken();
       console.log("AOTHATDAY");
     }
-
-  }
+  };
   const muti = () => {
     CheckLogin();
-
-  }
+  };
   const {
     control,
     handleSubmit,
@@ -312,12 +309,13 @@ export default function DetailsProduct() {
   } = useForm<LoginForm>({
     mode: "all",
   });
+  
   const param = useParams();
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
-    console.log("LoginData:" + data)
+    console.log("LoginData:" + data);
     userController.Login(data).then((res) => {
-      console.log("LoginTHanhCong:" + JSON.stringify(res.username))
+      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
       const username = res.username;
       const accessToken = res.accessToken;
       console.log(accessToken);
@@ -330,8 +328,8 @@ export default function DetailsProduct() {
       setTimeout(() => {
         window.location.href = `/Detailproducts/${param.id}`;
       }, 2000);
-    })
-  }
+    });
+  };
   const openModal = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
@@ -357,6 +355,7 @@ export default function DetailsProduct() {
     console.log("Data:" + JSON.stringify(data));
   };
   return (
+    
     <>
       <Container>
         <body className="body-detail container mx-auto">
@@ -392,10 +391,11 @@ export default function DetailsProduct() {
                       return (
                         <img
                           key={index}
-                          className={`h-[75px] w-[75px] ${selectedImageIndex === index
-                            ? "border-2 border-blue-500"
-                            : ""
-                            }`}
+                          className={`h-[75px] w-[75px] ${
+                            selectedImageIndex === index
+                              ? "border-2 border-blue-500"
+                              : ""
+                          }`}
                           src={e.url}
                           alt=""
                           onClick={() => handleImageClick(index)}
@@ -489,8 +489,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                            first?.productDetail.price! *
-                            (first?.productDetail.discount! / 100)
+                              first?.productDetail.price! *
+                                (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -588,8 +588,9 @@ export default function DetailsProduct() {
               {/* end icon */}
               {/* Mua ngay */}
               <div
-                className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`
-                  } mt-9 items-center gap-6`}
+                className={`w-[100%] flex ${
+                  isSoldOut ? `justify-start` : `justify-end`
+                } mt-9 items-center gap-6`}
               >
                 {/* <div>
                   <LoveProduct />
@@ -612,7 +613,8 @@ export default function DetailsProduct() {
                         <div
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
                           onClick={() =>
-                            !isSoldOut && addProduct(Number(id), quantity, false)
+                            !isSoldOut &&
+                            addProduct(Number(id), quantity, false)
                           }
                         >
                           <div className="text-center text-base font-bold text-[#4C4C4C]">
@@ -623,9 +625,7 @@ export default function DetailsProduct() {
                       ) : (
                         <div
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
-                          onClick={() =>
-                            openModal
-                          }
+                          onClick={() => openModal}
                         >
                           <div className="text-center text-base font-bold text-[#4C4C4C]">
                             Thêm Vào Giỏ Hàng
@@ -633,7 +633,6 @@ export default function DetailsProduct() {
                           <Cart />
                         </div>
                       )}
-
                     </a>
                     <a onClick={muti}>
                       {Logined ? (
@@ -654,7 +653,7 @@ export default function DetailsProduct() {
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
    transition duration-150 bg-[#EA4B48] justify-evenly`}
                           onClick={() => {
-                            openModal
+                            openModal;
                           }}
                         >
                           <p className="text-center text-base font-bold text-white ">
@@ -662,7 +661,6 @@ export default function DetailsProduct() {
                           </p>
                         </div>
                       )}
-
                     </a>
                     <div>
                       <DialogLogin
@@ -719,7 +717,9 @@ export default function DetailsProduct() {
                                               onChange={(e) => {
                                                 const reg = /[!#$%^&]/;
                                                 const value = e.target.value;
-                                                field.onChange(value.replace(reg, ""));
+                                                field.onChange(
+                                                  value.replace(reg, "")
+                                                );
                                               }}
                                               name="email"
                                             />
@@ -733,7 +733,6 @@ export default function DetailsProduct() {
                                       />
                                     </div>
                                   </div>
-
                                 </div>
                                 <div className="flex gap-3  ">
                                   <div className="flex flex-col gap-5 max-lg:gap-2">
@@ -771,7 +770,9 @@ export default function DetailsProduct() {
                                               onChange={(e) => {
                                                 const reg = /[!@#$%^&]/;
                                                 const value = e.target.value;
-                                                field.onChange(value.replace(reg, ""));
+                                                field.onChange(
+                                                  value.replace(reg, "")
+                                                );
                                               }}
                                               name="password"
                                             />
@@ -785,16 +786,13 @@ export default function DetailsProduct() {
                                       />
                                     </div>
                                   </div>
-
                                 </div>
                               </div>
                             </div>
                           </>
                         }
                       />
-
                     </div>
-
                   </>
                 )}
               </div>
@@ -831,7 +829,6 @@ export default function DetailsProduct() {
           {/* end Sản phẩm của shop */}
         </body>
       </Container>
-      <Container>{/* Chi tiết và đánh giá */}</Container>
       {/* <div className="border-[1px] border-[#E0E0E0] mt-[-2px]"></div> */}
       <Container>
         {/* chi tiết sản phẩm */}
@@ -847,10 +844,11 @@ export default function DetailsProduct() {
             </div>
             <div id="descriptions" role="tabpanel">
               <div
-                className="pl-[43px] text-[16px] break-all shadow-gray-50 rounded-md py-4 bg-white"
+                className="pl-[43px] text-[19px] leading-10 break-all shadow-gray-50 rounded-md py-4 bg-white"
                 dangerouslySetInnerHTML={{
                   __html: first?.productDetail?.description as any,
                 }}
+                // style={{ color: 'blue', textDecoration: 'underline' }}
               ></div>
             </div>
           </div>

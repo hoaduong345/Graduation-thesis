@@ -14,13 +14,14 @@ import { userController } from "../../controllers/UserController";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
-import Container from "../container/Container";
 import HeaderTopUser from "../HeaderTop/HeaderTopUser";
 import axios from "axios";
 import { useCookies } from 'react-cookie';
 import { Controller, useForm } from "react-hook-form";
 import DialogLogin from "../../helper/Dialog/DialogLogin";
 import { LoginForm } from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+import Container from "../container/Container";
+import { Top8product } from "../../model/ProductModel";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -28,6 +29,7 @@ export default function Header() {
   const [text, setText] = useState("");
 
   const [productSearch, setProductSearch] = useState<Products[]>([]);
+  const [topProduct, settopProduct] = useState<Top8product[]>([]);
   const [isSearch, setIsSearch] = useState(false);
 
   const user = localStorage.getItem("user");
@@ -53,11 +55,17 @@ export default function Header() {
 
   const getSearhvalue = async () => {
     await productController.getAllProductsSearch(text).then((res: any) => {
+      console.log(
+        "🚀 ~ file: Header.tsx:50 ~ awaitproductController.getAllProductsSearch ~ res:",
+        res
+      );
       setProductSearch(res.rows);
+      settopProduct(res.top8products);
     });
   };
 
   useEffect(() => {
+    getSearhvalue();
     if (text != "") {
       getSearhvalue();
       setSearchParams(
@@ -132,12 +140,10 @@ export default function Header() {
     userController.CheckToken().then((res) => {
       console.log(JSON.stringify(res));
     });
-  }
+  };
   const CheckRefreshToken = async () => {
-
     userController.CheckRefreshToken().then((res) => {
       console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
-
     });
 
 
@@ -529,41 +535,17 @@ export default function Header() {
         <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
           <Container>
             <div className="container mx-auto">
-              <ul className="flex gap-[3%] h-[60px] font-bold text-[#1A1A1A] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
-                <li>
-                  <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link>
-                </li>
-                <li>
-                  <Link to="/admin/category">categoryAdmin</Link>
-                </li>
-                <li>
-                  <Link to="/admin/voucher">voucherAdmin</Link>
-                </li>
-                <li>
-                  <Link to="/admin/usersmanager">usersmanagerAdmin</Link>
-                </li>
-                <li>
-                  <a href="/admin/statisticsPage">thongke</a>
-                </li>
-                <li>
-                  <Link to="/admin/ListproductsAdmin">ListproductsAdmin</Link>
-                </li>
-                <li>
-                  <a href="/admin/ordermanagement">ordermanagement</a>
-                </li>
-                <li>
-                  <Link to="/orderhistory">orderhistory</Link>
-                </li>
-                <li>
-                  <a href="/checkout">check out</a>
-                </li>
-                <li>
-                  <a href="/orderdetail">orderdetail</a>
-                </li>
-
-                {/*  <li>
-                  <a href="#">Sữa Baby</a>
-                </li> */}
+              <ul className="flex gap-[3%] h-[60px] font-medium text-[#45474B] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
+                {/* <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link> */}
+                {topProduct.map((items) => {
+                  return (
+                    <>
+                      <Link to={`/Detailproducts/${items.id}`}>
+                        <li className="hover:text-[#1F1717] ">{items.name}</li>
+                      </Link>
+                    </>
+                  );
+                })}
               </ul>
             </div>
           </Container>

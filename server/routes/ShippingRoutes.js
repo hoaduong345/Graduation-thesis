@@ -11,6 +11,11 @@ router.post('/confirmdelete', ShippingController.confirmDeleteOrder);
 router.get('/notificationadmin', ShippingController.getNotificationAdmin);
 router.get('/notificationdelivery', ShippingController.getNotificationForDelivery)
 router.get('/notificationforuser', ShippingController.getNotificationForUser)
-router.put('/markasread', ShippingController.isMarkAsRead);
 router.post('/filter', ShippingController.filterWithStatusNotification);
+
+// Đánh dấu đã đọc tất cả
+router.put('/markasreaduser', ShippingController.isMarkAsReadUser);
+router.put('/markasreadadmin', ShippingController.isMarkAsReadAdmin);
+router.put('/markasreaddelivery', ShippingController.isMarkAsReadDelivery);
+
 module.exports = router;

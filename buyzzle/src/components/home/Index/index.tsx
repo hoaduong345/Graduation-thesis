@@ -18,6 +18,8 @@ import {
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
+import VoucherHomePage from "../components/Voucher/Voucher";
+import { useScroll } from "react-spring";
 
 export type Product = {
   id: number;
@@ -39,27 +41,8 @@ export type FlashSaleList = {
   daBan: number;
 };
 
-interface VoucherBanner {
-  pathName: string;
-  icon: ReactNode;
-  title: string;
-}
-
-const listVoucherBanner: VoucherBanner[] = [
-  {
-    pathName: "/voucher",
-    icon: <LogoVoucherBuyzzle />,
-    title: "BUYZZLE",
-  },
-  // {
-  //   pathName: "",
-  //   icon: <LogoVoucherFreeship />,
-  //   title: "FREESHIP",
-  // },
-];
-
 function Index() {
-  // useScroll();
+  useScroll();
   const [categoty, setCategory] = useState<Cate[]>([]);
   const [product, setProducts] = useState<Products[]>([]);
   const [page, setPage] = useState(1);
@@ -128,133 +111,14 @@ function Index() {
           </div>
         </div>
 
-        <div className="container mt-[90px]">
-          <div className="flex justify-center mb-10">
-            <SanVoucher />
-          </div>
-
-          <div className="flex justify-center gap-[24px]">
-            {listVoucherBanner.map((e) => {
-              return (
-                <>
-                  <Link
-                    to={e.pathName}
-                    className="max-w-[420px] scale-95 duration-300 hover:scale-100 relative"
-                  >
-                    <VoucherBuyzzle />
-                    <div className="absolute left-[7%] top-[29%]">
-                      <div className="flex flex-col gap-1 items-center">
-                        <p className="font-bold text-2xl text-[#4C4C4C]">
-                          VOUCHER
-                        </p>
-                        <p className="font-bold text-[32px] text-[#4C4C4C]">
-                          {e.title}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="absolute bottom-[13%] right-[5%]">
-                      {e.icon}
-                    </div>
-                  </Link>
-                </>
-              );
-            })}
-          </div>
+        <div className="container">
+          <VoucherHomePage />
         </div>
       </Container>
 
-      {/* <div className="w-full mx-auto my-[60px] bg-[#ffeae9] ">
-        <Container>
-          <div className="py-[40px] backGroundImg flex justify-between max-[769px]:flex-col">
-            <div className="max-w-[276px] max-[1025px]:hidden">
-              <img src={Images.chooseUs1} alt="" />
-            </div>
-            <div className="max-w[444px]">
-              <img src={Images.chooseUs2} alt="" />
-            </div>
-            <div className="flex flex-col justify-center max-w-[536px] max-[769px]:max-w-[700px]">
-              <div className="max-w-[317px] pb-[26px]">
-                <span className="text-[40px] font-bold">
-                  100% sản phẩm <span className="text-[#00b207]">xanh</span>{" "}
-                  sạch
-                </span>
-              </div>
-
-              <div className="flex justify-between gap-[12px] items-center max-w-[536px]">
-                <div className="max-w-[40px]">
-                  <img src={Images.chooseUs3} alt="" />
-                </div>
-
-                <div className="text-[18px] font-bold max-w-[500px]">
-                  <p>
-                    Tuần Sản Phẩm Xanh: Mua Sắm Thả Ga - Giảm Giá Lên Đến 50%!
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center max-w-[536px] pb-[26px]">
-                <div className="max-w-[40px]"></div>
-
-                <div className="text-[14px] max-w-[500px]">
-                  <p>
-                    Giảm giá lên đến 50%: Khám phá bộ sưu tập đa dạng với giá
-                    cực kỳ hấp dẫn. Thêm sức khỏe vào giỏ hàng của bạn mà không
-                    làm trống túi tiền!
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center max-w-[536px]">
-                <div className="max-w-[40px]">
-                  <img src={Images.chooseUs3} alt="" />
-                </div>
-
-                <div className="text-[18px] font-bold max-w-[500px]">
-                  <p>
-                    Săn Sale Tuần Sản Phẩm Xanh: Mua Rau Sạch, Tiết Kiệm Lớn!"
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center max-w-[536px] pb-[26px]">
-                <div className="max-w-[40px]"></div>
-
-                <div className="text-[14px] max-w-[500px]">
-                  <p>
-                    Mua sắm thuận tiện: Dễ dàng đặt hàng trực tuyến và giao hàng
-                    tận cửa, để bạn tập trung vào việc nấu nướng ngon lành.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </div> */}
-
       <Container>
-        <div className="container mt-[60px] ">
-          <div className="flex justify-between p-[40px] max-lg:flex-wrap shadow max-[426px]:hidden">
-            <div className="flex gap-[16px] items-center justify-center max-lg:mb-[20px] max-lg:w-1/2">
-              <img src={Images.car} alt="" />
-              <span>Giao hàng miễn phí</span>
-            </div>
-            <div className="flex gap-[16px] items-center justify-center max-lg:mb-[20px] max-lg:w-1/2">
-              <img src={Images.headphones} alt="" />
-              <span>Nhận phản hồi 24/7</span>
-            </div>
-            <div className="flex gap-[16px] items-center justify-center max-lg:w-1/2">
-              <img src={Images.shopping} alt="" />
-              <span>Mua sắm an toàn 100%</span>
-            </div>
-            <div className="flex gap-[16px] items-center justify-center max-lg:w-1/2">
-              <img src={Images.Group} alt="" />
-              <span>Hoàn trả hàng</span>
-            </div>
-          </div>
-        </div>
-
         <div className="container my-[60px]">
-          <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm: </h1>
+          <h1 className="text-2xl font-bold mb-[15px]">Gợi ý sản phẩm </h1>
 
           <InfiniteScroll
             style={{ overflow: "hidden" }}
