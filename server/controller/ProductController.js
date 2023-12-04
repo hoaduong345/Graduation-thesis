@@ -418,10 +418,7 @@ const ProductController = {
                     product: {
                         select: {
                             quantity: true,
-
-
                         },
-
                     },
                 },
             });
@@ -1030,11 +1027,6 @@ const ProductController = {
             const idUser = parseInt(req.cookies.id);
             console.log('🚀 ~ file: ProductController.js:1026 ~ suggestProductBySex: ~ idUser:', idUser);
 
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: idUser,
-                },
-            });
             const whereClause = {
                 deletedAt: null,
             };
@@ -1063,8 +1055,23 @@ const ProductController = {
             };
 
             let paginatedProducts;
-
-            if (user.sex == 0) {
+            let user = null;
+            if (idUser) {
+                user = await prisma.user.findFirst({
+                    where: {
+                        id: idUser,
+                    },
+                });
+            } else {
+                const paginatedWithoutSexProducts = paginateArray(mergedProductsWithoutSex, pageSize, page);
+                paginatedProducts = {
+                    mergedProducts: paginatedWithoutSexProducts,
+                    page,
+                    pageSize,
+                    totalPages: Math.ceil(mergedProductsWithoutSex.length / pageSize),
+                };
+            }
+            if (user && user.sex == 0) {
                 const paginatedFemaleProducts = paginateArray(mergedProductsFemale, pageSize, page);
                 paginatedProducts = {
                     mergedProducts: paginatedFemaleProducts,
@@ -1072,7 +1079,7 @@ const ProductController = {
                     pageSize,
                     totalPages: Math.ceil(mergedProductsFemale.length / pageSize),
                 };
-            } else if (user.sex == 1) {
+            } else if (user && user.sex == 1) {
                 const paginatedMaleProducts = paginateArray(mergedProductsMale, pageSize, page);
                 paginatedProducts = {
                     mergedProducts: paginatedMaleProducts,
