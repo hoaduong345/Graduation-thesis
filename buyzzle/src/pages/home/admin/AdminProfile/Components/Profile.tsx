@@ -24,6 +24,7 @@ export type FormValues = {
   sex: string;
   phonenumber: string;
   dateofbirth: string;
+  image : string;
 };
 export type FormImage = {
   idadmin: number;
@@ -42,7 +43,7 @@ export default function UserProfile() {
   const [CheckImageUrl, setCheckImageUrl] = useState<boolean>(false);
   const param = useParams();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
@@ -242,8 +243,15 @@ export default function UserProfile() {
           await addImages(FormImage.idadmin, url);
           setCheckImageUrl(true);
         } else {
-          console.log("IDUSERCCCCCCCCCCCc:" + FormImage.idadmin);
-          await EditImages(FormImage.idadmin, url);
+          console.log("IMAGELUCNAY:" + url);
+          if(url != ""){
+            console.log("IDUSERCCCCCCCCCCCc:" + FormImage.idadmin);
+            await EditImages(FormImage.idadmin, url);
+          }else{
+            console.log("IDUSERCCCCCCCCCCCc:" + FormImage.idadmin);
+            await EditImages(FormImage.idadmin, urlThen);
+          }
+          
         }
       }
 
@@ -296,15 +304,17 @@ export default function UserProfile() {
     }
   };
 
-  const onChangeImage = (e: any) => {
-    const file = e.target.files?.[0];
+  const onChangeImage = (file: any) => {
+    // const file = e.target.files?.[0];
     if (file) {
-      console.log(`Selected file: ${file}`);
+      console.log(`Selected file: `+file.name);
       setSelectedFile(file);
       setImage(file);
+
+      // console.log("isDisabled:"+isDisabled)
     } else {
       setSelectedFile(null); // Reset the selectedFile state when no file is selected
-      setImage("" + null); // Reset the imageURL state
+      setImage(null); // Reset the imageURL state
       console.log("No file selected");
     }
   };
@@ -714,13 +724,27 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 }
                               }}
                             >
-                              <input
-                                type="file"
-                                onChange={onChangeImage}
-                                id="images"
-                                multiple
-                                className="hidden"
-                              />
+                              <Controller
+                              control={control}
+                              name="image"
+                              render={({ field }) => (
+                                <input
+                                  type="file"
+                                  onChange={(e)=>{
+                                    // const value = ;
+                                    onChangeImage(e.target.files?.[0]);
+                                    field.onChange(e.target.files?.[0].name);
+                                  
+                                  }
+                                  
+                                    
+                                  }
+                                  id="images"
+                                  multiple
+                                  className="hidden"
+                                />
+                              )}
+                            />
                               <button className="text-center text-sm font-bold text-[#1A1A1A] ">
                                 Thay đổi ảnh
                               </button>

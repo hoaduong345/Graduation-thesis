@@ -14,6 +14,7 @@ import Container from "../../../../components/container/Container";
 import { appConfig } from "../../../../configsEnv";
 import Back from "../assets/TSX/Back";
 import UploadIMG from "../assets/TSX/UploadIMG";
+import secureLocalStorage from "react-secure-storage";
 
 export type FormValues = {
   productName: string;
@@ -161,7 +162,13 @@ export default function Addproducts() {
       setLoadingImage(false);
     }
   };
-
+  useEffect(() => {
+    let user = secureLocalStorage.getItem("admin");
+    if (user == null) {
+      console.log("VCLLLLLLLLLLLLLLLLLll");
+      window.location.href = "/admin/loginadmin";
+    }
+  }, []);
   return (
     <Container>
       <div className="body-addproduct container mx-auto">

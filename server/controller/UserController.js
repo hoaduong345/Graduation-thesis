@@ -63,6 +63,7 @@ const UserController = {
                 phonenumber: req.body.phonenumber,
                 sex: req.body.sex,
                 dateOfBirth: new Date(req.body.dateOfBirth),
+                image: req.body.image,
             };
 
             const updatedUserResponse = await prisma.user.update({
@@ -107,6 +108,7 @@ const UserController = {
                     phonenumber: true,
                     sex: true,
                     dateOfBirth: true,
+                    image: true,
                 },
             });
             const allUsers = await prisma.user.findMany({

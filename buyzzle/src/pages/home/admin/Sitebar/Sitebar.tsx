@@ -61,16 +61,16 @@ const listSitebar: SitebarAdmin[] = [
     icon: <VouchersIcon />,
     pathName: "/admin/voucher",
   },
-  {
-    title: "Đơn Hàng",
-    icon: <Oder />,
-    pathName: "/admin/ordermanagement",
-  },
-  {
-    title: "Tin Nhắn",
-    icon: <MessagesIcon />,
-    pathName: "",
-  },
+  // {
+  //   title: "Đơn Hàng",
+  //   icon: <Oder />,
+  //   pathName: "/admin/ordermanagement",
+  // },
+  // {
+  //   title: "Tin Nhắn",
+  //   icon: <MessagesIcon />,
+  //   pathName: "",
+  // },
   {
     title: "Đăng xuất",
     icon: <Logout />,
