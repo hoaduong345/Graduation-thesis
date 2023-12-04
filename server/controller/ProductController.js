@@ -395,6 +395,7 @@ const ProductController = {
             const productDetail = await prisma.product.findFirst({
                 include: {
                     ProductImage: true,
+                    fK_category:true,
                 },
                 where: {
                     id: productId,
@@ -417,7 +418,10 @@ const ProductController = {
                     product: {
                         select: {
                             quantity: true,
+                           
+
                         },
+
                     },
                 },
             });
