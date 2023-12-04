@@ -1,6 +1,7 @@
 import axios from "axios";
 import { FormValues } from "../pages/home/admin/EditProduct/EditProductMap";
 import { Products } from "../pages/home/User/FilterPage/FiltersPage";
+import { MergedProducts, ProductSuggest } from "../model/ProductsSuggest";
 
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_URL || "",
@@ -187,6 +188,20 @@ class ProductController {
       .get(`${appConfig.apiUrl}/allproducts?rating=${rate}`)
       .then((res) => {
         return res.data as Products[];
+      });
+  };
+
+  getProductSuggestHome = async (
+    page: number,
+    pageSize: number
+  ): Promise<ProductSuggest> => {
+    return await axios
+      .post(`${appConfig.apiUrl}/getproductbysex`, {
+        page: page,
+        pageSize: pageSize,
+      })
+      .then((res) => {
+        return res.data as ProductSuggest;
       });
   };
 }
