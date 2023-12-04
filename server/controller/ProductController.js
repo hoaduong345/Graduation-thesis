@@ -1019,8 +1019,8 @@ const ProductController = {
     },
     suggestProductBySex: async (req, res) => {
         try {
-            const page = parseInt(req.query.page) || 1;
-            const pageSize = parseInt(req.query.pageSize) || 40;
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
             let skip = (page - 1) * pageSize;
             const idUser = parseInt(req.cookies.id);
             const user = await prisma.user.findFirst({
@@ -1044,9 +1044,9 @@ const ProductController = {
             const mergedProductsFemale = productsWithFemale.concat(productsWithoutSex);
             const mergedProductsWithoutSex = productsWithoutSex.concat(productsWithFemale, productsWithMale);
             // ĐẾM SỐ LƯỢNG 
-            const countMergedProductsMale = mergedProductsMale.length;
-            const countMergedProductsFemale = mergedProductsFemale.length;
-            const countMergedProductsWithoutSex = mergedProductsWithoutSex.length;
+            const countMergedProductsMale = productsWithMale.length;
+            const countMergedProductsFemale = productsWithFemale.length;
+            const countMergedProductsWithoutSex = productsWithoutSex.length;
             // TÍNH TOTAL ĐỂ TRẢ VỀ
             const CountProductForMale = countMergedProductsMale + countMergedProductsWithoutSex
             const CountProductForFemale = countMergedProductsFemale + countMergedProductsWithoutSex
@@ -1054,11 +1054,11 @@ const ProductController = {
 
 
             if (user.sex == 0) {
-                return res.status(200).send({ProductForFemale :mergedProductsFemale, Count : CountProductForFemale, skip });
+                return res.status(200).send({ProductForFemale :mergedProductsFemale, Count : CountProductForFemale, skip, take : pageSize });
             } else if (user.sex == 1) {
-                return res.status(200).send({ProductForMale : mergedProductsMale, Count : CountProductForMale, skip});
+                return res.status(200).send({ProductForMale : mergedProductsMale, Count : CountProductForMale, skip, take : pageSize});
             } else {
-                return res.status(200).send({ProductWithoutSex : mergedProductsWithoutSex, Count : CountProductWithoutSex, skip});
+                return res.status(200).send({ProductWithoutSex : mergedProductsWithoutSex, Count : CountProductWithoutSex, skip,take : pageSize });
             }
         } catch (error) {
             console.error(error);
