@@ -1019,9 +1019,7 @@ const ProductController = {
     },
     suggestProductBySex: async (req, res) => {
         try {
-            const page = parseInt(req.body.page) || 1;
-            const pageSize = parseInt(req.body.pageSize) || 40;
-            let skip = (page - 1) * pageSize;
+
             const idUser = parseInt(req.cookies.id);
             const user = await prisma.user.findFirst({
                 where: {
@@ -1054,11 +1052,11 @@ const ProductController = {
 
 
             if (user.sex == 0) {
-                return res.status(200).send({ProductForFemale :mergedProductsFemale, Count : CountProductForFemale, skip, take : pageSize });
+                return res.status(200).send({ProductForFemale :mergedProductsFemale, Count : CountProductForFemale});
             } else if (user.sex == 1) {
-                return res.status(200).send({ProductForMale : mergedProductsMale, Count : CountProductForMale, skip, take : pageSize});
+                return res.status(200).send({ProductForMale : mergedProductsMale, Count : CountProductForMale });
             } else {
-                return res.status(200).send({ProductWithoutSex : mergedProductsWithoutSex, Count : CountProductWithoutSex, skip,take : pageSize });
+                return res.status(200).send({ProductWithoutSex : mergedProductsWithoutSex, Count : CountProductWithoutSex });
             }
         } catch (error) {
             console.error(error);
