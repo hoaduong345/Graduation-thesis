@@ -119,8 +119,8 @@ export default function DetailsProduct() {
 
   const breadcrumbItems = [
     { text: 'Buyzzle', link: '/' },
-    { text: ''+category, link: `/FiltersPage/?nameCate=${category}&minPrice=0&maxPrice=10000000` },
-    { text: ''+productName },
+    { text: '' + category, link: `/FiltersPage/?nameCate=${category}&minPrice=0&maxPrice=10000000` },
+    { text: '' + productName },
   ];
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
@@ -373,7 +373,7 @@ export default function DetailsProduct() {
     <>
       <Container>
         <body className="body-detail container mx-auto">
-        <Breadcrumb items={breadcrumbItems} />
+          <Breadcrumb items={breadcrumbItems} />
           <div className="grid gap-4 grid-cols-10 mt-24 h-full">
             <div className="col-span-4 z-10">
               {/* {first?.productDetail && (
@@ -389,12 +389,16 @@ export default function DetailsProduct() {
                 </div>
               )} */}
               {first?.productDetail && (
-                <ImageMagnifier
-                  src={
-                    first?.productDetail?.ProductImage?.[selectedImageIndex]
-                      ?.url
-                  }
-                />
+                <div>
+                  <ImageMagnifier width="500px" height="430px"
+                    src={
+                      first?.productDetail?.ProductImage?.[selectedImageIndex]
+                        ?.url
+                    }
+                  />
+
+                </div>
+
               )}
             </div>
             <div className="my-auto">
