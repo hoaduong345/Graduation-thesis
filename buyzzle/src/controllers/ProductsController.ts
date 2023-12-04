@@ -196,14 +196,27 @@ class ProductController {
     pageSize: number
   ): Promise<ProductSuggest> => {
     return await axios
-      .post(`${appConfig.apiUrl}/getproductbysex`, {
-        page: page,
-        pageSize: pageSize,
-      })
+      .post(
+        `${appConfig.apiUrl}/getproductbysex`,
+        {
+          page: page,
+          pageSize: pageSize,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         return res.data as ProductSuggest;
       });
   };
+
+
+
+  
 }
 
 export const productController = new ProductController();

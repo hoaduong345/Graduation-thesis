@@ -1,5 +1,5 @@
 export interface ProductSuggest {
-  mergedProductsFemale: MergedProducts[];
+  mergedProducts: MergedProducts[];
   page: number;
   pageSize: number;
   totalPages: number;

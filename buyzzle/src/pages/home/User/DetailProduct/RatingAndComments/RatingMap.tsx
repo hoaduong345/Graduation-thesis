@@ -140,7 +140,7 @@ export default function RatingMap(props: Props) {
         const username = UserData.username;
         await adminController.getAdminWhereUsername(username).then((res) => {
           const name = res.adminWithImage.name;
-
+          
           // const email = res.adminWithImage.email;
           setAdminName(name);
           // setAdminAvt(null);

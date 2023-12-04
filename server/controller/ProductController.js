@@ -395,7 +395,7 @@ const ProductController = {
             const productDetail = await prisma.product.findFirst({
                 include: {
                     ProductImage: true,
-                    fK_category:true,
+                    fK_category: true,
                 },
                 where: {
                     id: productId,
@@ -418,7 +418,7 @@ const ProductController = {
                     product: {
                         select: {
                             quantity: true,
-                           
+
 
                         },
 
@@ -1022,6 +1022,7 @@ const ProductController = {
         }
     },
     // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
+    // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
     suggestProductBySex: async (req, res) => {
         try {
             const page = parseInt(req.body.page) || 1;
@@ -1029,7 +1030,7 @@ const ProductController = {
             const idUser = parseInt(req.cookies.id);
             console.log('🚀 ~ file: ProductController.js:1026 ~ suggestProductBySex: ~ idUser:', idUser);
 
-            const user = await prisma.user.findMany({
+            const user = await prisma.user.findFirst({
                 where: {
                     id: idUser,
                 },
@@ -1038,64 +1039,57 @@ const ProductController = {
                 deletedAt: null,
             };
 
+            const product = await prisma.product.findMany({
+                where: whereClause,
+                include: {
+                    ProductImage: true,
+                },
+            });
+
+            const productsWithMale = product.filter((product) => product.name.toLowerCase().includes('nam'));
+            const productsWithFemale = product.filter((product) => product.name.toLowerCase().includes('nữ'));
+            const productsWithoutSex = product.filter(
+                (product) => !product.name.toLowerCase().includes('nam') && !product.name.toLowerCase().includes('nữ')
+            );
+
+            const mergedProductsMale = productsWithMale.concat(productsWithoutSex);
+            const mergedProductsFemale = productsWithFemale.concat(productsWithoutSex);
+            const mergedProductsWithoutSex = productsWithoutSex.concat(productsWithFemale, productsWithMale);
+
             const paginateArray = (array, pageSize, page) => {
                 const startIndex = (page - 1) * pageSize;
                 const endIndex = page * pageSize;
                 return array.slice(startIndex, endIndex);
             };
 
-            const result = await prisma.product.findMany({
-                include: {
-                    ProductImage: true,
-                    fK_category: true,
-                    Rating: true,
-                },
-                where: whereClause,
-            });
             let paginatedProducts;
 
             if (user.sex == 0) {
-                const paginatedFemaleProducts = paginateArray(
-                    result.filter((product) => product.name.toLowerCase().includes('nữ')),
-                    pageSize,
-                    page
-                );
+                const paginatedFemaleProducts = paginateArray(mergedProductsFemale, pageSize, page);
                 paginatedProducts = {
-                    mergedProductsFemale: paginatedFemaleProducts,
+                    mergedProducts: paginatedFemaleProducts,
                     page,
                     pageSize,
-                    totalPages: Math.ceil(paginatedFemaleProducts.length / pageSize),
+                    totalPages: Math.ceil(mergedProductsFemale.length / pageSize),
                 };
             } else if (user.sex == 1) {
-                const paginatedMaleProducts = paginateArray(
-                    result.filter((product) => product.name.toLowerCase().includes('nam')),
-                    pageSize,
-                    page
-                );
+                const paginatedMaleProducts = paginateArray(mergedProductsMale, pageSize, page);
                 paginatedProducts = {
-                    mergedProductsMale: paginatedMaleProducts,
+                    mergedProducts: paginatedMaleProducts,
                     page,
                     pageSize,
-                    totalPages: Math.ceil(paginatedMaleProducts.length / pageSize),
+                    totalPages: Math.ceil(mergedProductsMale.length / pageSize),
                 };
             } else {
-                const paginatedWithoutSexProducts = paginateArray(
-                    result.filter(
-                        (product) =>
-                            !product.name.toLowerCase().includes('nam') && !product.name.toLowerCase().includes('nữ')
-                    ),
-                    pageSize,
-                    page
-                );
+                const paginatedWithoutSexProducts = paginateArray(mergedProductsWithoutSex, pageSize, page);
                 paginatedProducts = {
-                    mergedProductsWithoutSex: paginatedWithoutSexProducts,
+                    mergedProducts: paginatedWithoutSexProducts,
                     page,
                     pageSize,
-                    totalPages: Math.ceil(paginatedWithoutSexProducts.length / pageSize),
+                    totalPages: Math.ceil(mergedProductsWithoutSex.length / pageSize),
                 };
             }
-
-            return res.status(200).send(paginatedProducts);
+            return res.status(200).json(paginatedProducts);
         } catch (error) {
             console.error(error);
             res.status(500).json('Something when wrong ' + error.message);

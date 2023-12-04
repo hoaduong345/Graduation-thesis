@@ -54,7 +54,7 @@ function Index() {
 
   const getAllProducts = (page: number) => {
     productController.getProductSuggestHome(page, 2).then((res) => {
-      setProductsSuggest(res.mergedProductsFemale);
+      setProductsSuggest(res.mergedProducts);
     });
   };
   useEffect(() => {
@@ -65,7 +65,7 @@ function Index() {
   const nextData = () => {
     setPage(page + 1);
     productController.getProductSuggestHome(page + 1, 2).then((res) => {
-      setProductsSuggest(productsSuggest.concat(res.mergedProductsFemale));
+      setProductsSuggest(productsSuggest.concat(res.mergedProducts));
     });
   };
 
