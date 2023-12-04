@@ -1038,17 +1038,23 @@ const ProductController = {
                 where: whereClause,
             });
             const productsWithMale = product.filter((product) => product.name.toLowerCase().includes('nam'));
+            console.log(
+                '🚀 ~ file: ProductController.js:1041 ~ suggestProductBySex: ~ productsWithMale:',
+                productsWithMale
+            );
             const productsWithFemale = product.filter((product) => product.name.toLowerCase().includes('nữ'));
             const productsWithoutSex = product.filter(
                 (product) => !product.name.toLowerCase().includes('nam') && !product.name.toLowerCase().includes('nữ')
             );
 
-            const mergedProductsMale = productsWithMale.concat(productsWithMale, productsWithoutSex,skip);
-            const mergedProductsFemale = productsWithFemale.concat(productsWithFemale, productsWithoutSex,skip);
+            const mergedProductsMale = productsWithMale.concat(productsWithoutSex, skip);
+            // console.log("🚀 ~ file: ProductController.js:1047 ~ suggestProductBySex: ~ mergedProductsMale:", mergedProductsMale)
+            const mergedProductsFemale = productsWithFemale.concat(productsWithoutSex, skip);
+            // console.log("🚀 ~ file: ProductController.js:1049 ~ suggestProductBySex: ~ mergedProductsFemale:", mergedProductsFemale)
             const mergedProductsWithoutSex = productsWithoutSex.concat(
                 productsWithFemale,
                 productsWithMale,
-                productsWithoutSex,
+
                 skip
             );
 
