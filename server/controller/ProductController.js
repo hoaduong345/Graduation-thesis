@@ -1020,7 +1020,11 @@ const ProductController = {
     // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
     suggestProductBySex: async (req, res) => {
         try {
+            const page = parseInt(req.query.page) || 1;
+            const pageSize = parseInt(req.query.pageSize) || 40;
+            let skip = (page - 1) * pageSize;
             const idUser = parseInt(req.cookies.id);
+
             const user = await prisma.user.findFirst({
                 where: {
                     id: idUser,
@@ -1031,22 +1035,29 @@ const ProductController = {
                 deletedAt: null,
             };
             const product = await prisma.product.findMany({
-                where : whereClause
-            })
-            const productsWithMale = product.filter(product => product.name.toLowerCase().includes('nam'));
-            const productsWithFemale = product.filter(product => product.name.toLowerCase().includes('nữ'));
-            const productsWithoutSex = product.filter(product => !product.name.toLowerCase().includes('nam') && !product.name.toLowerCase().includes('nữ'));
+                where: whereClause,
+            });
+            const productsWithMale = product.filter((product) => product.name.toLowerCase().includes('nam'));
+            const productsWithFemale = product.filter((product) => product.name.toLowerCase().includes('nữ'));
+            const productsWithoutSex = product.filter(
+                (product) => !product.name.toLowerCase().includes('nam') && !product.name.toLowerCase().includes('nữ')
+            );
 
-            const mergedProductsMale = productsWithMale.concat(productsWithMale, productsWithoutSex);
-            const mergedProductsFemale = productsWithFemale.concat(productsWithFemale, productsWithoutSex);
-            const mergedProductsWithoutSex = productsWithoutSex.concat(productsWithFemale,productsWithMale, productsWithoutSex);
+            const mergedProductsMale = productsWithMale.concat(productsWithMale, productsWithoutSex,skip);
+            const mergedProductsFemale = productsWithFemale.concat(productsWithFemale, productsWithoutSex,skip);
+            const mergedProductsWithoutSex = productsWithoutSex.concat(
+                productsWithFemale,
+                productsWithMale,
+                productsWithoutSex,
+                skip
+            );
 
-            if(user.sex == 0){
-                return res.status(200).send(mergedProductsFemale)
-            }else if(user.sex == 1){
-                return res.status(200).send(mergedProductsMale)
-            }else{
-                return res.status(200).send(mergedProductsWithoutSex)
+            if (user.sex == 0) {
+                return res.status(200).send(mergedProductsFemale);
+            } else if (user.sex == 1) {
+                return res.status(200).send(mergedProductsMale);
+            } else {
+                return res.status(200).send(mergedProductsWithoutSex);
             }
         } catch (error) {
             console.error(error);
