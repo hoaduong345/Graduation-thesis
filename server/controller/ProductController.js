@@ -1017,20 +1017,17 @@ const ProductController = {
             res.status(500).json('Cập nhật phản hồi đánh giá không thành công. Lỗi: ' + error.message);
         }
     },
-    // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
     suggestProductBySex: async (req, res) => {
         try {
             const page = parseInt(req.query.page) || 1;
             const pageSize = parseInt(req.query.pageSize) || 40;
             let skip = (page - 1) * pageSize;
             const idUser = parseInt(req.cookies.id);
-
             const user = await prisma.user.findFirst({
                 where: {
                     id: idUser,
                 },
             });
-
             const whereClause = {
                 deletedAt: null,
             };
@@ -1038,32 +1035,30 @@ const ProductController = {
                 where: whereClause,
             });
             const productsWithMale = product.filter((product) => product.name.toLowerCase().includes('nam'));
-            console.log(
-                '🚀 ~ file: ProductController.js:1041 ~ suggestProductBySex: ~ productsWithMale:',
-                productsWithMale
-            );
             const productsWithFemale = product.filter((product) => product.name.toLowerCase().includes('nữ'));
             const productsWithoutSex = product.filter(
                 (product) => !product.name.toLowerCase().includes('nam') && !product.name.toLowerCase().includes('nữ')
             );
+            // KẾT HỢP VÀ TRỘN LẪN ĐỂ TRẢ VỀ CHO FE
+            const mergedProductsMale = productsWithMale.concat(productsWithoutSex);
+            const mergedProductsFemale = productsWithFemale.concat(productsWithoutSex);
+            const mergedProductsWithoutSex = productsWithoutSex.concat(productsWithFemale, productsWithMale);
+            // ĐẾM SỐ LƯỢNG 
+            const countMergedProductsMale = mergedProductsMale.length;
+            const countMergedProductsFemale = mergedProductsFemale.length;
+            const countMergedProductsWithoutSex = mergedProductsWithoutSex.length;
+            // TÍNH TOTAL ĐỂ TRẢ VỀ
+            const CountProductForMale = countMergedProductsMale + countMergedProductsWithoutSex
+            const CountProductForFemale = countMergedProductsFemale + countMergedProductsWithoutSex
+            const CountProductWithoutSex = countMergedProductsFemale + countMergedProductsMale + countMergedProductsWithoutSex
 
-            const mergedProductsMale = productsWithMale.concat(productsWithoutSex, skip);
-            // console.log("🚀 ~ file: ProductController.js:1047 ~ suggestProductBySex: ~ mergedProductsMale:", mergedProductsMale)
-            const mergedProductsFemale = productsWithFemale.concat(productsWithoutSex, skip);
-            // console.log("🚀 ~ file: ProductController.js:1049 ~ suggestProductBySex: ~ mergedProductsFemale:", mergedProductsFemale)
-            const mergedProductsWithoutSex = productsWithoutSex.concat(
-                productsWithFemale,
-                productsWithMale,
-
-                skip
-            );
 
             if (user.sex == 0) {
-                return res.status(200).send(mergedProductsFemale);
+                return res.status(200).send({ProductForFemale :mergedProductsFemale, Count : CountProductForFemale, skip });
             } else if (user.sex == 1) {
-                return res.status(200).send(mergedProductsMale);
+                return res.status(200).send({ProductForMale : mergedProductsMale, Count : CountProductForMale, skip});
             } else {
-                return res.status(200).send(mergedProductsWithoutSex);
+                return res.status(200).send({ProductWithoutSex : mergedProductsWithoutSex, Count : CountProductWithoutSex, skip});
             }
         } catch (error) {
             console.error(error);
