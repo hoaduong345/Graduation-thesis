@@ -19,6 +19,7 @@ import {
 } from "../admin/Management/Order/OrderManagement";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 import useThrottle from "@rooks/use-throttle";
+import secureLocalStorage from "react-secure-storage";
 
 export default function ShippingPage() {
   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
@@ -88,7 +89,13 @@ export default function ShippingPage() {
         return "#ccc";
     }
   }
-
+  useEffect(() => {
+    let user = secureLocalStorage.getItem("shippername");
+    if (user == null) {
+      console.log("VCLLLLLLLLLLLLLLLLLll");
+      window.location.href = "/shipping/loginShipper";
+    }
+  }, []);
   const getOrder = async () => {
     await orderControllers.getOrderOfShipping(orderAPI).then((res) => {
       setOrder(res);

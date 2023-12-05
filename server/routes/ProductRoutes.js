@@ -53,6 +53,6 @@ router.delete('/deletecategory/:id', ProductController.deleteCategory);
 router.put('/updatecategory/:id', ProductController.updateCategory);
 router.get('/allcategory', ProductController.getAllCategory);
 // SUGGEST sản phẩm theo giới tính
-router.get('/getproductbysex',ProductController.suggestProductBySex )
+router.post('/getproductbysex', ProductController.suggestProductBySex);
 
 module.exports = router;

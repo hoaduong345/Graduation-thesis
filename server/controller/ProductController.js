@@ -395,6 +395,7 @@ const ProductController = {
             const productDetail = await prisma.product.findFirst({
                 include: {
                     ProductImage: true,
+                    fK_category: true,
                 },
                 where: {
                     id: productId,
@@ -417,7 +418,10 @@ const ProductController = {
                     product: {
                         select: {
                             quantity: true,
+
+
                         },
+
                     },
                 },
             });
@@ -1017,10 +1021,16 @@ const ProductController = {
             res.status(500).json('Cập nhật phản hồi đánh giá không thành công. Lỗi: ' + error.message);
         }
     },
+    // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
+    // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
     suggestProductBySex: async (req, res) => {
         try {
 
+            const page = parseInt(req.body.page) || 1;
+            const pageSize = parseInt(req.body.pageSize) || 40;
             const idUser = parseInt(req.cookies.id);
+            console.log('🚀 ~ file: ProductController.js:1026 ~ suggestProductBySex: ~ idUser:', idUser);
+
             const user = await prisma.user.findFirst({
                 where: {
                     id: idUser,
@@ -1029,35 +1039,58 @@ const ProductController = {
             const whereClause = {
                 deletedAt: null,
             };
+
             const product = await prisma.product.findMany({
                 where: whereClause,
+                include: {
+                    ProductImage: true,
+                },
             });
+
             const productsWithMale = product.filter((product) => product.name.toLowerCase().includes('nam'));
             const productsWithFemale = product.filter((product) => product.name.toLowerCase().includes('nữ'));
             const productsWithoutSex = product.filter(
                 (product) => !product.name.toLowerCase().includes('nam') && !product.name.toLowerCase().includes('nữ')
             );
-            // KẾT HỢP VÀ TRỘN LẪN ĐỂ TRẢ VỀ CHO FE
+
             const mergedProductsMale = productsWithMale.concat(productsWithoutSex);
             const mergedProductsFemale = productsWithFemale.concat(productsWithoutSex);
             const mergedProductsWithoutSex = productsWithoutSex.concat(productsWithFemale, productsWithMale);
-            // ĐẾM SỐ LƯỢNG 
-            const countMergedProductsMale = productsWithMale.length;
-            const countMergedProductsFemale = productsWithFemale.length;
-            const countMergedProductsWithoutSex = productsWithoutSex.length;
-            // TÍNH TOTAL ĐỂ TRẢ VỀ
-            const CountProductForMale = countMergedProductsMale + countMergedProductsWithoutSex
-            const CountProductForFemale = countMergedProductsFemale + countMergedProductsWithoutSex
-            const CountProductWithoutSex = countMergedProductsFemale + countMergedProductsMale + countMergedProductsWithoutSex
 
+            const paginateArray = (array, pageSize, page) => {
+                const startIndex = (page - 1) * pageSize;
+                const endIndex = page * pageSize;
+                return array.slice(startIndex, endIndex);
+            };
+
+            let paginatedProducts;
 
             if (user.sex == 0) {
-                return res.status(200).send({ProductForFemale :mergedProductsFemale, Count : CountProductForFemale});
+                const paginatedFemaleProducts = paginateArray(mergedProductsFemale, pageSize, page);
+                paginatedProducts = {
+                    mergedProducts: paginatedFemaleProducts,
+                    page,
+                    pageSize,
+                    totalPages: Math.ceil(mergedProductsFemale.length / pageSize),
+                };
             } else if (user.sex == 1) {
-                return res.status(200).send({ProductForMale : mergedProductsMale, Count : CountProductForMale });
+                const paginatedMaleProducts = paginateArray(mergedProductsMale, pageSize, page);
+                paginatedProducts = {
+                    mergedProducts: paginatedMaleProducts,
+                    page,
+                    pageSize,
+                    totalPages: Math.ceil(mergedProductsMale.length / pageSize),
+                };
             } else {
-                return res.status(200).send({ProductWithoutSex : mergedProductsWithoutSex, Count : CountProductWithoutSex });
+                const paginatedWithoutSexProducts = paginateArray(mergedProductsWithoutSex, pageSize, page);
+                paginatedProducts = {
+                    mergedProducts: paginatedWithoutSexProducts,
+                    page,
+                    pageSize,
+                    totalPages: Math.ceil(mergedProductsWithoutSex.length / pageSize),
+                };
             }
+            return res.status(200).json(paginatedProducts);
         } catch (error) {
             console.error(error);
             res.status(500).json('Something when wrong ' + error.message);

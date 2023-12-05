@@ -5,10 +5,10 @@ import {
   numberFormat,
   roundedNumber,
 } from "../../../helper/Format";
-import { Products } from "../../../pages/home/User/FilterPage/FiltersPage";
+import { MergedProducts } from "../../../model/ProductsSuggest";
 
 export type Props = {
-  product: Products;
+  product: MergedProducts;
 };
 
 export default function Productss(props: Props) {
@@ -114,13 +114,13 @@ export default function Productss(props: Props) {
                   <button key={index}>
                     {/* Sử dụng index để xác định xem sao này có phải sao màu vàng hay không */}
                     <img
-                      src={index < product.rate ? Images.star1 : Images.star2}
+                      src={index < product.rate! ? Images.star1 : Images.star2}
                       alt=""
                     />
                   </button>
                 ))}
                 <span className="text-[12px] mr-[30px] ml-[4px] max-lg:text-base">
-                  {roundedNumber(product.rate)}.0
+                  {roundedNumber(product.rate!)}.0
                 </span>
               </div>
 

@@ -41,6 +41,8 @@ import { Controller, useForm } from "react-hook-form";
 import Cart from "../../../admin/assets/TSX/Cart";
 import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
+import ArrowRightBruh from "../../../../../assets/TSX/ArrowRightBruh";
+import Breadcrumb from "../../../../../helper/Breadcrumb/BreadcrumbProps";
 export interface ImgOfProduct {
   url: string;
 }
@@ -109,9 +111,18 @@ export default function DetailsProduct() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("descriptions"); // Mặc định là tab "App"
   const [Logined, setLogined] = useState<boolean>();
+  const [category, setCategory] = useState<String>("");
+  const [productName, setProductName] = useState<String>("");
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
   };
+
+  const breadcrumbItems = [
+    { text: 'Buyzzle', link: '/' },
+    { text: '' + category, link: `/FiltersPage/?nameCate=${category}&minPrice=0&maxPrice=10000000` },
+    { text: '' + productName },
+  ];
+
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (first) {
@@ -132,7 +143,10 @@ export default function DetailsProduct() {
       })
       .then((detail) => {
         // setEditImages(detail.data);
+        setCategory(detail.data.productDetail.fK_category.name)
+        setProductName(detail.data.productDetail.name)
         setfirst(detail.data);
+        // console.log("VCLVCLVLCLV:"+JSON.stringify(detail.data.productDetail.name))
       })
       .catch((error) => {
         console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
@@ -309,7 +323,7 @@ export default function DetailsProduct() {
   } = useForm<LoginForm>({
     mode: "all",
   });
-  
+
   const param = useParams();
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
@@ -355,10 +369,11 @@ export default function DetailsProduct() {
     console.log("Data:" + JSON.stringify(data));
   };
   return (
-    
+
     <>
       <Container>
         <body className="body-detail container mx-auto">
+          <Breadcrumb items={breadcrumbItems} />
           <div className="grid gap-4 grid-cols-10 mt-24 h-full">
             <div className="col-span-4 z-10">
               {/* {first?.productDetail && (
@@ -374,12 +389,16 @@ export default function DetailsProduct() {
                 </div>
               )} */}
               {first?.productDetail && (
-                <ImageMagnifier
-                  src={
-                    first?.productDetail?.ProductImage?.[selectedImageIndex]
-                      ?.url
-                  }
-                />
+                <div>
+                  <ImageMagnifier width="500px" height="430px"
+                    src={
+                      first?.productDetail?.ProductImage?.[selectedImageIndex]
+                        ?.url
+                    }
+                  />
+
+                </div>
+
               )}
             </div>
             <div className="my-auto">
@@ -391,11 +410,10 @@ export default function DetailsProduct() {
                       return (
                         <img
                           key={index}
-                          className={`h-[75px] w-[75px] ${
-                            selectedImageIndex === index
-                              ? "border-2 border-blue-500"
-                              : ""
-                          }`}
+                          className={`h-[75px] w-[75px] ${selectedImageIndex === index
+                            ? "border-2 border-blue-500"
+                            : ""
+                            }`}
                           src={e.url}
                           alt=""
                           onClick={() => handleImageClick(index)}
@@ -489,8 +507,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                              first?.productDetail.price! *
-                                (first?.productDetail.discount! / 100)
+                            first?.productDetail.price! *
+                            (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -588,9 +606,8 @@ export default function DetailsProduct() {
               {/* end icon */}
               {/* Mua ngay */}
               <div
-                className={`w-[100%] flex ${
-                  isSoldOut ? `justify-start` : `justify-end`
-                } mt-9 items-center gap-6`}
+                className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`
+                  } mt-9 items-center gap-6`}
               >
                 {/* <div>
                   <LoveProduct />
@@ -848,7 +865,7 @@ export default function DetailsProduct() {
                 dangerouslySetInnerHTML={{
                   __html: first?.productDetail?.description as any,
                 }}
-                // style={{ color: 'blue', textDecoration: 'underline' }}
+              // style={{ color: 'blue', textDecoration: 'underline' }}
               ></div>
             </div>
           </div>
@@ -884,7 +901,7 @@ export default function DetailsProduct() {
                         handleRemoveRating={handleRemoveRating}
                       />
                     </div>
-                    {}
+                    { }
                     <div className="mt-10">
                       <ResponsivePagination
                         current={rateAndcomment.currentPage!}
