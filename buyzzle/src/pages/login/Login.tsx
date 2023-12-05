@@ -7,12 +7,20 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
+import { jwtDecode } from "jwt-decode";
 // import LogoApple from "../../assets/PNG/lgApple.png";
 // import LogoFace from "../../assets/PNG/lgFace.png";
 // import LogoGoogle from "../../assets/PNG/lgG.png";
 import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import "./Login.css";
 import MyCustomButton from "../../helper/Dialog/MyCustomButton";
+
+
+export type LoginFormGoogle = {
+  email: string;
+  name: string;
+  username: string;
+};
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -109,16 +117,46 @@ function Login() {
       }
     }
   });
-  const GoogleLoginButton = () => {
-    const login = useGoogleLogin({
-      onSuccess: (tokenResponse) => console.log(tokenResponse),
+  const CustomGoogleLogin = () => {
+    const callAPI = async (data: LoginFormGoogle) => {
+      localStorage.setItem("user", JSON.stringify(data));
 
-    });
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    }
+    const handleSuccess = (credentialResponse: any) => {
+      if (credentialResponse && credentialResponse.credential) {
+        let decoded = jwtDecode<LoginFormGoogle>(credentialResponse.credential);
+
+        const data = {
+          email: decoded.email,
+          name: decoded.name,
+          username: decoded.email,
+        }
+        // console.log(data);
+        callAPI(data);
+
+      } else {
+        console.log('Credential or access_token is undefined');
+      }
+    };
+
+    const handleError = () => {
+      console.log('Login Failed');
+      // Your custom error handling logic here
+    };
 
     return (
-      <MyCustomButton onClick={() => login()}>
-        Sign in with Google 🚀
-      </MyCustomButton>
+      <div>
+        <GoogleLogin
+          onSuccess={handleSuccess}
+          onError={handleError}
+          width="400"
+          size="large"
+          // type="icon"
+        />
+      </div>
     );
   };
   return (
@@ -235,11 +273,24 @@ function Login() {
 
 
           </form>
-          <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
-            <div>
-              <GoogleLoginButton />
-            </div>
-          </GoogleOAuthProvider>
+          {/* <div class="grid justify-items-center ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
+</div> */}
+          <div className="grid justify-items-center">
+            <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
+      
+
+              <div><CustomGoogleLogin /></div>
+            </GoogleOAuthProvider>
+          </div>
+
+
+
           <div className="mt-6 text-center">
             <span className="text-gray-600">
               Bạn chưa có tài khoản Buyzzle?{" "}
