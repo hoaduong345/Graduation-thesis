@@ -112,6 +112,7 @@ function Login() {
   const GoogleLoginButton = () => {
     const login = useGoogleLogin({
       onSuccess: (tokenResponse) => console.log(tokenResponse),
+
     });
 
     return (
@@ -230,24 +231,26 @@ function Login() {
               <div className="mx-2 text-white-500">Hoặc</div>
               <div className="grow h-px bg-slate-300"></div>
             </div>
-            <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
-              <div>
-                <GoogleLoginButton />
-              </div>
-            </GoogleOAuthProvider>
-          
-            <div className="mt-6 text-center">
-              <span className="text-gray-600">
-                Bạn chưa có tài khoản Buyzzle?{" "}
-              </span>
-              <a
-                href="/register"
-                className="text-black-500 hover:underline font-bold"
-              >
-                Đăng ký
-              </a>
-            </div>
+
+
+
           </form>
+          <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
+            <div>
+              <GoogleLoginButton />
+            </div>
+          </GoogleOAuthProvider>
+          <div className="mt-6 text-center">
+            <span className="text-gray-600">
+              Bạn chưa có tài khoản Buyzzle?{" "}
+            </span>
+            <a
+              href="/register"
+              className="text-black-500 hover:underline font-bold"
+            >
+              Đăng ký
+            </a>
+          </div>
         </div>
       </div>
     </body>
