@@ -7,10 +7,12 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
+import { jwtDecode } from "jwt-decode";
 // import LogoApple from "../../assets/PNG/lgApple.png";
 // import LogoFace from "../../assets/PNG/lgFace.png";
 // import LogoGoogle from "../../assets/PNG/lgG.png";
-import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { GoogleOAuthProvider, useGoogleLogin,GoogleLogin  } from "@react-oauth/google";
+
 import "./Login.css";
 import MyCustomButton from "../../helper/Dialog/MyCustomButton";
 
@@ -110,8 +112,14 @@ function Login() {
     }
   });
   const GoogleLoginButton = () => {
-    const login = useGoogleLogin({
-      onSuccess: (tokenResponse) => console.log(tokenResponse),
+    const login = useGoogleLogin ({
+      onSuccess: (response) => {
+        console.log("Credential Response:", response);
+      },
+      
+      onError: () => {
+        console.log('Login Failed');
+      },
     });
 
     return (
@@ -233,6 +241,7 @@ function Login() {
             <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
               <div>
                 <GoogleLoginButton />
+                
               </div>
             </GoogleOAuthProvider>
           
