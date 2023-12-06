@@ -13,6 +13,11 @@ const OderController = {
                 select: {
                     name: true,
                     username: true,
+                    UserImage: {
+                        select: {
+                            url: true,
+                        },
+                    },
                 },
             });
 
@@ -58,7 +63,7 @@ const OderController = {
                     seen: false,
                 },
             });
-            order.user = user
+            order.user = user;
             const io = req.app.get('socketio');
             io.emit('newOrder', order);
             res.status(200).json(order ?? {});
