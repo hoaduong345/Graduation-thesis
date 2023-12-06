@@ -299,17 +299,27 @@ export default function DetailsProduct() {
     });
   };
   const CheckLogin = async () => {
-    const user = localStorage.getItem("user");
-    if (user == null) {
-      setLogined(false);
+    // const user = localStorage.getItem("user");
+    if (Logined == false) {
+      // setLogined(false);
       openModal(idAddAdmin);
     } else {
-      setLogined(true);
+      // setLogined(true);
       CheckToken();
       CheckRefreshToken();
       console.log("AOTHATDAY");
     }
   };
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user != null) {
+      setLogined(true);
+    } else {
+      setLogined(false);
+    }
+  }, []);
+
+
   const muti = () => {
     CheckLogin();
   };
