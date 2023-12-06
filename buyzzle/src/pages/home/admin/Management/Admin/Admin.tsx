@@ -19,6 +19,7 @@ import Handle from "../../assets/TSX/bacham";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
 import Search from "../../../../../assets/TSX/Search";
+import moment from "moment";
 
 export interface admin {
   id: number;
@@ -513,8 +514,15 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                             rules={{
                               required: {
                                 value: true,
-                                message:
-                                  "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                                message: "Hãy chọn ngày",
+                              },
+                              validate: (date: string) => {
+                                const valid = moment(date).isAfter(
+                                  moment().subtract(1, "days").toDate()
+                                );
+                                return valid == true
+                                  ? "Thời gian không hợp lệ"
+                                  : undefined;
                               },
                             }}
                             render={({ field }) => (
@@ -533,7 +541,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   value={field.value}
                                   onChange={(e) => {
                                     const value = e.target.value;
-                                    const reg = /[!@#$%^&*]/;
+                                    const reg =/[!]/;
                                     field.onChange(value.replace(reg, ""));
                                   }}
                                 />
