@@ -703,7 +703,7 @@ export default function DetailsProduct() {
                               <div className="col-span-3 ">
                                 <div className="flex gap-3  ">
                                   <div className="flex flex-col gap-5 max-lg:gap-2">
-                                    <div className="h-[90px] w-[455px]">
+                                    <div className="h-[90px] w-[400px]">
                                       <Controller
                                         name="email"
                                         control={control}
@@ -763,7 +763,7 @@ export default function DetailsProduct() {
                                 </div>
                                 <div className="flex gap-3  ">
                                   <div className="flex flex-col gap-5 max-lg:gap-2">
-                                    <div className="h-[90px] w-[455px]">
+                                    <div className="h-[90px] w-[400px]">
                                       <Controller
                                         name="password"
                                         control={control}
