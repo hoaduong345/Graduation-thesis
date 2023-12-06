@@ -593,6 +593,23 @@ const ShippingController = {
             errorResponse(res, error);
         }
     },
+    // Đánh dấu đã đọc
+    isMarkAsRead: async (req, res) => {
+        try {
+            const mark = req.body.id;
+            await prisma.notification.update({
+                where: {
+                    id: mark,
+                },
+                data: {
+                    seen: true,
+                },
+            });
+            res.send('Mark as read successfully');
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
 };
 // cron.schedule('0 0 * * *', async () => {
 //     // Run the task daily at midnight (adjust the cron expression as needed)
