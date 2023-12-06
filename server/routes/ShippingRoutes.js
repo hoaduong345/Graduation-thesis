@@ -19,5 +19,5 @@ router.put('/markasread', ShippingController.isMarkAsRead);
 router.put('/markasreaduser', ShippingController.isMarkAsReadUser);
 router.put('/markasreadadmin', ShippingController.isMarkAsReadAdmin);
 router.put('/markasreaddelivery', ShippingController.isMarkAsReadDelivery);
-
+        
 module.exports = router;

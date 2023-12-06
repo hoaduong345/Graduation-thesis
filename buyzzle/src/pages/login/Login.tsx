@@ -11,7 +11,7 @@ import { jwtDecode } from "jwt-decode";
 // import LogoApple from "../../assets/PNG/lgApple.png";
 // import LogoFace from "../../assets/PNG/lgFace.png";
 // import LogoGoogle from "../../assets/PNG/lgG.png";
-import { GoogleOAuthProvider, useGoogleLogin,GoogleLogin  } from "@react-oauth/google";
+import { GoogleOAuthProvider, useGoogleLogin, GoogleLogin } from "@react-oauth/google";
 
 import "./Login.css";
 import MyCustomButton from "../../helper/Dialog/MyCustomButton";
@@ -121,12 +121,12 @@ function Login() {
   const CustomGoogleLogin = () => {
     const callAPI = async (data: LoginFormGoogle) => {
       localStorage.setItem("user", JSON.stringify(data));
-      const API = 'http://localhost:5000/oauth/'
+      const API = 'http://localhost:5000/buyzzle/oauth/'
       const response = axios.post(API, data)
       console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
-    //   setTimeout(() => {
-    //     window.location.href = "/";
-    //   }, 2000);
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
     }
     const handleSuccess = (credentialResponse: any) => {
       if (credentialResponse && credentialResponse.credential) {
@@ -157,7 +157,7 @@ function Login() {
           onError={handleError}
           width="400"
           size="large"
-          // type="icon"
+        // type="icon"
         />
       </div>
     );
@@ -286,7 +286,7 @@ function Login() {
 </div> */}
           <div className="grid justify-items-center">
             <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
-      
+
 
               <div><CustomGoogleLogin /></div>
             </GoogleOAuthProvider>
