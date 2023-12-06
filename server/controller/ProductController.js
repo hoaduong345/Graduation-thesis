@@ -1022,6 +1022,7 @@ const ProductController = {
     // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
     suggestProductBySex: async (req, res) => {
         try {
+
             const page = parseInt(req.body.page) || 1;
             const pageSize = parseInt(req.body.pageSize) || 40;
             const idUser = parseInt(req.cookies.id);
