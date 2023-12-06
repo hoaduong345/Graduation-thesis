@@ -42,7 +42,7 @@ export default function Detail() {
       });
     useScroll();
   }, [id]);
-  
+
   const plusQuantity = () => {
     setQuantity(quantity + 1);
   };
@@ -204,16 +204,16 @@ export default function Detail() {
           <div>
             <LoveProduct />
           </div>
-          <div className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
-            <button
-              onClick={() =>
-                addCart({
-                  productId: Number(id),
-                  quantity: quantity,
-                })
-              }
-              className="text-center text-base font-bold text-[#4C4C4C] "
-            >
+          <div
+            className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer"
+            onClick={() =>
+              addCart({
+                productId: Number(id),
+                quantity: quantity,
+              })
+            }
+          >
+            <button className="text-center text-base font-bold text-[#4C4C4C] ">
               Thêm Vào Giỏ Hàng
             </button>
             <Cart />

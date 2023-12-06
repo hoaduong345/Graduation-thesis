@@ -3,17 +3,48 @@ import { useNotificationUser } from "../../hooks/Notification/NotificationContex
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import { handleSeenNoti } from "./components/SeenNoti";
+import { useState } from "react";
+import Check from "../../assets/TSX/Check";
+import { notificationControllers } from "../../controllers/NotificationController";
 
 export default function NotificationUser() {
   const { notificationUser } = useNotificationUser();
+  const [isRead, setIsRead] = useState(false);
 
+  const handleMarkAsRead = () => {
+    setIsRead(true);
+    setTimeout(() => {
+      setIsRead(false);
+    }, 2000);
+    handleSeenAllNoti();
+  };
+  const handleSeenAllNoti = () => {
+    notificationControllers
+      .seenAllNotiUser()
+      .then((_) => {})
+      .catch((err) => {
+        console.log(
+          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
+          err
+        );
+        return {};
+      });
+  };
   return (
     <div className="header-view top-full absolute w-[355px] invisible z-20 overflow-y-auto h-[600px] scroll-smooth">
       <div
         className="bg-white p-4
       shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
       >
-        <p className="font-extrabold text-xl text-[#EA4B48] ">Thông báo</p>
+        <div className="flex justify-between items-end">
+          <p className="font-extrabold text-xl text-[#EA4B48]">Thông báo</p>
+          <p
+            className="text-xs cursor-pointer flex gap-2"
+            onClick={handleMarkAsRead}
+          >
+            Đánh dấu tất cả là đã đọc {isRead && <Check />}
+          </p>
+        </div>
         <div className=" border-b-[1px] mt-2"></div>
         {/* BUTTON */}
 
