@@ -54,8 +54,10 @@ const OAuth2Controller = {
                 email : email
             }
         })
-        let refreshToken = OAuth2Controller.genereateRefreshToken(user.email);
+        console.log("🚀 ~ file: OAuth2Controller.js:57 ~ saveGoogleUserToDB:async ~ user:", user)
+        let refreshToken = OAuth2Controller.genereateRefreshToken(email);
         if(!user){
+            console.log("aaaaaaaaaaaaaaa",refreshToken)
           const newUser =  await prisma.user.create({
                 data:{
                     email : email,
@@ -68,7 +70,6 @@ const OAuth2Controller = {
             res.status(200).send(newUser)
         }else{
             const checkRefreshTokenExpired = OAuth2Controller.isRefreshTokenExpired(user.refresh_token)
-
             if(checkRefreshTokenExpired == false){
                 await prisma.user.update({
                     where:{
@@ -86,5 +87,35 @@ const OAuth2Controller = {
         res.status(404).send(error)
     }
    },
+   saveToCookies : async(req,res) =>{
+    try {
+        const { email } = req.body;
+        const user = await prisma.user.findFirst({
+            where:{
+                email : email
+            }
+        })
+        const accessToken = OAuth2Controller.genereateAccessToken(email)
+        res.cookie('accesstoken', accessToken, {
+            httpOnly: true,
+            secure: false,
+            path: '/',
+            sameSite: 'strict',
+            expires: expirationDate, // Set an expiration date
+        });
+
+        res.cookie('id', user.id, {
+            httpOnly: true,
+            secure: false,
+            path: '/',
+            sameSite: 'strict',
+            expires: expirationDate, // Set an expiration date
+        });
+        
+    } catch (error) {
+        console.log(error)
+        res.status(404).send(error)
+    }
+   }
 };
 module.exports = OAuth2Controller;
