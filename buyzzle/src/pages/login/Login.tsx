@@ -129,12 +129,18 @@ function Login() {
         callAPI2(data);
       }, 1500);
       const callAPI2 = async (data: LoginFormGoogle) => {
-        const response1 = axios.post(API2, data.email)
+
+        const response1 = axios.post(API2, data, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          withCredentials: true,
+        })
         console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
       }
-      // setTimeout(() => {
-      //   window.location.href = "/";
-      // }, 3000);
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 3000);
     }
     const handleSuccess = (credentialResponse: any) => {
       if (credentialResponse && credentialResponse.credential) {

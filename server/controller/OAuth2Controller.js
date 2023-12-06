@@ -89,7 +89,8 @@ const OAuth2Controller = {
    },
    saveToCookies : async(req,res) =>{
     try {
-        const { email } = req.body;
+        const { name, email,username } = req.body;
+        console.log("EMAIL?::"+email);
         const user = await prisma.user.findFirst({
             where:{
                 email : email
