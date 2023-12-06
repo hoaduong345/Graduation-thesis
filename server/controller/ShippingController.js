@@ -539,16 +539,16 @@ const ShippingController = {
     isMarkAsReadUser: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            const mark = req.body.id;
-            await prisma.notification.update({
-                where: {
-                    id: mark,
-                },
-                data: {
-                    seen: true,
-                },
-            });
-            const notifi = await prisma.notification.updateMany({
+            // const mark = req.body.id;
+            // await prisma.notification.update({
+            //     where: {
+            //         id: mark,
+            //     },
+            //     data: {
+            //         seen: true,
+            //     },
+            // });
+             await prisma.notification.updateMany({
                 where: {
                     userId: idUser,
                     seen: false,
@@ -557,8 +557,7 @@ const ShippingController = {
                     seen: true,
                 },
             });
-
-            res.status(200).send(notifi);
+            res.status(200).send("Mark all as read successfully");
         } catch (error) {
             errorResponse(res, error);
         }

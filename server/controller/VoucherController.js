@@ -79,11 +79,6 @@ const VoucherController = {
             const startIndex = (pageCurr - 1) * limit;
             const totalProduct = (await prisma.voucher.findMany()).length;
 
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: userIdFromCookies,
-                },
-            });
             const whereClause = {
                 deletedAt: null,
                 quantity: {
@@ -94,11 +89,13 @@ const VoucherController = {
                 },
             };
             let voucher;
-            if (!user) {
-                voucher = await prisma.voucher.findMany({
-                    where: whereClause,
+            let user = null;
+            if (userIdFromCookies) {
+                user = await prisma.user.findFirst({
+                    where: {
+                        id: userIdFromCookies,
+                    },
                 });
-            } else {
                 voucher = await prisma.voucher.findMany({
                     where: {
                         quantity: {
@@ -122,6 +119,13 @@ const VoucherController = {
                         },
                     },
                 });
+            } else {
+                voucher = await prisma.voucher.findMany({
+                    where: whereClause,
+                    skip: startIndex,
+                    take: limit,
+                });
+                
             }
 
             const results = {
