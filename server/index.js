@@ -20,7 +20,7 @@ const SripeRouter = require('./routes/StripeRoutes');
 const OrderRouter = require('./routes/OrderRoutes');
 const AdminShippingRouter = require('./routes/AdminShippingRouter');
 const AdminRouter = require('./routes/AdminRouter');
-
+const OAuthRouter = require('./routes/OAuthRoutes')
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const redisClient = redis.createClient({
@@ -71,7 +71,7 @@ app.use('/buyzzle/statistics', StatisticsRouter);
 app.use('/buyzzle/invoice', InvoiceRouter);
 app.use('/buyzzle/stripe', SripeRouter);
 app.use('/buyzzle/order', OrderRouter);
-
+app.use('/buyzzle/oauth',OAuthRouter)
 app.use('/admin', AdminRouter);
 
 app.use('/shipping/management', AdminShippingRouter);
