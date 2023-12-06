@@ -127,8 +127,6 @@ export default function DialogLogin(props: Props) {
                         <div className="flex gap-3  ">
                           <div className="flex flex-col gap-5 max-lg:gap-2 mb-2">
                             <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
-
-
                               <div><CustomGoogleLogin /></div>
                             </GoogleOAuthProvider>
                           </div>
