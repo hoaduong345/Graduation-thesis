@@ -16,6 +16,13 @@ import { GoogleOAuthProvider, useGoogleLogin,GoogleLogin  } from "@react-oauth/g
 import "./Login.css";
 import MyCustomButton from "../../helper/Dialog/MyCustomButton";
 
+
+export type LoginFormGoogle = {
+  email: string;
+  name: string;
+  username: string;
+};
+
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -111,21 +118,46 @@ function Login() {
       }
     }
   });
-  const GoogleLoginButton = () => {
-    const login = useGoogleLogin ({
-      onSuccess: (response) => {
-        console.log("Credential Response:", response);
-      },
-      
-      onError: () => {
-        console.log('Login Failed');
-      },
-    });
+  const CustomGoogleLogin = () => {
+    const callAPI = async (data: LoginFormGoogle) => {
+      localStorage.setItem("user", JSON.stringify(data));
+
+      setTimeout(() => {
+        // window.location.href = "/";
+      }, 2000);
+    }
+    const handleSuccess = (credentialResponse: any) => {
+      if (credentialResponse && credentialResponse.credential) {
+        let decoded = jwtDecode<LoginFormGoogle>(credentialResponse.credential);
+
+        const data = {
+          email: decoded.email,
+          name: decoded.name,
+          username: decoded.email,
+        }
+        // console.log(data);
+        callAPI(data);
+
+      } else {
+        console.log('Credential or access_token is undefined');
+      }
+    };
+
+    const handleError = () => {
+      console.log('Login Failed');
+      // Your custom error handling logic here
+    };
 
     return (
-      <MyCustomButton onClick={() => login()}>
-        Sign in with Google 🚀
-      </MyCustomButton>
+      <div>
+        <GoogleLogin
+          onSuccess={handleSuccess}
+          onError={handleError}
+          width="400"
+          size="large"
+          // type="icon"
+        />
+      </div>
     );
   };
   return (
@@ -238,25 +270,39 @@ function Login() {
               <div className="mx-2 text-white-500">Hoặc</div>
               <div className="grow h-px bg-slate-300"></div>
             </div>
-            <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
-              <div>
-                <GoogleLoginButton />
-                
-              </div>
-            </GoogleOAuthProvider>
-          
-            <div className="mt-6 text-center">
-              <span className="text-gray-600">
-                Bạn chưa có tài khoản Buyzzle?{" "}
-              </span>
-              <a
-                href="/register"
-                className="text-black-500 hover:underline font-bold"
-              >
-                Đăng ký
-              </a>
-            </div>
+
+
+
           </form>
+          {/* <div class="grid justify-items-center ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
+</div> */}
+          <div className="grid justify-items-center">
+            <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
+      
+
+              <div><CustomGoogleLogin /></div>
+            </GoogleOAuthProvider>
+          </div>
+
+
+
+          <div className="mt-6 text-center">
+            <span className="text-gray-600">
+              Bạn chưa có tài khoản Buyzzle?{" "}
+            </span>
+            <a
+              href="/register"
+              className="text-black-500 hover:underline font-bold"
+            >
+              Đăng ký
+            </a>
+          </div>
         </div>
       </div>
     </body>
