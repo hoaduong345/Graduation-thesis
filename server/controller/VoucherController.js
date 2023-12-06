@@ -79,30 +79,50 @@ const VoucherController = {
             const startIndex = (pageCurr - 1) * limit;
             const totalProduct = (await prisma.voucher.findMany()).length;
 
-            const voucher = await prisma.voucher.findMany({
+            const user = await prisma.user.findFirst({
                 where: {
-                    quantity: {
-                        gte: 1,
-                    },
-                    endDay: {
-                        gte: new Date(),
-                    },
-                    deletedAt: null,
-
+                    id: userIdFromCookies,
                 },
-                skip: startIndex,
-                take: limit,
-                include: {
-                    savedBy: {
-                        where: {
-                            userId: userIdFromCookies,
-                        },
-                        select: {
-                            used: true
-                        }
-                    }
-                }
             });
+            const whereClause = {
+                deletedAt: null,
+                quantity: {
+                    gte: 1,
+                },
+                endDay: {
+                    gte: new Date(),
+                },
+            };
+            let voucher;
+            if (!user) {
+                voucher = await prisma.voucher.findMany({
+                    where: whereClause,
+                });
+            } else {
+                voucher = await prisma.voucher.findMany({
+                    where: {
+                        quantity: {
+                            gte: 1,
+                        },
+                        endDay: {
+                            gte: new Date(),
+                        },
+                        deletedAt: null,
+                    },
+                    skip: startIndex,
+                    take: limit,
+                    include: {
+                        savedBy: {
+                            where: {
+                                userId: userIdFromCookies,
+                            },
+                            select: {
+                                used: true,
+                            },
+                        },
+                    },
+                });
+            }
 
             const results = {
                 page: pageCurr,
@@ -363,9 +383,9 @@ const VoucherController = {
                         },
                         quantity: {
                             decrement: 1,
-                        }
-                    }
-                })
+                        },
+                    },
+                }),
             ]);
 
             res.status(200).json({ message: 'Sử dụng voucher thành công.' });
