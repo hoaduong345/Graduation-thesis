@@ -121,21 +121,23 @@ function Login() {
   const CustomGoogleLogin = () => {
     const callAPI = async (data: LoginFormGoogle) => {
       localStorage.setItem("user", JSON.stringify(data));
-
-      setTimeout(() => {
-        // window.location.href = "/";
-      }, 2000);
+      const API = 'http://localhost:5000/oauth/'
+      const response = axios.post(API, data)
+      console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
+    //   setTimeout(() => {
+    //     window.location.href = "/";
+    //   }, 2000);
     }
     const handleSuccess = (credentialResponse: any) => {
       if (credentialResponse && credentialResponse.credential) {
-        let decoded = jwtDecode<LoginFormGoogle>(credentialResponse.credential);
+        const decoded = jwtDecode<LoginFormGoogle>(credentialResponse.credential);
 
         const data = {
           email: decoded.email,
           name: decoded.name,
           username: decoded.email,
         }
-        // console.log(data);
+        console.log("🚀 ~ file: Login.tsx:138 ~ handleSuccess ~ data:", data)
         callAPI(data);
 
       } else {

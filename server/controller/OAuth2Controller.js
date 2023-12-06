@@ -26,15 +26,16 @@ const OAuth2Controller = {
         },
    saveGoogleUserToDB : async(req,res) =>{
     try {
-        const { name, email } = req.body;
+        const { name, email,username } = req.body;
         await prisma.user.create({
             data:{
                 email : email,
                 name : name,
                 verify : true,
-                username : email,
+                username : username,
             }
         })
+        res.send("alllllooooooooooo")
     } catch (error) {
         console.log(error)
         res.status(404).send(error)
