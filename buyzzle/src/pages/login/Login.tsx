@@ -122,11 +122,19 @@ function Login() {
     const callAPI = async (data: LoginFormGoogle) => {
       localStorage.setItem("user", JSON.stringify(data));
       const API = 'http://localhost:5000/buyzzle/oauth/'
+      const API2 = 'http://localhost:5000/buyzzle/oauth/savecookies'
       const response = axios.post(API, data)
       console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
       setTimeout(() => {
-        window.location.href = "/";
-      }, 1000);
+        callAPI2(data);
+      }, 1500);
+      const callAPI2 = async (data: LoginFormGoogle) => {
+        const response1 = axios.post(API2, data.email)
+        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
+      }
+      // setTimeout(() => {
+      //   window.location.href = "/";
+      // }, 3000);
     }
     const handleSuccess = (credentialResponse: any) => {
       if (credentialResponse && credentialResponse.credential) {
