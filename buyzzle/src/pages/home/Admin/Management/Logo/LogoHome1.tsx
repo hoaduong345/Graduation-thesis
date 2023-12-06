@@ -69,7 +69,7 @@ export default function LogoHome1() {
   const openModal = async (id: string, data: LogoHome1Model) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      reset({ id: data.id });
+      reset({ id: data.id,linkgoogle: data.linkgoogle });
       setUrl(data.image);
       modal.showModal();
     }
@@ -209,7 +209,7 @@ export default function LogoHome1() {
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
                             max-lg:text-xl"
             >
-              QUẢN LÝ LOGO TRANG FILTER
+              QUẢN LÝ LOGO TRANG HOME
             </h2>
           </div>
           <div className="flex flex-col gap-[35px]">

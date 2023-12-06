@@ -18,17 +18,17 @@ const SendEmail = async (email, subject, text, next) => {
     await transporter.sendMail({
       from: process.env.USER,
       to: email,
-      // subject: subject,
-      // text: text,
-      subject: 'dang ki tai khoan thanh cong',
-      text: 'Cam on ban da su dung dich vu cua chung toi',
+      subject: subject,
+      text: text,
+      // subject: 'dang ki tai khoan thanh cong',
+      // text: 'Cam on ban da su dung dich vu cua chung toi',
     });
 
     console.log("Email sent Successfully");
 
-    if (next) {
+   
       next();
-    }
+   
   } catch (error) {
     console.log("Email not sent");
     console.error(error);

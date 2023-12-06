@@ -115,18 +115,19 @@ function Index() {
 
             <div className="flex-col max-w-[421px] max-xl:mx-auto">
               {logo1?.map((items, index) => (
-                  <a
-                    key={index}
-                    href={`${items.linkgoogle}`}
-                    className="flex items-center"                   
-                  >
-                    <img
-                      className="object-cover w-full h-full"
-                      src={items.image}
-                      alt=""
-                    />
-                  </a>
-                ))}
+                <a
+                  key={index}
+                  href={`${items.linkgoogle}`}
+                  className="flex items-center mb-5"
+                  style={{ width: "100%", height: "140px" }}
+                >
+                  <img
+                    className="object-cover w-full h-full"
+                    src={items.image}
+                    alt=""
+                  />
+                </a>
+              ))}
 
               <div className="flex justify-between max-w-[421px] max-[556px]:hidden">
                 {logo?.map((items, index) => (
@@ -136,9 +137,9 @@ function Index() {
                     className="flex items-center"
                     style={{
                       padding: "5px",
-                      width: "300px",
+                      width: "100%", 
                       height: "250px",
-                      marginTop: "5px",
+                      marginTop: "-6px",
                     }}
                   >
                     <img

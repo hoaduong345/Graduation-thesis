@@ -65,7 +65,9 @@ export default function Logoes() {
   const openModal = async (id: string, data : LogoModel) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      reset({id: data.id});
+      reset({id: data.id,
+        linkgoogle: data.linkgoogle
+      });
       setUrl(data.image)
       modal.showModal();
     }

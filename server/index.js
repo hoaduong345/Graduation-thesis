@@ -26,6 +26,7 @@ const BannerRouter = require('./routes/BannerRouter');
 const BannerHomeRouter = require('./routes/BannerHomeRouter');
 const LogoHomeRouter = require('./routes/LogoHomeRouter');
 const LogoHome1Router = require('./routes/LogoHome1Router');
+const LogoDetailRouter = require('./routes/LogoDetailRouter');
 
 const { createServer } = require('http');
 const { Server } = require('socket.io');
@@ -87,6 +88,7 @@ app.use('/buyzzle/banner', BannerRouter);
 app.use('/buyzzle/bannerhome', BannerHomeRouter );
 app.use('/buyzzle/logohome', LogoHomeRouter );
 app.use('/buyzzle/logohome1', LogoHome1Router );
+app.use('/buyzzle/logodetail', LogoDetailRouter );
 
 
 // Setup socket.io

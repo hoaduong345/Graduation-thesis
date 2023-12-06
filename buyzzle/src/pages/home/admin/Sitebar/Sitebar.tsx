@@ -61,6 +61,12 @@ const listSitebar: SitebarAdmin[] = [
     pathName: "/admin/logohome1",
   },
 
+  {
+    title: "LogoDetail",
+    icon: <Logo />,
+    pathName: "/admin/logodetail",
+  },
+
  
 
   {

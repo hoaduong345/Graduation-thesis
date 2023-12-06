@@ -43,6 +43,8 @@ import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
 import ArrowRightBruh from "../../../../../assets/TSX/ArrowRightBruh";
 import Breadcrumb from "../../../../../helper/Breadcrumb/BreadcrumbProps";
+import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
+import { logodetailController } from "../../../../../controllers/LogoDetailController";
 export interface ImgOfProduct {
   url: string;
 }
@@ -113,14 +115,29 @@ export default function DetailsProduct() {
   const [Logined, setLogined] = useState<boolean>();
   const [category, setCategory] = useState<String>("");
   const [productName, setProductName] = useState<String>("");
+  const [logo, setLogo] = useState<LogoDetailModel[]>([]);
+
+  const getAllLogo = async () => {
+    await logodetailController.getAll().then((res: any) => {
+      setLogo(res);
+    });
+  };
+
+  useEffect(() => {
+    getAllLogo();
+  }, []);
+
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
   };
 
   const breadcrumbItems = [
-    { text: 'Buyzzle', link: '/' },
-    { text: ''+category, link: `/FiltersPage/?nameCate=${category}&minPrice=0&maxPrice=10000000` },
-    { text: ''+productName },
+    { text: "Buyzzle", link: "/" },
+    {
+      text: "" + category,
+      link: `/FiltersPage/?nameCate=${category}&minPrice=0&maxPrice=10000000`,
+    },
+    { text: "" + productName },
   ];
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
@@ -143,8 +160,8 @@ export default function DetailsProduct() {
       })
       .then((detail) => {
         // setEditImages(detail.data);
-        setCategory(detail.data.productDetail.fK_category.name)
-        setProductName(detail.data.productDetail.name)
+        setCategory(detail.data.productDetail.fK_category.name);
+        setProductName(detail.data.productDetail.name);
         setfirst(detail.data);
         // console.log("VCLVCLVLCLV:"+JSON.stringify(detail.data.productDetail.name))
       })
@@ -369,11 +386,10 @@ export default function DetailsProduct() {
     console.log("Data:" + JSON.stringify(data));
   };
   return (
-
     <>
       <Container>
         <body className="body-detail container mx-auto">
-        <Breadcrumb items={breadcrumbItems} />
+          <Breadcrumb items={breadcrumbItems} />
           <div className="grid gap-4 grid-cols-10 mt-24 h-full">
             <div className="col-span-4 z-10">
               {/* {first?.productDetail && (
@@ -406,10 +422,11 @@ export default function DetailsProduct() {
                       return (
                         <img
                           key={index}
-                          className={`h-[75px] w-[75px] ${selectedImageIndex === index
-                            ? "border-2 border-blue-500"
-                            : ""
-                            }`}
+                          className={`h-[75px] w-[75px] ${
+                            selectedImageIndex === index
+                              ? "border-2 border-blue-500"
+                              : ""
+                          }`}
                           src={e.url}
                           alt=""
                           onClick={() => handleImageClick(index)}
@@ -503,8 +520,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                            first?.productDetail.price! *
-                            (first?.productDetail.discount! / 100)
+                              first?.productDetail.price! *
+                                (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -602,8 +619,9 @@ export default function DetailsProduct() {
               {/* end icon */}
               {/* Mua ngay */}
               <div
-                className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`
-                  } mt-9 items-center gap-6`}
+                className={`w-[100%] flex ${
+                  isSoldOut ? `justify-start` : `justify-end`
+                } mt-9 items-center gap-6`}
               >
                 {/* <div>
                   <LoveProduct />
@@ -821,12 +839,31 @@ export default function DetailsProduct() {
 
           {/* Sản phẩm của shop */}
           <div className="grid grid-cols-3 mt-24">
-            <div className="col-span-1 ">
+            <div className="col-span-1">
               <p className="text-[#4C4C4C] text-xl font-semibold mb-4">
                 SẢN PHẨM CỦA SHOP
               </p>
-              <img src={Images.BannerQC} alt="BannerQC" />
+              <div className="flex flex-col space-y-4">
+                {logo?.map((items, index) => (
+                  <a
+                    key={index}
+                    href={`${items.linkgoogle}`}
+                    className="flex items-center"
+                    style={{
+                      width: "100%",
+                      height: "680px",
+                    }}
+                  >
+                    <img
+                      className="object-cover w-full h-full"
+                      src={items.image}
+                      alt=""
+                    />
+                  </a>
+                ))}
+              </div>
             </div>
+
             <div className="mt-11 col-span-2 ">
               <div className="flex flex-wrap gap-3 ">
                 {recommandProduct.slice(0, 8).map((items) => {
@@ -861,7 +898,7 @@ export default function DetailsProduct() {
                 dangerouslySetInnerHTML={{
                   __html: first?.productDetail?.description as any,
                 }}
-              // style={{ color: 'blue', textDecoration: 'underline' }}
+                // style={{ color: 'blue', textDecoration: 'underline' }}
               ></div>
             </div>
           </div>
@@ -897,7 +934,7 @@ export default function DetailsProduct() {
                         handleRemoveRating={handleRemoveRating}
                       />
                     </div>
-                    { }
+                    {}
                     <div className="mt-10">
                       <ResponsivePagination
                         current={rateAndcomment.currentPage!}
