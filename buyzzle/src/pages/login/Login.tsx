@@ -149,7 +149,7 @@ function Login() {
         const data = {
           email: decoded.email,
           name: decoded.name,
-          username: decoded.email,
+          username: (decoded.email).split('.')[0].trim(),
         }
         console.log("🚀 ~ file: Login.tsx:138 ~ handleSuccess ~ data:", data)
         callAPI(data);

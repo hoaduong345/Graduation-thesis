@@ -9,6 +9,7 @@ import axios from "axios";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Voucher from "../../../../../assets/TSX/Voucher";
+import { googleLogout } from '@react-oauth/google';
 
 interface SitebarUser {
   icon: ReactNode;
@@ -66,6 +67,7 @@ export default function Sitebar() {
       console.log(reponse);
       localStorage.removeItem("user");
       localStorage.removeItem("nameUser");
+      googleLogout();
       window.location.href = "/";
     } catch (error) {
       console.log(error);
