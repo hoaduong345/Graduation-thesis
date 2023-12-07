@@ -1,9 +1,9 @@
 import ProductManager from "../../../../../assets/TSX/ProductManager";
 import User from "../../../../../assets/TSX/User";
 import HistoryBought from "../../../../../assets/TSX/HistoryBought";
-import Cart from "../../../../../assets/TSX/Cart";
-import Heart from "../../../../../assets/TSX/Heart";
-import Setting from "../../../../../assets/TSX/Setting";
+// import Cart from "../../../../../assets/TSX/Cart";
+// import Heart from "../../../../../assets/TSX/Heart";
+// import Setting from "../../../../../assets/TSX/Setting";
 import Logout from "../../../../../assets/TSX/Logout";
 import axios from "axios";
 import { ReactNode } from "react";
@@ -43,11 +43,11 @@ const listSitebar: SitebarUser[] = [
   //   pathName: "/cart",
   //   title: "Giỏ hàng",
   // },
-  {
-    icon: <Heart />,
-    pathName: "/favorite",
-    title: "Sản phẩm yêu thích",
-  },
+  // {
+  //   icon: <Heart />,
+  //   pathName: "/favorite",
+  //   title: "Sản phẩm yêu thích",
+  // },
   // {
   //   icon: <Setting />,
   //   pathName: "",

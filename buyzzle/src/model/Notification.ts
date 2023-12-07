@@ -1,6 +1,7 @@
 export interface NotificationModel {
   allNotification: AllNotification[];
   countNotification: number;
+  count: number;
 }
 
 export interface AllNotification {
@@ -41,5 +42,4 @@ export interface User {
 export interface UserImage {
   // name: string;
   url: string;
- 
 }

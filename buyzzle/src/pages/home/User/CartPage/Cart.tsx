@@ -295,7 +295,7 @@ export default function Cart() {
               })
             ) : (
               <>
-                <EmptyPage />
+                <EmptyPage title="Giỏ hàng của bạn đang trống!" />
               </>
             )}
             <DialogComfirm

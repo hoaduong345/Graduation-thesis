@@ -539,18 +539,27 @@ const ShippingController = {
     isMarkAsReadUser: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-    
-            const notifi =  await prisma.notification.updateMany({
+            // const mark = req.body.id;
+            // await prisma.notification.update({
+            //     where: {
+            //         id: mark,
+            //     },
+            //     data: {
+            //         seen: true,
+            //     },
+            // });
+            await prisma.notification.updateMany({
                 where: {
                     userId: idUser,
-                    seen: false
+                    seen: false,
                 },
                 data: {
                     seen: true,
                 },
             });
-    
-            res.status(200).send(notifi);
+            res.status(200).json({
+                count: 0,
+            });
         } catch (error) {
             errorResponse(res, error);
         }
@@ -563,13 +572,15 @@ const ShippingController = {
                 },
                 deleteAt: null,
             };
-             await prisma.notification.updateMany({
+            await prisma.notification.updateMany({
                 where: whereClause,
                 data: {
                     seen: true,
                 },
             });
-            res.send('Mark as read for admin successfully');
+            res.status(200).json({
+                count: 0,
+            });
         } catch (error) {
             errorResponse(res, error);
         }
@@ -582,13 +593,15 @@ const ShippingController = {
                 },
                 deleteAt: null,
             };
-             await prisma.notification.updateMany({
+            await prisma.notification.updateMany({
                 where: whereClause,
                 data: {
                     seen: true,
                 },
             });
-            res.send('Mark as read for admin successfully');
+            res.status(200).json({
+                count: 0,
+            });
         } catch (error) {
             errorResponse(res, error);
         }

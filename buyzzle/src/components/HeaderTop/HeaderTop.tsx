@@ -4,10 +4,12 @@ import Bell from "../../assets/TSX/Bell";
 
 interface HeaderTop {
   noti: ReactNode;
-  countNoti: ReactNode;
+  countNoti: number;
 }
 export default function HeaderTop(props: HeaderTop) {
   const { countNoti, noti } = props;
+  const user = localStorage.getItem("user");
+  console.log({ user });
   return (
     <header className="Header">
       <div className="Header-top bg-white">
@@ -34,7 +36,7 @@ export default function HeaderTop(props: HeaderTop) {
                       <span
                         className={`absolute top-0 inline-flex items-center justify-center px-[5px] py-1 text-xs cursor-default
                         font-medium leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full 
-                        ${countNoti == 0 ? "hidden" : ""}
+                        ${user == null ? "hidden" : ""}
                         `}
                       >
                         {countNoti}
