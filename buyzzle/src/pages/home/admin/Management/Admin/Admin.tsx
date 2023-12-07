@@ -20,6 +20,8 @@ import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
 import Search from "../../../../../assets/TSX/Search";
 import moment from "moment";
+import { download, generateCsv } from "export-to-csv";
+import { csvConfig } from "../../../../../helper/Export/Excel";
 
 export interface admin {
   id: number;
@@ -577,7 +579,13 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                 </div>
                 <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
                   <Download />
-                  <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm">
+                  <button
+                    className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                    onClick={() => {
+                      const csv = generateCsv(csvConfig)(admin.data as []);
+                      download(csvConfig)(csv);
+                    }}
+                  >
                     Xuất excel
                   </button>
                 </div>

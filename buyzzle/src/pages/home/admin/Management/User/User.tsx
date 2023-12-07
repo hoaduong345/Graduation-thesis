@@ -15,6 +15,8 @@ import {
 } from "../../../../../controllers/UserController";
 import { ModelUser } from "../../../../../model/UserModel";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
+import { download, generateCsv } from "export-to-csv";
+import { csvConfig } from "../../../../../helper/Export/Excel";
 import { numberFormat } from "../../../../../helper/Format";
 
 export interface users {
@@ -105,7 +107,13 @@ export default function User() {
               </div>
               <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
                 <Download />
-                <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm">
+                <button
+                  className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                  onClick={() => {
+                    const csv = generateCsv(csvConfig)(users.data as []);
+                    download(csvConfig)(csv);
+                  }}
+                >
                   Xuất excel
                 </button>
               </div>
@@ -116,10 +124,6 @@ export default function User() {
             <table className="w-full text-left ">
               <thead className="text-base text-[#4C4C4C] border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-[11px]">
                 <tr>
-                  <th
-                    scope="col"
-                    className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
-                  ></th>
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
@@ -165,6 +169,36 @@ export default function User() {
                     <>
                       <tbody>
                         <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
+                          <th
+                            scope="row"
+                            className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
+                          >
+                            {items.id}
+                          </th>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.username}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.email}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.sex
+                              ? (items.sex = "Nam")
+                              : (items.sex = "Nữ")}
+                          </td>
+
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {numberFormat(items.totalAmount)}
+                          </td>
+                          <td
+                            className={`${
+                              status == "Hoạt động"
+                                ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
+                                : "text-[#FF8A00] "
+                            }`}
+                          >
+                            Hoạt động
+                          </td>
                           <th
                             scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
@@ -213,36 +247,6 @@ export default function User() {
                               </ul>
                             </div>
                           </th>
-                          <th
-                            scope="row"
-                            className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                          >
-                            {items.id}
-                          </th>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.username}
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.email}
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.sex
-                              ? (items.sex = "Nam")
-                              : (items.sex = "Nữ")}
-                          </td>
-
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {numberFormat(items.totalAmount)}
-                          </td>
-                          <td
-                            className={`${
-                              status == "Hoạt động"
-                                ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                                : "text-[#FF8A00] "
-                            }`}
-                          >
-                            Hoạt động
-                          </td>
                         </tr>
                       </tbody>
                     </>
