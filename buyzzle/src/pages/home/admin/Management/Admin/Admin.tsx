@@ -541,7 +541,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   value={field.value}
                                   onChange={(e) => {
                                     const value = e.target.value;
-                                    const reg =/[!]/;
+                                    const reg = /[!]/;
                                     field.onChange(value.replace(reg, ""));
                                   }}
                                 />
@@ -589,13 +589,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
             <table className="w-full text-left ">
               <thead className="text-base text-[#4C4C4C] border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-[11px]">
                 <tr>
-                  <th
-                    scope="col"
-                    className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
-                  >
-                    <Delete />
-                    <p>Xóa</p>
-                  </th>
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
@@ -649,6 +642,35 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                         <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
                           <th
                             scope="row"
+                            className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
+                          >
+                            {items.id}
+                          </th>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.name}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.username}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.email}
+                          </td>
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.sex
+                              ? (items.sex = "Nam")
+                              : (items.sex = "Nữ")}
+                          </td>
+
+                          <td className="px-3 py-5 max-lg:py-3 justify-center">
+                            {items.dateofbirth != null
+                              ? reformatDate(items.dateofbirth.substring(0, 10))
+                              : (items.dateofbirth = "dd/mm/yyyy")}
+                          </td>
+                          <td className="text-[#2e34e6] px-3 py-5 max-lg:py-3 justify-center">
+                            {items.phonenumber}
+                          </td>
+                          <th
+                            scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
                             <div className="dropdown dropdown-left ">
@@ -678,56 +700,9 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     </p>
                                   </button>
                                 </li>
-                                <li>
-                                  <button
-                                    onClick={() => DeleteUser(items.id)}
-                                    className="flex items-center gap-4"
-                                  >
-                                    <RemoveCate />
-                                    <p
-                                      className="text-[#EA4B48] text-sm font-medium
-                                             max-[940px]:text-xs "
-                                    >
-                                      Xóa
-                                    </p>
-                                  </button>
-                                </li>
                               </ul>
                             </div>
-                            <input
-                              type="checkbox"
-                              className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                            />
                           </th>
-                          <th
-                            scope="row"
-                            className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                          >
-                            {items.id}
-                          </th>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.name}
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.username}
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.email}
-                          </td>
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.sex
-                              ? (items.sex = "Nam")
-                              : (items.sex = "Nữ")}
-                          </td>
-
-                          <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            {items.dateofbirth != null
-                              ? reformatDate(items.dateofbirth.substring(0, 10))
-                              : (items.dateofbirth = "dd/mm/yyyy")}
-                          </td>
-                          <td className="text-[#2e34e6] px-3 py-5 max-lg:py-3 justify-center">
-                            {items.phonenumber}
-                          </td>
                         </tr>
                       </tbody>
                     </>
@@ -745,20 +720,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                       <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
                       <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
 
-                      <td className="px-3 py-5 max-lg:py-3 justify-center">
-                       
-                      </td>
-                      <td
-                        className="px-3 py-5 max-lg:py-3 justify-center"
-                      >
-                      
-                      </td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
+                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
                       <th
                         scope="row"
                         className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                      >
-                        
-                      </th>
+                      ></th>
                     </tr>
                   </tbody>
                   <EmptyPage

@@ -97,10 +97,6 @@ export default function Shipper() {
                 <tr>
                   <th
                     scope="col"
-                    className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
-                  ></th>
-                  <th
-                    scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
                     Id
@@ -152,54 +148,6 @@ export default function Shipper() {
                         <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
                           <th
                             scope="row"
-                            className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                          >
-                            <div className="dropdown dropdown-left">
-                              <label
-                                className="max-lg:w-[24px] max-lg:h-[24px]"
-                                tabIndex={1}
-                              >
-                                <Handle />
-                              </label>
-                              <ul
-                                tabIndex={0}
-                                className="dropdown-content menu bg-white rounded-box w-52
-                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                              >
-                                <li>
-                                  <button
-                                    className="flex items-center gap-4"
-                                    onClick={() => JumpEditUser(items.username)}
-                                  >
-                                    <Edit />
-                                    <p
-                                      className="text-[#EA4B48] text-sm font-medium
-                                            max-[940px]:text-xs "
-                                    >
-                                      Xem chi tiết
-                                    </p>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() => DeleteUser(items.id)}
-                                    className="flex items-center gap-4"
-                                  >
-                                    <RemoveCate />
-                                    <p
-                                      className="text-[#EA4B48] text-sm font-medium
-                                             max-[940px]:text-xs "
-                                    >
-                                      Xóa
-                                    </p>
-                                  </button>
-                                </li>
-                              </ul>
-                            </div>
-                          </th>
-                          <th
-                            scope="row"
                             className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
                           >
                             {items.id}
@@ -230,6 +178,40 @@ export default function Shipper() {
                           >
                             {items.phonenumber}
                           </td>
+                          <th
+                            scope="row"
+                            className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
+                          >
+                            <div className="dropdown dropdown-left">
+                              <label
+                                className="max-lg:w-[24px] max-lg:h-[24px]"
+                                tabIndex={1}
+                              >
+                                <Handle />
+                              </label>
+                              <ul
+                                tabIndex={0}
+                                className="dropdown-content menu bg-white rounded-box w-52
+                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                              >
+                                <li>
+                                  <button
+                                    className="flex items-center gap-4"
+                                    onClick={() => JumpEditUser(items.username)}
+                                  >
+                                    <Edit />
+                                    <p
+                                      className="text-[#EA4B48] text-sm font-medium
+                                            max-[940px]:text-xs "
+                                    >
+                                      Xem chi tiết
+                                    </p>
+                                  </button>
+                                </li>
+                              </ul>
+                            </div>
+                          </th>
                         </tr>
                       </tbody>
                     </>
