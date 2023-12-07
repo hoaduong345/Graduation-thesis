@@ -13,7 +13,6 @@ import { numberFormat } from "../../../../helper/Format";
 import { CartItem } from "../../../../model/CartModel";
 import Container from "../../../../components/container/Container";
 import { useCart } from "../../../../hooks/Cart/CartContextProvider";
-import ArrowUp from "../../admin/assets/TSX/ArrowUp";
 import Delete from "../../admin/assets/TSX/Delete";
 import { toastWarn } from "../../../../helper/Toast/Warning";
 import { userController } from "../../../../controllers/UserController";
@@ -32,6 +31,7 @@ export default function Cart() {
     removeAllCart,
     idItemCart,
     idAllCart,
+    handleChecked,
   } = useCart();
 
   const CheckToken = async () => {
@@ -85,30 +85,14 @@ export default function Cart() {
     }
   };
 
-  const [plusThrottled] = useThrottle(handleIncreaseQuantity, 500);
-  const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
-  //check box
+  const [plusThrottled] = useThrottle(handleIncreaseQuantity, 300);
+  const [minusThrottled] = useThrottle(handleDecreaseQuantity, 300);
 
   const cartLength = carts.item?.filter((e) => e.product.quantity > 0);
   var checkAll: boolean =
     cartLength?.length > 0
       ? !!carts.item?.length && productChecked?.length === cartLength?.length
       : false;
-
-  // 2 array : 1 array cart, 1 array cart checked
-  const handleChecked = (checked: boolean, item: CartItem) => {
-    if (checked) {
-      if (item.product.quantity > 0) {
-        setProductChecked((prev) => [...prev, item]);
-      }
-    } else {
-      let cloneProduct = [...productChecked];
-      let products = cloneProduct.filter((e) => {
-        return e.productid !== item.productid;
-      });
-      setProductChecked(products);
-    }
-  };
 
   const handleCheckedAll = (checked: boolean) => {
     if (checked) {
@@ -178,9 +162,8 @@ export default function Cart() {
         </div>
         <div>
           <div
-            className={`overscroll-auto md:overscroll-contain lg:overscroll-none mt-8 flex flex-col gap-5 overflow-x-hidden ${
-              carts?.item?.length > 5 ? `h-[1000px]` : ``
-            }`}
+            className={`overscroll-auto md:overscroll-contain lg:overscroll-none mt-8 flex flex-col gap-5 overflow-x-hidden ${carts?.item?.length > 5 ? `h-[1000px]` : ``
+              }`}
           >
             {carts.item?.length > 0 ? (
               (carts.item ?? []).map((e) => {
@@ -236,11 +219,13 @@ export default function Cart() {
                           <>
                             <div
                               className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                              onClick={() =>
+                              onClick={() => {
                                 minusThrottled(e.quantity, {
                                   productId: e.productid,
                                   cartId: e.cartid,
                                 })
+                                setIdProduct(e.productid)
+                              }
                               }
                             >
                               <Minus />
@@ -255,12 +240,13 @@ export default function Cart() {
                               onClick={() => {
                                 e.quantity < e.product.quantity
                                   ? plusThrottled({
-                                      productId: e.productid,
-                                      cartId: e.cartid,
-                                    })
+                                    productId: e.productid,
+                                    cartId: e.cartid,
+                                  })
                                   : toastWarn(
-                                      `Chỉ còn ${e.product.quantity} sản phẩm`
-                                    );
+                                    `Chỉ còn ${e.product.quantity} sản phẩm`
+                                  );
+                                setIdProduct(e.productid)
                               }}
                             >
                               <Plus />
@@ -358,8 +344,6 @@ export default function Cart() {
                   </div>
                 </div>
                 <button
-                  // to={`${productChecked.length == 0 ? "" : "/checkout"
-                  //    }`}
                   onClick={muti}
                   className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 
@@ -369,11 +353,11 @@ export default function Cart() {
                   <p>Mua ngay</p>
                 </button>
                 <DialogComfirm
-                  desc="toàn bộ Giỏ hàng"
+                  desc="các sản phẩm"
                   id={idAllCart}
                   onClose={() => closeModal(idAllCart)}
                   onSave={() => removeAllCart()}
-                  title="Xóa toàn bộ Giỏ hàng!"
+                  title="Xóa các sản phẩm đã chọn!"
                 />
               </div>
             </div>
