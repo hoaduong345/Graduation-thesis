@@ -81,11 +81,26 @@ export default function useNotificationContextShippping() {
       console.log(socket.id);
     });
   }, [deletedOrder]);
+  const handleSeenAllNoti = () => {
+    notificationControllers
+      .seenAllNotiShipping()
+      .then((res: any) => {
+        setCountNotificationShipping(res.count);
+      })
+      .catch((err) => {
+        console.log(
+          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
+          err
+        );
+        return {};
+      });
+  };
   return {
     // shipping
     notificationShipping,
     countNotificationShipping,
     getAllNotiShipping,
+    handleSeenAllNoti,
   };
 }
 type NotificationContextType = ReturnType<

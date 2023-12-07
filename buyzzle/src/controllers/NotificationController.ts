@@ -54,12 +54,21 @@ class NotificationControllers {
 
   seenAllNotiUser = async (): Promise<NotificationModel> => {
     return await axios
-      .put(`${appConfig.apiShipping}/markasreaduser`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-        withCredentials: true,
-      })
+      .put(`${appConfig.apiShipping}/markasreaduser`)
+      .then((res) => {
+        return res.data as NotificationModel;
+      });
+  };
+  seenAllNotiAdmin = async (): Promise<NotificationModel> => {
+    return await axios
+      .put(`${appConfig.apiShipping}/markasreadadmin`)
+      .then((res) => {
+        return res.data as NotificationModel;
+      });
+  };
+  seenAllNotiShipping = async (): Promise<NotificationModel> => {
+    return await axios
+      .put(`${appConfig.apiShipping}/markasreaddelivery`)
       .then((res) => {
         return res.data as NotificationModel;
       });

@@ -548,7 +548,7 @@ const ShippingController = {
             //         seen: true,
             //     },
             // });
-             await prisma.notification.updateMany({
+            await prisma.notification.updateMany({
                 where: {
                     userId: idUser,
                     seen: false,
@@ -557,7 +557,9 @@ const ShippingController = {
                     seen: true,
                 },
             });
-            res.status(200).send("Mark all as read successfully");
+            res.status(200).json({
+                count: 0,
+            });
         } catch (error) {
             errorResponse(res, error);
         }
@@ -576,7 +578,9 @@ const ShippingController = {
                     seen: true,
                 },
             });
-            res.send('Mark as read for admin successfully');
+            res.status(200).json({
+                count: 0,
+            });
         } catch (error) {
             errorResponse(res, error);
         }
@@ -595,7 +599,9 @@ const ShippingController = {
                     seen: true,
                 },
             });
-            res.send('Mark as read for admin successfully');
+            res.status(200).json({
+                count: 0,
+            });
         } catch (error) {
             errorResponse(res, error);
         }

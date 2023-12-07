@@ -150,7 +150,27 @@ export default function useNotificationContextAdmin() {
     });
   }, [deletedOrder]);
 
+  const handleSeenAllNoti = () => {
+    notificationControllers
+      .seenAllNotiAdmin()
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: NotificationContextAdmin.tsx:157 ~ .then ~ res:",
+          res
+        );
+        setCountNotificationAdmin(res.count);
+      })
+      .catch((err) => {
+        console.log(
+          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
+          err
+        );
+        return {};
+      });
+  };
+
   return {
+    handleSeenAllNoti,
     setNotification: setNotificationAdmin,
     // admin
     notificationAdmin,

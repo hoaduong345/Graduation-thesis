@@ -8,7 +8,7 @@ import Check from "../../assets/TSX/Check";
 import { notificationControllers } from "../../controllers/NotificationController";
 
 export default function NotificationUser() {
-  const { notificationUser } = useNotificationUser();
+  const { notificationUser, handleSeenAllNoti } = useNotificationUser();
   const [isRead, setIsRead] = useState(false);
 
   const handleMarkAsRead = () => {
@@ -18,18 +18,7 @@ export default function NotificationUser() {
     }, 2000);
     handleSeenAllNoti();
   };
-  const handleSeenAllNoti = () => {
-    notificationControllers
-      .seenAllNotiUser()
-      .then((_) => {})
-      .catch((err) => {
-        console.log(
-          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
-          err
-        );
-        return {};
-      });
-  };
+
   return (
     <div className="header-view top-full absolute w-[355px] invisible z-20 overflow-y-auto h-[600px] scroll-smooth">
       <div

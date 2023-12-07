@@ -18,6 +18,7 @@ import Container from "../../../../components/container/Container";
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
 import { dateOrder } from "../../admin/Management/Order/OrderManagement";
 import ArrowDown from "../../admin/assets/TSX/ArrowDown";
+import EmptyPage from "../../../../helper/Empty/EmptyPage";
 
 export const getStatusOrder = (status: StatusOrder) => {
   let _statusOrder: ReactNode;
@@ -414,9 +415,7 @@ export default function OrderHistory() {
                   })
                 ) : (
                   <>
-                    <div className="flex justify-center p-20">
-                      <p className="text-2xl font-light">Chưa có đơn hàng</p>
-                    </div>
+                    <EmptyPage title="Chưa có đơn hàng!" />
                   </>
                 )}
 
