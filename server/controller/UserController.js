@@ -287,6 +287,19 @@ const UserController = {
                 where: whereClause,
                 skip,
                 take: pageSize,
+                include: {
+                    Order: {
+                        select: {
+                            amountTotal: true,
+                        },
+                        where: {
+                            status: 6,
+                        },
+                    },
+                },
+            });
+            AllUser.forEach((user) => {
+                user.totalAmount = user.Order.reduce((total, order) => total + order.amountTotal, 0);
             });
             res.status(200).json({
                 page: page,

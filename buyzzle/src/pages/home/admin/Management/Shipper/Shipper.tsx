@@ -8,6 +8,9 @@ import Download from "../../assets/TSX/Download";
 import Edit from "../../assets/TSX/Edit";
 import RemoveCate from "../../assets/TSX/RemoveCate";
 import Handle from "../../assets/TSX/bacham";
+import { download, generateCsv } from "export-to-csv";
+import { csvConfig } from "../../../../../helper/Export/Excel";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 
 export interface shipper {
   id: number;
@@ -84,7 +87,11 @@ export default function Shipper() {
               </div>
               <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
                 <Download />
-                <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm">
+                <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                  onClick={() => {
+                    const csv = generateCsv(csvConfig)(users as []);
+                    download(csvConfig)(csv);
+                  }}>
                   Xuất excel
                 </button>
               </div>
@@ -144,7 +151,7 @@ export default function Shipper() {
                 </tr>
               </thead>
 
-              {users?.length > 0 ? (
+              {users?.length > 0 && (
                 users?.map((items: any) => {
                   return (
                     <>
@@ -235,39 +242,17 @@ export default function Shipper() {
                     </>
                   );
                 })
-              ) : (
-                <>
-                  <tbody>
-                    <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-                      <th
-                        scope="row"
-                        className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                      ></th>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td
-                        className={`${
-                          status == "Hoạt động"
-                            ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                            : "text-[#FF8A00] "
-                        }`}
-                      ></td>
-                      <th
-                        scope="row"
-                        className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                      ></th>
-                    </tr>
-                  </tbody>
-                  {/* <EmptyPage
-                    title="Danh sách sản phẩm trống"
-                    button="Thêm Ngay"
-                  /> */}
-                </>
               )}
             </table>
+            {
+              users?.length == 0 && (
+                <>
+                  <EmptyPage
+                    title="Danh sách sản phẩm trống"
+                  />
+                </>
+              )
+            }
           </div>
         </div>
       </div>

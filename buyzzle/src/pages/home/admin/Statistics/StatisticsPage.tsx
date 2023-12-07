@@ -1,6 +1,5 @@
 import { IonIcon } from "@ionic/react";
 import { useEffect, useState } from "react";
-import ArrowRise from "../../../../assets/TSX/ArrowRise";
 import Container from "../../../../components/container/Container";
 import SitebarAdmin from "../Sitebar/Sitebar";
 
@@ -20,7 +19,6 @@ import moment from "moment";
 import { Bar, Line } from "react-chartjs-2";
 import { animated, useSpring } from "react-spring";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
-import ArrowFall from "../../../../assets/TSX/ArrowFall";
 import { statsControllers } from "../../../../controllers/StatsControllers";
 import { FilterChart } from "../../../../helper/Date/DataHelper";
 import { numberFormat } from "../../../../helper/Format";
@@ -164,6 +162,15 @@ export default function StatisticsPage() {
     });
     return <animated.div>{number.to((n) => n.toFixed(0))}</animated.div>;
   };
+  const numberStastRevenue = (n: number) => {
+    const { number } = useSpring({
+      from: { number: 0 },
+      number: n,
+      delay: 0,
+      config: { mass: 1, tension: 1030, friction: 114 },
+    });
+    return <animated.div>{number.to((n) => numberFormat(n))}</animated.div>;
+  };
 
   const [open, setOpen] = useState(false);
 
@@ -290,30 +297,6 @@ export default function StatisticsPage() {
               <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">
                 THỐNG KÊ BUYZZLE
               </h2>
-              <button
-                className="btn btn-outline items-center btn-sm text-xs hover:bg-[#eefff8]
-               text-green-600 hover:text-green-600 hover:border-[#16A46D] flex"
-                // onClick={() => {
-                //   const csv = generateCsv(csvConfig)(stats.); // Xuat excel
-                //   download(csvConfig)(csv);
-                // }}
-              >
-                Xuất excel
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  className="w-4 h-4"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                  />
-                </svg>
-              </button>
             </div>
             <div className="mt-[52px] flex">
               {/* dateTimePicker */}
@@ -341,54 +324,7 @@ export default function StatisticsPage() {
               />
               {/* end dateTimePicker */}
             </div>
-            <div className="grid grid-cols-4 gap-3 mt-4">
-              <div className="col-span-1 inline-flex items-center gap-1.5 p-6 rounded-2xl font-medium bg-blue-100 text-blue-800">
-                {/* Truy cập trang */}
-                <div className=" flex flex-col gap-3">
-                  <p className="text-[#1C1C1C] font-semibold">Truy cập trang</p>
-                  <div className="items-center grid grid-cols-3">
-                    <div className="col-span-2">
-                      <p className="text-[#1C1C1C] font-semibold text-xl">
-                        {numberStast(99999)}
-                      </p>
-                    </div>
-                    <div className="col-span-1 flex gap-1">
-                      <p className="text-[#00B207] font-semibold text-xs">
-                        +11.01%
-                      </p>
-                      <ArrowRise />
-                    </div>
-                  </div>
-                </div>
-                {/* end Truy cập trang */}
-                {/* so lieu */}
-                {/* end so lieu */}
-              </div>
-
-              <div className="col-span-1 inline-flex items-center gap-1.5 p-6 rounded-2xl font-medium bg-[#E5ECF6] text-blue-800">
-                {/* Truy cập trang */}
-                <div className=" flex flex-col gap-3">
-                  <p className="text-[#1C1C1C] font-semibold">
-                    Thời gian ở lại
-                  </p>
-                  <div className="items-center grid grid-cols-5">
-                    <div className="col-span-4">
-                      <p className="text-[#1C1C1C] font-semibold text-base gap-1 flex">
-                        {numberStast(39)} giờ {numberStast(90)} phut
-                      </p>
-                    </div>
-                    <div className="col-end-6 flex gap-1">
-                      <p className="text-[#EA4B48] font-semibold text-xs">
-                        -1.01%
-                      </p>
-                      <ArrowFall />
-                    </div>
-                  </div>
-                </div>
-                {/* end Truy cập trang */}
-                {/* so lieu */}
-                {/* end so lieu */}
-              </div>
+            <div className="grid grid-cols-2 gap-3 mt-4">
 
               <div className="col-span-1 inline-flex items-center gap-1.5 p-6 rounded-2xl font-medium bg-blue-100 text-blue-800">
                 {/* Truy cập trang */}
@@ -404,12 +340,11 @@ export default function StatisticsPage() {
                         {numberStast(stats.purchaseOrShoppingInRange)}
                       </p>
                     </div>
-                    <div className="col-end-6 flex gap-1">
+                    {/* <div className="col-end-6 flex gap-1">
                       <p className="text-[#00B207] font-semibold text-xs">
                         {stats.percentageQuantitySold}
                       </p>
-                      <ArrowRise />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -422,17 +357,16 @@ export default function StatisticsPage() {
                   <div className="items-center grid grid-cols-4">
                     <div className="col-span-2">
                       <p className="text-[#1C1C1C] font-semibold text-xl">
-                        {numberFormat(
-                          Number(numberStast(stats.totalRevenueInRange))
-                        )}
+                        {
+                          numberStastRevenue(stats.totalRevenueInRange)
+                        }
                       </p>
                     </div>
-                    <div className="col-end-6 flex gap-1 ">
+                    {/* <div className="col-end-6 flex gap-1 ">
                       <p className="text-[#EA4B48] font-semibold text-xs ">
                         {numberStast(stats.revenuePercentageInRange)}
                       </p>
-                      <ArrowFall />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
