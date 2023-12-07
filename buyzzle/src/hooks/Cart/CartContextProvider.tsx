@@ -90,12 +90,12 @@ export default function useCartContext() {
    const updateQuantityCart = async () => {
       if (listProductQuantity.length > 0) {
          await orderControllers.updateQuantityCart(listProductQuantity);
-         return await cartControllers.getCart()
-            .then((res) => {
-               setCarts(res.data);
-               return res.data.item;
-            });
       }
+      return await cartControllers.getCart()
+         .then((res) => {
+            setCarts(res.data);
+            return res.data.item;
+         });
    };
    useEffect(() => {
       getCart();
