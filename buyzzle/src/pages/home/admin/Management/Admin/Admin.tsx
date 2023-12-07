@@ -575,12 +575,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     onChange={(e) => handleSearchInput(e.target.value)}
                   />
                 </div>
-                <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
+                {/* <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
                   <Download />
                   <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm">
                     Xuất excel
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

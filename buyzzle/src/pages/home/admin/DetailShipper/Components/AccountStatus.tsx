@@ -208,7 +208,7 @@ export default function UserProfile() {
             </div>
           </div>
 
-          <div className="flex items-center justify-end col-span-1">
+          {/* <div className="flex items-center justify-end col-span-1">
             <button
               className="text-white text-center text-base font-bold
                  bg-[#EA4B48] hover:bg-[#ff6d65] w-[150px] h-[46px]
@@ -220,7 +220,7 @@ export default function UserProfile() {
               </div>
               <p className="w-full">Liên hệ</p>
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* input */}
@@ -228,7 +228,7 @@ export default function UserProfile() {
           {/* card */}
           <div className="card w-[100%] rounded-md">
             <div className="grid grid-cols-6 gap-5">
-              <div className="col-span-4 max-lg:col-span-3">
+              <div className="col-span-6 max-lg:col-span-3">
                 <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
                   #Id User
                 </p>
@@ -255,7 +255,11 @@ export default function UserProfile() {
               </div>
 
               <div className="col-span-2 max-lg:col-span-3">
-                <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
+                
+              </div>
+
+              <div className="col-span-6 max-lg:col-span-3">
+              <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
                   Ngày Tạo Tài Khoản
                 </p>
                 <div
@@ -279,19 +283,6 @@ export default function UserProfile() {
                     )}
                   />
                 </div>
-              </div>
-
-              <div className="col-span-6 max-lg:col-span-3">
-                <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
-                  Tổng Số Tiền Đã Thanh Toán:
-                </p>
-
-                <input
-                  className={`focus:outline-none text-[#EA4B48] text-base font-medium placeholder-[#EA4B48] 
-                            w-[100%] rounded-[6px] px-[15px] py-[12px]
-                            max-xl:text-sm max-lg:text-[13px] border-[1px] border-[#FFAAAF]`}
-                  placeholder={numberFormat(Number(1000000))}
-                />
               </div>
             </div>
           </div>

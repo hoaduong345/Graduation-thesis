@@ -39,7 +39,7 @@ export default function useNotificationContextAdmin() {
       .then((res) => {
         console.log(
           "🚀 ~ file: Notification.tsx:54 ~ awaitnotificationControllers.getAllNotification ~ res:",
-          JSON.stringify(res)
+          JSON.stringify(res.allNotification)
         );
         setNotificationAdmin(res.allNotification);
       })

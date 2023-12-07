@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { Images } from "../../assets/TS";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import MyCustomButton from "./MyCustomButton";
 import { LoginFormGoogle } from "../../pages/login/Login";
@@ -17,6 +17,7 @@ type Props = {
 };
 
 export default function DialogLogin(props: Props) {
+  const param = useParams();
   const { title, id, body, onClose, onSave } = props;
   const CustomGoogleLogin = () => {
     const callAPI = async (data: LoginFormGoogle) => {
@@ -38,9 +39,11 @@ export default function DialogLogin(props: Props) {
         })
         console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
       }
+      const pathname = window.location.pathname;
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = `${pathname}`;
       }, 3000);
+      console.log("PARAM:"+JSON.stringify(param));
       if ((await response).status === 200) {
         console.log("Login successfully");
         toast.success("Đăng nhập thành công", {

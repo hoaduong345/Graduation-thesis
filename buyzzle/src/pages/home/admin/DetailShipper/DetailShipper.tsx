@@ -31,7 +31,7 @@ export default function DetailShipper() {
             <ProFile />
             <AccountStatus />
           </div>
-          <PaymentAddress />
+          {/* <PaymentAddress /> */}
         </div>
       </div>
     </Container>
