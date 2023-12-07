@@ -114,6 +114,9 @@ const UserController = {
                         select: {
                             amountTotal: true,
                         },
+                        where: {
+                            status: 6,
+                        },
                     },
                 },
             });

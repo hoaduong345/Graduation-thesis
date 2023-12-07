@@ -501,7 +501,7 @@ export default function VoucherPage() {
                             </p>
                           </div>
                           <div className="col-span-1 flex justify-center mr-5">
-                            <div className="dropdown dropdown-left">
+                            <div className="dropdown dropdown-right">
                               <label tabIndex={0}>
                                 <Handle />
                               </label>

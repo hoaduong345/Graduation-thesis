@@ -87,11 +87,13 @@ export default function Shipper() {
               </div>
               <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
                 <Download />
-                <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                <button
+                  className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
                   onClick={() => {
                     const csv = generateCsv(csvConfig)(users as []);
                     download(csvConfig)(csv);
-                  }}>
+                  }}
+                >
                   Xuất excel
                 </button>
               </div>
@@ -147,7 +149,7 @@ export default function Shipper() {
                 </tr>
               </thead>
 
-              {users?.length > 0 && (
+              {users?.length > 0 &&
                 users?.map((items: any) => {
                   return (
                     <>
@@ -189,7 +191,7 @@ export default function Shipper() {
                             scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
-                            <div className="dropdown dropdown-left">
+                            <div className="dropdown dropdown-right">
                               <label
                                 className="max-lg:w-[24px] max-lg:h-[24px]"
                                 tabIndex={1}
@@ -223,18 +225,13 @@ export default function Shipper() {
                       </tbody>
                     </>
                   );
-                })
-              )}
+                })}
             </table>
-            {
-              users?.length == 0 && (
-                <>
-                  <EmptyPage
-                    title="Danh sách sản phẩm trống"
-                  />
-                </>
-              )
-            }
+            {users?.length == 0 && (
+              <>
+                <EmptyPage title="Danh sách sản phẩm trống" />
+              </>
+            )}
           </div>
         </div>
       </div>

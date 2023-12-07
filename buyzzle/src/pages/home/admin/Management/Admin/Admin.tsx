@@ -681,7 +681,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                             scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
-                            <div className="dropdown dropdown-left ">
+                            <div className="dropdown dropdown-right ">
                               <label
                                 className="max-lg:w-[24px] max-lg:h-[24px]"
                                 tabIndex={1}

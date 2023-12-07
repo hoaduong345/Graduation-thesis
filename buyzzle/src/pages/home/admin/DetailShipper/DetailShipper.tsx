@@ -3,6 +3,7 @@ import Back from "../assets/TSX/Back";
 import ProFile from "./Components/Profile";
 import PaymentAddress from "./Components/PaymentAddress";
 import AccountStatus from "./Components/AccountStatus";
+import { Link } from "react-router-dom";
 
 export default function DetailShipper() {
   return (
@@ -11,9 +12,11 @@ export default function DetailShipper() {
         {/* back */}
         <div className="back h-[57px] mt-[46px] ">
           <div className="flex gap-3 items-center">
-            <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
-              <Back />
-            </div>
+            <Link to={"/admin/shippermanager"}>
+              <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
+                <Back />
+              </div>
+            </Link>
             <div>
               <p className="font-normal text-sm max-xl:text-xs max-lg:text-[10px]">
                 Quay lại
@@ -31,7 +34,6 @@ export default function DetailShipper() {
             <ProFile />
             <AccountStatus />
           </div>
-          <PaymentAddress />
         </div>
       </div>
     </Container>

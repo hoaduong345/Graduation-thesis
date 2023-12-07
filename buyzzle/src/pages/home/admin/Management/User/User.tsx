@@ -154,12 +154,6 @@ export default function User() {
                   >
                     Tổng Số Tiền
                   </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
-                  >
-                    Trạng Thái
-                  </th>
                 </tr>
               </thead>
 
@@ -190,15 +184,7 @@ export default function User() {
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
                             {numberFormat(items.totalAmount)}
                           </td>
-                          <td
-                            className={`${
-                              status == "Hoạt động"
-                                ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                                : "text-[#FF8A00] "
-                            }`}
-                          >
-                            Hoạt động
-                          </td>
+
                           <th
                             scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
@@ -227,20 +213,6 @@ export default function User() {
                                             max-[940px]:text-xs "
                                     >
                                       Xem chi tiết
-                                    </p>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() => DeleteUser(items.id)}
-                                    className="flex items-center gap-4"
-                                  >
-                                    <RemoveCate />
-                                    <p
-                                      className="text-[#EA4B48] text-sm font-medium
-                                             max-[940px]:text-xs "
-                                    >
-                                      Xóa
                                     </p>
                                   </button>
                                 </li>
