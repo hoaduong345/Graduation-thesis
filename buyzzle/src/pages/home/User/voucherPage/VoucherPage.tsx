@@ -79,7 +79,7 @@ export default function VoucherUserPage() {
                   })
                 ) : (
                   <>
-                    <EmptyPage />
+                    <EmptyPage title="Mã Voucher của bạn hiện đang trống !" />
                   </>
                 )}
               </div>

@@ -21,6 +21,7 @@ import secureLocalStorage from "react-secure-storage";
 import { adminController } from "../../../../../controllers/AdminControllder";
 import User from "../../../admin/Management/User/User";
 import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 
 interface FormValues {
   id: number;
@@ -140,7 +141,7 @@ export default function RatingMap(props: Props) {
         const username = UserData.username;
         await adminController.getAdminWhereUsername(username).then((res) => {
           const name = res.adminWithImage.name;
-          
+
           // const email = res.adminWithImage.email;
           setAdminName(name);
           // setAdminAvt(null);
@@ -154,15 +155,12 @@ export default function RatingMap(props: Props) {
           } else {
             console.log("k co hinh");
           }
-          console.log("ADMIN DATA:" + AdminName, AdminAvt)
+          console.log("ADMIN DATA:" + AdminName, AdminAvt);
           return res;
         });
-
-      }
+      };
       fetchData();
-
     }
-
   }, []);
   useEffect(() => {
     let user = localStorage.getItem("nameUser");
@@ -173,9 +171,9 @@ export default function RatingMap(props: Props) {
       const username = userData;
       console.log("USERNAME: " + username);
       setUsername(username);
-      console.log("NameUser:"+ Username)
+      console.log("NameUser:" + Username);
     }
-  }, [])
+  }, []);
   // console.log("ADMIN DATA2:"+AdminName, AdminAvt)
   return (
     <div>
@@ -193,8 +191,6 @@ export default function RatingMap(props: Props) {
                     <div className="flex items-center gap-3">
                       {/* hinh anh */}
                       <div className="relative">
-
-
                         {rating?.user?.UserImage?.length > 0 ? (
                           <img
                             className="w-10 h-10 rounded-full"
@@ -206,16 +202,15 @@ export default function RatingMap(props: Props) {
                             // src={notiItems.fk_order.User.image}
                             // src={`${notiItems.fk_order.User.UserImage?.[0].url}`}
                             // alt="avatar_admin"
-                            className={`w-12 h-12 border-4  rounded-full bg-red-500 pt-2 pb-2 ps-3.5 pe-3.5}`}>
+                            className={`w-12 h-12 border-4  rounded-full bg-red-500 pt-2 pb-2 ps-3.5 pe-3.5}`}
+                          >
                             <p className="text-1xl text-stone-50">
-                              {(rating?.user?.name).substring(0, 1).toUpperCase()}
+                              {(rating?.user?.name)
+                                .substring(0, 1)
+                                .toUpperCase()}
                             </p>
                           </div>
-
                         )}
-
-
-
 
                         <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                       </div>
@@ -318,7 +313,6 @@ export default function RatingMap(props: Props) {
                               </li>
                             </ul>
                           </>
-
                         ) : (
                           <>
                             {AdminName ? (
@@ -335,7 +329,6 @@ export default function RatingMap(props: Props) {
                                     shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
                                     max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
                                 >
-
                                   <li>
                                     <button
                                       className="flex items-center gap-4"
@@ -359,7 +352,6 @@ export default function RatingMap(props: Props) {
                             )}
                           </>
                         )}
-
                       </div>
                     </div>
                   </div>
@@ -386,8 +378,9 @@ export default function RatingMap(props: Props) {
                   </div>
                   {/* text reply */}
 
-                  <> {
-                    rating.repComment ? (
+                  <>
+                    {" "}
+                    {rating.repComment ? (
                       <div>
                         <p
                           className="text-[#4C4C4C] text-xs hover:underline cursor-pointer max-w-max float-right"
@@ -415,18 +408,11 @@ export default function RatingMap(props: Props) {
                           <div></div>
                         )}
                       </>
-
-                    )
-                  }</>
-
-
-
+                    )}
+                  </>
 
                   {isFeedbackClicked === rating.id && (
                     <>
-
-
-
                       {/* end reply content comment */}
                       {/* input */}
 
@@ -435,101 +421,9 @@ export default function RatingMap(props: Props) {
                         {/* reply content comment */}
 
                         {rating.repComment != null ? (
-                          <>{AdminName ? (
-                            <div className="mx-3 my-2 flex">
-                              <div className="ml-2">
-                                <LineCMT />
-                              </div>
-                              {/* shop reply cmt */}
-                              <div className="flex items-center mt-1 ml-3 gap-3">
-                                {/* hinh anh */}
-                                <div className="relative ">
-                                  <img
-                                    className="w-10 h-10 rounded-full"
-                                    src={`${AdminAvt}`}
-                                    alt="Avtcmt"
-                                  />
-                                  {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
-                                  <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-                                </div>
-                                {/* end hinh anh */}
-                                {/* thong tin admin */}
-                                <div>
-                                  {/* name - period - date */}
-                                  <div className="flex items-center">
-                                    {/* name */}{" "}
-                                    <p className="text-[#1A1A1A] text-base font-medium">
-                                      {AdminName}
-                                    </p>
-                                    {/* end name */}
-                                    {/* period */}
-                                    <Period /> {/* end period */}
-                                    {/* date */}{" "}
-                                    <p className="text-[#4C4C4C] text-[12px]">
-                                      12-10-2023
-                                    </p>
-                                    {/* end date */}
-                                  </div>
-                                  {/* end name - period - date */}
-                                </div>{" "}
-                                {/* end thong tin admin */}
-                              </div>
-
-                              {/* shop reply cmt */}
-                            </div>
-                          ) : (
-                            <div className="mx-3 my-2 flex">
-                              <div className="ml-2">
-                                <LineCMT />
-                              </div>
-                              {/* shop reply cmt */}
-                              <div className="flex items-center mt-1 ml-3 gap-3">
-                                {/* hinh anh */}
-                                <div className="relative ">
-                                  <img
-                                    className="w-10 h-10 rounded-full"
-                                    src={`${rating?.admin?.AdminImage?.[0].url}`}
-                                    alt="Avtcmt"
-                                  />
-                                  {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
-                                  <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-                                </div>
-                                {/* end hinh anh */}
-                                {/* thong tin admin */}
-                                <div>
-                                  {/* name - period - date */}
-                                  <div className="flex items-center">
-                                    {/* name */}{" "}
-                                    <p className="text-[#1A1A1A] text-base font-medium">
-                                      {rating?.admin?.name}
-                                    </p>
-                                    {/* end name */}
-                                    {/* period */}
-                                    <Period /> {/* end period */}
-                                    {/* date */}{" "}
-                                    <p className="text-[#4C4C4C] text-[12px]">
-                                      12-10-2023
-                                    </p>
-                                    {/* end date */}
-                                  </div>
-                                  {/* end name - period - date */}
-                                </div>{" "}
-                                {/* end thong tin admin */}
-                              </div>
-
-                              {/* shop reply cmt */}
-                            </div>
-                          )}
-                            <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4">
-                              <p className="text-[#4C4C4C]">
-                                {rating.repComment}
-                              </p>
-                            </div></>
-
-                        ) : (
                           <>
                             {AdminName ? (
-                              <> <div className="mx-3 my-2 flex">
+                              <div className="mx-3 my-2 flex">
                                 <div className="ml-2">
                                   <LineCMT />
                                 </div>
@@ -570,6 +464,101 @@ export default function RatingMap(props: Props) {
 
                                 {/* shop reply cmt */}
                               </div>
+                            ) : (
+                              <div className="mx-3 my-2 flex">
+                                <div className="ml-2">
+                                  <LineCMT />
+                                </div>
+                                {/* shop reply cmt */}
+                                <div className="flex items-center mt-1 ml-3 gap-3">
+                                  {/* hinh anh */}
+                                  <div className="relative ">
+                                    <img
+                                      className="w-10 h-10 rounded-full"
+                                      src={`${rating?.admin?.AdminImage?.[0].url}`}
+                                      alt="Avtcmt"
+                                    />
+                                    {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
+                                    <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                                  </div>
+                                  {/* end hinh anh */}
+                                  {/* thong tin admin */}
+                                  <div>
+                                    {/* name - period - date */}
+                                    <div className="flex items-center">
+                                      {/* name */}{" "}
+                                      <p className="text-[#1A1A1A] text-base font-medium">
+                                        {rating?.admin?.name}
+                                      </p>
+                                      {/* end name */}
+                                      {/* period */}
+                                      <Period /> {/* end period */}
+                                      {/* date */}{" "}
+                                      <p className="text-[#4C4C4C] text-[12px]">
+                                        12-10-2023
+                                      </p>
+                                      {/* end date */}
+                                    </div>
+                                    {/* end name - period - date */}
+                                  </div>{" "}
+                                  {/* end thong tin admin */}
+                                </div>
+
+                                {/* shop reply cmt */}
+                              </div>
+                            )}
+                            <div className="border-t-[1px] border-[#E0E0E0] py-2 mx-7 mt-4">
+                              <p className="text-[#4C4C4C]">
+                                {rating.repComment}
+                              </p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            {AdminName ? (
+                              <>
+                                {" "}
+                                <div className="mx-3 my-2 flex">
+                                  <div className="ml-2">
+                                    <LineCMT />
+                                  </div>
+                                  {/* shop reply cmt */}
+                                  <div className="flex items-center mt-1 ml-3 gap-3">
+                                    {/* hinh anh */}
+                                    <div className="relative ">
+                                      <img
+                                        className="w-10 h-10 rounded-full"
+                                        src={`${AdminAvt}`}
+                                        alt="Avtcmt"
+                                      />
+                                      {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
+                                      <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                                    </div>
+                                    {/* end hinh anh */}
+                                    {/* thong tin admin */}
+                                    <div>
+                                      {/* name - period - date */}
+                                      <div className="flex items-center">
+                                        {/* name */}{" "}
+                                        <p className="text-[#1A1A1A] text-base font-medium">
+                                          {AdminName}
+                                        </p>
+                                        {/* end name */}
+                                        {/* period */}
+                                        <Period /> {/* end period */}
+                                        {/* date */}{" "}
+                                        <p className="text-[#4C4C4C] text-[12px]">
+                                          12-10-2023
+                                        </p>
+                                        {/* end date */}
+                                      </div>
+                                      {/* end name - period - date */}
+                                    </div>{" "}
+                                    {/* end thong tin admin */}
+                                  </div>
+
+                                  {/* shop reply cmt */}
+                                </div>
                                 <div className="text-[#333333] rounded-[6px] px-[10px] py-[6px] max-xl:text-sm mt-2 border-[1px] border-[#FFAAAF] w-[95%] mx-auto flex">
                                   <input
                                     className={`w-full focus:outline-none`}
@@ -592,14 +581,12 @@ export default function RatingMap(props: Props) {
                                   >
                                     <SendCmt />
                                   </div>
-                                </div></>
-
+                                </div>
+                              </>
                             ) : (
                               <div></div>
                             )}
                           </>
-
-
                         )}
                       </div>
                       {/* content comment */}
@@ -612,7 +599,11 @@ export default function RatingMap(props: Props) {
         ) : (
           <></>
         )
-      ) : null}
+      ) : (
+        <>
+          <EmptyPage title="Chưa có đánh giá nào!" />
+        </>
+      )}
       <DialogModal
         id={idDialogRating}
         onClose={() => onClose(idDialogRating)}
@@ -671,7 +662,7 @@ export default function RatingMap(props: Props) {
                             message: "",
                           },
                         }}
-                        render={({ }) => (
+                        render={({}) => (
                           <>
                             {[1, 2, 3, 4, 5].map((rating) => (
                               <input
@@ -680,7 +671,7 @@ export default function RatingMap(props: Props) {
                                 name="rating-5"
                                 className="mask mask-star-2 bg-orange-400"
                                 onClick={() => handleRatingClick(rating)}
-                              // ref={register}
+                                // ref={register}
                               />
                             ))}
                           </>

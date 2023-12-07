@@ -118,9 +118,12 @@ export default function DetailsProduct() {
   };
 
   const breadcrumbItems = [
-    { text: 'Buyzzle', link: '/' },
-    { text: '' + category, link: `/FiltersPage/?nameCate=${category}&minPrice=0&maxPrice=10000000` },
-    { text: '' + productName },
+    { text: "Buyzzle", link: "/" },
+    {
+      text: "" + category,
+      link: `/FiltersPage/?nameCate=${category}&minPrice=0&maxPrice=10000000`,
+    },
+    { text: "" + productName },
   ];
 
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
@@ -143,8 +146,8 @@ export default function DetailsProduct() {
       })
       .then((detail) => {
         // setEditImages(detail.data);
-        setCategory(detail.data.productDetail.fK_category.name)
-        setProductName(detail.data.productDetail.name)
+        setCategory(detail.data.productDetail.fK_category.name);
+        setProductName(detail.data.productDetail.name);
         setfirst(detail.data);
         // console.log("VCLVCLVLCLV:"+JSON.stringify(detail.data.productDetail.name))
       })
@@ -299,17 +302,26 @@ export default function DetailsProduct() {
     });
   };
   const CheckLogin = async () => {
-    const user = localStorage.getItem("user");
-    if (user == null) {
-      setLogined(false);
+    // const user = localStorage.getItem("user");
+    if (Logined == false) {
+      // setLogined(false);
       openModal(idAddAdmin);
     } else {
-      setLogined(true);
+      // setLogined(true);
       CheckToken();
       CheckRefreshToken();
       console.log("AOTHATDAY");
     }
   };
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user != null) {
+      setLogined(true);
+    } else {
+      setLogined(false);
+    }
+  }, []);
+
   const muti = () => {
     CheckLogin();
   };
@@ -369,7 +381,6 @@ export default function DetailsProduct() {
     console.log("Data:" + JSON.stringify(data));
   };
   return (
-
     <>
       <Container>
         <body className="body-detail container mx-auto">
@@ -390,15 +401,15 @@ export default function DetailsProduct() {
               )} */}
               {first?.productDetail && (
                 <div>
-                  <ImageMagnifier width="500px" height="430px"
+                  <ImageMagnifier
+                    width="500px"
+                    height="430px"
                     src={
                       first?.productDetail?.ProductImage?.[selectedImageIndex]
                         ?.url
                     }
                   />
-
                 </div>
-
               )}
             </div>
             <div className="my-auto">
@@ -410,10 +421,11 @@ export default function DetailsProduct() {
                       return (
                         <img
                           key={index}
-                          className={`h-[75px] w-[75px] ${selectedImageIndex === index
-                            ? "border-2 border-blue-500"
-                            : ""
-                            }`}
+                          className={`h-[75px] w-[75px] ${
+                            selectedImageIndex === index
+                              ? "border-2 border-blue-500"
+                              : ""
+                          }`}
                           src={e.url}
                           alt=""
                           onClick={() => handleImageClick(index)}
@@ -507,8 +519,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                            first?.productDetail.price! *
-                            (first?.productDetail.discount! / 100)
+                              first?.productDetail.price! *
+                                (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -606,8 +618,9 @@ export default function DetailsProduct() {
               {/* end icon */}
               {/* Mua ngay */}
               <div
-                className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`
-                  } mt-9 items-center gap-6`}
+                className={`w-[100%] flex ${
+                  isSoldOut ? `justify-start` : `justify-end`
+                } mt-9 items-center gap-6`}
               >
                 {/* <div>
                   <LoveProduct />
@@ -865,7 +878,7 @@ export default function DetailsProduct() {
                 dangerouslySetInnerHTML={{
                   __html: first?.productDetail?.description as any,
                 }}
-              // style={{ color: 'blue', textDecoration: 'underline' }}
+                // style={{ color: 'blue', textDecoration: 'underline' }}
               ></div>
             </div>
           </div>
@@ -901,7 +914,7 @@ export default function DetailsProduct() {
                         handleRemoveRating={handleRemoveRating}
                       />
                     </div>
-                    { }
+                    {}
                     <div className="mt-10">
                       <ResponsivePagination
                         current={rateAndcomment.currentPage!}

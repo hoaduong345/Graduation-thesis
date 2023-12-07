@@ -22,4 +22,12 @@ export interface UserModel {
   addresstype: string;
   specificaddress: string;
   refresh_token: string;
+  forgotpassword_token?: string;
+  role: any;
+  deletedAt: any;
+  Order: Order[];
+  totalAmount: number;
+}
+export interface Order {
+  amountTotal: number;
 }

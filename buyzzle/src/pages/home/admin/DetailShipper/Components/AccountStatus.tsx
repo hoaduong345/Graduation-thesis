@@ -177,9 +177,6 @@ export default function UserProfile() {
           <span className="text-[#000] text-2xl font-normal ">
             Trạng Thái Tài Khoản
           </span>
-          <div>
-            <InforUser />
-          </div>
         </div>
         <div className="border-[1px] border-[#E0E0E0] my-[30px]"></div>
         <div className="grid grid-cols-3 items-center">
@@ -203,23 +200,7 @@ export default function UserProfile() {
             )}
             <div>
               <p>Tên: {name}</p>
-
-              <p className="text-[#12b004]">● Đang Hoạt Động</p>
             </div>
-          </div>
-
-          <div className="flex items-center justify-end col-span-1">
-            <button
-              className="text-white text-center text-base font-bold
-                 bg-[#EA4B48] hover:bg-[#ff6d65] w-[150px] h-[46px]
-                 rounded-md transition duration-150 cursor-pointer
-                 flex items-center px-6"
-            >
-              <div className="mt-2">
-                <Contact />
-              </div>
-              <p className="w-full">Liên hệ</p>
-            </button>
           </div>
         </div>
 
@@ -227,70 +208,55 @@ export default function UserProfile() {
         <div className="mt-7">
           {/* card */}
           <div className="card w-[100%] rounded-md">
-            <div className="grid grid-cols-6 gap-5">
-              <div className="col-span-4 max-lg:col-span-3">
-                <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
-                  #Id User
-                </p>
-                <div
-                  className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
+            <div>
+              <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
+                #Id User
+              </p>
+              <div
+                className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                  border-[1px] border-[#FFAAAF] `}
-                >
-                  <Controller
-                    control={control}
-                    name="id"
-                    render={({ field }) => (
-                      <>
-                        <input
-                          className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
+              >
+                <Controller
+                  control={control}
+                  name="id"
+                  render={({ field }) => (
+                    <>
+                      <input
+                        className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
                                                                             max-xl:text-sm  max-lg:text-[13px] cursor-not-allowed"
-                          placeholder="#a32223"
-                          value={field.value}
-                          disabled={true}
-                        />
-                      </>
-                    )}
-                  />
-                </div>
+                        placeholder="#a32223"
+                        value={`#00${field.value}`}
+                        disabled={true}
+                      />
+                    </>
+                  )}
+                />
               </div>
+            </div>
 
-              <div className="col-span-2 max-lg:col-span-3">
-                <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
-                  Ngày Tạo Tài Khoản
-                </p>
-                <div
-                  className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
+            <div className="mt-5">
+              <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
+                Ngày Tạo Tài Khoản
+              </p>
+              <div
+                className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                 border-[1px] border-[#FFAAAF] `}
-                >
-                  <Controller
-                    control={control}
-                    name="createdAt"
-                    render={({ field }) => (
-                      <>
-                        <input
-                          className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
+              >
+                <Controller
+                  control={control}
+                  name="createdAt"
+                  render={({ field }) => (
+                    <>
+                      <input
+                        className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
                                                                             max-xl:text-sm max-lg:text-[13px] cursor-not-allowed"
-                          placeholder={"20/10/2020"}
-                          maxLength={3}
-                          value={field.value}
-                          disabled={true}
-                        />
-                      </>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <div className="col-span-6 max-lg:col-span-3">
-                <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
-                  Tổng Số Tiền Đã Thanh Toán:
-                </p>
-
-                <input
-                  className={`focus:outline-none text-[#EA4B48] text-base font-medium placeholder-[#EA4B48] 
-                            w-[100%] rounded-[6px] px-[15px] py-[12px]
-                            max-xl:text-sm max-lg:text-[13px] border-[1px] border-[#FFAAAF]`}
-                  placeholder={numberFormat(Number(1000000))}
+                        placeholder={"20/10/2020"}
+                        maxLength={3}
+                        value={field.value}
+                        disabled={true}
+                      />
+                    </>
+                  )}
                 />
               </div>
             </div>

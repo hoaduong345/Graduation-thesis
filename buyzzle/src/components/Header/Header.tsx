@@ -16,7 +16,7 @@ import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import HeaderTopUser from "../HeaderTop/HeaderTopUser";
 import axios from "axios";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import DialogLogin from "../../helper/Dialog/DialogLogin";
 import { LoginForm } from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
@@ -147,37 +147,32 @@ export default function Header() {
     userController.CheckRefreshToken().then((res) => {
       console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
     });
-
-
-
-  }
+  };
   // const muti = () => {
   //   CheckToken();
   //   CheckRefreshToken();
   //   console.log("AOTHATDAY");
   // }
-  
+
   const CheckLogin = async () => {
     // const user = localStorage.getItem("user");
     if (Logined == false) {
       // setLogined(false);
-      openModal(idAddAdmin)
+      openModal(idAddAdmin);
     } else {
       // setLogined(true);
       CheckToken();
       CheckRefreshToken();
       console.log("AOTHATDAY");
     }
-
-  }
+  };
   const muti = () => {
     CheckToken();
     CheckRefreshToken();
-
-  }
+  };
   const CheckLogin1 = () => {
     CheckLogin();
-  }
+  };
   const {
     control,
     handleSubmit,
@@ -191,9 +186,9 @@ export default function Header() {
   const param = useParams();
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
-    console.log("LoginData:" + data)
+    console.log("LoginData:" + data);
     userController.Login(data).then((res) => {
-      console.log("LoginTHanhCong:" + JSON.stringify(res.username))
+      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
       const username = res.username;
       const accessToken = res.accessToken;
       console.log(accessToken);
@@ -206,8 +201,8 @@ export default function Header() {
       setTimeout(() => {
         window.location.href = `/Detailproducts/${param.id}`;
       }, 2000);
-    })
-  }
+    });
+  };
   const openModal = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
@@ -309,7 +304,6 @@ export default function Header() {
                           />
                         </div>
                       </div>
-
                     </div>
                     <div className="flex gap-3  ">
                       <div className="flex flex-col gap-5 max-lg:gap-2">
@@ -361,14 +355,12 @@ export default function Header() {
                           />
                         </div>
                       </div>
-
                     </div>
                   </div>
                 </div>
               </>
             }
           />
-
         </div>
         <div className="border-2 border-[#E6E6E6]" />
         <Container>
@@ -400,7 +392,7 @@ export default function Header() {
                     />
                     {showSuggestions && (
                       <>
-                        <div className="absolute w-[665px] z-10  bg-white border border-gray-300 rounded mt-2 p-2 top-28">
+                        <div className="absolute w-[665px] z-50 bg-white border border-gray-300 rounded mt-2 p-2 top-28">
                           {/* // tên sản phẩm */}
                           <div>
                             <h1 className="text-base font-bold cursor-default p-1 pl-2">
@@ -439,12 +431,12 @@ export default function Header() {
                                           setIsSearch(false);
                                         }}
                                       >
-                                        <div className="text-[14px] ">
+                                        <div className="text-[12px] ">
                                           {itemsSearch.name &&
-                                            itemsSearch.name.length > 17 ? (
+                                          itemsSearch.name.length > 14 ? (
                                             `${itemsSearch.name.substring(
                                               0,
-                                              17
+                                              14
                                             )}...`
                                           ) : itemsSearch.name ? (
                                             itemsSearch.name
@@ -464,7 +456,7 @@ export default function Header() {
                           </div>
                           {/* // danh mục */}
                           <div>
-                            <h1 className="text-base font-bold cursor-default p-1 pl-2 mt-2">
+                            <h1 className="text-base font-bold cursor-default p-1 pl-2 mt-2 ">
                               Từ khóa
                             </h1>
                             <p className="text-base cursor-default p-1 pl-2 font-normal">
@@ -487,16 +479,7 @@ export default function Header() {
                 </div>
 
                 <div className="items-center flex relative gap-2">
-                  <a onClick={CheckLogin1}>
-                    {Logined ? (
-                      <CartCount />
-                    ) : (
-                      <></>
-                    )
-
-                    }
-
-                  </a>
+                  <a onClick={CheckLogin1}>{Logined ? <CartCount /> : <></>}</a>
 
                   <div className="items-center">
                     {checkLogin ? (
@@ -534,16 +517,18 @@ export default function Header() {
           </div>
         </Container>
 
-        <div className="Header-bottom bg-[#FFEAE9] h-[60px]">
+        <div className="Header-bottom bg-[#FFEAE9] h-[40px]">
           <Container>
             <div className="container mx-auto">
-              <ul className="flex gap-[3%] h-[60px] font-medium text-[#45474B] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
+              <ul className="flex gap-[3%] h-[40px] font-medium text-[#45474B] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
                 {/* <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link> */}
                 {topProduct.map((items) => {
                   return (
                     <>
                       <Link to={`/Detailproducts/${items.id}`}>
-                        <li className="hover:text-[#1F1717] ">{items.name}</li>
+                        <li className="hover:text-[#1F1717] text-xs">
+                          {items.name}
+                        </li>
                       </Link>
                     </>
                   );

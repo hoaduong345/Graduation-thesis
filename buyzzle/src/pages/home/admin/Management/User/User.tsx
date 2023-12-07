@@ -15,6 +15,7 @@ import {
 } from "../../../../../controllers/UserController";
 import { ModelUser } from "../../../../../model/UserModel";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
+import { numberFormat } from "../../../../../helper/Format";
 
 export interface users {
   id: number;
@@ -231,7 +232,7 @@ export default function User() {
                           </td>
 
                           <td className="px-3 py-5 max-lg:py-3 justify-center">
-                            3999999
+                            {numberFormat(items.totalAmount)}
                           </td>
                           <td
                             className={`${

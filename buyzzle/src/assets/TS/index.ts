@@ -95,4 +95,6 @@ export const Images = {
   vnpost: "../src/assets/PNG/vnpost.png",
   momo2: "../src/assets/PNG/momo2.png",
   zalopay: "../src/assets/PNG/zalopay.png",
+
+  emptyPages: "../src/assets/PNG/emptyPage.png",
 };

@@ -1,14 +1,15 @@
 import ProductManager from "../../../../../assets/TSX/ProductManager";
 import User from "../../../../../assets/TSX/User";
 import HistoryBought from "../../../../../assets/TSX/HistoryBought";
-import Cart from "../../../../../assets/TSX/Cart";
-import Heart from "../../../../../assets/TSX/Heart";
-import Setting from "../../../../../assets/TSX/Setting";
+// import Cart from "../../../../../assets/TSX/Cart";
+// import Heart from "../../../../../assets/TSX/Heart";
+// import Setting from "../../../../../assets/TSX/Setting";
 import Logout from "../../../../../assets/TSX/Logout";
 import axios from "axios";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Voucher from "../../../../../assets/TSX/Voucher";
+import { googleLogout } from '@react-oauth/google';
 
 interface SitebarUser {
   icon: ReactNode;
@@ -42,11 +43,11 @@ const listSitebar: SitebarUser[] = [
   //   pathName: "/cart",
   //   title: "Giỏ hàng",
   // },
-  {
-    icon: <Heart />,
-    pathName: "/favorite",
-    title: "Sản phẩm yêu thích",
-  },
+  // {
+  //   icon: <Heart />,
+  //   pathName: "/favorite",
+  //   title: "Sản phẩm yêu thích",
+  // },
   // {
   //   icon: <Setting />,
   //   pathName: "",
@@ -66,6 +67,7 @@ export default function Sitebar() {
       console.log(reponse);
       localStorage.removeItem("user");
       localStorage.removeItem("nameUser");
+      googleLogout();
       window.location.href = "/";
     } catch (error) {
       console.log(error);
