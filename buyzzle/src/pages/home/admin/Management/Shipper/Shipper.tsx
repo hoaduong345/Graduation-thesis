@@ -102,16 +102,18 @@ export default function Shipper() {
     setSex(JSON.parse(event.target.value));
   };
   const AddShipper = async (formData: FormValues) => {
+    formData.sex = JSON.stringify(sex)
     formData.sex = JSON.parse(formData.sex);
     console.log("Data Shipper:" + JSON.stringify(formData));
     shipperController
       .registerShipper(formData)
       .then((res) => {
         toast.success("Đăng kí thành công !");
-        console.log("res:" + res);
+        getAllShipper();
       })
-      .catch(() => {
+      .catch((error) => {
         toast.error("Đăng kí thất bại !");
+        console.log("res:" + error);
       });
   };
 
@@ -183,8 +185,10 @@ export default function Shipper() {
     }
   };
   const saveModal = (id: string, data: FormValues) => {
-    data.sex = JSON.parse(data.sex);
+    // data.sex = JSON.parse(data.sex);
+    console.log("DATA SHIPPER:"+data);
     AddShipper(data);
+    
     reset({
       name: "",
       username:  "",
@@ -603,8 +607,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   message: "Không để trống",
                                 },
                                 minLength: {
-                                  value: 4,
-                                  message: "Ít nhất 4 ký tự",
+                                  value: 9,
+                                  message: "Ít nhất 9 ký tự",
                                 },
                                 maxLength: {
                                   value: 25,
