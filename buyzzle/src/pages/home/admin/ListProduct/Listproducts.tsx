@@ -171,7 +171,6 @@ export default function ListproductsAdmin() {
         </div>
         <div className="grid grid-cols-5">
           <div className={`col-span-1`}>
-            {/* You can open the modal using document.getElementById('ID').showModal() method */}
             <dialog id="my_modal_3" className="max-2xl:modal ">
               <div className="relative">
                 <button
