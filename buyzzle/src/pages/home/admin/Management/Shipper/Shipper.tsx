@@ -1,19 +1,22 @@
+import { download, generateCsv } from "export-to-csv";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import ResponsivePagination from "react-responsive-pagination";
 import { toast } from "react-toastify";
 import Search from "../../../../../assets/TSX/Search";
 import Container from "../../../../../components/container/Container";
+import { AdminModel } from "../../../../../controllers/AdminControllder";
 import { shipperController } from "../../../../../controllers/ShipperController";
+import DialogAddAdmin from "../../../../../helper/Dialog/DialogAddAdmin";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
+import { csvConfig } from "../../../../../helper/Export/Excel";
+import { ModelAdmin } from "../../../../../model/AdminModel";
+import useDebounce from "../../../../../useDebounceHook/useDebounce";
 import SitebarAdmin from "../../Sitebar/Sitebar";
 import Download from "../../assets/TSX/Download";
 import Edit from "../../assets/TSX/Edit";
-import RemoveCate from "../../assets/TSX/RemoveCate";
-import Handle from "../../assets/TSX/bacham";
 import PlusSquare from "../../assets/TSX/PlusSquare";
-import DialogAddAdmin from "../../../../../helper/Dialog/DialogAddAdmin";
-import { Controller, useForm } from "react-hook-form";
-import { download, generateCsv } from "export-to-csv";
-import { csvConfig } from "../../../../../helper/Export/Excel";
-import EmptyPage from "../../../../../helper/Empty/EmptyPage";
+import Handle from "../../assets/TSX/bacham";
 
 export interface shipper {
   id: number;
@@ -34,8 +37,6 @@ export interface FormValues {
   city: string;
 }
 export default function Shipper() {
-
-
   const provinces = [
     "Tỉnh/Thành phố, Quận/Huyện, Phường/Xã",
     `An Giang`,
@@ -100,84 +101,109 @@ export default function Shipper() {
     "Vĩnh Phúc",
     "Yên Bái",
   ];
-  const [sex, setSex] = useState<boolean>();
+  const [sex, setSex] = useState<boolean>(true);
   const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSex(JSON.parse(event.target.value));
   };
+  const [admin, setAdmin] = useState<ModelAdmin>({} as ModelAdmin);
+
+  const [adminAPI, setAdminAPI] = useState<AdminModel>({
+    pageSize: 2,
+  });
+  const debouncedInputValueSearch = useDebounce(adminAPI.keyword, 500);
+  const idShipper = "AddShipper";
+
   const AddShipper = async (formData: FormValues) => {
-    formData.sex = JSON.stringify(sex)
+    console.log("first");
+    formData.sex = JSON.stringify(sex);
     formData.sex = JSON.parse(formData.sex);
     console.log("Data Shipper:" + JSON.stringify(formData));
     shipperController
       .registerShipper(formData)
-      .then((res) => {
+      .then((_) => {
         toast.success("Đăng kí thành công !");
+        reset({
+          name: "",
+          username: "",
+          email: "",
+          password: "",
+          dateofbirth: "",
+          phonenumber: "",
+          sex: "",
+          address: "",
+          city: "",
+        });
+        const modal = document.getElementById(
+          idShipper
+        ) as HTMLDialogElement | null;
+
+        if (modal) {
+          modal.close();
+        }
         getAllShipper();
       })
       .catch((error) => {
-        toast.error("Đăng kí thất bại !");
-        console.log("res:" + error);
+        if (error.response?.data == "Email đã được sử dụng") {
+          setError("email", {
+            message: "Email đã được sử dụng",
+          });
+        } else if (error.response?.data == "Sdt đã được sử dụng") {
+          setError("phonenumber", {
+            message: "Sdt đã được sử dụng",
+          });
+        } else {
+          setError("username", {
+            message: "Username đã được sử dụng",
+          });
+        }
+        return;
       });
   };
 
-
-
-  let status = "Hoạt động";
-  const [users, setUsers] = useState<any>({});
   const getAllShipper = () => {
     shipperController
-      .getAllShipper()
+      .getAllShipper(adminAPI)
       .then((res) => {
         return res;
       })
       .then((res) => {
-        setUsers(res);
-        console.log("Test" + JSON.stringify(res));
+        if (res[0]?.dateofbirth == null) {
+          res.dateofbirth = "dd/mm/yyyy";
+        } else {
+          res.dateofbirth = (res[0]?.dateofbirth).substring(0, 10);
+        }
+        setAdmin(res);
       });
   };
 
   useEffect(() => {
     getAllShipper();
-  }, []);
+  }, [adminAPI.page, debouncedInputValueSearch]);
+  const handlePageChange = (page: number) => {
+    setAdminAPI({ ...adminAPI, page: page });
+  };
+  const handleSearchInput = (value: string) => {
+    setAdminAPI({ ...adminAPI, keyword: value });
+  };
 
   function JumpEditUser(username: any) {
     window.location.href = `detailshipper/${username}`;
   }
 
-  const DeleteUser = (id: any) => {
-    shipperController
-      .deleteShipperWhereId(id)
-      .then((res) => {
-        toast.success("Xóa thành công !");
-        console.log("res:" + res);
-        getAllShipper();
-      })
-      .catch(() => {
-        toast.error("Xóa thất bại !");
-      });
-  };
-
-
-
   const {
     control,
     handleSubmit,
-    clearErrors,
     reset,
     register,
+    setError,
+
     formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
   });
-  // const AddShipper = (data: FormValues) => {
-
-  // };
-  const idShipper = "AddShipper";
   const openModal = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      //  reset({ name: data.name, id: data.id });
-      //  setUrl(data.image);
       modal.showModal();
     }
   };
@@ -187,31 +213,6 @@ export default function Shipper() {
       modal.close();
     }
   };
-  const saveModal = (id: string, data: FormValues) => {
-    // data.sex = JSON.parse(data.sex);
-    console.log("DATA SHIPPER:"+data);
-    AddShipper(data);
-    
-    reset({
-      name: "",
-      username:  "",
-      email:  "",
-      password:  "",
-      dateofbirth:  "",
-      phonenumber:  "",
-      sex:  "",
-      address:  "",
-      city:  "",
-    });
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
-    }
-    console.log("Data:" + JSON.stringify(data));
-  };
-
-
-
 
   return (
     <Container>
@@ -219,7 +220,7 @@ export default function Shipper() {
         <div className="col-span-1 max-2xl:hidden">
           <SitebarAdmin />
         </div>
-        <div className="content-right-filter mt-[34px] col-span-4 flex flex-col gap-[50px] max-2xl:col-span-5">
+        <div className="content-right-filter col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
           <div>
             <h2
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
@@ -228,7 +229,8 @@ export default function Shipper() {
               QUẢN LÝ DANH SÁCH SHIPPER
             </h2>
           </div>
-          <div className="flex flex-col gap-[35px]">
+
+          <div className="flex flex-col gap-4">
             <div className="flex justify-between mb-7">
               <div className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6">
                 <button
@@ -241,23 +243,11 @@ export default function Shipper() {
                   </p>
                 </button>
               </div>
-              <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
-                <Download />
-                <button
-                  className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
-                  onClick={() => {
-                    const csv = generateCsv(csvConfig)(users as []);
-                    download(csvConfig)(csv);
-                  }}
-                >
-                  Xuất excel
-                </button>
-              </div>
               <DialogAddAdmin
                 id={idShipper}
                 onClose={() => closeModal(idShipper)}
-                onSave={handleSubmit((data: any) => {
-                  saveModal(idShipper, data);
+                onSave={handleSubmit((data) => {
+                  AddShipper(data);
                 })}
                 title="Thêm đơn vị vận chuyển"
                 body={
@@ -322,12 +312,12 @@ export default function Shipper() {
                                   message: "Không để trống",
                                 },
                                 minLength: {
-                                  value: 6,
-                                  message: "Ít nhất 6 ký tự",
+                                  value: 5,
+                                  message: "Ít nhất 5 ký tự",
                                 },
                                 maxLength: {
-                                  value: 12,
-                                  message: "Nhiều nhất 12 kí tự",
+                                  value: 24,
+                                  message: "Nhiều nhất 24 kí tự",
                                 },
                               }}
                               render={({ field }) => (
@@ -703,7 +693,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     </div>
                   </>
                 }
-
               />
               <div className="flex gap-[24px]">
                 <div
@@ -716,17 +705,26 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                   <input
                     className="rounded-lg focus:outline-none text-lg relative pr-7 flex-1 pl-3 max-xl:text-sm max-lg:text-sm "
                     placeholder="Tìm kiếm theo tên đăng nhập"
-                  // value={adminAPI.keyword}
-                  // style={{ fontSize: "14px" }}
-                  // onChange={(e) => handleSearchInput(e.target.value)}
+                    value={adminAPI.keyword}
+                    style={{ fontSize: "14px" }}
+                    onChange={(e) => handleSearchInput(e.target.value)}
                   />
                 </div>
-                {/* <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
+                <div
+                  className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition 
+                duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer"
+                >
                   <Download />
-                  <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm">
+                  <button
+                    className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                    onClick={() => {
+                      const csv = generateCsv(csvConfig)(admin.data as []);
+                      download(csvConfig)(csv);
+                    }}
+                  >
                     Xuất excel
                   </button>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
@@ -735,10 +733,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
             <table className="w-full text-left ">
               <thead className="text-base text-[#4C4C4C] border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-[11px]">
                 <tr>
-                  <th
-                    scope="col"
-                    className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
-                  ></th>
                   <th
                     scope="col"
                     className="px-3 py-5 max-lg:px-[5px] max-lg:py-2"
@@ -784,60 +778,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                 </tr>
               </thead>
 
-              {users?.length > 0 ? (
-                users?.map((items: any) => {
+              {admin.data?.length > 0 ? (
+                admin.data?.map((items: any) => {
                   return (
                     <>
                       <tbody>
                         <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-                          <th
-                            scope="row"
-                            className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                          >
-                            <div className="dropdown dropdown-left">
-                              <label
-                                className="max-lg:w-[24px] max-lg:h-[24px]"
-                                tabIndex={1}
-                              >
-                                <Handle />
-                              </label>
-                              <ul
-                                tabIndex={0}
-                                className="dropdown-content menu bg-white rounded-box w-52
-                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                              >
-                                <li>
-                                  <button
-                                    className="flex items-center gap-4"
-                                    onClick={() => JumpEditUser(items.username)}
-                                  >
-                                    <Edit />
-                                    <p
-                                      className="text-[#EA4B48] text-sm font-medium
-                                            max-[940px]:text-xs "
-                                    >
-                                      Xem chi tiết
-                                    </p>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() => DeleteUser(items.id)}
-                                    className="flex items-center gap-4"
-                                  >
-                                    <RemoveCate />
-                                    <p
-                                      className="text-[#EA4B48] text-sm font-medium
-                                             max-[940px]:text-xs "
-                                    >
-                                      Xóa
-                                    </p>
-                                  </button>
-                                </li>
-                              </ul>
-                            </div>
-                          </th>
                           <th
                             scope="row"
                             className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
@@ -870,6 +816,40 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                           >
                             {items.phonenumber}
                           </td>
+                          <th
+                            scope="row"
+                            className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
+                          >
+                            <div className="dropdown dropdown-left">
+                              <label
+                                className="max-lg:w-[24px] max-lg:h-[24px]"
+                                tabIndex={1}
+                              >
+                                <Handle />
+                              </label>
+                              <ul
+                                tabIndex={0}
+                                className="dropdown-content menu bg-white rounded-box w-52
+                                                shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                                max-2xl:left-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                              >
+                                <li>
+                                  <button
+                                    className="flex items-center gap-4"
+                                    onClick={() => JumpEditUser(items.username)}
+                                  >
+                                    <Edit />
+                                    <p
+                                      className="text-[#EA4B48] text-sm font-medium
+                                            max-[940px]:text-xs "
+                                    >
+                                      Xem chi tiết
+                                    </p>
+                                  </button>
+                                </li>
+                              </ul>
+                            </div>
+                          </th>
                         </tr>
                       </tbody>
                     </>
@@ -877,36 +857,18 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                 })
               ) : (
                 <>
-                  <tbody>
-                    <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-                      <th
-                        scope="row"
-                        className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                      ></th>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td
-                        className={`${status == "Hoạt động"
-                          ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                          : "text-[#FF8A00] "
-                          }`}
-                      ></td>
-                      <th
-                        scope="row"
-                        className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                      ></th>
-                    </tr>
-                  </tbody>
-                  {/* <EmptyPage
-                    title="Danh sách sản phẩm trống"
-                    button="Thêm Ngay"
-                  /> */}
+                  <EmptyPage title="Danh sách shipper trống" />
                 </>
               )}
             </table>
+            <div className="mt-10">
+              <ResponsivePagination
+                current={adminAPI.page!}
+                total={admin.totalPage}
+                onPageChange={handlePageChange}
+                maxWidth={500}
+              />
+            </div>
           </div>
         </div>
       </div>

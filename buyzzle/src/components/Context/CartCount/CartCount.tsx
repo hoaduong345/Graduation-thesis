@@ -15,7 +15,11 @@ export default function CartCount() {
                 <span
                   className={`absolute top-0 right-0 inline-flex items-center justify-center py-1 px-[6px] text-xs  border-[1px] border-[#44170f]
                   font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full
-                  ${carts.item?.length == 0 ? "hidden" : ""}
+                  ${
+                    carts.item?.length == 0 || carts.item?.length == undefined
+                      ? "hidden"
+                      : ""
+                  }
                   `}
                 >
                   {carts.item?.length >= 10 ? (

@@ -28,7 +28,7 @@ export interface admin {
   username: string;
   name: string;
   email: string;
-  sex: string;
+  sex: boolean;
   dateofbirth: string;
   phonenumber: string;
 }
@@ -39,12 +39,11 @@ export interface FormValues {
   password: string;
   dateofbirth: string;
   phonenumber: string;
-  sex: string;
+  sex: boolean;
 }
 
 export default function Admin() {
-  const [sex, setSex] = useState<boolean>();
-  let status = "Hoạt động";
+  const [sex, setSex] = useState<boolean>(true);
   const [admin, setAdmin] = useState<ModelAdmin>({} as ModelAdmin);
   const [adminAPI, setAdminAPI] = useState<AdminModel>({
     pageSize: 2,
@@ -56,7 +55,7 @@ export default function Admin() {
   const {
     control,
     handleSubmit,
-    clearErrors,
+    setError,
     reset,
     register,
     formState: { errors },
@@ -95,28 +94,40 @@ export default function Admin() {
     window.location.href = `adminprofile/${username}`;
   }
 
-  const DeleteUser = (id: any) => {
-    adminController
-      .DeleteAdmin(id)
-      .then((res) => {
-        toast.success("Xóa thành công !");
-        console.log("res:" + res);
-        getAllAdmin();
-      })
-      .catch(() => {
-        toast.error("Xóa thất bại !");
-      });
-  };
   const AddAdmin = (data: FormValues) => {
     adminController
       .AddAdmin(data)
       .then((res) => {
         toast.success("Thêm thành công !");
-        console.log("res:" + res);
+        reset({
+          name: "",
+          username: "",
+          email: "",
+          password: "",
+          dateofbirth: "",
+          phonenumber: "",
+          sex: Boolean(sex),
+        });
+        const modal = document.getElementById(
+          idAddAdmin
+        ) as HTMLDialogElement | null;
+
+        if (modal) {
+          modal.close();
+        }
         getAllAdmin();
       })
-      .catch(() => {
-        toast.error("Thêm thất bại !");
+      .catch((error) => {
+        if (error.response?.data == "Email đã được sử dụng") {
+          setError("email", {
+            message: "Email đã được sử dụng",
+          });
+        } else {
+          setError("phonenumber", {
+            message: "Sdt đã được sử dụng",
+          });
+        }
+        return;
       });
   };
   function reformatDate(dateStr: any) {
@@ -136,24 +147,6 @@ export default function Admin() {
     if (modal) {
       modal.close();
     }
-  };
-  const saveModal = (id: string, data: FormValues) => {
-    data.sex = JSON.parse(data.sex);
-    AddAdmin(data);
-    reset({
-      name: "",
-      username: "",
-      email: "",
-      password: "",
-      dateofbirth: "",
-      phonenumber: "",
-      sex: "",
-    });
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
-    }
-    console.log("Data:" + JSON.stringify(data));
   };
 
   return (
@@ -188,8 +181,8 @@ export default function Admin() {
               <DialogAddAdmin
                 id={idAddAdmin}
                 onClose={() => closeModal(idAddAdmin)}
-                onSave={handleSubmit((data: any) => {
-                  saveModal(idAddAdmin, data);
+                onSave={handleSubmit((data) => {
+                  AddAdmin(data);
                 })}
                 title="Thêm Admin"
                 body={
