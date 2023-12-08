@@ -5,23 +5,20 @@ import { toastSuccess } from "../../../../../helper/Toast/Success";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import Container from "../../../../../components/container/Container";
-import { logoesController } from "../../../../../controllers/LogoController";
-import { storage } from "../../../../../firebase/Config";
-import Loading from "../../../../../helper/Loading/Loading";
-import { LogoModel } from "../../../../../model/LogoModel";
-import SitebarAdmin from "../../Sitebar/Sitebar";
-import Edit from "../../assets/TSX/Edit";
-import PlusSquare from "../../assets/TSX/PlusSquare";
-import RemoveCate from "../../assets/TSX/RemoveCate";
-import UploadIMG from "../../assets/TSX/UploadIMG";
-import Handle from "../../assets/TSX/bacham";
-import { toastWarn } from "../../../../../helper/Toast/Warning";
-import { id } from "@material-tailwind/react/types/components/tabs";
-import { Any } from "react-spring";
-import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
-import { Accordion } from "@chakra-ui/react";
-import { LogoHomeModel } from "../../../../../model/LogoHomeModel";
 import { logohomeController } from "../../../../../controllers/LogoHomeController";
+import { storage } from "../../../../../firebase/Config";
+import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
+import Loading from "../../../../../helper/Loading/Loading";
+import { toastWarn } from "../../../../../helper/Toast/Warning";
+import { LogoHomeModel } from "../../../../../model/LogoHomeModel";
+import { LogoModel } from "../../../../../model/LogoModel";
+import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
+import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
+import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
+import Handle from "../../../admin/assets/TSX/bacham";
+import Edit from "../../../admin/assets/TSX/Edit";
+import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
+
 type FormValues = {
   id: number;
   images: string;
@@ -67,7 +64,7 @@ export default function LogoHome() {
   const openModal = async (id: string, data: LogoHomeModel) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      reset({ id: data.id ,linkgoogle: data.linkgoogle});
+      reset({ id: data.id, linkgoogle: data.linkgoogle });
       setUrl(data.image);
       modal.showModal();
     }

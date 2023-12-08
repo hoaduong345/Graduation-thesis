@@ -1,20 +1,15 @@
 import { ReactNode, useEffect, useState } from "react";
 
-
 import { Link, useLocation } from "react-router-dom";
-import { adminController } from "../../../../controllers/AdminControllder";
-import { title } from "process";
 import secureLocalStorage from "react-secure-storage";
-import HomeSitebar from "../Assets/Icon/homeSitebar";
-import Statistical from "../Assets/Icon/Statistical";
-import ProductIcon from "../Assets/Icon/ProductIcon";
-import CategoryIcon from "../Assets/Icon/CategoryIcon";
-import Members from "../Assets/Icon/Members";
-import VouchersIcon from "../Assets/Icon/VouchersIcon";
-import Oder from "../Assets/Icon/Oder";
-import MessagesIcon from "../Assets/Icon/MessagesIcon";
 import Logout from "../../../../assets/TSX/Logout";
-import Logo from "../Assets/Icon/Logo";
+import { adminController } from "../../../../controllers/AdminControllder";
+import CategoryIcon from "../assets/Icon/CategoryIcon";
+import Members from "../assets/Icon/Members";
+import ProductIcon from "../assets/Icon/ProductIcon";
+import Statistical from "../assets/Icon/Statistical";
+import VouchersIcon from "../assets/Icon/VouchersIcon";
+import Logo from "../../Admin/Assets/Icon/Logo";
 export interface SitebarAdmin {
   title: ReactNode;
   icon: ReactNode;
@@ -67,8 +62,6 @@ const listSitebar: SitebarAdmin[] = [
     pathName: "/admin/logodetail",
   },
 
- 
-
   {
     title: "BannerFilter",
     icon: <Logo />,
@@ -80,8 +73,6 @@ const listSitebar: SitebarAdmin[] = [
     icon: <Logo />,
     pathName: "/admin/bannerhome",
   },
-
-
 
   {
     title: "Người dùng",

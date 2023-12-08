@@ -5,23 +5,20 @@ import { toastSuccess } from "../../../../../helper/Toast/Success";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import Container from "../../../../../components/container/Container";
-import { logoesController } from "../../../../../controllers/LogoController";
-import { storage } from "../../../../../firebase/Config";
-import Loading from "../../../../../helper/Loading/Loading";
-import { LogoModel } from "../../../../../model/LogoModel";
-import SitebarAdmin from "../../Sitebar/Sitebar";
-import Edit from "../../assets/TSX/Edit";
-import PlusSquare from "../../assets/TSX/PlusSquare";
-import RemoveCate from "../../assets/TSX/RemoveCate";
-import UploadIMG from "../../assets/TSX/UploadIMG";
-import Handle from "../../assets/TSX/bacham";
-import { toastWarn } from "../../../../../helper/Toast/Warning";
-import { id } from "@material-tailwind/react/types/components/tabs";
-import { Any } from "react-spring";
-import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
-import { Accordion } from "@chakra-ui/react";
-import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
 import { logodetailController } from "../../../../../controllers/LogoDetailController";
+import { storage } from "../../../../../firebase/Config";
+import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
+import Loading from "../../../../../helper/Loading/Loading";
+import { toastWarn } from "../../../../../helper/Toast/Warning";
+import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
+import { LogoModel } from "../../../../../model/LogoModel";
+import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
+import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
+import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
+import Handle from "../../../admin/assets/TSX/bacham";
+import Edit from "../../../admin/assets/TSX/Edit";
+import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
+
 type FormValues = {
   id: number;
   images: string;
@@ -58,19 +55,17 @@ export default function LogoDetail() {
   } = useForm<LogoDetailModel>({
     mode: "all",
     defaultValues: {
-      id : 0,
-      image : "",
-      linkgoogle : ""
+      id: 0,
+      image: "",
+      linkgoogle: "",
     },
   });
 
-  const openModal = async (id: string, data : LogoDetailModel) => {
+  const openModal = async (id: string, data: LogoDetailModel) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      reset({id: data.id,
-        linkgoogle: data.linkgoogle
-      });
-      setUrl(data.image)
+      reset({ id: data.id, linkgoogle: data.linkgoogle });
+      setUrl(data.image);
       modal.showModal();
     }
   };
@@ -104,10 +99,12 @@ export default function LogoDetail() {
           setCheckedCategory([]);
         });
     } else {
-        logodetailController.add({ id: data.id, image: url, linkgoogle: data.linkgoogle }).then(() => {
-        toastSuccess("Thêm thành công!!");
-        getAllLogo();
-      });
+      logodetailController
+        .add({ id: data.id, image: url, linkgoogle: data.linkgoogle })
+        .then(() => {
+          toastSuccess("Thêm thành công!!");
+          getAllLogo();
+        });
     }
   };
 
@@ -125,11 +122,11 @@ export default function LogoDetail() {
       });
   };
 
-    const setnull = async () => {
-      reset({ id: 0, image: "" , linkgoogle : ""});
-      
-      setUrl("");
-    };
+  const setnull = async () => {
+    reset({ id: 0, image: "", linkgoogle: "" });
+
+    setUrl("");
+  };
 
   const loadImageFile = async (images: any) => {
     for (let i = 0; i < 1; i++) {
@@ -194,7 +191,6 @@ export default function LogoDetail() {
     }
   };
 
- 
   return (
     <Container>
       <div className="grid grid-cols-5">
@@ -274,50 +270,47 @@ export default function LogoDetail() {
                           />
                         </div>
                         <div className="mt-5">
-                                <Controller
-                                  name="linkgoogle"
-                                  control={control}
-                                  rules={{
-                                    required: {
-                                      value: true,
-                                      message: "Không để trống",
-                                    },
-                                    minLength: {
-                                      value: 4,
-                                      message: "Ít nhất 4 ký tự",
-                                    },
-                                   
-                                  }}
-                                  render={({ field }) => (
-                                    <>
-                                      <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
-                                      Nhập đường dẫn hình ảnh*
-                                      </label>
-                                      <input
-                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                          <Controller
+                            name="linkgoogle"
+                            control={control}
+                            rules={{
+                              required: {
+                                value: true,
+                                message: "Không để trống",
+                              },
+                              minLength: {
+                                value: 4,
+                                message: "Ít nhất 4 ký tự",
+                              },
+                            }}
+                            render={({ field }) => (
+                              <>
+                                <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                  Nhập đường dẫn hình ảnh*
+                                </label>
+                                <input
+                                  className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                        placeholder="Nhập đường dẫn hình ảnh"
-                                        value={field.value}
-                                        onChange={(e) => {
-                                          const reg = /[!@#$%^&]/;
-                                          const value = e.target.value;
-                                          field.onChange(
-                                            value.replace(reg, "")
-                                          );
-                                        }}
-                                        name="name"
-                                      />
-                                      {errors.linkgoogle && (
-                                        <p className="text-[11px] text-red-700 mt-2">
-                                          {errors.linkgoogle.message}
-                                        </p>
-                                      )}
-                                    </>
-                                  )}
+                                  placeholder="Nhập đường dẫn hình ảnh"
+                                  value={field.value}
+                                  onChange={(e) => {
+                                    const reg = /[!@#$%^&]/;
+                                    const value = e.target.value;
+                                    field.onChange(value.replace(reg, ""));
+                                  }}
+                                  name="name"
                                 />
-                              </div>
+                                {errors.linkgoogle && (
+                                  <p className="text-[11px] text-red-700 mt-2">
+                                    {errors.linkgoogle.message}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          />
+                        </div>
                       </div>
                     </>
                   }
@@ -342,10 +335,12 @@ export default function LogoDetail() {
 
               <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                 {logo?.map((items) => {
-                  console.log("🚀 ~ file: Logoes.tsx:340 ~ {logo?.map ~ items:", items)
+                  console.log(
+                    "🚀 ~ file: Logoes.tsx:340 ~ {logo?.map ~ items:",
+                    items
+                  );
                   return (
                     <>
-                     
                       <div className="grid grid-cols-9 border-t-[1px] py-4">
                         <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
                           <p
@@ -375,8 +370,6 @@ export default function LogoDetail() {
                           </p>
                         </div>
 
-                     
-
                         <div className="col-span-1 flex justify-center mr-5">
                           <div className="dropdown dropdown-left">
                             <label tabIndex={0}>
@@ -390,10 +383,10 @@ export default function LogoDetail() {
                             >
                               <li>
                                 <button
-                                  onClick={() =>{
-                                    openModal(idModal, items)
-                                    // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle}) 
-                                  }}   
+                                  onClick={() => {
+                                    openModal(idModal, items);
+                                    // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle})
+                                  }}
                                   className="flex items-center gap-4"
                                 >
                                   <Edit />
@@ -437,7 +430,6 @@ export default function LogoDetail() {
                 onClose={() => closeModal(idRemove)}
                 title="Xóa Logo này"
                 onSave={() => removee(logoToDelete, idRemove)}
-               
               />
             </div>
           </div>

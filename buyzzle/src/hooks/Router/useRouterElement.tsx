@@ -42,14 +42,14 @@ import User from "../../pages/home/admin/Management/User/User";
 import Shipper from "../../pages/home/admin/Management/Shipper/Shipper";
 import StatisticsPage from "../../pages/home/admin/Statistics/StatisticsPage";
 import Admin from "../../pages/home/admin/Management/Admin/Admin";
-import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
 import Logoes from "../../pages/home/Admin/Management/Logo/Logoes";
 import Banner from "../../pages/home/Admin/Management/Banner/Banner";
 import BannerHome from "../../pages/home/Admin/Management/Banner/BannerHome";
 import VouchersPage from "../../components/home/components/Voucher/VouchersPage";
-import LogoHome from "../../pages/home/Admin/Management/Logo/Logohome";
 import LogoHome1 from "../../pages/home/Admin/Management/Logo/LogoHome1";
 import LogoDetail from "../../pages/home/Admin/Management/Logo/LogoDetail";
+import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
+import LogoHome from "../../pages/home/Admin/Management/Logo/LogoHome";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -604,8 +604,6 @@ export default function useRouterEmelent() {
           path: "logodetail",
           element: <LogoDetail />,
         },
-
-       
 
         {
           path: "banner",
