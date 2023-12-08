@@ -1,6 +1,7 @@
 import axios from "axios";
 import { FormLoginValues } from "../pages/home/Shipping/LoginShipper/LoginShipper";
 import { FormValues } from "../pages/home/Shipping/RegisterShipper/RegisterShipper";
+import { AdminModel } from "./AdminControllder";
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_SHIPPING_WITHOUT_BUYZZLE_URL || "",
 };
@@ -20,9 +21,9 @@ class ShipperController {
         return res.data;
       });
   };
-  getAllShipper = async () => {
+  getAllShipper = async (data: AdminModel) => {
     return await axios
-      .get(`${appConfig.apiUrl}/management/allshipping`)
+      .post(`${appConfig.apiUrl}/management/allshipping`, data)
       .then((res) => {
         return res.data;
       });
