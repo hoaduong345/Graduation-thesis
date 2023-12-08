@@ -55,13 +55,13 @@ export default function OrderManagement() {
     "🚀 ~ file: OrderManagement.tsx:39 ~ OrderManagement ~ order?.totalOrder;:",
     order?.totalOrder
   );
-  useEffect(() => {
-    let user = secureLocalStorage.getItem("shippername");
-    if (user == null) {
-      console.log("VCLLLLLLLLLLLLLLLLLll");
-      window.location.href = "/shipping/loginShipper";
-    }
-  }, []);
+  // useEffect(() => {
+  //   let user = secureLocalStorage.getItem("shippername");
+  //   if (user == null) {
+  //     console.log("VCLLLLLLLLLLLLLLLLLll");
+  //     window.location.href = "/shipping/loginShipper";
+  //   }
+  // }, []);
   const [changeButton, setChangeButton] = useState([
     {
       id: -1,

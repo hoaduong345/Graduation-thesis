@@ -249,7 +249,7 @@ export default function Header() {
             <HeaderTopUser />
           </div>
         </Container>
-        <div>
+        {/* <div>
           <DialogLogin
             id={idAddAdmin}
             onClose={() => closeModal2(idAddAdmin)}
@@ -375,7 +375,7 @@ export default function Header() {
               </>
             }
           />
-        </div>
+        </div> */}
         <div className="border-2 border-[#E6E6E6]" />
         <Container>
           <div className="Header-center bg-white h-[91px]">
