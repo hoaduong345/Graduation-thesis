@@ -136,14 +136,14 @@ export default function SitebarAdmin() {
           console.log("Chua Dang Nhap Dung");
         }
       } catch (error) {
-        // if (user != null) {
-        //   let UserData = JSON.parse(user);
-        //   // UserData = JSON.parse(UserData);
-        //   const username = UserData.username;
-        //   setName(username);
-        //   setEmail(UserData.email);
-        //   console.log("VCLLLl ");
-        // }
+        if (user != null) {
+          let UserData = JSON.parse(user);
+          // UserData = JSON.parse(UserData);
+          const username = UserData.username;
+          setName(username);
+          setEmail(UserData.email);
+          console.log("VCLLLl ");
+        }
 
         console.log("ERROR", error);
       }

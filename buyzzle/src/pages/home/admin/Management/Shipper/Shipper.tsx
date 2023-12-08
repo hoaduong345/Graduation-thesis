@@ -11,6 +11,9 @@ import Handle from "../../assets/TSX/bacham";
 import PlusSquare from "../../assets/TSX/PlusSquare";
 import DialogAddAdmin from "../../../../../helper/Dialog/DialogAddAdmin";
 import { Controller, useForm } from "react-hook-form";
+import { download, generateCsv } from "export-to-csv";
+import { csvConfig } from "../../../../../helper/Export/Excel";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 
 export interface shipper {
   id: number;
@@ -238,7 +241,18 @@ export default function Shipper() {
                   </p>
                 </button>
               </div>
-
+              <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
+                <Download />
+                <button
+                  className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                  onClick={() => {
+                    const csv = generateCsv(csvConfig)(users as []);
+                    download(csvConfig)(csv);
+                  }}
+                >
+                  Xuất excel
+                </button>
+              </div>
               <DialogAddAdmin
                 id={idShipper}
                 onClose={() => closeModal(idShipper)}
