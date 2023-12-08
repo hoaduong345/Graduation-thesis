@@ -1,31 +1,31 @@
 import { ReactNode, useEffect, useState } from "react";
-import HomeSitebar from "../assets/Icon/homeSitebar";
-import Statistical from "../assets/Icon/Statistical";
-import ProductIcon from "../assets/Icon/ProductIcon";
-import EventIcon from "../assets/Icon/EventIcon";
-import Members from "../assets/Icon/Members";
-import SalesIcon from "../assets/Icon/SalesIcon";
-import VouchersIcon from "../assets/Icon/VouchersIcon";
-import SettingsIcon from "../assets/Icon/SettingsIcon";
-import Oder from "../assets/Icon/Oder";
-import MessagesIcon from "../assets/Icon/MessagesIcon";
+
+
 import { Link, useLocation } from "react-router-dom";
-import CategoryIcon from "../assets/Icon/CategoryIcon";
 import { adminController } from "../../../../controllers/AdminControllder";
 import { title } from "process";
 import secureLocalStorage from "react-secure-storage";
+import HomeSitebar from "../Assets/Icon/homeSitebar";
+import Statistical from "../Assets/Icon/Statistical";
+import ProductIcon from "../Assets/Icon/ProductIcon";
+import CategoryIcon from "../Assets/Icon/CategoryIcon";
+import Members from "../Assets/Icon/Members";
+import VouchersIcon from "../Assets/Icon/VouchersIcon";
+import Oder from "../Assets/Icon/Oder";
+import MessagesIcon from "../Assets/Icon/MessagesIcon";
 import Logout from "../../../../assets/TSX/Logout";
+import Logo from "../Assets/Icon/Logo";
 export interface SitebarAdmin {
   title: ReactNode;
   icon: ReactNode;
   pathName: string;
 }
 const listSitebar: SitebarAdmin[] = [
-  {
-    title: <p>Trang Chủ</p>,
-    icon: <HomeSitebar />,
-    pathName: "",
-  },
+  // {
+  //   title: <p>Trang Chủ</p>,
+  //   icon: <HomeSitebar />,
+  //   pathName: "",
+  // },
   {
     title: "Thống Kê",
     icon: <Statistical />,
@@ -36,11 +36,53 @@ const listSitebar: SitebarAdmin[] = [
     icon: <ProductIcon />,
     pathName: "/admin/ListproductsAdmin",
   },
+
   {
     title: "Danh mục",
     icon: <CategoryIcon />,
     pathName: "/admin/category",
   },
+
+  {
+    title: "LogoFilter",
+    icon: <Logo />,
+    pathName: "/admin/logo",
+  },
+
+  {
+    title: "LogoHome",
+    icon: <Logo />,
+    pathName: "/admin/logohome",
+  },
+
+  {
+    title: "LogoHome1",
+    icon: <Logo />,
+    pathName: "/admin/logohome1",
+  },
+
+  {
+    title: "LogoDetail",
+    icon: <Logo />,
+    pathName: "/admin/logodetail",
+  },
+
+ 
+
+  {
+    title: "BannerFilter",
+    icon: <Logo />,
+    pathName: "/admin/banner",
+  },
+
+  {
+    title: "BannerHome",
+    icon: <Logo />,
+    pathName: "/admin/bannerhome",
+  },
+
+
+
   {
     title: "Người dùng",
     icon: <Members />,

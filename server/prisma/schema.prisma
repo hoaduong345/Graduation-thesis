@@ -24,9 +24,10 @@ model User {
   updateAt             DateTime       @default(now())
   dateOfBirth          DateTime?
   sex                  Boolean?
-  address              String?
   addresstype          String?
+  address              String?
   specificaddress      String?
+  town                 String?
   refresh_token        String?
   forgotpassword_token String?        @db.VarChar(300)
   role                 Int?
@@ -35,7 +36,6 @@ model User {
   UserImage            UserImage[]
   Rating               Rating[]
   deletedAt            DateTime?
-  // roleId               Role? @relation(fields: [id], references: [id])
   sender               Message[]      @relation("Sender")
   receiver             Message[]      @relation("Receiver")
   Order                Order[]
@@ -43,7 +43,13 @@ model User {
   savedVouchers        SavedVoucher[]
   usedVouchers         Voucher[]      @relation("UsedBy")
   Notification         Notification[]
+ 
 }
+
+
+
+
+
 
 model ShippingUnit {
  id            Int            @id @default(autoincrement())
@@ -63,7 +69,7 @@ model ShippingUnit {
 }
 model ShippingImage {
   id            Int       @id @default(autoincrement())
-  url           String?
+  url           String?   @db.VarChar(2000) 
   idshipping       Int?      @unique
   fk_shippingImage ShippingUnit?    @relation(fields: [idshipping], references: [id], onDelete: Cascade)
   deletedAt     DateTime?
@@ -98,7 +104,7 @@ model SavedVoucher {
 
 model UserImage {
   id           Int       @id @unique @default(autoincrement())
-  url          String?
+  url          String?@db.VarChar(2000) 
   iduser       Int       @unique
   fK_UserImage User?     @relation(fields: [iduser], references: [id], onDelete: Cascade)
   deletedAt    DateTime?
@@ -202,7 +208,7 @@ model ItemCart {
 
 model ProductImage {
   id               Int       @id @default(autoincrement())
-  url              String?
+  url              String?@db.VarChar(2000) 
   idproduct        Int?
   fK_propductImage Product?  @relation(fields: [idproduct], references: [id], onDelete: Cascade)
   deletedAt        DateTime?
@@ -210,7 +216,7 @@ model ProductImage {
 
 model CommentImage {
   id              Int       @id @default(autoincrement())
-  url             String?
+  url             String?@db.VarChar(2000) 
   idcomment       Int?
   fk_commentImage Rating?   @relation(fields: [idcomment], references: [id], onDelete: Cascade)
   deletedAt       DateTime?
@@ -225,8 +231,8 @@ model Rating {
   adminId      Int?          
   admin        Admin?         @relation(fields: [adminId], references: [id])
   ratingValue  Int?
-  comment      String?
-  repComment    String?
+  comment      String?         @db.VarChar(2000)
+  repComment    String?         @db.VarChar(2000) 
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
   CommentImage CommentImage[]
@@ -304,7 +310,7 @@ model Admin {
 
 model AdminImage {
   id            Int       @id @default(autoincrement())
-  url           String?
+  url           String?@db.VarChar(2000) 
   idadmin       Int?      @unique
   fk_adminImage Admin?    @relation(fields: [idadmin], references: [id], onDelete: Cascade)
   deletedAt     DateTime?
@@ -332,3 +338,52 @@ model Notification {
   fk_user  User?      @relation(fields: [userId], references: [id])
   fk_order Order     @relation(fields: [orderId], references: [id])
 }
+
+model ImageLogo {
+  id    Int  @id @default(autoincrement())
+  image String?
+  linkgoogle  String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+  
+}
+model ImageBanner {
+  id    Int  @id @default(autoincrement())
+  image String?
+  linkgoogle  String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+}
+model ImageBannerHome {
+  id    Int  @id @default(autoincrement())
+  image String?
+  linkgoogle  String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+}
+
+model ImageLogoHome {
+  id    Int  @id @default(autoincrement())
+  image String?
+  linkgoogle  String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+}
+model ImageLogoHome1 {
+  id    Int  @id @default(autoincrement())
+  image String?
+  linkgoogle  String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+}
+
+model ImageDetail {
+  id    Int  @id @default(autoincrement())
+  image String?
+  linkgoogle  String?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now())
+}
+
+
+

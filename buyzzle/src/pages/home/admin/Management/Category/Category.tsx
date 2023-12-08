@@ -170,7 +170,7 @@ function Category() {
       .remove(id)
       .then(() => {
         closeModal(idDialog);
-        toastError("Successfully");
+        toastSuccess("Successfully");
         getList();
       })
       .then(() => {
@@ -638,10 +638,8 @@ function Category() {
                                 <li>
                                   <button
                                     onClick={() => {
-                                      openModal(
-                                        idRemoveCategory,
-                                        {} as CategoryModal
-                                      );
+                                      openModal(idRemoveCategory, {} as CategoryModal
+);
                                       setIdCate(e.id);
                                     }}
                                     className="flex items-center gap-4"

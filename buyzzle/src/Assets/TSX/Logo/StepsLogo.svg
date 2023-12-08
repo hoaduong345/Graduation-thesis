@@ -1,7 +1,4 @@
-import React from 'react'
 
-export default function StepsLogo() {
-  return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="82"
@@ -16,5 +13,4 @@ export default function StepsLogo() {
         fill="#FFAAAF"
       />
     </svg>
-  );
-}
+ 

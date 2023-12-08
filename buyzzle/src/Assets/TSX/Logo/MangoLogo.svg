@@ -1,7 +1,4 @@
-import React from 'react'
 
-export default function MangoLogo() {
-  return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="67"
@@ -694,5 +691,3 @@ export default function MangoLogo() {
         fill="#4C4C4C"
       />
     </svg>
-  );
-}
