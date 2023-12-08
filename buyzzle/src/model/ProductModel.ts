@@ -106,7 +106,6 @@ export interface Rating {
   ratingValue: number;
   comment: string;
   createdAt: string;
-  updateAt: string;
   repComment: string;
   product: {
     quantity: number;

@@ -3,6 +3,7 @@ import ProFile from "../DetailUser/Components/Profile";
 import PaymentAddress from "../DetailUser/Components/PaymentAddress";
 import AccountStatus from "../DetailUser/Components/AccountStatus";
 import Container from "../../../../components/container/Container";
+import { Link } from "react-router-dom";
 
 export default function DetailUser() {
   return (
@@ -11,9 +12,11 @@ export default function DetailUser() {
         {/* back */}
         <div className="back h-[57px] mt-[46px] ">
           <div className="flex gap-3 items-center">
-            <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
-              <Back />
-            </div>
+            <Link to={"/admin/usersmanager"}>
+              <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
+                <Back />
+              </div>
+            </Link>
             <div>
               <p className="font-normal text-sm max-xl:text-xs max-lg:text-[10px]">
                 Quay lại danh sách sản phẩm

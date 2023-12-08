@@ -160,7 +160,7 @@ function Category() {
           setCheckedCategory([]);
         })
         .catch(() => {
-          toastWarn('Tối đa 6 danh mục')
+          toastWarn("Tối đa 6 danh mục");
         });
     }
   };
@@ -170,7 +170,7 @@ function Category() {
       .remove(id)
       .then(() => {
         closeModal(idDialog);
-        toastError("Successfully");
+        toastSuccess("Successfully");
         getList();
       })
       .then(() => {
@@ -345,7 +345,7 @@ function Category() {
           <div className="col-span-1 max-2xl:hidden">
             <SitebarAdmin />
           </div>
-          <div className="content-right-filter mt-[34px] col-span-4 flex flex-col gap-[50px] max-2xl:col-span-5">
+          <div className="content-right-filter col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
             <div>
               <h2
                 className="txt-filter font-bold text-[#1A1A1A] text-3xl

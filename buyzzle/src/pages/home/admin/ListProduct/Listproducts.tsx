@@ -171,7 +171,6 @@ export default function ListproductsAdmin() {
         </div>
         <div className="grid grid-cols-5">
           <div className={`col-span-1`}>
-            {/* You can open the modal using document.getElementById('ID').showModal() method */}
             <dialog id="my_modal_3" className="max-2xl:modal ">
               <div className="relative">
                 <button
@@ -187,7 +186,7 @@ export default function ListproductsAdmin() {
               <SitebarAdmin />
             </div>
           </div>
-          <div className="content-right-filter mt-[34px] col-span-4 max-2xl:col-span-5 ">
+          <div className="content-right-filter  col-span-4 max-2xl:col-span-5 ">
             {/* h2 */}
             <div>
               <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">
@@ -196,7 +195,7 @@ export default function ListproductsAdmin() {
             </div>
             {/* end h2 */}
             <div
-              className="grid gap-4 grid-cols-9 mt-12
+              className="grid gap-4 grid-cols-9 mt-4
             max-lg:grid-cols-5 max-lg:gap-0 max-[885px]:grid-cols-12
             "
             >

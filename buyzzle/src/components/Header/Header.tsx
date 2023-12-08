@@ -126,6 +126,21 @@ export default function Header() {
   };
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
+      if (searchValue?.toString()! != undefined) {
+        navigate({
+          pathname: `/FiltersPage/`,
+          search: createSearchParams({
+            keyword: searchValue?.toString()!,
+            minPrice: sliderValues[0].toString(),
+            maxPrice: sliderValues[1].toString(),
+          }).toString(),
+        });
+        setShowSuggestions(false);
+      }
+    }
+  };
+  const handleSearch = () => {
+    if (searchValue?.toString()! != undefined) {
       navigate({
         pathname: `/FiltersPage/`,
         search: createSearchParams({
@@ -137,7 +152,6 @@ export default function Header() {
       setShowSuggestions(false);
     }
   };
-
   const CheckToken = async () => {
     userController.CheckToken().then((res) => {
       console.log(JSON.stringify(res));
@@ -158,7 +172,7 @@ export default function Header() {
     // const user = localStorage.getItem("user");
     if (Logined == false) {
       // setLogined(false);
-      // openModal(idAddAdmin);
+      openModal(idAddAdmin);
     } else {
       // setLogined(true);
       CheckToken();
@@ -173,8 +187,60 @@ export default function Header() {
   const CheckLogin1 = () => {
     CheckLogin();
   };
-
-  
+  const {
+    control,
+    handleSubmit,
+    clearErrors,
+    reset,
+    register,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    mode: "all",
+  });
+  const param = useParams();
+  const idAddAdmin = "AddAdmin";
+  const Login = async (data: LoginForm) => {
+    console.log("LoginData:" + data);
+    userController.Login(data).then((res) => {
+      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
+      const username = res.username;
+      const accessToken = res.accessToken;
+      console.log(accessToken);
+      const UserData = { username };
+      const Token = { accessToken };
+      localStorage.setItem("idUser", JSON.stringify(res.id));
+      localStorage.setItem("user", JSON.stringify(UserData));
+      localStorage.setItem("accessToken", JSON.stringify(Token));
+      // const id = param.id;
+      setTimeout(() => {
+        window.location.href = `/Detailproducts/${param.id}`;
+      }, 2000);
+    });
+  };
+  const openModal = (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+  const closeModal2 = async (id: string) => {
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+  };
+  const saveModal = (id: string, data: LoginForm) => {
+    Login(data);
+    reset({
+      email: "",
+      password: "",
+    });
+    const modal = document.getElementById(id) as HTMLDialogElement | null;
+    if (modal) {
+      modal.close();
+    }
+    console.log("Data:" + JSON.stringify(data));
+  };
   return (
     <>
       <header className="Header">
@@ -183,7 +249,133 @@ export default function Header() {
             <HeaderTopUser />
           </div>
         </Container>
-        
+        <div>
+          <DialogLogin
+            id={idAddAdmin}
+            onClose={() => closeModal2(idAddAdmin)}
+            onSave={handleSubmit((data: any) => {
+              saveModal(idAddAdmin, data);
+            })}
+            title="Đăng Nhập"
+            body={
+              <>
+                <div className="grid grid-cols-5 gap-8">
+                  <div className="col-span-3 ">
+                    <div className="flex gap-3  ">
+                      <div className="flex flex-col gap-5 max-lg:gap-2">
+                        <div className="h-[90px] w-[455px]">
+                          <Controller
+                            name="email"
+                            control={control}
+                            rules={{
+                              required: {
+                                value: true,
+                                message: "Không để trống",
+                              },
+                              minLength: {
+                                value: 4,
+                                message: "Ít nhất 4 ký tự",
+                              },
+                              // maxLength: {
+                              //   value: ,
+                              //   message:
+                              //     "Nhiều nhất 25 kí tự",
+                              // },
+                              validate: {
+                                // Kiểm tra email có đúng định dạng không
+                                validEmail: (value) =>
+                                  /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(
+                                    value
+                                  ) || "Email không hợp lệ",
+                              },
+                            }}
+                            render={({ field }) => (
+                              <>
+                                <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                                  Email
+                                </label>
+                                <input
+                                  className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                                  placeholder="Nhập vào email của bạn"
+                                  value={field.value}
+                                  onChange={(e) => {
+                                    const reg = /[!#$%^&]/;
+                                    const value = e.target.value;
+                                    field.onChange(value.replace(reg, ""));
+                                  }}
+                                  name="email"
+                                />
+                                {errors.email && (
+                                  <p className="text-[11px] text-red-700 mt-0">
+                                    {errors.email.message}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex gap-3  ">
+                      <div className="flex flex-col gap-5 max-lg:gap-2">
+                        <div className="h-[90px] w-[455px]">
+                          <Controller
+                            name="password"
+                            control={control}
+                            rules={{
+                              required: {
+                                value: true,
+                                message: "Không để trống",
+                              },
+                              minLength: {
+                                value: 4,
+                                message: "Ít nhất 4 ký tự",
+                              },
+                              maxLength: {
+                                value: 25,
+                                message: "Nhiều nhất 25 kí tự",
+                              },
+                            }}
+                            render={({ field }) => (
+                              <>
+                                <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
+                                  Mật khẩu
+                                </label>
+                                <input
+                                  className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
+                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
+                                            `}
+                                  type="password"
+                                  placeholder="Nhập vào mật khẩu"
+                                  value={field.value}
+                                  onChange={(e) => {
+                                    const reg = /[!@#$%^&]/;
+                                    const value = e.target.value;
+                                    field.onChange(value.replace(reg, ""));
+                                  }}
+                                  name="password"
+                                />
+                                {errors.password && (
+                                  <p className="text-[11px] text-red-700 mt-0">
+                                    {errors.password.message}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            }
+          />
+        </div>
         <div className="border-2 border-[#E6E6E6]" />
         <Container>
           <div className="Header-center bg-white h-[91px]">
@@ -288,7 +480,7 @@ export default function Header() {
                         </div>
                       </>
                     )}
-                    <div className="flex items-center">
+                    <div className="flex items-center" onClick={handleSearch}>
                       <button
                         className="btn-search bg-[#FFEAE9] p-[7px] rounded-lg font-bold text-[#1A1A1A] 
                       w-[135px] max-xl:max-w-[70px] max-xl:text-[11px] max-xl:p-[4px] border

@@ -61,7 +61,7 @@ function Login() {
 
       if (response.status === 200) {
         console.log("Login successfully");
-        toast.success("Đăng nhập thành công", {
+        toast.success("Login successfully", {
           position: "top-right",
           autoClose: 5000,
         });
@@ -141,13 +141,6 @@ function Login() {
       setTimeout(() => {
         window.location.href = "/";
       }, 3000);
-      if ((await response).status === 200) {
-        console.log("Login successfully");
-        toast.success("Đăng nhập thành công", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      }
     }
     const handleSuccess = (credentialResponse: any) => {
       if (credentialResponse && credentialResponse.credential) {

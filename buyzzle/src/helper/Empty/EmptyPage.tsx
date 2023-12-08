@@ -9,7 +9,7 @@ export default function EmptyPage(props: EmptyModel) {
   const { title, button } = props;
   return (
     <>
-      <div className="text-center">
+      <div className="text-center w-full">
         <div
           role="status"
           className="space-y-8 relative px-3 py-6 animate-pulse my-auto mx-auto md:space-y-0 md:space-x-8 md:flex md:items-center"

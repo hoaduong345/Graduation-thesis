@@ -43,6 +43,8 @@ import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
 import ArrowRightBruh from "../../../../../assets/TSX/ArrowRightBruh";
 import Breadcrumb from "../../../../../helper/Breadcrumb/BreadcrumbProps";
+import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
+import { logodetailController } from "../../../../../controllers/LogoDetailController";
 export interface ImgOfProduct {
   url: string;
 }
@@ -113,6 +115,18 @@ export default function DetailsProduct() {
   const [Logined, setLogined] = useState<boolean>();
   const [category, setCategory] = useState<String>("");
   const [productName, setProductName] = useState<String>("");
+  const [logo, setLogo] = useState<LogoDetailModel[]>([]);
+
+  const getAllLogo = async () => {
+    await logodetailController.getAll().then((res: any) => {
+      setLogo(res);
+    });
+  };
+
+  useEffect(() => {
+    getAllLogo();
+  }, []);
+
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
   };
@@ -706,7 +720,7 @@ export default function DetailsProduct() {
                               <div className="col-span-3 ">
                                 <div className="flex gap-3  ">
                                   <div className="flex flex-col gap-5 max-lg:gap-2">
-                                    <div className="h-[90px] w-[400px]">
+                                    <div className="h-[90px] w-[455px]">
                                       <Controller
                                         name="email"
                                         control={control}
@@ -766,7 +780,7 @@ export default function DetailsProduct() {
                                 </div>
                                 <div className="flex gap-3  ">
                                   <div className="flex flex-col gap-5 max-lg:gap-2">
-                                    <div className="h-[90px] w-[400px]">
+                                    <div className="h-[90px] w-[455px]">
                                       <Controller
                                         name="password"
                                         control={control}
@@ -838,12 +852,31 @@ export default function DetailsProduct() {
 
           {/* Sản phẩm của shop */}
           <div className="grid grid-cols-3 mt-24">
-            <div className="col-span-1 ">
+            <div className="col-span-1">
               <p className="text-[#4C4C4C] text-xl font-semibold mb-4">
                 SẢN PHẨM CỦA SHOP
               </p>
-              <img src={Images.BannerQC} alt="BannerQC" />
+              <div className="flex flex-col space-y-4">
+                {logo?.map((items, index) => (
+                  <a
+                    key={index}
+                    href={`${items.linkgoogle}`}
+                    className="flex items-center"
+                    style={{
+                      width: "100%",
+                      height: "680px",
+                    }}
+                  >
+                    <img
+                      className="object-cover w-full h-full"
+                      src={items.image}
+                      alt=""
+                    />
+                  </a>
+                ))}
+              </div>
             </div>
+
             <div className="mt-11 col-span-2 ">
               <div className="flex flex-wrap gap-3 ">
                 {recommandProduct.slice(0, 8).map((items) => {
