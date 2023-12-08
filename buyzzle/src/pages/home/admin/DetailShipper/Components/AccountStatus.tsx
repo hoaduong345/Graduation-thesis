@@ -13,7 +13,11 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import InforUser from "../../assets/TSX/InforUser";
 import { Images } from "../../../../../assets/TS";
 import Contact from "../../assets/TSX/Contact";
-import { currentDate, numberFormat } from "../../../../../helper/Format";
+import {
+  currentDate,
+  formatDate,
+  numberFormat,
+} from "../../../../../helper/Format";
 import { shipperController } from "../../../../../controllers/ShipperController";
 import secureLocalStorage from "react-secure-storage";
 
@@ -252,7 +256,7 @@ export default function UserProfile() {
                                                                             max-xl:text-sm max-lg:text-[13px] cursor-not-allowed"
                         placeholder={"20/10/2020"}
                         maxLength={3}
-                        value={field.value}
+                        value={formatDate(field.value as any)}
                         disabled={true}
                       />
                     </>
