@@ -291,14 +291,14 @@ export default function StatisticsPage() {
               <SitebarAdmin />
             </div>
           </div>
-          <div className="content-right-filter mt-[34px] col-span-4 max-2xl:col-span-5 ">
+          <div className="content-right-filter col-span-4 max-2xl:col-span-5 ">
             {/* h2 */}
             <div className="flex justify-between items-center">
               <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">
                 THỐNG KÊ BUYZZLE
               </h2>
             </div>
-            <div className="mt-[52px] flex">
+            <div className="mt-4 flex">
               {/* dateTimePicker */}
               <Datepicker
                 // disabledDates={disabledDates}
@@ -325,7 +325,6 @@ export default function StatisticsPage() {
               {/* end dateTimePicker */}
             </div>
             <div className="grid grid-cols-2 gap-3 mt-4">
-
               <div className="col-span-1 inline-flex items-center gap-1.5 p-6 rounded-2xl font-medium bg-blue-100 text-blue-800">
                 {/* Truy cập trang */}
                 <div className=" flex flex-col gap-3 justify-between w-full">
@@ -357,9 +356,7 @@ export default function StatisticsPage() {
                   <div className="items-center grid grid-cols-4">
                     <div className="col-span-2">
                       <p className="text-[#1C1C1C] font-semibold text-xl">
-                        {
-                          numberStastRevenue(stats.totalRevenueInRange)
-                        }
+                        {numberStastRevenue(stats.totalRevenueInRange)}
                       </p>
                     </div>
                     {/* <div className="col-end-6 flex gap-1 ">

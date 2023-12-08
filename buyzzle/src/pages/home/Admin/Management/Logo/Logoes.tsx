@@ -12,11 +12,12 @@ import Loading from "../../../../../helper/Loading/Loading";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
 import { LogoModel } from "../../../../../model/LogoModel";
 import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
-import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
-import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
-import Handle from "../../../admin/assets/TSX/bacham";
 import Edit from "../../../admin/assets/TSX/Edit";
+import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
+import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
+import Handle from "../../../admin/assets/TSX/bacham";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 
 export default function Logoes() {
   const idModal = "logo";
@@ -24,7 +25,6 @@ export default function Logoes() {
   const [loading, setLoading] = useState(false);
 
   const [url, setUrl] = useState<string>();
-  const [open, setOpen] = useState<number>();
 
   const [logo, setLogo] = useState<LogoModel[]>([]);
   const [logoToDelete, setLogoToDelete] = useState(0);
@@ -191,7 +191,7 @@ export default function Logoes() {
           <SitebarAdmin />
         </div>
 
-        <div className="content-right-filter mt-[34px] col-span-4 flex flex-col gap-[50px] max-2xl:col-span-5">
+        <div className="content-right-filter col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
           <div>
             <h2
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
@@ -200,7 +200,7 @@ export default function Logoes() {
               QUẢN LÝ LOGO TRANG FILTER
             </h2>
           </div>
-          <div className="flex flex-col gap-[35px]">
+          <div className="flex flex-col gap-4">
             <div className="flex justify-between">
               <button
                 onClick={() =>
@@ -311,120 +311,116 @@ export default function Logoes() {
               </div>
             </div>
 
-            <div className="">
-              <div className="grid grid-cols-9 pb-7">
-                <div className="col-span-2 text-base text-[#4c4c4c] mx-auto max-[940px]:text-sm">
-                  <p>ID</p>
-                </div>
-                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30 ml-4">
-                  <p>HÌNH ẢNH</p>
-                </div>
-                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30 ml-1">
-                  <p>LINK</p>
-                </div>
-
-                <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm"></div>
+            <div className="grid grid-cols-12">
+              <div className="col-span-1 text-base text-[#4c4c4c]  max-[940px]:text-sm">
+                <p className="text-center">ID</p>
+              </div>
+              <div className="col-span-2 text-base text-[#4C4C4C]  max-[940px]:text-sm mr-30 ml-4">
+                <p className="text-center">HÌNH ẢNH</p>
+              </div>
+              <div className="col-span-8 text-base text-[#4C4C4C]  max-[940px]:text-sm mr-30 ml-1">
+                <p className="text-center"> LINK</p>
               </div>
 
-              <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
-                {logo?.map((items) => {
-                  console.log(
-                    "🚀 ~ file: Logoes.tsx:340 ~ {logo?.map ~ items:",
-                    items
-                  );
-                  return (
-                    <>
-                      <div className="grid grid-cols-9 border-t-[1px] py-4">
-                        <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
-                          <p
-                            className="font-medium text-base text-[#EA4B48]
-                             max-[940px]:text-xs "
-                          >
-                            {items.id}
-                          </p>
-                        </div>
-                        <div
-                          // onClick={() => handleOpen(items.id)}
-                          className="cursor-pointer"
-                        >
-                          <img
-                            className="w-[200px] h-[50px] object-cover ml--5"
-                            src={items.image}
-                            alt=""
-                          />
-                        </div>
-
-                        <div className="col-span-2 text-base text-[#4C4C4C] mx-auto ">
-                          <p
-                            className="font-medium text-base text-[#070702]
-                             max-[40px]:text-xs ml-7"
-                          >
-                            {items.linkgoogle}
-                          </p>
-                        </div>
-
-                        <div className="col-span-1 flex justify-center mr-5">
-                          <div className="dropdown dropdown-left">
-                            <label tabIndex={0}>
-                              <Handle />
-                            </label>
-                            <ul
-                              tabIndex={0}
-                              className="dropdown-content menu bg-white rounded-box w-52
-                                            shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                            max-2xl:right-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                            >
-                              <li>
-                                <button
-                                  onClick={() => {
-                                    openModal(idModal, items);
-                                    // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle})
-                                  }}
-                                  className="flex items-center gap-4"
-                                >
-                                  <Edit />
-                                  <p
-                                    className="text-[#EA4B48] text-sm font-medium
-                                        max-[940px]:text-xs "
-                                  >
-                                    Sửa
-                                  </p>
-                                </button>
-                              </li>
-                              <li>
-                                <button
-                                  onClick={() => {
-                                    openModal(idRemove, items);
-                                    setLogoToDelete(items.id);
-                                  }}
-                                  className="flex items-center gap-4"
-                                >
-                                  <RemoveCate />
-                                  <p
-                                    className="text-[#EA4B48] text-sm font-medium
-                                         max-[940px]:text-xs "
-                                  >
-                                    Xóa
-                                  </p>
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-
-              <DialogComfirm
-                desc="logo"
-                id={idRemove}
-                onClose={() => closeModal(idRemove)}
-                title="Xóa Logo này"
-                onSave={() => removee(logoToDelete, idRemove)}
-              />
+              <div className="col-span-1 text-base text-[#4C4C4C]  max-[940px]:text-sm"></div>
             </div>
+
+            {logo.length > 0 ? (
+              logo?.map((items) => {
+                return (
+                  <div className="grid grid-cols-12 border-t-[1px] py-1">
+                    <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                      <p
+                        className="font-medium text-base text-[#EA4B48]
+                           max-[940px]:text-xs "
+                      >
+                        {items.id}
+                      </p>
+                    </div>
+                    <div
+                      // onClick={() => handleOpen(items.id)}
+                      className="cursor-pointer col-span-2"
+                    >
+                      <img
+                        className="w-[200px] h-[50px] object-cover ml--5"
+                        src={items.image}
+                        alt=""
+                      />
+                    </div>
+
+                    <div className="col-span-8 text-base text-[#4C4C4C] mx-auto ">
+                      <p
+                        className="font-medium text-base text-[#070702]
+                           max-[40px]:text-xs ml-7"
+                      >
+                        {items.linkgoogle}
+                      </p>
+                    </div>
+
+                    <div className="col-span-1 flex justify-end">
+                      <div className="dropdown dropdown-right">
+                        <label tabIndex={0}>
+                          <Handle />
+                        </label>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content menu bg-white rounded-box w-52
+                                          shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                          max-2xl:right-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                        >
+                          <li>
+                            <button
+                              onClick={() => {
+                                openModal(idModal, items);
+                                // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle})
+                              }}
+                              className="flex items-center gap-4"
+                            >
+                              <Edit />
+                              <p
+                                className="text-[#EA4B48] text-sm font-medium
+                                      max-[940px]:text-xs "
+                              >
+                                Sửa
+                              </p>
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => {
+                                openModal(idRemove, items);
+                                setLogoToDelete(items.id);
+                              }}
+                              className="flex items-center gap-4"
+                            >
+                              <RemoveCate />
+                              <p
+                                className="text-[#EA4B48] text-sm font-medium
+                                       max-[940px]:text-xs "
+                              >
+                                Xóa
+                              </p>
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <>
+                <EmptyPage title="Logo của trang filter đang trống!" />
+              </>
+            )}
+
+            <DialogComfirm
+              desc="logo"
+              id={idRemove}
+              onClose={() => closeModal(idRemove)}
+              title="Xóa Logo này"
+              onSave={() => removee(logoToDelete, idRemove)}
+            />
           </div>
         </div>
       </div>

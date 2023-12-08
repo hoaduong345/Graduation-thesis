@@ -162,7 +162,7 @@ export default function Admin() {
         <div className="col-span-1 max-2xl:hidden">
           <SitebarAdmin />
         </div>
-        <div className="content-right-filter mt-[34px] col-span-4 flex flex-col gap-[50px] max-2xl:col-span-5">
+        <div className="content-right-filter col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
           <div>
             <h2
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
@@ -171,7 +171,7 @@ export default function Admin() {
               QUẢN LÝ DANH SÁCH ADMIN
             </h2>
           </div>
-          <div className="flex flex-col gap-[35px]">
+          <div className="flex flex-col gap-4">
             <div className="flex justify-between mb-7">
               <div className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6">
                 <button
