@@ -28,7 +28,7 @@ export interface admin {
   username: string;
   name: string;
   email: string;
-  sex: string;
+  sex: boolean;
   dateofbirth: string;
   phonenumber: string;
 }
@@ -39,7 +39,7 @@ export interface FormValues {
   password: string;
   dateofbirth: string;
   phonenumber: string;
-  sex: string;
+  sex: boolean;
 }
 
 export default function Admin() {
@@ -106,7 +106,7 @@ export default function Admin() {
           password: "",
           dateofbirth: "",
           phonenumber: "",
-          sex: "",
+          sex: Boolean(sex),
         });
         const modal = document.getElementById(
           idAddAdmin
@@ -122,13 +122,9 @@ export default function Admin() {
           setError("email", {
             message: "Email đã được sử dụng",
           });
-        } else if (error.response?.data == "Sdt đã được sử dụng") {
+        } else {
           setError("phonenumber", {
             message: "Sdt đã được sử dụng",
-          });
-        } else {
-          setError("username", {
-            message: "Username đã được sử dụng",
           });
         }
         return;
