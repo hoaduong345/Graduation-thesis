@@ -126,6 +126,21 @@ export default function Header() {
   };
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
+      if (searchValue?.toString()! != undefined) {
+        navigate({
+          pathname: `/FiltersPage/`,
+          search: createSearchParams({
+            keyword: searchValue?.toString()!,
+            minPrice: sliderValues[0].toString(),
+            maxPrice: sliderValues[1].toString(),
+          }).toString(),
+        });
+        setShowSuggestions(false);
+      }
+    }
+  };
+  const handleSearch = () => {
+    if (searchValue?.toString()! != undefined) {
       navigate({
         pathname: `/FiltersPage/`,
         search: createSearchParams({
@@ -137,7 +152,6 @@ export default function Header() {
       setShowSuggestions(false);
     }
   };
-
   const CheckToken = async () => {
     userController.CheckToken().then((res) => {
       console.log(JSON.stringify(res));
@@ -466,7 +480,7 @@ export default function Header() {
                         </div>
                       </>
                     )}
-                    <div className="flex items-center">
+                    <div className="flex items-center" onClick={handleSearch}>
                       <button
                         className="btn-search bg-[#FFEAE9] p-[7px] rounded-lg font-bold text-[#1A1A1A] 
                       w-[135px] max-xl:max-w-[70px] max-xl:text-[11px] max-xl:p-[4px] border

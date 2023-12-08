@@ -57,12 +57,11 @@ export default function OrderManagement() {
   );
   useEffect(() => {
     let user = secureLocalStorage.getItem("shippername");
-    if(user == null){
+    if (user == null) {
       console.log("VCLLLLLLLLLLLLLLLLLll");
       window.location.href = "/shipping/loginShipper";
     }
-
-  }, [])
+  }, []);
   const [changeButton, setChangeButton] = useState([
     {
       id: -1,
@@ -111,13 +110,13 @@ export default function OrderManagement() {
         "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
         selectedButton.id
       );
-      setOrderAPI({ ...orderAPI, status: selectedButton.id });
+      setOrderAPI({ ...orderAPI, status: selectedButton.id, keyword: "" });
     } else {
-      setOrderAPI({ ...orderAPI, status: null });
+      setOrderAPI({ ...orderAPI, status: null, keyword: "" });
     }
   };
 
-  const [btnFiterThrottle] = useThrottle(handleClick, 1000);
+  const [btnFiterThrottle] = useThrottle(handleClick, 500);
 
   function getBorderColor(id: number) {
     switch (id) {
@@ -178,7 +177,7 @@ export default function OrderManagement() {
             <SitebarAdmin />
           </div>
         </div>
-        <div className="content-right-filter mt-[34px] col-span-4 max-2xl:col-span-5 ">
+        <div className="content-right-filter col-span-4 max-2xl:col-span-5 ">
           {/* h2 */}
           <div>
             <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">
@@ -187,7 +186,7 @@ export default function OrderManagement() {
           </div>
           {/* end h2 */}
           {/* button */}
-          <div className="flex mt-[45px] gap-5">
+          <div className="flex mt-4 gap-5">
             {changeButton.map((btnItems) => {
               return (
                 <button

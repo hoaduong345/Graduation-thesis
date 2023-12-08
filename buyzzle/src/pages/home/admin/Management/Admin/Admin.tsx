@@ -20,6 +20,8 @@ import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
 import Search from "../../../../../assets/TSX/Search";
 import moment from "moment";
+import { download, generateCsv } from "export-to-csv";
+import { csvConfig } from "../../../../../helper/Export/Excel";
 
 export interface admin {
   id: number;
@@ -160,7 +162,7 @@ export default function Admin() {
         <div className="col-span-1 max-2xl:hidden">
           <SitebarAdmin />
         </div>
-        <div className="content-right-filter mt-[34px] col-span-4 flex flex-col gap-[50px] max-2xl:col-span-5">
+        <div className="content-right-filter col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
           <div>
             <h2
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
@@ -169,7 +171,7 @@ export default function Admin() {
               QUẢN LÝ DANH SÁCH ADMIN
             </h2>
           </div>
-          <div className="flex flex-col gap-[35px]">
+          <div className="flex flex-col gap-4">
             <div className="flex justify-between mb-7">
               <div className="items-center bg-[#EA4B48] rounded-md h-[46px] flex px-6">
                 <button
@@ -577,7 +579,13 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                 </div>
                 <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
                   <Download />
-                  <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm">
+                  <button
+                    className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                    onClick={() => {
+                      const csv = generateCsv(csvConfig)(admin.data as []);
+                      download(csvConfig)(csv);
+                    }}
+                  >
                     Xuất excel
                   </button>
                 </div>
@@ -673,7 +681,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                             scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
-                            <div className="dropdown dropdown-left ">
+                            <div className="dropdown dropdown-right ">
                               <label
                                 className="max-lg:w-[24px] max-lg:h-[24px]"
                                 tabIndex={1}

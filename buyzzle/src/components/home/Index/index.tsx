@@ -4,7 +4,6 @@ import Category from "../components/Category";
 
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useScroll } from "react-spring";
 import { categoryController } from "../../../controllers/CategoryController";
 import { productController } from "../../../controllers/ProductsController";
 import { MergedProducts } from "../../../model/ProductsSuggest";
@@ -16,6 +15,11 @@ import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import VoucherHomePage from "../components/Voucher/Voucher";
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
+import { useScroll } from "react-spring";
+import { LogoHomeModel } from "../../../model/LogoHomeModel";
+import { logohomeController } from "../../../controllers/LogoHomeController";
+import { logohome1Controller } from "../../../controllers/LogoHome1Controller";
+import { LogoHome1Model } from "../../../model/LogoHome1Model";
 
 export type Product = {
   id: number;
@@ -41,6 +45,30 @@ function Index() {
   useScroll();
   const [categoty, setCategory] = useState<Cate[]>([]);
   const [productsSuggest, setProductsSuggest] = useState<MergedProducts[]>([]);
+  const [product, setProducts] = useState<Products[]>([]);
+  const [logo, setLogo] = useState<LogoHomeModel[]>([]);
+  const [logo1, setLogo1] = useState<LogoHome1Model[]>([]);
+
+  const getAllLogo = async () => {
+    await logohomeController.getAll().then((res: any) => {
+      setLogo(res);
+    });
+  };
+
+  useEffect(() => {
+    getAllLogo();
+  }, []);
+
+  const getAlllLogo = async () => {
+    await logohome1Controller.getAlll().then((res: any) => {
+      setLogo1(res);
+    });
+  };
+
+  useEffect(() => {
+    getAlllLogo();
+  }, []);
+
   const [page, setPage] = useState(1);
   const getCategory = () => {
     categoryController
@@ -79,15 +107,41 @@ function Index() {
             </div>
 
             <div className="flex-col max-w-[421px] max-xl:mx-auto">
-              <img
-                className="mb-[18px] w-full"
-                src="https://lzd-img-global.slatic.net/g/icms/images/ims-web/8f54ec75-a209-4a10-acf8-22bf81ed64cb.jpg_2200x2200q90.jpg_.webp"
-                alt=""
-              />
+              {logo1?.map((items, index) => (
+                <a
+                  key={index}
+                  href={`${items.linkgoogle}`}
+                  className="flex items-center mb-5"
+                  style={{ width: "100%", height: "140px" }}
+                >
+                  <img
+                    className="object-cover w-full h-full"
+                    src={items.image}
+                    alt=""
+                  />
+                </a>
+              ))}
 
               <div className="flex justify-between max-w-[421px] max-[556px]:hidden">
-                <img className="object-cover" src={Images.banner3} alt="" />
-                <img className="object-cover" src={Images.banner4} alt="" />
+                {logo?.map((items, index) => (
+                  <a
+                    key={index}
+                    href={`${items.linkgoogle}`}
+                    className="flex items-center"
+                    style={{
+                      padding: "5px",
+                      width: "100%",
+                      height: "250px",
+                      marginTop: "-6px",
+                    }}
+                  >
+                    <img
+                      className="object-cover w-full h-full"
+                      src={items.image}
+                      alt=""
+                    />
+                  </a>
+                ))}
               </div>
             </div>
           </div>

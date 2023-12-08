@@ -8,6 +8,16 @@ const SendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
 const decode = require('jwt-decode');
 const { re } = require('mathjs');
+const fs = require('fs').promises; // Sử dụng fs.promises để sử dụng promise-based API
+const path = require('path');
+
+const getAddressInfo = (localJson, { address, specificaddress, town }) => {
+    return localJson.find((item) =>
+        item.address === address &&
+        item.specificaddress === specificaddress &&
+        item.town === town
+    );
+};
 dotenv.config();
 
 const UserController = {
@@ -114,6 +124,9 @@ const UserController = {
                         select: {
                             amountTotal: true,
                         },
+                        where: {
+                            status: 6,
+                        },
                     },
                 },
             });
@@ -146,10 +159,12 @@ const UserController = {
             const id = req.body.id;
 
             const updatedPaymentAddress = {
+                username: req.body.username,
                 name: req.body.name,
                 addresstype: req.body.addresstype,
                 address: req.body.address,
                 specificaddress: req.body.specificaddress,
+                town: req.body.town,
             };
 
             const update = await prisma.user.update({
@@ -169,7 +184,13 @@ const UserController = {
     getPaymentAddress: async (req, res) => {
         try {
             const Name = req.params.username;
-
+    
+            // Đọc nội dung của file local.json
+            const localFilePath = path.join(__dirname, 'local.json'); // Điều chỉnh đường dẫn tùy vào cấu trúc của dự án
+            const localData = await fs.readFile(localFilePath, 'utf8');
+            const localJson = JSON.parse(localData);
+    
+            // Lấy thông tin người dùng từ database
             const userWithoutImage = await prisma.user.findUnique({
                 where: {
                     username: Name,
@@ -178,18 +199,31 @@ const UserController = {
                     id: true,
                     name: true,
                     phonenumber: true,
-                    address: true,
                     addresstype: true,
+                    address: true,
                     specificaddress: true,
+                    town: true,
                 },
             });
-
-            res.status(200).json(userWithoutImage);
+    
+            // Lấy thông tin từ local.json dựa trên dữ liệu từ userWithoutImage
+            const addressInfo = getAddressInfo(localJson, userWithoutImage);
+    
+            // Thêm thông tin địa chỉ vào đối tượng trả về
+            const userWithAddress = {
+                ...userWithoutImage,
+                addressInfo,
+            };
+    
+            // Trả về thông tin người dùng kèm theo thông tin địa chỉ
+            res.status(200).json(userWithAddress);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+
+    
 
     getAccountStatus: async (req, res) => {
         try {

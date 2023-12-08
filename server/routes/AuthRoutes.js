@@ -14,9 +14,9 @@ const router = require("express").Router();
 
 // REGISTER
 router.post("/register", createVali, AuthController.register);
-router.delete("/deleteregister/:id", AuthController.deleteregister);
-router.put("/userprofile/:username", AuthController.UserProfile);
-router.put("/updatepassword/:id", AuthController.UpdatePassword);
+// router.delete("/deleteregister/:id", AuthController.deleteregister);
+// router.put("/userprofile/:username", AuthController.UserProfile);
+// router.put("/updatepassword/:id", AuthController.UpdatePassword);
 
 // LOGIN
 router.post(

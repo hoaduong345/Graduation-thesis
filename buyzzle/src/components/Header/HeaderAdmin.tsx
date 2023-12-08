@@ -28,8 +28,6 @@ export default function HeaderAdmin() {
             </div>
           </div>
         </Container>
-
-        <div className="Header-bottom bg-[#FFEAE9] h-[60px]"></div>
       </header>
     </>
   );

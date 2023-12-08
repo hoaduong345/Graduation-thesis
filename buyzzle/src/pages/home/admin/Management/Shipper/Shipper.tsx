@@ -8,6 +8,9 @@ import Download from "../../assets/TSX/Download";
 import Edit from "../../assets/TSX/Edit";
 import RemoveCate from "../../assets/TSX/RemoveCate";
 import Handle from "../../assets/TSX/bacham";
+import { download, generateCsv } from "export-to-csv";
+import { csvConfig } from "../../../../../helper/Export/Excel";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 
 export interface shipper {
   id: number;
@@ -59,7 +62,7 @@ export default function Shipper() {
         <div className="col-span-1 max-2xl:hidden">
           <SitebarAdmin />
         </div>
-        <div className="content-right-filter mt-[34px] col-span-4 flex flex-col gap-[50px] max-2xl:col-span-5">
+        <div className="content-right-filter  col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
           <div>
             <h2
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
@@ -68,7 +71,7 @@ export default function Shipper() {
               QUẢN LÝ DANH SÁCH SHIPPER
             </h2>
           </div>
-          <div className="flex flex-col gap-[35px]">
+          <div className="flex flex-col gap-4">
             <div className="flex gap-[24px]">
               <div
                 className="Search-input-headerCenter items-center flex
@@ -84,7 +87,13 @@ export default function Shipper() {
               </div>
               <div className="flex items-center w-[133px] rounded-md h-[46px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer">
                 <Download />
-                <button className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm">
+                <button
+                  className="text-center text-base font-bold text-[#EA4B48] max-lg:text-sm"
+                  onClick={() => {
+                    const csv = generateCsv(csvConfig)(users as []);
+                    download(csvConfig)(csv);
+                  }}
+                >
                   Xuất excel
                 </button>
               </div>
@@ -140,7 +149,7 @@ export default function Shipper() {
                 </tr>
               </thead>
 
-              {users?.length > 0 ? (
+              {users?.length > 0 &&
                 users?.map((items: any) => {
                   return (
                     <>
@@ -182,7 +191,7 @@ export default function Shipper() {
                             scope="row"
                             className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
                           >
-                            <div className="dropdown dropdown-left">
+                            <div className="dropdown dropdown-right">
                               <label
                                 className="max-lg:w-[24px] max-lg:h-[24px]"
                                 tabIndex={1}
@@ -216,40 +225,13 @@ export default function Shipper() {
                       </tbody>
                     </>
                   );
-                })
-              ) : (
-                <>
-                  <tbody>
-                    <tr className="bg-white border-b-[2px] border-[#E0E0E0] max-xl:text-sm max-lg:text-xs">
-                      <th
-                        scope="row"
-                        className="px-3 py-5 max-lg:py-3 justify-center font-medium text-gray-900"
-                      ></th>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-
-                      <td className="px-3 py-5 max-lg:py-3 justify-center"></td>
-                      <td
-                        className={`${
-                          status == "Hoạt động"
-                            ? "text-[#00B207] px-3 py-5 max-lg:py-3 justify-center"
-                            : "text-[#FF8A00] "
-                        }`}
-                      ></td>
-                      <th
-                        scope="row"
-                        className="flex gap-2 items-center px-3 py-5 max-lg:py-3"
-                      ></th>
-                    </tr>
-                  </tbody>
-                  {/* <EmptyPage
-                    title="Danh sách sản phẩm trống"
-                    button="Thêm Ngay"
-                  /> */}
-                </>
-              )}
+                })}
             </table>
+            {users?.length == 0 && (
+              <>
+                <EmptyPage title="Danh sách sản phẩm trống" />
+              </>
+            )}
           </div>
         </div>
       </div>

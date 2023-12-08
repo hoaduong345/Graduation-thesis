@@ -1,82 +1,40 @@
 import { ReactNode, useEffect, useState } from "react";
-import HomeSitebar from "../assets/Icon/homeSitebar";
-import Statistical from "../assets/Icon/Statistical";
-import ProductIcon from "../assets/Icon/ProductIcon";
-import EventIcon from "../assets/Icon/EventIcon";
-import Members from "../assets/Icon/Members";
-import SalesIcon from "../assets/Icon/SalesIcon";
-import VouchersIcon from "../assets/Icon/VouchersIcon";
-import SettingsIcon from "../assets/Icon/SettingsIcon";
-import Oder from "../assets/Icon/Oder";
-import MessagesIcon from "../assets/Icon/MessagesIcon";
+
 import { Link, useLocation } from "react-router-dom";
-import CategoryIcon from "../assets/Icon/CategoryIcon";
-import { adminController } from "../../../../controllers/AdminControllder";
-import { title } from "process";
 import secureLocalStorage from "react-secure-storage";
 import Logout from "../../../../assets/TSX/Logout";
+import { adminController } from "../../../../controllers/AdminControllder";
+import CategoryIcon from "../assets/Icon/CategoryIcon";
+import Members from "../assets/Icon/Members";
+import ProductIcon from "../assets/Icon/ProductIcon";
+import Statistical from "../assets/Icon/Statistical";
+import VouchersIcon from "../assets/Icon/VouchersIcon";
+import Logo from "../../Admin/Assets/Icon/Logo";
+import Oder from "../assets/Icon/Oder";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+} from "@chakra-ui/react";
 export interface SitebarAdmin {
+  title?: ReactNode;
+  icon: ReactNode;
+  pathName?: string;
+  MenuBanner?: MenuBanner[];
+  MenuRole?: MenuRole[];
+}
+export interface MenuBanner {
   title: ReactNode;
   icon: ReactNode;
   pathName: string;
 }
-const listSitebar: SitebarAdmin[] = [
-  {
-    title: <p>Trang Chủ</p>,
-    icon: <HomeSitebar />,
-    pathName: "",
-  },
-  {
-    title: "Thống Kê",
-    icon: <Statistical />,
-    pathName: "/admin/statisticsPage",
-  },
-  {
-    title: "Sản Phẩm",
-    icon: <ProductIcon />,
-    pathName: "/admin/ListproductsAdmin",
-  },
-  {
-    title: "Danh mục",
-    icon: <CategoryIcon />,
-    pathName: "/admin/category",
-  },
-  {
-    title: "Người dùng",
-    icon: <Members />,
-    pathName: "/admin/usersmanager",
-  },
-  {
-    title: "Shipper",
-    icon: <Members />,
-    pathName: "/admin/shippermanager",
-  },
-  {
-    title: "Admin",
-    icon: <Members />,
-    pathName: "/admin/adminmanager",
-  },
-  {
-    title: "Mã Giảm Giá",
-    icon: <VouchersIcon />,
-    pathName: "/admin/voucher",
-  },
-  // {
-  //   title: "Đơn Hàng",
-  //   icon: <Oder />,
-  //   pathName: "/admin/ordermanagement",
-  // },
-  // {
-  //   title: "Tin Nhắn",
-  //   icon: <MessagesIcon />,
-  //   pathName: "",
-  // },
-  {
-    title: "Đăng xuất",
-    icon: <Logout />,
-    pathName: "/admin/loginadmin",
-  },
-];
+export interface MenuRole {
+  title: ReactNode;
+  icon: ReactNode;
+  pathName: string;
+}
 
 export default function SitebarAdmin() {
   // const listSitebar: SitebarAdmin[] = [];
@@ -85,7 +43,6 @@ export default function SitebarAdmin() {
   const [name, setName] = useState<string>();
   const [email, setEmail] = useState<string>();
   const [image, setImage] = useState<string>();
-  const [urlThen, setUrlThen] = useState<string>();
   const loadBorder = (index: number) => {
     if ((index + 1) % 2 == 0) {
       return (
@@ -151,9 +108,105 @@ export default function SitebarAdmin() {
     fetchData();
   }, []);
 
+  const listSitebar: SitebarAdmin[] = [
+    {
+      title: "Sản Phẩm",
+      icon: <ProductIcon />,
+      pathName: "/admin/ListproductsAdmin",
+    },
+    {
+      title: "Thống Kê",
+      icon: <Statistical />,
+      pathName: "/admin/statisticsPage",
+    },
+    {
+      title: "Danh mục",
+      icon: <CategoryIcon />,
+      pathName: "/admin/category",
+    },
+
+    {
+      title: "Logo & Banner",
+      icon: <Logo />,
+      MenuBanner: [
+        {
+          title: "LogoFilter",
+          icon: <Logo />,
+          pathName: "/admin/logo",
+        },
+
+        {
+          title: "LogoHome",
+          icon: <Logo />,
+          pathName: "/admin/logohome",
+        },
+
+        {
+          title: "LogoHome1",
+          icon: <Logo />,
+          pathName: "/admin/logohome1",
+        },
+
+        {
+          title: "LogoDetail",
+          icon: <Logo />,
+          pathName: "/admin/logodetail",
+        },
+
+        {
+          title: "BannerFilter",
+          icon: <Logo />,
+          pathName: "/admin/banner",
+        },
+
+        {
+          title: "BannerHome",
+          icon: <Logo />,
+          pathName: "/admin/bannerhome",
+        },
+      ],
+    },
+    {
+      title: "Quyền",
+      icon: <Members />,
+      MenuRole: [
+        {
+          title: "Người dùng",
+          icon: <Members />,
+          pathName: "/admin/usersmanager",
+        },
+        {
+          title: "Shipper",
+          icon: <Members />,
+          pathName: "/admin/shippermanager",
+        },
+        {
+          title: "Admin",
+          icon: <Members />,
+          pathName: "/admin/adminmanager",
+        },
+      ],
+    },
+    {
+      title: "Mã Giảm Giá",
+      icon: <VouchersIcon />,
+      pathName: "/admin/voucher",
+    },
+    {
+      title: "Đơn Hàng",
+      icon: <Oder />,
+      pathName: "/admin/ordermanagement",
+    },
+    {
+      title: "Đăng xuất",
+      icon: <Logout />,
+      pathName: "/admin/loginadmin",
+    },
+  ];
+
   return (
     <div
-      className="mt-20 py-8 px-5 w-56 rounded-[6px] mb-5 bg-white 
+      className=" py-8 px-5 w-56 rounded-[6px] mb-5 bg-white 
       shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
       "
     >
@@ -161,8 +214,8 @@ export default function SitebarAdmin() {
         return (
           <>
             <div
-              className={`w-[100%] flex justify-start items-center py-2 gap-6 transition duration-200
-                     hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] hover:text-[#EA4B48] pl-7 
+              className={`w-[100%] flex justify-start py-2 gap-6 transition duration-200
+                     hover:rounded-[6px] cursor-pointer  hover:text-[#EA4B48]
                      ${
                        element.pathName == pathname
                          ? `bg-[#FFEAE9] rounded-[6px] text-[#EA4B48]`
@@ -171,7 +224,89 @@ export default function SitebarAdmin() {
             >
               {element.icon}
               <span className="text-sm font-normal ">
-                <Link to={element.pathName}>{element.title}</Link>
+                <Link to={element.pathName!}>
+                  {element.title == "Logo & Banner" ? (
+                    <>
+                      <Accordion allowMultiple>
+                        <AccordionItem>
+                          <h2>
+                            <AccordionButton className="flex justify-between">
+                              <span>Logo & Banner</span>
+                              <AccordionIcon className="ml-7 !text-navy-900 dark:!text-[#1A1A1A]" />
+                            </AccordionButton>
+                          </h2>
+                          <AccordionPanel pb={4} pl={0}>
+                            <div className="rate flex">
+                              <div className="mt-3">
+                                {element.MenuBanner?.map((element) => {
+                                  return (
+                                    <div
+                                      className={`w-[100%] flex justify-start items-center py-2 gap-3 transition duration-200
+                       hover:rounded-[6px] cursor-pointer  hover:text-[#EA4B48] 
+                       ${
+                         element.pathName == pathname
+                           ? `bg-[#FFEAE9] rounded-[6px] text-[#EA4B48]`
+                           : `bg-white text-[#7A828A]`
+                       }  `}
+                                    >
+                                      {element.icon}
+                                      <span className="text-sm font-normal ">
+                                        <Link to={element.pathName!}>
+                                          {element.title}
+                                        </Link>
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </AccordionPanel>
+                        </AccordionItem>
+                      </Accordion>
+                    </>
+                  ) : element.title == "Quyền" ? (
+                    <>
+                      <Accordion allowMultiple>
+                        <AccordionItem>
+                          <h2>
+                            <AccordionButton className="justify-between">
+                              <span>Quyền</span>
+                              <AccordionIcon className="ml-[82px] !text-navy-900 dark:!text-[#1A1A1A]" />
+                            </AccordionButton>
+                          </h2>
+                          <AccordionPanel pb={4} pl={0}>
+                            <div className="rate flex">
+                              <div className="mt-3">
+                                {element.MenuRole?.map((element) => {
+                                  return (
+                                    <div
+                                      className={`w-[100%] flex justify-start items-center py-2 gap-3 transition duration-200
+  hover:rounded-[6px] cursor-pointer  hover:text-[#EA4B48] 
+  ${
+    element.pathName == pathname
+      ? `bg-[#FFEAE9] rounded-[6px] text-[#EA4B48]`
+      : `bg-white text-[#7A828A]`
+  }  `}
+                                    >
+                                      {element.icon}
+                                      <span className="text-sm font-normal ">
+                                        <Link to={element.pathName!}>
+                                          {element.title}
+                                        </Link>
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </AccordionPanel>
+                        </AccordionItem>
+                      </Accordion>
+                    </>
+                  ) : (
+                    <>{element.title}</>
+                  )}
+                </Link>
               </span>
             </div>
             {loadBorder(index)}
