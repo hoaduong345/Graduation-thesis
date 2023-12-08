@@ -119,9 +119,11 @@ export default function SitebarAdmin() {
 
             const email = res.adminWithImage.email;
             // const pathName = `/admin/adminprofile/${username}`
+         
             setHref(`/admin/adminprofile/${username}`);
             setName(name);
             setEmail(email);
+            console.log("ADMIN RESS:"+name);
             if (res.adminWithImage.AdminImage != undefined) {
               const Image = res.adminWithImage.AdminImage[0].url;
               setImage(Image);
@@ -134,14 +136,14 @@ export default function SitebarAdmin() {
           console.log("Chua Dang Nhap Dung");
         }
       } catch (error) {
-        if (user != null) {
-          let UserData = JSON.parse(user);
-          // UserData = JSON.parse(UserData);
-          const username = UserData.username;
-          setName(username);
-          setEmail(UserData.email);
-          console.log("VCLLLl ");
-        }
+        // if (user != null) {
+        //   let UserData = JSON.parse(user);
+        //   // UserData = JSON.parse(UserData);
+        //   const username = UserData.username;
+        //   setName(username);
+        //   setEmail(UserData.email);
+        //   console.log("VCLLLl ");
+        // }
 
         console.log("ERROR", error);
       }

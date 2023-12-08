@@ -593,8 +593,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     scope="col"
                     className="flex gap-2 items-center px-3 py-5 max-lg:px-[5px] max-lg:py-2"
                   >
-                    <Delete />
-                    <p>Xóa</p>
+                    {/* <Delete />
+                    <p>Xóa</p> */}
                   </th>
                   <th
                     scope="col"
@@ -694,10 +694,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 </li>
                               </ul>
                             </div>
-                            <input
+                            {/* <input
                               type="checkbox"
                               className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px] max-[940px]:w-3"
-                            />
+                            /> */}
                           </th>
                           <th
                             scope="row"
