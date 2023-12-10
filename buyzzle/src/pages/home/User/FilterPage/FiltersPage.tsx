@@ -66,6 +66,8 @@ export default function FiltersPage() {
   const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
   const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
     useState(true);
+    const [activeBtnHotSelling, setActiveBtnActiveBtnHotSelling] =
+    useState(true);
 
   // Slider Price SiteBarFilterPages
   const [sliderValues, setSliderValues] = useState<[number, number]>([
@@ -184,7 +186,8 @@ export default function FiltersPage() {
       });
   };
   const handleActiveBTNLatestCreationDate = () => {
-    setActiveBtnLatestCreationDate(!activeBtnLatestCreationDate);
+    setActiveBtnLatestCreationDate(false);
+    setActiveBtnActiveBtnHotSelling(true);
     const filterOptions = {
       key: "desc",
       categoryName: nameCateValue?.toString(),
@@ -195,6 +198,12 @@ export default function FiltersPage() {
       .then((res: any) => {
         setProducts(res.rows);
       });
+  };
+  const handleActiveBTNHotSelling = () => {
+    setActiveBtnActiveBtnHotSelling(!activeBtnHotSelling);
+    setActiveBtnLatestCreationDate(true);
+    setActiveBtnActiveBtnHotSelling(false);
+    console.log('Hot Selling clicked !')
   };
   const getProductSearch = (props: string) => {
     productController
@@ -252,15 +261,19 @@ export default function FiltersPage() {
 
   const [btnHighToLowThrottle] = useThrottle(
     handleActiveBTNHighToLowClick,
-    2000
+    700
   );
   const [btnLowToHighThrottle] = useThrottle(
     handleActiveBTNLowToHighClick,
-    2000
+    700
   );
   const [btnLatestCreationDateThrottle] = useThrottle(
     handleActiveBTNLatestCreationDate,
-    2000
+    700
+  );
+  const [btnHotSellingThrottle] = useThrottle(
+    handleActiveBTNHotSelling,
+    700
   );
 
   return (
@@ -304,7 +317,7 @@ export default function FiltersPage() {
                     <p className="text-[#000000] text-sm ml-5 font-semibold max-2xl:text-lg max-lg:">
                       Sắp xếp theo
                     </p>
-                    <button
+                    {/* <button
                       type="button"
                       className="transition duration-150 outline outline-2 outline-[#EA4B48]  font-medium
                    rounded-[6px] text-xs py-[6px] px-[13px] text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#FFAAAF] 
@@ -313,7 +326,7 @@ export default function FiltersPage() {
                    "
                     >
                       Liên Quan
-                    </button>
+                    </button> */}
                     <button
                       type="button"
                       className={
@@ -333,12 +346,20 @@ export default function FiltersPage() {
                     </button>
                     <button
                       type="button"
-                      className="transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                   rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
-                   max-2xl:py-[5px] max-2xl:text-base 
-                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm "
+                      className={
+                        activeBtnHotSelling
+                          ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
+                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
+                    max-2xl:py-[5px] max-2xl:text-base 
+                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
+                          : `transition duration-150 outline outline-2 outline-[#EA4B48] bg-[#FFAAAF] hover:bg-[#FFAAAF] font-medium
+                        rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] text-white
+                        max-2xl:py-[5px] max-2xl:text-base
+                        max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
+                      }
+                      onClick={btnHotSellingThrottle}
                     >
-                      Bán Chạy
+                      Bán chay
                     </button>
                   </div>
 

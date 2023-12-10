@@ -46,7 +46,7 @@ export default function VoucherHomePage() {
             </div>
           </div>
           <Link to={"/voucher"}>
-            <p className="group absolute bottom-[20%] right-0 text-[#F7755F] text-xs cursor-pointer hover:text-[#322322] duration-300 ">
+            <p className="group absolute bottom-[8%] right-0 text-[#F7755F] text-sm cursor-pointer hover:text-[#322322] duration-300 ">
               Xem tất cả
               <span className=" transform translate-x-full opacity-0 group-hover:opacity-100 group-hover:text-[#322322] px-1 group-hover:translate-x-0 transition-opacity duration-300">
                 &#8594;

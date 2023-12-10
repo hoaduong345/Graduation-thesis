@@ -845,7 +845,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     Xin lỗi, trang bạn đang tìm kiếm không thể được tìm thấy.
                   </p>
                   <a
-                    href="#"
+                    href="/"
                     className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded transition duration-150"
                     title="Return Home"
                   >

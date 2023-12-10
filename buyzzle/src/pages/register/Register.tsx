@@ -227,8 +227,8 @@ function Register() {
                             message: "Không để trống",
                           },
                           minLength: {
-                            value: 4,
-                            message: "Ít nhất 4 ký tự",
+                            value: 6,
+                            message: "Ít nhất 6 ký tự",
                           },
                           maxLength: {
                             value: 25,
@@ -275,8 +275,8 @@ function Register() {
                             message: "Không để trống",
                           },
                           minLength: {
-                            value: 4,
-                            message: "Ít nhất 4 ký tự",
+                            value: 6,
+                            message: "Ít nhất 6 ký tự",
                           },
                           maxLength: {
                             value: 25,
@@ -388,8 +388,8 @@ function Register() {
                             message: "Không để trống",
                           },
                           minLength: {
-                            value: 4,
-                            message: "Ít nhất 4 ký tự",
+                            value: 10,
+                            message: "Ít nhất 10 ký tự",
                           },
                           maxLength: {
                             value: 11,

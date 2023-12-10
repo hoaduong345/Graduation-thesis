@@ -68,9 +68,9 @@ export default function ShippingPage() {
         "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
         selectedButton.id
       );
-      setOrderAPI({ ...orderAPI, status: selectedButton.id });
+      setOrderAPI({ ...orderAPI, status: selectedButton.id, keyword: "" });
     } else {
-      setOrderAPI({ ...orderAPI, status: null });
+      setOrderAPI({ ...orderAPI, status: null, keyword: "" });
     }
   };
   const [btnFiterThrottle] = useThrottle(handleClick, 1000);

@@ -16,16 +16,16 @@ export default function HeaderTop(props: HeaderTop) {
         <div className="container mx-auto">
           <div className="Header-top-content flex justify-between">
             <div className="content-left flex py-2">
-              <Map />
-              <span className="text-[#4C4C4C] pl-2">Buôn Ma Thuột</span>
+              {/* <Map />
+              <span className="text-[#4C4C4C] pl-2">Buôn Ma Thuột ddddđ</span> */}
             </div>
 
             <div className="content-right flex items-center gap-2 ">
               <div className="content-left flex items-center">
-                <span className="text-[#4C4C4C] pl-2">Việt Nam</span>
+                {/* <span className="text-[#4C4C4C] pl-2">Việt Nam</span> */}
               </div>
               <div className="content-left flex py-2 gap-2 ">
-                <div className="border-[1px] border-black " />
+                {/* <div className="border-[1px] border-black " /> */}
                 {/* Noti */}
                 <div className="flex items-center relative">
                   <div className=" header-hover justify-start items-center flex gap-3">

@@ -53,6 +53,7 @@ const ProductController = {
                     image,
                 },
             });
+            console.log("🚀 ~ file: ProductController.js:56 ~ addCategory: ~ newCategory:", newCategory)
 
             res.status(200).json('Thêm danh mục thành công');
         } catch (error) {
