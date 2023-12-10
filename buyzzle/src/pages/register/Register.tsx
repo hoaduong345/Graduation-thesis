@@ -436,7 +436,10 @@ function Register() {
                 required
               />
               <label htmlFor="termsAgreement">
-                Tôi đã đọc và đồng ý với <a className="text-red-600" href="/dieukhoan">Điều Khoản</a>
+                Tôi đã đọc và đồng ý với{" "}
+                <a className="text-red-600" href="/clause">
+                  Điều Khoản
+                </a>
               </label>
             </div>
             <button

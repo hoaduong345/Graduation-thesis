@@ -13,21 +13,13 @@ import ConfirmAccount from "../../pages/confirmAccount/ConfirmAccount";
 import Forgotpassword from "../../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../../pages/forgotpassword/Resetpassword";
 import path from "../../contants/path";
-import Cart from "../../pages/home/User/cartPage/Cart";
-import OrderHistory from "../../pages/home/User/orderHistoryPage/OrderHistory";
-import CheckOut from "../../pages/home/User/checkoutPage/CheckOut";
-import OrderDetailPage from "../../pages/home/User/orderDetail/OrderDetailPage";
-import DetailsProduct from "../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
+
 import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
-import InvoicesPage from "../../pages/home/User/invoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import ShippingPage from "../../pages/home/Shipping/ShippingPage";
 import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
-import RegisterShipper from "../../pages/home/Shipping/registerShipper/RegisterShipper";
-import LoginShipper from "../../pages/home/Shipping/loginShipper/LoginShipper";
-import FavoritePage from "../../pages/home/User/favoriteProducts/FavoritePage";
-import FiltersPage from "../../pages/home/User/filterPage/FiltersPage";
+
 import Addproducts from "../../pages/home/admin/Addproduct/Addproducts";
 import AdminProfile from "../../pages/home/admin/AdminProfile/AdminProfile";
 import Editproducts from "../../pages/home/admin/EditProduct/Editproducts";
@@ -51,6 +43,16 @@ import LogoDetail from "../../pages/home/Admin/Management/Logo/LogoDetail";
 import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
 import LogoHome from "../../pages/home/Admin/Management/Logo/LogoHome";
 import DieuKhoan from "../../pages/clause/Clause";
+import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
+import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+import Cart from "../../pages/home/User/CartPage/Cart";
+import OrderHistory from "../../pages/home/User/OrderHistoryPage/OrderHistory";
+import CheckOut from "../../pages/home/User/CheckoutPage/CheckOut";
+import OrderDetailPage from "../../pages/home/User/OrderDetail/OrderDetailPage";
+import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
+import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
+import RegisterShipper from "../../pages/home/Shipping/RegisterShipper/RegisterShipper";
+import LoginShipper from "../../pages/home/Shipping/LoginShipper/LoginShipper";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -100,11 +102,10 @@ export default function useRouterEmelent() {
       path: "/clause",
       element: (
         <RegisterLoginLayout>
-          <DieuKhoan/>
+          <DieuKhoan />
         </RegisterLoginLayout>
       ),
     },
-
 
     {
       path: "/login",

@@ -32,7 +32,6 @@ import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
 
 // import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
 
-import RatingMap from "../ratingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { userController } from "../../../../../controllers/UserController";
 
@@ -45,6 +44,7 @@ import ArrowRightBruh from "../../../../../assets/TSX/ArrowRightBruh";
 import Breadcrumb from "../../../../../helper/Breadcrumb/BreadcrumbProps";
 import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
 import { logodetailController } from "../../../../../controllers/LogoDetailController";
+import RatingMap from "../RatingAndComments/RatingMap";
 export interface ImgOfProduct {
   url: string;
 }
@@ -977,7 +977,7 @@ export default function DetailsProduct() {
                                   key={index}
                                   checked={item.checked}
                                   rating={item.rating}
-                                  onChangeFilter={(rating) => {
+                                  onChangeFilter={(rating: any) => {
                                     console.log("Ratting:" + rating);
                                     HandleGetCommentWhereRating(rating);
                                   }}

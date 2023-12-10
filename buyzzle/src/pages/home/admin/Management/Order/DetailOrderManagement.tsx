@@ -13,12 +13,12 @@ import {
   UpdateQuantityModal,
 } from "../../../../../model/OrderModel";
 import Container from "../../../../../components/container/Container";
-import { getStatusOrder } from "../../../User/orderHistoryPage/OrderHistory";
 import Back from "../../assets/TSX/Back";
 import Paymethod from "../../assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../../assets/TSX/PhoneOrderAdmin";
 import PrintOrder from "../../assets/TSX/PrintOrder";
 import { dateOrder, timeOrder } from "./OrderManagement";
+import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 
 export default function DetailOrderManagement() {
   const { id } = useParams();
@@ -298,23 +298,22 @@ export default function DetailOrderManagement() {
                   </div>
 
                   <div className="flex justify-between mb-8">
-
                     <div className="flex gap-1">
                       {order.User && order.User.UserImage?.[0]?.url ? (
                         <img
-                          className="w-[40px] h-[40px] object-cover rounded-full border-4"
+                          className="w-[40px] h-[40px] object-cover rounded-full"
                           src={order.User.UserImage?.[0].url}
                           alt=""
                         />
                       ) : (
-                        <div className="w-[40px] h-[40px] object-cover rounded-full border-4 bg-red-500 pt-1 pb-2 ps-3 pe-3">
+                        <div className="w-[40px] h-[40px] object-cover rounded-full bg-red-500 pt-1 pb-2 ps-3 pe-3">
                           <p className="text-1xl text-stone-50">
-                            {/* {name.substring(0, 1).toUpperCase()} */}
-                            {order?.name?.length > 0 ? (order?.name).substring(0, 1).toUpperCase() : ""}{" "}
+                            {order?.name?.length > 0
+                              ? (order?.name).substring(0, 1).toUpperCase()
+                              : ""}{" "}
                           </p>
                         </div>
                       )}
-
 
                       <div>
                         <p className="text-sm">

@@ -4,24 +4,18 @@ import {
   Link,
   createSearchParams,
   useNavigate,
-  useParams,
   useSearchParams,
 } from "react-router-dom";
 import LogoWeb from "../../assets/TSX/LogoWeb";
 import Search from "../../assets/TSX/Search";
 import { productController } from "../../controllers/ProductsController";
 import { userController } from "../../controllers/UserController";
-import { Products } from "../../pages/home/User/filterPage/FiltersPage";
+import { Top8product } from "../../model/ProductModel";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import HeaderTopUser from "../HeaderTop/HeaderTopUser";
-import axios from "axios";
-import { useCookies } from "react-cookie";
-import { Controller, useForm } from "react-hook-form";
-import DialogLogin from "../../helper/Dialog/DialogLogin";
-import { LoginForm } from "../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
 import Container from "../container/Container";
-import { Top8product } from "../../model/ProductModel";
+import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -162,19 +156,10 @@ export default function Header() {
       console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
     });
   };
-  // const muti = () => {
-  //   CheckToken();
-  //   CheckRefreshToken();
-  //   console.log("AOTHATDAY");
-  // }
-
   const CheckLogin = async () => {
-    // const user = localStorage.getItem("user");
     if (Logined == false) {
-      // setLogined(false);
       openModal(idAddAdmin);
     } else {
-      // setLogined(true);
       CheckToken();
       CheckRefreshToken();
       console.log("AOTHATDAY");
@@ -187,60 +172,16 @@ export default function Header() {
   const CheckLogin1 = () => {
     CheckLogin();
   };
-  const {
-    control,
-    handleSubmit,
-    clearErrors,
-    reset,
-    register,
-    formState: { errors },
-  } = useForm<LoginForm>({
-    mode: "all",
-  });
-  const param = useParams();
+
   const idAddAdmin = "AddAdmin";
-  const Login = async (data: LoginForm) => {
-    console.log("LoginData:" + data);
-    userController.Login(data).then((res) => {
-      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
-      const username = res.username;
-      const accessToken = res.accessToken;
-      console.log(accessToken);
-      const UserData = { username };
-      const Token = { accessToken };
-      localStorage.setItem("idUser", JSON.stringify(res.id));
-      localStorage.setItem("user", JSON.stringify(UserData));
-      localStorage.setItem("accessToken", JSON.stringify(Token));
-      // const id = param.id;
-      setTimeout(() => {
-        window.location.href = `/Detailproducts/${param.id}`;
-      }, 2000);
-    });
-  };
+
   const openModal = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
       modal.showModal();
     }
   };
-  const closeModal2 = async (id: string) => {
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
-    }
-  };
-  const saveModal = (id: string, data: LoginForm) => {
-    Login(data);
-    reset({
-      email: "",
-      password: "",
-    });
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
-    }
-    console.log("Data:" + JSON.stringify(data));
-  };
+
   return (
     <>
       <header className="Header">
@@ -249,133 +190,6 @@ export default function Header() {
             <HeaderTopUser />
           </div>
         </Container>
-        {/* <div>
-          <DialogLogin
-            id={idAddAdmin}
-            onClose={() => closeModal2(idAddAdmin)}
-            onSave={handleSubmit((data: any) => {
-              saveModal(idAddAdmin, data);
-            })}
-            title="Đăng Nhập"
-            body={
-              <>
-                <div className="grid grid-cols-5 gap-8">
-                  <div className="col-span-3 ">
-                    <div className="flex gap-3  ">
-                      <div className="flex flex-col gap-5 max-lg:gap-2">
-                        <div className="h-[90px] w-[455px]">
-                          <Controller
-                            name="email"
-                            control={control}
-                            rules={{
-                              required: {
-                                value: true,
-                                message: "Không để trống",
-                              },
-                              minLength: {
-                                value: 4,
-                                message: "Ít nhất 4 ký tự",
-                              },
-                              // maxLength: {
-                              //   value: ,
-                              //   message:
-                              //     "Nhiều nhất 25 kí tự",
-                              // },
-                              validate: {
-                                // Kiểm tra email có đúng định dạng không
-                                validEmail: (value) =>
-                                  /^[A-Z0-9._%±]+@[A-Z0-9.-]+.[A-Z]{2,}$/i.test(
-                                    value
-                                  ) || "Email không hợp lệ",
-                              },
-                            }}
-                            render={({ field }) => (
-                              <>
-                                <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
-                                  Email
-                                </label>
-                                <input
-                                  className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
-                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
-                                            `}
-                                  placeholder="Nhập vào email của bạn"
-                                  value={field.value}
-                                  onChange={(e) => {
-                                    const reg = /[!#$%^&]/;
-                                    const value = e.target.value;
-                                    field.onChange(value.replace(reg, ""));
-                                  }}
-                                  name="email"
-                                />
-                                {errors.email && (
-                                  <p className="text-[11px] text-red-700 mt-0">
-                                    {errors.email.message}
-                                  </p>
-                                )}
-                              </>
-                            )}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-3  ">
-                      <div className="flex flex-col gap-5 max-lg:gap-2">
-                        <div className="h-[90px] w-[455px]">
-                          <Controller
-                            name="password"
-                            control={control}
-                            rules={{
-                              required: {
-                                value: true,
-                                message: "Không để trống",
-                              },
-                              minLength: {
-                                value: 4,
-                                message: "Ít nhất 4 ký tự",
-                              },
-                              maxLength: {
-                                value: 25,
-                                message: "Nhiều nhất 25 kí tự",
-                              },
-                            }}
-                            render={({ field }) => (
-                              <>
-                                <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
-                                  Mật khẩu
-                                </label>
-                                <input
-                                  className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
-                                             rounded-[6px] px-[10px] py-[12px] w-[100%] mt-0
-                                             max-xl:text-xs max-lg:text-[10px] border-[#EA4B48]
-                                            `}
-                                  type="password"
-                                  placeholder="Nhập vào mật khẩu"
-                                  value={field.value}
-                                  onChange={(e) => {
-                                    const reg = /[!@#$%^&]/;
-                                    const value = e.target.value;
-                                    field.onChange(value.replace(reg, ""));
-                                  }}
-                                  name="password"
-                                />
-                                {errors.password && (
-                                  <p className="text-[11px] text-red-700 mt-0">
-                                    {errors.password.message}
-                                  </p>
-                                )}
-                              </>
-                            )}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            }
-          />
-        </div> */}
         <div className="border-2 border-[#E6E6E6]" />
         <Container>
           <div className="Header-center bg-white h-[91px]">
@@ -504,13 +318,13 @@ export default function Header() {
                         {img ? (
                           <div className="relative">
                             <img
-                              className="w-10 h-10 rounded-full border-4 "
+                              className="w-10 h-10 rounded-full "
                               src={img}
                               alt=""
                             />
                           </div>
                         ) : (
-                          <div className=" rounded-full border-4 pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
+                          <div className=" rounded-full pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
                             <p className="text-1xl text-stone-50">
                               {name.substring(0, 1).toUpperCase()}
                             </p>
@@ -535,13 +349,14 @@ export default function Header() {
           <Container>
             <div className="container mx-auto">
               <ul className="flex gap-[3%] h-[40px] font-medium text-[#45474B] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
-                {/* <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link> */}
                 {topProduct.map((items) => {
                   return (
                     <>
                       <Link to={`/Detailproducts/${items.id}`}>
                         <li className="hover:text-[#1F1717] text-xs">
-                          {items.name}
+                          {items.name.length > 20
+                            ? `${items.name.substring(0, 20)}...`
+                            : items.name}
                         </li>
                       </Link>
                     </>

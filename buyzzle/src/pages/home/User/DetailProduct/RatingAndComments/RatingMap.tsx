@@ -208,8 +208,6 @@ export default function RatingMap(props: Props) {
                             </p>
                           </div>
                         )}
-
-                        <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                       </div>
                       {/* end hinh anh */}
                       {/* thong tin users */}
@@ -428,13 +426,12 @@ export default function RatingMap(props: Props) {
                                 <div className="flex items-center mt-1 ml-3 gap-3">
                                   {/* hinh anh */}
                                   <div className="relative ">
-                                  {
-                                      rating?.admin?.AdminImage?.length > 0 ? (
-                                    <img
-                                      className="w-10 h-10 rounded-full"
-                                      src={`${AdminAvt}`}
-                                      alt="Avtcmt"
-                                    />
+                                    {rating?.admin?.AdminImage?.length > 0 ? (
+                                      <img
+                                        className="w-10 h-10 rounded-full"
+                                        src={`${AdminAvt}`}
+                                        alt="Avtcmt"
+                                      />
                                     ) : (
                                       <div
                                         // src={notiItems.fk_order.User.image}
@@ -448,11 +445,9 @@ export default function RatingMap(props: Props) {
                                             .toUpperCase()}
                                         </p>
                                       </div>
-                                    )
-                                  }
+                                    )}
 
                                     {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
-                                    <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                                   </div>
                                   {/* end hinh anh */}
                                   {/* thong tin admin */}
@@ -468,7 +463,7 @@ export default function RatingMap(props: Props) {
                                       <Period /> {/* end period */}
                                       {/* date */}{" "}
                                       <p className="text-[#4C4C4C] text-[12px]">
-                                      {currentDate(rating.updateAt)}
+                                        {currentDate(rating.updateAt)}
                                       </p>
                                       {/* end date */}
                                     </div>
@@ -488,13 +483,12 @@ export default function RatingMap(props: Props) {
                                 <div className="flex items-center mt-1 ml-3 gap-3">
                                   {/* hinh anh */}
                                   <div className="relative ">
-                                  {
-                                      rating?.admin?.AdminImage?.length > 0 ? (
-                                    <img
-                                      className="w-10 h-10 rounded-full"
-                                      src={`${AdminAvt}`}
-                                      alt="Avtcmt"
-                                    />
+                                    {rating?.admin?.AdminImage?.length > 0 ? (
+                                      <img
+                                        className="w-10 h-10 rounded-full"
+                                        src={`${AdminAvt}`}
+                                        alt="Avtcmt"
+                                      />
                                     ) : (
                                       <div
                                         // src={notiItems.fk_order.User.image}
@@ -508,8 +502,7 @@ export default function RatingMap(props: Props) {
                                             .toUpperCase()}
                                         </p>
                                       </div>
-                                    )
-                                  }
+                                    )}
                                     {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
                                     <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                                   </div>
@@ -527,7 +520,7 @@ export default function RatingMap(props: Props) {
                                       <Period /> {/* end period */}
                                       {/* date */}{" "}
                                       <p className="text-[#4C4C4C] text-[12px]">
-                                      {currentDate(rating.updateAt)}
+                                        {currentDate(rating.updateAt)}
                                       </p>
                                       {/* end date */}
                                     </div>
@@ -558,13 +551,12 @@ export default function RatingMap(props: Props) {
                                   <div className="flex items-center mt-1 ml-3 gap-3">
                                     {/* hinh anh */}
                                     <div className="relative ">
-                                    {
-                                      rating?.admin?.AdminImage?.length > 0 ? (
-                                      <img
-                                        className="w-10 h-10 rounded-full"
-                                        src={`${AdminAvt}`}
-                                        alt="Avtcmt"
-                                      />
+                                      {rating?.admin?.AdminImage?.length > 0 ? (
+                                        <img
+                                          className="w-10 h-10 rounded-full"
+                                          src={`${AdminAvt}`}
+                                          alt="Avtcmt"
+                                        />
                                       ) : (
                                         <div
                                           // src={notiItems.fk_order.User.image}
@@ -573,13 +565,13 @@ export default function RatingMap(props: Props) {
                                           className={`w-12 h-12 border-4  rounded-full bg-red-500 pt-2.5 pb-2.5 ps-4 pe-4`}
                                         >
                                           <p className="text-1xl text-stone-50">
-                                            {(AdminName)
-                                              .substring(0, 1)
-                                              .toUpperCase()}
+                                            {AdminName.substring(
+                                              0,
+                                              1
+                                            ).toUpperCase()}
                                           </p>
                                         </div>
-                                      )
-                                    }
+                                      )}
                                       {/* <img src={`${rating?.admin?.AdminImage?.[0].url}`} className="w-10 h-10 rounded-ful"/>  */}
                                       <span className="top-0 right-0 absolute  w-2.5 h-2.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
                                     </div>
@@ -597,7 +589,7 @@ export default function RatingMap(props: Props) {
                                         <Period /> {/* end period */}
                                         {/* date */}{" "}
                                         <p className="text-[#4C4C4C] text-[12px]">
-                                        {currentDate(rating.updateAt)}
+                                          {currentDate(rating.updateAt)}
                                         </p>
                                         {/* end date */}
                                       </div>
