@@ -24,7 +24,7 @@ export type FormValues = {
   sex: string;
   phonenumber: string;
   dateofbirth: string;
-  image : string;
+  image: string;
 };
 export type FormImage = {
   idadmin: number;
@@ -68,9 +68,9 @@ export default function UserProfile() {
   });
   // console.log("URLTHEN:"+url);
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
+  const user = param.username;
   useEffect(() => {
     const fetchData = async () => {
-      const user = param.username;
       try {
         if (user != null) {
           const username = user;
@@ -152,8 +152,6 @@ export default function UserProfile() {
   const SetDataUser = (data: any) => {
     const user = JSON.stringify(secureLocalStorage.getItem("admin"));
     if (user != null) {
-      const Username = JSON.parse(user);
-
       console.log("UserData1:" + JSON.stringify(data));
       reset({
         username: "" + data?.username,
@@ -244,14 +242,13 @@ export default function UserProfile() {
           setCheckImageUrl(true);
         } else {
           console.log("IMAGELUCNAY:" + url);
-          if(url != ""){
+          if (url != "") {
             console.log("IDUSERCCCCCCCCCCCc:" + FormImage.idadmin);
             await EditImages(FormImage.idadmin, url);
-          }else{
+          } else {
             console.log("IDUSERCCCCCCCCCCCc:" + FormImage.idadmin);
             await EditImages(FormImage.idadmin, urlThen);
           }
-          
         }
       }
 
@@ -307,7 +304,7 @@ export default function UserProfile() {
   const onChangeImage = (file: any) => {
     // const file = e.target.files?.[0];
     if (file) {
-      console.log(`Selected file: `+file.name);
+      console.log(`Selected file: ` + file.name);
       setSelectedFile(file);
       setImage(file);
 
@@ -676,42 +673,35 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                       >
                         <div className=" flex flex-col items-center my-auto">
-                          <div className="avatar online">
-                            <div className="max-w-[174px] rounded-full border-[4px] border-[#2E89FF]">
-                              <div className="w-[100%] h-[100%]">
-                                {selectedFile ? (
-                                  <>
-                                    {/* <p>Selected file: {selectedFile.name}</p> */}
-                                    <img
-                                      src={url!}
-                                      alt="Selected"
-                                      width={"100%"}
-                                      className="object-cover"
-                                      height={"100%"}
-                                    />
-                                  </>
-                                ) : (
-                                  <div className="w-[174px]">
-                                    {CheckImageUrl ? (
-                                      <>
-                                        <img
-                                          src={urlThen!}
-                                          alt="Selected"
-                                          width={"100%"}
-                                          className="object-cover"
-                                          height={"100%"}
-                                        />
-                                      </>
-                                    ) : (
-                                      <p className=" flex flex-col items-center my-16">
-                                        No file selected
-                                      </p>
-                                    )}
+                          {selectedFile ? (
+                            <>
+                              <img
+                                className="w-40 h-40 rounded-full object-cover"
+                                src={url!}
+                                alt="Rounded avatar"
+                              />
+                            </>
+                          ) : (
+                            <>
+                              {CheckImageUrl ? (
+                                <>
+                                  <img
+                                    src={urlThen!}
+                                    alt="Rounded avatar"
+                                    className="w-40 h-40 rounded-full object-cover"
+                                  />
+                                </>
+                              ) : (
+                                <div>
+                                  <div className="w-36 h-36 rounded-full flex items-center justify-center bg-red-500">
+                                    <p className="text-2xl text-stone-50 text-[45px]">
+                                      {user?.substring(0, 1).toUpperCase()}
+                                    </p>
                                   </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
+                                </div>
+                              )}
+                            </>
+                          )}
                           {/* button */}
                           <label htmlFor="images">
                             <div
@@ -725,29 +715,25 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               }}
                             >
                               <Controller
-                              control={control}
-                              name="image"
-                              render={({ field }) => (
-                                <input
-                                  type="file"
-                                  onChange={(e)=>{
-                                    // const value = ;
-                                    onChangeImage(e.target.files?.[0]);
-                                    field.onChange(e.target.files?.[0].name);
-                                  
-                                  }
-                                  
-                                    
-                                  }
-                                  id="images"
-                                  multiple
-                                  className="hidden"
-                                />
-                              )}
-                            />
-                              <button className="text-center text-sm font-bold text-[#1A1A1A] ">
+                                control={control}
+                                name="image"
+                                render={({ field }) => (
+                                  <input
+                                    type="file"
+                                    onChange={(e) => {
+                                      // const value = ;
+                                      onChangeImage(e.target.files?.[0]);
+                                      field.onChange(e.target.files?.[0].name);
+                                    }}
+                                    id="images"
+                                    multiple
+                                    className="hidden"
+                                  />
+                                )}
+                              />
+                              <div className="text-center text-sm font-bold text-[#1A1A1A] ">
                                 Thay đổi ảnh
-                              </button>
+                              </div>
                             </div>
                           </label>
                         </div>

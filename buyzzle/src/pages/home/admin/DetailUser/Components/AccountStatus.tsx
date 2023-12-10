@@ -152,7 +152,7 @@ export default function UserProfile() {
               </div>
             ) : (
               <div>
-                <div className="w-[70px] h-[70px] rounded-full border-4  flex items-center justify-center bg-red-500">
+                <div className="w-[70px] h-[70px] rounded-full flex items-center justify-center bg-red-500">
                   <p className="text-2xl text-stone-50">
                     {name.substring(0, 1).toUpperCase()}
                   </p>
