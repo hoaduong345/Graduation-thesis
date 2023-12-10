@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import bgi from "../../assets/PNG/LogoSlogan.png";
@@ -13,6 +13,8 @@ import LogoFace from "../../assets/PNG/lgFace.png";
 import LogoGoogle from "../../assets/PNG/lgG.png";
 import "./Resetpassword.css";
 function Resetpassword() {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   // const [validUrl, setValidUrl] = useState(false);
@@ -49,27 +51,18 @@ function Resetpassword() {
     )}`;
     console.log("checker", API);
     try {
-      const response = await axios.post(API, data);
-      setValidUrl(true);
-      if (response.status === 200) {
-        console.log("Reset password successfully");
-        toast.success(
-          "Reset password successfully-check your email to verify account",
-          {
-            position: "top-right",
-            autoClose: 5000,
-          }
-        );
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 5000);
-      } else {
-        console.log("Reset password Failed!");
-        toast.warning("Reset password failed", {
+      await axios.post(API, data).then((_) => {
+        setValidUrl(true);
+        toast.success("Đặt lại mật khẩu thành công!", {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 1000,
         });
-      }
+        setTimeout(() => {
+          navigate({
+            pathname: "/login",
+          });
+        }, 500);
+      });
     } catch (error) {
       console.error(error);
       setValidUrl(false);
