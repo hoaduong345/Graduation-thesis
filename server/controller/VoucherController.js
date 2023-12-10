@@ -44,6 +44,9 @@ const VoucherController = {
             }
             const whereClause = {
                 deletedAt: null,
+                endDay: {
+                    gte: new Date(),
+                },
                 code: {
                     contains: keyword,
                 },
@@ -125,7 +128,7 @@ const VoucherController = {
                     skip: startIndex,
                     take: limit,
                 });
-                
+
             }
 
             const results = {
