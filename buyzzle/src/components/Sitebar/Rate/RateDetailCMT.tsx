@@ -1,4 +1,4 @@
-import { RatingStarDetail } from "../../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+import { RatingStarDetail } from "../../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
 
 export default function RateDetailCMT(props: RatingStarDetail) {
   return (

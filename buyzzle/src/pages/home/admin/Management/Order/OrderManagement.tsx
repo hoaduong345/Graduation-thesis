@@ -12,7 +12,7 @@ import { numberFormat } from "../../../../../helper/Format";
 import { OrderPanigation } from "../../../../../model/OrderModel";
 import Container from "../../../../../components/container/Container";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
-import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../../../User/orderHistoryPage/OrderHistory";
 import Calendar from "../../assets/TSX/calendar";
 import Excel from "../../assets/TSX/excel";
 import SitebarAdmin from "../../Sitebar/Sitebar";

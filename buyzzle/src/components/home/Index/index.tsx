@@ -10,7 +10,7 @@ import { MergedProducts } from "../../../model/ProductsSuggest";
 import {
   ImgOfProduct,
   Products,
-} from "../../../pages/home/User/FilterPage/FiltersPage";
+} from "../../../pages/home/User/filterPage/FiltersPage";
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import VoucherHomePage from "../components/Voucher/Voucher";

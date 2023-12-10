@@ -13,7 +13,7 @@ import {
   UpdateQuantityModal,
 } from "../../../../../model/OrderModel";
 import Container from "../../../../../components/container/Container";
-import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../../../User/orderHistoryPage/OrderHistory";
 import Back from "../../assets/TSX/Back";
 import Paymethod from "../../assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../../assets/TSX/PhoneOrderAdmin";

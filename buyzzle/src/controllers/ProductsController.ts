@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FormValues } from "../pages/home/admin/EditProduct/EditProductMap";
-import { Products } from "../pages/home/User/FilterPage/FiltersPage";
+import { Products } from "../pages/home/User/filterPage/FiltersPage";
 import { MergedProducts, ProductSuggest } from "../model/ProductsSuggest";
 
 export const appConfig = {

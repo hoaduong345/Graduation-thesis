@@ -8,7 +8,7 @@ import { voucherControllers } from "../../../../controllers/VoucherControllers";
 import { formatDate } from "../../../../helper/Format";
 import { toastWarn } from "../../../../helper/Toast/Warning";
 import { VoucherModel } from "../../../../model/VoucherModel";
-import { LoginForm } from "../../../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+import { LoginForm } from "../../../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { userController } from "../../../../controllers/UserController";

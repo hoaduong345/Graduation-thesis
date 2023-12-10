@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Products } from "../../FilterPage/FiltersPage";
+import { Products } from "../../filterPage/FiltersPage";
 import ArrowUp from "../../../../../assets/TSX/ArrowUp";
 import ArrowDown from "../../../../../assets/TSX/ArrowDown";
 import { numberFormat } from "../../../../../helper/Format";
@@ -20,7 +20,7 @@ import { useParams } from "react-router-dom";
 import { appConfig } from "../../../../../configsEnv";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
 import { toast } from "react-toastify";
-import Cart from "../../CartPage/Cart";
+import Cart from "../../cartPage/Cart";
 
 export default function Detail() {
   const [first, setfirst] = useState<Products | undefined>(undefined);

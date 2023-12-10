@@ -17,7 +17,7 @@ import {
   dateOrder,
   timeOrder,
 } from "../admin/Management/Order/OrderManagement";
-import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../User/orderHistoryPage/OrderHistory";
 import useThrottle from "@rooks/use-throttle";
 import secureLocalStorage from "react-secure-storage";
 

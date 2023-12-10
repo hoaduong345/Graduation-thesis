@@ -1,14 +1,7 @@
-import React, { useState } from "react";
 import { Images } from "../../assets/TS/index";
 // import "./Register.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import bg from "../../assets/PNG/NewProject.png";
 
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../utils/rules";
 export interface FormValues {
     name: string;
     username: string;

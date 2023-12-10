@@ -11,7 +11,7 @@ import LogoWeb from "../../assets/TSX/LogoWeb";
 import Search from "../../assets/TSX/Search";
 import { productController } from "../../controllers/ProductsController";
 import { userController } from "../../controllers/UserController";
-import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
+import { Products } from "../../pages/home/User/filterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import HeaderTopUser from "../HeaderTop/HeaderTopUser";
@@ -19,7 +19,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import DialogLogin from "../../helper/Dialog/DialogLogin";
-import { LoginForm } from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+import { LoginForm } from "../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
 import Container from "../container/Container";
 import { Top8product } from "../../model/ProductModel";
 

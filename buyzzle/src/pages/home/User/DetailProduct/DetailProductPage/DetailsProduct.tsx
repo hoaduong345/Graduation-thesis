@@ -32,7 +32,7 @@ import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
 
 // import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
 
-import RatingMap from "../RatingAndComments/RatingMap";
+import RatingMap from "../ratingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { userController } from "../../../../../controllers/UserController";
 

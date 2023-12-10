@@ -1,6 +1,6 @@
-import Profile from "../UserProfile/Components/Profile"
-import Changepassword from "../UserProfile/Components/ChangePassword"
-import PaymentAddress from "../UserProfile/Components/PaymentAddress"
+import Profile from "./components/Profile"
+import Changepassword from "./components/ChangePassword"
+import PaymentAddress from "./components/PaymentAddress"
 import Container from "../../../../components/container/Container"
 
 export default function UserProfile() {

@@ -3,7 +3,6 @@ import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Images } from "../../../../../assets/TS";
-import CircleAvrCMT from "../../../../../assets/TSX/CircleAvrCMT";
 import LineCMT from "../../../../../assets/TSX/LineCMT";
 import Period from "../../../../../assets/TSX/Period";
 import SendCmt from "../../../../../assets/TSX/SendCmt";
@@ -15,13 +14,11 @@ import { Ratee, Rating } from "../../../../../model/ProductModel";
 import Edit from "../../../admin/assets/TSX/Edit";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 // import eyeslide from "../../../Admin/assets/TSX/EyeSlide";
-import Handle from "../../../admin/assets/TSX/bacham";
-import AvtDefautl from "../../../../../hooks/Notification/assets/AvtDefautl";
 import secureLocalStorage from "react-secure-storage";
 import { adminController } from "../../../../../controllers/AdminControllder";
-import User from "../../../admin/Management/User/User";
-import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
+import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
+import Handle from "../../../admin/assets/TSX/bacham";
 
 interface FormValues {
   id: number;

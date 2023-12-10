@@ -16,7 +16,7 @@ import {
   dateOrder,
   timeOrder,
 } from "../admin/Management/Order/OrderManagement";
-import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../User/orderHistoryPage/OrderHistory";
 
 export default function ShippingDetail() {
   const { id } = useParams();

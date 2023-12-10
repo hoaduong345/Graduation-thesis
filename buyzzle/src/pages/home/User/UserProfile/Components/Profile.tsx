@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect, useCallback } from "react";
 import Container from "../../../../../components/container/Container";
-import Sitebar from "../Sitebar/Sitebar";
+import Sitebar from "../sitebar/Sitebar";
 import { Controller, useForm } from "react-hook-form";
 
 import axios from "axios";
