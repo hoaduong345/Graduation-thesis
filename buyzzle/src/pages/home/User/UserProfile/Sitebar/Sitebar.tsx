@@ -9,7 +9,8 @@ import axios from "axios";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Voucher from "../../../../../assets/TSX/Voucher";
-import { googleLogout } from '@react-oauth/google';
+import { googleLogout } from "@react-oauth/google";
+import Cart from "../../../admin/assets/TSX/Cart";
 
 interface SitebarUser {
   icon: ReactNode;
@@ -18,11 +19,6 @@ interface SitebarUser {
 }
 
 const listSitebar: SitebarUser[] = [
-  {
-    icon: <ProductManager />,
-    pathName: "",
-    title: "Quản lý sản phẩm",
-  },
   {
     icon: <User />,
     pathName: "/userprofilepage/username",
@@ -38,21 +34,11 @@ const listSitebar: SitebarUser[] = [
     pathName: "/uservoucherstorage",
     title: "Voucher",
   },
-  // {
-  //   icon: <Cart />,
-  //   pathName: "/cart",
-  //   title: "Giỏ hàng",
-  // },
-  // {
-  //   icon: <Heart />,
-  //   pathName: "/favorite",
-  //   title: "Sản phẩm yêu thích",
-  // },
-  // {
-  //   icon: <Setting />,
-  //   pathName: "",
-  //   title: "Cài đặt",
-  // },
+  {
+    icon: <Cart />,
+    pathName: "/cart",
+    title: "Giỏ hàng",
+  },
 ];
 const instance = axios.create({
   withCredentials: true,
