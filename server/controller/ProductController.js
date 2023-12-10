@@ -41,7 +41,11 @@ const ProductController = {
             const { name } = req.body;
             const { image } = req.body;
 
-            const categoryCount = await prisma.category.count();
+            const categoryCount = await prisma.category.count({
+                where: {
+                    deletedAt: null
+                }
+            });
             if (categoryCount >= 6) {
                 return res.status(400).json('du 6 danh muc');
             }
