@@ -190,7 +190,7 @@ function LoginShipper() {
             <div className="mb-4 text-right">
               <a
                 href="/forgotpassword"
-                className="text-black-500 hover:no-underline"
+                className="text-[#7088f2] hover:text-[#4255AA] "
               >
                 Quên mật khẩu?
               </a>

@@ -97,7 +97,7 @@ export default function useRouterEmelent() {
     },
 
     {
-      path: "/dieukhoan",
+      path: "/clause",
       element: (
         <RegisterLoginLayout>
           <DieuKhoan/>

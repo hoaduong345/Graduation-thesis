@@ -453,13 +453,12 @@ function Register() {
               // Custom theme for the toast container
               theme="dark"
             /> */}
-            <div className="flex items-center my-4">
+            {/* <div className="flex items-center my-4">
               <div className="grow h-px bg-slate-300"></div>
-              <div className="mx-2 text-white-500">Hoặc</div>
               <div className="grow h-px bg-slate-300"></div>
-            </div>
+            </div> */}
             <div className="flex justify-center space-x-3">
-              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
+              {/* <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
                 <img src={Images.logoGoogle} alt="Google" className="w-6 h-6" />
               </button>
               <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
@@ -467,7 +466,7 @@ function Register() {
               </button>
               <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
                 <img src={Images.logoFace} alt="Facebook" className="w-6 h-6" />
-              </button>
+              </button> */}
             </div>
             <div className="mt-6 text-center">
               <span className="text-gray-600">
@@ -475,9 +474,9 @@ function Register() {
               </span>
               <Link
                 to={`/login`}
-                className="text-black font-semibold items-start"
+                className="text-[#7088f2] hover:text-[#4255AA] font-semibold items-start"
               >
-                Back to login{" "}
+                Quay lại trang đăng nhập{" "}
               </Link>
             </div>
           </form>

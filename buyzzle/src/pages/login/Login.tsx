@@ -270,7 +270,7 @@ function Login() {
             <div className="mb-4 text-right">
               <a
                 href="/forgotpassword"
-                className="text-black-500 hover:no-underline"
+                className="text-[#7088f2] hover:text-[#4255AA] "
               >
                 Quên mật khẩu?
               </a>
@@ -314,7 +314,7 @@ function Login() {
             </span>
             <a
               href="/register"
-              className="text-black-500 hover:underline font-bold"
+              className="text-[#7088f2] hover:text-[#4255AA]  font-bold"
             >
               Đăng ký
             </a>

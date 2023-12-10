@@ -105,7 +105,7 @@ export default function DialogLogin(props: Props) {
                     {/* <input id="remember" type="checkbox" className="mr-1 checked:bg-purple-700" /> <label className="mr-auto text-xs font-semibold">Remember for 30 days</label> */}
                     <a
                       href="/forgotpassword"
-                      className="text-xs font-semibold text-[#EA4B48]"
+                      className="text-[#7088f2] hover:text-[#4255AA] text-xs"
                     >
                       Quên mật khẩu?
                     </a>
