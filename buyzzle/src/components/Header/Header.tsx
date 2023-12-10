@@ -349,13 +349,14 @@ export default function Header() {
           <Container>
             <div className="container mx-auto">
               <ul className="flex gap-[3%] h-[40px] font-medium text-[#45474B] leading-15 items-center leading-[100%] max-[426px]:text-[9px]">
-                {/* <Link to="/admin/Addproductspage">Thêm sản phẩm Admin</Link> */}
                 {topProduct.map((items) => {
                   return (
                     <>
                       <Link to={`/Detailproducts/${items.id}`}>
                         <li className="hover:text-[#1F1717] text-xs">
-                          {items.name}
+                          {items.name.length > 20
+                            ? `${items.name.substring(0, 20)}...`
+                            : items.name}
                         </li>
                       </Link>
                     </>
