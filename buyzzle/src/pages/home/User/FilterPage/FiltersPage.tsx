@@ -73,16 +73,10 @@ export default function FiltersPage() {
   ]);
   const debouncedInputValue = useDebounce(sliderValues, 700); // Debounce for 300 milliseconds
   const [searchParams, setSearchParams] = useSearchParams();
+
   const searchValue = searchParams.get("keyword");
-  console.log(
-    "🚀 ~ file: FiltersPage.tsx:88 ~ FiltersPage ~ searchValue:",
-    searchValue
-  );
+
   const nameCateValue = searchParams.get("nameCate");
-  console.log(
-    "🚀 ~ file: FiltersPage.tsx:90 ~ FiltersPage ~ nameCateValue:",
-    nameCateValue
-  );
 
   const urlSliderValues = searchParams.get("sliderValues");
 
@@ -202,21 +196,22 @@ export default function FiltersPage() {
         setProducts(res.rows);
       });
   };
-  const getProductSearch = () => {
+  const getProductSearch = (props: string) => {
     productController
-      .getSearchAndPaginationProduct(searchValue?.toString())
+      .getSearchAndPaginationProduct(props?.toString())
       .then((res: any) => {
-        setProducts(res.rows);
+        setProducts(res);
       })
       .catch((err) => {
         console.log(err);
       });
   };
   useEffect(() => {
+    const searchValue = searchParams.get("keyword");
     if (searchValue?.toString()) {
-      getProductSearch();
+      getProductSearch(searchValue);
     }
-  }, [searchValue?.toString()]);
+  }, [searchValue?.toString(), searchParams]);
 
   // Slider Price SiteBarFilterPages
   useEffect(() => {
