@@ -385,9 +385,6 @@ const VoucherController = {
                         used: {
                             increment: 1,
                         },
-                        quantity: {
-                            decrement: 1,
-                        },
                     },
                 }),
             ]);
