@@ -461,32 +461,40 @@ const ShippingController = {
                 },
             });
             if (!user) return res.status(404).send('AccessToken is expried');
-            const status = {
-                gte: 4,
-            };
-            const whereClause = {
-                userId: userId,
-                status: status,
-                deleteAt: null,
-            };
-            const notifi = await prisma.notification.findMany({
-                where: whereClause,
-                orderBy: {
-                    id: 'desc',
-                },
-                include: {
-                    fk_user: {
-                        select: {
-                            name: true,
-                            UserImage: {
-                                select: {
-                                    url: true,
+
+            let notifi;
+            let status
+            if (!userId) {
+                res.status(404).send('you are not Authenticate');
+            } else {
+                status = {
+                    gte: 4,
+                };
+                const whereClause = {
+                    userId: userId,
+                    status: status,
+                    deleteAt: null,
+                };
+                notifi = await prisma.notification.findMany({
+                    where: whereClause,
+                    orderBy: {
+                        id: 'desc',
+                    },
+                    include: {
+                        fk_user: {
+                            select: {
+                                name: true,
+                                UserImage: {
+                                    select: {
+                                        url: true,
+                                    },
                                 },
                             },
                         },
                     },
-                },
-            });
+                });
+            }
+
             const whereClauseSeen = {
                 userId: userId,
                 status: status,
@@ -539,15 +547,6 @@ const ShippingController = {
     isMarkAsReadUser: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            // const mark = req.body.id;
-            // await prisma.notification.update({
-            //     where: {
-            //         id: mark,
-            //     },
-            //     data: {
-            //         seen: true,
-            //     },
-            // });
             await prisma.notification.updateMany({
                 where: {
                     userId: idUser,

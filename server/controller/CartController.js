@@ -24,12 +24,20 @@ const CartController = {
             const existingCartItem = cart.item.find((item) => item.productid === productId);
 
             if (existingCartItem) {
-                if ((existingCartItem.quantity + quantity) > product.quantity) {
-                    return res.status(500).json(`Bạn đã có ${existingCartItem.quantity} sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`);
+                if (existingCartItem.quantity + quantity > product.quantity) {
+                    return res
+                        .status(500)
+                        .json(
+                            `Bạn đã có ${existingCartItem.quantity} sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`
+                        );
                 }
             } else {
                 if (quantity > product.quantity) {
-                    return res.status(500).json(`Bạn đã có ${existingCartItem.quantity} sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`);
+                    return res
+                        .status(500)
+                        .json(
+                            `Bạn đã có ${existingCartItem.quantity} sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`
+                        );
                 }
             }
 
@@ -74,11 +82,11 @@ const CartController = {
                     include: {
                         product: {
                             include: {
-                                ProductImage: true
-                            }
-                        }
-                    }
-                }
+                                ProductImage: true,
+                            },
+                        },
+                    },
+                },
             },
         });
     },
@@ -127,11 +135,11 @@ const CartController = {
                     include: {
                         product: {
                             include: {
-                                ProductImage: true
-                            }
-                        }
-                    }
-                }
+                                ProductImage: true,
+                            },
+                        },
+                    },
+                },
             },
         });
     },
@@ -300,8 +308,8 @@ const CartController = {
                             },
                         },
                         orderBy: {
-                            id: "desc"
-                        }
+                            id: 'desc',
+                        },
                     },
                 },
             });
@@ -353,8 +361,8 @@ const CartController = {
                             },
                         },
                         orderBy: {
-                            id: "desc"
-                        }
+                            id: 'desc',
+                        },
                     },
                 },
             });
@@ -373,35 +381,40 @@ const CartController = {
     getCart: async (req, res) => {
         try {
             const id = parseInt(req.cookies.id);
-            let cart = await prisma.cart.findFirst({
-                where: {
-                    userId: id,
-                },
-                include: {
-                    item: {
-                        include: {
-                            product: {
-                                include: {
-                                    ProductImage: true,
+
+            if (!id) {
+                res.status(404).send('You are not Authenticate');
+            } else {
+                let cart = await prisma.cart.findFirst({
+                    where: {
+                        userId: id,
+                    },
+                    include: {
+                        item: {
+                            include: {
+                                product: {
+                                    include: {
+                                        ProductImage: true,
+                                    },
                                 },
                             },
+                            orderBy: {
+                                id: 'desc',
+                            },
                         },
-                        orderBy: {
-                            id: 'desc'
-                        }
                     },
-                },
-            });
-            if (!cart) {
-                return res.status(400).json({
-                    type: 'Invalid',
-                    msg: 'Cart not Found',
+                });
+                if (!cart) {
+                    return res.status(400).json({
+                        type: 'Invalid',
+                        msg: 'Cart not Found',
+                    });
+                }
+                res.status(200).json({
+                    status: true,
+                    data: cart,
                 });
             }
-            res.status(200).json({
-                status: true,
-                data: cart,
-            });
         } catch (err) {
             console.log(err);
             res.status(400).json({
