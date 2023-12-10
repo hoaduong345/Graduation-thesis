@@ -13,11 +13,11 @@ interface BreadcrumbProps {
             <li key={index} className="flex items-center"> 
               {index > 0 && <ArrowRightBruh />} 
               {item.link ? (
-                <a href={item.link} className="text-blue-500 text-lg">
+                <a href={item.link} className="text-blue-500 text-sm">
                   {item.text}
                 </a>
               ) : (
-                <span className="text-gray-500 text-lg">{item.text}</span>
+                <span className="text-gray-500 text-sm">{item.text}</span>
               )}
             </li>
           ))}
