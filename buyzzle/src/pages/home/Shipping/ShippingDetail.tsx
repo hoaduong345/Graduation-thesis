@@ -16,7 +16,7 @@ import {
   dateOrder,
   timeOrder,
 } from "../admin/Management/Order/OrderManagement";
-import { getStatusOrder } from "../User/orderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 
 export default function ShippingDetail() {
   const { id } = useParams();
@@ -235,14 +235,15 @@ export default function ShippingDetail() {
                           alt=""
                         />
                       ) : (
-                        <div  className="w-[40px] h-[40px] object-cover rounded-full border-4 bg-red-500 pt-1 pb-2 ps-3 pe-3">
+                        <div className="w-[40px] h-[40px] object-cover rounded-full border-4 bg-red-500 pt-1 pb-2 ps-3 pe-3">
                           <p className="text-1xl text-stone-50">
-                              {/* {name.substring(0, 1).toUpperCase()} */}
-                              {order?.name?.length > 0 ? (order?.name).substring(0, 1).toUpperCase() : ""}{" "}
-                            </p>
+                            {/* {name.substring(0, 1).toUpperCase()} */}
+                            {order?.name?.length > 0
+                              ? (order?.name).substring(0, 1).toUpperCase()
+                              : ""}{" "}
+                          </p>
                         </div>
                       )}
-
 
                       <div>
                         <p className="text-sm">

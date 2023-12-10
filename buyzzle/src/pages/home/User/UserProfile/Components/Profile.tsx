@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect, useCallback } from "react";
 import Container from "../../../../../components/container/Container";
-import Sitebar from "../sitebar/Sitebar";
+import Sitebar from "../Sitebar/Sitebar";
 import { Controller, useForm } from "react-hook-form";
 
 import axios from "axios";
@@ -114,7 +114,6 @@ export default function UserProfile() {
               Bruh2 = "";
               setCheckPhone(true);
             }
-
 
             let phonenumberDef = Bruh2;
 
@@ -265,7 +264,6 @@ export default function UserProfile() {
             console.log("Ao that day:" + FormImage.id);
             await EditImages(FormImage.id, urlThen);
           }
-
         }
       }
 
@@ -388,10 +386,11 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                          rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                        ${!!errors.username
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                        ${
+                                          !!errors.username
+                                            ? "border-[2px] border-red-900"
+                                            : "border-[1px] border-[#FFAAAF]"
+                                        }`}
                                     disabled={true}
                                     placeholder="Tên đăng nhập"
                                     value={field.value}
@@ -439,10 +438,11 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
 rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.name
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                                   ${
+                                                     !!errors.name
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                     placeholder="Tên người dùng"
                                     onChange={(e) => {
                                       const value = e.target.value;
@@ -450,7 +450,7 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                       field.onChange(value.replace(reg, ""));
                                     }}
                                     value={field.value}
-                                  // {...register("name")}
+                                    // {...register("name")}
                                   />
                                   {!!errors.name && (
                                     <p className="text-red-700 mt-2">
@@ -486,10 +486,11 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                                   ${!!errors.email
-                                      ? "border-[2px] border-red-900"
-                                      : "border-[1px] border-[#FFAAAF]"
-                                    }`}
+                                                   ${
+                                                     !!errors.email
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                   placeholder="Email"
                                   onChange={(e) => {
                                     const value = e.target.value;
@@ -498,8 +499,8 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                   }}
                                   value={field.value}
                                   disabled={true}
-                                // {...register("email")}
-                                // onChange={onChangeInput}
+                                  // {...register("email")}
+                                  // onChange={onChangeInput}
                                 />
                                 {!!errors.email && (
                                   <p className="text-red-700 mt-2">
@@ -566,106 +567,105 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               </div>
                             </div>
                           </div>
-                          {
-                            checkPhone == true ? (
-                              <div className="w-[48%]">
-                                <Controller
-                                  control={control}
-                                  name="phonenumber"
-                                  rules={{
-                                    required: {
-                                      value: true,
-                                      message:
-                                        "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                                    },
-                                  }}
-                                  render={({ field }) => (
-                                    <>
-                                      <label
-                                        htmlFor="name"
-                                        className="text-[#4C4C4C] text-sm font-medium"
-                                      >
-                                        Số điện thoại
-                                      </label>
-                                      {/* input addNameProducts */}
-                                      <input
-                                        className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                          {checkPhone == true ? (
+                            <div className="w-[48%]">
+                              <Controller
+                                control={control}
+                                name="phonenumber"
+                                rules={{
+                                  required: {
+                                    value: true,
+                                    message:
+                                      "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                                  },
+                                }}
+                                render={({ field }) => (
+                                  <>
+                                    <label
+                                      htmlFor="name"
+                                      className="text-[#4C4C4C] text-sm font-medium"
+                                    >
+                                      Số điện thoại
+                                    </label>
+                                    {/* input addNameProducts */}
+                                    <input
+                                      className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.phonenumber
-                                            ? "border-[2px] border-red-900"
-                                            : "border-[1px] border-[#FFAAAF]"
-                                          }`}
-                                        placeholder="Số điện thoại"
-                                        onChange={(e) => {
-                                          const value = e.target.value;
-                                          const reg = /[!@#$%^&]/;
-                                          field.onChange(value.replace(reg, ""));
-                                        }}
-                                        // disabled={true}
-                                        value={field.value}
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
+                                      placeholder="Số điện thoại"
+                                      onChange={(e) => {
+                                        const value = e.target.value;
+                                        const reg = /[!@#$%^&]/;
+                                        field.onChange(value.replace(reg, ""));
+                                      }}
+                                      // disabled={true}
+                                      value={field.value}
                                       // {...register("phonenumber")}
                                       // onChange={onChangeInput}
-                                      />
-                                      {!!errors.phonenumber && (
-                                        <p className="text-red-700 mt-2">
-                                          {errors.phonenumber.message}
-                                        </p>
-                                      )}
-                                    </>
-                                  )}
-                                />
-                              </div>
-                            ) : (
-                              <div className="w-[48%]">
-                                <Controller
-                                  control={control}
-                                  name="phonenumber"
-                                  rules={{
-                                    required: {
-                                      value: true,
-                                      message:
-                                        "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                                    },
-                                  }}
-                                  render={({ field }) => (
-                                    <>
-                                      <label
-                                        htmlFor="name"
-                                        className="text-[#4C4C4C] text-sm font-medium"
-                                      >
-                                        Số điện thoại
-                                      </label>
-                                      {/* input addNameProducts */}
-                                      <input
-                                        className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                    />
+                                    {!!errors.phonenumber && (
+                                      <p className="text-red-700 mt-2">
+                                        {errors.phonenumber.message}
+                                      </p>
+                                    )}
+                                  </>
+                                )}
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-[48%]">
+                              <Controller
+                                control={control}
+                                name="phonenumber"
+                                rules={{
+                                  required: {
+                                    value: true,
+                                    message:
+                                      "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                                  },
+                                }}
+                                render={({ field }) => (
+                                  <>
+                                    <label
+                                      htmlFor="name"
+                                      className="text-[#4C4C4C] text-sm font-medium"
+                                    >
+                                      Số điện thoại
+                                    </label>
+                                    {/* input addNameProducts */}
+                                    <input
+                                      className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.phonenumber
-                                            ? "border-[2px] border-red-900"
-                                            : "border-[1px] border-[#FFAAAF]"
-                                          }`}
-                                        placeholder="Số điện thoại"
-                                        onChange={(e) => {
-                                          const value = e.target.value;
-                                          const reg = /[!@#$%^&]/;
-                                          field.onChange(value.replace(reg, ""));
-                                        }}
-                                        disabled={true}
-                                        value={field.value}
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
+                                      placeholder="Số điện thoại"
+                                      onChange={(e) => {
+                                        const value = e.target.value;
+                                        const reg = /[!@#$%^&]/;
+                                        field.onChange(value.replace(reg, ""));
+                                      }}
+                                      disabled={true}
+                                      value={field.value}
                                       // {...register("phonenumber")}
                                       // onChange={onChangeInput}
-                                      />
-                                      {!!errors.phonenumber && (
-                                        <p className="text-red-700 mt-2">
-                                          {errors.phonenumber.message}
-                                        </p>
-                                      )}
-                                    </>
-                                  )}
-                                />
-                              </div>
-                            )
-                          }
-
+                                    />
+                                    {!!errors.phonenumber && (
+                                      <p className="text-red-700 mt-2">
+                                        {errors.phonenumber.message}
+                                      </p>
+                                    )}
+                                  </>
+                                )}
+                              />
+                            </div>
+                          )}
                         </div>
                         <div className="w-[100%] mt-4">
                           <Controller
@@ -697,10 +697,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                   rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                 ${!!errors.dateOfBirth
-                                      ? "border-[2px] border-red-900"
-                                      : "border-[1px] border-[#FFAAAF]"
-                                    }`}
+                                 ${
+                                   !!errors.dateOfBirth
+                                     ? "border-[2px] border-red-900"
+                                     : "border-[1px] border-[#FFAAAF]"
+                                 }`}
                                   type="date"
                                   value={field.value}
                                   onChange={(e) => {
@@ -725,17 +726,19 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               onSubmit(formData, FormImage);
                             }
                           )}
-                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
-                            ? "bg-[#aeaeae] cursor-not-allowed"
-                            : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                            }
+                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
+                            isDisabled
+                              ? "bg-[#aeaeae] cursor-not-allowed"
+                              : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                          }
                      `}
                         >
                           <button
                             disabled={isDisabled}
                             className={`text-center text-base font-bold text-[#FFFFFF]
-                    ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                              }                `}
+                    ${
+                      isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                    }                `}
                           >
                             Lưu
                           </button>
@@ -807,11 +810,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       // const value = ;
                                       onChangeImage(e.target.files?.[0]);
                                       field.onChange(e.target.files?.[0].name);
-
-                                    }
-
-
-                                    }
+                                    }}
                                     id="images"
                                     multiple
                                     className="hidden"
@@ -822,7 +821,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 Thay đổi ảnh
                               </button>
                             </div>
-
                           </label>
                         </div>
                       </div>
@@ -1085,10 +1083,9 @@ rotate(-89.32491)"
                 </div>
               </div>
             </Container>
-          )
-          }
-        </div >
+          )}
+        </div>
       )}
-    </Fragment >
+    </Fragment>
   );
 }
