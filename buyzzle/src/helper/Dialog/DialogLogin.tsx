@@ -1,8 +1,12 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { Images } from "../../assets/TS";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import MyCustomButton from "./MyCustomButton";
+import { LoginFormGoogle } from "../../pages/login/Login";
+import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 // import { useGoogleLogin } from '@react-oauth/google';
 type Props = {
   title: ReactNode;
@@ -13,51 +17,82 @@ type Props = {
 };
 
 export default function DialogLogin(props: Props) {
+  const param = useParams();
   const { title, id, body, onClose, onSave } = props;
-  const GoogleLoginButton = () => {
-    const login = useGoogleLogin({
-      onSuccess: (tokenResponse) => console.log(tokenResponse),
-    });
+  const CustomGoogleLogin = () => {
+    const callAPI = async (data: LoginFormGoogle) => {
+      localStorage.setItem("user", JSON.stringify(data));
+      const API = 'http://localhost:5000/buyzzle/oauth/'
+      const API2 = 'http://localhost:5000/buyzzle/oauth/savecookies'
+      const response = axios.post(API, data)
+      console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
+      setTimeout(() => {
+        callAPI2(data);
+      }, 1500);
+      const callAPI2 = async (data: LoginFormGoogle) => {
+
+        const response1 = axios.post(API2, data, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          withCredentials: true,
+        })
+        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
+      }
+      const pathname = window.location.pathname;
+      setTimeout(() => {
+        window.location.href = `${pathname}`;
+      }, 3000);
+      console.log("PARAM:"+JSON.stringify(param));
+      if ((await response).status === 200) {
+        console.log("Login successfully");
+        toast.success("Đăng nhập thành công", {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      }
+    }
+    const handleSuccess = (credentialResponse: any) => {
+      if (credentialResponse && credentialResponse.credential) {
+        const decoded = jwtDecode<LoginFormGoogle>(credentialResponse.credential);
+
+        const data = {
+          email: decoded.email,
+          name: decoded.name,
+          username: (decoded.email).split('.')[0].trim(),
+        }
+        console.log("🚀 ~ file: Login.tsx:138 ~ handleSuccess ~ data:", data)
+        callAPI(data);
+
+      } else {
+        console.log('Credential or access_token is undefined');
+      }
+    };
+
+    const handleError = () => {
+      console.log('Login Failed');
+      // Your custom error handling logic here
+    };
 
     return (
-      <MyCustomButton onClick={() => login()}>
-        Sign in with Google 🚀
-      </MyCustomButton>
+      <div>
+        <GoogleLogin
+          onSuccess={handleSuccess}
+          onError={handleError}
+          width="400"
+          size="large"
+        // type="icon"
+        />
+      </div>
     );
   };
   return (
     <>
       <dialog id={id} className="modal ">
-        {/* <div className="bg-white relative flex flex-col w-[640px] p-[60px] max-xl:w-[650px] max-lg:w-[450px] max-lg:p-[30px] rounded-2xl">
-                    <div className="flex flex-col max-lg:gap-4">
-                        <div className="flex items-center justify-center">
-                            <h3 className="font-bold text-3xl max-xl:text-[18px] uppercase text-[#FFAAAF]">
-                                {title}
-                            </h3>
-                        </div>
-                        <div className="mt-5">{body}</div>
-
-                        <div className="flex justify-center gap-2 mt-9">
-                            <button
-                                onClick={() => onClose()}
-                                className="py-2 px-14 border-[1px] border-[#EA4B48] text-sm text-[#1A1A1A] rounded"
-                            >
-                                Hủy
-                            </button>
-                            <button
-                                onClick={() => onSave()}
-                                className="py-2 px-11 border-[1px] text-sm text-[#FCFCFD] rounded bg-[#EA4B48]"
-                            >
-                                Đăng nhập
-                            </button>
-                        </div>
-                    </div>
-                </div> */}
-
         <div className="flex flex-wrap content-center justify-center bg-gray-200 py-10 bg-white relative flex flex-col w-[1000px] p-[10px]  relative">
           <div className="flex shadow-md">
             <div className="flex flex-wrap content-center justify-center rounded-l-md bg-white">
-              <div className="w-[500px] p-[20px]">
+              <div className="w-[455px] p-[20px]">
                 <h1 className="text-3xl font-semibold">Đăng nhập</h1>
                 <small className="text-gray-400">
                   Xin chào! Vui lòng nhập vào thông tin của bạn
@@ -66,16 +101,6 @@ export default function DialogLogin(props: Props) {
 
                 <div className="mt-4 ">
                   {body}
-                  {/* <div className="mb-3">
-                                        <label className="mb-2 block text-xs font-semibold">Email</label>
-                                        <input type="email" placeholder="Enter your email" className="block w-full rounded-md border border-gray-300 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" />
-                                    </div>
-
-                                    <div className="mb-3">
-                                        <label className="mb-2 block text-xs font-semibold">Password</label>
-                                        <input type="password" placeholder="*****" className="block w-full rounded-md border border-gray-300 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" />
-                                    </div> */}
-
                   <div className="mb-3 flex flex-wrap content-center">
                     {/* <input id="remember" type="checkbox" className="mr-1 checked:bg-purple-700" /> <label className="mr-auto text-xs font-semibold">Remember for 30 days</label> */}
                     <a
@@ -87,25 +112,42 @@ export default function DialogLogin(props: Props) {
                   </div>
 
                   <div className="mb-3">
-                    <button
-                      className="mb-1.5 block w-full text-center text-white bg-[#EA4B48] hover:bg-[#ab0a07] px-2 py-1.5 rounded-md"
-                      onClick={() => onSave()}
-                    >
-                      Đăng Nhập
-                    </button>
 
-                    <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
-                      <div>
-                        <GoogleLoginButton />
+
+                    <div className="grid grid-cols-5 gap-8">
+                      <div className="col-span-3 ">
+                        <div className="flex gap-3  ">
+                          <div className="flex flex-col gap-5 max-lg:gap-2">
+                            <button
+                              className="mb-1.5 block w-[400px] text-center text-white bg-[#EA4B48] hover:bg-[#ab0a07] px-2 py-1.5 rounded-md"
+                              onClick={() => onSave()}
+                            >
+                              Đăng Nhập
+                            </button>
+                          </div>
+
+                        </div>
+                        <div className="flex gap-3  ">
+                          <div className="flex flex-col gap-5 max-lg:gap-2 mb-2">
+                            <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
+                              <div><CustomGoogleLogin /></div>
+                            </GoogleOAuthProvider>
+                          </div>
+                        </div>
+                        <div className="flex gap-3  ">
+                          <div className="flex flex-col gap-5 max-lg:gap-2">
+                            <button
+                              className="flex flex-wrap justify-center w-[400px] border border-gray-300 hover:border-gray-500 px-2 py-1.5 rounded-md"
+                              onClick={() => onClose()}
+                            >
+                              Hủy
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </GoogleOAuthProvider>
+                    </div>
 
-                    <button
-                      className="flex flex-wrap justify-center w-full border border-gray-300 hover:border-gray-500 px-2 py-1.5 rounded-md"
-                      onClick={() => onClose()}
-                    >
-                      Hủy
-                    </button>
+
                   </div>
                 </div>
 

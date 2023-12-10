@@ -50,6 +50,7 @@ import LogoHome1 from "../../pages/home/Admin/Management/Logo/LogoHome1";
 import LogoDetail from "../../pages/home/Admin/Management/Logo/LogoDetail";
 import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
 import LogoHome from "../../pages/home/Admin/Management/Logo/LogoHome";
+import DieuKhoan from "../../pages/dieukhoan/dieukhoan";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -94,6 +95,17 @@ export default function useRouterEmelent() {
         </RegisterLoginLayout>
       ),
     },
+
+    {
+      path: "/dieukhoan",
+      element: (
+        <RegisterLoginLayout>
+          <DieuKhoan/>
+        </RegisterLoginLayout>
+      ),
+    },
+
+
     {
       path: "/login",
       element: (
