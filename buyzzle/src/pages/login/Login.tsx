@@ -125,9 +125,17 @@ function Login() {
       const API2 = 'http://localhost:5000/buyzzle/oauth/savecookies'
       const response = axios.post(API, data)
       console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
-      setTimeout(() => {
-        callAPI2(data);
-      }, 1500);
+      if ((await response).status == 400) {
+        toast.warning("Email đã tồn tại vui lòng đăng nhập bằng tài khoản đã đăng kí", {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      } else {
+        setTimeout(() => {
+          callAPI2(data);
+        }, 1000);
+      }
+
       const callAPI2 = async (data: LoginFormGoogle) => {
 
         const response1 = axios.post(API2, data, {
@@ -137,10 +145,11 @@ function Login() {
           withCredentials: true,
         })
         console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 2000);
       }
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 3000);
+
     }
     const handleSuccess = (credentialResponse: any) => {
       if (credentialResponse && credentialResponse.credential) {
