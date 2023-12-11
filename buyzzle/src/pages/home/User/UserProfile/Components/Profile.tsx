@@ -79,7 +79,7 @@ export default function UserProfile() {
   // setIsDisable(!(isValid && isDirty));
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
   //DCM hoa`
-  const user = param.username;
+  // let user = "";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,6 +126,7 @@ export default function UserProfile() {
 
             res.email = emailDef;
             res.phonenumber = phonenumberDef;
+            setName(res.name);
             setId(res.id);
             setSex(res.sex);
             setLoading(false);
@@ -159,7 +160,13 @@ export default function UserProfile() {
     function CheckLink() {
       const user = localStorage.getItem("user");
       if (user != null) {
-        setValidUrl(true);
+        const userData = JSON.parse(user);
+        const username = userData.username;
+        if (username == param.username) {
+          setValidUrl(true);
+        } else {
+          window.location.href = `/userprofilepage/${username}`;
+        }
       } else {
         setValidUrl(false);
       }
@@ -835,7 +842,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 <div>
                                   <div className="w-36 h-36 rounded-full flex items-center justify-center bg-red-500">
                                     <p className="text-2xl text-stone-50 text-[45px]">
-                                      {user?.substring(0, 1).toUpperCase()}
+                                      {name?.substring(0, 1).toUpperCase()}
                                     </p>
                                   </div>
                                 </div>
