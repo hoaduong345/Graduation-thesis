@@ -1,7 +1,7 @@
 import axios from "axios";
+import { ProductSuggest } from "../model/ProductsSuggest";
+import { Products } from "../pages/home/User/FilterPage/FiltersPage";
 import { FormValues } from "../pages/home/admin/EditProduct/EditProductMap";
-import { Products } from "../pages/home/User/filterPage/FiltersPage";
-import { MergedProducts, ProductSuggest } from "../model/ProductsSuggest";
 
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_URL || "",
@@ -80,6 +80,7 @@ class ProductController {
     const queryParams = new URLSearchParams({
       sortByPrice: key || "",
       sortByDateCreate: key || "",
+      sortBySoldCount: key || "",
       categoryName: categoryName || "",
       keyword: keyword || "",
     });
@@ -213,10 +214,6 @@ class ProductController {
         return res.data as ProductSuggest;
       });
   };
-
-
-
-  
 }
 
 export const productController = new ProductController();

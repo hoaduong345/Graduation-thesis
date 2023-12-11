@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import Map from "../../assets/TSX/Map";
 import Bell from "../../assets/TSX/Bell";
 
 interface HeaderTop {

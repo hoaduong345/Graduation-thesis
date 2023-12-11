@@ -455,19 +455,11 @@ const ShippingController = {
     getNotificationForUser: async (req, res) => {
         try {
             const userId = parseInt(req.cookies.id);
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: userId,
-                },
-            });
-            if (!user) return res.status(404).send('AccessToken is expried');
 
-            let notifi;
-            let status
-            if (!userId) {
-                res.status(404).send('you are not Authenticate');
-            } else {
-                status = {
+            if(!userId){
+                console.log("You are not authenticate")
+            }
+                const status = {
                     gte: 4,
                 };
                 const whereClause = {
@@ -493,7 +485,6 @@ const ShippingController = {
                         },
                     },
                 });
-            }
 
             const whereClauseSeen = {
                 userId: userId,

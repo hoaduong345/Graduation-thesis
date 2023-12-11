@@ -399,7 +399,7 @@ export default function DetailsProduct() {
       <Container>
         <body className="body-detail container mx-auto">
           <Breadcrumb items={breadcrumbItems} />
-          <div className="grid gap-4 grid-cols-10 mt-24 h-full">
+          <div className="grid gap-4 grid-cols-10 mt-10 h-full">
             <div className="col-span-4 z-10">
               {/* {first?.productDetail && (
                 <div>

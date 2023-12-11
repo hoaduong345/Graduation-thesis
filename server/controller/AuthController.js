@@ -110,7 +110,7 @@ const AuthController = {
             if (AuthController.isRefreshTokenExpired(user.refresh_token) == false) {
                 res.clearCookie('id');
                 res.clearCookie('accesstoken');
-                res.status(300).json("AccessToken is expried, login again");
+                res.status(300).json('AccessToken is expried, login again');
             } else {
                 res.send('Refresh token still expried');
             }
@@ -148,7 +148,7 @@ const AuthController = {
             });
 
             const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/${user.id}/verify/${token.token}`;
-            await SendEmail(user.email, "Verify email", url);
+            await SendEmail(user.email, 'Verify email', url);
             console.log('🚀 ~ file: AuthController.js    :83 ~ register: ~ url:', url);
 
             console.log('Email URL: ' + url);
@@ -423,7 +423,7 @@ const AuthController = {
 
             const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
             console.log('Generated URL:', url);
-            // await SendEmail(user.email, "Forgot Password", url);
+            await SendEmail(user.email, 'Forgot Password', url);
 
             res.status(200).send('A Link has sent to your email');
         } catch (error) {
@@ -445,10 +445,7 @@ const AuthController = {
             const newAccesstoken = AuthController.genereateAccessToken(email);
             const newRefrestoken = AuthController.genereateRefreshToken(email);
             res.status(200).json({ accesstoken: newAccesstoken });
-           
-        }); 
-      
-       
+        });
     },
 
     // VERIFY ACCOUNT WHEN REGISTER WITH EMAIL
@@ -494,7 +491,7 @@ const AuthController = {
     changePassword: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            console.log("🚀 ~ file: AuthController.js:497 ~ changePassword: ~ idUser:", idUser)
+            console.log('🚀 ~ file: AuthController.js:497 ~ changePassword: ~ idUser:', idUser);
             const refresh_token = req.cookies.refreshtoken;
             const token = decode(refresh_token);
             const user = await prisma.user.findUnique({
@@ -522,14 +519,6 @@ const AuthController = {
                     password: hashed,
                 },
             });
-            const refreshTokenPayload = {
-                email: user.email,
-            };
-            console.log(refreshTokenPayload);
-
-            const newRefreshToken = jwt.sign(refreshTokenPayload, process.env.JWT_REFRESH_TOKEN, {
-                expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token
-            });
 
             await prisma.user.update({
                 where: {
@@ -537,7 +526,7 @@ const AuthController = {
                 },
                 data: {
                     password: hashed,
-                    refresh_token: newRefreshToken,
+              
                 },
             });
             res.status(200).send('Change Password Successfully');

@@ -55,7 +55,6 @@ const OAuth2Controller = {
             });
             let refreshToken = OAuth2Controller.genereateRefreshToken(email);
             if (!user) {
-                console.log('aaaaaaaaaaaaaaa', refreshToken);
                 const newUser = await prisma.user.create({
                     data: {
                         email: email,
@@ -67,6 +66,10 @@ const OAuth2Controller = {
                 });
                 res.status(200).send(newUser);
             } else {
+                if(user.password != null){
+                    console.log("LOI:"+user.password);
+                    return res.status(400).send("Email is invalid")
+                }
                 const checkRefreshTokenExpired = OAuth2Controller.isRefreshTokenExpired(user.refresh_token);
                 if (checkRefreshTokenExpired == false) {
                     await prisma.user.update({
@@ -88,7 +91,6 @@ const OAuth2Controller = {
     saveToCookies: async (req, res) => {
         try {
             const { name, email, username } = req.body;
-            console.log('🚀 ~ file: OAuth2Controller.js:93 ~ saveToCookies:async ~ email:', email);
             const user = await prisma.user.findFirst({
                 where: {
                     email: email,
