@@ -61,7 +61,7 @@ function Login() {
 
       if (response.status === 200) {
         console.log("Login successfully");
-        toast.success("Login successfully", {
+        toast.success("Đăng nhập thành công", {
           position: "top-right",
           autoClose: 5000,
         });
@@ -120,31 +120,55 @@ function Login() {
   });
   const CustomGoogleLogin = () => {
     const callAPI = async (data: LoginFormGoogle) => {
-      localStorage.setItem("user", JSON.stringify(data));
       const API = 'http://localhost:5000/buyzzle/oauth/'
       const API2 = 'http://localhost:5000/buyzzle/oauth/savecookies'
-      const response = axios.post(API, data)
-      console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
-      if ((await response).status == 400) {
-        toast.warning("Email đã tồn tại vui lòng đăng nhập bằng tài khoản đã đăng kí", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      } 
-      if((await response).status == 200) {
-        setTimeout(() => {
-          callAPI2(data);
-        }, 1000);
+      try {
+       
+
+        const response = await axios.post(API, data)
+        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response.status)
+
+        if (response.status == 200) {
+          setTimeout(() => {
+            callAPI2(data);
+          }, 1000);
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          if (error.response.status == 400) {
+            toast.warning("Email đã tồn tại vui lòng đăng nhập bằng tài khoản đã đăng kí", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+          else {
+            toast.warning("Lỗi đăng nhập", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+        }
+
       }
+
 
       const callAPI2 = async (data: LoginFormGoogle) => {
 
-        const response1 = axios.post(API2, data, {
+        const response1 = await axios.post(API2, data, {
           headers: {
             "Access-Control-Allow-Origin": "*",
           },
           withCredentials: true,
         })
+        // if (response1.status == 200) {
+        toast.loading("Đang tải vui lòng đợi", {
+          position: "top-right",
+          autoClose: 5000,
+        })
+        // }
+        const loginByGG = true;
+        localStorage.setItem("user", (JSON.stringify(data)));
+        localStorage.setItem("LoginByGG",(JSON.stringify(loginByGG)))
         console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
         setTimeout(() => {
           window.location.href = "/";

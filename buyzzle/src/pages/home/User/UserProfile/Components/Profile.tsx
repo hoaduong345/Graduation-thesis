@@ -50,7 +50,7 @@ export default function UserProfile() {
   const [sex, setSex] = useState<boolean>();
   const [emailThen, setEmailThen] = useState<string>("");
   const [sdtThen, setSdtThen] = useState<string>("");
-
+  const [LoginByGG, setLoginByGG] = useState<boolean>();
   const [checkPhone, setCheckPhone] = useState<boolean>(true);
 
   // const [isDisabled1,setIsDisable1] = useState<boolean>(false);
@@ -155,6 +155,9 @@ export default function UserProfile() {
     }
     CheckLink();
   }, [param]);
+
+
+
 
   const SetDataUser = (data: any) => {
     const user = localStorage.getItem("user");
@@ -380,11 +383,10 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                          rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                        ${
-                                          !!errors.username
-                                            ? "border-[2px] border-red-900"
-                                            : "border-[1px] border-[#FFAAAF]"
-                                        }`}
+                                        ${!!errors.username
+                                        ? "border-[2px] border-red-900"
+                                        : "border-[1px] border-[#FFAAAF]"
+                                      }`}
                                     disabled={true}
                                     placeholder="Tên đăng nhập"
                                     value={field.value}
@@ -432,11 +434,10 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
 rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${
-                                                     !!errors.name
-                                                       ? "border-[2px] border-red-900"
-                                                       : "border-[1px] border-[#FFAAAF]"
-                                                   }`}
+                                                   ${!!errors.name
+                                        ? "border-[2px] border-red-900"
+                                        : "border-[1px] border-[#FFAAAF]"
+                                      }`}
                                     placeholder="Tên người dùng"
                                     onChange={(e) => {
                                       const value = e.target.value;
@@ -444,7 +445,7 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                       field.onChange(value.replace(reg, ""));
                                     }}
                                     value={field.value}
-                                    // {...register("name")}
+                                  // {...register("name")}
                                   />
                                   {!!errors.name && (
                                     <p className="text-red-700 mt-2">
@@ -480,11 +481,10 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                                   ${
-                                                     !!errors.email
-                                                       ? "border-[2px] border-red-900"
-                                                       : "border-[1px] border-[#FFAAAF]"
-                                                   }`}
+                                                   ${!!errors.email
+                                      ? "border-[2px] border-red-900"
+                                      : "border-[1px] border-[#FFAAAF]"
+                                    }`}
                                   placeholder="Email"
                                   onChange={(e) => {
                                     const value = e.target.value;
@@ -493,8 +493,8 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                   }}
                                   value={field.value}
                                   disabled={true}
-                                  // {...register("email")}
-                                  // onChange={onChangeInput}
+                                // {...register("email")}
+                                // onChange={onChangeInput}
                                 />
                                 {!!errors.email && (
                                   <p className="text-red-700 mt-2">
@@ -585,11 +585,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${
-                                                     !!errors.phonenumber
-                                                       ? "border-[2px] border-red-900"
-                                                       : "border-[1px] border-[#FFAAAF]"
-                                                   }`}
+                                                   ${!!errors.phonenumber
+                                          ? "border-[2px] border-red-900"
+                                          : "border-[1px] border-[#FFAAAF]"
+                                        }`}
                                       placeholder="Số điện thoại"
                                       onChange={(e) => {
                                         const value = e.target.value;
@@ -598,8 +597,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       }}
                                       // disabled={true}
                                       value={field.value}
-                                      // {...register("phonenumber")}
-                                      // onChange={onChangeInput}
+                                    // {...register("phonenumber")}
+                                    // onChange={onChangeInput}
                                     />
                                     {!!errors.phonenumber && (
                                       <p className="text-red-700 mt-2">
@@ -634,11 +633,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${
-                                                     !!errors.phonenumber
-                                                       ? "border-[2px] border-red-900"
-                                                       : "border-[1px] border-[#FFAAAF]"
-                                                   }`}
+                                                   ${!!errors.phonenumber
+                                          ? "border-[2px] border-red-900"
+                                          : "border-[1px] border-[#FFAAAF]"
+                                        }`}
                                       placeholder="Số điện thoại"
                                       onChange={(e) => {
                                         const value = e.target.value;
@@ -647,8 +645,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       }}
                                       disabled={true}
                                       value={field.value}
-                                      // {...register("phonenumber")}
-                                      // onChange={onChangeInput}
+                                    // {...register("phonenumber")}
+                                    // onChange={onChangeInput}
                                     />
                                     {!!errors.phonenumber && (
                                       <p className="text-red-700 mt-2">
@@ -691,11 +689,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                   rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                 ${
-                                   !!errors.dateOfBirth
-                                     ? "border-[2px] border-red-900"
-                                     : "border-[1px] border-[#FFAAAF]"
-                                 }`}
+                                 ${!!errors.dateOfBirth
+                                      ? "border-[2px] border-red-900"
+                                      : "border-[1px] border-[#FFAAAF]"
+                                    }`}
                                   type="date"
                                   value={field.value}
                                   onChange={(e) => {
@@ -720,19 +717,17 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               onSubmit(formData, FormImage);
                             }
                           )}
-                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
-                            isDisabled
+                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
                               ? "bg-[#aeaeae] cursor-not-allowed"
                               : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                          }
+                            }
                      `}
                         >
                           <button
                             disabled={isDisabled}
                             className={`text-center text-base font-bold text-[#FFFFFF]
-                    ${
-                      isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                    }                `}
+                    ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                              }                `}
                           >
                             Lưu
                           </button>

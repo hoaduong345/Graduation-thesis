@@ -52,6 +52,7 @@ export default function Sitebar() {
       const reponse = await instance.post(API);
       console.log(reponse);
       localStorage.removeItem("user");
+      localStorage.removeItem("LoginByGG");
       localStorage.removeItem("nameUser");
       googleLogout();
       window.location.href = "/";
