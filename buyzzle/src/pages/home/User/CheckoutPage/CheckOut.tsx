@@ -942,7 +942,7 @@ export default function CheckOut() {
                       invoice={invoice}
                       address={user.specificaddress}
                       name={user.name}
-                      phoneNumber={Number(user.phonenumber)}
+                      phoneNumber={user.phonenumber}
                     />
                   </a>
 
