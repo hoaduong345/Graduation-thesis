@@ -453,6 +453,8 @@ const ProductController = {
             const discount = 60;
             const productid = parseInt(req.params.id);
             const availabilityType = req.query.availabilityType; // Thêm tham số availabilityType
+            const sortBySoldCount = req.query.sortBySoldCount;
+
 
             const FlashsaleProducts = await prisma.product.findMany({
                 where: {
@@ -500,6 +502,8 @@ const ProductController = {
                     lte: parseInt(req.query.maxPrice),
                 };
             }
+
+
             if (req.query.minQuantity && req.query.maxQuantity) {
                 whereClause.quantity = {
                     gte: parseInt(req.query.minQuantity),
@@ -534,7 +538,7 @@ const ProductController = {
                 },
             });
             const result = await prisma.product.findMany({
-                orderBy: [{ sellingPrice: sortByPrice }, { createdAt: sortByDateCreate }, { soldcount: 'desc' }],
+                orderBy: [{ sellingPrice: sortByPrice }, { createdAt: sortByDateCreate }, { soldcount: sortBySoldCount }],
                 include: {
                     ProductImage: true,
                     fK_category: true,
@@ -597,8 +601,25 @@ const ProductController = {
                 res.status(200).json({
                     rows: outOfStockProducts,
                 });
+            } else if (availabilityType === 'soldCount') {
+                const soldCountProducts = await prisma.product.findMany({
+                  orderBy: [{ soldcount: 'desc' }],
+                  include: {
+                    ProductImage: true,
+                    fK_category: true,
+                    Rating: true,
+                  },
+                  where: whereClause,
+                  skip,
+                  take: pageSize,
+                });
+              
+                res.status(200).json({
+                  rows: soldCountProducts,
+                }); 
+
+                
             } else {
-                // Trả về tất cả sản phẩm nếu availabilityType không được xác định
                 const resultProduct = {
                     FlashsaleProducts: FlashsaleProducts,
                     currentPage: page,
