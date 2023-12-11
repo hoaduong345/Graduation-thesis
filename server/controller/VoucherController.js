@@ -79,30 +79,54 @@ const VoucherController = {
             const startIndex = (pageCurr - 1) * limit;
             const totalProduct = (await prisma.voucher.findMany()).length;
 
-            const voucher = await prisma.voucher.findMany({
-                where: {
-                    quantity: {
-                        gte: 1,
-                    },
-                    endDay: {
-                        gte: new Date(),
-                    },
-                    deletedAt: null,
-
+            const whereClause = {
+                deletedAt: null,
+                quantity: {
+                    gte: 1,
                 },
-                skip: startIndex,
-                take: limit,
-                include: {
-                    savedBy: {
-                        where: {
-                            userId: userIdFromCookies,
+                endDay: {
+                    gte: new Date(),
+                },
+            };
+            let voucher;
+            let user = null;
+            if (userIdFromCookies) {
+                user = await prisma.user.findFirst({
+                    where: {
+                        id: userIdFromCookies,
+                    },
+                });
+                voucher = await prisma.voucher.findMany({
+                    where: {
+                        quantity: {
+                            gte: 1,
                         },
-                        select: {
-                            used: true
-                        }
-                    }
-                }
-            });
+                        endDay: {
+                            gte: new Date(),
+                        },
+                        deletedAt: null,
+                    },
+                    skip: startIndex,
+                    take: limit,
+                    include: {
+                        savedBy: {
+                            where: {
+                                userId: userIdFromCookies,
+                            },
+                            select: {
+                                used: true,
+                            },
+                        },
+                    },
+                });
+            } else {
+                voucher = await prisma.voucher.findMany({
+                    where: whereClause,
+                    skip: startIndex,
+                    take: limit,
+                });
+                
+            }
 
             const results = {
                 page: pageCurr,
@@ -361,11 +385,8 @@ const VoucherController = {
                         used: {
                             increment: 1,
                         },
-                        quantity: {
-                            decrement: 1,
-                        }
-                    }
-                })
+                    },
+                }),
             ]);
 
             res.status(200).json({ message: 'Sử dụng voucher thành công.' });

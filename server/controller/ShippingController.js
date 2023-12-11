@@ -461,32 +461,40 @@ const ShippingController = {
                 },
             });
             if (!user) return res.status(404).send('AccessToken is expried');
-            const status = {
-                gte: 4,
-            };
-            const whereClause = {
-                userId: userId,
-                status: status,
-                deleteAt: null,
-            };
-            const notifi = await prisma.notification.findMany({
-                where: whereClause,
-                orderBy: {
-                    id: 'desc',
-                },
-                include: {
-                    fk_user: {
-                        select: {
-                            name: true,
-                            UserImage: {
-                                select: {
-                                    url: true,
+
+            let notifi;
+            let status
+            if (!userId) {
+                res.status(404).send('you are not Authenticate');
+            } else {
+                status = {
+                    gte: 4,
+                };
+                const whereClause = {
+                    userId: userId,
+                    status: status,
+                    deleteAt: null,
+                };
+                notifi = await prisma.notification.findMany({
+                    where: whereClause,
+                    orderBy: {
+                        id: 'desc',
+                    },
+                    include: {
+                        fk_user: {
+                            select: {
+                                name: true,
+                                UserImage: {
+                                    select: {
+                                        url: true,
+                                    },
                                 },
                             },
                         },
                     },
-                },
-            });
+                });
+            }
+
             const whereClauseSeen = {
                 userId: userId,
                 status: status,
@@ -539,18 +547,18 @@ const ShippingController = {
     isMarkAsReadUser: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-    
-            const notifi =  await prisma.notification.updateMany({
+            await prisma.notification.updateMany({
                 where: {
                     userId: idUser,
-                    seen: false
+                    seen: false,
                 },
                 data: {
                     seen: true,
                 },
             });
-    
-            res.status(200).send(notifi);
+            res.status(200).json({
+                count: 0,
+            });
         } catch (error) {
             errorResponse(res, error);
         }
@@ -563,13 +571,15 @@ const ShippingController = {
                 },
                 deleteAt: null,
             };
-             await prisma.notification.updateMany({
+            await prisma.notification.updateMany({
                 where: whereClause,
                 data: {
                     seen: true,
                 },
             });
-            res.send('Mark as read for admin successfully');
+            res.status(200).json({
+                count: 0,
+            });
         } catch (error) {
             errorResponse(res, error);
         }
@@ -582,13 +592,32 @@ const ShippingController = {
                 },
                 deleteAt: null,
             };
-             await prisma.notification.updateMany({
+            await prisma.notification.updateMany({
                 where: whereClause,
                 data: {
                     seen: true,
                 },
             });
-            res.send('Mark as read for admin successfully');
+            res.status(200).json({
+                count: 0,
+            });
+        } catch (error) {
+            errorResponse(res, error);
+        }
+    },
+    // Đánh dấu đã đọc
+    isMarkAsRead: async (req, res) => {
+        try {
+            const mark = req.body.id;
+            await prisma.notification.update({
+                where: {
+                    id: mark,
+                },
+                data: {
+                    seen: true,
+                },
+            });
+            res.send('Mark as read successfully');
         } catch (error) {
             errorResponse(res, error);
         }

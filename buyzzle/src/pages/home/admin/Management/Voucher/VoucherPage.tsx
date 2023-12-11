@@ -133,7 +133,7 @@ export default function VoucherPage() {
             <SitebarAdmin />
           </div>
 
-          <div className="content-right-filter mt-[34px] col-span-4 flex flex-col gap-[50px] max-2xl:col-span-5">
+          <div className="content-right-filter col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
             <div>
               <h2
                 className="txt-filter font-bold text-[#1A1A1A] text-3xl
@@ -142,7 +142,7 @@ export default function VoucherPage() {
                 QUẢN LÝ DANH SÁCH MÃ GIẢM GIÁ
               </h2>
             </div>
-            <div className="flex flex-col gap-[35px]">
+            <div className="flex flex-col gap-4">
               <div className="flex justify-between">
                 <button
                   onClick={() => {
@@ -501,7 +501,7 @@ export default function VoucherPage() {
                             </p>
                           </div>
                           <div className="col-span-1 flex justify-center mr-5">
-                            <div className="dropdown dropdown-left">
+                            <div className="dropdown dropdown-right">
                               <label tabIndex={0}>
                                 <Handle />
                               </label>

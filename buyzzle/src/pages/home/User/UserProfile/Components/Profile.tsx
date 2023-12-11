@@ -13,6 +13,7 @@ import { storage } from "../../../../../firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { replace } from "lodash";
 import { stringify } from "querystring";
+import moment from "moment";
 
 export type FormValues = {
   username: string;
@@ -21,10 +22,11 @@ export type FormValues = {
   sex: string;
   phonenumber: string;
   dateOfBirth: string;
+  image: string;
 };
 export type FormImage = {
-  id: number;
-  UserImage: string[];
+  id?: number;
+  UserImage?: string[];
 };
 type UserData1 = {
   username: string;
@@ -49,11 +51,8 @@ export default function UserProfile() {
   const [emailThen, setEmailThen] = useState<string>("");
   const [sdtThen, setSdtThen] = useState<string>("");
 
-  const [username, setUsername] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phonenumber, setPhonenumber] = useState<string>("");
-  const [dateOfBirth, setDateOfBirth] = useState<string>("");
+  const [checkPhone, setCheckPhone] = useState<boolean>(true);
+
   // const [isDisabled1,setIsDisable1] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
@@ -72,16 +71,15 @@ export default function UserProfile() {
   let isDisabled = !(isValid && isDirty);
   // setIsDisable(!(isValid && isDirty));
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
+  //DCM hoa`
+  const user = param.username;
+
   useEffect(() => {
     const fetchData = async () => {
-      const user = localStorage.getItem("user");
       try {
         if (user != null) {
-          const userData = JSON.parse(user);
-          const username = userData.username;
-          console.log("USERNAME: " + username);
-          await userController.getUserWhereUsername(username).then((res) => {
-            console.log(JSON.stringify(res));
+          await userController.getUserWhereUsername(user).then((res) => {
+            console.log("USER:" + JSON.stringify(res));
             if (res.dateOfBirth == null) {
               res.dateOfBirth = "dd/mm/yyyy";
             } else {
@@ -94,17 +92,23 @@ export default function UserProfile() {
             Bruh = Bruh.replace(res.email[5], "*");
             let emailDef = Bruh;
 
-            // console.log(emailDef);
+            console.log("DCM cuoc doi" + JSON.stringify(res.image));
             setEmailThen(res.email);
-
             let Bruh2 = res.phonenumber;
-            Bruh2 = Bruh2.replace(res.phonenumber[0], "*");
-            Bruh2 = Bruh2.replace(res.phonenumber[1], "*");
-            Bruh2 = Bruh2.replace(res.phonenumber[2], "*");
-            Bruh2 = Bruh2.replace(res.phonenumber[3], "*");
-            Bruh2 = Bruh2.replace(res.phonenumber[4], "*");
-            Bruh2 = Bruh2.replace(res.phonenumber[5], "*");
-            Bruh2 = Bruh2.replace(res.phonenumber[6], "*");
+            if (res.phonenumber != null) {
+              Bruh2 = Bruh2.replace(res.phonenumber[0], "*");
+              Bruh2 = Bruh2.replace(res.phonenumber[1], "*");
+              Bruh2 = Bruh2.replace(res.phonenumber[2], "*");
+              Bruh2 = Bruh2.replace(res.phonenumber[3], "*");
+              Bruh2 = Bruh2.replace(res.phonenumber[4], "*");
+              Bruh2 = Bruh2.replace(res.phonenumber[5], "*");
+              Bruh2 = Bruh2.replace(res.phonenumber[6], "*");
+              setCheckPhone(false);
+            } else {
+              Bruh2 = "";
+              setCheckPhone(true);
+            }
+
             let phonenumberDef = Bruh2;
 
             setSdtThen(res.phonenumber);
@@ -128,7 +132,8 @@ export default function UserProfile() {
             return res;
           });
         } else {
-          console.log("Chua Dang Nhap Dung");
+          // console.log("Chua Dang Nhap Dung");
+          window.location.href = "/";
         }
       } catch (error) {
         console.log("ERROR", error);
@@ -155,7 +160,6 @@ export default function UserProfile() {
     const user = localStorage.getItem("user");
     if (user != null) {
       const Username = JSON.parse(user);
-
       console.log("UserData1:" + JSON.stringify(data));
       reset({
         username: "" + Username?.username,
@@ -164,6 +168,7 @@ export default function UserProfile() {
         // sex: JSON.stringify(data?.sex),
         phonenumber: " " + data?.phonenumber,
         dateOfBirth: data?.dateOfBirth,
+        // image : "" ,
       });
     }
   };
@@ -212,11 +217,11 @@ export default function UserProfile() {
       iduser: id,
       url: url,
     };
-    console.log("IDDDDDDĐ:", urlImages.iduser);
+    console.log("IDDDDDDĐ:", urlImages.url);
     await axios
       .put(
         `${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`,
-        urlImages.url
+        urlImages
       )
       .then((response) => response.data);
   };
@@ -232,8 +237,11 @@ export default function UserProfile() {
       // console.log("TESTING: " + formData);
       formData.sex = JSON.parse(formData.sex);
       formData.email = emailThen;
-      formData.phonenumber = sdtThen;
-      // console.log("SERVER:" + JSON.stringify(formData));
+      if (sdtThen != null) {
+        formData.phonenumber = sdtThen;
+      }
+
+      console.log("SERVER:" + JSON.stringify(formData));
       const response = await axios.put(API, formData);
       FormImage.id = parseInt(id);
       if (response) {
@@ -243,8 +251,13 @@ export default function UserProfile() {
           await addImages(FormImage.id, url);
           setCheckImageUrl(true);
         } else {
-          console.log("Ao that day:" + FormImage.id);
-          await EditImages(FormImage.id, url);
+          if (url != "") {
+            console.log("Ao that day:" + url);
+            await EditImages(FormImage.id, url);
+          } else {
+            console.log("Ao that day:" + FormImage.id);
+            await EditImages(FormImage.id, urlThen);
+          }
         }
       }
 
@@ -297,10 +310,10 @@ export default function UserProfile() {
     }
   };
 
-  const onChangeImage = (e: any) => {
-    const file = e.target.files?.[0];
+  const onChangeImage = (file: any) => {
+    // const file = e.target.files?.[0];
     if (file) {
-      console.log(`Selected file: ${file}`);
+      console.log(`Selected file: ` + file.name);
       setSelectedFile(file);
       setImage(file);
 
@@ -548,54 +561,105 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               </div>
                             </div>
                           </div>
-                          <div className="w-[48%]">
-                            <Controller
-                              control={control}
-                              name="phonenumber"
-                              rules={{
-                                required: {
-                                  value: true,
-                                  message:
-                                    "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                                },
-                              }}
-                              render={({ field }) => (
-                                <>
-                                  <label
-                                    htmlFor="name"
-                                    className="text-[#4C4C4C] text-sm font-medium"
-                                  >
-                                    Số điện thoại
-                                  </label>
-                                  {/* input addNameProducts */}
-                                  <input
-                                    className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                          {checkPhone == true ? (
+                            <div className="w-[48%]">
+                              <Controller
+                                control={control}
+                                name="phonenumber"
+                                rules={{
+                                  required: {
+                                    value: true,
+                                    message:
+                                      "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                                  },
+                                }}
+                                render={({ field }) => (
+                                  <>
+                                    <label
+                                      htmlFor="name"
+                                      className="text-[#4C4C4C] text-sm font-medium"
+                                    >
+                                      Số điện thoại
+                                    </label>
+                                    {/* input addNameProducts */}
+                                    <input
+                                      className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                                    ${
                                                      !!errors.phonenumber
                                                        ? "border-[2px] border-red-900"
                                                        : "border-[1px] border-[#FFAAAF]"
                                                    }`}
-                                    placeholder="Số điện thoại"
-                                    onChange={(e) => {
-                                      const value = e.target.value;
-                                      const reg = /[!@#$%^&]/;
-                                      field.onChange(value.replace(reg, ""));
-                                    }}
-                                    disabled={true}
-                                    value={field.value}
-                                    // {...register("phonenumber")}
-                                    // onChange={onChangeInput}
-                                  />
-                                  {!!errors.phonenumber && (
-                                    <p className="text-red-700 mt-2">
-                                      {errors.phonenumber.message}
-                                    </p>
-                                  )}
-                                </>
-                              )}
-                            />
-                          </div>
+                                      placeholder="Số điện thoại"
+                                      onChange={(e) => {
+                                        const value = e.target.value;
+                                        const reg = /[!@#$%^&]/;
+                                        field.onChange(value.replace(reg, ""));
+                                      }}
+                                      // disabled={true}
+                                      value={field.value}
+                                      // {...register("phonenumber")}
+                                      // onChange={onChangeInput}
+                                    />
+                                    {!!errors.phonenumber && (
+                                      <p className="text-red-700 mt-2">
+                                        {errors.phonenumber.message}
+                                      </p>
+                                    )}
+                                  </>
+                                )}
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-[48%]">
+                              <Controller
+                                control={control}
+                                name="phonenumber"
+                                rules={{
+                                  required: {
+                                    value: true,
+                                    message:
+                                      "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                                  },
+                                }}
+                                render={({ field }) => (
+                                  <>
+                                    <label
+                                      htmlFor="name"
+                                      className="text-[#4C4C4C] text-sm font-medium"
+                                    >
+                                      Số điện thoại
+                                    </label>
+                                    {/* input addNameProducts */}
+                                    <input
+                                      className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                    rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
+                                      placeholder="Số điện thoại"
+                                      onChange={(e) => {
+                                        const value = e.target.value;
+                                        const reg = /[!@#$%^&]/;
+                                        field.onChange(value.replace(reg, ""));
+                                      }}
+                                      disabled={true}
+                                      value={field.value}
+                                      // {...register("phonenumber")}
+                                      // onChange={onChangeInput}
+                                    />
+                                    {!!errors.phonenumber && (
+                                      <p className="text-red-700 mt-2">
+                                        {errors.phonenumber.message}
+                                      </p>
+                                    )}
+                                  </>
+                                )}
+                              />
+                            </div>
+                          )}
                         </div>
                         <div className="w-[100%] mt-4">
                           <Controller
@@ -606,6 +670,14 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 value: true,
                                 message:
                                   "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                              },
+                              validate: (date: string) => {
+                                const valid = moment(date).isAfter(
+                                  moment().subtract(1, "days").toDate()
+                                );
+                                return valid == true
+                                  ? "Thời gian không hợp lệ"
+                                  : undefined;
                               },
                             }}
                             render={({ field }) => (
@@ -618,7 +690,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 </label>
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2`}
+                                  rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
+                                 ${
+                                   !!errors.dateOfBirth
+                                     ? "border-[2px] border-red-900"
+                                     : "border-[1px] border-[#FFAAAF]"
+                                 }`}
                                   type="date"
                                   value={field.value}
                                   onChange={(e) => {
@@ -669,42 +746,35 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                       >
                         <div className=" flex flex-col items-center my-auto">
-                          <div className="avatar online">
-                            <div className="max-w-[174px] rounded-full border-[4px] border-[#2E89FF]">
-                              <div className="w-[100%] h-[100%]">
-                                {selectedFile ? (
-                                  <>
-                                    {/* <p>Selected file: {selectedFile.name}</p> */}
-                                    <img
-                                      src={url!}
-                                      alt="Selected"
-                                      width={"100%"}
-                                      className="object-cover"
-                                      height={"100%"}
-                                    />
-                                  </>
-                                ) : (
-                                  <div className="w-[174px]">
-                                    {CheckImageUrl ? (
-                                      <>
-                                        <img
-                                          src={urlThen!}
-                                          alt="Selected"
-                                          width={"100%"}
-                                          className="object-cover"
-                                          height={"100%"}
-                                        />
-                                      </>
-                                    ) : (
-                                      <p className=" flex flex-col items-center my-16">
-                                        Chọn ảnh
-                                      </p>
-                                    )}
+                          {selectedFile ? (
+                            <>
+                              <img
+                                className="w-40 h-40 rounded-full object-cover"
+                                src={url!}
+                                alt="Rounded avatar"
+                              />
+                            </>
+                          ) : (
+                            <>
+                              {CheckImageUrl ? (
+                                <>
+                                  <img
+                                    src={urlThen!}
+                                    alt="Rounded avatar"
+                                    className="w-40 h-40 rounded-full object-cover"
+                                  />
+                                </>
+                              ) : (
+                                <div>
+                                  <div className="w-36 h-36 rounded-full flex items-center justify-center bg-red-500">
+                                    <p className="text-2xl text-stone-50 text-[45px]">
+                                      {user?.substring(0, 1).toUpperCase()}
+                                    </p>
                                   </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
+                                </div>
+                              )}
+                            </>
+                          )}
                           {/* button */}
                           <label htmlFor="images">
                             <div
@@ -717,16 +787,26 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 }
                               }}
                             >
-                              <input
-                                type="file"
-                                onChange={onChangeImage}
-                                id="images"
-                                multiple
-                                className="hidden"
+                              <Controller
+                                control={control}
+                                name="image"
+                                render={({ field }) => (
+                                  <input
+                                    type="file"
+                                    onChange={(e) => {
+                                      // const value = ;
+                                      onChangeImage(e.target.files?.[0]);
+                                      field.onChange(e.target.files?.[0].name);
+                                    }}
+                                    id="images"
+                                    multiple
+                                    className="hidden"
+                                  />
+                                )}
                               />
-                              <button className="text-center text-sm font-bold text-[#1A1A1A] ">
+                              <div className="text-center text-sm font-bold text-[#1A1A1A] ">
                                 Thay đổi ảnh
-                              </button>
+                              </div>
                             </div>
                           </label>
                         </div>
@@ -750,7 +830,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     Xin lỗi, trang bạn đang tìm kiếm không thể được tìm thấy.
                   </p>
                   <a
-                    href="#"
+                    href="/"
                     className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded transition duration-150"
                     title="Return Home"
                   >

@@ -119,10 +119,25 @@ export default function useNotificationContextUser() {
       console.log(socket.id);
     });
   }, [socketUser]);
+  const handleSeenAllNoti = () => {
+    notificationControllers
+      .seenAllNotiUser()
+      .then((res: any) => {
+        setCountNotificationUser(res.count);
+      })
+      .catch((err) => {
+        console.log(
+          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
+          err
+        );
+        return {};
+      });
+  };
   return {
     countNotificationUser,
     notificationUser,
     getAllNotiUser,
+    handleSeenAllNoti,
   };
 }
 type NotificationContextType = ReturnType<typeof useNotificationContextUser>;

@@ -17,9 +17,9 @@ import {
   dateOrder,
   timeOrder,
 } from "../admin/Management/Order/OrderManagement";
-import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 import useThrottle from "@rooks/use-throttle";
 import secureLocalStorage from "react-secure-storage";
+import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 
 export default function ShippingPage() {
   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);
@@ -68,12 +68,12 @@ export default function ShippingPage() {
         "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
         selectedButton.id
       );
-      setOrderAPI({ ...orderAPI, status: selectedButton.id });
+      setOrderAPI({ ...orderAPI, status: selectedButton.id, keyword: "" });
     } else {
-      setOrderAPI({ ...orderAPI, status: null });
+      setOrderAPI({ ...orderAPI, status: null, keyword: "" });
     }
   };
-  const [btnFiterThrottle] = useThrottle(handleClick, 1000);
+  const [btnFiterThrottle] = useThrottle(handleClick, 700);
 
   function getBorderColor(id: number) {
     switch (id) {
@@ -115,7 +115,7 @@ export default function ShippingPage() {
   };
   return (
     <Container>
-      <div className="grid grid-cols-5">
+      <div className="grid grid-cols-5 pb-10">
         <div className="content-right-filter mt-[34px] col-span-5 max-2xl:col-span-5 ">
           {/* h2 */}
           <div>

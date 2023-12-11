@@ -6,9 +6,10 @@ import Heart from "../../../../../assets/TSX/Heart";
 import Setting from "../../../../../assets/TSX/Setting";
 import Logout from "../../../../../assets/TSX/Logout";
 import axios from "axios";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Voucher from "../../../../../assets/TSX/Voucher";
+import secureLocalStorage from "react-secure-storage";
 
 interface SitebarUser {
   icon: ReactNode;
@@ -56,6 +57,14 @@ const listSitebar: SitebarUser[] = [
 const instance = axios.create({
   withCredentials: true,
 });
+// useEffect(() => {
+//   let user = secureLocalStorage.getItem("admin");
+//   if(user == null){
+//     console.log("VCLLLLLLLLLLLLLLLLLll");
+//     window.location.href = "/admin/loginAdmin";
+//   }
+
+// }, [])
 export default function Sitebar() {
   const { pathname } = useLocation();
 

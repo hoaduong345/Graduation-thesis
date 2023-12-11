@@ -20,6 +20,7 @@ const SripeRouter = require('./routes/StripeRoutes');
 const OrderRouter = require('./routes/OrderRoutes');
 const AdminShippingRouter = require('./routes/AdminShippingRouter');
 const AdminRouter = require('./routes/AdminRouter');
+const OAuthRouter = require('./routes/OAuthRoutes');
 
 const LogoRouter = require('./routes/LogoRouter');
 const BannerRouter = require('./routes/BannerRouter');
@@ -78,18 +79,17 @@ app.use('/buyzzle/statistics', StatisticsRouter);
 app.use('/buyzzle/invoice', InvoiceRouter);
 app.use('/buyzzle/stripe', SripeRouter);
 app.use('/buyzzle/order', OrderRouter);
-
+app.use('/buyzzle/oauth', OAuthRouter);
 app.use('/admin', AdminRouter);
 
 app.use('/shipping/management', AdminShippingRouter);
 
 app.use('/buyzzle/logo', LogoRouter);
 app.use('/buyzzle/banner', BannerRouter);
-app.use('/buyzzle/bannerhome', BannerHomeRouter );
-app.use('/buyzzle/logohome', LogoHomeRouter );
-app.use('/buyzzle/logohome1', LogoHome1Router );
-app.use('/buyzzle/logodetail', LogoDetailRouter );
-
+app.use('/buyzzle/bannerhome', BannerHomeRouter);
+app.use('/buyzzle/logohome', LogoHomeRouter);
+app.use('/buyzzle/logohome1', LogoHome1Router);
+app.use('/buyzzle/logodetail', LogoDetailRouter);
 
 // Setup socket.io
 const io = new Server(httpServer, {
@@ -105,23 +105,20 @@ const io = new Server(httpServer, {
 app.set('socketio', io);
 
 // await client.connect();
-redisClient.on('error', err => console.log('Redis Client Error', err));
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
 
 redisClient.on('ready', () => {
     console.log('Redis client connected and ready to process commands');
 });
-
 
 io.on('connection', (socket) => {
     const socketId = socket.id;
     console.log(`user ${socketId} connected`);
     socket.on('disconnect', () => {
         console.log(`user ${socketId} disconnected`);
- 
     });
 });
 
 httpServer.listen(process.env.APP_PORT || 5000, () => {
     console.log('Server up and running on port ' + process.env.APP_PORT);
 });
-

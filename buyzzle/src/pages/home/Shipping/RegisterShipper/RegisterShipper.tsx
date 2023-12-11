@@ -629,7 +629,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                 to={`/login`}
                 className="text-black font-semibold items-start"
               >
-                Back to login{" "}
+                Quay lại trang đăng nhập{" "}
               </Link>
             </div>
           </form>

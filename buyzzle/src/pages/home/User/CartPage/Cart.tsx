@@ -1,23 +1,25 @@
 import useThrottle from "@rooks/use-throttle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Buyzzle from "../../../../assets/TSX/Buyzzle";
 import Minus from "../../../../assets/TSX/Minus";
 import Plus from "../../../../assets/TSX/Plus";
+import Container from "../../../../components/container/Container";
 import {
   UpdateCart,
   cartControllers,
 } from "../../../../controllers/CartControllers";
+import { userController } from "../../../../controllers/UserController";
 import DialogComfirm from "../../../../helper/Dialog/DialogComfirm";
 import EmptyPage from "../../../../helper/Empty/EmptyPage";
 import { numberFormat } from "../../../../helper/Format";
-import { CartItem } from "../../../../model/CartModel";
-import Container from "../../../../components/container/Container";
-import { useCart } from "../../../../hooks/Cart/CartContextProvider";
-import ArrowUp from "../../admin/assets/TSX/ArrowUp";
-import Delete from "../../admin/assets/TSX/Delete";
 import { toastWarn } from "../../../../helper/Toast/Warning";
-import { userController } from "../../../../controllers/UserController";
+import { useCart } from "../../../../hooks/Cart/CartContextProvider";
+import { CartItem } from "../../../../model/CartModel";
+import Back from "../../admin/assets/TSX/Back";
+import Delete from "../../admin/assets/TSX/Delete";
 export default function Cart() {
+  const navigate = useNavigate();
+
   const {
     carts,
     setCarts,
@@ -32,6 +34,7 @@ export default function Cart() {
     removeAllCart,
     idItemCart,
     idAllCart,
+    handleChecked,
   } = useCart();
 
   const CheckToken = async () => {
@@ -85,30 +88,14 @@ export default function Cart() {
     }
   };
 
-  const [plusThrottled] = useThrottle(handleIncreaseQuantity, 500);
-  const [minusThrottled] = useThrottle(handleDecreaseQuantity, 500);
-  //check box
+  const [plusThrottled] = useThrottle(handleIncreaseQuantity, 300);
+  const [minusThrottled] = useThrottle(handleDecreaseQuantity, 300);
 
   const cartLength = carts.item?.filter((e) => e.product.quantity > 0);
   var checkAll: boolean =
     cartLength?.length > 0
       ? !!carts.item?.length && productChecked?.length === cartLength?.length
       : false;
-
-  // 2 array : 1 array cart, 1 array cart checked
-  const handleChecked = (checked: boolean, item: CartItem) => {
-    if (checked) {
-      if (item.product.quantity > 0) {
-        setProductChecked((prev) => [...prev, item]);
-      }
-    } else {
-      let cloneProduct = [...productChecked];
-      let products = cloneProduct.filter((e) => {
-        return e.productid !== item.productid;
-      });
-      setProductChecked(products);
-    }
-  };
 
   const handleCheckedAll = (checked: boolean) => {
     if (checked) {
@@ -143,10 +130,32 @@ export default function Cart() {
     return _check !== -1;
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Container>
       <div>
-        <h1 className="mt-12 text-[32px] uppercase font-medium">Giỏ Hàng</h1>
+        {/* back */}
+        <div className="back h-[57px] mt-[46px] ">
+          <div className="flex gap-3 items-center">
+            <button onClick={handleGoBack}>
+              <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
+                <Back />
+              </div>
+            </button>
+            <div>
+              <p className="font-normal text-sm max-xl:text-xs max-lg:text-[10px]">
+                Quay lại
+              </p>
+              <h2 className="uppercase text-[32px] font-bold max-xl:text-[28px] max-lg:text-2xl">
+                Giỏ Hàng
+              </h2>
+            </div>
+          </div>
+        </div>
+        {/* end back */}
         <div
           className="bg-white py-7 mt-[50px] rounded-md items-center
                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
@@ -236,12 +245,13 @@ export default function Cart() {
                           <>
                             <div
                               className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
-                              onClick={() =>
+                              onClick={() => {
                                 minusThrottled(e.quantity, {
                                   productId: e.productid,
                                   cartId: e.cartid,
-                                })
-                              }
+                                });
+                                setIdProduct(e.productid);
+                              }}
                             >
                               <Minus />
                             </div>
@@ -261,6 +271,7 @@ export default function Cart() {
                                   : toastWarn(
                                       `Chỉ còn ${e.product.quantity} sản phẩm`
                                     );
+                                setIdProduct(e.productid);
                               }}
                             >
                               <Plus />
@@ -295,7 +306,7 @@ export default function Cart() {
               })
             ) : (
               <>
-                <EmptyPage />
+                <EmptyPage title="Giỏ hàng của bạn đang trống!" />
               </>
             )}
             <DialogComfirm
@@ -358,8 +369,6 @@ export default function Cart() {
                   </div>
                 </div>
                 <button
-                  // to={`${productChecked.length == 0 ? "" : "/checkout"
-                  //    }`}
                   onClick={muti}
                   className="justify-center gap-3 items-center text-lg font-bold text-white w-[287px]
                              rounded-md h-[58px] hover:bg-[#ff6d65] flex 
@@ -369,11 +378,11 @@ export default function Cart() {
                   <p>Mua ngay</p>
                 </button>
                 <DialogComfirm
-                  desc="toàn bộ Giỏ hàng"
+                  desc="các sản phẩm"
                   id={idAllCart}
                   onClose={() => closeModal(idAllCart)}
                   onSave={() => removeAllCart()}
-                  title="Xóa toàn bộ Giỏ hàng!"
+                  title="Xóa các sản phẩm đã chọn!"
                 />
               </div>
             </div>

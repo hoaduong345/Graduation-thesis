@@ -32,7 +32,6 @@ import { Rate, Ratee, Rating, Row } from "../../../../../model/ProductModel";
 
 // import ZoomableImage from "../../../../../components/ZoomImage/ZoomableImage";
 
-import RatingMap from "../RatingAndComments/RatingMap";
 import DetailRecommandProduct from "./DetailRecommandProduct";
 import { userController } from "../../../../../controllers/UserController";
 
@@ -45,6 +44,7 @@ import ArrowRightBruh from "../../../../../assets/TSX/ArrowRightBruh";
 import Breadcrumb from "../../../../../helper/Breadcrumb/BreadcrumbProps";
 import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
 import { logodetailController } from "../../../../../controllers/LogoDetailController";
+import RatingMap from "../RatingAndComments/RatingMap";
 export interface ImgOfProduct {
   url: string;
 }
@@ -316,17 +316,26 @@ export default function DetailsProduct() {
     });
   };
   const CheckLogin = async () => {
-    const user = localStorage.getItem("user");
-    if (user == null) {
-      setLogined(false);
+    // const user = localStorage.getItem("user");
+    if (Logined == false) {
+      // setLogined(false);
       openModal(idAddAdmin);
     } else {
-      setLogined(true);
+      // setLogined(true);
       CheckToken();
       CheckRefreshToken();
       console.log("AOTHATDAY");
     }
   };
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user != null) {
+      setLogined(true);
+    } else {
+      setLogined(false);
+    }
+  }, []);
+
   const muti = () => {
     CheckLogin();
   };
@@ -405,12 +414,16 @@ export default function DetailsProduct() {
                 </div>
               )} */}
               {first?.productDetail && (
-                <ImageMagnifier
-                  src={
-                    first?.productDetail?.ProductImage?.[selectedImageIndex]
-                      ?.url
-                  }
-                />
+                <div>
+                  <ImageMagnifier
+                    width="500px"
+                    height="430px"
+                    src={
+                      first?.productDetail?.ProductImage?.[selectedImageIndex]
+                        ?.url
+                    }
+                  />
+                </div>
               )}
             </div>
             <div className="my-auto">
@@ -964,7 +977,7 @@ export default function DetailsProduct() {
                                   key={index}
                                   checked={item.checked}
                                   rating={item.rating}
-                                  onChangeFilter={(rating) => {
+                                  onChangeFilter={(rating: any) => {
                                     console.log("Ratting:" + rating);
                                     HandleGetCommentWhereRating(rating);
                                   }}

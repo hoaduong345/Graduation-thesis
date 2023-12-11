@@ -13,21 +13,13 @@ import ConfirmAccount from "../../pages/confirmAccount/ConfirmAccount";
 import Forgotpassword from "../../pages/forgotpassword/Forgotpassword";
 import ChangePassword from "../../pages/forgotpassword/Resetpassword";
 import path from "../../contants/path";
-import Cart from "../../pages/home/User/CartPage/Cart";
-import OrderHistory from "../../pages/home/User/OrderHistoryPage/OrderHistory";
-import CheckOut from "../../pages/home/User/CheckoutPage/CheckOut";
-import OrderDetailPage from "../../pages/home/User/OrderDetail/OrderDetailPage";
-import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+
 import VoucherUserPage from "../../pages/home/User/voucherPage/VoucherPage";
-import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import VoucherHomePage from "../../components/home/components/Voucher/Voucher";
 import ShippingPage from "../../pages/home/Shipping/ShippingPage";
 import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
-import RegisterShipper from "../../pages/home/Shipping/RegisterShipper/RegisterShipper";
-import LoginShipper from "../../pages/home/Shipping/LoginShipper/LoginShipper";
-import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
-import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
+
 import Addproducts from "../../pages/home/admin/Addproduct/Addproducts";
 import AdminProfile from "../../pages/home/admin/AdminProfile/AdminProfile";
 import Editproducts from "../../pages/home/admin/EditProduct/Editproducts";
@@ -42,14 +34,25 @@ import User from "../../pages/home/admin/Management/User/User";
 import Shipper from "../../pages/home/admin/Management/Shipper/Shipper";
 import StatisticsPage from "../../pages/home/admin/Statistics/StatisticsPage";
 import Admin from "../../pages/home/admin/Management/Admin/Admin";
-import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
 import Logoes from "../../pages/home/Admin/Management/Logo/Logoes";
 import Banner from "../../pages/home/Admin/Management/Banner/Banner";
 import BannerHome from "../../pages/home/Admin/Management/Banner/BannerHome";
 import VouchersPage from "../../components/home/components/Voucher/VouchersPage";
-import LogoHome from "../../pages/home/Admin/Management/Logo/Logohome";
 import LogoHome1 from "../../pages/home/Admin/Management/Logo/LogoHome1";
 import LogoDetail from "../../pages/home/Admin/Management/Logo/LogoDetail";
+import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
+import LogoHome from "../../pages/home/Admin/Management/Logo/LogoHome";
+import DieuKhoan from "../../pages/clause/Clause";
+import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
+import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
+import Cart from "../../pages/home/User/CartPage/Cart";
+import OrderHistory from "../../pages/home/User/OrderHistoryPage/OrderHistory";
+import CheckOut from "../../pages/home/User/CheckoutPage/CheckOut";
+import OrderDetailPage from "../../pages/home/User/OrderDetail/OrderDetailPage";
+import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
+import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
+import RegisterShipper from "../../pages/home/Shipping/RegisterShipper/RegisterShipper";
+import LoginShipper from "../../pages/home/Shipping/LoginShipper/LoginShipper";
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {
@@ -94,6 +97,16 @@ export default function useRouterEmelent() {
         </RegisterLoginLayout>
       ),
     },
+
+    {
+      path: "/clause",
+      element: (
+        <RegisterLoginLayout>
+          <DieuKhoan />
+        </RegisterLoginLayout>
+      ),
+    },
+
     {
       path: "/login",
       element: (
@@ -604,8 +617,6 @@ export default function useRouterEmelent() {
           path: "logodetail",
           element: <LogoDetail />,
         },
-
-       
 
         {
           path: "banner",

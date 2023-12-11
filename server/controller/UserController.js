@@ -73,6 +73,7 @@ const UserController = {
                 phonenumber: req.body.phonenumber,
                 sex: req.body.sex,
                 dateOfBirth: new Date(req.body.dateOfBirth),
+                image: req.body.image,
             };
 
             const updatedUserResponse = await prisma.user.update({
@@ -117,6 +118,16 @@ const UserController = {
                     phonenumber: true,
                     sex: true,
                     dateOfBirth: true,
+                    createdAt: true,
+                    image: true,
+                    Order: {
+                        select: {
+                            amountTotal: true,
+                        },
+                        where: {
+                            status: 6,
+                        },
+                    },
                 },
             });
             const allUsers = await prisma.user.findMany({
@@ -126,12 +137,14 @@ const UserController = {
             if (!userWithImage || !userWithoutImage) {
                 return res.status(404).json({ error: 'Không tìm thấy người dùng' });
             }
+            const totalAmount = userWithoutImage.Order.reduce((sum, order) => sum + order.amountTotal, 0);
 
             // Kết hợp thông tin từ cả hai kết quả
             const user = {
                 ...userWithoutImage,
                 UserImage: userWithImage.UserImage,
                 allUsers: allUsers,
+                totalAmount: totalAmount,
             };
 
             res.status(200).json(user);
@@ -316,7 +329,21 @@ const UserController = {
                 where: whereClause,
                 skip,
                 take: pageSize,
+                include: {
+                    Order: {
+                        select: {
+                            amountTotal: true,
+                        },
+                        where: {
+                            status: 6,
+                        },
+                    },
+                },
             });
+            AllUser.forEach((user) => {
+                user.totalAmount = user.Order.reduce((total, order) => total + order.amountTotal, 0);
+            });
+            console.log('🚀 ~ file: UserController.js:298 ~ getAllUser: ~ AllUser:', AllUser);
             res.status(200).json({
                 page: page,
                 pageSize: pageSize,

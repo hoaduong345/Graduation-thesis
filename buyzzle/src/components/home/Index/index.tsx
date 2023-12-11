@@ -2,23 +2,19 @@ import { Images } from "../../../assets/TS";
 import Container from "../../container/Container";
 import Category from "../components/Category";
 
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Link } from "react-router-dom";
-import LogoVoucherBuyzzle from "../../../assets/TSX/LogoVoucherBuyzzle";
-import LogoVoucherFreeship from "../../../assets/TSX/LogoVoucherFreeship";
-import SanVoucher from "../../../assets/TSX/SanVoucher";
-import VoucherBuyzzle from "../../../assets/TSX/VoucherBuyzzle";
 import { categoryController } from "../../../controllers/CategoryController";
 import { productController } from "../../../controllers/ProductsController";
+import { MergedProducts } from "../../../model/ProductsSuggest";
 import {
   ImgOfProduct,
   Products,
-} from "../../../pages/home/User/FilterPage/FiltersPage";
+} from "../../../pages/home/User/filterPage/FiltersPage";
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
-import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
 import VoucherHomePage from "../components/Voucher/Voucher";
+import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
 import { useScroll } from "react-spring";
 import { LogoHomeModel } from "../../../model/LogoHomeModel";
 import { logohomeController } from "../../../controllers/LogoHomeController";
@@ -48,6 +44,7 @@ export type FlashSaleList = {
 function Index() {
   useScroll();
   const [categoty, setCategory] = useState<Cate[]>([]);
+  const [productsSuggest, setProductsSuggest] = useState<MergedProducts[]>([]);
   const [product, setProducts] = useState<Products[]>([]);
   const [logo, setLogo] = useState<LogoHomeModel[]>([]);
   const [logo1, setLogo1] = useState<LogoHome1Model[]>([]);
@@ -84,11 +81,9 @@ function Index() {
   };
 
   const getAllProducts = (page: number) => {
-    productController
-      .getSearchAndPaginationProduct("", page, 2)
-      .then((res: Products[]) => {
-        setProducts(res);
-      });
+    productController.getProductSuggestHome(page, 2).then((res) => {
+      setProductsSuggest(res.mergedProducts);
+    });
   };
   useEffect(() => {
     getCategory();
@@ -97,11 +92,9 @@ function Index() {
 
   const nextData = () => {
     setPage(page + 1);
-    productController
-      .getSearchAndPaginationProduct("", page + 1, 2)
-      .then((res: Products[]) => {
-        setProducts(product.concat(res));
-      });
+    productController.getProductSuggestHome(page + 1, 2).then((res) => {
+      setProductsSuggest(productsSuggest.concat(res.mergedProducts));
+    });
   };
 
   return (
@@ -137,7 +130,7 @@ function Index() {
                     className="flex items-center"
                     style={{
                       padding: "5px",
-                      width: "100%", 
+                      width: "100%",
                       height: "250px",
                       marginTop: "-6px",
                     }}
@@ -175,13 +168,13 @@ function Index() {
 
           <InfiniteScroll
             style={{ overflow: "hidden" }}
-            dataLength={product.length}
+            dataLength={productsSuggest.length}
             next={nextData}
             hasMore={true}
             loader={<></>}
           >
             <div className="flex flex-wrap mb-6 gap-3 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4 ">
-              {product?.map((product) => {
+              {productsSuggest?.map((product) => {
                 return <Productss product={product} />;
               })}
             </div>

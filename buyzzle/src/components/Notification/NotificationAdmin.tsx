@@ -6,9 +6,11 @@ import { useNotificationAdmin } from "../../hooks/Notification/NotificationConte
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import { handleSeenNoti } from "./components/SeenNoti";
+import Check from "../../assets/TSX/Check";
 
 export default function NotificationAdmin() {
   moment.locale("vi");
+  const [isRead, setIsRead] = useState(false);
 
   const [changeButton, setChangeButton] = useState([
     {
@@ -27,8 +29,12 @@ export default function NotificationAdmin() {
       active: false,
     },
   ]);
-  const { getAllNotiAdmin, notificationAdmin, setNotification } =
-    useNotificationAdmin();
+  const {
+    getAllNotiAdmin,
+    notificationAdmin,
+    setNotification,
+    handleSeenAllNoti,
+  } = useNotificationAdmin();
   // console.log("VCLLLLLLLLl:"+JSON.stringify(notificationAdmin));
   const handleClick = (id: number) => {
     console.log("🚀 ~ file: Notification.tsx:27 ~ handleClick ~ id:", id);
@@ -74,13 +80,30 @@ export default function NotificationAdmin() {
         console.log(err);
       });
   };
+
+  const handleMarkAsRead = () => {
+    setIsRead(true);
+    setTimeout(() => {
+      setIsRead(false);
+    }, 2000);
+    handleSeenAllNoti();
+  };
+
   return (
     <div className="header-view top-full absolute w-[355px] invisible z-20 overflow-y-auto h-[600px] scroll-smooth">
       <div
         className="bg-white p-4
       shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
       >
-        <p className="font-extrabold text-xl text-[#EA4B48] ">Thông báo</p>
+        <div className="flex justify-between items-end">
+          <p className="font-extrabold text-xl text-[#EA4B48]">Thông báo</p>
+          <p
+            className="text-xs cursor-pointer flex gap-2"
+            onClick={handleMarkAsRead}
+          >
+            Đánh dấu tất cả là đã đọc {isRead && <Check />}
+          </p>
+        </div>
         <div className=" border-b-[1px] mt-2"></div>
         {/* BUTTON */}
         <div className="flex my-3 gap-2">

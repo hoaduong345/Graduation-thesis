@@ -97,52 +97,43 @@ export default function useNotificationContextAdmin() {
     });
     socket.on("newOrder", (newOrder) => {
       console.log("NewOrderr:", newOrder);
-      userController
-        .getUserWhereUsername(newOrder.user.username)
-        .then((res) => {
-          console.log(
-            "🚀 ~ file: Header.tsx:76 ~ userController.getUserWhereUsername ~ res:",
-            res
-          );
-          const UserImageArray = JSON.stringify(res.UserImage);
-          const urlTaker = JSON.parse(UserImageArray);
+      const urlTaker = newOrder.user.UserImage;
 
-          toast(
-            <a href={`/admin/ordermanagement/${newOrder.order.id}`}>
-              <CustomToast
-                image={
-                  <>
-                    {urlTaker?.length > 0 ? (
-                      <img
-                        className="w-12 h-12 rounded-full"
-                        src={`${urlTaker[0]?.url}`}
-                        alt="avatar_admin"
-                      />
-                    ) : (
-                      <AvtDefautl />
-                    )}
-                  </>
-                }
-                iconSVG={<NewOrder />}
-                name={
-                  <p className="text-sm font-semibold text-gray-900 ">
-                    {newOrder.user.name}
-                  </p>
-                }
-                content={
-                  <p className="text-sm font-normal text-[#739072]">
-                    Có 1 đơn hàng mới
-                  </p>
-                }
-              />
-            </a>,
-            {
-              position: "bottom-left",
-              autoClose: 10000,
-              closeButton: true,
+      toast(
+        <a href={`/admin/ordermanagement/${newOrder.id}`}>
+          <CustomToast
+            image={
+              <>
+                {urlTaker?.length > 0 ? (
+                  <img
+                    className="w-12 h-12 rounded-full"
+                    src={`${urlTaker[0]?.url}`}
+                    alt="avatar_admin"
+                  />
+                ) : (
+                  <AvtDefautl />
+                )}
+              </>
             }
-          );
-        });
+            iconSVG={<NewOrder />}
+            name={
+              <p className="text-sm font-semibold text-gray-900 ">
+                {newOrder.name}
+              </p>
+            }
+            content={
+              <p className="text-sm font-normal text-[#739072]">
+                Có 1 đơn hàng mới
+              </p>
+            }
+          />
+        </a>,
+        {
+          position: "bottom-left",
+          autoClose: 10000,
+          closeButton: true,
+        }
+      );
 
       setCountNotificationAdmin((prevState) => ({
         ...prevState,
@@ -156,7 +147,27 @@ export default function useNotificationContextAdmin() {
     });
   }, [deletedOrder]);
 
+  const handleSeenAllNoti = () => {
+    notificationControllers
+      .seenAllNotiAdmin()
+      .then((res: any) => {
+        console.log(
+          "🚀 ~ file: NotificationContextAdmin.tsx:157 ~ .then ~ res:",
+          res
+        );
+        setCountNotificationAdmin(res.count);
+      })
+      .catch((err) => {
+        console.log(
+          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
+          err
+        );
+        return {};
+      });
+  };
+
   return {
+    handleSeenAllNoti,
     setNotification: setNotificationAdmin,
     // admin
     notificationAdmin,

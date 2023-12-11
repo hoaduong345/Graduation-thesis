@@ -1,20 +1,14 @@
-import { Fragment, useState, useEffect } from "react";
-import Container from "../../../../../components/container/Container";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-import axios from "axios";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
-import { userController } from "../../../../../controllers/UserController";
-import { appConfigUser } from "../../../../../configsEnv";
-import { storage } from "../../../../../firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import InforUser from "../../assets/TSX/InforUser";
-import { Images } from "../../../../../assets/TS";
-import Contact from "../../assets/TSX/Contact";
-import { currentDate, numberFormat } from "../../../../../helper/Format";
 import secureLocalStorage from "react-secure-storage";
+import { userController } from "../../../../../controllers/UserController";
+import { storage } from "../../../../../firebase/Config";
+import { formatDateYYYY, numberFormat } from "../../../../../helper/Format";
+import { UserDetail } from "../../../../../model/DetailUser";
 
 export interface userStatus {
   id: number;
@@ -33,59 +27,35 @@ export default function UserProfile() {
   const [validUrl, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [image, setImage] = useState("");
-  // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [id, setId] = useState<string>("11");
-  // const id: number | undefined = getID()!;
-  const [sex, setSex] = useState<boolean>();
+  const [users, setUsers] = useState<UserDetail>({} as UserDetail);
 
-  const {
-    control,
-    handleSubmit,
-    register,
-    reset,
-    formState: { errors, isDirty, isValid },
-  } = useForm<FormValues>({
+  const { control, reset } = useForm<FormValues>({
     mode: "all",
   });
-  const isDisabled = !(isValid && isDirty);
 
   const getUserData = () => {
     const user = param.username;
-    if (user != null) {
-      // const userData = JSON.parse(user);
-      // const username = userData.username;
-      console.log("USERNAME1: " + user);
-      userController
-        .getUserWhereUsername(user)
-        .then((res) => {
-          return res;
-        })
-        .then((res) => {
-          setName(res.name);
-          const UserImageArray = JSON.stringify(res.UserImage);
-          if (UserImageArray == "[]") {
-            setCheckImageUrl(false);
-          } else {
-            const urlTaker = JSON.parse(UserImageArray);
-            setUrlThen(urlTaker[0].url);
-            setCheckImageUrl(true);
-            // console.log(urlThen);
-          }
-        })
-        .catch((error) => {
-          console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
-            error
-          );
-        });
-    } else {
-      console.log("Chua Dang Nhap Dung");
-    }
+    userController
+      .getUserWhereUsername(user)
+      .then((res) => {
+        setUsers(res);
+        setName(res.name);
+        const UserImageArray = JSON.stringify(res.UserImage);
+        if (UserImageArray == "[]") {
+          setCheckImageUrl(false);
+        } else {
+          const urlTaker = JSON.parse(UserImageArray);
+          setUrlThen(urlTaker[0].url);
+          setCheckImageUrl(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -98,8 +68,6 @@ export default function UserProfile() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-
-        // console.log("data", data)
       } else {
         setValidUrl(false);
       }
@@ -120,7 +88,6 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-      // console.log("URL IMAGE: "+url);
       return url;
     } catch (error) {
       console.error(error);
@@ -150,7 +117,6 @@ export default function UserProfile() {
             id: res.id,
             createdAt: res.createdAt,
           });
-          // console.log( res.createdAt);
         })
         .catch((error) => {
           console.log(
@@ -172,9 +138,6 @@ export default function UserProfile() {
           <span className="text-[#000] text-2xl font-normal ">
             Trạng Thái Tài Khoản
           </span>
-          <div>
-            <InforUser />
-          </div>
         </div>
         <div className="border-[1px] border-[#E0E0E0] my-[30px]"></div>
         <div className="grid grid-cols-3 items-center">
@@ -189,7 +152,7 @@ export default function UserProfile() {
               </div>
             ) : (
               <div>
-                <div className="w-[70px] h-[70px] rounded-full border-4  flex items-center justify-center bg-red-500">
+                <div className="w-[70px] h-[70px] rounded-full flex items-center justify-center bg-red-500">
                   <p className="text-2xl text-stone-50">
                     {name.substring(0, 1).toUpperCase()}
                   </p>
@@ -198,23 +161,7 @@ export default function UserProfile() {
             )}
             <div>
               <p>Tên: {name}</p>
-
-              <p className="text-[#12b004]">● Đang Hoạt Động</p>
             </div>
-          </div>
-
-          <div className="flex items-center justify-end col-span-1">
-            <button
-              className="text-white text-center text-base font-bold
-                 bg-[#EA4B48] hover:bg-[#ff6d65] w-[150px] h-[46px]
-                 rounded-md transition duration-150 cursor-pointer
-                 flex items-center px-6"
-            >
-              <div className="mt-2">
-                <Contact />
-              </div>
-              <p className="w-full">Liên hệ</p>
-            </button>
           </div>
         </div>
 
@@ -240,7 +187,7 @@ export default function UserProfile() {
                           className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
                                                                             max-xl:text-sm  max-lg:text-[13px] cursor-not-allowed"
                           placeholder="#a32223"
-                          value={field.value}
+                          value={`#00${users.id}`}
                           disabled={true}
                         />
                       </>
@@ -267,7 +214,7 @@ export default function UserProfile() {
                                                                             max-xl:text-sm max-lg:text-[13px] cursor-not-allowed"
                           placeholder={"20/10/2020"}
                           maxLength={3}
-                          value={field.value}
+                          value={formatDateYYYY(users.createdAt)}
                           disabled={true}
                         />
                       </>
@@ -280,12 +227,12 @@ export default function UserProfile() {
                 <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] max-xl:text-[13px] max-lg:text-xs">
                   Tổng Số Tiền Đã Thanh Toán:
                 </p>
-
                 <input
                   className={`focus:outline-none text-[#EA4B48] text-base font-medium placeholder-[#EA4B48] 
                             w-[100%] rounded-[6px] px-[15px] py-[12px]
                             max-xl:text-sm max-lg:text-[13px] border-[1px] border-[#FFAAAF]`}
-                  placeholder={numberFormat(Number(1000000))}
+                  placeholder={numberFormat(users.totalAmount)}
+                  disabled={true}
                 />
               </div>
             </div>

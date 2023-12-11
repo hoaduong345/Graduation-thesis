@@ -494,6 +494,7 @@ const AuthController = {
     changePassword: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
+            console.log("🚀 ~ file: AuthController.js:497 ~ changePassword: ~ idUser:", idUser)
             const refresh_token = req.cookies.refreshtoken;
             const token = decode(refresh_token);
             const user = await prisma.user.findUnique({

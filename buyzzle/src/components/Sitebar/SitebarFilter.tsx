@@ -138,7 +138,6 @@ export default function SitebarFilter({
           ) : (
             <></>
           )}
-
           <AccordionItem className="border-b border-gray-200 py-[17px] dark:!border-[#E6E6E6]">
             <h2>
               <AccordionButton className="flex justify-between">

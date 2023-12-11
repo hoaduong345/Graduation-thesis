@@ -5,25 +5,20 @@ import { toastSuccess } from "../../../../../helper/Toast/Success";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import Container from "../../../../../components/container/Container";
-import { logoesController } from "../../../../../controllers/LogoController";
-import { storage } from "../../../../../firebase/Config";
-import Loading from "../../../../../helper/Loading/Loading";
-import { LogoModel } from "../../../../../model/LogoModel";
-import SitebarAdmin from "../../Sitebar/Sitebar";
-import Edit from "../../assets/TSX/Edit";
-import PlusSquare from "../../assets/TSX/PlusSquare";
-import RemoveCate from "../../assets/TSX/RemoveCate";
-import UploadIMG from "../../assets/TSX/UploadIMG";
-import Handle from "../../assets/TSX/bacham";
-import { toastWarn } from "../../../../../helper/Toast/Warning";
-import { id } from "@material-tailwind/react/types/components/tabs";
-import { Any } from "react-spring";
-import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
-import { Accordion } from "@chakra-ui/react";
-import { BannerModel } from "../../../../../model/BannerModel";
-import { bannerController } from "../../../../../controllers/BannerController";
-import { BannerHomeModel } from "../../../../../model/BannerHomeModel";
 import { bannerhomeController } from "../../../../../controllers/BannerHomeController";
+import { storage } from "../../../../../firebase/Config";
+import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
+import Loading from "../../../../../helper/Loading/Loading";
+import { toastWarn } from "../../../../../helper/Toast/Warning";
+import { BannerHomeModel } from "../../../../../model/BannerHomeModel";
+import { LogoModel } from "../../../../../model/LogoModel";
+import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
+import Edit from "../../../admin/assets/TSX/Edit";
+import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
+import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
+import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
+import Handle from "../../../admin/assets/TSX/bacham";
 type FormValues = {
   id: number;
   images: string;
@@ -60,17 +55,17 @@ export default function BannerHome() {
   } = useForm<BannerHomeModel>({
     mode: "all",
     defaultValues: {
-      id : 0,
-      image : "",
-      linkgoogle : ""
+      id: 0,
+      image: "",
+      linkgoogle: "",
     },
   });
 
-  const openModal = async (id: string, data : BannerHomeModel) => {
+  const openModal = async (id: string, data: BannerHomeModel) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      reset({id: data.id, linkgoogle: data.linkgoogle});
-      setUrl(data.image)
+      reset({ id: data.id, linkgoogle: data.linkgoogle });
+      setUrl(data.image);
       modal.showModal();
     }
   };
@@ -104,10 +99,12 @@ export default function BannerHome() {
           setCheckedCategory([]);
         });
     } else {
-      bannerhomeController.add({ id: data.id, image: url, linkgoogle: data.linkgoogle }).then(() => {
-        toastSuccess("Thêm thành công!!");
-        getAllBanner();
-      });
+      bannerhomeController
+        .add({ id: data.id, image: url, linkgoogle: data.linkgoogle })
+        .then(() => {
+          toastSuccess("Thêm thành công!!");
+          getAllBanner();
+        });
     }
   };
 
@@ -125,11 +122,11 @@ export default function BannerHome() {
       });
   };
 
-    const setnull = async () => {
-      reset({ id: 0, image: "" , linkgoogle : ""});
-      
-      setUrl("");
-    };
+  const setnull = async () => {
+    reset({ id: 0, image: "", linkgoogle: "" });
+
+    setUrl("");
+  };
 
   const loadImageFile = async (images: any) => {
     for (let i = 0; i < 1; i++) {
@@ -194,7 +191,6 @@ export default function BannerHome() {
     }
   };
 
- 
   return (
     <Container>
       <div className="grid grid-cols-5">
@@ -202,7 +198,7 @@ export default function BannerHome() {
           <SitebarAdmin />
         </div>
 
-        <div className="content-right-filter mt-[34px] col-span-4 flex flex-col gap-[50px] max-2xl:col-span-5">
+        <div className="content-right-filter col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
           <div>
             <h2
               className="txt-filter font-bold text-[#1A1A1A] text-3xl
@@ -211,7 +207,7 @@ export default function BannerHome() {
               QUẢN LÝ BANNER TRANG HOME
             </h2>
           </div>
-          <div className="flex flex-col gap-[35px]">
+          <div className="flex flex-col gap-4">
             <div className="flex justify-between">
               <button
                 onClick={() =>
@@ -274,50 +270,47 @@ export default function BannerHome() {
                           />
                         </div>
                         <div className="mt-5">
-                                <Controller
-                                  name="linkgoogle"
-                                  control={control}
-                                  rules={{
-                                    required: {
-                                      value: true,
-                                      message: "Không để trống",
-                                    },
-                                    minLength: {
-                                      value: 4,
-                                      message: "Ít nhất 4 ký tự",
-                                    },
-                                   
-                                  }}
-                                  render={({ field }) => (
-                                    <>
-                                      <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
-                                      Nhập đường dẫn hình ảnh*
-                                      </label>
-                                      <input
-                                        className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
+                          <Controller
+                            name="linkgoogle"
+                            control={control}
+                            rules={{
+                              required: {
+                                value: true,
+                                message: "Không để trống",
+                              },
+                              minLength: {
+                                value: 4,
+                                message: "Ít nhất 4 ký tự",
+                              },
+                            }}
+                            render={({ field }) => (
+                              <>
+                                <label className="text-sm max-xl:text-xs max-lg:text-[10px]">
+                                  Nhập đường dẫn hình ảnh*
+                                </label>
+                                <input
+                                  className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
                                              rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                              max-xl:text-xs max-lg:text-[10px]
                                             `}
-                                        placeholder="Nhập đường dẫn hình ảnh"
-                                        value={field.value}
-                                        onChange={(e) => {
-                                          const reg = /[!@#$%^&]/;
-                                          const value = e.target.value;
-                                          field.onChange(
-                                            value.replace(reg, "")
-                                          );
-                                        }}
-                                        name="name"
-                                      />
-                                      {errors.linkgoogle && (
-                                        <p className="text-[11px] text-red-700 mt-2">
-                                          {errors.linkgoogle.message}
-                                        </p>
-                                      )}
-                                    </>
-                                  )}
+                                  placeholder="Nhập đường dẫn hình ảnh"
+                                  value={field.value}
+                                  onChange={(e) => {
+                                    const reg = /[!@#$%^&]/;
+                                    const value = e.target.value;
+                                    field.onChange(value.replace(reg, ""));
+                                  }}
+                                  name="name"
                                 />
-                              </div>
+                                {errors.linkgoogle && (
+                                  <p className="text-[11px] text-red-700 mt-2">
+                                    {errors.linkgoogle.message}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          />
+                        </div>
                       </div>
                     </>
                   }
@@ -325,121 +318,116 @@ export default function BannerHome() {
               </div>
             </div>
 
-            <div className="">
-              <div className="grid grid-cols-9 pb-7">
-                <div className="col-span-2 text-base text-[#4c4c4c] mx-auto max-[940px]:text-sm">
-                  <p>ID</p>
-                </div>
-                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30">
-                  <p>HÌNH ẢNH</p>
-                </div>
-                <div className="col-span-2 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm mr-30">
-                  <p>LINK</p>
-                </div>
-
-                <div className="col-span-1 text-base text-[#4C4C4C] mx-auto max-[940px]:text-sm"></div>
+            <div className="grid grid-cols-12">
+              <div className="col-span-1 text-base text-[#4c4c4c]  max-[940px]:text-sm">
+                <p className="text-center">ID</p>
+              </div>
+              <div className="col-span-2 text-base text-[#4C4C4C]  max-[940px]:text-sm mr-30 ml-4">
+                <p className="text-center">HÌNH ẢNH</p>
+              </div>
+              <div className="col-span-8 text-base text-[#4C4C4C]  max-[940px]:text-sm mr-30 ml-1">
+                <p className="text-center"> LINK</p>
               </div>
 
-              <div className="shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
-                {banner?.map((items) => {
-                  console.log("🚀 ~ file: Logoes.tsx:340 ~ {logo?.map ~ items:", items)
-                  return (
-                    <>
-                     
-                      <div className="grid grid-cols-9 border-t-[1px] py-4">
-                        <div className="col-span-2 text-base text-[#4C4C4C] mx-auto">
-                          <p
-                            className="font-medium text-base text-[#EA4B48]
-                             max-[940px]:text-xs "
-                          >
-                            {items.id}
-                          </p>
-                        </div>
-                        <div
-                          // onClick={() => handleOpen(items.id)}
-                          className="cursor-pointer"
-                        >
-                          <img
-                            className="w-[150px] h-[100px] object-cover ml-5"
-                            src={items.image}
-                            alt=""
-                          />
-                        </div>
-
-                        <div className="col-span-2 text-base text-[#4C4C4C] mx-auto ">
-                          <p
-                            className="font-medium text-base text-[#070702]
-                             max-[940px]:text-xs ml-20"
-                          >
-                            {items.linkgoogle}
-                          </p>
-                        </div>
-
-                     
-
-                        <div className="col-span-1 flex justify-center mr-5">
-                          <div className="dropdown dropdown-left">
-                            <label tabIndex={0}>
-                              <Handle />
-                            </label>
-                            <ul
-                              tabIndex={0}
-                              className="dropdown-content menu bg-white rounded-box w-52
-                                            shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
-                                            max-2xl:right-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
-                            >
-                              <li>
-                                <button
-                                  onClick={() =>{
-                                    openModal(idModal, items)
-                                    // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle}) 
-                                  }}   
-                                  className="flex items-center gap-4"
-                                >
-                                  <Edit />
-                                  <p
-                                    className="text-[#EA4B48] text-sm font-medium
-                                        max-[940px]:text-xs "
-                                  >
-                                    Sửa
-                                  </p>
-                                </button>
-                              </li>
-                              <li>
-                                <button
-                                  onClick={() => {
-                                    openModal(idRemove, items);
-                                    setBannerToDelete(items.id);
-                                  }}
-                                  className="flex items-center gap-4"
-                                >
-                                  <RemoveCate />
-                                  <p
-                                    className="text-[#EA4B48] text-sm font-medium
-                                         max-[940px]:text-xs "
-                                  >
-                                    Xóa
-                                  </p>
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-
-              <DialogComfirm
-                desc="logo"
-                id={idRemove}
-                onClose={() => closeModal(idRemove)}
-                title="Xóa Logo này"
-                onSave={() => removee(bannerToDelete, idRemove)}
-               
-              />
+              <div className="col-span-1 text-base text-[#4C4C4C]  max-[940px]:text-sm"></div>
             </div>
+
+            {banner.length > 0 ? (
+              banner?.map((items) => {
+                return (
+                  <div className="grid grid-cols-12 border-t-[1px] py-1">
+                    <div className="col-span-1 text-base text-[#4C4C4C] mx-auto">
+                      <p
+                        className="font-medium text-base text-[#EA4B48]
+                           max-[940px]:text-xs "
+                      >
+                        {items.id}
+                      </p>
+                    </div>
+                    <div
+                      // onClick={() => handleOpen(items.id)}
+                      className="cursor-pointer col-span-2"
+                    >
+                      <img
+                        className="w-[200px] h-[50px] object-cover ml--5"
+                        src={items.image}
+                        alt=""
+                      />
+                    </div>
+
+                    <div className="col-span-8 text-base text-[#4C4C4C] mx-auto ">
+                      <p
+                        className="font-medium text-base text-[#070702]
+                           max-[40px]:text-xs ml-7"
+                      >
+                        {items.linkgoogle}
+                      </p>
+                    </div>
+
+                    <div className="col-span-1 flex justify-end">
+                      <div className="dropdown dropdown-right">
+                        <label tabIndex={0}>
+                          <Handle />
+                        </label>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content menu bg-white rounded-box w-52
+                                          shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]
+                                          max-2xl:right-[100%] max-2xl:origin-left max-[940px]:w-32 max-[940px]:h-[88px] max-[940px]:rounded"
+                        >
+                          <li>
+                            <button
+                              onClick={() => {
+                                openModal(idModal, items);
+                                // reset({id: items.id, image: items.image, linkgoogle: items.linkgoogle})
+                              }}
+                              className="flex items-center gap-4"
+                            >
+                              <Edit />
+                              <p
+                                className="text-[#EA4B48] text-sm font-medium
+                                      max-[940px]:text-xs "
+                              >
+                                Sửa
+                              </p>
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => {
+                                openModal(idRemove, items);
+                                setBannerToDelete(items.id);
+                              }}
+                              className="flex items-center gap-4"
+                            >
+                              <RemoveCate />
+                              <p
+                                className="text-[#EA4B48] text-sm font-medium
+                                       max-[940px]:text-xs "
+                              >
+                                Xóa
+                              </p>
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <>
+                <EmptyPage title="Banner của trang chủ đang trống!" />
+              </>
+            )}
+
+            <DialogComfirm
+              desc="logo"
+              id={idRemove}
+              onClose={() => closeModal(idRemove)}
+              title="Xóa Logo này"
+              onSave={() => removee(bannerToDelete, idRemove)}
+            />
           </div>
         </div>
       </div>

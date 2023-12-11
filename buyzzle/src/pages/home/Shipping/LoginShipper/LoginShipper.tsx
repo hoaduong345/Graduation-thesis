@@ -74,7 +74,7 @@ function LoginShipper() {
       <div className="w-1/2 flex justify-center items-center min-h-screen bg-white">
         <div className="w-[424px]">
           <form className="registration-form">
-            <h1 className=" login-a ">ĐƠN VỊ VẬN CHUYỂN</h1>
+            <h1 className="login123-a">ĐƠN VỊ VẬN CHUYỂN</h1>
             <div className="grid grid-cols-5 gap-8">
               <div className="col-span-3 ">
                 <div className="flex gap-3 ">
@@ -105,7 +105,7 @@ function LoginShipper() {
                         render={({ field }) => (
                           <>
                             <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
-                              Username
+                              Tên đăng nhập
                             </label>
                             <input
                               className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
@@ -190,7 +190,7 @@ function LoginShipper() {
             <div className="mb-4 text-right">
               <a
                 href="/forgotpassword"
-                className="text-black-500 hover:no-underline"
+                className="text-[#7088f2] hover:text-[#4255AA] "
               >
                 Quên mật khẩu?
               </a>
@@ -220,7 +220,7 @@ function LoginShipper() {
                 <img src={LogoFace} alt="Facebook" className="w-6 h-6" />
               </button>
             </div>
-            <div className="mt-6 text-center">
+            {/* <div className="mt-6 text-center">
               <span className="text-gray-600">
                 Bạn chưa có tài khoản Buyzzle?{" "}
               </span>
@@ -230,7 +230,7 @@ function LoginShipper() {
               >
                 Đăng ký
               </a>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>

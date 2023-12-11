@@ -1,76 +1,121 @@
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const decode = require('jwt-decode');
-dotenv.config();
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 const OAuth2Controller = {
-    getOauthGooleToken: async (code) => {
-        const body = {
-            code,
-            client_id: process.env.GOOGLE_CLIENT_ID,
-            client_secret: process.env.GOOGLE_CLIENT_SECRET,
-            redirect_uri: process.env.GOOGLE_AUTHORIZED_REDIRECT_URI,
-            grant_type: 'authorization_code',
-        };
-        const { data } = await axios.post('https://oauth2.googleapis.com/token', body, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        });
-        return data;
-    },
-    /**
-     * Hàm này thực hiện gửi yêu cầu lấy thông tin người dùng từ Google dựa trên Google OAuth token.
-     * @param {Object} tokens - Đối tượng chứa Google OAuth token.
-     * @param {string} tokens.id_token - ID token được lấy từ Google OAuth.
-     * @param {string} tokens.access_token - Access token được lấy từ Google OAuth.
-     * @returns {Object} - Đối tượng chứa thông tin người dùng từ Google.
-     */
-    getGoogleUser: async ({ id_token, access_token }) => {
-        const { data } = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
-            params: {
-                access_token,
-                alt: 'json',
-            },
-            headers: {
-                Authorization: `Bearer ${id_token}`,
-            },
-        });
-        return data;
-    },
+    // CHECK EXPRIED REFRESH TOKEN
+    isRefreshTokenExpired: (refreshToken) => {
+        const decoded = jwt.decode(refreshToken);
 
-    loginWithGoogle: async (req, res, next) => {
+        if (decoded && decoded.exp) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            return decoded.exp > currentTime;
+        }
+
+        return true; // Treat as expired if there's no expiration claim
+    },
+    // CHECK EXPRIED ACCESS TOKEN
+    isAccessTokenExpired: (accesstoken) => {
+        const decoded = jwt.decode(accesstoken);
+
+        if (decoded && decoded.exp) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            return decoded.exp > currentTime;
+        }
+
+        return true; // Treat as expired if there's no expiration claim
+    },
+    // GENERATE ACCESS TOKEN
+    genereateAccessToken: (email) => {
+        return jwt.sign(
+            {
+                email: email,
+            },
+            process.env.SECRECT_KEY,
+            { expiresIn: '30m' }
+        );
+    },
+    // GENERATE REFRESH TOKEN
+    genereateRefreshToken: (email) => {
+        return jwt.sign(
+            {
+                email: email,
+            },
+            process.env.JWT_REFRESH_TOKEN,
+            { expiresIn: '30d' }
+        );
+    },
+    saveGoogleUserToDB: async (req, res) => {
         try {
-            const { code } = req.query;
-            const data = await getOauthGooleToken(code); // Gửi authorization code để lấy Google OAuth token
-            const { id_token, access_token } = data; // Lấy ID token và access token từ kết quả trả về
-            const googleUser = await getGoogleUser({ id_token, access_token }); // Gửi Google OAuth token để lấy thông tin người dùng từ Google
-
-            // Kiểm tra email đã được xác minh từ Google
-            if (!googleUser.verified_email) {
-                return res.status(403).json({
-                    message: 'Google email not verified',
+            const { name, email, username } = req.body;
+            const user = await prisma.user.findFirst({
+                where: {
+                    email: email,
+                },
+            });
+            let refreshToken = OAuth2Controller.genereateRefreshToken(email);
+            if (!user) {
+                console.log('aaaaaaaaaaaaaaa', refreshToken);
+                const newUser = await prisma.user.create({
+                    data: {
+                        email: email,
+                        name: name,
+                        verify: true,
+                        username: username,
+                        refresh_token: refreshToken,
+                    },
                 });
+                res.status(200).send(newUser);
+            } else {
+                const checkRefreshTokenExpired = OAuth2Controller.isRefreshTokenExpired(user.refresh_token);
+                if (checkRefreshTokenExpired == false) {
+                    await prisma.user.update({
+                        where: {
+                            email: user.email,
+                        },
+                        data: {
+                            refresh_token: refreshToken,
+                        },
+                    });
+                }
+                res.status(200).send('Welcome back');
             }
-
-            // Tạo manual_access_token và manual_refresh_token sử dụng JWT (JSON Web Token)
-            const manual_access_token = jwt.sign(
-                { email: googleUser.email, type: 'access_token' },
-                process.env.SECRECT_KEY,
-                { expiresIn: '30m' }
-            );
-            const manual_refresh_token = jwt.sign(
-                { email: googleUser.email, type: 'refresh_token' },
-                process.env.JWT_REFRESH_TOKEN,
-                { expiresIn: '30d' }
-            );
-
-            // Redirect người dùng về trang login với access token và refresh token
-            return res.redirect(
-                `http://localhost:5000/login/oauth?access_token=${manual_access_token}&refresh_token=${manual_refresh_token}`
-            );
         } catch (error) {
-            next(error);
+            console.log(error);
+            res.status(404).send(error);
+        }
+    },
+    saveToCookies: async (req, res) => {
+        try {
+            const { name, email, username } = req.body;
+            console.log('🚀 ~ file: OAuth2Controller.js:93 ~ saveToCookies:async ~ email:', email);
+            const user = await prisma.user.findFirst({
+                where: {
+                    email: email,
+                },
+            });
+            const accessToken = OAuth2Controller.genereateAccessToken(email);
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 30);
+            res.cookie('accesstoken', accessToken, {
+                httpOnly: true,
+                secure: false,
+                path: '/',
+                sameSite: 'strict',
+                expires: expirationDate, // Set an expiration date
+            });
+
+            res.cookie('id', user.id, {
+                httpOnly: true,
+                secure: false,
+                path: '/',
+                sameSite: 'strict',
+                expires: expirationDate, // Set an expiration date
+            });
+            res.send("Save to cookies ")
+        } catch (error) {
+            console.log(error);
+            res.status(404).send(error);
         }
     },
 };

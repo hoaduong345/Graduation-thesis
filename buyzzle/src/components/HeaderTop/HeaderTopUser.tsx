@@ -4,12 +4,15 @@ import HeaderTop from "./HeaderTop";
 
 export default function HeaderTopUser() {
   const { countNotificationUser } = useNotificationUser();
-
+  const user = localStorage.getItem("user");
+  console.log({ user });
   return (
     <>
       <HeaderTop
         countNoti={
-          countNotificationUser ? countNotificationUser.countNotification : 0
+          !countNotificationUser || user == null
+            ? 0
+            : countNotificationUser.countNotification
         }
         noti={<NotificationUser />}
       />

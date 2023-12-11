@@ -7,11 +7,21 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
+import { jwtDecode } from "jwt-decode";
 // import LogoApple from "../../assets/PNG/lgApple.png";
 // import LogoFace from "../../assets/PNG/lgFace.png";
 // import LogoGoogle from "../../assets/PNG/lgG.png";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { GoogleOAuthProvider, useGoogleLogin, GoogleLogin } from "@react-oauth/google";
+
 import "./Login.css";
+import MyCustomButton from "../../helper/Dialog/MyCustomButton";
+
+
+export type LoginFormGoogle = {
+  email: string;
+  name: string;
+  username: string;
+};
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -108,7 +118,64 @@ function Login() {
       }
     }
   });
+  const CustomGoogleLogin = () => {
+    const callAPI = async (data: LoginFormGoogle) => {
+      localStorage.setItem("user", JSON.stringify(data));
+      const API = 'http://localhost:5000/buyzzle/oauth/'
+      const API2 = 'http://localhost:5000/buyzzle/oauth/savecookies'
+      const response = axios.post(API, data)
+      console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
+      setTimeout(() => {
+        callAPI2(data);
+      }, 1500);
+      const callAPI2 = async (data: LoginFormGoogle) => {
 
+        const response1 = axios.post(API2, data, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          withCredentials: true,
+        })
+        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
+      }
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 3000);
+    }
+    const handleSuccess = (credentialResponse: any) => {
+      if (credentialResponse && credentialResponse.credential) {
+        const decoded = jwtDecode<LoginFormGoogle>(credentialResponse.credential);
+
+        const data = {
+          email: decoded.email,
+          name: decoded.name,
+          username: (decoded.email).split('.')[0].trim(),
+        }
+        console.log("🚀 ~ file: Login.tsx:138 ~ handleSuccess ~ data:", data)
+        callAPI(data);
+
+      } else {
+        console.log('Credential or access_token is undefined');
+      }
+    };
+
+    const handleError = () => {
+      console.log('Login Failed');
+      // Your custom error handling logic here
+    };
+
+    return (
+      <div>
+        <GoogleLogin
+          onSuccess={handleSuccess}
+          onError={handleError}
+          width="400"
+          size="large"
+        // type="icon"
+        />
+      </div>
+    );
+  };
   return (
     <body className="login-bg flex">
       <div className="h-1083px w-963px p-4 relative">
@@ -203,7 +270,7 @@ function Login() {
             <div className="mb-4 text-right">
               <a
                 href="/forgotpassword"
-                className="text-black-500 hover:no-underline"
+                className="text-[#7088f2] hover:text-[#4255AA] "
               >
                 Quên mật khẩu?
               </a>
@@ -219,39 +286,39 @@ function Login() {
               <div className="mx-2 text-white-500">Hoặc</div>
               <div className="grow h-px bg-slate-300"></div>
             </div>
-            <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com">
-              <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  console.log(credentialResponse);
-                }}
-                onError={() => {
-                  console.log("Login Failed");
-                }}
-              />
-            </GoogleOAuthProvider>
-            {/* <div className="flex justify-center space-x-3">
-              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
-                <img src={LogoGoogle} alt="Google" className="w-6 h-6" />
-              </button>
-              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
-                <img src={LogoApple} alt="Apple" className="w-6 h-6" />
-              </button>
-              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
-                <img src={LogoFace} alt="Facebook" className="w-6 h-6" />
-              </button>
-            </div> */}
-            <div className="mt-6 text-center">
-              <span className="text-gray-600">
-                Bạn chưa có tài khoản Buyzzle?{" "}
-              </span>
-              <a
-                href="/register"
-                className="text-black-500 hover:underline font-bold"
-              >
-                Đăng ký
-              </a>
-            </div>
+
+
+
           </form>
+          {/* <div class="grid justify-items-center ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+  <div>05</div>
+  <div>06</div>
+</div> */}
+          <div className="grid justify-items-center">
+            <GoogleOAuthProvider clientId="447170837696-uqm2gp31ook1fqnas6rfnn2ne2med3la.apps.googleusercontent.com" >
+
+
+              <div><CustomGoogleLogin /></div>
+            </GoogleOAuthProvider>
+          </div>
+
+
+
+          <div className="mt-6 text-center">
+            <span className="text-gray-600">
+              Bạn chưa có tài khoản Buyzzle?{" "}
+            </span>
+            <a
+              href="/register"
+              className="text-[#7088f2] hover:text-[#4255AA]  font-bold"
+            >
+              Đăng ký
+            </a>
+          </div>
         </div>
       </div>
     </body>
