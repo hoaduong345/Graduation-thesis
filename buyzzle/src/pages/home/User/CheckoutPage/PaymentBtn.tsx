@@ -20,7 +20,7 @@ export interface StripePayment {
   invoice: boolean;
   name: string;
   address: string;
-  phoneNumber: number;
+  phoneNumber: string;
 }
 
 export default function PaymentBtn(props: StripePayment) {
@@ -38,7 +38,7 @@ export default function PaymentBtn(props: StripePayment) {
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async () => {
-    if (address != null && phoneNumber != 0) {
+    if (address != null && phoneNumber != null) {
       if (cartItems.length > 0) {
         if (method == "stripe") {
           setLoading(true);
