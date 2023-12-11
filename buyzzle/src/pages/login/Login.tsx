@@ -130,7 +130,8 @@ function Login() {
           position: "top-right",
           autoClose: 5000,
         });
-      } else {
+      } 
+      if((await response).status == 200) {
         setTimeout(() => {
           callAPI2(data);
         }, 1000);
