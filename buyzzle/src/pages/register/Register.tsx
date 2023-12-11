@@ -45,7 +45,7 @@ function Register() {
       if (response.status === 200) {
         console.log("Sign-in successfully");
         toast.success(
-          "Sign-in successfully-check your email to verify account",
+          "Đăng kí thành công! Vui lòng kiểm tra email để xác nhận tài khoản",
           {
             position: "top-right",
             autoClose: 5000,
@@ -69,18 +69,18 @@ function Register() {
           const errorMessageUsername = responseData.error.username;
           const errorMessageEmail = responseData.error.email;
           const errorMessagePhoneNumber = responseData.error.phonenumber;
-          if (errorMessageUsername) {
-            toast.warning(errorMessageUsername, {
+          if (errorMessageUsername == "Tên tài khoản đã tồn tại!") {
+            toast.warning("Tên tài khoản đã tồn tại!", {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessageEmail) {
-            toast.warning(errorMessageEmail, {
+          } else if (errorMessageEmail == "Email đã tồn tại") {
+            toast.warning("Email đã tồn tại", {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessagePhoneNumber) {
-            toast.warning(errorMessagePhoneNumber, {
+          } else if (errorMessagePhoneNumber == "Số điện thoại không đúng định dạng!" ) {
+            toast.warning("Số điện thoại không đúng định dạng!", {
               position: "top-right",
               autoClose: 5000,
             });
@@ -393,7 +393,7 @@ function Register() {
                           },
                           maxLength: {
                             value: 10,
-                            message: "Số điện thoại nhất 10 kí tự",
+                            message: "Số điện thoại nhiều nhất 10 kí tự",
                           },
                         }}
                         render={({ field }) => (

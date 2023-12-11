@@ -354,21 +354,26 @@ export default function DetailsProduct() {
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
     console.log("LoginData:" + data);
-    userController.Login(data).then((res) => {
-      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
-      const username = res.username;
-      const accessToken = res.accessToken;
-      console.log(accessToken);
-      const UserData = { username };
-      const Token = { accessToken };
-      localStorage.setItem("idUser", JSON.stringify(res.id));
-      localStorage.setItem("user", JSON.stringify(UserData));
-      localStorage.setItem("accessToken", JSON.stringify(Token));
-      // const id = param.id;
-      setTimeout(() => {
-        window.location.href = `/Detailproducts/${param.id}`;
-      }, 2000);
-    });
+    // try {
+      userController.Login(data).then((res) => {
+        console.log("LoginTHanhCong:" + JSON.stringify(res.username));
+        const username = res.username;
+        const accessToken = res.accessToken;
+        console.log(accessToken);
+        const UserData = { username };
+        const Token = { accessToken };
+        localStorage.setItem("idUser", JSON.stringify(res.id));
+        localStorage.setItem("user", JSON.stringify(UserData));
+        localStorage.setItem("accessToken", JSON.stringify(Token));
+        // const id = param.id;
+        setTimeout(() => {
+          window.location.href = `/Detailproducts/${param.id}`;
+        }, 2000);
+      });
+    // } catch (error) {
+      
+    // }
+    
   };
   const openModal = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
@@ -383,16 +388,21 @@ export default function DetailsProduct() {
     }
   };
   const saveModal = (id: string, data: LoginForm) => {
-    Login(data);
-    reset({
-      email: "",
-      password: "",
-    });
-    const modal = document.getElementById(id) as HTMLDialogElement | null;
-    if (modal) {
-      modal.close();
+    try {
+      Login(data);
+      reset({
+        email: "",
+        password: "",
+      });
+      // const modal = document.getElementById(id) as HTMLDialogElement | null;
+      //   if (modal) {
+      //     modal.close();
+      //   }
+      //   console.log("Data:" + JSON.stringify(data));
+    } catch (error) {
+      console.log("Error:" + JSON.stringify(data));
     }
-    console.log("Data:" + JSON.stringify(data));
+  
   };
   return (
     <>
@@ -670,6 +680,7 @@ export default function DetailsProduct() {
                         <div
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
                           onClick={() => openModal}
+                          
                         >
                           <div className="text-center text-base font-bold text-[#4C4C4C]">
                             Thêm Vào Giỏ Hàng
@@ -720,7 +731,7 @@ export default function DetailsProduct() {
                               <div className="col-span-3 ">
                                 <div className="flex gap-3  ">
                                   <div className="flex flex-col gap-5 max-lg:gap-2">
-                                    <div className="h-[90px] w-[455px]">
+                                    <div className="h-[90px] w-[400px]">
                                       <Controller
                                         name="email"
                                         control={control}
@@ -780,7 +791,7 @@ export default function DetailsProduct() {
                                 </div>
                                 <div className="flex gap-3  ">
                                   <div className="flex flex-col gap-5 max-lg:gap-2">
-                                    <div className="h-[90px] w-[455px]">
+                                    <div className="h-[90px] w-[400px]">
                                       <Controller
                                         name="password"
                                         control={control}
