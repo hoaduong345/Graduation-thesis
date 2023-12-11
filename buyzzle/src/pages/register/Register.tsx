@@ -392,8 +392,8 @@ function Register() {
                             message: "Ít nhất 10 ký tự",
                           },
                           maxLength: {
-                            value: 11,
-                            message: "Nhiều nhất 11 kí tự",
+                            value: 10,
+                            message: "Số điện thoại nhất 10 kí tự",
                           },
                         }}
                         render={({ field }) => (
