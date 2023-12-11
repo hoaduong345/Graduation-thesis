@@ -11,9 +11,11 @@ import { userController } from "../../../../../controllers/UserController";
 import { appConfigUser } from "../../../../../configsEnv";
 import { storage } from "../../../../../firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { replace } from "lodash";
+import { replace, values } from "lodash";
 import { stringify } from "querystring";
 import moment from "moment";
+
+
 
 export type FormValues = {
   username: string;
@@ -52,7 +54,10 @@ export default function UserProfile() {
   const [sdtThen, setSdtThen] = useState<string>("");
   const [LoginByGG, setLoginByGG] = useState<boolean>();
   const [checkPhone, setCheckPhone] = useState<boolean>(true);
-
+  const [username, setUsername] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [dateOfBirth, setDateOfBirth] = useState<string>("");
   // const [isDisabled1,setIsDisable1] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
@@ -63,12 +68,14 @@ export default function UserProfile() {
     handleSubmit,
     register,
     reset,
+    // watch,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
     // defaultValues: UserData1
   });
   let isDisabled = !(isValid && isDirty);
+  console.log("isDisabled: " + isValid);
   // setIsDisable(!(isValid && isDirty));
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
   //DCM hoa`
@@ -77,8 +84,12 @@ export default function UserProfile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const user = localStorage.getItem("user");
         if (user != null) {
-          await userController.getUserWhereUsername(user).then((res) => {
+          const userData = JSON.parse(user);
+          const username = userData.username;
+          console.log("USERNAME: " + username);
+          await userController.getUserWhereUsername(username).then((res) => {
             console.log("USER:" + JSON.stringify(res));
             if (res.dateOfBirth == null) {
               res.dateOfBirth = "dd/mm/yyyy";
@@ -176,8 +187,8 @@ export default function UserProfile() {
     }
   };
 
-  const handleSexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSex(JSON.parse(event.target.value));
+  const handleSexChange = (e: string) => {
+    setSex(JSON.parse(e));
   };
 
   useEffect(() => {
@@ -234,51 +245,76 @@ export default function UserProfile() {
     try {
       console.log("selectedFile:" + selectedFile);
       if (selectedFile == null && CheckImageUrl == false) {
-        toast.error("Hãy chọn hình");
-        return;
-      }
-      // console.log("TESTING: " + formData);
-      formData.sex = JSON.parse(formData.sex);
-      formData.email = emailThen;
-      if (sdtThen != null) {
-        formData.phonenumber = sdtThen;
-      }
+        formData.sex = JSON.stringify(sex);
+        formData.sex = JSON.parse(formData.sex);
+        formData.email = emailThen;
+        if (sdtThen != null) {
+          formData.phonenumber = sdtThen;
+        }
 
-      console.log("SERVER:" + JSON.stringify(formData));
-      const response = await axios.put(API, formData);
-      FormImage.id = parseInt(id);
-      if (response) {
-        console.log("UrlThen" + url);
+        console.log("SERVER:" + JSON.stringify(formData));
+        const response = await axios.put(API, formData);
+        console.log("edit thanh cong", response);
 
-        if (CheckImageUrl == false) {
-          await addImages(FormImage.id, url);
-          setCheckImageUrl(true);
+        if (response.status === 200) {
+          console.log("Edit successfully");
+          toast.success("Cập nhật thành công", {
+            position: "top-right",
+            autoClose: 5000,
+          });
         } else {
-          if (url != "") {
-            console.log("Ao that day:" + url);
-            await EditImages(FormImage.id, url);
+          console.log("Sign-in Failed!");
+          toast.warning("Sign-in failed", {
+            position: "top-right",
+            autoClose: 5000,
+          });
+        }
+      } else {
+        formData.sex = JSON.stringify(sex);
+        formData.sex = JSON.parse(formData.sex);
+        formData.email = emailThen;
+        if (sdtThen != null) {
+          formData.phonenumber = sdtThen;
+        }
+
+        console.log("SERVER:" + JSON.stringify(formData));
+        const response = await axios.put(API, formData);
+        FormImage.id = parseInt(id);
+        if (response) {
+          console.log("UrlThen" + url);
+
+          if (CheckImageUrl == false) {
+            await addImages(FormImage.id, url);
+            setCheckImageUrl(true);
           } else {
-            console.log("Ao that day:" + FormImage.id);
-            await EditImages(FormImage.id, urlThen);
+            if (url != "") {
+              console.log("Ao that day:" + url);
+              await EditImages(FormImage.id, url);
+            } else {
+              console.log("Ao that day:" + FormImage.id);
+              await EditImages(FormImage.id, urlThen);
+            }
           }
         }
-      }
 
-      console.log("edit thanh cong", response);
+        console.log("edit thanh cong", response);
 
-      if (response.status === 200) {
-        console.log("Edit successfully");
-        toast.success("Cập nhật thành công", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      } else {
-        console.log("Sign-in Failed!");
-        toast.warning("Sign-in failed", {
-          position: "top-right",
-          autoClose: 5000,
-        });
+        if (response.status === 200) {
+          console.log("Edit successfully");
+          toast.success("Cập nhật thành công", {
+            position: "top-right",
+            autoClose: 5000,
+          });
+        } else {
+          console.log("Sign-in Failed!");
+          toast.warning("Sign-in failed", {
+            position: "top-right",
+            autoClose: 5000,
+          });
+        }
       }
+      // console.log("TESTING: " + formData);
+
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
@@ -421,6 +457,11 @@ export default function UserProfile() {
                                   message:
                                     "Tên người dùng phải lớn hơn 6 ký tự",
                                 },
+                                maxLength: {
+                                  value: 25,
+                                  message:
+                                    "Tên người dùng phải bé hơn 25 ký tự",
+                                }
                               }}
                               render={({ field }) => (
                                 <>
@@ -439,12 +480,14 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                         : "border-[1px] border-[#FFAAAF]"
                                       }`}
                                     placeholder="Tên người dùng"
+                                    value={field.value}
                                     onChange={(e) => {
                                       const value = e.target.value;
                                       const reg = /[!@#$%^&*]/;
                                       field.onChange(value.replace(reg, ""));
+                                      // field.onChange
                                     }}
-                                    value={field.value}
+
                                   // {...register("name")}
                                   />
                                   {!!errors.name && (
@@ -514,52 +557,68 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                             >
                               Giới tính
                             </label>
-                            <div className="flex w-[100%] mt-6">
-                              <div className="flex items-center w-[33%] gap-1">
-                                <div>
-                                  <h3>Nam</h3>
-                                </div>
-                                <div className="flex items-center justify-start ">
-                                  <input
-                                    type="radio"
-                                    // name="colored-radio"
-                                    id="orange-radio1"
-                                    value="true"
-                                    {...register("sex")}
-                                    checked={sex === true}
-                                    onChange={handleSexChange}
-                                    className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
+                            <Controller
+                              control={control}
+                              name="sex"
+                              render={({ field }) => (
+                                <div className="flex w-[100%] mt-6">
+                                  <div className="flex items-center w-[33%] gap-1">
+                                    <div>
+                                      <h3>Nam</h3>
+                                    </div>
+                                    <div className="flex items-center justify-start ">
+                                      <input
+                                        type="radio"
+                                        // name="colored-radio"
+                                        id="orange-radio1"
+                                        value="true"
+
+                                        onChange={(e) => {
+                                          field.onChange("true");
+                                          handleSexChange(e.target.value);
+                                        }}
+
+                                        checked={sex === true}
+
+                                        className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
                                         checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                  />
-                                  <div
-                                    className="h-6 w-6 absolute rounded-full pointer-events-none
+                                      />
+                                      <div
+                                        className="h-6 w-6 absolute rounded-full pointer-events-none
                                         peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                  />
-                                </div>
-                              </div>
-                              <div className="flex items-center w-[33%] gap-1">
-                                <div>
-                                  <h3>Nữ</h3>
-                                </div>
-                                <div className="flex items-center justify-start ">
-                                  <input
-                                    type="radio"
-                                    // name="colored-radio"
-                                    id="orange-radio2"
-                                    value="false"
-                                    {...register("sex")}
-                                    checked={sex === false}
-                                    onChange={handleSexChange}
-                                    className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center w-[33%] gap-1">
+                                    <div>
+                                      <h3>Nữ</h3>
+                                    </div>
+                                    <div className="flex items-center justify-start ">
+                                      <input
+                                        type="radio"
+                                        // name="colored-radio"
+                                        id="orange-radio2"
+                                        value="false"
+                                        // {...register("sex")}
+
+                                        checked={sex === false}
+                                        onChange={(e) => {
+                                          field.onChange("true");
+                                          handleSexChange(e.target.value);
+                                        }}
+                                        className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full
 checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                  />
-                                  <div
-                                    className="h-6 w-6 absolute rounded-full pointer-events-none
+                                      />
+                                      <div
+                                        className="h-6 w-6 absolute rounded-full pointer-events-none
                                         peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                  />
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
+                              )}
+                            />
+
                           </div>
                           {checkPhone == true ? (
                             <div className="w-[48%]">
@@ -590,13 +649,14 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                           : "border-[1px] border-[#FFAAAF]"
                                         }`}
                                       placeholder="Số điện thoại"
+                                      value={field.value}
                                       onChange={(e) => {
                                         const value = e.target.value;
                                         const reg = /[!@#$%^&]/;
                                         field.onChange(value.replace(reg, ""));
                                       }}
-                                      // disabled={true}
-                                      value={field.value}
+                                    // disabled={true}
+
                                     // {...register("phonenumber")}
                                     // onChange={onChangeInput}
                                     />
@@ -620,6 +680,16 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     message:
                                       "Bạn phải nhập thông tin cho trường dữ liệu này!",
                                   },
+                                  minLength: {
+                                    value: 10,
+                                    message:
+                                      "Tối thiểu 10 kí tự",
+                                  },
+                                  maxLength: {
+                                    value: 11,
+                                    message:
+                                      "Nhiều nhất 11 kí tự",
+                                  }
                                 }}
                                 render={({ field }) => (
                                   <>
@@ -679,7 +749,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               },
                             }}
                             render={({ field }) => (
-                              <>
+                              <div>
                                 <label
                                   htmlFor="name"
                                   className="text-[#4C4C4C] text-sm font-medium"
@@ -694,19 +764,21 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       : "border-[1px] border-[#FFAAAF]"
                                     }`}
                                   type="date"
-                                  value={field.value}
+
                                   onChange={(e) => {
                                     const value = e.target.value;
-                                    const reg = /[!@#$%^&*]/;
-                                    field.onChange(value.replace(reg, ""));
+                                    // const reg = /[!@#$%^&*]/;
+                                    field.onChange(value);
+                                    // field.onChange(e.target.value);
                                   }}
+                                  value={field.value}
                                 />
                                 {!!errors.dateOfBirth && (
                                   <p className="text-red-700 mt-2">
                                     {errors.dateOfBirth.message}
                                   </p>
                                 )}
-                              </>
+                              </div>
                             )}
                           />
                         </div>
@@ -718,8 +790,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                             }
                           )}
                           className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
-                              ? "bg-[#aeaeae] cursor-not-allowed"
-                              : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                            ? "bg-[#aeaeae] cursor-not-allowed"
+                            : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
                             }
                      `}
                         >
