@@ -381,7 +381,6 @@ const CartController = {
     getCart: async (req, res) => {
         try {
             const id = parseInt(req.cookies.id);
-
             if (!id) {
                 res.status(404).send('You are not Authenticate');
             } else {
