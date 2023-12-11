@@ -73,7 +73,7 @@ export default function ShippingPage() {
       setOrderAPI({ ...orderAPI, status: null, keyword: "" });
     }
   };
-  const [btnFiterThrottle] = useThrottle(handleClick, 1000);
+  const [btnFiterThrottle] = useThrottle(handleClick, 700);
 
   function getBorderColor(id: number) {
     switch (id) {
@@ -115,7 +115,7 @@ export default function ShippingPage() {
   };
   return (
     <Container>
-      <div className="grid grid-cols-5">
+      <div className="grid grid-cols-5 pb-10">
         <div className="content-right-filter mt-[34px] col-span-5 max-2xl:col-span-5 ">
           {/* h2 */}
           <div>

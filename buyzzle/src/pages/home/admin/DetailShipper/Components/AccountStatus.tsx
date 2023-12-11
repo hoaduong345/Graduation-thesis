@@ -1,25 +1,13 @@
-import { Fragment, useState, useEffect } from "react";
-import Container from "../../../../../components/container/Container";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-import axios from "axios";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
-import { userController } from "../../../../../controllers/UserController";
-import { appConfigUser } from "../../../../../configsEnv";
-import { storage } from "../../../../../firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import InforUser from "../../assets/TSX/InforUser";
-import { Images } from "../../../../../assets/TS";
-import Contact from "../../assets/TSX/Contact";
-import {
-  currentDate,
-  formatDate,
-  numberFormat,
-} from "../../../../../helper/Format";
-import { shipperController } from "../../../../../controllers/ShipperController";
 import secureLocalStorage from "react-secure-storage";
+import { shipperController } from "../../../../../controllers/ShipperController";
+import { storage } from "../../../../../firebase/Config";
+import { formatDate } from "../../../../../helper/Format";
 
 export interface userStatus {
   id: number;
@@ -195,7 +183,7 @@ export default function UserProfile() {
               </div>
             ) : (
               <div>
-                <div className="w-[70px] h-[70px] rounded-full border-4  flex items-center justify-center bg-red-500">
+                <div className="w-[70px] h-[70px] rounded-full flex items-center justify-center bg-red-500">
                   <p className="text-2xl text-stone-50">
                     {name.substring(0, 1).toUpperCase()}
                   </p>

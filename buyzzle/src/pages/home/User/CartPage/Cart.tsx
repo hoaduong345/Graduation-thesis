@@ -1,22 +1,25 @@
 import useThrottle from "@rooks/use-throttle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Buyzzle from "../../../../assets/TSX/Buyzzle";
 import Minus from "../../../../assets/TSX/Minus";
 import Plus from "../../../../assets/TSX/Plus";
+import Container from "../../../../components/container/Container";
 import {
   UpdateCart,
   cartControllers,
 } from "../../../../controllers/CartControllers";
+import { userController } from "../../../../controllers/UserController";
 import DialogComfirm from "../../../../helper/Dialog/DialogComfirm";
 import EmptyPage from "../../../../helper/Empty/EmptyPage";
 import { numberFormat } from "../../../../helper/Format";
-import { CartItem } from "../../../../model/CartModel";
-import Container from "../../../../components/container/Container";
-import { useCart } from "../../../../hooks/Cart/CartContextProvider";
-import Delete from "../../admin/assets/TSX/Delete";
 import { toastWarn } from "../../../../helper/Toast/Warning";
-import { userController } from "../../../../controllers/UserController";
+import { useCart } from "../../../../hooks/Cart/CartContextProvider";
+import { CartItem } from "../../../../model/CartModel";
+import Back from "../../admin/assets/TSX/Back";
+import Delete from "../../admin/assets/TSX/Delete";
 export default function Cart() {
+  const navigate = useNavigate();
+
   const {
     carts,
     setCarts,
@@ -127,10 +130,32 @@ export default function Cart() {
     return _check !== -1;
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Container>
       <div>
-        <h1 className="mt-12 text-[32px] uppercase font-medium">Giỏ Hàng</h1>
+        {/* back */}
+        <div className="back h-[57px] mt-[46px] ">
+          <div className="flex gap-3 items-center">
+            <button onClick={handleGoBack}>
+              <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
+                <Back />
+              </div>
+            </button>
+            <div>
+              <p className="font-normal text-sm max-xl:text-xs max-lg:text-[10px]">
+                Quay lại
+              </p>
+              <h2 className="uppercase text-[32px] font-bold max-xl:text-[28px] max-lg:text-2xl">
+                Giỏ Hàng
+              </h2>
+            </div>
+          </div>
+        </div>
+        {/* end back */}
         <div
           className="bg-white py-7 mt-[50px] rounded-md items-center
                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
@@ -162,8 +187,9 @@ export default function Cart() {
         </div>
         <div>
           <div
-            className={`overscroll-auto md:overscroll-contain lg:overscroll-none mt-8 flex flex-col gap-5 overflow-x-hidden ${carts?.item?.length > 5 ? `h-[1000px]` : ``
-              }`}
+            className={`overscroll-auto md:overscroll-contain lg:overscroll-none mt-8 flex flex-col gap-5 overflow-x-hidden ${
+              carts?.item?.length > 5 ? `h-[1000px]` : ``
+            }`}
           >
             {carts.item?.length > 0 ? (
               (carts.item ?? []).map((e) => {
@@ -223,10 +249,9 @@ export default function Cart() {
                                 minusThrottled(e.quantity, {
                                   productId: e.productid,
                                   cartId: e.cartid,
-                                })
-                                setIdProduct(e.productid)
-                              }
-                              }
+                                });
+                                setIdProduct(e.productid);
+                              }}
                             >
                               <Minus />
                             </div>
@@ -240,13 +265,13 @@ export default function Cart() {
                               onClick={() => {
                                 e.quantity < e.product.quantity
                                   ? plusThrottled({
-                                    productId: e.productid,
-                                    cartId: e.cartid,
-                                  })
+                                      productId: e.productid,
+                                      cartId: e.cartid,
+                                    })
                                   : toastWarn(
-                                    `Chỉ còn ${e.product.quantity} sản phẩm`
-                                  );
-                                setIdProduct(e.productid)
+                                      `Chỉ còn ${e.product.quantity} sản phẩm`
+                                    );
+                                setIdProduct(e.productid);
                               }}
                             >
                               <Plus />

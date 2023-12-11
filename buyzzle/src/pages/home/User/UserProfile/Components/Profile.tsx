@@ -51,11 +51,7 @@ export default function UserProfile() {
   const [emailThen, setEmailThen] = useState<string>("");
   const [sdtThen, setSdtThen] = useState<string>("");
 
-  const [username, setUsername] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
   const [checkPhone, setCheckPhone] = useState<boolean>(true);
-  const [dateOfBirth, setDateOfBirth] = useState<string>("");
 
   // const [isDisabled1,setIsDisable1] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
@@ -76,15 +72,13 @@ export default function UserProfile() {
   // setIsDisable(!(isValid && isDirty));
   // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
   //DCM hoa`
+  const user = param.username;
+
   useEffect(() => {
     const fetchData = async () => {
-      const user = localStorage.getItem("user");
       try {
         if (user != null) {
-          const userData = JSON.parse(user);
-          const username = userData.username;
-          console.log("USERNAME: " + username);
-          await userController.getUserWhereUsername(username).then((res) => {
+          await userController.getUserWhereUsername(user).then((res) => {
             console.log("USER:" + JSON.stringify(res));
             if (res.dateOfBirth == null) {
               res.dateOfBirth = "dd/mm/yyyy";
@@ -752,42 +746,35 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                     shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                       >
                         <div className=" flex flex-col items-center my-auto">
-                          <div className="avatar online">
-                            <div className="max-w-[174px] rounded-full border-[4px] border-[#2E89FF]">
-                              <div className="w-[100%] h-[100%]">
-                                {selectedFile ? (
-                                  <>
-                                    {/* <p>Selected file: {selectedFile.name}</p> */}
-                                    <img
-                                      src={url!}
-                                      alt="Selected"
-                                      width={"100%"}
-                                      className="object-cover"
-                                      height={"100%"}
-                                    />
-                                  </>
-                                ) : (
-                                  <div className="w-[174px]">
-                                    {CheckImageUrl ? (
-                                      <>
-                                        <img
-                                          src={urlThen!}
-                                          alt="Selected"
-                                          width={"100%"}
-                                          className="object-cover"
-                                          height={"100%"}
-                                        />
-                                      </>
-                                    ) : (
-                                      <p className=" flex flex-col items-center my-16">
-                                        Chọn ảnh
-                                      </p>
-                                    )}
+                          {selectedFile ? (
+                            <>
+                              <img
+                                className="w-40 h-40 rounded-full object-cover"
+                                src={url!}
+                                alt="Rounded avatar"
+                              />
+                            </>
+                          ) : (
+                            <>
+                              {CheckImageUrl ? (
+                                <>
+                                  <img
+                                    src={urlThen!}
+                                    alt="Rounded avatar"
+                                    className="w-40 h-40 rounded-full object-cover"
+                                  />
+                                </>
+                              ) : (
+                                <div>
+                                  <div className="w-36 h-36 rounded-full flex items-center justify-center bg-red-500">
+                                    <p className="text-2xl text-stone-50 text-[45px]">
+                                      {user?.substring(0, 1).toUpperCase()}
+                                    </p>
                                   </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
+                                </div>
+                              )}
+                            </>
+                          )}
                           {/* button */}
                           <label htmlFor="images">
                             <div
@@ -817,9 +804,9 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   />
                                 )}
                               />
-                              <button className="text-center text-sm font-bold text-[#1A1A1A] ">
+                              <div className="text-center text-sm font-bold text-[#1A1A1A] ">
                                 Thay đổi ảnh
-                              </button>
+                              </div>
                             </div>
                           </label>
                         </div>
