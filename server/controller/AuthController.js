@@ -494,9 +494,6 @@ const AuthController = {
     changePassword: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            console.log("🚀 ~ file: AuthController.js:497 ~ changePassword: ~ idUser:", idUser)
-            const refresh_token = req.cookies.refreshtoken;
-            const token = decode(refresh_token);
             const user = await prisma.user.findUnique({
                 where: {
                     id: idUser,
@@ -522,14 +519,6 @@ const AuthController = {
                     password: hashed,
                 },
             });
-            const refreshTokenPayload = {
-                email: user.email,
-            };
-            console.log(refreshTokenPayload);
-
-            const newRefreshToken = jwt.sign(refreshTokenPayload, process.env.JWT_REFRESH_TOKEN, {
-                expiresIn: token.exp - Math.floor(Date.now() / 1000), // Calculate the remaining time of the old token
-            });
 
             await prisma.user.update({
                 where: {
@@ -537,7 +526,7 @@ const AuthController = {
                 },
                 data: {
                     password: hashed,
-                    refresh_token: newRefreshToken,
+              
                 },
             });
             res.status(200).send('Change Password Successfully');

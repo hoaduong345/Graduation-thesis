@@ -1046,7 +1046,6 @@ const ProductController = {
             const page = parseInt(req.body.page) || 1;
             const pageSize = parseInt(req.body.pageSize) || 40;
             const idUser = parseInt(req.cookies.id);
-            console.log('🚀 ~ file: ProductController.js:1026 ~ suggestProductBySex: ~ idUser:', idUser);
 
             const whereClause = {
                 deletedAt: null,
