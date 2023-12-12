@@ -188,12 +188,10 @@ export default function Header() {
   useEffect(() => {
     let admin = JSON.stringify(secureLocalStorage.getItem("admin"));
     if (admin != null) {
-      // admin =admin;
+      const adminData = JSON.parse(admin);
       console.log(admin)
       setCheckAdmin(true);
-
-      setNameAdmin((JSON.parse(admin)).name);
-
+      setNameAdmin(adminData.name);
     } else {
       // console.log("Bo m la admin:" + JSON.stringify(admin));
       setCheckAdmin(false);
