@@ -468,7 +468,7 @@ export default function Shipper() {
                               render={({ field }) => (
                                 <>
                                   <label className="text-sm font-medium max-xl:text-xs max-lg:text-[10px]">
-                                    Thành phố vận chuyển
+                                    Khu vực vận chuyển
                                   </label>
                                   <div
                                     className={`focus:outline-none border-[1px] text-[#333333] text-base placeholder-[#7A828A]
@@ -508,13 +508,13 @@ export default function Shipper() {
                                   message: "Không để trống",
                                 },
                                 minLength: {
-                                  value: 4,
-                                  message: "Ít nhất 4 ký tự",
+                                  value: 10,
+                                  message: "Ít nhất 10 ký tự",
                                 },
-                                maxLength: {
-                                  value: 25,
-                                  message: "Nhiều nhất 25 kí tự",
-                                },
+                                // maxLength: {
+                                //   value: 25,
+                                //   message: "Nhiều nhất 25 kí tự",
+                                // },
                               }}
                               render={({ field }) => (
                                 <>
