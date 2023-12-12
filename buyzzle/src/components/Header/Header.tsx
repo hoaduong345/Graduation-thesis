@@ -186,19 +186,29 @@ export default function Header() {
   };
 
   useEffect(() => {
-    let admin = JSON.stringify(secureLocalStorage.getItem("admin"));
+    let admin = secureLocalStorage.getItem("admin");
     if (admin != null) {
-      const adminData = JSON.parse(admin);
-      console.log(admin)
-      setCheckAdmin(true);
-      setNameAdmin(adminData.name);
+      checkAdminFunc(admin);
+      getAdmin(admin);
     } else {
-      // console.log("Bo m la admin:" + JSON.stringify(admin));
       setCheckAdmin(false);
-
+      console.log("AdminChuaLogin");
     }
-  }, []);
 
+  }, []);
+  function checkAdminFunc(admin: any) {
+    if (admin != null) {
+      setCheckAdmin(true);
+    } else {
+      setCheckAdmin(false);
+    }
+  }
+
+  function getAdmin(adminData: any) {
+    console.log("CheckAdmin:" + CheckAdmin);
+    setNameAdmin(adminData.name);
+
+  }
 
   // console.log("Checklogin:"+CheckAdmin);
   return (
