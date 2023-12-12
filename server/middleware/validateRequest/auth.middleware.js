@@ -21,6 +21,7 @@ const createVali = async (req, res, next) => {
             email: email,
         },
     });
+    
 
     if (user_name) {
         error.username = 'Tên tài khoản đã tồn tại!';

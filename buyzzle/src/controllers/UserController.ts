@@ -28,14 +28,14 @@ class UserController {
         .then((res) => {
           if (res.status === 200) {
             console.log("Login successfully");
-            toast.success("Login successfully", {
+            toast.success("Đăng nhập thành công", {
               position: "top-right",
               autoClose: 5000,
             });
 
           } else {
             console.log("Login Failed!");
-            toast.warning("Login failed", {
+            toast.error("Đăng nhập thất bại", {
               position: "top-right",
               autoClose: 5000,
             });
@@ -50,11 +50,21 @@ class UserController {
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData) {
           //   const errorMessage = responseData.error.password;
-          console.log(`Lỗi1:1 ${responseData}`);
-          toast.warning(responseData, {
-            position: "top-right",
-            autoClose: 5000,
-          });
+          if(responseData == "Sai mật khẩu"){
+            console.log(`Lỗi1:1 ${responseData}`);
+            toast.error("Sai mật khẩu", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+          if(responseData == "Sai email"){
+            console.log(`Lỗi1:1 ${responseData}`);
+            toast.error("Tài khoản không tồn tại", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+          
         } else {
           console.log("Lỗi không xác định từ server");
         }

@@ -16,6 +16,7 @@ import CartCount from "../Context/CartCount/CartCount";
 import HeaderTopUser from "../HeaderTop/HeaderTopUser";
 import Container from "../container/Container";
 import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
+import secureLocalStorage from "react-secure-storage";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -25,7 +26,9 @@ export default function Header() {
   const [productSearch, setProductSearch] = useState<Products[]>([]);
   const [topProduct, settopProduct] = useState<Top8product[]>([]);
   const [isSearch, setIsSearch] = useState(false);
-
+  const [CheckAdmin, setCheckAdmin] = useState<boolean>();
+  const [nameAdmin, setNameAdmin] = useState("");
+  const [imgAdmin, setImgAdmin] = useState("");
   const user = localStorage.getItem("user");
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
 
@@ -182,6 +185,32 @@ export default function Header() {
     }
   };
 
+  useEffect(() => {
+    let admin = secureLocalStorage.getItem("admin");
+    if (admin != null) {
+      checkAdminFunc(admin);
+      getAdmin(admin);
+    } else {
+      setCheckAdmin(false);
+      console.log("AdminChuaLogin");
+    }
+
+  }, []);
+  function checkAdminFunc(admin: any) {
+    if (admin != null) {
+      setCheckAdmin(true);
+    } else {
+      setCheckAdmin(false);
+    }
+  }
+
+  function getAdmin(adminData: any) {
+    console.log("CheckAdmin:" + CheckAdmin);
+    setNameAdmin(adminData.name);
+
+  }
+
+  // console.log("Checklogin:"+CheckAdmin);
   return (
     <>
       <header className="Header">
@@ -261,7 +290,7 @@ export default function Header() {
                                       >
                                         <div className="text-[12px] ">
                                           {itemsSearch.name &&
-                                          itemsSearch.name.length > 14 ? (
+                                            itemsSearch.name.length > 14 ? (
                                             `${itemsSearch.name.substring(
                                               0,
                                               14
@@ -310,34 +339,52 @@ export default function Header() {
                   <a onClick={CheckLogin1}>{Logined ? <CartCount /> : <></>}</a>
 
                   <div className="items-center">
-                    {checkLogin ? (
-                      <a className=" flex gap-2" href={href} onClick={muti}>
-                        <div className="font-medium flex items-center justify-center">
-                          {name}
-                        </div>
-                        {img ? (
-                          <div className="relative">
-                            <img
-                              className="w-10 h-10 rounded-full "
-                              src={img}
-                              alt=""
-                            />
+                    {
+                      CheckAdmin == true ? (
+                        <>
+                          {/* {checkLogin ? ( */}
+                          <div className=" flex gap-2">
+                            <div className="font-medium flex items-center justify-center">
+                              <p>Xin chào Admin:   <a href="/admin/ListproductsAdmin" className="text-[#f74b4b] hover:text-[#af4949] ">{nameAdmin}</a></p>
+                            </div>
+
                           </div>
-                        ) : (
-                          <div className=" rounded-full pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
-                            <p className="text-1xl text-stone-50">
-                              {name.substring(0, 1).toUpperCase()}
-                            </p>
-                          </div>
-                        )}
-                      </a>
-                    ) : (
-                      <div className="flex text-[#1A1A1A] ml-[10px]">
-                        <a href="/login">ĐĂNG NHẬP</a>
-                        <div className="border-[1px] border-[#000000] mx-[20px] " />
-                        <a href="/register">ĐĂNG KÍ</a>
-                      </div>
-                    )}
+
+                        </>
+                      ) : (
+                        <>
+                          {checkLogin ? (
+                            <a className=" flex gap-2" href={href} onClick={muti}>
+                              <div className="font-medium flex items-center justify-center">
+                                {name}
+                              </div>
+                              {img ? (
+                                <div className="relative">
+                                  <img
+                                    className="w-10 h-10 rounded-full "
+                                    src={img}
+                                    alt=""
+                                  />
+                                </div>
+                              ) : (
+                                <div className=" rounded-full pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
+                                  <p className="text-1xl text-stone-50">
+                                    {name.substring(0, 1).toUpperCase()}
+                                  </p>
+                                </div>
+                              )}
+                            </a>
+                          ) : (
+                            <div className="flex text-[#1A1A1A] ml-[10px]">
+                              <a href="/login">ĐĂNG NHẬP</a>
+                              <div className="border-[1px] border-[#000000] mx-[20px] " />
+                              <a href="/register">ĐĂNG KÍ</a>
+                            </div>
+                          )}
+                        </>
+                      )
+                    }
+
                   </div>
                 </div>
               </div>

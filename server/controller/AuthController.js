@@ -272,12 +272,12 @@ const AuthController = {
                 where: { email: req.body.email },
             });
             if (!user) {
-                return res.status(404).json('wrong email');
+                return res.status(404).json('Sai email');
             }
             const validPassword = await bcrypt.compare(reqpassword, user.password);
 
             if (!validPassword) {
-                return res.status(404).json('wrong password');
+                return res.status(404).json('Sai mật khẩu');
             }
 
             if (user.verify == false) {

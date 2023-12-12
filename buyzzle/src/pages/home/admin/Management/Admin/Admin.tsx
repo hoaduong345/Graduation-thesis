@@ -77,6 +77,7 @@ export default function Admin() {
         } else {
           res.dateofbirth = (res[0]?.dateofbirth).substring(0, 10);
         }
+        
         setAdmin(res);
       });
   };
@@ -95,6 +96,8 @@ export default function Admin() {
   }
 
   const AddAdmin = (data: FormValues) => {
+    console.log(JSON.stringify(data.dateofbirth)); 
+    data.sex = sex;
     adminController
       .AddAdmin(data)
       .then((res) => {
@@ -182,6 +185,7 @@ export default function Admin() {
                 id={idAddAdmin}
                 onClose={() => closeModal(idAddAdmin)}
                 onSave={handleSubmit((data) => {
+                  console.log("DATA:"+JSON.stringify(data));
                   AddAdmin(data);
                 })}
                 title="Thêm Admin"
@@ -464,12 +468,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   message: "Không để trống",
                                 },
                                 minLength: {
-                                  value: 4,
-                                  message: "Ít nhất 4 ký tự",
+                                  value: 10,
+                                  message: "Ít nhất 10 ký tự",
                                 },
                                 maxLength: {
-                                  value: 25,
-                                  message: "Nhiều nhất 25 kí tự",
+                                  value: 10,
+                                  message: "Nhiều nhất 10 kí tự",
                                 },
                               }}
                               render={({ field }) => (
