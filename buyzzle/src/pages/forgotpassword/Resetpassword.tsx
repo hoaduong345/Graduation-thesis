@@ -195,22 +195,22 @@ function Resetpassword() {
                   <div className="grow h-px bg-slate-300"></div>
                 </div>
                 <div className="flex justify-center space-x-3">
-                  <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
+                  {/* <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
                     <img src={LogoGoogle} alt="Google" className="w-6 h-6" />
-                  </button>
-                  <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
+                  </button> */}
+                  {/* <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
                     <img src={LogoApple} alt="Apple" className="w-6 h-6" />
                   </button>
                   <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
                     <img src={LogoFace} alt="Facebook" className="w-6 h-6" />
-                  </button>
+                  </button> */}
                 </div>
                 <div className="mt-6 text-center">
                   <span className="text-gray-600">
                     Bạn đã có tài khoản Buyzzle?{" "}
                   </span>
                   <a
-                    href="#"
+                    href="/login"
                     className="text-black-500 hover:underline font-bold"
                   >
                     Đăng nhập
