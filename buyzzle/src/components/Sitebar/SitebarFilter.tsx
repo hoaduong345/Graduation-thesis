@@ -167,10 +167,10 @@ export default function SitebarFilter({
                   // value={rangeValue}
                   // onChange={() => onSliderChange}
                   range
-                  // onChange={(e) => {
-                  //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
-                  //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
-                  // }}
+                // onChange={(e) => {
+                //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
+                //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
+                // }}
                 />
                 <div className="flex mt-[20px] justify-start gap-2 ">
                   <p className="max-w-max">Giá: </p>
@@ -215,14 +215,14 @@ export default function SitebarFilter({
               </div>
             </AccordionPanel>
           </AccordionItem>
-          <div className="btn-deleteFilter font-extrabold flex items-center justify-center mt-[38px]">
+          {/* <div className="btn-deleteFilter font-extrabold flex items-center justify-center mt-[38px]">
             <button
               type="button"
               className=" text-white bg-[#EA4B48] hover:bg-red-400 rounded-lg px-6 py-3 w-[95%] "
             >
               Xóa bộ lọc
             </button>
-          </div>
+          </div> */}
           <a href="#">
             <img
               className="mt-[12px] cursor-pointer opacity-100 hover:opacity-80 transition duration-200 hover:ease-in"
