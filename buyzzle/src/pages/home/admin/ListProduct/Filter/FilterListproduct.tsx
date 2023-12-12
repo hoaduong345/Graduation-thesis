@@ -73,13 +73,13 @@ export default function FilterListproduct({
     >
       <div className="grid grid-cols-3 gap-11">
         <div className="col-span-1 flex flex-col gap-6">
-          <input
+          {/* <input
             checked={price}
             onClick={() => setPrice(!price)}
             id="default-checkbox"
             type="checkbox"
             className="w-4 h-4 accent-[#EA4B48]  max-lg:w-[14px] max-lg:h-[14px]"
-          />
+          /> */}
           <div className="slider">
             <p
               className={`text-center text-lg max-xl:text-base max-lg:text-sm 
@@ -135,13 +135,13 @@ export default function FilterListproduct({
         </div>
 
         <div className="col-span-1 flex flex-col gap-6">
-          <input
+          {/* <input
             checked={purchase}
             onClick={() => setPurchase(!purchase)}
             id="default-checkbox"
             type="checkbox"
             className="w-4 h-4 accent-[#EA4B48] max-lg:w-[14px] max-lg:h-[14px]"
-          />
+          /> */}
 
           <div className="slider">
             <p
@@ -163,17 +163,15 @@ export default function FilterListproduct({
             <div className="flex mt-[20px] justify-start gap-2">
               <p
                 className={`max-w-max text-sm max-xl:text-[13px]
-                              ${
-                                purchase ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
-                              }  `}
+                              ${purchase ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
+                  }  `}
               >
                 SP:{" "}
               </p>
               <p
                 className={`font-medium max-w-max text-sm max-xl:text-[13px]
-                               ${
-                                 purchase ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
-                               } `}
+                               ${purchase ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
+                  } `}
               >
                 {rangePurchaseValue[0]} - {rangePurchaseValue[1]}
               </p>
@@ -215,20 +213,20 @@ export default function FilterListproduct({
         </div>
 
         <div className="col-span-1 flex flex-col gap-6">
-          <input
+          {/* <input
             checked={quantity}
             onClick={() => setPQuantity(!quantity)}
             id="default-checkbox"
             type="checkbox"
             className="w-4 h-4 accent-[#EA4B48] max-lg:w-[14px] max-lg:h-[14px]"
-          />
+          /> */}
 
           <div className="slider">
             <p
               className={`text-center text-lg max-xl:text-base max-lg:text-sm 
                            ${quantity ? `text-[#1A1A1A]` : `text-[#8c8c8c]`} `}
             >
-              Số Lượng SP Kho
+              SLSP còn trong kho
             </p>
             <div className="slider">
               <Slider
@@ -247,17 +245,15 @@ export default function FilterListproduct({
               <div className="flex mt-[20px] justify-start gap-2 ">
                 <p
                   className={`max-w-max text-sm max-xl:text-[13px]
-                               ${
-                                 quantity ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
-                               } `}
+                               ${quantity ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
+                    } `}
                 >
                   Số lượng:{" "}
                 </p>
                 <p
                   className={`font-medium max-w-max text-sm max-xl:text-[13px]
-                               ${
-                                 quantity ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
-                               } `}
+                               ${quantity ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
+                    } `}
                 >
                   {rangeQuantityValue[0]} - {rangeQuantityValue[1]}
                 </p>
@@ -282,7 +278,7 @@ export default function FilterListproduct({
           );
         })}
       </div>
-      <div>
+      {/* <div>
         <button
           className="bg-[#EA4B48] text-white p-3 px-10 justify-center hover:bg-red-400 duration-300
                          rounded-md flex gap-3 items-center text-base font-bold
@@ -291,7 +287,7 @@ export default function FilterListproduct({
           Xóa bộ lọc
           <DeleteWhite />
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

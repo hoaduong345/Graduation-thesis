@@ -45,7 +45,7 @@ function Forgotpassword() {
     } catch (error) {
       setLoading(false);
       setIsButtonDisabled(false);
-      toast.warning("Send email failed", {
+      toast.warning("Gửi email thất bại", {
         position: "top-right",
         autoClose: 5000,
       });
@@ -129,7 +129,7 @@ function Forgotpassword() {
               <span className="text-gray-600">
                 Bạn đã có tài khoản Buyzzle?{" "}
               </span>
-              <a href="#" className="text-black-500 hover:underline font-bold">
+              <a href="/login" className="text-black-500 hover:underline font-bold">
                 Đăng nhập
               </a>
             </div>

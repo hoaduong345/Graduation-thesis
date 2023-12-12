@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Images } from "../../assets/TS";
 import { Link, useParams } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
@@ -19,14 +19,14 @@ type Props = {
 export default function DialogLogin(props: Props) {
   const param = useParams();
   const { title, id, body, onClose, onSave } = props;
+
+
   const CustomGoogleLogin = () => {
     const callAPI = async (data: LoginFormGoogle) => {
       localStorage.setItem("user", JSON.stringify(data));
       const API = 'http://localhost:5000/buyzzle/oauth/'
       const API2 = 'http://localhost:5000/buyzzle/oauth/savecookies'
       try {
-
-
         const response = await axios.post(API, data)
         console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response.status)
 
