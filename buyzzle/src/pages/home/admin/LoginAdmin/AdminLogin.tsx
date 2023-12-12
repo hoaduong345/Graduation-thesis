@@ -191,12 +191,40 @@ function LoginAdmin() {
                 </span>
               )}
             </div>
+
+            {/* <div className='mb-4 text-right'>
+                            <a href='/forgotpassword' className='text-black-500 hover:no-underline'>
+                                Quên mật khẩu?
+                            </a>
+                        </div> */}
             <button
               type="submit"
               className="w-[424px] h-[49.44px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[25px]"
             >
               Đăng Nhập
             </button>
+            {/* <div className='flex items-center my-4'>
+                            <div className='grow h-px bg-slate-300'></div>
+                            <div className='mx-2 text-white-500'>Hoặc</div>
+                            <div className='grow h-px bg-slate-300'></div>
+                        </div>
+                        <div className='flex justify-center space-x-3'>
+                            <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2' >
+                                <img src={LogoGoogle} alt='Google' className='w-6 h-6' />
+                            </button>
+                            <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2'>
+                                <img src={LogoApple} alt='Apple' className='w-6 h-6' />
+                            </button>
+                            <button className='flex items-center justify-center w-12 h-12 text-white rounded-full border-2'>
+                                <img src={LogoFace} alt='Facebook' className='w-6 h-6' />
+                            </button>
+                        </div>
+                        <div className='mt-6 text-center'>
+                            <span className='text-gray-600'>Bạn chưa có tài khoản Buyzzle? </span>
+                            <a href='/register' className='text-black-500 hover:underline font-bold'>
+                                Đăng ký
+                            </a>
+                        </div> */}
           </form>
         </div>
       </div>
