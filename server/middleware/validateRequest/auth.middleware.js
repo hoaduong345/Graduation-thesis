@@ -21,6 +21,11 @@ const createVali = async (req, res, next) => {
             email: email,
         },
     });
+    const phonenumber_email = await prisma.user.findFirst({
+        where: {
+            phonenumber: phonenumber,
+        },
+    });
     
 
     if (user_name) {
@@ -28,6 +33,9 @@ const createVali = async (req, res, next) => {
     }
     if (user_email) {
         error.email = 'Email đã tồn tại!';
+    }
+    if(phonenumber_email){
+        error.phonenumber = 'Số điện thoại đã được sử dụng!';
     }
     if (!email) {
         error.email = 'Email là trường bắt buộc!';
