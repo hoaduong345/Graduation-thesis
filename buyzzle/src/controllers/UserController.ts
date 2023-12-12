@@ -35,7 +35,7 @@ class UserController {
 
           } else {
             console.log("Login Failed!");
-            toast.warning("Đăng nhập thất bại", {
+            toast.error("Đăng nhập thất bại", {
               position: "top-right",
               autoClose: 5000,
             });
@@ -52,14 +52,14 @@ class UserController {
           //   const errorMessage = responseData.error.password;
           if(responseData == "Sai mật khẩu"){
             console.log(`Lỗi1:1 ${responseData}`);
-            toast.warning("Sai mật khẩu", {
+            toast.error("Sai mật khẩu", {
               position: "top-right",
               autoClose: 5000,
             });
           }
           if(responseData == "Sai email"){
             console.log(`Lỗi1:1 ${responseData}`);
-            toast.warning("Tài khoản không tồn tại", {
+            toast.error("Tài khoản không tồn tại", {
               position: "top-right",
               autoClose: 5000,
             });
