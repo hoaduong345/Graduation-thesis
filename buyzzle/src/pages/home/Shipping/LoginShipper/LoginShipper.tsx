@@ -188,12 +188,12 @@ function LoginShipper() {
             </div>
 
             <div className="mb-4 text-right">
-              <a
+              {/* <a
                 href="/forgotpassword"
                 className="text-[#7088f2] hover:text-[#4255AA] "
               >
                 Quên mật khẩu?
-              </a>
+              </a> */}
             </div>
             <button
               onClick={handleSubmit((formData: any) => {

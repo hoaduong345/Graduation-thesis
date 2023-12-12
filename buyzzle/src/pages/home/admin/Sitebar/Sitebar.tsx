@@ -56,7 +56,7 @@ export default function SitebarAdmin() {
   useEffect(() => {
     let user = secureLocalStorage.getItem("admin");
     if (user == null) {
-      console.log("VCLLLLLLLLLLLLLLLLLll");
+      // console.log("VCLLLLLLLLLLLLLLLLLll");
       window.location.href = "/admin/loginadmin";
     }
   }, []);
@@ -94,7 +94,7 @@ export default function SitebarAdmin() {
         if (user != null) {
           let UserData = JSON.parse(user);
           // UserData = JSON.parse(UserData);
-          const username = UserData.username;
+          const username = UserData.name;
           setName(username);
           setEmail(UserData.email);
           console.log("VCLLLl ");

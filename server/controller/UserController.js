@@ -165,6 +165,7 @@ const UserController = {
                 address: req.body.address,
                 specificaddress: req.body.specificaddress,
                 town: req.body.town,
+                phonenumber: req.body.phonenumber,
             };
 
             const update = await prisma.user.update({
@@ -184,12 +185,12 @@ const UserController = {
     getPaymentAddress: async (req, res) => {
         try {
             const Name = req.params.username;
-    
+
             // Đọc nội dung của file local.json
             const localFilePath = path.join(__dirname, 'local.json'); // Điều chỉnh đường dẫn tùy vào cấu trúc của dự án
             const localData = await fs.readFile(localFilePath, 'utf8');
             const localJson = JSON.parse(localData);
-    
+
             // Lấy thông tin người dùng từ database
             const userWithoutImage = await prisma.user.findUnique({
                 where: {
@@ -205,16 +206,16 @@ const UserController = {
                     town: true,
                 },
             });
-    
+
             // Lấy thông tin từ local.json dựa trên dữ liệu từ userWithoutImage
             const addressInfo = getAddressInfo(localJson, userWithoutImage);
-    
+
             // Thêm thông tin địa chỉ vào đối tượng trả về
             const userWithAddress = {
                 ...userWithoutImage,
                 addressInfo,
             };
-    
+
             // Trả về thông tin người dùng kèm theo thông tin địa chỉ
             res.status(200).json(userWithAddress);
         } catch (error) {
@@ -223,7 +224,7 @@ const UserController = {
         }
     },
 
-    
+
 
     getAccountStatus: async (req, res) => {
         try {

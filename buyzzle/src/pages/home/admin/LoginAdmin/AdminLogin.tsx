@@ -50,7 +50,7 @@ function LoginAdmin() {
 
       if (response.status === 200) {
         console.log("Login successfully");
-        toast.success("Login successfully", {
+        toast.success("Đăng nhập thành công", {
           position: "top-right",
           autoClose: 5000,
         });
@@ -73,7 +73,7 @@ function LoginAdmin() {
         }, 2000);
       } else {
         console.log("Login Failed!");
-        toast.warning("Login failed", {
+        toast.warning("Đăng nhập thất bại vui lòng kiểm tra lại tài khoản hoặc mật khẩu", {
           position: "top-right",
           autoClose: 5000,
         });
@@ -87,7 +87,7 @@ function LoginAdmin() {
         if (responseData) {
           //   const errorMessage = responseData.error.password;
           console.log(`Lỗi1:1 ${responseData}`);
-          toast.warning(responseData, {
+          toast.warning("Đăng nhập thất bại vui lòng kiểm tra lại tài khoản hoặc mật khẩu", {
             position: "top-right",
             autoClose: 5000,
           });
@@ -126,7 +126,7 @@ function LoginAdmin() {
             <h1 className=" login-a text-[40px]">ĐĂNG NHẬP ADMIN</h1>
             <div className="mb-4">
               <label htmlFor="email" className="login-a4 font-sans">
-                Username
+                Tên đăng nhập
               </label>
               <input
                 type="text"

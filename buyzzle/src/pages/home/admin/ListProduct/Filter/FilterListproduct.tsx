@@ -15,12 +15,12 @@ const arrRating: RatingStar[] = [
   { checked: false, rating: 2 },
   { checked: false, rating: 1 },
 ];
-// export interface RatingStar {
-//   checked: boolean;
-//   rating: number;
+export interface RatingStar {
+  checked: boolean;
+  rating: number;
 
-//   onChangeFilter?(rating: number): void;
-// }
+  onChangeFilter?(rating: number): void;
+}
 export default function FilterListproduct({
   valuePrice: value,
   onPriceRangeChange,

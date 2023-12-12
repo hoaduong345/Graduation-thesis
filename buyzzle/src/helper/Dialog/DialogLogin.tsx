@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import MyCustomButton from "./MyCustomButton";
 import { LoginFormGoogle } from "../../pages/login/Login";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 // import { useGoogleLogin } from '@react-oauth/google';
@@ -24,11 +24,41 @@ export default function DialogLogin(props: Props) {
       localStorage.setItem("user", JSON.stringify(data));
       const API = 'http://localhost:5000/buyzzle/oauth/'
       const API2 = 'http://localhost:5000/buyzzle/oauth/savecookies'
-      const response = axios.post(API, data)
-      console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
-      setTimeout(() => {
-        callAPI2(data);
-      }, 1500);
+      try {
+
+
+        const response = await axios.post(API, data)
+        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response.status)
+
+        if (response.status == 200) {
+          setTimeout(() => {
+            callAPI2(data);
+          }, 1000);
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          if (error.response.status == 400) {
+            toast.warning("Email đã tồn tại vui lòng đăng nhập bằng tài khoản đã đăng kí", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+          else {
+            toast.warning("Lỗi đăng nhập", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+        }
+      }
+
+
+
+      // const response = axios.post(API, data)
+      // console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
+      // setTimeout(() => {
+      //   callAPI2(data);
+      // }, 1500);
       const callAPI2 = async (data: LoginFormGoogle) => {
 
         const response1 = axios.post(API2, data, {
@@ -40,17 +70,22 @@ export default function DialogLogin(props: Props) {
         console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
       }
       const pathname = window.location.pathname;
+      toast.loading("Đang tải vui lòng đợi", {
+        position: "top-right",
+        autoClose: 5000,
+        closeOnClick: true,
+        // className:"z-[10000000000]",
+      })
+
+      const loginByGG = true;
+      localStorage.setItem("user", (JSON.stringify(data)));
+      localStorage.setItem("LoginByGG", (JSON.stringify(loginByGG)))
+
       setTimeout(() => {
         window.location.href = `${pathname}`;
       }, 3000);
-      console.log("PARAM:"+JSON.stringify(param));
-      if ((await response).status === 200) {
-        console.log("Login successfully");
-        toast.success("Đăng nhập thành công", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      }
+
+
     }
     const handleSuccess = (credentialResponse: any) => {
       if (credentialResponse && credentialResponse.credential) {
@@ -88,7 +123,8 @@ export default function DialogLogin(props: Props) {
   };
   return (
     <>
-      <dialog id={id} className="modal ">
+      <dialog id={id} className="modal">
+        <ToastContainer></ToastContainer>
         <div className="flex flex-wrap content-center justify-center bg-gray-200 py-10 bg-white relative flex flex-col w-[1000px] p-[10px]  relative">
           <div className="flex shadow-md">
             <div className="flex flex-wrap content-center justify-center rounded-l-md bg-white">

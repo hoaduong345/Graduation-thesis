@@ -22,7 +22,7 @@ import { useScroll } from "react-spring";
 export default function ListproductsAdmin() {
   const idComfirmRemove = "removeModal";
   const [idProduct, setIdProduct] = useState<number>();
-
+  // const [rate, setRate] = useState<number>();
   const [products, setProducts] = useState<any>([]);
   // Xuat excel
   const [search, setSearch] = useState("");
@@ -159,6 +159,13 @@ export default function ListproductsAdmin() {
     setSliderPurchaseValues(purchase);
     console.log("price Range:", purchase);
   };
+
+  const handleFillerStar = async (Rate: number) => {
+    await productController.getProductWhereRatting(Rate)
+    .then((res) => {
+      setProducts(res);
+    })
+  }
 
   return (
     <>
@@ -355,7 +362,7 @@ export default function ListproductsAdmin() {
             {isShown && (
               <FilterListproduct
                 setProductSubcate={() => console.log("s")}
-                onRateChange={() => console.log("s")}
+                onRateChange={(value) => handleFillerStar(value)}
                 valuePurchase={sliderPurchaseValues}
                 valueQuantity={sliderQuantityValues}
                 valuePrice={sliderPriceValues}

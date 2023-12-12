@@ -40,7 +40,7 @@ const AdminController = {
     // add
     createAdmin: async (req, res) => {
         try {
-            const { username, password, email, name, sex, phonenumber } = req.body;
+            const { username, password,dateofbirth, email, name, sex, phonenumber } = req.body;
 
             const existingEmail = await prisma.admin.findFirst({
                 where: { email },
@@ -75,6 +75,7 @@ const AdminController = {
                     name,
                     sex,
                     phonenumber,
+                    dateofbirth: new Date(),
                 },
             });
 

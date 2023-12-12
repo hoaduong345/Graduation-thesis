@@ -66,8 +66,6 @@ export default function FiltersPage() {
   const [activeBtnHighToLow, setActiveBtnHighToLow] = useState(true);
   const [activeBtnLatestCreationDate, setActiveBtnLatestCreationDate] =
     useState(true);
-    const [activeBtnHotSelling, setActiveBtnActiveBtnHotSelling] =
-    useState(true);
 
   // Slider Price SiteBarFilterPages
   const [sliderValues, setSliderValues] = useState<[number, number]>([
@@ -138,17 +136,6 @@ export default function FiltersPage() {
     }
   }, [sliderValues]);
 
-  // useEffect(() => {
-  //   getProductInNameCate();
-  // }, [nameCateValue?.toString()]);
-
-  // const getProductInNameCate = () => {
-  //   productController.getList(nameCateValue?.toString()!).then((res: any) => {
-  //     setStars(res.data);
-  //     setProducts(res.rows);
-  //   });
-  // };
-
   // Điều này giả định rằng bạn có một hàm hoặc cách nào đó để lấy giá trị `averageRating` từ `first`
   useEffect(() => {
     if (stars) {
@@ -167,6 +154,7 @@ export default function FiltersPage() {
       .then((res: any) => {
         setActiveBtnLowToHigh(false);
         setActiveBtnHighToLow(true);
+        setActiveBtnLatestCreationDate(true);
         setProducts(res.rows);
       });
   };
@@ -182,12 +170,11 @@ export default function FiltersPage() {
       .then((res: any) => {
         setActiveBtnLowToHigh(true);
         setActiveBtnHighToLow(false);
+        setActiveBtnLatestCreationDate(true);
         setProducts(res.rows);
       });
   };
   const handleActiveBTNLatestCreationDate = () => {
-    setActiveBtnLatestCreationDate(false);
-    setActiveBtnActiveBtnHotSelling(true);
     const filterOptions = {
       key: "desc",
       categoryName: nameCateValue?.toString(),
@@ -196,15 +183,13 @@ export default function FiltersPage() {
     productController
       .getSortProductbyPriceAndDateCreate(filterOptions)
       .then((res: any) => {
+        setActiveBtnLowToHigh(true);
+        setActiveBtnHighToLow(true);
+        setActiveBtnLatestCreationDate(false);
         setProducts(res.rows);
       });
   };
-  const handleActiveBTNHotSelling = () => {
-    setActiveBtnActiveBtnHotSelling(!activeBtnHotSelling);
-    setActiveBtnLatestCreationDate(true);
-    setActiveBtnActiveBtnHotSelling(false);
-    console.log('Hot Selling clicked !')
-  };
+
   const getProductSearch = (props: string) => {
     productController
       .getSearchAndPaginationProduct(props?.toString())
@@ -271,10 +256,7 @@ export default function FiltersPage() {
     handleActiveBTNLatestCreationDate,
     700
   );
-  const [btnHotSellingThrottle] = useThrottle(
-    handleActiveBTNHotSelling,
-    700
-  );
+  // const [btnHotSellingThrottle] = useThrottle(handleActiveBTNHotSelling, 700);
 
   return (
     <Container>
@@ -306,7 +288,7 @@ export default function FiltersPage() {
               <div className="bg-[#FFEAE9] h-[60px] rounded-[6px] ">
                 <div className="txt-content flex">
                   <div
-                    className="content-left w-[50.5%] flex items-center justify-start gap-5 h-[60px]
+                    className="content-left flex items-center justify-start gap-5 h-[60px]
                  max-2xl:w-[51.5%] 
                  max-2xl:gap-7
                  max-xl:w-[52%]
@@ -315,18 +297,8 @@ export default function FiltersPage() {
                 "
                   >
                     <p className="text-[#000000] text-sm ml-5 font-semibold max-2xl:text-lg max-lg:">
-                      Sắp xếp theo
+                      Sắp xếp
                     </p>
-                    {/* <button
-                      type="button"
-                      className="transition duration-150 outline outline-2 outline-[#EA4B48]  font-medium
-                   rounded-[6px] text-xs py-[6px] px-[13px] text-[#FFFFFF] hover:text-[#FFFFFF] bg-[#FFAAAF] 
-                   max-2xl:py-[5px] max-2xl:text-base 
-                   max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm 
-                   "
-                    >
-                      Liên Quan
-                    </button> */}
                     <button
                       type="button"
                       className={
@@ -347,34 +319,6 @@ export default function FiltersPage() {
                     <button
                       type="button"
                       className={
-                        activeBtnHotSelling
-                          ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
-                    rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
-                    max-2xl:py-[5px] max-2xl:text-base 
-                    max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
-                          : `transition duration-150 outline outline-2 outline-[#EA4B48] bg-[#FFAAAF] hover:bg-[#FFAAAF] font-medium
-                        rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF] text-white
-                        max-2xl:py-[5px] max-2xl:text-base
-                        max-xl:py-[6px] max-xl:px-[12px] max-xl:text-sm `
-                      }
-                      onClick={btnHotSellingThrottle}
-                    >
-                      Bán chay
-                    </button>
-                  </div>
-
-                  <div
-                    className="content-left flex items-center justify-start gap-5 h-[60px] 
-                max-2xl:gap-7
-                max-xl:gap-4
-                "
-                  >
-                    <p className="text-[#000000] font-semibold text-sm max-2xl:text-lg">
-                      Giá
-                    </p>
-                    <button
-                      type="button"
-                      className={
                         activeBtnLowToHigh
                           ? `transition duration-150 outline outline-2 outline-[#EA4B48] bg-white hover:bg-[#FFAAAF] font-medium
                     rounded-[6px] text-sm py-[6px] px-[13px] hover:text-[#FFFFFF]
@@ -387,7 +331,7 @@ export default function FiltersPage() {
                       }
                       onClick={btnLowToHighThrottle}
                     >
-                      Thấp Nhất
+                      Giá Thấp Nhất
                     </button>
                     <button
                       type="button"
@@ -404,7 +348,7 @@ export default function FiltersPage() {
                       }
                       onClick={btnHighToLowThrottle}
                     >
-                      Cao Nhất
+                      Giá Cao Nhất
                     </button>
                   </div>
                 </div>
