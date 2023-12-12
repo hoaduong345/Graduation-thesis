@@ -144,6 +144,16 @@ model Product {
   subcateId     Int?
   fK_category   Category?              @relation(fields: [categoryID], references: [id])
   fK_subcateLv2 subCategoriesMultiLv2? @relation(fields: [subcateId], references: [id])
+
+  sizeID        Int?
+  fk_size       Size?                   @relation(fields: [sizeID], references: [id])
+
+  colorID        Int?
+  fk_color       Color?                   @relation(fields: [colorID], references: [id])
+
+
+
+
   OrderDetail   OrderDetail[]
   ProductImage  ProductImage[]
   cart          ItemCart[]
@@ -160,7 +170,6 @@ model Category {
   products      Product[]
   subCategories subCategoriesMultiLv2[] @relation("CategorySubcategories")
   deletedAt     DateTime?
-
   @@index([name])
 }
 
@@ -172,9 +181,30 @@ model subCategoriesMultiLv2 {
   createAt   DateTime?
   productId  Product[]
   category   Category  @relation("CategorySubcategories", fields: [categoryid], references: [id])
-
+  SizeCategories Size[] @relation("Sizecategorieslv2")
+  ColorCategories Color[] @relation("Colorcategorieslv2")
   @@index([name])
 }
+
+model Size {
+  id           Int       @id @default(autoincrement())
+  sizecategoryid Int?
+  size          String?
+  productId  Product[]
+  subCategoryMultiLv2 subCategoriesMultiLv2? @relation("Sizecategorieslv2",fields: [sizecategoryid], references: [id])
+}
+
+model Color {
+  id           Int       @id @default(autoincrement())
+  sizecategoryid Int?
+  size          String?
+  productId  Product[]
+  subCategoryMultiLv2 subCategoriesMultiLv2? @relation("Colorcategorieslv2",fields: [sizecategoryid], references: [id])
+}
+
+
+
+
 
 model Cart {
   id        Int              @id @default(autoincrement())
