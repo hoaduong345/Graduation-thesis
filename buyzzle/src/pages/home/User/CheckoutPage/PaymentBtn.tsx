@@ -5,6 +5,7 @@ import { cartControllers } from "../../../../controllers/CartControllers";
 import { orderControllers } from "../../../../controllers/OrderControllers";
 import { paymentControllers } from "../../../../controllers/PaymentControllers";
 import { voucherControllers } from "../../../../controllers/VoucherControllers";
+import { toastWarn } from "../../../../helper/Toast/Warning";
 import { CartItem } from "../../../../model/CartModel";
 import { OrderItems, UpdateQuantityModal } from "../../../../model/OrderModel";
 import { VoucherModel } from "../../../../model/VoucherModel";
@@ -19,7 +20,7 @@ export interface StripePayment {
   invoice: boolean;
   name: string;
   address: string;
-  phoneNumber: number;
+  phoneNumber: string;
 }
 
 export default function PaymentBtn(props: StripePayment) {
@@ -37,7 +38,7 @@ export default function PaymentBtn(props: StripePayment) {
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async () => {
-    if (address != null) {
+    if (address != null && phoneNumber != null) {
       if (cartItems.length > 0) {
         if (method == "stripe") {
           setLoading(true);
@@ -125,7 +126,7 @@ export default function PaymentBtn(props: StripePayment) {
         toast.warning("Chưa có sản phẩm");
       }
     } else {
-      toast.warn("Chưa có Địa chỉ giao hàng");
+      toastWarn("Địa chỉ hoặc SĐT đang trống");
     }
   };
 

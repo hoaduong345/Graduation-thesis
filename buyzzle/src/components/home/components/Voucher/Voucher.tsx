@@ -5,7 +5,6 @@ import VoucherManage from "../../../../assets/TSX/VoucherManage";
 import VoucherManageItem from "../../../../assets/TSX/VoucherManageItem";
 import { voucherControllers } from "../../../../controllers/VoucherControllers";
 import { formatDate } from "../../../../helper/Format";
-import { toastWarn } from "../../../../helper/Toast/Warning";
 import { VoucherModel } from "../../../../model/VoucherModel";
 import "./voucher.css";
 
@@ -20,17 +19,6 @@ export default function VoucherHomePage() {
   useEffect(() => {
     getVoucher();
   }, []);
-
-  const savedVoucher = (id: number) => {
-    voucherControllers
-      .userSavedVoucher(id)
-      .then((_) => {
-        getVoucher();
-      })
-      .catch((err) => {
-        toastWarn(err.response?.data);
-      });
-  };
 
   return (
     <>
@@ -57,29 +45,30 @@ export default function VoucherHomePage() {
 
         <div className="grid grid-cols-4 gap-5">
           {voucher.slice(0, 8).map((e) => {
-            let isSave: boolean = e.savedBy?.length! > 0;
             return (
               <>
-                <div className="col-span-1 relative ">
-                  <VoucherManageItem />
-                  <div className="absolute left-[4%] top-[13%] flex flex-col gap-3 items-center w-[50%]">
-                    <p className="font-bold text-xs text-[#F7755F]">
-                      GIẢM {e.discount}%
-                    </p>
-                    <p className="text-[#4C4C4C] text-sm font-semibold bg-[#FFEAE9] w-[85%] text-center py-1">
-                      #{e.code}
-                    </p>
+                <Link to={"/voucher"}>
+                  <div className="col-span-1 relative ">
+                    <VoucherManageItem />
+                    <div className="absolute left-[4%] top-[13%] flex flex-col gap-3 items-center w-[50%]">
+                      <p className="font-bold text-xs text-[#F7755F]">
+                        GIẢM {e.discount}%
+                      </p>
+                      <p className="text-[#4C4C4C] text-sm font-semibold bg-[#FFEAE9] w-[85%] text-center py-1">
+                        #{e.code}
+                      </p>
 
-                    <p className="text-xs font-medium text-[#EA4B48]">
-                      {formatDate(e.startDay)} - {formatDate(e.endDay)}
-                    </p>
-                  </div>
+                      <p className="text-xs font-medium text-[#EA4B48]">
+                        {formatDate(e.startDay)} - {formatDate(e.endDay)}
+                      </p>
+                    </div>
 
-                  <div className="absolute right-[10%] top-[11%] flex flex-col items-center gap-1">
-                    <p className="text-white font-bold text-sm">BUYZZLE</p>
-                    <LogoVoucher />
+                    <div className="absolute right-[10%] top-[11%] flex flex-col items-center gap-1">
+                      <p className="text-white font-bold text-sm">BUYZZLE</p>
+                      <LogoVoucher />
+                    </div>
                   </div>
-                </div>
+                </Link>
               </>
             );
           })}

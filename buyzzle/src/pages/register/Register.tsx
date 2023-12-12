@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Images } from "../../assets/TS/index";
 import "./Register.css";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import bg from "../../assets/PNG/NewProject.png";
 
 import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../utils/rules";
+import { useState } from "react";
 export interface FormValues {
   name: string;
   username: string;
@@ -18,52 +15,48 @@ export interface FormValues {
   phonenumber: string;
 }
 function Register() {
-  const [msg, setMsg] = useState("");
-
   const {
     control,
     handleSubmit,
-    register,
+    getValues,
     reset,
-    getValues, // add this line
-    formState: { errors, isDirty, isValid },
+    formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
-    // defaultValues: UserData1
+    defaultValues: {
+      name: "",
+      confirmpassword: "",
+      email: "",
+      password: "",
+      phonenumber: "",
+      username: "",
+    },
   });
-
+  const [loading, setLoading] = useState(true);
   const API = "http://localhost:5000/buyzzle/auth/register";
   const onSubmit = handleSubmit(async (data) => {
-    // const response = await axios.post(API, data);
-    //   console.log("server: ", response);
-
     try {
-      console.log("checker", data);
       const response = await axios.post(API, data);
-      console.log("Them thanh cong", response);
-
       if (response.status === 200) {
-        console.log("Sign-in successfully");
+        setLoading(false);
         toast.success(
-          "Đăng kí thành công! Vui lòng kiểm tra email để xác nhận tài khoản",
+          "Đăng ký thành công - kiểm tra email của bạn để xác minh tài khoản",
           {
             position: "top-right",
             autoClose: 5000,
           }
         );
+        reset({});
       } else {
-        console.log("Sign-in Failed!");
-        toast.warning("Sign-in failed", {
+        setLoading(true);
+        toast.warning("Đăng ký thất bại!", {
           position: "top-right",
           autoClose: 5000,
         });
       }
     } catch (error) {
-      // console.log("Them that bai", error);
-      console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-        // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData.error) {
           console.log(`Lỗi2: ${responseData.error}`);
           const errorMessageUsername = responseData.error.username;
@@ -79,7 +72,9 @@ function Register() {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if (errorMessagePhoneNumber == "Số điện thoại không đúng định dạng!" ) {
+          } else if (
+            errorMessagePhoneNumber == "Số điện thoại không đúng định dạng!"
+          ) {
             toast.warning("Số điện thoại không đúng định dạng!", {
               position: "top-right",
               autoClose: 5000,
@@ -442,35 +437,28 @@ function Register() {
                 </a>
               </label>
             </div>
-            <button
-              onClick={handleSubmit((formData: any) => {
-                onSubmit(formData);
-              })}
-              type="submit"
-              className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[50px]"
-            >
-              Đăng ký
-            </button>
-            {/* <ToastContainer
-              position="top-right"
-              // Custom theme for the toast container
-              theme="dark"
-            /> */}
-            {/* <div className="flex items-center my-4">
-              <div className="grow h-px bg-slate-300"></div>
-              <div className="grow h-px bg-slate-300"></div>
-            </div> */}
-            <div className="flex justify-center space-x-3">
-              {/* <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
-                <img src={Images.logoGoogle} alt="Google" className="w-6 h-6" />
+            {!loading ? (
+              <button
+                onClick={handleSubmit((formData: any) => {
+                  onSubmit(formData);
+                })}
+                type="submit"
+                disabled={true}
+                className="w-[424px] bg-gray-400 text-white py-2 rounded-md mt-[50px]"
+              >
+                Đăng ký
               </button>
-              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
-                <img src={Images.logoApple} alt="Apple" className="w-6 h-6" />
+            ) : (
+              <button
+                onClick={handleSubmit((formData: any) => {
+                  onSubmit(formData);
+                })}
+                type="submit"
+                className="w-[424px] bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 mt-[50px]"
+              >
+                Đăng ký
               </button>
-              <button className="flex items-center justify-center w-12 h-12 text-white rounded-full border-2">
-                <img src={Images.logoFace} alt="Facebook" className="w-6 h-6" />
-              </button> */}
-            </div>
+            )}
             <div className="mt-6 text-center">
               <span className="text-gray-600">
                 Bạn đã có tài khoản Buyzzle?{" "}

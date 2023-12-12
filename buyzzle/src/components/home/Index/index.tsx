@@ -10,7 +10,7 @@ import { MergedProducts } from "../../../model/ProductsSuggest";
 import {
   ImgOfProduct,
   Products,
-} from "../../../pages/home/User/filterPage/FiltersPage";
+} from "../../../pages/home/User/FilterPage/FiltersPage";
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import VoucherHomePage from "../components/Voucher/Voucher";
@@ -45,7 +45,6 @@ function Index() {
   useScroll();
   const [categoty, setCategory] = useState<Cate[]>([]);
   const [productsSuggest, setProductsSuggest] = useState<MergedProducts[]>([]);
-  const [product, setProducts] = useState<Products[]>([]);
   const [logo, setLogo] = useState<LogoHomeModel[]>([]);
   const [logo1, setLogo1] = useState<LogoHome1Model[]>([]);
 

@@ -25,7 +25,7 @@ type FormValues = {
   address: string;
   addresstype: string;
   specificaddress: string;
-  phonenumber: number;
+  phonenumber: string;
 };
 
 export type PaymentMethod = "stripe" | "cash";
@@ -163,6 +163,7 @@ export default function CheckOut() {
       specificaddress: "",
       addresstype: "",
       name: "",
+      phonenumber: "",
     },
   });
 
@@ -188,6 +189,7 @@ export default function CheckOut() {
         address: formData.address,
         specificaddress: formData.specificaddress,
         addresstype: formData.addresstype,
+        phonenumber: formData.phonenumber,
       };
       sendToDatabase(data);
       // console.log("edit thanh cong", response1);
@@ -230,6 +232,7 @@ export default function CheckOut() {
         name: user.name,
         addresstype: user.addresstype,
         specificaddress: user.specificaddress,
+        phonenumber: user.phonenumber
       });
       modal.showModal();
     }
@@ -253,10 +256,11 @@ export default function CheckOut() {
             addresstype: res.addresstype,
             address: res.address,
             specificaddress: res.specificaddress,
+            phonenumber: res.phonenumber,
           });
           setUser(res);
           setIdUpdateAddress(res.id);
-          if (res.specificaddress == null) {
+          if (res.specificaddress == null || res.phonenumber == null) {
             openModal(idModal);
           }
         })
@@ -287,6 +291,7 @@ export default function CheckOut() {
   const API = `http://localhost:5000/buyzzle/user/paymentaddress/${username}`;
 
   const sendToDatabase = async (formData: any) => {
+    console.log(formData)
     try {
       const response1 = await axios.put(API, formData).then(() => {
         getUserAddress();
@@ -323,7 +328,7 @@ export default function CheckOut() {
     CheckToken();
     // handleBuyNow();
     CheckRefreshToken();
-    console.log("AOTHATDAY");
+    // console.log("AOTHATDAY");
   }
   return (
     <>
@@ -543,7 +548,55 @@ export default function CheckOut() {
                               </div>
                             </div>
 
-                            <div className="w-[100%] mt-4">
+                            <div className="w-[100%] mt-2">
+                              <Controller
+                                control={control}
+                                name="phonenumber"
+                                rules={{
+                                  required: {
+                                    value: true,
+                                    message: "Hãy nhập số điện thoại",
+                                  },
+                                  maxLength: {
+                                    value: 10,
+                                    message: "Không quá 10 số",
+                                  },
+                                  minLength: {
+                                    value: 10,
+                                    message: "Số điện thoại phải là 10 số",
+                                  }
+                                }}
+                                render={({ field }) => (
+                                  <>
+                                    <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px]">
+                                      Số điện thoại*
+                                    </p>
+                                    <input
+                                      className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                   rounded-[6px] px-[10px] py-[12px] w-[100%]
+                                                  ${!!errors.phonenumber
+                                          ? "border-[2px] border-red-900"
+                                          : "border-[1px] border-[#FFAAAF]"
+                                        }`}
+                                      placeholder="Số điện thoại"
+                                      onChange={(e) => {
+                                        const reg = /[a-zA-Z!@#$e]/;
+                                        const value = e.target.value;
+                                        field.onChange(value.replace(reg, ""));
+                                      }}
+                                      value={field.value}
+                                    />
+                                    {!!errors.phonenumber && (
+                                      <p className="text-red-700 mt-2">
+                                        {errors.phonenumber.message}
+                                      </p>
+                                    )}
+                                  </>
+                                )}
+                              />
+                            </div>
+
+                            <div className="w-[100%] mt-2">
                               <Controller
                                 control={control}
                                 name="address"
@@ -588,7 +641,7 @@ export default function CheckOut() {
                               />
                             </div>
 
-                            <div className="flex flex-col border-b-[1px] pb-4 mb-4 gap-2">
+                            <div className="flex flex-col border-b-[1px] pb-4 my-2 gap-2">
                               <Controller
                                 name="specificaddress"
                                 control={control}
@@ -608,12 +661,9 @@ export default function CheckOut() {
                                 }}
                                 render={({ field }) => (
                                   <>
-                                    <label
-                                      htmlFor="specificaddress"
-                                      className="text-[#4C4C4C] text-sm font-medium"
-                                    >
-                                      Địa chỉ cụ thể
-                                    </label>
+                                    <p className="text-[#4C4C4C] text-sm font-semibold">
+                                      Địa chỉ cụ thể*
+                                    </p>
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                    rounded-[6px] px-[10px] py-[12px] w-[100%]
@@ -851,8 +901,8 @@ export default function CheckOut() {
                               </div>
                               <p
                                 className={`max-lg:text-[10px] ${selectedPaymentMethod === element.type
-                                    ? "inherit"
-                                    : "text-[#9c9c9c]"
+                                  ? "inherit"
+                                  : "text-[#9c9c9c]"
                                   } cursor-pointer`}
                                 onClick={() => {
                                   setSelectedPaymentMethod(element.type);
@@ -884,16 +934,16 @@ export default function CheckOut() {
                   </div>
                   <a onClick={muti}>
                     <PaymentBtn
-                    idUser={idUser}
-                    cartItems={listLocalCart}
-                    method={selectedPaymentMethod}
-                    voucher={itemVoucher}
-                    note={note}
-                    invoice={invoice}
-                    address={user.specificaddress}
-                    name={user.name}
-                    phoneNumber={user.phonenumber}
-                  />
+                      idUser={idUser}
+                      cartItems={listLocalCart}
+                      method={selectedPaymentMethod}
+                      voucher={itemVoucher}
+                      note={note}
+                      invoice={invoice}
+                      address={user.specificaddress}
+                      name={user.name}
+                      phoneNumber={user.phonenumber}
+                    />
                   </a>
 
                 </div>
