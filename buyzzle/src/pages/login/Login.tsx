@@ -100,7 +100,7 @@ function Login() {
         }
       } else {
         console.log("Login Failed!");
-        toast.warning("Login failed", {
+        toast.error("Đăng nhập thất bại", {
           position: "top-right",
           autoClose: 5000,
         });
@@ -113,14 +113,29 @@ function Login() {
         const responseData = error.response.data;
         console.log(responseData);
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
-        if (responseData) {
+        if (responseData == "Sai email") {
           //   const errorMessage = responseData.error.password;
           console.log(`Lỗi1:1 ${responseData}`);
-          toast.warning(responseData, {
+          toast.error("Tài khoản không tồn tại!", {
             position: "top-right",
             autoClose: 5000,
           });
-        } else {
+        }else if(responseData == "Sai mật khẩu"){
+          toast.error("Sai mật khẩu!", {
+            position: "top-right",
+            autoClose: 5000,
+          });
+        }else if(responseData == "An email has sent to your email, please check that"){
+          toast.error("Tài khoản bạn đăng kí chưa xác thực!", {
+            position: "top-right",
+            autoClose: 5000,
+          });
+        }else if(responseData == "data and hash arguments required"){
+          toast.error("Sai mật khẩu", {
+            position: "top-right",
+            autoClose: 5000,
+          });
+        } else  {
           console.log("Lỗi không xác định từ server");
         }
       } else {
