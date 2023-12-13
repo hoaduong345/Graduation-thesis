@@ -216,12 +216,12 @@ export default function SitebarFilter({
             </AccordionPanel>
           </AccordionItem>
           <div className="btn-deleteFilter font-extrabold flex items-center justify-center mt-[38px]">
-            {/* <button
+            <button
               type="button"
               className=" text-white bg-[#EA4B48] hover:bg-red-400 rounded-lg px-6 py-3 w-[95%] "
             >
               Xóa bộ lọc
-            </button> */}
+            </button>
           </div>
           <a href="#">
             <img
