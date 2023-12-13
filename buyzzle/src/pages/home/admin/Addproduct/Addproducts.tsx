@@ -16,6 +16,7 @@ import { CategoryModal } from "../../../../model/CategoryModel";
 import Back from "../assets/TSX/Back";
 import UploadIMG from "../assets/TSX/UploadIMG";
 import { toastError } from "../../../../helper/Toast/Error";
+import Attribute from "./Attribute";
 
 export type FormValues = {
   productName: string;
@@ -87,7 +88,7 @@ export default function Addproducts() {
     const _url = [...url];
     _url.splice(index, 1);
     setUrl(_url);
-  }
+  };
 
   const addImages = async (id: number, url: string) => {
     const urlImages = {
@@ -242,10 +243,11 @@ export default function Addproducts() {
                             className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A]
                                                         rounded-[6px] px-[10px] py-[12px] w-[100%]
                                                         max-xl:text-sm max-lg:text-[13px]
-                                            ${!!errors.productName
-                                ? "border-[2px] border-red-900"
-                                : "border-[1px] border-[#FFAAAF]"
-                              }`}
+                                            ${
+                                              !!errors.productName
+                                                ? "border-[2px] border-red-900"
+                                                : "border-[1px] border-[#FFAAAF]"
+                                            }`}
                             placeholder="Nhập tiêu đề sản phẩm"
                             value={field.value}
                             onChange={(e) => {
@@ -355,10 +357,11 @@ export default function Addproducts() {
                   <div
                     className={`flex items-center w-[150px] rounded-md h-[46px] transition 
                                     duration-150 justify-evenly  max-[1330px]:w-[280px] max-[1024px]:w-[320px]
-                                ${isDisabled
-                        ? "bg-[#aeaeae] cursor-not-allowed"
-                        : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                      }
+                                ${
+                                  isDisabled
+                                    ? "bg-[#aeaeae] cursor-not-allowed"
+                                    : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                                }
                                     `}
                   >
                     <button
@@ -367,10 +370,11 @@ export default function Addproducts() {
                         handleAddproduct(data);
                       })}
                       className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
-                                        ${isDisabled
-                          ? "cursor-not-allowed"
-                          : "cursor-pointer"
-                        } `}
+                                        ${
+                                          isDisabled
+                                            ? "cursor-not-allowed"
+                                            : "cursor-pointer"
+                                        } `}
                     >
                       Thêm sản phẩm
                     </button>
@@ -402,14 +406,18 @@ export default function Addproducts() {
                     <Controller
                       control={control}
                       name="productImage"
-                      render={({ }) => (
+                      render={({}) => (
                         <>
                           <div className="flex max-[1300px]:gap-3">
                             {/* form upload img */}
                             <div className="max-w-max items-center">
                               <label htmlFor="images">
                                 <div
-                                  className={`outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 ${url.length >= 6 ? `cursor-not-allowed` : `cursor-pointer`}
+                                  className={`outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 ${
+                                    url.length >= 6
+                                      ? `cursor-not-allowed`
+                                      : `cursor-pointer`
+                                  }
                                   max-xl:px-4 max-[1100px]:py-4 max-[1024px]:p-2 max-[768px]:p-1`}
                                 >
                                   <input
@@ -458,14 +466,12 @@ export default function Addproducts() {
                                           ></div>
                                           <div
                                             className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
-                                            onClick={() =>
-                                              removeListUrl(index)
-                                            }
+                                            onClick={() => removeListUrl(index)}
                                           >
                                             <RemoveIMG />
                                           </div>
                                         </div>
-                                      </div >
+                                      </div>
                                     </>
                                   );
                                 })}
@@ -515,10 +521,11 @@ export default function Addproducts() {
                               </p>
                               <div
                                 className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
-                                                            ${!!errors.productPrice
-                                    ? "border-[1px] border-red-900"
-                                    : "border-[1px] border-[#FFAAAF]"
-                                  }
+                                                            ${
+                                                              !!errors.productPrice
+                                                                ? "border-[1px] border-red-900"
+                                                                : "border-[1px] border-[#FFAAAF]"
+                                                            }
                                                             `}
                               >
                                 <input
@@ -571,10 +578,11 @@ export default function Addproducts() {
                               </p>
                               <div
                                 className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
-                                                            ${!!errors.productDiscount
-                                    ? "border-[1px] border-red-900"
-                                    : "border-[1px] border-[#FFAAAF]"
-                                  }
+                                                            ${
+                                                              !!errors.productDiscount
+                                                                ? "border-[1px] border-red-900"
+                                                                : "border-[1px] border-[#FFAAAF]"
+                                                            }
                                                             `}
                               >
                                 <input
@@ -627,10 +635,11 @@ export default function Addproducts() {
                           <input
                             className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
                                                             max-xl:text-sm max-lg:text-[13px]
-                                                    ${!!errors.productQuantity
-                                ? "border-[1px] border-red-900"
-                                : "border-[1px] border-[#FFAAAF]"
-                              } `}
+                                                    ${
+                                                      !!errors.productQuantity
+                                                        ? "border-[1px] border-red-900"
+                                                        : "border-[1px] border-[#FFAAAF]"
+                                                    } `}
                             placeholder="000.000"
                             value={field.value}
                             onChange={(e) => {
@@ -738,7 +747,7 @@ export default function Addproducts() {
                                       return (
                                         <>
                                           {ele.categoryid ==
-                                            watch("categoryID") ? (
+                                          watch("categoryID") ? (
                                             <option value={ele.id}>
                                               {ele.name}
                                             </option>
@@ -765,6 +774,7 @@ export default function Addproducts() {
                     {/* end input addNameProducts */}
                   </div>
                 </div>
+                <Attribute />
               </div>
             </div>
           </form>
