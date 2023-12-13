@@ -2,7 +2,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useFieldArray } from "react-hook-form";
 import { Link } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { toast } from "react-toastify";
@@ -19,16 +19,22 @@ import { toastError } from "../../../../helper/Toast/Error";
 import Attribute from "./Attribute";
 
 export type FormValues = {
+  id: number;
   productName: string;
   productPrice: number;
   productDesc: string;
-  productQuantity: number;
   productImage: string;
   productDiscount: number;
   categoryID: number;
   subCategoryID: Number;
+  attributes: attribute[];
 };
-
+export interface attribute {
+  // id: number;
+  size: string;
+  color: string;
+  productQuantity: number;
+}
 export default function Addproducts() {
   const [categoty, setCategory] = useState<CategoryModal[]>([]);
   const editorRef = useRef<any>(null);
@@ -113,11 +119,15 @@ export default function Addproducts() {
       name: data.productName,
       price: data.productPrice,
       description: data.productDesc,
-      quantity: data.productQuantity,
       discount: data.productDiscount,
       categoryID: data.categoryID,
+      attribute: data.attributes,
       subcategoriesID: data.subCategoryID,
     };
+    console.log(
+      "🚀 ~ file: Addproducts.tsx:127 ~ handleAddproduct ~ _data:",
+      _data
+    );
     axios
       .post(`${appConfig.apiUrl}/addproduct`, _data)
       .then((response) => {
@@ -151,11 +161,21 @@ export default function Addproducts() {
       productDesc: "",
       productImage: "",
       productPrice: 1,
-      productQuantity: 1,
       productDiscount: 1,
+      attributes: [
+        {
+          size: "",
+          color: "",
+          productQuantity: 1,
+        },
+      ],
     },
   });
-
+  const { fields, append, remove } = useFieldArray<FormValues>({
+    name: "attributes",
+    control,
+  });
+  console.log("watch().attributes", watch().attributes);
   const isDisabled = !(isValid && isDirty);
 
   const loading = () => {
@@ -174,7 +194,6 @@ export default function Addproducts() {
   useEffect(() => {
     let user = secureLocalStorage.getItem("admin");
     if (user == null) {
-      // console.log("VCLLLLLLLLLLLLLLLLLll");
       window.location.href = "/admin/loginadmin";
     }
   }, []);
@@ -464,11 +483,11 @@ export default function Addproducts() {
                                             className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
                                                                     opacity-0 transition duration-300 ease-in-out group-hover:opacity-20"
                                           ></div>
-                                          <div
-                                            className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
-                                            onClick={() => removeListUrl(index)}
-                                          >
-                                            <RemoveIMG />
+                                          <div className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute">
+                                            <RemoveIMG
+                                              index={index}
+                                              removeListUrl={removeListUrl}
+                                            />
                                           </div>
                                         </div>
                                       </div>
@@ -484,10 +503,10 @@ export default function Addproducts() {
                   </div>
                 </div>
 
-                {/* Giá và số lượng sản phẩm */}
+                {/* Giá */}
                 <div className="mt-7">
                   <span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
-                    Giá & Số Lượng
+                    Giá & Giảm Giá
                   </span>
                   {/* card */}
                   <div
@@ -611,51 +630,6 @@ export default function Addproducts() {
                         )}
                       />
                     </div>
-
-                    <Controller
-                      control={control}
-                      name="productQuantity"
-                      rules={{
-                        required: {
-                          value: true,
-                          message: "Bạn phải nhập số lượng cho sản phẩm này!",
-                        },
-                        maxLength: {
-                          value: 4,
-                          message:
-                            "Số lượng sản phẩm quá nhiều! Chỉ tối đa đến hàng nghìn!",
-                        },
-                      }}
-                      render={({ field }) => (
-                        <>
-                          <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
-                            Số Lượng Sản Phẩm
-                            <span className="text-[#FF0000]">*</span>
-                          </p>
-                          <input
-                            className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
-                                                            max-xl:text-sm max-lg:text-[13px]
-                                                    ${
-                                                      !!errors.productQuantity
-                                                        ? "border-[1px] border-red-900"
-                                                        : "border-[1px] border-[#FFAAAF]"
-                                                    } `}
-                            placeholder="000.000"
-                            value={field.value}
-                            onChange={(e) => {
-                              const reg = /[^0-9]/g;
-                              const value = e.target.value;
-                              field.onChange(value.replace(reg, ""));
-                            }}
-                          />
-                          {errors.productQuantity && (
-                            <p className="text-red-700 mt-2">
-                              {errors.productQuantity.message}
-                            </p>
-                          )}
-                        </>
-                      )}
-                    />
                   </div>
                 </div>
 
@@ -774,7 +748,13 @@ export default function Addproducts() {
                     {/* end input addNameProducts */}
                   </div>
                 </div>
-                <Attribute />
+                <Attribute
+                  control={control}
+                  errors={errors}
+                  fields={fields}
+                  remove={remove}
+                  append={append}
+                />
               </div>
             </div>
           </form>
