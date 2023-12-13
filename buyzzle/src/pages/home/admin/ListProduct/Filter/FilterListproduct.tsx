@@ -226,7 +226,7 @@ export default function FilterListproduct({
               className={`text-center text-lg max-xl:text-base max-lg:text-sm 
                            ${quantity ? `text-[#1A1A1A]` : `text-[#8c8c8c]`} `}
             >
-              SLSP còn trong kho
+              Số Lượng sản phẩm có trong kho
             </p>
             <div className="slider">
               <Slider
