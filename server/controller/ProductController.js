@@ -43,8 +43,8 @@ const ProductController = {
 
             const categoryCount = await prisma.category.count({
                 where: {
-                    deletedAt: null
-                }
+                    deletedAt: null,
+                },
             });
             if (categoryCount >= 6) {
                 return res.status(400).json('du 6 danh muc');
@@ -57,7 +57,7 @@ const ProductController = {
                     image,
                 },
             });
-            console.log("🚀 ~ file: ProductController.js:56 ~ addCategory: ~ newCategory:", newCategory)
+            console.log('🚀 ~ file: ProductController.js:56 ~ addCategory: ~ newCategory:', newCategory);
 
             res.status(200).json('Thêm danh mục thành công');
         } catch (error) {
@@ -234,14 +234,22 @@ const ProductController = {
 
     addProduct: async (req, res) => {
         try {
-            const { name, price, rate, discount, quantity, description, status, categoryID, subcategoriesID } =
-                req.body;
-
-            console.log('aaa', categoryID);
-            console.log('bbbbb', subcategoriesID);
+            const {
+                name,
+                price,
+                rate,
+                discount,
+                quantity,
+                description,
+                status,
+                categoryID,
+                subcategoriesID,
+                attributes,
+            } = req.body;
+    
             const SellingPrice = price - price * (discount / 100);
             const Pricesale = price * (discount / 100);
-
+    
             const newProduct = {
                 name,
                 price: parseInt(price),
@@ -256,24 +264,33 @@ const ProductController = {
                 date: new Date(),
                 createdAt: new Date(),
                 updatedAt: new Date(),
-                // productId: parseInt(productId),
                 categoryID: parseInt(categoryID),
                 subcateId: parseInt(subcategoriesID),
+                quantity: attributes.reduce((acc, attr) => acc + parseInt(attr.soluong), 0),
+                attributes: {
+                    create: attributes.map(attr => ({
+                      size: attr.size,
+                      color: attr.color,
+                      soluong: parseInt(attr.soluong),
+                    })),
+                  },
             };
-
-            const neww = await prisma.product.create({
+    
+            const newProductResult = await prisma.product.create({
                 data: newProduct,
+                include: {
+                    attributes: true,
+                  },
             });
-
-            console.log(neww);
-            // res.status(200).json("Thêm sản phẩm thành công");
-            res.status(200).json(neww);
-            // });
+    
+            res.status(200).json(newProductResult);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    
+    
 
     // xóa sản phẩm
     deleteProduct: async (req, res) => {
@@ -282,14 +299,27 @@ const ProductController = {
             const page = parseInt(req.body.page) || 1;
             const pageSize = parseInt(req.body.pageSize) || 40;
             let skip = (page - 1) * pageSize;
+    
+            // Find the product to delete
             const productToDelete = await prisma.product.findFirst({
                 where: {
                     id: id,
                 },
             });
-
+    
             some.info(`[ProductToDelete] `, `Id: ${req.params.id}`);
             if (productToDelete) {
+                // Delete associated attributes
+                await prisma.attribute.updateMany({
+                    where: {
+                        productId: id,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                });
+    
+                // Soft delete the product
                 await prisma.product.update({
                     where: {
                         id: id,
@@ -298,9 +328,12 @@ const ProductController = {
                         deletedAt: new Date(),
                     },
                 });
+    
                 const whereClause = {
                     deletedAt: null,
                 };
+    
+                // Retrieve the updated product list
                 const totalProduct = await prisma.product.count({
                     where: whereClause,
                 });
@@ -317,20 +350,23 @@ const ProductController = {
                     skip,
                     take: pageSize,
                 });
+    
                 const resultProduct = {
                     currentPage: page,
                     totalPage: Math.ceil(totalProduct / pageSize),
                     rows: result,
                 };
+    
                 return res.status(200).json(resultProduct);
             }
-
+    
             return res.status(402).json('San pham khong ton tai');
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    
 
     //cập nhật sản phẩm
     updateProduct: async (req, res) => {
@@ -457,7 +493,6 @@ const ProductController = {
             const availabilityType = req.query.availabilityType; // Thêm tham số availabilityType
             const sortBySoldCount = req.query.sortBySoldCount;
 
-
             const FlashsaleProducts = await prisma.product.findMany({
                 where: {
                     discount: {
@@ -505,7 +540,6 @@ const ProductController = {
                 };
             }
 
-
             if (req.query.minQuantity && req.query.maxQuantity) {
                 whereClause.quantity = {
                     gte: parseInt(req.query.minQuantity),
@@ -540,7 +574,11 @@ const ProductController = {
                 },
             });
             const result = await prisma.product.findMany({
-                orderBy: [{ sellingPrice: sortByPrice }, { createdAt: sortByDateCreate }, { soldcount: sortBySoldCount }],
+                orderBy: [
+                    { sellingPrice: sortByPrice },
+                    { createdAt: sortByDateCreate },
+                    { soldcount: sortBySoldCount },
+                ],
                 include: {
                     ProductImage: true,
                     fK_category: true,
@@ -605,22 +643,20 @@ const ProductController = {
                 });
             } else if (availabilityType === 'soldCount') {
                 const soldCountProducts = await prisma.product.findMany({
-                  orderBy: [{ soldcount: 'desc' }],
-                  include: {
-                    ProductImage: true,
-                    fK_category: true,
-                    Rating: true,
-                  },
-                  where: whereClause,
-                  skip,
-                  take: pageSize,
+                    orderBy: [{ soldcount: 'desc' }],
+                    include: {
+                        ProductImage: true,
+                        fK_category: true,
+                        Rating: true,
+                    },
+                    where: whereClause,
+                    skip,
+                    take: pageSize,
                 });
-              
-                res.status(200).json({
-                  rows: soldCountProducts,
-                }); 
 
-                
+                res.status(200).json({
+                    rows: soldCountProducts,
+                });
             } else {
                 const resultProduct = {
                     FlashsaleProducts: FlashsaleProducts,
@@ -842,23 +878,23 @@ const ProductController = {
             const userId = parseInt(req.cookies.id);
             const ratingId = parseInt(req.params.ratingId);
             const { ratingValue, comment } = req.body;
-    
+
             // Kiểm tra xem đánh giá có tồn tại không
             const existingRating = await prisma.rating.findUnique({
                 where: {
                     id: ratingId,
                 },
             });
-    
+
             if (!existingRating) {
                 return res.status(404).json('Đánh giá không tồn tại');
             }
-    
+
             // Kiểm tra xem người dùng hiện tại có quyền cập nhật đánh giá hay không
             if (existingRating.iduser !== userId) {
                 return res.status(403).json('Bạn không có quyền cập nhật đánh giá này');
             }
-    
+
             // Thực hiện cập nhật đánh giá
             const updatedRating = await prisma.rating.update({
                 where: {
@@ -869,7 +905,7 @@ const ProductController = {
                     comment,
                 },
             });
-    
+
             res.status(200).json(updatedRating);
         } catch (error) {
             console.error(error);
@@ -881,33 +917,31 @@ const ProductController = {
         try {
             const userId = parseInt(req.cookies.id);
             const { ratingId } = req.params;
-    
-         
+
             const existingRating = await prisma.rating.findUnique({
                 where: {
                     id: parseInt(ratingId),
                 },
             });
-    
+
             if (!existingRating) {
-                return res.status(404).json("Đánh giá không tồn tại");
+                return res.status(404).json('Đánh giá không tồn tại');
             }
-    
-            
+
             if (existingRating.iduser !== userId) {
-                return res.status(403).json("Bạn không có quyền xóa đánh giá này");
+                return res.status(403).json('Bạn không có quyền xóa đánh giá này');
             }
-    
+
             await prisma.rating.delete({
                 where: {
                     id: parseInt(ratingId),
                 },
             });
-    
-            res.status(200).json("Xóa đánh giá thành công");
+
+            res.status(200).json('Xóa đánh giá thành công');
         } catch (error) {
             console.error(error);
-            res.status(500).json("Lỗi khi xóa đánh giá");
+            res.status(500).json('Lỗi khi xóa đánh giá');
         }
     },
 
@@ -1063,7 +1097,6 @@ const ProductController = {
     // GỢI Ý SẢN PHẨM THEO GIỚI TÍNH
     suggestProductBySex: async (req, res) => {
         try {
-
             const page = parseInt(req.body.page) || 1;
             const pageSize = parseInt(req.body.pageSize) || 40;
             const idUser = parseInt(req.cookies.id);
