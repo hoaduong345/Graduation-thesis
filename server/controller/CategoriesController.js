@@ -7,7 +7,6 @@ const CategoriesController = {
             const categoryId = parseInt(req.body.categoryId);
             const name = req.body.name;
 
-            // Check if the category exists
             const category = await prisma.category.findUnique({
                 where: { id: categoryId },
             });
@@ -31,11 +30,6 @@ const CategoriesController = {
 
     getSubCategories: async (req, res) => {
         try {
-            // const categoryId = parseInt(req.body.category);
-            // const category = await prisma.category.findUnique({
-            //     where: { id: categoryId },
-            // });
-            // if (!category) return res.json('Category is undefined');
             const whereClause = {
                 deletedAt: null
             }

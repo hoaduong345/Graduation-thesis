@@ -234,14 +234,22 @@ const ProductController = {
 
     addProduct: async (req, res) => {
         try {
-            const { name, price, rate, discount, quantity, description, status, categoryID, subcategoriesID } =
-                req.body;
-
-            console.log('aaa', categoryID);
-            console.log('bbbbb', subcategoriesID);
+            const {
+                name,
+                price,
+                rate,
+                discount,
+                quantity,
+                description,
+                status,
+                categoryID,
+                subcategoriesID,
+                attributes,
+            } = req.body;
+    
             const SellingPrice = price - price * (discount / 100);
             const Pricesale = price * (discount / 100);
-
+    
             const newProduct = {
                 name,
                 price: parseInt(price),
@@ -256,24 +264,33 @@ const ProductController = {
                 date: new Date(),
                 createdAt: new Date(),
                 updatedAt: new Date(),
-                // productId: parseInt(productId),
                 categoryID: parseInt(categoryID),
                 subcateId: parseInt(subcategoriesID),
+                quantity: attributes.reduce((acc, attr) => acc + parseInt(attr.soluong), 0),
+                attributes: {
+                    create: attributes.map(attr => ({
+                      size: attr.size,
+                      color: attr.color,
+                      soluong: parseInt(attr.soluong),
+                    })),
+                  },
             };
-
-            const neww = await prisma.product.create({
+    
+            const newProductResult = await prisma.product.create({
                 data: newProduct,
+                include: {
+                    attributes: true,
+                  },
             });
-
-            console.log(neww);
-            // res.status(200).json("Thêm sản phẩm thành công");
-            res.status(200).json(neww);
-            // });
+    
+            res.status(200).json(newProductResult);
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    
+    
 
     // xóa sản phẩm
     deleteProduct: async (req, res) => {
@@ -282,14 +299,27 @@ const ProductController = {
             const page = parseInt(req.body.page) || 1;
             const pageSize = parseInt(req.body.pageSize) || 40;
             let skip = (page - 1) * pageSize;
+    
+            // Find the product to delete
             const productToDelete = await prisma.product.findFirst({
                 where: {
                     id: id,
                 },
             });
-
+    
             some.info(`[ProductToDelete] `, `Id: ${req.params.id}`);
             if (productToDelete) {
+                // Delete associated attributes
+                await prisma.attribute.updateMany({
+                    where: {
+                        productId: id,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                });
+    
+                // Soft delete the product
                 await prisma.product.update({
                     where: {
                         id: id,
@@ -298,9 +328,12 @@ const ProductController = {
                         deletedAt: new Date(),
                     },
                 });
+    
                 const whereClause = {
                     deletedAt: null,
                 };
+    
+                // Retrieve the updated product list
                 const totalProduct = await prisma.product.count({
                     where: whereClause,
                 });
@@ -317,20 +350,23 @@ const ProductController = {
                     skip,
                     take: pageSize,
                 });
+    
                 const resultProduct = {
                     currentPage: page,
                     totalPage: Math.ceil(totalProduct / pageSize),
                     rows: result,
                 };
+    
                 return res.status(200).json(resultProduct);
             }
-
+    
             return res.status(402).json('San pham khong ton tai');
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
         }
     },
+    
 
     //cập nhật sản phẩm
     updateProduct: async (req, res) => {
