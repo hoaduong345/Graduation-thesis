@@ -228,7 +228,7 @@ export default function FilterListproduct({
               className={`text-center text-lg max-xl:text-base max-lg:text-sm 
                            ${quantity ? `text-[#1A1A1A]` : `text-[#8c8c8c]`} `}
             >
-              Số Lượng SP Kho
+              Số Lượng sản phẩm có trong kho
             </p>
             <div className="slider">
               <Slider
@@ -283,14 +283,14 @@ export default function FilterListproduct({
         })}
       </div>
       <div>
-        <button
+        {/* <button
           className="bg-[#EA4B48] text-white p-3 px-10 justify-center hover:bg-red-400 duration-300
                          rounded-md flex gap-3 items-center text-base font-bold
                          max-xl:p-[10px] max-xl:text-sm max-[900px]:text-xs max-[900px]:p-[8px]"
         >
           Xóa bộ lọc
           <DeleteWhite />
-        </button>
+        </button> */}
       </div>
     </div>
   );
