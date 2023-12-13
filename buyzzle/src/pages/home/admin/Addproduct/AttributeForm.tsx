@@ -30,11 +30,11 @@ export default function AttributeForm(props: Form) {
                 rules={{
                   required: {
                     value: true,
-                    message: "Vui lòng nhap size!",
+                    message: "Nhập size!",
                   },
                   maxLength: {
                     value: 2,
-                    message: "Size chi toi da 2 ky tu",
+                    message: "Size tối đa 2 ký tự!",
                   },
                 }}
                 render={({ field }) => (
@@ -76,11 +76,11 @@ export default function AttributeForm(props: Form) {
                 rules={{
                   required: {
                     value: true,
-                    message: "Vui lòng nhap chon mau sac!",
+                    message: "Nhập màu sắc!",
                   },
                   maxLength: {
                     value: 6,
-                    message: "Mau sac khong hop le!",
+                    message: "Màu sắc không hợp lệ!",
                   },
                 }}
                 render={({ field }) => (
@@ -101,7 +101,7 @@ export default function AttributeForm(props: Form) {
                                                                 : "border-[1px] border-[#FFAAAF]"
                                                             }
                                                    `}
-                      placeholder="Den, Trang,.."
+                      placeholder="Đen, Trắng,.."
                       value={field.value}
                       onChange={(e) => {
                         field.onChange(e);
@@ -118,18 +118,18 @@ export default function AttributeForm(props: Form) {
             </div>
             <div className="col-span-3">
               <Controller
-                name={`attributes.${index}.productQuantity`}
+                control={control}
+                name={`attributes.${index}.soluong`}
                 rules={{
                   required: {
                     value: true,
-                    message: "Vui lòng nhap so luong!",
+                    message: "Nhập số lượng!",
                   },
                   maxLength: {
                     value: 6,
-                    message: "So luong khong hop le!",
+                    message: "Số lượng không hợp lệ!",
                   },
                 }}
-                control={control}
                 render={({ field }) => (
                   <>
                     <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
@@ -143,7 +143,7 @@ export default function AttributeForm(props: Form) {
                                                               errors.attributes &&
                                                               errors.attributes[
                                                                 index
-                                                              ]?.productQuantity
+                                                              ]?.soluong
                                                                 ? "border-[1px] border-red-900"
                                                                 : "border-[1px] border-[#FFAAAF]"
                                                             }
@@ -153,15 +153,14 @@ export default function AttributeForm(props: Form) {
                       onChange={(e) => {
                         const reg = /[^0-9]/g;
                         const value = e.target.value;
-                        field.onChange(value.replace(reg, ""));
+                        field.onChange(e);
                       }}
                     />
-                    {errors.attributes &&
-                      errors.attributes[index]?.productQuantity && (
-                        <p className="text-red-700 mt-2">
-                          {errors.attributes[index]?.productQuantity?.message}
-                        </p>
-                      )}
+                    {errors.attributes && errors.attributes[index]?.soluong && (
+                      <p className="text-red-700 mt-2">
+                        {errors.attributes[index]?.soluong?.message}
+                      </p>
+                    )}
                   </>
                 )}
               />

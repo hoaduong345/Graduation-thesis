@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Control,
   FieldArrayWithId,
@@ -20,7 +19,7 @@ export default function Attribute(props: AttributeProps) {
   const { fields, errors, control, append, remove } = props;
 
   const handlePlusClick = () => {
-    append({ color: "", productQuantity: 1, size: "" });
+    append({ color: "", soluong: 1, size: "" });
   };
 
   const handleMinusClick = (index: number) => {

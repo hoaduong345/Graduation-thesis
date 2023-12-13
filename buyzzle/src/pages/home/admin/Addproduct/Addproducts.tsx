@@ -30,10 +30,9 @@ export type FormValues = {
   attributes: attribute[];
 };
 export interface attribute {
-  // id: number;
   size: string;
   color: string;
-  productQuantity: number;
+  soluong: number;
 }
 export default function Addproducts() {
   const [categoty, setCategory] = useState<CategoryModal[]>([]);
@@ -121,7 +120,7 @@ export default function Addproducts() {
       description: data.productDesc,
       discount: data.productDiscount,
       categoryID: data.categoryID,
-      attribute: data.attributes,
+      attributes: data.attributes,
       subcategoriesID: data.subCategoryID,
     };
     console.log(
@@ -166,7 +165,7 @@ export default function Addproducts() {
         {
           size: "",
           color: "",
-          productQuantity: 1,
+          soluong: 1,
         },
       ],
     },
