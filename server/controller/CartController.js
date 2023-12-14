@@ -14,6 +14,11 @@ const CartController = {
             let atri = await prisma.attribute.findFirst({
                 where: {
                     id : atributes
+                },
+                select:{
+                    color: true,
+                    size: true,
+                    soluong: true
                 }
             })
             if (!cart) {
