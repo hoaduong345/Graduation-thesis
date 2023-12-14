@@ -1,4 +1,4 @@
-import { Images } from "../../../../assets/ts";
+import { Images } from "../../../../assets/TS";
 import { numberFormat } from "../../../../helper/Format";
 import Container from "../../../../components/container/Container";
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../../assets/ts";
+import { Images } from "../../../../../assets/TS";
 import Map from "../../../../../assets/TSX/Map";
 import NoteOrderAdmin from "../../../../../assets/TSX/NoteOrderAdmin";
 import { orderControllers } from "../../../../../controllers/OrderControllers";

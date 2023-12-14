@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Images } from "../../../../assets/ts";
+import { Images } from "../../../../assets/TS";
 import {
   currentDate,
   numberFormat,

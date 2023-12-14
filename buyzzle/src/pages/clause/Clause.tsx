@@ -1,4 +1,4 @@
-import { Images } from "../../assets/ts/index";
+import { Images } from "../../assets/TS/index";
 // import "./Register.css";
 import { Link, useNavigate } from "react-router-dom";
 import Back from "../home/admin/assets/TSX/Back";

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../assets/ts/index";
+import { Images } from "../../assets/TS/index";
 import "./Register.css";
 
 import { useState } from "react";

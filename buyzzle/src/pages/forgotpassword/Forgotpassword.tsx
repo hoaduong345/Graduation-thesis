@@ -1,4 +1,4 @@
-import { Images } from "../../assets/ts/index";
+import { Images } from "../../assets/TS/index";
 
 // import "./forgotpassword.css";
 import { yupResolver } from "@hookform/resolvers/yup";

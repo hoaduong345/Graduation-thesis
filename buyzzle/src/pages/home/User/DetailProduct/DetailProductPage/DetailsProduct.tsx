@@ -14,7 +14,7 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import { toast } from "react-toastify";
-import { Images } from "../../../../../assets/ts";
+import { Images } from "../../../../../assets/TS";
 import Minus from "../../../../../assets/TSX/Minus";
 import Plus from "../../../../../assets/TSX/Plus";
 import SuccessIcon from "../../../../../assets/TSX/SuccessIcon";

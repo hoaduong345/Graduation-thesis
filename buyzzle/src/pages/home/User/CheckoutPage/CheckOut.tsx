@@ -8,7 +8,7 @@ import BlueRight from "../../../../assets/SVG/LetterPayment/BlueRight";
 import PinkMedium from "../../../../assets/SVG/LetterPayment/PinkMedium";
 import PinkMediumSmall from "../../../../assets/SVG/LetterPayment/PinkMediumSmall";
 import PinkRight from "../../../../assets/SVG/LetterPayment/PinkRight";
-import { Images } from "../../../../assets/ts";
+import { Images } from "../../../../assets/TS";
 import Location from "../../../../assets/TSX/Location";
 import Voucher from "../../../../assets/TSX/Voucher";
 import { userController } from "../../../../controllers/UserController";

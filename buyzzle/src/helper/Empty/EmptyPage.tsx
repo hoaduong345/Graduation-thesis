@@ -1,4 +1,4 @@
-import { Images } from "../../assets/ts";
+import { Images } from "../../assets/TS";
 
 interface EmptyModel {
   title?: string;

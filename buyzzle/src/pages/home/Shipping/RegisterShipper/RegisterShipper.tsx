@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../assets/ts";
+import { Images } from "../../../../assets/TS";
 import "./Register.css";
 
 import { Controller, useForm } from "react-hook-form";

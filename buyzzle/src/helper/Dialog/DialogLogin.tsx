@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Images } from "../../assets/ts";
+import { Images } from "../../assets/TS";
 import { LoginFormGoogle } from "../../pages/login/Login";
 // import { useGoogleLogin } from '@react-oauth/google';
 type Props = {

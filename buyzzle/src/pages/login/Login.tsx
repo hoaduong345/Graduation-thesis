@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Images } from "../../assets/ts/index";
+import { Images } from "../../assets/TS/index";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";

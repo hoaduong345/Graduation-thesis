@@ -2,7 +2,7 @@ import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../../assets/ts";
+import { Images } from "../../../../../assets/TS";
 import LineCMT from "../../../../../assets/TSX/LineCMT";
 import Period from "../../../../../assets/TSX/Period";
 import SendCmt from "../../../../../assets/TSX/SendCmt";

@@ -10,7 +10,7 @@ import "./AdminLogin.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import * as yup from "yup";
-import { Images } from "../../../../assets/ts"
+import { Images } from "../../../../assets/TS"
 function LoginAdmin() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);

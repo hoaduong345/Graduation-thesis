@@ -1,5 +1,5 @@
 import BuyzzyFooterLogo from "../../assets/TSX/BuyzzyFooterLogo";
-import { Images } from "../../assets/ts";
+import { Images } from "../../assets/TS";
 import Container from "../container/Container";
 
 export default function Footer() {
