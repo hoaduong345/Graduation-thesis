@@ -37,7 +37,6 @@ export default function NotificationAdmin() {
   } = useNotificationAdmin();
   // console.log("VCLLLLLLLLl:"+JSON.stringify(notificationAdmin));
   const handleClick = (id: number) => {
-    console.log("🚀 ~ file: Notification.tsx:27 ~ handleClick ~ id:", id);
     const updatedButtons = changeButton.map((btn) => {
       if (btn.id === id) {
         console.log(

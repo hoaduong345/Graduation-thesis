@@ -170,7 +170,6 @@ const AdminShippingController = {
 
             res.status(200).json(updateShippingResponse);
         } catch (error) {
-            console.log(error);
             res.status(500).json({ error: 'Có lỗi xảy ra khi cập nhật hồ sơ Shipping.', message: error.message });
         }
     },
@@ -230,7 +229,6 @@ const AdminShippingController = {
             });
             res.status(200).json('Them hinh thanh cong');
         } catch (error) {
-            console.log(error);
             res.status(500).json(error.message);
         }
     },

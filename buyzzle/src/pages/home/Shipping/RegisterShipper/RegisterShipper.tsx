@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import { Images } from "../../../../assets/TS";
-import "./Register.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import bg from "../../../../assets/PNG/NewProject.png";
+import { toast } from "react-toastify";
+import { Images } from "../../../../assets/ts";
+import "./Register.css";
 
 import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../../../utils/rules";
 import { shipperController } from "../../../../controllers/ShipperController";
 export interface FormValues {
   name: string;
@@ -27,8 +23,7 @@ function RegisterShipper() {
     control,
     handleSubmit,
     register,
-    reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors},
   } = useForm<FormValues>({
     mode: "all",
     // defaultValues: UserData1

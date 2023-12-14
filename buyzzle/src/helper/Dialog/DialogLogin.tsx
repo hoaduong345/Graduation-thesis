@@ -1,12 +1,11 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
-import { Images } from "../../assets/TS";
-import { Link, useParams } from "react-router-dom";
-import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import MyCustomButton from "./MyCustomButton";
-import { LoginFormGoogle } from "../../pages/login/Login";
-import { ToastContainer, toast } from "react-toastify";
-import { jwtDecode } from "jwt-decode";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { ReactNode } from "react";
+import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { Images } from "../../assets/ts";
+import { LoginFormGoogle } from "../../pages/login/Login";
 // import { useGoogleLogin } from '@react-oauth/google';
 type Props = {
   title: ReactNode;
@@ -67,7 +66,6 @@ export default function DialogLogin(props: Props) {
           },
           withCredentials: true,
         })
-        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
       }
       const pathname = window.location.pathname;
       toast.loading("Đang tải vui lòng đợi", {
@@ -96,16 +94,13 @@ export default function DialogLogin(props: Props) {
           name: decoded.name,
           username: (decoded.email).split('.')[0].trim(),
         }
-        console.log("🚀 ~ file: Login.tsx:138 ~ handleSuccess ~ data:", data)
         callAPI(data);
 
       } else {
-        console.log('Credential or access_token is undefined');
       }
     };
 
     const handleError = () => {
-      console.log('Login Failed');
       // Your custom error handling logic here
     };
 

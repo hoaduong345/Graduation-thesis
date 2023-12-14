@@ -1,19 +1,16 @@
-import { Fragment, useState, useEffect, useCallback } from "react";
-import Container from "../../../../../components/container/Container";
-import Sitebar from "../Sitebar/Sitebar";
+import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import Container from "../../../../../components/container/Container";
+import Sitebar from "../sitebar/Sitebar";
 
 import axios from "axios";
-import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
-import { v4 } from "uuid";
-import { userController } from "../../../../../controllers/UserController";
-import { appConfigUser } from "../../../../../configsEnv";
-import { storage } from "../../../../../firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { replace, values } from "lodash";
-import { stringify } from "querystring";
 import moment from "moment";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { appConfigUser } from "../../../../../configsEnv";
+import { userController } from "../../../../../controllers/UserController";
+import { storage } from "../../../../../firebase/Config";
 
 
 
@@ -30,43 +27,27 @@ export type FormImage = {
   id?: number;
   UserImage?: string[];
 };
-type UserData1 = {
-  username: string;
-  name: string;
-  email: string;
-  sex: string;
-  phonenumber: string;
-  dateOfBirth: string;
-};
+
 export default function UserProfile() {
   const [validUrl, setValidUrl] = useState<boolean>(false);
   const [CheckImageUrl, setCheckImageUrl] = useState<boolean>(false);
   const param = useParams();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [image, setImage] = useState<File | null>(null);
-  // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
   const [id, setId] = useState<string>("11");
-  // const id: number | undefined = getID()!;
   const [sex, setSex] = useState<boolean>();
   const [emailThen, setEmailThen] = useState<string>("");
   const [sdtThen, setSdtThen] = useState<string>("");
-  const [LoginByGG, setLoginByGG] = useState<boolean>();
   const [checkPhone, setCheckPhone] = useState<boolean>(true);
-  const [username, setUsername] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [dateOfBirth, setDateOfBirth] = useState<string>("");
-  // const [isDisabled1,setIsDisable1] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
-  // const [UserData1, setUserData1] = useState<UserData1>();
 
   const {
     control,
     handleSubmit,
-    register,
     reset,
     // watch,
     formState: { errors, isDirty, isValid },

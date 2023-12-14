@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Products } from "../../filterPage/FiltersPage";
-import ArrowUp from "../../../../../assets/TSX/ArrowUp";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import ArrowDown from "../../../../../assets/TSX/ArrowDown";
-import { numberFormat } from "../../../../../helper/Format";
+import ArrowUp from "../../../../../assets/TSX/ArrowUp";
 import Minus from "../../../../../assets/TSX/Minus";
 import Plus from "../../../../../assets/TSX/Plus";
-import FB from "../../../admin/assets/TSX/FB";
-import TW from "../../../admin/assets/TSX/TW";
-import Insta from "../../../admin/assets/TSX/Insta";
-import SaveLink from "../../../admin/assets/TSX/SaveLink";
-import Share from "../../../admin/assets/TSX/Share";
-import LoveProduct from "../../../admin/assets/TSX/LoveProduct";
-import axios from "axios";
+import { appConfig } from "../../../../../configsEnv";
 import {
   ModelCart,
   cartControllers,
 } from "../../../../../controllers/CartControllers";
-import { useParams } from "react-router-dom";
-import { appConfig } from "../../../../../configsEnv";
+import { numberFormat } from "../../../../../helper/Format";
 import { useScroll } from "../../../../../hooks/Scroll/useScrollPages";
-import { toast } from "react-toastify";
+import FB from "../../../admin/assets/TSX/FB";
+import Insta from "../../../admin/assets/TSX/Insta";
+import LoveProduct from "../../../admin/assets/TSX/LoveProduct";
+import SaveLink from "../../../admin/assets/TSX/SaveLink";
+import Share from "../../../admin/assets/TSX/Share";
+import TW from "../../../admin/assets/TSX/TW";
 import Cart from "../../cartPage/Cart";
+import { Products } from "../../filterPage/FiltersPage";
 
 export default function Detail() {
   const [first, setfirst] = useState<Products | undefined>(undefined);

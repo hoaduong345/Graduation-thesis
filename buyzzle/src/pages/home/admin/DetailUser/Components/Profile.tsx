@@ -1,16 +1,11 @@
-import { Fragment, useState, useEffect } from "react";
-import Container from "../../../../../components/container/Container";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import Container from "../../../../../components/container/Container";
 
-import axios from "axios";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
-import { userController } from "../../../../../controllers/UserController";
-import { appConfigUser } from "../../../../../configsEnv";
-import { storage } from "../../../../../firebase/Config";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import secureLocalStorage from "react-secure-storage";
+import { userController } from "../../../../../controllers/UserController";
 
 export type FormValues = {
   username: string;

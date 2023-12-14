@@ -3,16 +3,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 import "./stylesFilter.css";
 
 // import required modules
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import { Images } from "../../../../../assets/TS";
 import { useEffect, useState } from "react";
-import { BannerModel } from "../../../../../model/BannerModel";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { bannerController } from "../../../../../controllers/BannerController";
+import { BannerModel } from "../../../../../model/BannerModel";
 
 export default function SlidesFilter() {
   const [banner, setBanner] = useState<BannerModel[]>([]);

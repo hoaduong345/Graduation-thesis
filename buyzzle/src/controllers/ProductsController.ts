@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ProductSuggest } from "../model/ProductsSuggest";
-import { Products } from "../pages/home/User/FilterPage/FiltersPage";
 import { FormValues } from "../pages/home/admin/EditProduct/EditProductMap";
+import { Products } from "../pages/home/User/filterPage/FiltersPage";
 
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_URL || "",

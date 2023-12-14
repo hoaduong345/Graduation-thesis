@@ -19,10 +19,7 @@ import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
 import Handle from "../../../admin/assets/TSX/bacham";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
-type FormValues = {
-  id: number;
-  images: string;
-};
+
 export default function LogoHome1() {
   const idModal = "logo";
   const idRemove = "removeLogo";

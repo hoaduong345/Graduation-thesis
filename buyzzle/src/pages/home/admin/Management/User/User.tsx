@@ -4,20 +4,19 @@ import Container from "../../../../../components/container/Container";
 import SitebarAdmin from "../../Sitebar/Sitebar";
 import Download from "../../assets/TSX/Download";
 import Edit from "../../assets/TSX/Edit";
-import RemoveCate from "../../assets/TSX/RemoveCate";
 import Handle from "../../assets/TSX/bacham";
 
+import { download, generateCsv } from "export-to-csv";
 import ResponsivePagination from "react-responsive-pagination";
 import { toast } from "react-toastify";
 import {
   userController,
   userModel,
 } from "../../../../../controllers/UserController";
-import { ModelUser } from "../../../../../model/UserModel";
-import useDebounce from "../../../../../useDebounceHook/useDebounce";
-import { download, generateCsv } from "export-to-csv";
 import { csvConfig } from "../../../../../helper/Export/Excel";
 import { numberFormat } from "../../../../../helper/Format";
+import { ModelUser } from "../../../../../model/UserModel";
+import useDebounce from "../../../../../useDebounceHook/useDebounce";
 
 export interface users {
   id: number;

@@ -1,21 +1,17 @@
-import { Fragment, useState, useEffect, useCallback } from "react";
-import Container from "../../../../../components/container/Container";
-import Sitebar from "../Sitebar/Sitebar";
+import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import Container from "../../../../../components/container/Container";
 
 import axios from "axios";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import { userController } from "../../../../../controllers/UserController";
-import { appConfigAdmin, appConfigUser } from "../../../../../configsEnv";
-import { storage } from "../../../../../firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { replace } from "lodash";
-import { stringify } from "querystring";
-import { adminController } from "../../../../../controllers/AdminControllder";
-import SitebarAdmin from "../../Sitebar/Sitebar";
 import secureLocalStorage from "react-secure-storage";
+import { appConfigAdmin } from "../../../../../configsEnv";
+import { adminController } from "../../../../../controllers/AdminControllder";
+import { storage } from "../../../../../firebase/Config";
+import SitebarAdmin from "../../Sitebar/Sitebar";
 
 export type FormValues = {
   username: string;

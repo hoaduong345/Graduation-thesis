@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 
-import { categoryController } from "../../../../controllers/CategoryController";
-import { productController } from "../../../../controllers/ProductsController";
-import { roundedNumber } from "../../../../helper/Format";
-import { subCate } from "../../../../model/CategoryModel";
-import { Rate, Row } from "../../../../model/ProductModel";
+import useThrottle from "@rooks/use-throttle";
 import SitebarFilter from "../../../../components/Sitebar/SitebarFilter";
 import Container from "../../../../components/container/Container";
 import SlidesFilter from "../../../../components/home/components/slides/SlidesFilter/SlidesFilter";
+import { categoryController } from "../../../../controllers/CategoryController";
+import { logoesController } from "../../../../controllers/LogoController";
+import { productController } from "../../../../controllers/ProductsController";
+import { roundedNumber } from "../../../../helper/Format";
+import { subCate } from "../../../../model/CategoryModel";
+import { LogoModel } from "../../../../model/LogoModel";
+import { Rate, Row } from "../../../../model/ProductModel";
 import useDebounce from "../../../../useDebounceHook/useDebounce";
 import "../../../css/filter.css";
-import Filter from "./Filter";
-import useThrottle from "@rooks/use-throttle";
-import { LogoModel } from "../../../../model/LogoModel";
-import { logoesController } from "../../../../controllers/LogoController";
-import { BannerModel } from "../../../../model/BannerModel";
-import { bannerController } from "../../../../controllers/BannerController";
+import Filters from "./Filter";
+
 export interface Cate {
   id: number;
   name: string;
@@ -370,7 +369,7 @@ export default function FiltersPage() {
               )}
               <div className="flex flex-wrap gap-4 ml-[37px] mt-5 max-2xl:ml-0 max-2xl:flex-wrap max-lg:gap-4">
                 {products?.map((items) => {
-                  return <Filter starsnumber={starsnumber} product={items} />;
+                  return <Filters starsnumber={starsnumber} product={items} />;
                 })}
               </div>
             </div>

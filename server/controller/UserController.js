@@ -344,7 +344,6 @@ const UserController = {
             AllUser.forEach((user) => {
                 user.totalAmount = user.Order.reduce((total, order) => total + order.amountTotal, 0);
             });
-            console.log('🚀 ~ file: UserController.js:298 ~ getAllUser: ~ AllUser:', AllUser);
             res.status(200).json({
                 page: page,
                 pageSize: pageSize,

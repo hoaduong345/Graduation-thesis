@@ -1,16 +1,5 @@
-import React, { useState } from "react";
-import { Stepper, Step, Button, Typography } from "@material-tailwind/react";
-import {
-  CogIcon,
-  UserIcon,
-  BuildingLibraryIcon,
-} from "@heroicons/react/24/outline";
 export default function TestProgress() {
-  const [activeTab, setActiveTab] = useState("app"); // Mặc định là tab "App"
 
-  const handleTabClick = (tabId: string) => {
-    setActiveTab(tabId);
-  };
   return (
     <>
       <div>

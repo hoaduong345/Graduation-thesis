@@ -138,7 +138,7 @@ class UserController {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         if (error.response.status === 300) {
-          console.log("HetHanToken");
+          ("HetHanToken");
           localStorage.removeItem("user");
           localStorage.removeItem("accessToken");
           localStorage.removeItem("nameUser");

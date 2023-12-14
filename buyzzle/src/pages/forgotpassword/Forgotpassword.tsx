@@ -1,15 +1,14 @@
-import { Images } from "../../assets/TS/index";
+import { Images } from "../../assets/ts/index";
 
 // import "./forgotpassword.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 function Forgotpassword() {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 

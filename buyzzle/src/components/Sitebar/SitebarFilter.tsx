@@ -8,7 +8,7 @@ import {
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useState } from "react";
-import { Images } from "../../assets/TS";
+import { Images } from "../../assets/ts";
 import { numberFormat } from "../../helper/Format";
 import { subCate } from "../../model/CategoryModel";
 import Checkbox from "./Checkbox/Checkbox";

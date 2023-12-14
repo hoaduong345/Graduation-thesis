@@ -1,11 +1,11 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../assets/TS/index";
+import { Images } from "../../assets/ts/index";
 import "./Register.css";
 
-import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 export interface FormValues {
   name: string;
   username: string;

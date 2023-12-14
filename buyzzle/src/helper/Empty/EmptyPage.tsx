@@ -1,4 +1,4 @@
-import { Images } from "../../assets/TS";
+import { Images } from "../../assets/ts";
 
 interface EmptyModel {
   title?: string;
@@ -6,7 +6,7 @@ interface EmptyModel {
 }
 
 export default function EmptyPage(props: EmptyModel) {
-  const { title, button } = props;
+  const { title } = props;
   return (
     <>
       <div className="text-center w-full">

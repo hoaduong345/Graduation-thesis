@@ -1,5 +1,5 @@
 import { FlashSaleList } from "../Index";
-import { Images } from "../../../assets/TS";
+import { Images } from "../../../assets/ts";
 import Progess from "./progess";
 
 type FlashSale = {

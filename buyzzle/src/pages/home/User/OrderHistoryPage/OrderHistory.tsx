@@ -15,7 +15,7 @@ import { numberFormat } from "../../../../helper/Format";
 import { OrderPanigation, StatusOrder } from "../../../../model/OrderModel";
 import Container from "../../../../components/container/Container";
 
-import Sitebar from "../UserProfile/Sitebar/Sitebar";
+import Sitebar from "../UserProfile/sitebar/Sitebar";
 import { dateOrder } from "../../admin/Management/Order/OrderManagement";
 import ArrowDown from "../../admin/assets/TSX/ArrowDown";
 import EmptyPage from "../../../../helper/Empty/EmptyPage";
