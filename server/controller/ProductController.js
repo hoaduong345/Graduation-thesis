@@ -438,6 +438,7 @@ const ProductController = {
                 include: {
                     ProductImage: true,
                     fK_category: true,
+                    attributes: true,
                 },
                 where: {
                     id: productId,
