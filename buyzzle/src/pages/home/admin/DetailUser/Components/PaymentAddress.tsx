@@ -102,7 +102,7 @@ export default function PaymentAddress() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-        // console.log("data", data)
+
       } else {
         setValidUrl(false);
       }
@@ -117,6 +117,7 @@ export default function PaymentAddress() {
       userController
         .getUserWhereUsername2(user)
         .then((res) => {
+        
           return res;
         })
         .then((res) => {
@@ -136,6 +137,7 @@ export default function PaymentAddress() {
           );
         });
     } else {
+      console.log("Error");
     }
   };
 

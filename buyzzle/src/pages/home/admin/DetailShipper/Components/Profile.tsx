@@ -38,11 +38,10 @@ export default function UserProfile() {
     if (user != null) {
       // const userData = JSON.parse(user);
       const username = user;
-      console.log("USERNAME1: " + username);
+  
       shipperController
         .getShipperWhereUsername(username)
         .then((res) => {
-          // console.log("SHipperBruh:"+JSON.stringify(res.ShippingWithImage.dateofbirth))
           return res;
         })
         .then((res) => {
@@ -70,7 +69,7 @@ export default function UserProfile() {
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 

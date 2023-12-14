@@ -41,12 +41,10 @@ function Resetpassword() {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log("checker", data);
     const token = params.token ?? ""; // Sử dụng chuỗi rỗng làm giá trị mặc định nếu params.token là undefined
     const API = `http://localhost:5000/buyzzle/auth/resetpassword/${encodeURIComponent(
       token
     )}`;
-    console.log("checker", API);
     try {
       await axios.post(API, data).then((_) => {
         setValidUrl(true);

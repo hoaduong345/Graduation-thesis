@@ -56,7 +56,7 @@ export default function EditProductMap() {
       .remove(id)
       .then((_) => {
         getList();
-        console.log(id);
+      
       })
       .catch((err) => {
         console.log(
@@ -95,7 +95,7 @@ export default function EditProductMap() {
         url: data.images?.url,
       },
     };
-    console.log(_data);
+
     productController
       .update(id, _data)
       .then(async (responseData) => {
@@ -444,7 +444,7 @@ export default function EditProductMap() {
                                 ></div>
                                 <div
                                   className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
-                                  onClick={() => console.log("an không ?")}
+                                  // onClick={() => console.log("an không ?")}
                                 >
                                   <RemoveIMG />
                                 </div>

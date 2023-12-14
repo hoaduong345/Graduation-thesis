@@ -31,9 +31,11 @@ export default function UserProfile() {
   const [urlThen, setUrlThen] = useState<string>("");
   const [name, setName] = useState<string>("");
 
+  
+
   const {
     control,
-
+ 
     reset,
     formState: {isDirty, isValid },
   } = useForm<FormValues>({
@@ -45,9 +47,11 @@ export default function UserProfile() {
     const user = param.username;
     if (user != null) {
       const username = user;
+     
       shipperController
         .getShipperWhereUsername(username)
         .then((res) => {
+          
           return res;
         })
         .then((res) => {
@@ -61,14 +65,14 @@ export default function UserProfile() {
             const urlTaker = JSON.parse(UserImageArray);
             setUrlThen(urlTaker[0].url);
             setCheckImageUrl(true);
-            // console.log(urlThen);
+          
           }
         })
         .catch((error) => {
           console.log(error);
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 
@@ -82,8 +86,6 @@ export default function UserProfile() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-
-        // console.log("data", data)
       } else {
         setValidUrl(false);
       }
@@ -104,7 +106,7 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-      // console.log("URL IMAGE: "+url);
+     
       return url;
     } catch (error) {
       console.error(error);
@@ -114,7 +116,7 @@ export default function UserProfile() {
   const getUserStatus = () => {
     const user = param.username;
     if (user != null) {
-      console.log("USERNAME1: " + user);
+     
       shipperController
         .getShipperWhereUsername(user)
         .then((res) => {
@@ -125,7 +127,7 @@ export default function UserProfile() {
             res.ShippingWithImage.createdAt = "dd/mm/yyyy";
           } else {
             var createdAt = res.ShippingWithImage.createdAt.substring(0, 10);
-            console.log(createdAt);
+    
             var datearray = createdAt.split("-");
             res.ShippingWithImage.createdAt =
               datearray[2] + "-" + datearray[1] + "-" + datearray[0];
@@ -134,12 +136,13 @@ export default function UserProfile() {
             id: res.ShippingWithImage.id,
             createdAt: res.ShippingWithImage.createdAt,
           });
-          // console.log( res.createdAt);
+          
         })
         .catch((error) => {
           console.log(error)
           
         });
+      console.log("Error");
     }
   };
 

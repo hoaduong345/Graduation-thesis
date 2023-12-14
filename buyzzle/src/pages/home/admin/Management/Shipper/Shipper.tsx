@@ -114,10 +114,9 @@ export default function Shipper() {
   const idShipper = "AddShipper";
 
   const AddShipper = async (formData: FormValues) => {
-    console.log("first");
+   
     formData.sex = JSON.stringify(sex);
     formData.sex = JSON.parse(formData.sex);
-    console.log("Data Shipper:" + JSON.stringify(formData));
     shipperController
       .registerShipper(formData)
       .then((_) => {

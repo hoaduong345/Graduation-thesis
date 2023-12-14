@@ -51,7 +51,6 @@ export default function Header() {
 
   const getSearhvalue = async () => {
     await productController.getAllProductsSearch(text).then((res: any) => {
-
       setProductSearch(res.rows);
       settopProduct(res.top8products);
     });
@@ -79,12 +78,9 @@ export default function Header() {
       setLogined(true);
       const userData = JSON.parse(user);
       const username = userData.username;
-      console.log("USERNAME: " + username);
+   
       userController.getUserWhereUsername(username).then((res) => {
-        console.log(
-          "🚀 ~ file: Header.tsx:76 ~ userController.getUserWhereUsername ~ res:",
-          res
-        );
+       
         // setEditUser(res)
         setName(res.name);
         localStorage.setItem("nameUser", JSON.stringify(res.name));
@@ -93,11 +89,11 @@ export default function Header() {
         const UserImageArray = JSON.stringify(res.UserImage);
         const urlTaker = JSON.parse(UserImageArray);
         setImg(urlTaker[0].url);
-        console.log("ID: " + img);
+       
         localStorage.setItem("avatarUser", JSON.stringify(urlTaker[0].url));
       });
     } else {
-      console.log("Chua Dang Nhap Dung");
+     
       setLogined(false);
     }
   }, []);
@@ -105,7 +101,7 @@ export default function Header() {
   if (user != null) {
     username = JSON.parse(user).username;
   } else {
-    console.log("Chua dang nhap");
+    username = "Nah"
   }
   const href = `/userprofilepage/${username}`;
 
@@ -147,12 +143,12 @@ export default function Header() {
   };
   const CheckToken = async () => {
     userController.CheckToken().then((res) => {
-      console.log(JSON.stringify(res));
+
     });
   };
   const CheckRefreshToken = async () => {
     userController.CheckRefreshToken().then((res) => {
-      console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
+     
     });
   };
   const CheckLogin = async () => {
@@ -161,7 +157,7 @@ export default function Header() {
     } else {
       CheckToken();
       CheckRefreshToken();
-      console.log("AOTHATDAY");
+ 
     }
   };
   const muti = () => {
@@ -188,7 +184,7 @@ export default function Header() {
       getAdmin(admin);
     } else {
       setCheckAdmin(false);
-      console.log("AdminChuaLogin");
+     
     }
 
   }, []);
@@ -201,12 +197,12 @@ export default function Header() {
   }
 
   function getAdmin(adminData: any) {
-    console.log("CheckAdmin:" + CheckAdmin);
+  
     setNameAdmin(adminData.name);
 
   }
 
-  // console.log("Checklogin:"+CheckAdmin);
+
   return (
     <>
       <header className="Header">

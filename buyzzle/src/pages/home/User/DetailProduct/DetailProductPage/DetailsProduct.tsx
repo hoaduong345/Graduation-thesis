@@ -162,10 +162,10 @@ export default function DetailsProduct() {
         setCategory(detail.data.productDetail.fK_category.name);
         setProductName(detail.data.productDetail.name);
         setfirst(detail.data);
-        // console.log("VCLVCLVLCLV:"+JSON.stringify(detail.data.productDetail.name))
+      
       })
       .catch((error) => {
-        console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
+        ("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
       });
   };
 
@@ -205,7 +205,6 @@ export default function DetailsProduct() {
       .getCommentWhereRating(idproduct, rating, page, perPage)
       .then((res) => {
         setRateAndcomment(res);
-        console.log("RATING:" + JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
@@ -213,7 +212,6 @@ export default function DetailsProduct() {
   };
   const HandleGetCommentWhereRating = (rating: any) => {
     const idproduct = id;
-    console.log("IDDDDDDDDDDDD:" + id);
     getCommentWhereRating(idproduct, rating);
   };
 
@@ -259,7 +257,7 @@ export default function DetailsProduct() {
       .catch(() => {
         toast.error("Đánh giá thất bại !");
       });
-    console.log("Sửa bình luận!");
+
   };
   useEffect(() => {
     document.title = `${first?.productDetail.name}`;
@@ -306,12 +304,11 @@ export default function DetailsProduct() {
   const isSoldOut = first?.productDetail?.quantity == 0;
   const CheckToken = async () => {
     userController.CheckToken().then((res) => {
-      console.log(JSON.stringify(res));
+
     });
   };
   const CheckRefreshToken = async () => {
     userController.CheckRefreshToken().then((res) => {
-      console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
     });
   };
   const CheckLogin = async () => {
@@ -323,7 +320,7 @@ export default function DetailsProduct() {
       // setLogined(true);
       CheckToken();
       CheckRefreshToken();
-      console.log("AOTHATDAY");
+
     }
   };
   useEffect(() => {
@@ -352,13 +349,13 @@ export default function DetailsProduct() {
   const param = useParams();
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
-    console.log("LoginData:" + data);
+
     // try {
       userController.Login(data).then((res) => {
-        console.log("LoginTHanhCong:" + JSON.stringify(res.username));
+       
         const username = res.username;
         const accessToken = res.accessToken;
-        console.log(accessToken);
+   
         const UserData = { username };
         const Token = { accessToken };
         localStorage.setItem("idUser", JSON.stringify(res.id));
@@ -988,7 +985,7 @@ export default function DetailsProduct() {
                                   checked={item.checked}
                                   rating={item.rating}
                                   onChangeFilter={(rating: any) => {
-                                    console.log("Ratting:" + rating);
+                               
                                     HandleGetCommentWhereRating(rating);
                                   }}
                                 />

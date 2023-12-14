@@ -25,7 +25,6 @@ export default function AddCategory() {
           return response
         })
         .then(data => {
-          console.log(data);
           getList()
           setCategory({ name: '', date: '', idcategory: 0 })
         })
@@ -35,13 +34,11 @@ export default function AddCategory() {
 
         });
     } else {
-      console.log("add")
       axios.post('http://localhost:5000/buyzzle/product/addcategory', { name: category.name })
         .then(response => {
           return response
         })
         .then(data => {
-          console.log(data);
           getList()
           setCategory({ name: '', date: '', idcategory: 0 })
         })
@@ -62,7 +59,6 @@ export default function AddCategory() {
           return response
         })
         .then(data => {
-          console.log(data);
           getList()
         })
         .catch(error => {
@@ -92,7 +88,6 @@ export default function AddCategory() {
         return bien
 
       }).then((data) => {
-        console.log(data)
         setCategorys(data)
 
       }).catch((error) => {

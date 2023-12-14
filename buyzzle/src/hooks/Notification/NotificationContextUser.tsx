@@ -21,10 +21,7 @@ export default function useNotificationContextUser() {
   }, []);
   const getCountNoti = async () => {
     await notificationControllers.getAllNotificationUser().then((res) => {
-      console.log(
-        "🚀 ~ file: HeaderTopUser.tsx:16 ~ awaitnotificationControllers.getAllNotificationUser ~ res:",
-        res
-      );
+     
       setCountNotificationUser(res);
     });
   };
@@ -37,20 +34,15 @@ export default function useNotificationContextUser() {
     await notificationControllers
       .getAllNotificationUser()
       .then((res) => {
-        console.log(
-          "🚀 ~ file: NotificationContextShipping.tsx:36 ~ .then ~ res:",
-          res
-        );
+       
         setNotificationUser(res.allNotification);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+     
   };
 
   useEffect(() => {
     const idUser = localStorage.getItem("idUser");
-    console.log("🚀 ~ file: MainLayout.tsx:22 ~ useEffect ~ idUser:", idUser);
+   
     if (!idUser) return;
     const socket = io("http://localhost:5000");
     socket.on(`confirmCancelOrder/${idUser}`, (confirmCancelOrder) => {
@@ -116,7 +108,7 @@ export default function useNotificationContextUser() {
       setsocketUser(deliverysuccessfully);
     });
     socket.on("disconnect", () => {
-      console.log(socket.id);
+     
     });
   }, [socketUser]);
   const handleSeenAllNoti = () => {
@@ -126,10 +118,7 @@ export default function useNotificationContextUser() {
         setCountNotificationUser(res.count);
       })
       .catch((err) => {
-        console.log(
-          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
-          err
-        );
+        
         return {};
       });
   };

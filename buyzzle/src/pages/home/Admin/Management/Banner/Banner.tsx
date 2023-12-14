@@ -109,7 +109,6 @@ export default function Banner() {
   };
 
   const removee = (id: number, idDialog: string) => {
-    console.log("xoa", id);
     bannerController
       .remove(id)
       .then(() => {
@@ -158,7 +157,6 @@ export default function Banner() {
 
   const renderImg = () => {
     if (url) {
-      console.log("🚀 ~ file: Logoes.tsx:139 ~ renderImg ~ url:", url);
       return (
         <div className="group relative">
           <img

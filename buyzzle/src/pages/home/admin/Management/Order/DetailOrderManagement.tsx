@@ -32,7 +32,6 @@ export default function DetailOrderManagement() {
       setOrder(res);
     });
   };
-  console.log("ORDER:" + JSON.stringify(order));
   useEffect(() => {
     getOrder();
   }, []);

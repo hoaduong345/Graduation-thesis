@@ -82,18 +82,18 @@ export default function SitebarFilter({
 }: SliderComponentProps) {
   const [rangeValue, setRangeValue] = useState([5000, 300000]);
   const handleSliderChange = (price: [number, number]) => {
-    // console.log("sdssdsd", price);
+   
     setRangeValue(price);
     onPriceRangeChange(price);
   };
 
   const [rating, setRating] = useState(1);
   const handleRateChange = (rate: number) => {
-    console.log("Rating:", rate);
+    
     setRating(rate);
     onRateChange(rate);
   };
-  console.log("🚀 ~ file: SitebarFilter.tsx:79 ~ nameCate:", nameCate);
+ 
 
   return (
     <>
