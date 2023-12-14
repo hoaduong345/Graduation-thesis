@@ -1,14 +1,11 @@
 import Slider from "rc-slider";
-import DeleteWhite from "../../assets/TSX/DeleteWhite";
-import {
-  RatingStar,
-  SliderComponentProps,
-} from "../../../../../components/Sitebar/SitebarFilter";
-import FilterRateMap from "./FilterRateMap";
 import { useState } from "react";
 import { numberFormat } from "../../../../../helper/Format";
+import FilterRateMap from "./FilterRateMap";
+import { SliderComponentProps } from "../../../../../components/Sitebar/SitebarFilter";
+import { RatingStarDetail } from "../../../User/DetailProduct/detailProductPage/DetailsProduct";
 
-const arrRating: RatingStar[] = [
+const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 5 },
   { checked: false, rating: 4 },
   { checked: false, rating: 3 },

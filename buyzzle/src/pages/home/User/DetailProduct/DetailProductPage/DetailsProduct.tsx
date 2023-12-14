@@ -40,11 +40,10 @@ import { Controller, useForm } from "react-hook-form";
 import Cart from "../../../admin/assets/TSX/Cart";
 import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
-import ArrowRightBruh from "../../../../../assets/TSX/ArrowRightBruh";
 import Breadcrumb from "../../../../../helper/Breadcrumb/BreadcrumbProps";
 import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
 import { logodetailController } from "../../../../../controllers/LogoDetailController";
-import RatingMap from "../RatingAndComments/RatingMap";
+import RatingMap from "../ratingAndComments/RatingMap";
 export interface ImgOfProduct {
   url: string;
 }

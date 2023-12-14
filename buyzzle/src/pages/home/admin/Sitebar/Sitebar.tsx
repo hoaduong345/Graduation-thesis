@@ -9,7 +9,6 @@ import Members from "../assets/Icon/Members";
 import ProductIcon from "../assets/Icon/ProductIcon";
 import Statistical from "../assets/Icon/Statistical";
 import VouchersIcon from "../assets/Icon/VouchersIcon";
-import Logo from "../../Admin/Assets/Icon/Logo";
 import Oder from "../assets/Icon/Oder";
 import {
   Accordion,
@@ -18,6 +17,7 @@ import {
   AccordionItem,
   AccordionPanel,
 } from "@chakra-ui/react";
+import Logo from "../assets/Icon/Logo";
 export interface SitebarAdmin {
   title?: ReactNode;
   icon: ReactNode;
