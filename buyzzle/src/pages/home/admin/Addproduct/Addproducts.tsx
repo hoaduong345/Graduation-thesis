@@ -27,9 +27,9 @@ export type FormValues = {
   productDiscount: number;
   categoryID: number;
   subCategoryID: Number;
-  attributes: attribute[];
+  attributes: Attribute[];
 };
-export interface attribute {
+export interface Attribute {
   size: string;
   color: string;
   soluong: number;
@@ -51,7 +51,7 @@ export default function Addproducts() {
       .then((res) => {
         setCategory(res.data);
       })
-      .catch((err) => console.log(err));
+      
   };
 
   const delayIMG = () => {
@@ -109,9 +109,13 @@ export default function Addproducts() {
     setUrl([]);
   };
   // Tạo fuction handle thêm sản phẩm.
-  const handleAddproduct = (data: FormValues) => {
+  const handleAddproduct = async (data: FormValues) => {
     if (url.length == 0) {
       toast.error("Hãy chọn hình");
+      return;
+    }
+    if (hasDuplicateSizeColor(data.attributes)) {
+      toast.warning("Có cặp Size - Màu sắc giống nhau. Vui lòng kiểm tra lại!");
       return;
     }
     const _data = {
@@ -127,22 +131,42 @@ export default function Addproducts() {
       "🚀 ~ file: Addproducts.tsx:127 ~ handleAddproduct ~ _data:",
       _data
     );
-    axios
-      .post(`${appConfig.apiUrl}/addproduct`, _data)
-      .then((response) => {
-        return response;
-      })
-      .then(async (responseData) => {
+    try {
+      const response = await axios.post(
+        `${appConfig.apiUrl}/addproduct`,
+        _data
+      );
+      const productId = response?.data?.id;
+
+      if (productId) {
         toast.success("Thêm thành công !");
         resetImages();
-        for (let i = 0; i < url.length; i++) {
-          await addImages(responseData?.data.id, url[i]);
-        }
+
+        await Promise.all(url.map((image) => addImages(productId, image)));
+
         reset({});
-      })
-      .catch(() => {
-        toastError("Danh mục trống!");
-      });
+      } else {
+        toastError("Không nhận được ID sản phẩm từ phản hồi của API");
+      }
+    } catch (error) {
+      console.error("Lỗi khi thêm sản phẩm:", error);
+      toastError("Đã xảy ra lỗi khi thêm sản phẩm!");
+    }
+  };
+
+  // Hàm kiểm tra cặp size-color trùng nhau
+  const hasDuplicateSizeColor = (attributes: Attribute[]) => {
+    const sizeColorPairs = new Set<string>();
+    for (let i = 0; i < attributes.length; i++) {
+      const normalizedSize = attributes[i]?.size.trim().toLowerCase();
+      const normalizedColor = attributes[i]?.color.trim().toLowerCase();
+      const currentPair = `${normalizedSize}-${normalizedColor}`;
+      if (sizeColorPairs.has(currentPair)) {
+        return true;
+      }
+      sizeColorPairs.add(currentPair);
+    }
+    return false;
   };
 
   const {
@@ -150,6 +174,7 @@ export default function Addproducts() {
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
@@ -173,7 +198,12 @@ export default function Addproducts() {
   const { fields, append, remove } = useFieldArray<FormValues>({
     name: "attributes",
     control,
+    rules: {
+      required: true,
+    },
   });
+  const watchFields = watch("attributes", []);
+
   console.log("watch().attributes", watch().attributes);
   const isDisabled = !(isValid && isDirty);
 

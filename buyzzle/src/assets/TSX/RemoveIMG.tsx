@@ -1,4 +1,3 @@
-import React from "react";
 interface RemoveIMG {
   index: number;
   removeListUrl: (index: number) => void;

@@ -19,8 +19,7 @@ export default function ChangePassword() {
   const {
     control,
     handleSubmit,
-    register,
-    formState: { errors, isDirty, isValid },
+    formState: { errors},
   } = useForm<FormValues1>({
     // mode: 'all',
     defaultValues: {
@@ -29,9 +28,7 @@ export default function ChangePassword() {
       confirmPassword: "",
     },
   });
-  const instance = axios.create({
-    withCredentials: true,
-  });
+
   const [validUrl, setValidUrl] = useState(false);
   const param = useParams();
 
@@ -40,7 +37,7 @@ export default function ChangePassword() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-        // console.log("data", data)
+       
       } else {
         setValidUrl(false);
       }
@@ -51,15 +48,8 @@ export default function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
-  const [formData2, setFormData2] = useState({
-    username: "",
-    password: "",
-  });
-  const [errorss, setErrors] = useState({
-    username: "",
-    password: "",
-  });
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
+
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -78,14 +68,14 @@ export default function ChangePassword() {
       try {
         if (user != null) {
           const username = user;
-          console.log("USERNAME: " + username);
+        
           await adminController.getAdminWhereUsername(username).then((res) => {
             setId(res.adminWithImage.id);
-            console.log("ID:" + res.adminWithImage.id);
+           
             return res;
           });
         } else {
-          console.log("Chua Dang Nhap Dung");
+         
         }
       } catch (error) {
         console.log("ERROR", error);
@@ -94,11 +84,10 @@ export default function ChangePassword() {
     fetchData();
   }, []);
   const onSubmit2 = async (formData: FormValues1) => {
-    // console.log("DATA:"+JSON.stringify(formData))
+   
     try {
       await adminController.ChangePasswordAdmin(id1, formData).then((res) => {
-        console.log("checker", formData);
-        console.log("Change successfully", res);
+       
         if (res != null) {
           toast.success("Change successfully", {
             position: "top-right",
@@ -112,14 +101,14 @@ export default function ChangePassword() {
         }
       });
     } catch (error) {
-      // console.log("Them that bai", error);
+     
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-        console.log("Bug:" + responseData);
+      
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData) {
-          console.log(`Lỗi2: ${responseData}`);
+         
           toast.warning(responseData, {
             position: "top-right",
             autoClose: 5000,

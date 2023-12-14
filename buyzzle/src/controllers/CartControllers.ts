@@ -6,12 +6,13 @@ const appConfig = {
 };
 
 export interface ModelCart {
-  // id?: number,
+  id?: number;
+  atributes: number;
   productId: number;
   quantity: number;
 }
 export interface UpdateCart {
-  productId: number;
+  attributeId: number;
   cartId: number;
 }
 class CartControllers {

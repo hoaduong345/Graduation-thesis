@@ -16,20 +16,13 @@ export default function UserProfile() {
       }
     }
     CheckGG();
-  }, [])
+  }, []);
   return (
     <Container>
       <div>
         <Profile />
         <PaymentAddress />
-        {
-          LoginByGG == true ? (
-           <></>
-          ) : (
-            <Changepassword />
-          )
-        }
-
+        {LoginByGG == true ? <></> : <Changepassword />}
       </div>
     </Container>
   );

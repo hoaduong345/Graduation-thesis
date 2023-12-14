@@ -5,10 +5,7 @@ type handleClick = {
 
 function StepperAdmin(props: handleClick) {
   const { comfirm, status } = props;
-  console.log(
-    "🚀 ~ file: StepperShipping.tsx:8 ~ StepperAdmin ~ status:",
-    status
-  );
+  
   return (
     <>
       <ul className="steps w-full">

@@ -1,5 +1,4 @@
 import moment from "moment";
-import { DateValueType } from "react-tailwindcss-datepicker";
 
 export interface FilterChart {
   title?: string;
@@ -20,7 +19,7 @@ const endOfDay = (enddate: Date) => moment(enddate).endOf("day").toDate();
 const today = moment();
 
 const start = startOfDay(today.toDate());
-console.log("🚀 ~ file: DataHelper.ts:22 ~ start:", start);
+
 const end = endOfDay(today.toDate());
 
 export const dataFilter: FilterChart[] = [

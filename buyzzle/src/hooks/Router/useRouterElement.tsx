@@ -40,7 +40,6 @@ import BannerHome from "../../pages/home/Admin/Management/Banner/BannerHome";
 import VouchersPage from "../../components/home/components/Voucher/VouchersPage";
 import LogoHome1 from "../../pages/home/Admin/Management/Logo/LogoHome1";
 import LogoDetail from "../../pages/home/Admin/Management/Logo/LogoDetail";
-import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
 import LogoHome from "../../pages/home/Admin/Management/Logo/LogoHome";
 import DieuKhoan from "../../pages/clause/Clause";
 import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
@@ -53,6 +52,8 @@ import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
 import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import RegisterShipper from "../../pages/home/Shipping/RegisterShipper/RegisterShipper";
 import LoginShipper from "../../pages/home/Shipping/LoginShipper/LoginShipper";
+import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
+
 export default function useRouterEmelent() {
   const routes = useRoutes([
     {

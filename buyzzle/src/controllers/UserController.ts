@@ -27,14 +27,14 @@ class UserController {
         })
         .then((res) => {
           if (res.status === 200) {
-            console.log("Login successfully");
+           
             toast.success("Đăng nhập thành công", {
               position: "top-right",
               autoClose: 5000,
             });
 
           } else {
-            console.log("Login Failed!");
+           
             toast.error("Đăng nhập thất bại", {
               position: "top-right",
               autoClose: 5000,
@@ -43,22 +43,22 @@ class UserController {
           return res.data;
         });
     } catch (error) {
-      // console.log(error);
+      
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-        console.log(responseData);
+      
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData) {
           //   const errorMessage = responseData.error.password;
           if(responseData == "Sai mật khẩu"){
-            console.log(`Lỗi1:1 ${responseData}`);
+           
             toast.error("Sai mật khẩu", {
               position: "top-right",
               autoClose: 5000,
             });
           }
           if(responseData == "Sai email"){
-            console.log(`Lỗi1:1 ${responseData}`);
+           
             toast.error("Tài khoản không tồn tại", {
               position: "top-right",
               autoClose: 5000,
@@ -66,7 +66,11 @@ class UserController {
           }
           
         } else {
-          console.log("Lỗi không xác định từ server");
+        
+          toast.error("Lỗi không xác định từ server", {
+            position: "top-right",
+            autoClose: 5000,
+          });
         }
       } else {
         console.error("Lỗi gửi yêu cầu không thành công", error);
@@ -114,8 +118,7 @@ class UserController {
     const instance = axios.create({
       withCredentials: true,
     });
-    // const reponse = await instance.post(API);
-    // console.log(reponse);
+
     return await instance
       .post(`${appConfigAuth.apiUrl}/1`)
       .then((res) => {
@@ -128,8 +131,7 @@ class UserController {
       const instance = axios.create({
         withCredentials: true,
       });
-      // const reponse = await instance.post(API);
-      // console.log(reponse);
+    
       return await instance
         .post(`${appConfigAuth.apiUrl}/refresh`)
         .then((res) => {
@@ -138,7 +140,7 @@ class UserController {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         if (error.response.status === 300) {
-          console.log("HetHanToken");
+     
           localStorage.removeItem("user");
           localStorage.removeItem("accessToken");
           localStorage.removeItem("nameUser");

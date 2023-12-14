@@ -1,10 +1,8 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { userController } from "../../../../../controllers/UserController";
 import secureLocalStorage from "react-secure-storage";
+import { userController } from "../../../../../controllers/UserController";
 
 type FormValues = {
   id: number;
@@ -104,7 +102,7 @@ export default function PaymentAddress() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-        // console.log("data", data)
+
       } else {
         setValidUrl(false);
       }
@@ -115,13 +113,11 @@ export default function PaymentAddress() {
   const getUserData = () => {
     const user = param.username;
     if (user != null) {
-      // const userData = JSON.parse(user);
-      // const username = userData.username;
-      // console.log("USERNAME1: " + username);
+
       userController
         .getUserWhereUsername2(user)
         .then((res) => {
-          console.log("TEST " + JSON.stringify(res));
+        
           return res;
         })
         .then((res) => {
@@ -136,12 +132,12 @@ export default function PaymentAddress() {
         })
         .catch((error) => {
           console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
+        
             error
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 

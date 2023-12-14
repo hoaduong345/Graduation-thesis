@@ -1,11 +1,8 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { userController } from "../../../../../controllers/UserController";
-import { shipperController } from "../../../../../controllers/ShipperController";
 import secureLocalStorage from "react-secure-storage";
+import { shipperController } from "../../../../../controllers/ShipperController";
 
 type FormValues = {
   id: number;
@@ -105,7 +102,6 @@ export default function PaymentAddress() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-        // console.log("data", data)
       } else {
         setValidUrl(false);
       }
@@ -117,11 +113,10 @@ export default function PaymentAddress() {
     const user = param.username;
     if (user != null) {
       const username = user;
-      console.log("USERNAME1: " + username);
       shipperController
         .getShipperWhereUsername(username)
         .then((res) => {
-          console.log("TEST " + JSON.stringify(res));
+         
           return res;
         })
         .then((res) => {
@@ -141,7 +136,7 @@ export default function PaymentAddress() {
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 

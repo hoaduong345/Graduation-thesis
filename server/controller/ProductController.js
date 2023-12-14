@@ -57,7 +57,6 @@ const ProductController = {
                     image,
                 },
             });
-            console.log('🚀 ~ file: ProductController.js:56 ~ addCategory: ~ newCategory:', newCategory);
 
             res.status(200).json('Thêm danh mục thành công');
         } catch (error) {
@@ -436,6 +435,7 @@ const ProductController = {
             const productId = parseInt(req.params.id);
             const productDetail = await prisma.product.findFirst({
                 include: {
+                    attributes: true,
                     ProductImage: true,
                     fK_category: true,
                     attributes: true,
@@ -773,7 +773,6 @@ const ProductController = {
     addProductRating: async (req, res) => {
         try {
             const userId = parseInt(req.cookies.id);
-            console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
             const { idproduct, ratingValue, comment } = req.body;
             const rating = await prisma.rating.create({
                 data: {

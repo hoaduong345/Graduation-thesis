@@ -1,15 +1,12 @@
-import ProductManager from "../../../../../assets/TSX/ProductManager";
-import User from "../../../../../assets/TSX/User";
 import HistoryBought from "../../../../../assets/TSX/HistoryBought";
-// import Cart from "../../../../../assets/TSX/Cart";
-// import Heart from "../../../../../assets/TSX/Heart";
-// import Setting from "../../../../../assets/TSX/Setting";
-import Logout from "../../../../../assets/TSX/Logout";
+import User from "../../../../../assets/TSX/User";
+
+import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Logout from "../../../../../assets/TSX/Logout";
 import Voucher from "../../../../../assets/TSX/Voucher";
-import { googleLogout } from "@react-oauth/google";
 import Cart from "../../../admin/assets/TSX/Cart";
 
 interface SitebarUser {
@@ -49,8 +46,7 @@ export default function Sitebar() {
   const API = "http://localhost:5000/buyzzle/auth/logout";
   async function LogOut() {
     try {
-      const reponse = await instance.post(API);
-      console.log(reponse);
+      await instance.post(API);
       localStorage.removeItem("user");
       localStorage.removeItem("LoginByGG");
       localStorage.removeItem("nameUser");
@@ -72,11 +68,10 @@ export default function Sitebar() {
               <div
                 className={`w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
                         hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4
-                         ${
-                           e.pathName == pathname
-                             ? `bg-[#FFEAE9] rounded-md text-[#EA4B48]`
-                             : `bg-white text-[#7A828A]`
-                         }   `}
+                         ${e.pathName == pathname
+                    ? `bg-[#FFEAE9] rounded-md text-[#EA4B48]`
+                    : `bg-white text-[#7A828A]`
+                  }   `}
               >
                 {e.icon}
                 <span className="text-base font-normal ">{e.title}</span>

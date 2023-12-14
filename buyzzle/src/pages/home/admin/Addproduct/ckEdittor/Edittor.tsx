@@ -1,7 +1,5 @@
-import { useId, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Editor } from '@tinymce/tinymce-react';
-import { FormValues } from '../Addproducts';
+import { useRef } from 'react';
 type Props = {
   desc: string
 };
@@ -11,14 +9,14 @@ const Edittor = (props: Props) => {
   const editorRef = useRef<any>(null);
   const log = () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+      
     }
   };
   return (
     <>
       <Editor
         apiKey="i6krl4na00k3s7n08vuwluc3ynywgw9pt6kd46v0dn1knm3i"
-        onInit={(evt, editor) => (editorRef.current = editor)}
+        onInit={(editor) => (editorRef.current = editor)}
         initialValue={`${props.desc}`}
         init={{
           height: 500,

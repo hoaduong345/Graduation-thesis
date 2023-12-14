@@ -74,18 +74,14 @@ export default function ChangePassword() {
   const API2 = "http://localhost:5000/buyzzle/auth/changepassword";
   const onSubmit2 = async (formData: FormValues) => {
     try {
-      console.log("checker", formData);
       const response = await instance.put(API2, formData);
-      console.log("Change successfully", response);
 
       if (response.status === 200) {
-        console.log("Change successfully");
         toast.success("Change successfully", {
           position: "top-right",
           autoClose: 5000,
         });
       } else {
-        console.log("Change Failed!");
         toast.warning("Change failed", {
           position: "top-right",
           autoClose: 5000,
@@ -98,7 +94,6 @@ export default function ChangePassword() {
         const responseData = error.response.data;
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData) {
-          console.log(`Lỗi2: ${responseData}`);
           toast.warning(responseData, {
             position: "top-right",
             autoClose: 5000,

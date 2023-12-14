@@ -1,23 +1,22 @@
 import { IonIcon } from "@ionic/react";
+import useThrottle from "@rooks/use-throttle";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { useNavigate } from "react-router-dom";
 import Search from "../../../../../assets/TSX/Search";
+import Container from "../../../../../components/container/Container";
 import {
   orderControllers,
   orderModelController,
 } from "../../../../../controllers/OrderControllers";
 import { numberFormat } from "../../../../../helper/Format";
 import { OrderPanigation } from "../../../../../model/OrderModel";
-import Container from "../../../../../components/container/Container";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
+import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
+import SitebarAdmin from "../../Sitebar/Sitebar";
 import Calendar from "../../assets/TSX/calendar";
 import Excel from "../../assets/TSX/excel";
-import SitebarAdmin from "../../Sitebar/Sitebar";
-import useThrottle from "@rooks/use-throttle";
-import secureLocalStorage from "react-secure-storage";
-import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 
 export const dateOrder = (date: Date) => {
   return moment(date).format("L");
@@ -51,17 +50,7 @@ export default function OrderManagement() {
       modal.close();
     }
   };
-  console.log(
-    "🚀 ~ file: OrderManagement.tsx:39 ~ OrderManagement ~ order?.totalOrder;:",
-    order?.totalOrder
-  );
-  // useEffect(() => {
-  //   let user = secureLocalStorage.getItem("shippername");
-  //   if (user == null) {
-  //     console.log("VCLLLLLLLLLLLLLLLLLll");
-  //     window.location.href = "/shipping/loginShipper";
-  //   }
-  // }, []);
+
   const [changeButton, setChangeButton] = useState([
     {
       id: -1,
@@ -93,10 +82,6 @@ export default function OrderManagement() {
   const handleClick = (id: number) => {
     const updatedButtons = changeButton.map((btn) => {
       if (btn.id === id) {
-        console.log(
-          "🚀 ~ file: OrderManagement.tsx:91 ~ updatedButtons ~ btn.id:",
-          btn.id
-        );
         return { ...btn, active: true };
       } else {
         return { ...btn, active: false };
@@ -106,10 +91,6 @@ export default function OrderManagement() {
     const selectedButton = updatedButtons.find((btn) => btn.id === id);
 
     if (selectedButton && selectedButton.id !== -1) {
-      console.log(
-        "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
-        selectedButton.id
-      );
       setOrderAPI({ ...orderAPI, status: selectedButton.id, keyword: "" });
     } else {
       setOrderAPI({ ...orderAPI, status: null, keyword: "" });

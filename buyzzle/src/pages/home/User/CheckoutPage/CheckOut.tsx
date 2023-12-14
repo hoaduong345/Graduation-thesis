@@ -17,8 +17,9 @@ import { numberFormat } from "../../../../helper/Format";
 import { CartItem } from "../../../../model/CartModel";
 import { VoucherModel } from "../../../../model/VoucherModel";
 import Container from "../../../../components/container/Container";
-import PaymentBtn from "./PaymentBtn";
+
 import { voucherControllers } from "../../../../controllers/VoucherControllers";
+import PaymentBtn from "./PaymentBtn";
 
 type FormValues = {
   name: string;
@@ -192,26 +193,11 @@ export default function CheckOut() {
         phonenumber: formData.phonenumber,
       };
       sendToDatabase(data);
-      // console.log("edit thanh cong", response1);
-      // if (response1.status === 200) {
-      //    console.log("Edit successfully");
-      //    toast.success("Cập nhật thành công", {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //    });
-      //    closeModal(idModalUpdate);
-      // } else {
-      //    toast.warning("Sign-in failed", {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //    });
-      // }
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
         if (responseData) {
-          console.log(`Lỗi2: ${responseData}`);
           toast.warning(responseData, {
             position: "top-right",
             autoClose: 5000,
@@ -232,7 +218,7 @@ export default function CheckOut() {
         name: user.name,
         addresstype: user.addresstype,
         specificaddress: user.specificaddress,
-        phonenumber: user.phonenumber
+        phonenumber: user.phonenumber,
       });
       modal.showModal();
     }
@@ -247,7 +233,6 @@ export default function CheckOut() {
       await userController
         .getUserWhereUsername2(username)
         .then((res) => {
-          console.log("TEST " + JSON.stringify(res));
           return res;
         })
         .then((res) => {
@@ -271,7 +256,7 @@ export default function CheckOut() {
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 
@@ -291,7 +276,6 @@ export default function CheckOut() {
   const API = `http://localhost:5000/buyzzle/user/paymentaddress/${username}`;
 
   const sendToDatabase = async (formData: any) => {
-    console.log(formData)
     try {
       const response1 = await axios.put(API, formData).then(() => {
         getUserAddress();
@@ -315,21 +299,16 @@ export default function CheckOut() {
     getUserAddress();
   }, []);
   const CheckToken = async () => {
-    userController.CheckToken().then((res) => {
-      console.log(JSON.stringify(res));
-    });
-  }
+    userController.CheckToken().then((res) => {});
+  };
   const CheckRefreshToken = async () => {
-    userController.CheckRefreshToken().then((res) => {
-      console.log(JSON.stringify(res));
-    });
-  }
+    userController.CheckRefreshToken().then((res) => {});
+  };
   const muti = () => {
     CheckToken();
-    // handleBuyNow();
+
     CheckRefreshToken();
-    // console.log("AOTHATDAY");
-  }
+  };
   return (
     <>
       <Container>
@@ -398,20 +377,6 @@ export default function CheckOut() {
                       body={
                         <>
                           <div className="border-b-[1px] pb-4 mb-4 flex gap-1">
-                            {/* <div className="flex items-center mr-4 justify-start ">
-                                             <input
-                                                checked
-                                                type="radio"
-                                                name="colored-radio"
-                                                id="orange-radio"
-                                                className="appearance-none h-5 w-5 border border-[#CCCCCC] rounded-full 
-                                                                checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                             />
-                                             <div
-                                                className="h-5 w-5 absolute rounded-full pointer-events-none
-                                                                peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                             />
-                                          </div> */}
                             <div className="flex flex-col gap-1 w-full">
                               <div className="flex justify-between w-full">
                                 <div className="flex items-center gap-3">
@@ -438,19 +403,6 @@ export default function CheckOut() {
                               </div>
                             </div>
                           </div>
-                          {/* <div className="border-b-[1px] pb-4 mb-4 flex gap-1 items-center justify-center">
-                                          <button
-                                             onClick={() =>
-                                                openUpadate(idModalUpdate)
-                                             }
-                                             className="flex gap-1"
-                                          >
-                                             <Address />
-                                             <p className="text-sm text-[#4C4C4C]">
-                                                Thêm địa chỉ mới
-                                             </p>
-                                          </button>
-                                       </div> */}
                         </>
                       }
                     />
@@ -491,10 +443,11 @@ export default function CheckOut() {
                                       <input
                                         className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                    rounded-[6px] px-[10px] py-[10.5px] w-[100%] mt-2
-                                                  ${!!errors.name
-                                            ? "border-[2px] border-red-900"
-                                            : "border-[1px] border-[#FFAAAF]"
-                                          }`}
+                                                  ${
+                                                    !!errors.name
+                                                      ? "border-[2px] border-red-900"
+                                                      : "border-[1px] border-[#FFAAAF]"
+                                                  }`}
                                         placeholder="Họ và tên"
                                         value={field.value}
                                       />
@@ -564,7 +517,7 @@ export default function CheckOut() {
                                   minLength: {
                                     value: 10,
                                     message: "Số điện thoại phải là 10 số",
-                                  }
+                                  },
                                 }}
                                 render={({ field }) => (
                                   <>
@@ -574,10 +527,11 @@ export default function CheckOut() {
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                    rounded-[6px] px-[10px] py-[12px] w-[100%]
-                                                  ${!!errors.phonenumber
-                                          ? "border-[2px] border-red-900"
-                                          : "border-[1px] border-[#FFAAAF]"
-                                        }`}
+                                                  ${
+                                                    !!errors.phonenumber
+                                                      ? "border-[2px] border-red-900"
+                                                      : "border-[1px] border-[#FFAAAF]"
+                                                  }`}
                                       placeholder="Số điện thoại"
                                       onChange={(e) => {
                                         const reg = /[a-zA-Z!@#$e]/;
@@ -667,10 +621,11 @@ export default function CheckOut() {
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                    rounded-[6px] px-[10px] py-[12px] w-[100%]
-                                                  ${!!errors.specificaddress
-                                          ? "border-[2px] border-red-900"
-                                          : "border-[1px] border-[#FFAAAF]"
-                                        }`}
+                                                  ${
+                                                    !!errors.specificaddress
+                                                      ? "border-[2px] border-red-900"
+                                                      : "border-[1px] border-[#FFAAAF]"
+                                                  }`}
                                       placeholder="Địa chỉ cụ thể"
                                       onChange={(e) => {
                                         const value = e.target.value;
@@ -726,6 +681,10 @@ export default function CheckOut() {
                                   <span className="text-[#4C4C4C]">
                                     x{e.quantity}
                                   </span>
+                                </p>
+                                <p className="text-[#7A828A] text-xs font-medium mt-2">
+                                  Phân loại: {e.atributes_fk.color} -{" "}
+                                  {e.atributes_fk.size}
                                 </p>
                               </div>
                             </div>
@@ -831,25 +790,18 @@ export default function CheckOut() {
                       </p>
                       <div className="flex gap-1">
                         <p className="text-sm text-[#EA4B48] max-[870px]:text-[11px]">
-                          {
-                            itemVoucher.discount == 0 ? (
-                              numberFormat(
-                                calculatePrice() * (itemVoucher.discount / 100)
-                              )
-                            ) : (
-                              <p>
-                                -{" "}
-                                {numberFormat(
-                                  calculatePrice() *
-                                  (itemVoucher.discount / 100)
-                                )}
-                              </p>
+                          {itemVoucher.discount == 0 ? (
+                            numberFormat(
+                              calculatePrice() * (itemVoucher.discount / 100)
                             )
-                            //  ? numberFormat(
-                            //      calculatePrice() * (itemVoucher.discount / 100)
-                            //    )
-                            //  : numberFormat(0)}
-                          }
+                          ) : (
+                            <p>
+                              -{" "}
+                              {numberFormat(
+                                calculatePrice() * (itemVoucher.discount / 100)
+                              )}
+                            </p>
+                          )}
                         </p>
                       </div>
                     </div>
@@ -860,11 +812,11 @@ export default function CheckOut() {
                       <p className="text-xl text-[#EA4B48] max-[870px]:text-sm">
                         {itemVoucher.discount
                           ? numberFormat(
-                            calculatePrice() -
-                            calculatePrice() *
-                            (itemVoucher.discount / 100) +
-                            30000
-                          )
+                              calculatePrice() -
+                                calculatePrice() *
+                                  (itemVoucher.discount / 100) +
+                                30000
+                            )
                           : numberFormat(calculatePrice() + 30000)}
                       </p>
                     </div>
@@ -900,10 +852,11 @@ export default function CheckOut() {
                                 />
                               </div>
                               <p
-                                className={`max-lg:text-[10px] ${selectedPaymentMethod === element.type
-                                  ? "inherit"
-                                  : "text-[#9c9c9c]"
-                                  } cursor-pointer`}
+                                className={`max-lg:text-[10px] ${
+                                  selectedPaymentMethod === element.type
+                                    ? "inherit"
+                                    : "text-[#9c9c9c]"
+                                } cursor-pointer`}
                                 onClick={() => {
                                   setSelectedPaymentMethod(element.type);
                                 }}
@@ -925,8 +878,9 @@ export default function CheckOut() {
                       onChange={(e) => setInvoice(e.target.checked)}
                     />
                     <p
-                      className={`text-[15px] max-[870px]:text-[13px] cursor-pointer ${invoice ? `inherit` : `text-[#9c9c9c]`
-                        }`}
+                      className={`text-[15px] max-[870px]:text-[13px] cursor-pointer ${
+                        invoice ? `inherit` : `text-[#9c9c9c]`
+                      }`}
                       onClick={() => setInvoice(!invoice)}
                     >
                       Xuất hóa đơn
@@ -945,7 +899,6 @@ export default function CheckOut() {
                       phoneNumber={user.phonenumber}
                     />
                   </a>
-
                 </div>
               </div>
             </div>

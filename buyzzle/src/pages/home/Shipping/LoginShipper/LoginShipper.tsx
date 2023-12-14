@@ -37,14 +37,13 @@ function LoginShipper() {
         setLoading(false);
         setIsButtonDisabled(true);
         toast.success("Đăng nhập thành công !");
-        console.log("res:" + res);
+     
         // localStorage.removeItem("user");
         const jsonString: string = JSON.stringify(res);
         const jsonObject = JSON.parse(jsonString);
         const username = jsonObject.username;
-        console.log(username);
-        // const accessToken = jsonObject.accessToken;
-        // console.log(accessToken);
+   
+       
         const UserData = { username };
         // const Token = {accessToken};
         secureLocalStorage.setItem("shippername", JSON.stringify(UserData));

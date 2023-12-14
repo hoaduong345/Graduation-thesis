@@ -129,7 +129,6 @@ export default function OrderHistory() {
     await orderControllers
       .getOrderOfUser(orderAPI.page!, orderAPI.status!)
       .then((res) => {
-        console.log(orderAPI.page);
         setOrder(res);
       });
   };

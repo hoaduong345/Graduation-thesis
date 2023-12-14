@@ -17,9 +17,8 @@ interface Form {
 }
 export default function AttributeForm(props: Form) {
   const { handleMinusClick, handlePlusClick, fields, control, errors } = props;
-  console.log("errors.attributes?.message", !!errors.attributes?.message);
   return (
-    <div>
+    <form>
       {fields.map((field, index) => {
         return (
           <div key={field.id} className="grid grid-cols-12 col-span-10 gap-3 ">
@@ -184,6 +183,6 @@ export default function AttributeForm(props: Form) {
           </div>
         );
       })}
-    </div>
+    </form>
   );
 }

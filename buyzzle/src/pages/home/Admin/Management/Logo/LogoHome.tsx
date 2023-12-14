@@ -8,22 +8,19 @@ import Container from "../../../../../components/container/Container";
 import { logohomeController } from "../../../../../controllers/LogoHomeController";
 import { storage } from "../../../../../firebase/Config";
 import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 import Loading from "../../../../../helper/Loading/Loading";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
 import { LogoHomeModel } from "../../../../../model/LogoHomeModel";
 import { LogoModel } from "../../../../../model/LogoModel";
 import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
-import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
-import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
-import Handle from "../../../admin/assets/TSX/bacham";
 import Edit from "../../../admin/assets/TSX/Edit";
+import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
-import EmptyPage from "../../../../../helper/Empty/EmptyPage";
+import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
+import Handle from "../../../admin/assets/TSX/bacham";
 
-type FormValues = {
-  id: number;
-  images: string;
-};
+
 export default function LogoHome() {
   const idModal = "logo";
   const idRemove = "removeLogo";
@@ -110,7 +107,7 @@ export default function LogoHome() {
   };
 
   const removee = (id: number, idDialog: string) => {
-    console.log("xoa", id);
+   
     logohomeController
       .remove(id)
       .then(() => {
@@ -159,7 +156,7 @@ export default function LogoHome() {
 
   const renderImg = () => {
     if (url) {
-      console.log("🚀 ~ file: Logoes.tsx:139 ~ renderImg ~ url:", url);
+    
       return (
         <div className="group relative">
           <img

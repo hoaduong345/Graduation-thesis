@@ -55,7 +55,7 @@ class VoucherControllers {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
+  
         return res.data as VoucherModel;
       });
   };
@@ -68,7 +68,7 @@ class VoucherControllers {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
+       
         return res.data as VoucherModel[];
       });
   };

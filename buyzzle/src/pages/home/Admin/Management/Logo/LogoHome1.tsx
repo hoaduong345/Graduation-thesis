@@ -19,10 +19,7 @@ import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
 import Handle from "../../../admin/assets/TSX/bacham";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
-type FormValues = {
-  id: number;
-  images: string;
-};
+
 export default function LogoHome1() {
   const idModal = "logo";
   const idRemove = "removeLogo";
@@ -109,7 +106,7 @@ export default function LogoHome1() {
   };
 
   const removee = (id: number, idDialog: string) => {
-    console.log("xoa", id);
+
     logohome1Controller
       .remove(id)
       .then(() => {
@@ -158,7 +155,6 @@ export default function LogoHome1() {
 
   const renderImg = () => {
     if (url) {
-      console.log("🚀 ~ file: Logoes.tsx:139 ~ renderImg ~ url:", url);
       return (
         <div className="group relative">
           <img

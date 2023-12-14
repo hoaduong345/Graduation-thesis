@@ -33,20 +33,15 @@ export default function useNotificationContextShippping() {
     await notificationControllers
       .getAllNotificationShipping()
       .then((res) => {
-        console.log(
-          "🚀 ~ file: NotificationContextShipping.tsx:36 ~ .then ~ res:",
-          res
-        );
+        
         setNotificationShipping(res.allNotification);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      
   };
   useEffect(() => {
     const socket = io("http://localhost:5000");
     socket.on("setstatus", (setstatus) => {
-      console.log("Received deleted order data:", setstatus);
+   
       toast(
         <a href={`/shipping/detail/${setstatus.id}`}>
           <CustomToast
@@ -78,7 +73,7 @@ export default function useNotificationContextShippping() {
       setDeletedOrder(setstatus);
     });
     socket.on("disconnect", () => {
-      console.log(socket.id);
+      
     });
   }, [deletedOrder]);
   const handleSeenAllNoti = () => {
@@ -88,10 +83,7 @@ export default function useNotificationContextShippping() {
         setCountNotificationShipping(res.count);
       })
       .catch((err) => {
-        console.log(
-          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
-          err
-        );
+       
         return {};
       });
   };

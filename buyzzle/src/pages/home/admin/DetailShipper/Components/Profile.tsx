@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import Container from "../../../../../components/container/Container";
-
 import { useParams } from "react-router-dom";
-
 import secureLocalStorage from "react-secure-storage";
+import Container from "../../../../../components/container/Container";
 import { shipperController } from "../../../../../controllers/ShipperController";
-
 export type FormValues = {
   username: string;
   name: string;
@@ -21,23 +18,17 @@ export type FormImage = {
 };
 export default function UserProfile() {
   const [validUrl, setValidUrl] = useState(false);
-  const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [image, setImage] = useState("");
-  // const [editUser, setEditUser] = useState<FormValues>();
-  const [url, setUrl] = useState<string>("");
-  const [urlThen, setUrlThen] = useState<string>("");
+
 
   const [id, setId] = useState<string>("11");
-  // const id: number | undefined = getID()!;
   const [sex, setSex] = useState<boolean>();
 
   const {
     control,
     register,
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors},
   } = useForm<FormValues>({
     mode: "all",
   });
@@ -47,11 +38,10 @@ export default function UserProfile() {
     if (user != null) {
       // const userData = JSON.parse(user);
       const username = user;
-      console.log("USERNAME1: " + username);
+  
       shipperController
         .getShipperWhereUsername(username)
         .then((res) => {
-          // console.log("SHipperBruh:"+JSON.stringify(res.ShippingWithImage.dateofbirth))
           return res;
         })
         .then((res) => {
@@ -79,7 +69,7 @@ export default function UserProfile() {
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 

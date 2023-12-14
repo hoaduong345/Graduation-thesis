@@ -78,11 +78,7 @@ export default function OrderDetailPage() {
   };
 
   const addImages = async (url: string, id: number) => {
-    console.log(url, id);
-
-    await ratingAndCommentController
-      .addImagesComment(url, id)
-      .then((_) => console.log("thanh cong"));
+    await ratingAndCommentController.addImagesComment(url, id);
   };
 
   const resetImages = () => {
@@ -133,7 +129,6 @@ export default function OrderDetailPage() {
   const handleRatingClick = (rating: number) => {
     setValue("ratingValue", rating);
     setSelectedRating(rating);
-    console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
   };
 
   const [selectedRating, setSelectedRating] = useState(0);
@@ -174,7 +169,6 @@ export default function OrderDetailPage() {
         // );
         toast.success("Đánh giá thành công !");
         resetImages();
-        console.log(data);
 
         for (let i = 0; i < url.length; i++) {
           await addImages(url[i], data.id);
@@ -357,6 +351,10 @@ export default function OrderDetailPage() {
                               <span className="text-[#4C4C4C]">
                                 x{e.quantity}
                               </span>
+                            </p>
+                            <p className="text-[#7A828A] text-xs font-medium mt-1">
+                              Phân loại: {e.fK_attributee?.color} -{" "}
+                              {e.fK_attributee?.size}
                             </p>
                           </div>
                         </div>

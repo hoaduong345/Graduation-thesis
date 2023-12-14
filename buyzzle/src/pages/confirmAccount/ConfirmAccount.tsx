@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 // import { Images } from "../../assets/TS/index";
 
 import "./ConfirmAccount.css";
@@ -6,10 +6,10 @@ import "./ConfirmAccount.css";
 import axios from "axios";
 // import LogoGoogle from "../../assets/PNG/lgG.png";
 // import LogoApple from "../../assets/PNG/lgApple.png";
-import bg from "../../assets/PNG/NewProject.png";
-import bgi from "../../assets/PNG/LogoSlogan.png";
-import iconCheck from "../../assets/PNG/check.png";
 import { Link, useParams } from "react-router-dom";
+import bgi from "../../assets/PNG/LogoSlogan.png";
+import bg from "../../assets/PNG/NewProject.png";
+import iconCheck from "../../assets/PNG/check.png";
 import Container from "../../components/container/Container";
 
 function ConfirmAccount() {
@@ -23,9 +23,9 @@ function ConfirmAccount() {
         setValidUrl(true);
         await axios.post(url);
 
-        // console.log("data", data)
+        
       } catch (error) {
-        console.log(error);
+       
         setValidUrl(false);
       }
     };

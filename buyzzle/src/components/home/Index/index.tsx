@@ -1,25 +1,23 @@
-import { Images } from "../../../assets/TS";
 import Container from "../../container/Container";
 import Category from "../components/Category";
 
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useScroll } from "react-spring";
 import { categoryController } from "../../../controllers/CategoryController";
+import { logohome1Controller } from "../../../controllers/LogoHome1Controller";
+import { logohomeController } from "../../../controllers/LogoHomeController";
 import { productController } from "../../../controllers/ProductsController";
+import { LogoHome1Model } from "../../../model/LogoHome1Model";
+import { LogoHomeModel } from "../../../model/LogoHomeModel";
 import { MergedProducts } from "../../../model/ProductsSuggest";
 import {
-  ImgOfProduct,
-  Products,
-} from "../../../pages/home/User/FilterPage/FiltersPage";
+  ImgOfProduct
+} from "../../../pages/home/User/filterPage/FiltersPage";
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import VoucherHomePage from "../components/Voucher/Voucher";
 import SlidesHome from "../components/slides/SlidesHome/SlidesHome";
-import { useScroll } from "react-spring";
-import { LogoHomeModel } from "../../../model/LogoHomeModel";
-import { logohomeController } from "../../../controllers/LogoHomeController";
-import { logohome1Controller } from "../../../controllers/LogoHome1Controller";
-import { LogoHome1Model } from "../../../model/LogoHome1Model";
 
 export type Product = {
   id: number;
@@ -76,7 +74,7 @@ function Index() {
       .then((data) => {
         setCategory(data);
       })
-      .catch((err) => console.log(err));
+     
   };
 
   const getAllProducts = (page: number) => {

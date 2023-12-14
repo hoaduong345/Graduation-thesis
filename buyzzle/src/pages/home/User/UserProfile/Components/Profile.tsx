@@ -1,21 +1,16 @@
-import { Fragment, useState, useEffect, useCallback } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import Container from "../../../../../components/container/Container";
 import Sitebar from "../Sitebar/Sitebar";
-import { Controller, useForm } from "react-hook-form";
 
 import axios from "axios";
-import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
-import { v4 } from "uuid";
-import { userController } from "../../../../../controllers/UserController";
-import { appConfigUser } from "../../../../../configsEnv";
-import { storage } from "../../../../../firebase/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { replace, values } from "lodash";
-import { stringify } from "querystring";
 import moment from "moment";
-
-
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { appConfigUser } from "../../../../../configsEnv";
+import { userController } from "../../../../../controllers/UserController";
+import { storage } from "../../../../../firebase/Config";
 
 export type FormValues = {
   username: string;
@@ -30,43 +25,26 @@ export type FormImage = {
   id?: number;
   UserImage?: string[];
 };
-type UserData1 = {
-  username: string;
-  name: string;
-  email: string;
-  sex: string;
-  phonenumber: string;
-  dateOfBirth: string;
-};
+
 export default function UserProfile() {
   const [validUrl, setValidUrl] = useState<boolean>(false);
   const [CheckImageUrl, setCheckImageUrl] = useState<boolean>(false);
   const param = useParams();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [image, setImage] = useState<File | null>(null);
-  // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
   const [id, setId] = useState<string>("11");
-  // const id: number | undefined = getID()!;
   const [sex, setSex] = useState<boolean>();
   const [emailThen, setEmailThen] = useState<string>("");
   const [sdtThen, setSdtThen] = useState<string>("");
-  const [LoginByGG, setLoginByGG] = useState<boolean>();
   const [checkPhone, setCheckPhone] = useState<boolean>(true);
-  const [username, setUsername] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [dateOfBirth, setDateOfBirth] = useState<string>("");
-  // const [isDisabled1,setIsDisable1] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
-
-  // const [UserData1, setUserData1] = useState<UserData1>();
 
   const {
     control,
     handleSubmit,
-    register,
     reset,
     // watch,
     formState: { errors, isDirty, isValid },
@@ -75,11 +53,6 @@ export default function UserProfile() {
     // defaultValues: UserData1
   });
   let isDisabled = !(isValid && isDirty);
-  console.log("isDisabled: " + isValid);
-  // setIsDisable(!(isValid && isDirty));
-  // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
-  //DCM hoa`
-  // let user = "";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,9 +61,8 @@ export default function UserProfile() {
         if (user != null) {
           const userData = JSON.parse(user);
           const username = userData.username;
-          console.log("USERNAME: " + username);
+
           await userController.getUserWhereUsername(username).then((res) => {
-            console.log("USER:" + JSON.stringify(res));
             if (res.dateOfBirth == null) {
               res.dateOfBirth = "dd/mm/yyyy";
             } else {
@@ -103,7 +75,6 @@ export default function UserProfile() {
             Bruh = Bruh.replace(res.email[5], "*");
             let emailDef = Bruh;
 
-            console.log("DCM cuoc doi" + JSON.stringify(res.image));
             setEmailThen(res.email);
             let Bruh2 = res.phonenumber;
             if (res.phonenumber != null) {
@@ -144,7 +115,6 @@ export default function UserProfile() {
             return res;
           });
         } else {
-          // console.log("Chua Dang Nhap Dung");
           window.location.href = "/";
         }
       } catch (error) {
@@ -174,14 +144,10 @@ export default function UserProfile() {
     CheckLink();
   }, [param]);
 
-
-
-
   const SetDataUser = (data: any) => {
     const user = localStorage.getItem("user");
     if (user != null) {
       const Username = JSON.parse(user);
-      console.log("UserData1:" + JSON.stringify(data));
       reset({
         username: "" + Username?.username,
         name: "" + data?.name,
@@ -215,8 +181,6 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-      console.log("URL IMAGE: " + url);
-      // FormImage.id = parseInt(id);
       return url;
     } catch (error) {
       console.error(error);
@@ -238,7 +202,6 @@ export default function UserProfile() {
       iduser: id,
       url: url,
     };
-    console.log("IDDDDDDĐ:", urlImages.url);
     await axios
       .put(
         `${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`,
@@ -250,7 +213,6 @@ export default function UserProfile() {
   const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
   const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
-      console.log("selectedFile:" + selectedFile);
       if (selectedFile == null && CheckImageUrl == false) {
         formData.sex = JSON.stringify(sex);
         formData.sex = JSON.parse(formData.sex);
@@ -259,18 +221,14 @@ export default function UserProfile() {
           formData.phonenumber = sdtThen;
         }
 
-        console.log("SERVER:" + JSON.stringify(formData));
         const response = await axios.put(API, formData);
-        console.log("edit thanh cong", response);
 
         if (response.status === 200) {
-          console.log("Edit successfully");
           toast.success("Cập nhật thành công", {
             position: "top-right",
             autoClose: 5000,
           });
         } else {
-          console.log("Sign-in Failed!");
           toast.warning("Sign-in failed", {
             position: "top-right",
             autoClose: 5000,
@@ -284,50 +242,38 @@ export default function UserProfile() {
           formData.phonenumber = sdtThen;
         }
 
-        console.log("SERVER:" + JSON.stringify(formData));
         const response = await axios.put(API, formData);
         FormImage.id = parseInt(id);
         if (response) {
-          console.log("UrlThen" + url);
-
           if (CheckImageUrl == false) {
             await addImages(FormImage.id, url);
             setCheckImageUrl(true);
           } else {
             if (url != "") {
-              console.log("Ao that day:" + url);
               await EditImages(FormImage.id, url);
             } else {
-              console.log("Ao that day:" + FormImage.id);
               await EditImages(FormImage.id, urlThen);
             }
           }
         }
 
-        console.log("edit thanh cong", response);
-
         if (response.status === 200) {
-          console.log("Edit successfully");
           toast.success("Cập nhật thành công", {
             position: "top-right",
             autoClose: 5000,
           });
         } else {
-          console.log("Sign-in Failed!");
           toast.warning("Sign-in failed", {
             position: "top-right",
             autoClose: 5000,
           });
         }
       }
-      // console.log("TESTING: " + formData);
-
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
         if (responseData.error) {
-          console.log(`Lỗi2: ${responseData.error}`);
           const errorMessageUsername = responseData.error.username;
           const errorMessageEmail = responseData.error.email;
           const errorMessagePhoneNumber = responseData.error.phonenumber;
@@ -359,22 +305,18 @@ export default function UserProfile() {
   const onChangeImage = (file: any) => {
     // const file = e.target.files?.[0];
     if (file) {
-      console.log(`Selected file: ` + file.name);
       setSelectedFile(file);
       setImage(file);
-
-      // console.log("isDisabled:"+isDisabled)
     } else {
       setSelectedFile(null); // Reset the selectedFile state when no file is selected
       setImage(null); // Reset the imageURL state
-      console.log("No file selected");
     }
   };
 
   return (
     <Fragment>
       {loading ? (
-        "LOADING............."
+        <></>
       ) : (
         <div>
           {validUrl ? (
@@ -426,10 +368,11 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                          rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                        ${!!errors.username
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                        ${
+                                          !!errors.username
+                                            ? "border-[2px] border-red-900"
+                                            : "border-[1px] border-[#FFAAAF]"
+                                        }`}
                                     disabled={true}
                                     placeholder="Tên đăng nhập"
                                     value={field.value}
@@ -468,7 +411,7 @@ export default function UserProfile() {
                                   value: 25,
                                   message:
                                     "Tên người dùng phải bé hơn 25 ký tự",
-                                }
+                                },
                               }}
                               render={({ field }) => (
                                 <>
@@ -482,10 +425,11 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
 rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.name
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                                   ${
+                                                     !!errors.name
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                     placeholder="Tên người dùng"
                                     value={field.value}
                                     onChange={(e) => {
@@ -495,7 +439,7 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                       // field.onChange
                                     }}
 
-                                  // {...register("name")}
+                                    // {...register("name")}
                                   />
                                   {!!errors.name && (
                                     <p className="text-red-700 mt-2">
@@ -531,10 +475,11 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                                   ${!!errors.email
-                                      ? "border-[2px] border-red-900"
-                                      : "border-[1px] border-[#FFAAAF]"
-                                    }`}
+                                                   ${
+                                                     !!errors.email
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                   placeholder="Email"
                                   onChange={(e) => {
                                     const value = e.target.value;
@@ -543,8 +488,8 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                   }}
                                   value={field.value}
                                   disabled={true}
-                                // {...register("email")}
-                                // onChange={onChangeInput}
+                                  // {...register("email")}
+                                  // onChange={onChangeInput}
                                 />
                                 {!!errors.email && (
                                   <p className="text-red-700 mt-2">
@@ -579,14 +524,11 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                         // name="colored-radio"
                                         id="orange-radio1"
                                         value="true"
-
                                         onChange={(e) => {
                                           field.onChange("true");
                                           handleSexChange(e.target.value);
                                         }}
-
                                         checked={sex === true}
-
                                         className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
                                         checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       />
@@ -625,7 +567,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 </div>
                               )}
                             />
-
                           </div>
                           {checkPhone == true ? (
                             <div className="w-[48%]">
@@ -651,10 +592,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.phonenumber
-                                          ? "border-[2px] border-red-900"
-                                          : "border-[1px] border-[#FFAAAF]"
-                                        }`}
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                       placeholder="Số điện thoại"
                                       value={field.value}
                                       onChange={(e) => {
@@ -662,10 +604,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                         const reg = /[!@#$%^&]/;
                                         field.onChange(value.replace(reg, ""));
                                       }}
-                                    // disabled={true}
+                                      // disabled={true}
 
-                                    // {...register("phonenumber")}
-                                    // onChange={onChangeInput}
+                                      // {...register("phonenumber")}
+                                      // onChange={onChangeInput}
                                     />
                                     {!!errors.phonenumber && (
                                       <p className="text-red-700 mt-2">
@@ -689,14 +631,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   },
                                   minLength: {
                                     value: 10,
-                                    message:
-                                      "Tối thiểu 10 kí tự",
+                                    message: "Tối thiểu 10 kí tự",
                                   },
                                   maxLength: {
                                     value: 11,
-                                    message:
-                                      "Nhiều nhất 11 kí tự",
-                                  }
+                                    message: "Nhiều nhất 11 kí tự",
+                                  },
                                 }}
                                 render={({ field }) => (
                                   <>
@@ -710,10 +650,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.phonenumber
-                                          ? "border-[2px] border-red-900"
-                                          : "border-[1px] border-[#FFAAAF]"
-                                        }`}
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                       placeholder="Số điện thoại"
                                       onChange={(e) => {
                                         const value = e.target.value;
@@ -722,8 +663,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       }}
                                       disabled={true}
                                       value={field.value}
-                                    // {...register("phonenumber")}
-                                    // onChange={onChangeInput}
+                                      // {...register("phonenumber")}
+                                      // onChange={onChangeInput}
                                     />
                                     {!!errors.phonenumber && (
                                       <p className="text-red-700 mt-2">
@@ -766,12 +707,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                   rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                 ${!!errors.dateOfBirth
-                                      ? "border-[2px] border-red-900"
-                                      : "border-[1px] border-[#FFAAAF]"
-                                    }`}
+                                 ${
+                                   !!errors.dateOfBirth
+                                     ? "border-[2px] border-red-900"
+                                     : "border-[1px] border-[#FFAAAF]"
+                                 }`}
                                   type="date"
-
                                   onChange={(e) => {
                                     const value = e.target.value;
                                     // const reg = /[!@#$%^&*]/;
@@ -796,17 +737,19 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               onSubmit(formData, FormImage);
                             }
                           )}
-                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
-                            ? "bg-[#aeaeae] cursor-not-allowed"
-                            : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                            }
+                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
+                            isDisabled
+                              ? "bg-[#aeaeae] cursor-not-allowed"
+                              : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                          }
                      `}
                         >
                           <button
                             disabled={isDisabled}
                             className={`text-center text-base font-bold text-[#FFFFFF]
-                    ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                              }                `}
+                    ${
+                      isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                    }                `}
                           >
                             Lưu
                           </button>

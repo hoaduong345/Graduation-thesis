@@ -26,22 +26,18 @@ export default function UserProfile() {
   const [validUrl, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [image, setImage] = useState("");
-  // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [id, setId] = useState<string>("11");
-  // const id: number | undefined = getID()!;
-  const [sex, setSex] = useState<boolean>();
+
+  
 
   const {
     control,
-    handleSubmit,
-    register,
+ 
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: {isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
   });
@@ -51,13 +47,11 @@ export default function UserProfile() {
     const user = param.username;
     if (user != null) {
       const username = user;
-      console.log("USERNAME1: " + username);
+     
       shipperController
         .getShipperWhereUsername(username)
         .then((res) => {
-          console.log(
-            "BRUHUUUUUUUUUU:" + JSON.stringify(res.ShippingWithImage)
-          );
+          
           return res;
         })
         .then((res) => {
@@ -71,17 +65,14 @@ export default function UserProfile() {
             const urlTaker = JSON.parse(UserImageArray);
             setUrlThen(urlTaker[0].url);
             setCheckImageUrl(true);
-            // console.log(urlThen);
+          
           }
         })
         .catch((error) => {
-          console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
-            error
-          );
+          console.log(error);
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 
@@ -95,8 +86,6 @@ export default function UserProfile() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-
-        // console.log("data", data)
       } else {
         setValidUrl(false);
       }
@@ -117,7 +106,7 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-      // console.log("URL IMAGE: "+url);
+     
       return url;
     } catch (error) {
       console.error(error);
@@ -127,7 +116,7 @@ export default function UserProfile() {
   const getUserStatus = () => {
     const user = param.username;
     if (user != null) {
-      console.log("USERNAME1: " + user);
+     
       shipperController
         .getShipperWhereUsername(user)
         .then((res) => {
@@ -138,7 +127,7 @@ export default function UserProfile() {
             res.ShippingWithImage.createdAt = "dd/mm/yyyy";
           } else {
             var createdAt = res.ShippingWithImage.createdAt.substring(0, 10);
-            console.log(createdAt);
+    
             var datearray = createdAt.split("-");
             res.ShippingWithImage.createdAt =
               datearray[2] + "-" + datearray[1] + "-" + datearray[0];
@@ -147,15 +136,13 @@ export default function UserProfile() {
             id: res.ShippingWithImage.id,
             createdAt: res.ShippingWithImage.createdAt,
           });
-          // console.log( res.createdAt);
+          
         })
         .catch((error) => {
-          console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
-            error
-          );
+          console.log(error)
+          
         });
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 

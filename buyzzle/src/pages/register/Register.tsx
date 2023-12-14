@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import { Images } from "../../assets/TS/index";
 import "./Register.css";
 
-import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 export interface FormValues {
   name: string;
   username: string;
@@ -65,7 +65,6 @@ function Register() {
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
         if (responseData.error) {
-          console.log(`Lỗi2: ${responseData.error}`);
           const errorMessageUsername = responseData.error.username;
           const errorMessageEmail = responseData.error.email;
           const errorMessagePhoneNumber = responseData.error.phonenumber;

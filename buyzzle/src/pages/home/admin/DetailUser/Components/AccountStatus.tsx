@@ -97,7 +97,6 @@ export default function UserProfile() {
   const getUserStatus = () => {
     const user = param.username;
     if (user != null) {
-      console.log("USERNAME1: " + user);
       userController
         .getStatusUser(user)
         .then((res) => {
@@ -108,7 +107,6 @@ export default function UserProfile() {
             res.createdAt = "dd/mm/yyyy";
           } else {
             var createdAt = res.createdAt.substring(0, 10);
-            console.log(createdAt);
             var datearray = createdAt.split("-");
             res.createdAt =
               datearray[2] + "-" + datearray[1] + "-" + datearray[0];
@@ -124,7 +122,7 @@ export default function UserProfile() {
             error
           );
         });
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 

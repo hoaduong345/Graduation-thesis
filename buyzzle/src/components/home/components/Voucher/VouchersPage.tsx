@@ -1,19 +1,17 @@
-import React from "react";
-import Container from "../../../container/Container";
-import VoucherManage from "../../../../assets/TSX/VoucherManage";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import LogoVoucher from "../../../../assets/TSX/LogoVoucher";
+import VoucherManage from "../../../../assets/TSX/VoucherManage";
 import VoucherManageItem from "../../../../assets/TSX/VoucherManageItem";
+import { userController } from "../../../../controllers/UserController";
 import { voucherControllers } from "../../../../controllers/VoucherControllers";
+import DialogLogin from "../../../../helper/Dialog/DialogLogin";
 import { formatDate } from "../../../../helper/Format";
 import { toastWarn } from "../../../../helper/Toast/Warning";
 import { VoucherModel } from "../../../../model/VoucherModel";
 import { LoginForm } from "../../../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
-import { Controller, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { userController } from "../../../../controllers/UserController";
-import DialogLogin from "../../../../helper/Dialog/DialogLogin";
-import { toast } from "react-toastify";
+import Container from "../../../container/Container";
 export default function VouchersPage() {
   const [voucher, setVoucher] = useState<VoucherModel[]>([]);
   const [Logined, setLogined] = useState<boolean>();
@@ -31,7 +29,7 @@ export default function VouchersPage() {
       .userSavedVoucher(id)
       .then((_) => {
         getVoucher();  // if ((await response).status === 200) {
-        console.log("Login successfully");
+      
         toast.success("Lưu voucher thành công", {
           position: "top-right",
           autoClose: 5000,
@@ -51,36 +49,28 @@ export default function VouchersPage() {
     }
   }, []);
   const CheckLogin = async () => {
-    // const user = localStorage.getItem("user");
     if (Logined == false) {
-      // setLogined(false);
       openModal(idAddAdmin);
     } else {
-      // setLogined(true);
-      // CheckToken();
-      // CheckRefreshToken();
-      console.log("AOTHATDAY");
+      setLogined(true);
     }
   };
   const {
     control,
-    handleSubmit,
-    clearErrors,
+    handleSubmit, 
     reset,
-    register,
     formState: { errors },
   } = useForm<LoginForm>({
     mode: "all",
   });
-  const param = useParams();
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
-    console.log("LoginData:" + data);
+   
     userController.Login(data).then((res) => {
-      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
+     
       const username = res.username;
       const accessToken = res.accessToken;
-      console.log(accessToken);
+     
       const UserData = { username };
       const Token = { accessToken };
       localStorage.setItem("idUser", JSON.stringify(res.id));
@@ -114,7 +104,6 @@ export default function VouchersPage() {
     if (modal) {
       modal.close();
     }
-    console.log("Data:" + JSON.stringify(data));
   };
 
   return (
