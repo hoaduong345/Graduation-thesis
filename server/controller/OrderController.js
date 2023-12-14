@@ -243,6 +243,9 @@ const OderController = {
                         where: {
                             id: parseInt(element.productId),
                         },
+                        include: {
+                            attributes: true, // Bao gồm thuộc tính của sản phẩm
+                          },
                     });
 
                     const newQuantity = currentProduct.quantity - parseInt(element.quantity);
@@ -255,6 +258,22 @@ const OderController = {
                             quantity: newQuantity,
                         },
                     });
+                    if (currentProduct.attributes) {
+                        await Promise.all(
+                          currentProduct.attributes.map(async (attribute) => {
+                            const updatedAttribute = {
+                              soluong: attribute.soluong - parseInt(element.quantity),
+                            };
+              
+                            await prisma.attribute.update({
+                              where: {
+                                id: attribute.id,
+                              },
+                              data: updatedAttribute,
+                            });
+                          })
+                        );
+                      }
                 })
             );
 

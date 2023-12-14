@@ -874,8 +874,8 @@ export default function DetailsProduct() {
                     href={`${items.linkgoogle}`}
                     className="flex items-center"
                     style={{
-                      width: "100%",
-                      height: "680px",
+                      width: "99%",
+                      height: "670px",
                     }}
                   >
                     <img
