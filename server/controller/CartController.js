@@ -6,16 +6,25 @@ const CartController = {
     addToCart: async (req, res) => {
         try {
             const userId = parseInt(req.cookies.id);
-            const { productId: prodId, quantity: qty } = req.body;
+            const { productId: prodId, quantity: qty, atributes} = req.body;
 
             const productId = parseInt(prodId);
             const quantity = parseInt(qty || 1); // default to 1 if not provided
             let cart = await CartController.findCart(userId, productId);
-
+            let atri = await prisma.attribute.findFirst({
+                where: {
+                    id : atributes
+                },
+                select:{
+                    color: true,
+                    size: true,
+                    soluong: true
+                }
+            })
             if (!cart) {
                 cart = await CartController.createCart(userId, productId, quantity);
                 cart.subtotal += cart.item.price * quantity;
-                return res.status(201).json(cart);
+                return res.status(201).json({ cart: cart, atributes: atri });
             }
 
             const product = await prisma.product.findFirst({
@@ -42,7 +51,7 @@ const CartController = {
             }
 
             const updatedCart = await CartController.updateCart(cart, productId, quantity);
-            res.status(200).json(updatedCart);
+            res.status(200).json({updatedCart: updatedCart, atributes: atri});
         } catch (error) {
             console.error('error', error);
             res.status(500).json({
