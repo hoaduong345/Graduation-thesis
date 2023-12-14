@@ -436,7 +436,6 @@ const ProductController = {
             const productId = parseInt(req.params.id);
             const productDetail = await prisma.product.findFirst({
                 include: {
-                    attributes: true,
                     ProductImage: true,
                     fK_category: true,
                     attributes: true,
