@@ -44,7 +44,7 @@ function Forgotpassword() {
     } catch (error) {
       setLoading(false);
       setIsButtonDisabled(false);
-      toast.warning("Send email failed", {
+      toast.warning("Gửi email thất bại", {
         position: "top-right",
         autoClose: 5000,
       });

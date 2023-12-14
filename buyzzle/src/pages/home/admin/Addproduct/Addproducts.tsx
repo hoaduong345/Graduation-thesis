@@ -2,31 +2,38 @@ import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useFieldArray } from "react-hook-form";
 import { Link } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 import { toast } from "react-toastify";
 import RemoveIMG from "../../../../assets/TSX/RemoveIMG";
+import Container from "../../../../components/container/Container";
+import { appConfig } from "../../../../configsEnv";
 import { categoryController } from "../../../../controllers/CategoryController";
 import { storage } from "../../../../firebase/Config";
 import Loading from "../../../../helper/Loading/Loading";
 import { CategoryModal } from "../../../../model/CategoryModel";
-import Container from "../../../../components/container/Container";
-import { appConfig } from "../../../../configsEnv";
 import Back from "../assets/TSX/Back";
 import UploadIMG from "../assets/TSX/UploadIMG";
-import secureLocalStorage from "react-secure-storage";
+import { toastError } from "../../../../helper/Toast/Error";
+import Attribute from "./Attribute";
 
 export type FormValues = {
+  id: number;
   productName: string;
   productPrice: number;
   productDesc: string;
-  productQuantity: number;
   productImage: string;
   productDiscount: number;
   categoryID: number;
   subCategoryID: Number;
+  attributes: Attribute[];
 };
-
+export interface Attribute {
+  size: string;
+  color: string;
+  soluong: number;
+}
 export default function Addproducts() {
   const [categoty, setCategory] = useState<CategoryModal[]>([]);
   const editorRef = useRef<any>(null);
@@ -50,14 +57,15 @@ export default function Addproducts() {
   const delayIMG = () => {
     const timeoutId = setTimeout(() => {
       setLoadingImage(false);
-    }, 7000);
+    }, 4000);
     return () => {
       clearTimeout(timeoutId);
     };
   };
   // img firebase
   const loadImageFile = async (images: any) => {
-    for (let i = 0; i < 6; i++) {
+    const remainingSlots = 6 - url.length;
+    for (let i = 0; i < remainingSlots && i < images.length; i++) {
       const imageRef = ref(storage, `multipleFiles/${images[i].name}`);
 
       await uploadBytes(imageRef, images[i])
@@ -81,6 +89,12 @@ export default function Addproducts() {
     }
   };
 
+  const removeListUrl = (index: number) => {
+    const _url = [...url];
+    _url.splice(index, 1);
+    setUrl(_url);
+  };
+
   const addImages = async (id: number, url: string) => {
     const urlImages = {
       idproduct: id,
@@ -95,36 +109,64 @@ export default function Addproducts() {
     setUrl([]);
   };
   // Tạo fuction handle thêm sản phẩm.
-  const handleAddproduct = (data: FormValues) => {
+  const handleAddproduct = async (data: FormValues) => {
     if (url.length == 0) {
       toast.error("Hãy chọn hình");
+      return;
+    }
+    if (hasDuplicateSizeColor(data.attributes)) {
+      toast.warning("Có cặp Size - Màu sắc giống nhau. Vui lòng kiểm tra lại!");
       return;
     }
     const _data = {
       name: data.productName,
       price: data.productPrice,
       description: data.productDesc,
-      quantity: data.productQuantity,
       discount: data.productDiscount,
       categoryID: data.categoryID,
+      attributes: data.attributes,
       subcategoriesID: data.subCategoryID,
     };
-    axios
-      .post(`${appConfig.apiUrl}/addproduct`, _data)
-      .then((response) => {
-        return response;
-      })
-      .then(async (responseData) => {
+    console.log(
+      "🚀 ~ file: Addproducts.tsx:127 ~ handleAddproduct ~ _data:",
+      _data
+    );
+    try {
+      const response = await axios.post(
+        `${appConfig.apiUrl}/addproduct`,
+        _data
+      );
+      const productId = response?.data?.id;
+
+      if (productId) {
         toast.success("Thêm thành công !");
         resetImages();
-        for (let i = 0; i < url.length; i++) {
-          await addImages(responseData?.data.id, url[i]);
-        }
+
+        await Promise.all(url.map((image) => addImages(productId, image)));
+
         reset({});
-      })
-      .catch(() => {
-        toast.error("Thêm thất bại !");
-      });
+      } else {
+        toastError("Không nhận được ID sản phẩm từ phản hồi của API");
+      }
+    } catch (error) {
+      console.error("Lỗi khi thêm sản phẩm:", error);
+      toastError("Đã xảy ra lỗi khi thêm sản phẩm!");
+    }
+  };
+
+  // Hàm kiểm tra cặp size-color trùng nhau
+  const hasDuplicateSizeColor = (attributes: Attribute[]) => {
+    const sizeColorPairs = new Set<string>();
+    for (let i = 0; i < attributes.length; i++) {
+      const normalizedSize = attributes[i]?.size.trim().toLowerCase();
+      const normalizedColor = attributes[i]?.color.trim().toLowerCase();
+      const currentPair = `${normalizedSize}-${normalizedColor}`;
+      if (sizeColorPairs.has(currentPair)) {
+        return true;
+      }
+      sizeColorPairs.add(currentPair);
+    }
+    return false;
   };
 
   const {
@@ -132,6 +174,7 @@ export default function Addproducts() {
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
@@ -142,11 +185,26 @@ export default function Addproducts() {
       productDesc: "",
       productImage: "",
       productPrice: 1,
-      productQuantity: 1,
       productDiscount: 1,
+      attributes: [
+        {
+          size: "",
+          color: "",
+          soluong: 1,
+        },
+      ],
     },
   });
+  const { fields, append, remove } = useFieldArray<FormValues>({
+    name: "attributes",
+    control,
+    rules: {
+      required: true,
+    },
+  });
+  const watchFields = watch("attributes", []);
 
+  console.log("watch().attributes", watch().attributes);
   const isDisabled = !(isValid && isDirty);
 
   const loading = () => {
@@ -165,7 +223,6 @@ export default function Addproducts() {
   useEffect(() => {
     let user = secureLocalStorage.getItem("admin");
     if (user == null) {
-      console.log("VCLLLLLLLLLLLLLLLLLll");
       window.location.href = "/admin/loginadmin";
     }
   }, []);
@@ -175,11 +232,11 @@ export default function Addproducts() {
         {/* back */}
         <div className="back h-[57px] mt-[46px] ">
           <div className="flex gap-3 items-center">
-            <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
-              <Link to={"/admin/ListproductsAdmin"}>
+            <Link to={"/admin/ListproductsAdmin"}>
+              <div className="border-[1px] border-[#EA4B48] rounded-md py-4 px-4 max-xl:p-3 max-lg:p-2">
                 <Back />
-              </Link>
-            </div>
+              </div>
+            </Link>
             <div>
               <p className="font-normal text-sm max-xl:text-xs max-lg:text-[10px]">
                 Quay lại danh sách sản phẩm
@@ -404,10 +461,15 @@ export default function Addproducts() {
                             <div className="max-w-max items-center">
                               <label htmlFor="images">
                                 <div
-                                  className="outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 cursor-pointer
-                                                                 max-xl:px-4 max-[1100px]:py-4 max-[1024px]:p-2 max-[768px]:p-1"
+                                  className={`outline-dashed outline-2 outline-offset-2 outline-[#EA4B48] py-7 px-9 ${
+                                    url.length >= 6
+                                      ? `cursor-not-allowed`
+                                      : `cursor-pointer`
+                                  }
+                                  max-xl:px-4 max-[1100px]:py-4 max-[1024px]:p-2 max-[768px]:p-1`}
                                 >
                                   <input
+                                    disabled={url.length >= 6 && true}
                                     type="file"
                                     // onChange={field.onChange}
                                     onChange={(e: any) =>
@@ -433,7 +495,7 @@ export default function Addproducts() {
 
                             <div className="justify-center flex flex-1">
                               <div className="inline-grid grid-cols-3 gap-4 relative">
-                                {url.map((e) => {
+                                {url.map((e, index) => {
                                   return (
                                     <>
                                       <div className="relative">
@@ -450,13 +512,11 @@ export default function Addproducts() {
                                             className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-md bg-gray-900 bg-fixed 
                                                                     opacity-0 transition duration-300 ease-in-out group-hover:opacity-20"
                                           ></div>
-                                          <div
-                                            className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
-                                            onClick={() =>
-                                              console.log("an không ?")
-                                            }
-                                          >
-                                            <RemoveIMG />
+                                          <div className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute">
+                                            <RemoveIMG
+                                              index={index}
+                                              removeListUrl={removeListUrl}
+                                            />
                                           </div>
                                         </div>
                                       </div>
@@ -472,10 +532,10 @@ export default function Addproducts() {
                   </div>
                 </div>
 
-                {/* Giá và số lượng sản phẩm */}
+                {/* Giá */}
                 <div className="mt-7">
                   <span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
-                    Giá & Số Lượng
+                    Giá & Giảm Giá
                   </span>
                   {/* card */}
                   <div
@@ -599,51 +659,6 @@ export default function Addproducts() {
                         )}
                       />
                     </div>
-
-                    <Controller
-                      control={control}
-                      name="productQuantity"
-                      rules={{
-                        required: {
-                          value: true,
-                          message: "Bạn phải nhập số lượng cho sản phẩm này!",
-                        },
-                        maxLength: {
-                          value: 4,
-                          message:
-                            "Số lượng sản phẩm quá nhiều! Chỉ tối đa đến hàng nghìn!",
-                        },
-                      }}
-                      render={({ field }) => (
-                        <>
-                          <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
-                            Số Lượng Sản Phẩm
-                            <span className="text-[#FF0000]">*</span>
-                          </p>
-                          <input
-                            className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
-                                                            max-xl:text-sm max-lg:text-[13px]
-                                                    ${
-                                                      !!errors.productQuantity
-                                                        ? "border-[1px] border-red-900"
-                                                        : "border-[1px] border-[#FFAAAF]"
-                                                    } `}
-                            placeholder="000.000"
-                            value={field.value}
-                            onChange={(e) => {
-                              const reg = /[^0-9]/g;
-                              const value = e.target.value;
-                              field.onChange(value.replace(reg, ""));
-                            }}
-                          />
-                          {errors.productQuantity && (
-                            <p className="text-red-700 mt-2">
-                              {errors.productQuantity.message}
-                            </p>
-                          )}
-                        </>
-                      )}
-                    />
                   </div>
                 </div>
 
@@ -762,6 +777,13 @@ export default function Addproducts() {
                     {/* end input addNameProducts */}
                   </div>
                 </div>
+                <Attribute
+                  control={control}
+                  errors={errors}
+                  fields={fields}
+                  remove={remove}
+                  append={append}
+                />
               </div>
             </div>
           </form>

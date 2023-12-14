@@ -15,7 +15,17 @@ export interface ProductDetail {
   updatedAt: string;
   categoryID: number;
   ProductImage: ProductImage[];
+  attributes: Attributes[]
 }
+
+interface Attributes {
+  id: number;
+  size: string;
+  color: string;
+  soluong: number;
+  productId: number;
+}
+
 export interface Rate {
   FlashsaleProducts: FlashsaleProduct[];
   currentPage: number;

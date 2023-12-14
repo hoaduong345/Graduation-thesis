@@ -306,7 +306,7 @@ export default function DetailOrderManagement() {
                           alt=""
                         />
                       ) : (
-                        <div className="w-[40px] h-[40px] object-cover rounded-full bg-red-500 pt-1 pb-2 ps-3 pe-3">
+                        <div className="w-[40px] h-[40px] object-cover rounded-full bg-red-500 pt-2 pb-2 ps-4 pe-4">
                           <p className="text-1xl text-stone-50">
                             {order?.name?.length > 0
                               ? (order?.name).substring(0, 1).toUpperCase()

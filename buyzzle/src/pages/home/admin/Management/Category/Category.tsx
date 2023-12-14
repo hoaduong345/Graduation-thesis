@@ -686,6 +686,7 @@ function Category() {
                                       <div className="flex items-center text-center justify-center gap-5 max-lg:ml-4 max-lg:pt-[22px] max-lg:pb-0 max-lg:pl-[6%] max-lg:gap-2">
                                         <div
                                           onClick={() => {
+                                            setIndexCate(index)
                                             openModal(idModalSubCateLv1, {
                                               name: elements.name,
                                             } as CategoryModal);

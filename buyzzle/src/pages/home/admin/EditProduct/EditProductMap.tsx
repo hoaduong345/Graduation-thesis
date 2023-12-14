@@ -1,19 +1,20 @@
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { ref, uploadBytes } from "firebase/storage";
+import { useEffect, useRef, useState } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import RemoveIMG from "../../../../assets/TSX/RemoveIMG";
+import { appConfig } from "../../../../configsEnv";
 import { categoryController } from "../../../../controllers/CategoryController";
 import { imagesController } from "../../../../controllers/ImagesController";
 import { productController } from "../../../../controllers/ProductsController";
 import { storage } from "../../../../firebase/Config";
-import { appConfig } from "../../../../configsEnv";
-import UploadIMG from "../assets/TSX/UploadIMG";
 import Loading from "../../../../helper/Loading/Loading";
 import { CategoryModal } from "../../../../model/CategoryModel";
+import Attribute from "../Addproduct/Attribute";
+import UploadIMG from "../assets/TSX/UploadIMG";
 
 export type FormValues = {
   name?: string;
@@ -24,8 +25,13 @@ export type FormValues = {
   categoryID?: number;
   subcateId?: Number;
   images?: EditImage;
+  attributes: Attribute[];
 };
-
+export interface Attribute {
+  size: string;
+  color: string;
+  soluong: number;
+}
 interface EditImage {
   url?: string;
   id?: number;
@@ -48,6 +54,15 @@ export default function EditProductMap() {
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
+    defaultValues: {
+      attributes: [
+        {
+          size: "",
+          color: "",
+          soluong: 1,
+        },
+      ],
+    },
   });
   const isDisabled = !(isValid && isDirty);
 
@@ -83,6 +98,10 @@ export default function EditProductMap() {
   const id = Number(idProduct.id);
 
   const submitData = (data: FormValues) => {
+    if (hasDuplicateSizeColor(data.attributes)) {
+      toast.warning("Có cặp Size - Màu sắc giống nhau. Vui lòng kiểm tra lại!");
+      return;
+    }
     const _data = {
       name: data.name,
       price: data.price,
@@ -94,6 +113,7 @@ export default function EditProductMap() {
       images: {
         url: data.images?.url,
       },
+      attributes: data.attributes,
     };
     console.log(_data);
     productController
@@ -109,6 +129,25 @@ export default function EditProductMap() {
       });
   };
 
+  const { fields, append, remove } = useFieldArray<FormValues>({
+    name: "attributes",
+    control,
+  });
+  console.log("watch().attributes", watch().attributes);
+  // Hàm kiểm tra cặp size-color trùng nhau
+  const hasDuplicateSizeColor = (attributes: Attribute[]) => {
+    const sizeColorPairs = new Set<string>();
+    for (let i = 0; i < attributes.length; i++) {
+      const normalizedSize = attributes[i]?.size.trim().toLowerCase();
+      const normalizedColor = attributes[i]?.color.trim().toLowerCase();
+      const currentPair = `${normalizedSize}-${normalizedColor}`;
+      if (sizeColorPairs.has(currentPair)) {
+        return true;
+      }
+      sizeColorPairs.add(currentPair);
+    }
+    return false;
+  };
   const updateImages = async (id: number, url: string) => {
     const urlImages = {
       idproduct: id,
@@ -136,6 +175,7 @@ export default function EditProductMap() {
           images: {
             url: detailForm.data.productDetail.ProductImage,
           },
+          attributes: detailForm.data.productDetail.attributes,
         });
         setEditImages(detailForm.data.productDetail.ProductImage);
       })
@@ -462,7 +502,7 @@ export default function EditProductMap() {
             {/* Giá và số lượng sản phẩm */}
             <div className="mt-7">
               <span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
-                Giá & Số Lượng
+                Giá & Giảm Giá
               </span>
               {/* card */}
               <div
@@ -587,51 +627,6 @@ export default function EditProductMap() {
                     )}
                   />
                 </div>
-
-                <Controller
-                  control={control}
-                  name="quantity"
-                  rules={{
-                    required: {
-                      value: true,
-                      message: "Bạn phải nhập số lượng cho sản phẩm này!",
-                    },
-                    maxLength: {
-                      value: 4,
-                      message:
-                        "Số lượng sản phẩm quá nhiều! Chỉ tối đa đến hàng nghìn!",
-                    },
-                  }}
-                  render={({ field }) => (
-                    <>
-                      <p className="text-[#4C4C4C] text-sm font-semibold mb-[8px] mt-[23px] max-xl:text-[13px] max-lg:text-xs">
-                        Số Lượng Sản Phẩm
-                        <span className="text-[#FF0000]">*</span>
-                      </p>
-                      <input
-                        className={`focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%] rounded-[6px] px-[15px] py-[12px]
-                                                max-xl:text-sm max-lg:text-[13px]
-                                                    ${
-                                                      !!errors.quantity
-                                                        ? "border-[1px] border-red-900"
-                                                        : "border-[1px] border-[#FFAAAF]"
-                                                    } `}
-                        placeholder="000.000"
-                        value={field.value}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const reg = /[a-zA-Z!@#$%^&*(){}[\]"=+:"_-]/;
-                          field.onChange(value.replace(reg, ""));
-                        }}
-                      />
-                      {errors.quantity && (
-                        <p className="text-red-700 mt-2">
-                          {errors.quantity.message}
-                        </p>
-                      )}
-                    </>
-                  )}
-                />
               </div>
             </div>
 
@@ -734,6 +729,13 @@ export default function EditProductMap() {
                 />
               </div>
             </div>
+            <Attribute
+              append={append}
+              control={control}
+              errors={errors}
+              fields={fields}
+              remove={remove}
+            />
           </div>
         </div>
       </form>

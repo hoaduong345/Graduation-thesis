@@ -142,13 +142,35 @@ model Product {
   updatedAt     DateTime?              @default(now())
   categoryID    Int?
   subcateId     Int?
+  // attributeID   Int? 
   fK_category   Category?              @relation(fields: [categoryID], references: [id])
   fK_subcateLv2 subCategoriesMultiLv2? @relation(fields: [subcateId], references: [id])
+  // fK_attribute  Attribute?             @relation(fields: [attributeID], references: [id])
   OrderDetail   OrderDetail[]
   ProductImage  ProductImage[]
   cart          ItemCart[]
   Rating        Rating[]
+   attributes   Attribute[]
 }
+
+model Attribute  {
+     id           Int       @id @default(autoincrement())
+     size         String?
+     color        String?
+     soluong      Int?    
+    productId    Int?      // Thêm trường idproduct
+
+  products     Product?  @relation(fields: [productId], references: [id]) 
+  idorder      Order[]
+
+  deletedAt     DateTime?
+  createdAt     DateTime?              @default(now())
+  updatedAt     DateTime?              @default(now())
+     
+}
+
+
+
 
 model Category {
   id            Int                     @id @default(autoincrement())
@@ -160,7 +182,6 @@ model Category {
   products      Product[]
   subCategories subCategoriesMultiLv2[] @relation("CategorySubcategories")
   deletedAt     DateTime?
-
   @@index([name])
 }
 
@@ -172,9 +193,15 @@ model subCategoriesMultiLv2 {
   createAt   DateTime?
   productId  Product[]
   category   Category  @relation("CategorySubcategories", fields: [categoryid], references: [id])
-
+  // SizeCategories Size[] @relation("Sizecategorieslv2")
+  // ColorCategories Color[] @relation("Colorcategorieslv2")
   @@index([name])
 }
+
+
+
+
+
 
 model Cart {
   id        Int              @id @default(autoincrement())
@@ -253,6 +280,8 @@ model Order {
   OrderDetail   OrderDetail[]
   User          User?          @relation(fields: [userId], references: [id])
   Notification  Notification[]
+  attributeIDD   Int? 
+  fK_attributee  Attribute?             @relation(fields: [attributeIDD], references: [id])
 }
 
 model OrderDetail {
