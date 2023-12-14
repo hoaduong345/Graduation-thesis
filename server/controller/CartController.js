@@ -10,10 +10,10 @@ const CartController = {
 
             const productId = parseInt(prodId);
             const quantity = parseInt(qty || 1); // default to 1 if not provided
-            const astributes = parseInt(atri)
-            let cart = await CartController.findCart(userId, productId,astributes);
+            const atributes = parseInt(atri);
+            let cart = await CartController.findCart(userId, productId, atributes);
             if (!cart) {
-                cart = await CartController.createCart(userId, productId, quantity,astributes);
+                cart = await CartController.createCart(userId, productId, quantity, atributes);
                 cart.subtotal += cart.item.price * quantity;
                 return res.status(201).json(cart);
             }
@@ -21,6 +21,13 @@ const CartController = {
             const product = await prisma.product.findFirst({
                 where: { id: productId },
             });
+            const attributes = await prisma.attribute.findFirst({
+                where:{
+                    productId: productId,
+                    id: atributes
+                }
+            })
+            if(!attributes) return res.status(404).send("Product không tồn tại")
             const existingCartItem = cart.item.find((item) => item.productid === productId);
 
             if (existingCartItem) {
@@ -41,8 +48,8 @@ const CartController = {
                 }
             }
 
-            const updatedCart = await CartController.updateCart(cart, productId, quantity,atri);
-            res.status(200).json( updatedCart);
+            const updatedCart = await CartController.updateCart(cart, productId, quantity, atributes);
+            res.status(200).json(updatedCart);
         } catch (error) {
             console.error('error', error);
             res.status(500).json({
@@ -94,10 +101,12 @@ const CartController = {
     },
 
     updateCart: async (cart, productId, quantity, atributes) => {
-        const existingCartItem = cart.item.find((item) => item.productid === productId);
+        const existingCartItem = cart.item.find((item) => item.productid === productId && item.atributesId === atributes);
+        console.log("🚀 ~ file: CartController.js:105 ~ updateCart: ~ existingCartItem:", existingCartItem)
+        
         if (existingCartItem) {
             await prisma.itemCart.update({
-                where: { id: existingCartItem.id },
+                where: { id: existingCartItem.id},
                 data: {
                     atributesId: atributes,
                     quantity: existingCartItem.quantity + quantity,
@@ -106,7 +115,7 @@ const CartController = {
                 },
             });
         } else {
-            const product = await prisma.product.findUnique({
+            const product = await prisma.product.findFirst({
                 where: { id: productId },
             });
 
@@ -114,14 +123,15 @@ const CartController = {
                 throw new Error(`Product with ID ${productId} not found.`);
             }
 
-            await prisma.itemCart.create({
+           await prisma.itemCart.create({
                 data: {
                     quantity,
-                    atributesId: atributes,
                     price: product.sellingPrice,
                     total: quantity * product.sellingPrice,
                     cartschema: { connect: { id: cart.id } },
                     product: { connect: { id: product.id } },
+                    atributes_fk: { connect: {id: atributes}}
+                    
                 },
             });
         }
