@@ -78,11 +78,7 @@ export default function OrderDetailPage() {
   };
 
   const addImages = async (url: string, id: number) => {
-
-
-    await ratingAndCommentController
-      .addImagesComment(url, id)
-     
+    await ratingAndCommentController.addImagesComment(url, id);
   };
 
   const resetImages = () => {
@@ -355,6 +351,10 @@ export default function OrderDetailPage() {
                               <span className="text-[#4C4C4C]">
                                 x{e.quantity}
                               </span>
+                            </p>
+                            <p className="text-[#7A828A] text-xs font-medium mt-1">
+                              Phân loại: {e.fK_attributee?.color} -{" "}
+                              {e.fK_attributee?.size}
                             </p>
                           </div>
                         </div>

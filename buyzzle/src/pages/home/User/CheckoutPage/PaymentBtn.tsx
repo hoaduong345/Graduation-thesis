@@ -78,10 +78,11 @@ export default function PaymentBtn(props: StripePayment) {
               price: e.product.sellingPrice,
               quantity: e.quantity,
               total: e.product.sellingPrice * e.quantity,
+              attributeID: e.atributesId,
             });
             listProductQuantity.push({
-              productId: e.product.id,
-              quantity: e.quantity,
+              attributeId: e.atributesId,
+              soluong: e.atributes_fk.soluong,
             });
           });
           let order = {
@@ -109,7 +110,7 @@ export default function PaymentBtn(props: StripePayment) {
               })
               .then(() => {
                 order.cartItems.map((e) => {
-                  cartControllers.removeItemCart(e.productId);
+                  cartControllers.removeItemCart(e.attributeID);
                 });
               })
               .then(() => {

@@ -5,6 +5,7 @@ const OderController = {
     createOrder: async (req, res) => {
         try {
             const orderData = req.body.order;
+            console.log('🚀 ~ file: OrderController.js:8 ~ createOrder: ~ orderData:', orderData);
 
             const user = await prisma.user.findFirst({
                 where: {
@@ -48,6 +49,7 @@ const OderController = {
                     price: e.price,
                     quantity: e.quantity,
                     total: e.total,
+                    attributeID: e.attributeID,
                 };
             });
             console.log({ a });
@@ -106,7 +108,14 @@ const OderController = {
                 },
                 include: {
                     OrderDetail: true,
+                    fK_attributee: {
+                        select: {
+                            color: true,
+                            size: true,
+                        },
+                    },
                 },
+
                 orderBy: {
                     id: 'desc',
                 },
@@ -164,7 +173,16 @@ const OderController = {
                     id: id,
                 },
                 include: {
-                    OrderDetail: true,
+                    OrderDetail: {
+                        include: {
+                            fK_attributee: {
+                                select: {
+                                    color: true,
+                                    size: true,
+                                },
+                            },
+                        },
+                    },
                     User: {
                         include: {
                             UserImage: {

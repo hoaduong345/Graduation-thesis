@@ -12,7 +12,7 @@ export interface ModelCart {
   quantity: number;
 }
 export interface UpdateCart {
-  productId: number;
+  attributeId: number;
   cartId: number;
 }
 class CartControllers {

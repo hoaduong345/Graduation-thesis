@@ -23,8 +23,6 @@ export default function Cart() {
   const {
     carts,
     setCarts,
-    setIdProduct,
-    idProduct,
     productChecked,
     setProductChecked,
     handleBuyNow,
@@ -35,48 +33,45 @@ export default function Cart() {
     idItemCart,
     idAllCart,
     handleChecked,
+    setIdAttribute,
+    idAttribute,
+    getCart,
   } = useCart();
 
   const CheckToken = async () => {
-    userController.CheckToken().then((res) => {
-     
-    });
+    userController.CheckToken().then((_) => {});
   };
   const CheckRefreshToken = async () => {
-    userController.CheckRefreshToken().then((res) => {
-   
-    });
+    userController.CheckRefreshToken().then((_) => {});
   };
   const muti = () => {
     CheckToken();
     handleBuyNow();
     CheckRefreshToken();
-    
   };
 
-  const handleIncreaseQuantity = (data: UpdateCart) => {
-    cartControllers.increaseCart(data).then((res) => {
+  const handleIncreaseQuantity = async (data: UpdateCart) => {
+    await cartControllers.increaseCart(data).then((res) => {
       setCarts(res.data);
     });
     if (productChecked.length > 0) {
       const indexProduct = productChecked.findIndex(
-        (item) => item.productid === data.productId
+        (item) => item.atributes_fk.id === data.attributeId
       );
       const _productChecked = [...productChecked];
       _productChecked[indexProduct].quantity += 1;
-
       setProductChecked(_productChecked);
     }
   };
-  const handleDecreaseQuantity = (quantity: number, data: UpdateCart) => {
+  const handleDecreaseQuantity = async (quantity: number, data: UpdateCart) => {
     if (quantity > 1) {
-      cartControllers.decreaseCart(data).then((res) => {
+      await cartControllers.decreaseCart(data).then((res) => {
         setCarts(res.data);
       });
 
       if (productChecked.length > 0) {
         const indexProduct = productChecked.findIndex(
-          (item) => item.productid === data.productId
+          (item) => item.productid === data.attributeId
         );
         const _productChecked = [...productChecked];
         _productChecked[indexProduct].quantity -= 1;
@@ -125,7 +120,7 @@ export default function Cart() {
   };
   const checked = (item: CartItem) => {
     const _check = productChecked.findIndex(
-      (el) => el.productid == item.productid
+      (el) => el.atributes_fk.id == item.atributes_fk.id
     );
     return _check !== -1;
   };
@@ -228,6 +223,10 @@ export default function Cart() {
                               Giảm {e.product.discount}%
                             </p>
                           </div>
+                          <p className="text-[#7A828A] text-xs font-medium mx-3 mt-3">
+                            Phân loại: {e.atributes_fk.color} -{" "}
+                            {e.atributes_fk.size}
+                          </p>
                         </div>
                       </div>
                       <div className="col-span-2">
@@ -247,10 +246,10 @@ export default function Cart() {
                               className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
                               onClick={() => {
                                 minusThrottled(e.quantity, {
-                                  productId: e.productid,
+                                  attributeId: e.atributes_fk.id,
                                   cartId: e.cartid,
                                 });
-                                setIdProduct(e.productid);
+                                setIdAttribute(e.atributes_fk.id);
                               }}
                             >
                               <Minus />
@@ -265,13 +264,13 @@ export default function Cart() {
                               onClick={() => {
                                 e.quantity < e.product.quantity
                                   ? plusThrottled({
-                                      productId: e.productid,
+                                      attributeId: e.atributes_fk.id,
                                       cartId: e.cartid,
                                     })
                                   : toastWarn(
                                       `Chỉ còn ${e.product.quantity} sản phẩm`
                                     );
-                                setIdProduct(e.productid);
+                                setIdAttribute(e.atributes_fk.id);
                               }}
                             >
                               <Plus />
@@ -292,7 +291,7 @@ export default function Cart() {
                         <button
                           onClick={() => {
                             openModal(idItemCart);
-                            setIdProduct(Number(e.productid));
+                            setIdAttribute(Number(e.atributes_fk.id));
                           }}
                           className="p-3 rounded-full
                     shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]"
@@ -313,7 +312,7 @@ export default function Cart() {
               desc="sản phẩm"
               id={idItemCart}
               onClose={() => closeModal(idItemCart)}
-              onSave={() => removeItemCart(idProduct)}
+              onSave={() => removeItemCart(idAttribute)}
               title="Xóa sản phẩm này!"
             />
           </div>

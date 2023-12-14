@@ -154,18 +154,19 @@ model Product {
 }
 
 model Attribute {
-  id        Int        @id @default(autoincrement())
-  size      String?
-  color     String?
-  soluong   Int?
-  productId Int? // Thêm trường idproduct
-  itemId    Int?
-  deletedAt DateTime?
-  createdAt DateTime?  @default(now())
-  updatedAt DateTime?  @default(now())
-  products  Product?   @relation(fields: [productId], references: [id])
-  idorder   Order[]
-  idItem    ItemCart[]
+  id          Int           @id @default(autoincrement())
+  size        String?
+  color       String?
+  soluong     Int?
+  productId   Int? // Thêm trường idproduct
+  itemId      Int?
+  deletedAt   DateTime?
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @default(now())
+  products    Product?      @relation(fields: [productId], references: [id])
+  idorder     Order[]
+  idItem      ItemCart[]
+  OrderDetail OrderDetail[]
 }
 
 model Category {
@@ -275,25 +276,27 @@ model Order {
   OrderDetail   OrderDetail[]
   User          User?          @relation(fields: [userId], references: [id])
   Notification  Notification[]
-  attributeIDD  Int?
-  fK_attributee Attribute?     @relation(fields: [attributeIDD], references: [id])
+  attributeID   Int?
+  fK_attributee Attribute?     @relation(fields: [attributeID], references: [id])
 }
 
 model OrderDetail {
-  id           Int       @id @default(autoincrement())
-  orderId      Int?
-  productId    Int?
-  name         String?
-  image        String?
-  price        Int?
-  quantity     Int?
-  total        Int?
-  ratingAt     DateTime?
-  createdAt    DateTime? @default(now())
-  updatedAt    DateTime? @default(now())
-  deletedAt    DateTime?
-  order        Order?    @relation(fields: [orderId], references: [id])
-  productOrder Product?  @relation(fields: [productId], references: [id])
+  id            Int        @id @default(autoincrement())
+  orderId       Int?
+  productId     Int?
+  name          String?
+  image         String?
+  price         Int?
+  quantity      Int?
+  total         Int?
+  ratingAt      DateTime?
+  createdAt     DateTime?  @default(now())
+  updatedAt     DateTime?  @default(now())
+  deletedAt     DateTime?
+  order         Order?     @relation(fields: [orderId], references: [id])
+  productOrder  Product?   @relation(fields: [productId], references: [id])
+  attributeID   Int?
+  fK_attributee Attribute? @relation(fields: [attributeID], references: [id])
 }
 
 model Invoice {

@@ -46,7 +46,7 @@ export default function DetailOrderManagement() {
     let listProductQuantity: UpdateQuantityModal[] = [];
     order.OrderDetail.map((element) => {
       listProductQuantity.push({
-        productId: element.productId!,
+        attributeId: element.productId!,
         quantity: element.quantity,
       });
     });

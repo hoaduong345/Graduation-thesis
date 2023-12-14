@@ -2,17 +2,16 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { ModelCart, cartControllers } from "../../controllers/CartControllers";
 import { toastSuccess } from "../../helper/Toast/Success";
 import { toastWarn } from "../../helper/Toast/Warning";
-import { CartItem, CartProduct } from "../../model/CartModel";
+import { CartItem, DataCart } from "../../model/CartModel";
 import { orderControllers } from "../../controllers/OrderControllers";
 import { UpdateQuantityModal } from "../../model/OrderModel";
 import { useNavigate } from "react-router-dom";
 
 export default function useCartContext() {
   const [loading, setLoading] = useState(true);
-  const [idProduct, setIdProduct] = useState(0);
   const [warning, setWarning] = useState<string>("");
   const [productChecked, setProductChecked] = useState<CartItem[]>([]);
-  const [carts, setCarts] = useState<CartProduct>({} as CartProduct);
+  const [carts, setCarts] = useState<DataCart>({} as DataCart);
   let listProductQuantity: UpdateQuantityModal[] = [];
   const navigate = useNavigate();
   const [idAttribute, setIdAttribute] = useState<number>(0);
@@ -35,15 +34,18 @@ export default function useCartContext() {
         if (type) {
           setProductChecked([]);
           const buynowChecked = res.data.item.find(
-            (e) => e.productid == data.productId
+            (e) => e.atributes_fk.id == data.atributes
           );
           const _buynowChecked: CartItem = {
-            id: buynowChecked?.id,
+            id: buynowChecked?.id!,
             productid: buynowChecked?.productid!,
             quantity: buynowChecked?.quantity!,
             cartid: buynowChecked?.cartid!,
             product: buynowChecked?.product!,
             total: buynowChecked?.total!,
+            atributes_fk: buynowChecked?.atributes_fk!,
+            atributesId: buynowChecked?.atributesId!,
+            price: buynowChecked?.price!,
           };
           handleChecked(true, _buynowChecked);
           navigate("/cart");
@@ -51,11 +53,11 @@ export default function useCartContext() {
         } else {
           if (productChecked.length > 0) {
             const isCheck = productChecked.find(
-              (item) => item.productid == productId
+              (item) => item.atributes_fk.id == idAttribute
             );
             if (isCheck) {
               const indexProduct = productChecked.findIndex(
-                (item) => item.productid === data.productId
+                (item) => item.atributes_fk.id === data.atributes
               );
               const _productChecked = [...productChecked];
               _productChecked[indexProduct].quantity += productQuantities;
@@ -77,12 +79,16 @@ export default function useCartContext() {
     await cartControllers
       .getCart()
       .then((res) => {
+        console.log(
+          "🚀 ~ file: CartContextProvider.tsx:83 ~ .then ~ res:",
+          res
+        );
         setCarts(res.data);
         res.data.item.map((e) => {
           if (e.quantity > e.product.quantity) {
             listProductQuantity.push({
-              productId: e.id!,
-              quantity: e.product.quantity,
+              attributeId: e.atributes_fk.id!,
+              soluong: e.atributes_fk.soluong,
             });
           }
         });
@@ -113,7 +119,7 @@ export default function useCartContext() {
       await getCart();
       await updateQuantityCart().then((res) => {
         const listCheckout = res!.filter((e) =>
-          productChecked.some((ele) => ele.productid == e.productid)
+          productChecked.some((ele) => ele.atributes_fk.id == e.atributes_fk.id)
         );
         sessionStorage.setItem("cartBuyzzle", JSON.stringify(listCheckout));
         setProductChecked(listCheckout);
@@ -138,18 +144,20 @@ export default function useCartContext() {
   const idItemCart = "confirmCart";
   const idAllCart = "confirmAllCart";
   const removeItemCart = (id: number) => {
-    cartControllers.removeItemCart(idProduct).then(() => {
+    cartControllers.removeItemCart(id).then(() => {
       getCart();
       closeModal(idItemCart);
       const _productChecked = [...productChecked];
-      const Product = _productChecked.filter((item) => item.productid !== id);
+      const Product = _productChecked.filter(
+        (item) => item.atributes_fk.id !== id
+      );
       setProductChecked(Product);
     });
   };
   const removeAllCart = () => {
     productChecked.length > 0 &&
       productChecked.map((e) => {
-        cartControllers.removeItemCart(e.productid).then(() => {
+        cartControllers.removeItemCart(e.atributesId).then(() => {
           getCart();
           setProductChecked([]);
           closeModal(idAllCart);
@@ -157,6 +165,10 @@ export default function useCartContext() {
       });
   };
   const handleChecked = (checked: boolean, item: CartItem) => {
+    console.log(
+      "🚀 ~ file: CartContextProvider.tsx:169 ~ handleChecked ~ item:",
+      item
+    );
     if (checked) {
       if (item.product.quantity > 0) {
         setProductChecked((prev) => [...prev, item]);
@@ -164,7 +176,7 @@ export default function useCartContext() {
     } else {
       let cloneProduct = [...productChecked];
       let products = cloneProduct.filter((e) => {
-        return e.productid !== item.productid;
+        return e.atributes_fk.id !== item.atributes_fk.id;
       });
       setProductChecked(products);
     }
@@ -176,8 +188,7 @@ export default function useCartContext() {
     loading,
     setLoading,
     getCart,
-    setIdProduct,
-    idProduct,
+
     productChecked,
     setProductChecked,
     handleBuyNow,
