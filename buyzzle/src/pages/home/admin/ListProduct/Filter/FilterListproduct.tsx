@@ -1,14 +1,11 @@
 import Slider from "rc-slider";
-import DeleteWhite from "../../assets/TSX/DeleteWhite";
-import {
-  RatingStar,
-  SliderComponentProps,
-} from "../../../../../components/Sitebar/SitebarFilter";
-import FilterRateMap from "./FilterRateMap";
 import { useState } from "react";
 import { numberFormat } from "../../../../../helper/Format";
+import FilterRateMap from "./FilterRateMap";
+import { SliderComponentProps } from "../../../../../components/Sitebar/SitebarFilter";
+import { RatingStarDetail } from "../../../User/DetailProduct/detailProductPage/DetailsProduct";
 
-const arrRating: RatingStar[] = [
+const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 5 },
   { checked: false, rating: 4 },
   { checked: false, rating: 3 },
@@ -37,32 +34,22 @@ export default function FilterListproduct({
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
   const [availability, setAvailability] = useState<boolean>(false);
   const handleSliderChangePrice = (price: [number, number]) => {
-    console.log(
-      "🚀 ~ file: FilterListproduct.tsx:29 ~ handleSliderChangePrice ~ price:",
-      price
-    );
+
     setRangePriceValue(price);
     onPriceRangeChange(price);
   };
   const handleSliderChangeQuantity = (quantity: [number, number]) => {
-    console.log(
-      "🚀 ~ file: FilterListproduct.tsx:34 ~ handleSliderChangeQuantity ~ quantity:",
-      quantity
-    );
+    
     setRangeQuantityValue(quantity);
     onQuantityRangeChange(quantity);
   };
   const handleSliderChangeBoughtQuantity = (quantity: [number, number]) => {
-    console.log(
-      "🚀 ~ file: FilterListproduct.tsx:34 ~ handleSliderChangeQuantity ~ quantity:",
-      quantity
-    );
+  
     setRangePurchaseValue(quantity);
     onPurchaseRangeChange(quantity);
   };
 
   const handleRateChange = (rate: number) => {
-    console.log("Rating:", rate);
     setRating(rate);
     onRateChange(rate);
   };

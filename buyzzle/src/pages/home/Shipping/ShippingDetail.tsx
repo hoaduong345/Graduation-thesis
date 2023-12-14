@@ -8,7 +8,6 @@ import { orderControllers } from "../../../controllers/OrderControllers";
 import { numberFormat } from "../../../helper/Format";
 import StepperShipping from "../../../helper/Stepper/StepperShipping";
 import { OrderModel, UpdateQuantityModal } from "../../../model/OrderModel";
-import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 import {
   dateOrder,
   timeOrder,
@@ -16,6 +15,7 @@ import {
 import Back from "../admin/assets/TSX/Back";
 import Paymethod from "../admin/assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../admin/assets/TSX/PhoneOrderAdmin";
+import { getStatusOrder } from "../User/orderHistoryPage/OrderHistory";
 
 export default function ShippingDetail() {
   const { id } = useParams();

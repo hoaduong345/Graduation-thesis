@@ -51,7 +51,7 @@ export default function Addproducts() {
       .then((res) => {
         setCategory(res.data);
       })
-      .catch((err) => console.log(err));
+      
   };
 
   const delayIMG = () => {

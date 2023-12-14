@@ -5,7 +5,7 @@ import HeaderTop from "./HeaderTop";
 export default function HeaderTopUser() {
   const { countNotificationUser } = useNotificationUser();
   const user = localStorage.getItem("user");
-  console.log({ user });
+
   return (
     <>
       <HeaderTop

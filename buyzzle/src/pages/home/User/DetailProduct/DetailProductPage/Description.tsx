@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Products } from "../../filterPage/FiltersPage";
 
 export default function Description() {

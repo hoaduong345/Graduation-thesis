@@ -9,7 +9,6 @@ import Members from "../assets/Icon/Members";
 import ProductIcon from "../assets/Icon/ProductIcon";
 import Statistical from "../assets/Icon/Statistical";
 import VouchersIcon from "../assets/Icon/VouchersIcon";
-import Logo from "../../Admin/Assets/Icon/Logo";
 import Oder from "../assets/Icon/Oder";
 import {
   Accordion,
@@ -18,6 +17,7 @@ import {
   AccordionItem,
   AccordionPanel,
 } from "@chakra-ui/react";
+import Logo from "../assets/Icon/Logo";
 export interface SitebarAdmin {
   title?: ReactNode;
   icon: ReactNode;
@@ -56,7 +56,6 @@ export default function SitebarAdmin() {
   useEffect(() => {
     let user = secureLocalStorage.getItem("admin");
     if (user == null) {
-      // console.log("VCLLLLLLLLLLLLLLLLLll");
       window.location.href = "/admin/loginadmin";
     }
   }, []);
@@ -64,13 +63,11 @@ export default function SitebarAdmin() {
     const fetchData = async () => {
       // const user = secureLocalStorage.getItem("admin");
       let user = JSON.stringify(secureLocalStorage.getItem("admin"));
-      // console.log("LOCAL:"+user);
       try {
         if (user != null) {
           let UserData = JSON.parse(user);
           // UserData = JSON.parse(user);
           const username = UserData.username;
-          // console.log("USERNAME: " + JSON.stringify(UserData));
           await adminController.getAdminWhereUsername(username).then((res) => {
             const name = res.adminWithImage.name;
 
@@ -83,12 +80,12 @@ export default function SitebarAdmin() {
               const Image = res.adminWithImage.AdminImage[0].url;
               setImage(Image);
             } else {
-              console.log("k co hinh");
+              console.log("Error");
             }
             return res;
           });
         } else {
-          console.log("Chua Dang Nhap Dung");
+          console.log("Error");
         }
       } catch (error) {
         if (user != null) {
@@ -97,7 +94,6 @@ export default function SitebarAdmin() {
           const username = UserData.name;
           setName(username);
           setEmail(UserData.email);
-          console.log("VCLLLl ");
         }
 
         console.log("ERROR", error);

@@ -193,26 +193,13 @@ export default function CheckOut() {
         phonenumber: formData.phonenumber,
       };
       sendToDatabase(data);
-      // console.log("edit thanh cong", response1);
-      // if (response1.status === 200) {
-      //    console.log("Edit successfully");
-      //    toast.success("Cập nhật thành công", {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //    });
-      //    closeModal(idModalUpdate);
-      // } else {
-      //    toast.warning("Sign-in failed", {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //    });
-      // }
+
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
         if (responseData) {
-          console.log(`Lỗi2: ${responseData}`);
+         
           toast.warning(responseData, {
             position: "top-right",
             autoClose: 5000,
@@ -248,7 +235,7 @@ export default function CheckOut() {
       await userController
         .getUserWhereUsername2(username)
         .then((res) => {
-          console.log("TEST " + JSON.stringify(res));
+  
           return res;
         })
         .then((res) => {
@@ -272,7 +259,7 @@ export default function CheckOut() {
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 
@@ -292,7 +279,7 @@ export default function CheckOut() {
   const API = `http://localhost:5000/buyzzle/user/paymentaddress/${username}`;
 
   const sendToDatabase = async (formData: any) => {
-    console.log(formData)
+
     try {
       const response1 = await axios.put(API, formData).then(() => {
         getUserAddress();
@@ -317,19 +304,19 @@ export default function CheckOut() {
   }, []);
   const CheckToken = async () => {
     userController.CheckToken().then((res) => {
-      console.log(JSON.stringify(res));
+
     });
   }
   const CheckRefreshToken = async () => {
     userController.CheckRefreshToken().then((res) => {
-      console.log(JSON.stringify(res));
+
     });
   }
   const muti = () => {
     CheckToken();
-    // handleBuyNow();
+
     CheckRefreshToken();
-    // console.log("AOTHATDAY");
+    
   }
   return (
     <>

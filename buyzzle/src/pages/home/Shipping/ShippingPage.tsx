@@ -64,10 +64,7 @@ export default function ShippingPage() {
     const selectedButton = updatedButtons.find((btn) => btn.id === id);
 
     if (selectedButton && selectedButton.id !== -1) {
-      console.log(
-        "🚀 ~ file: ShippingPage.tsx:66 ~ handleClick ~ selectedButton.id:",
-        selectedButton.id
-      );
+   
       setOrderAPI({ ...orderAPI, status: selectedButton.id, keyword: "" });
     } else {
       setOrderAPI({ ...orderAPI, status: null, keyword: "" });
@@ -92,14 +89,14 @@ export default function ShippingPage() {
   useEffect(() => {
     let user = secureLocalStorage.getItem("shippername");
     if (user == null) {
-      console.log("VCLLLLLLLLLLLLLLLLLll");
+     
       window.location.href = "/shipping/loginShipper";
     }
   }, []);
   const getOrder = async () => {
     await orderControllers.getOrderOfShipping(orderAPI).then((res) => {
       setOrder(res);
-      console.log(res);
+    
     });
   };
 
