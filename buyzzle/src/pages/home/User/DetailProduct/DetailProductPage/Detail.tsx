@@ -19,8 +19,8 @@ import LoveProduct from "../../../admin/assets/TSX/LoveProduct";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
 import Share from "../../../admin/assets/TSX/Share";
 import TW from "../../../admin/assets/TSX/TW";
-import Cart from "../../cartPage/Cart";
-import { Products } from "../../filterPage/FiltersPage";
+import Cart from "../../../../../assets/TSX/Cart";
+import { Products } from "../../FilterPage/FiltersPage";
 
 export default function Detail() {
   const [first, setfirst] = useState<Products | undefined>(undefined);
@@ -35,10 +35,11 @@ export default function Detail() {
         return detail;
       })
       .then((detail) => {
+        console.log("🚀 ~ file: Detail.tsx:38 ~ .then ~ detail:", detail);
         setfirst(detail.data);
       })
       .catch((error) => {
-        ("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
+        console.log("🚀 ~ file: Detail.tsx:41 ~ useEffect ~ error:", error);
       });
     useScroll();
   }, [id]);
@@ -78,7 +79,7 @@ export default function Detail() {
             </div>
             {
               // first?.ProductImage.filter( e)
-              first?.ProductImage.slice(1, 5).map((e) => {
+              first?.ProductImage.slice(1, 5).map((e: any) => {
                 return <img className="h-[88px] w-[88px]" src={e.url} alt="" />;
               })
             }

@@ -18,7 +18,7 @@ import Paymethod from "../../assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../../assets/TSX/PhoneOrderAdmin";
 import PrintOrder from "../../assets/TSX/PrintOrder";
 import { dateOrder, timeOrder } from "./OrderManagement";
-import { getStatusOrder } from "../../../User/orderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 
 export default function DetailOrderManagement() {
   const { id } = useParams();

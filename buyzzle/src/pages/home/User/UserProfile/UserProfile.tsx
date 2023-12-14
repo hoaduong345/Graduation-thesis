@@ -1,6 +1,6 @@
-import Profile from "./components/Profile";
-import Changepassword from "./components/ChangePassword";
-import PaymentAddress from "./components/PaymentAddress";
+import Profile from "./Components/Profile";
+import Changepassword from "./Components/ChangePassword";
+import PaymentAddress from "./Components/PaymentAddress";
 import Container from "../../../../components/container/Container";
 import { useEffect, useState } from "react";
 
@@ -16,20 +16,13 @@ export default function UserProfile() {
       }
     }
     CheckGG();
-  }, [])
+  }, []);
   return (
     <Container>
       <div>
         <Profile />
         <PaymentAddress />
-        {
-          LoginByGG == true ? (
-           <></>
-          ) : (
-            <Changepassword />
-          )
-        }
-
+        {LoginByGG == true ? <></> : <Changepassword />}
       </div>
     </Container>
   );

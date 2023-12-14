@@ -102,10 +102,11 @@ export interface EditImage {
 export default function DetailsProduct() {
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState("");
-  const { addProduct, warning, closeModal } = useCart();
+  const { addProduct, warning, closeModal, setIdAttribute, idAttribute } =
+    useCart();
   const idWarningQuantity = "idWarningQuantity";
-  const [idAttibute, setIdAttibute] = useState(0);
-  const [quantityAttibute, setQuantityAttibute] = useState(0);
+  const [quantityAttribute, setQuantityAttribute] = useState(0);
+  const [indexAttribute, setIndexAttribute] = useState(0);
 
   const [first, setfirst] = useState<Rate | undefined>(undefined);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -128,10 +129,6 @@ export default function DetailsProduct() {
   useEffect(() => {
     getAllLogo();
   }, []);
-
-  const handleTabClick = (tabId: string) => {
-    setActiveTab(tabId);
-  };
 
   const breadcrumbItems = [
     { text: "Buyzzle", link: "/" },
@@ -165,10 +162,10 @@ export default function DetailsProduct() {
         setCategory(detail.data.productDetail.fK_category.name);
         setProductName(detail.data.productDetail.name);
         setfirst(detail.data);
-      
+        // console.log("VCLVCLVLCLV:"+JSON.stringify(detail.data.productDetail.name))
       })
       .catch((error) => {
-        ("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
+        console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
       });
   };
 
@@ -189,7 +186,7 @@ export default function DetailsProduct() {
   }, [rateAndcomment.currentPage, id]);
 
   const plusQuantity = () => {
-    if (quantity < first?.productDetail?.quantity!) {
+    if (quantity < first?.productDetail?.attributes[indexAttribute]?.soluong!) {
       setQuantity(quantity + 1);
     }
   };
@@ -208,6 +205,7 @@ export default function DetailsProduct() {
       .getCommentWhereRating(idproduct, rating, page, perPage)
       .then((res) => {
         setRateAndcomment(res);
+        console.log("RATING:" + JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
@@ -215,6 +213,7 @@ export default function DetailsProduct() {
   };
   const HandleGetCommentWhereRating = (rating: any) => {
     const idproduct = id;
+    console.log("IDDDDDDDDDDDD:" + id);
     getCommentWhereRating(idproduct, rating);
   };
 
@@ -260,7 +259,7 @@ export default function DetailsProduct() {
       .catch(() => {
         toast.error("Đánh giá thất bại !");
       });
-
+    console.log("Sửa bình luận!");
   };
   useEffect(() => {
     document.title = `${first?.productDetail.name}`;
@@ -307,11 +306,12 @@ export default function DetailsProduct() {
   const isSoldOut = first?.productDetail?.quantity == 0;
   const CheckToken = async () => {
     userController.CheckToken().then((res) => {
-
+      console.log(JSON.stringify(res));
     });
   };
   const CheckRefreshToken = async () => {
     userController.CheckRefreshToken().then((res) => {
+      console.log("VVVVVVVVVVVVVVVVVv" + JSON.stringify(res));
     });
   };
   const CheckLogin = async () => {
@@ -323,7 +323,7 @@ export default function DetailsProduct() {
       // setLogined(true);
       CheckToken();
       CheckRefreshToken();
-
+      console.log("AOTHATDAY");
     }
   };
   useEffect(() => {
@@ -352,27 +352,26 @@ export default function DetailsProduct() {
   const param = useParams();
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
-
+    console.log("LoginData:" + data);
     // try {
-      userController.Login(data).then((res) => {
-       
-        const username = res.username;
-        const accessToken = res.accessToken;
-   
-        const UserData = { username };
-        const Token = { accessToken };
-        localStorage.setItem("idUser", JSON.stringify(res.id));
-        localStorage.setItem("user", JSON.stringify(UserData));
-        localStorage.setItem("accessToken", JSON.stringify(Token));
-        // const id = param.id;
-        setTimeout(() => {
-          window.location.href = `/Detailproducts/${param.id}`;
-        }, 2000);
-      });
+    userController.Login(data).then((res) => {
+      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
+      const username = res.username;
+      const accessToken = res.accessToken;
+      console.log(accessToken);
+      const UserData = { username };
+      const Token = { accessToken };
+      localStorage.setItem("idUser", JSON.stringify(res.id));
+      localStorage.setItem("user", JSON.stringify(UserData));
+      localStorage.setItem("accessToken", JSON.stringify(Token));
+      // const id = param.id;
+      setTimeout(() => {
+        window.location.href = `/Detailproducts/${param.id}`;
+      }, 2000);
+    });
     // } catch (error) {
 
     // }
-
   };
   const openModal = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
@@ -401,7 +400,6 @@ export default function DetailsProduct() {
     } catch (error) {
       console.log("Error:" + JSON.stringify(data));
     }
-
   };
   return (
     <>
@@ -444,10 +442,11 @@ export default function DetailsProduct() {
                       return (
                         <img
                           key={index}
-                          className={`h-[75px] w-[75px] ${selectedImageIndex === index
-                            ? "border-2 border-blue-500"
-                            : ""
-                            }`}
+                          className={`h-[75px] w-[75px] ${
+                            selectedImageIndex === index
+                              ? "border-2 border-blue-500"
+                              : ""
+                          }`}
                           src={e.url}
                           alt=""
                           onClick={() => handleImageClick(index)}
@@ -541,8 +540,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                            first?.productDetail.price! *
-                            (first?.productDetail.discount! / 100)
+                              first?.productDetail.price! *
+                                (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -578,39 +577,60 @@ export default function DetailsProduct() {
                       {/* Tăng số lượng */}
                       <div
                         className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
-                        onClick={plusQuantity}
+                        onClick={() => {
+                          if (idAttribute != 0) {
+                            plusQuantity();
+                          } else {
+                            toastWarn("Vui lòng chọn Phân loại hàng");
+                          }
+                        }}
                       >
                         <Plus />
                       </div>
                       {/* end Tăng số lượng */}
                     </div>
                     <div className="flex justify-start gap-2 text-[#7A828A]">
-                      {quantityAttibute > 0 ? quantityAttibute : first?.productDetail.quantity} sản phẩm có sẵn
+                      {quantityAttribute > 0
+                        ? quantityAttribute
+                        : first?.productDetail.quantity}{" "}
+                      sản phẩm có sẵn
                     </div>
                   </div>
                   {/* end Tăng giảm số lượng */}
                 </div>
               </div>{" "}
-
               <div className="flex flex-wrap gap-4 mt-4">
-                {
-                  first?.productDetail.attributes.map((e) => (
-                    <div key={e.id}
-                      onClick={() => {
-                        if (e.soluong > 0) {
-                          setIdAttibute(e.id)
-                          setQuantityAttibute(e.soluong)
+                {first?.productDetail.attributes.map((e, index) => (
+                  <div
+                    key={e.id}
+                    onClick={() => {
+                      if (e.soluong > 0) {
+                        setIdAttribute(e.id);
+                        setQuantityAttribute(e.soluong);
+                        setIndexAttribute(index);
+                      }
+                      if (e.soluong < quantity) {
+                        setQuantity(e.soluong);
+                      }
+                    }}
+                    className={`border-[1px] py-2 rounded-md px-4
+                        ${
+                          idAttribute == e.id
+                            ? `text-[#ee4d2d] border-[#ee4d2d]`
+                            : `text-[#7A828A] border-[#e4e4e4]`
                         }
-                      }}
-                      className={`border-[1px] py-2 rounded-md px-4
-                        ${idAttibute == e.id ? `text-[#ee4d2d] border-[#ee4d2d]` : `text-[#7A828A] border-[#e4e4e4]`}
-                        ${e.soluong == 0 ? `cursor-not-allowed bg-[#fafafa] text-[#bbbbbb]` : `cursor-pointer hover: border-[#e4e4e4] hover:border-[#ee4d2d]`}`}>
-                      <span className="text-[13px]">{e.color} - {e.size}</span>
-                    </div>
-                  ))
-                }
+                        ${
+                          e.soluong == 0
+                            ? `cursor-not-allowed bg-[#fafafa] text-[#bbbbbb]`
+                            : `cursor-pointer hover:text-[#ee4d2d] hover:border-[#ee4d2d]`
+                        }`}
+                  >
+                    <span className="text-[13px]">
+                      {e.color} - {e.size}
+                    </span>
+                  </div>
+                ))}
               </div>
-
               {/* icon */}
               <div className="w-[100%] flex mt-4 px-5 items-center justify-between bg-[#F8F8F8] rounded-md py-[14px]">
                 <div className="flex gap-2">
@@ -659,8 +679,9 @@ export default function DetailsProduct() {
               {/* end icon */}
               {/* Mua ngay */}
               <div
-                className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`
-                  } mt-9 items-center gap-6`}
+                className={`w-[100%] flex ${
+                  isSoldOut ? `justify-start` : `justify-end`
+                } mt-9 items-center gap-6`}
               >
                 {/* <div>
                   <LoveProduct />
@@ -683,10 +704,10 @@ export default function DetailsProduct() {
                         <div
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
                           onClick={() =>
-                            idAttibute != 0 ?
-                              !isSoldOut &&
-                              addProduct(Number(id), quantity, false)
-                              : toastWarn('Vui lòng chọn Phân loại hàng')
+                            idAttribute != 0
+                              ? !isSoldOut &&
+                                addProduct(Number(id), quantity, false)
+                              : toastWarn("Vui lòng chọn Phân loại hàng")
                           }
                         >
                           <div className="text-center text-base font-bold text-[#4C4C4C]">
@@ -698,7 +719,6 @@ export default function DetailsProduct() {
                         <div
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
                           onClick={() => openModal}
-
                         >
                           <div className="text-center text-base font-bold text-[#4C4C4C]">
                             Thêm Vào Giỏ Hàng
@@ -714,10 +734,10 @@ export default function DetailsProduct() {
    transition duration-150 bg-[#EA4B48] justify-evenly`}
                           onClick={() => {
                             if (isSoldOut) return;
-                            if (idAttibute != 0) {
+                            if (idAttribute != 0) {
                               return addProduct(Number(id), quantity, true);
                             } else {
-                              toastWarn('Vui lòng chọn Phân loại hàng')
+                              toastWarn("Vui lòng chọn Phân loại hàng");
                             }
                           }}
                         >
@@ -944,7 +964,7 @@ export default function DetailsProduct() {
                 dangerouslySetInnerHTML={{
                   __html: first?.productDetail?.description as any,
                 }}
-              // style={{ color: 'blue', textDecoration: 'underline' }}
+                // style={{ color: 'blue', textDecoration: 'underline' }}
               ></div>
             </div>
           </div>
@@ -980,7 +1000,7 @@ export default function DetailsProduct() {
                         handleRemoveRating={handleRemoveRating}
                       />
                     </div>
-                    { }
+                    {}
                     <div className="mt-10">
                       <ResponsivePagination
                         current={rateAndcomment.currentPage!}
@@ -1011,7 +1031,7 @@ export default function DetailsProduct() {
                                   checked={item.checked}
                                   rating={item.rating}
                                   onChangeFilter={(rating: any) => {
-                               
+                                    console.log("Ratting:" + rating);
                                     HandleGetCommentWhereRating(rating);
                                   }}
                                 />

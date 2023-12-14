@@ -13,7 +13,7 @@ import {
 import { numberFormat } from "../../../../../helper/Format";
 import { OrderPanigation } from "../../../../../model/OrderModel";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
-import { getStatusOrder } from "../../../User/orderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import SitebarAdmin from "../../Sitebar/Sitebar";
 import Calendar from "../../assets/TSX/calendar";
 import Excel from "../../assets/TSX/excel";
@@ -50,7 +50,7 @@ export default function OrderManagement() {
       modal.close();
     }
   };
-  
+
   const [changeButton, setChangeButton] = useState([
     {
       id: -1,
@@ -82,7 +82,6 @@ export default function OrderManagement() {
   const handleClick = (id: number) => {
     const updatedButtons = changeButton.map((btn) => {
       if (btn.id === id) {
-       
         return { ...btn, active: true };
       } else {
         return { ...btn, active: false };
@@ -92,7 +91,6 @@ export default function OrderManagement() {
     const selectedButton = updatedButtons.find((btn) => btn.id === id);
 
     if (selectedButton && selectedButton.id !== -1) {
-    
       setOrderAPI({ ...orderAPI, status: selectedButton.id, keyword: "" });
     } else {
       setOrderAPI({ ...orderAPI, status: null, keyword: "" });

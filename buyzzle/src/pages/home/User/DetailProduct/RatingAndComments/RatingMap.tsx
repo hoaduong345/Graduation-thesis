@@ -16,7 +16,7 @@ import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 import secureLocalStorage from "react-secure-storage";
 import { adminController } from "../../../../../controllers/AdminControllder";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
-import EyeSlide from "../../../admin/assets/TSX/EyeSlide";
+import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
 import Handle from "../../../admin/assets/TSX/bacham";
 
 interface FormValues {
@@ -90,7 +90,6 @@ export default function RatingMap(props: Props) {
   };
   const handleRatingClick = (rating: number) => {
     setValue("ratingValue", rating);
-  
   };
   const handleFeedbackClick = (ratingId: number) => {
     if (isFeedbackClicked === ratingId) {
@@ -126,7 +125,6 @@ export default function RatingMap(props: Props) {
   useEffect(() => {
     let user = secureLocalStorage.getItem("admin");
     if (user == null) {
-   
       setAdminName(null);
       setAdminAvt(null);
     } else {
@@ -150,7 +148,7 @@ export default function RatingMap(props: Props) {
           } else {
             console.log("Error");
           }
-   
+
           return res;
         });
       };
@@ -164,9 +162,8 @@ export default function RatingMap(props: Props) {
     } else {
       const userData = JSON.parse(user);
       const username = userData;
-  
+
       setUsername(username);
-    
     }
   }, []);
 

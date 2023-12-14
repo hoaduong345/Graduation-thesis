@@ -17,7 +17,7 @@ import {
   AccordionItem,
   AccordionPanel,
 } from "@chakra-ui/react";
-import Logo from "../assets/Icon/Logo";
+import Logo from "../../Admin/Assets/Icon/Logo";
 export interface SitebarAdmin {
   title?: ReactNode;
   icon: ReactNode;

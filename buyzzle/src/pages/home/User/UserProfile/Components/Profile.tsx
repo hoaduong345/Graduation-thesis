@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Container from "../../../../../components/container/Container";
-import Sitebar from "../sitebar/Sitebar";
+import Sitebar from "../Sitebar/Sitebar";
 
 import axios from "axios";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -11,8 +11,6 @@ import { toast } from "react-toastify";
 import { appConfigUser } from "../../../../../configsEnv";
 import { userController } from "../../../../../controllers/UserController";
 import { storage } from "../../../../../firebase/Config";
-
-
 
 export type FormValues = {
   username: string;
@@ -44,7 +42,6 @@ export default function UserProfile() {
   const [name, setName] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
-
   const {
     control,
     handleSubmit,
@@ -57,7 +54,6 @@ export default function UserProfile() {
   });
   let isDisabled = !(isValid && isDirty);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -65,7 +61,7 @@ export default function UserProfile() {
         if (user != null) {
           const userData = JSON.parse(user);
           const username = userData.username;
-   
+
           await userController.getUserWhereUsername(username).then((res) => {
             if (res.dateOfBirth == null) {
               res.dateOfBirth = "dd/mm/yyyy";
@@ -147,9 +143,6 @@ export default function UserProfile() {
     }
     CheckLink();
   }, [param]);
-
-
-
 
   const SetDataUser = (data: any) => {
     const user = localStorage.getItem("user");
@@ -252,7 +245,6 @@ export default function UserProfile() {
         const response = await axios.put(API, formData);
         FormImage.id = parseInt(id);
         if (response) {
-
           if (CheckImageUrl == false) {
             await addImages(FormImage.id, url);
             setCheckImageUrl(true);
@@ -264,7 +256,6 @@ export default function UserProfile() {
             }
           }
         }
-
 
         if (response.status === 200) {
           toast.success("Cập nhật thành công", {
@@ -278,7 +269,6 @@ export default function UserProfile() {
           });
         }
       }
-
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
@@ -317,7 +307,6 @@ export default function UserProfile() {
     if (file) {
       setSelectedFile(file);
       setImage(file);
-
     } else {
       setSelectedFile(null); // Reset the selectedFile state when no file is selected
       setImage(null); // Reset the imageURL state
@@ -379,10 +368,11 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                          rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                        ${!!errors.username
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                        ${
+                                          !!errors.username
+                                            ? "border-[2px] border-red-900"
+                                            : "border-[1px] border-[#FFAAAF]"
+                                        }`}
                                     disabled={true}
                                     placeholder="Tên đăng nhập"
                                     value={field.value}
@@ -421,7 +411,7 @@ export default function UserProfile() {
                                   value: 25,
                                   message:
                                     "Tên người dùng phải bé hơn 25 ký tự",
-                                }
+                                },
                               }}
                               render={({ field }) => (
                                 <>
@@ -435,10 +425,11 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
 rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.name
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                                   ${
+                                                     !!errors.name
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                     placeholder="Tên người dùng"
                                     value={field.value}
                                     onChange={(e) => {
@@ -448,7 +439,7 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                       // field.onChange
                                     }}
 
-                                  // {...register("name")}
+                                    // {...register("name")}
                                   />
                                   {!!errors.name && (
                                     <p className="text-red-700 mt-2">
@@ -484,10 +475,11 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                                   ${!!errors.email
-                                      ? "border-[2px] border-red-900"
-                                      : "border-[1px] border-[#FFAAAF]"
-                                    }`}
+                                                   ${
+                                                     !!errors.email
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                   placeholder="Email"
                                   onChange={(e) => {
                                     const value = e.target.value;
@@ -496,8 +488,8 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                   }}
                                   value={field.value}
                                   disabled={true}
-                                // {...register("email")}
-                                // onChange={onChangeInput}
+                                  // {...register("email")}
+                                  // onChange={onChangeInput}
                                 />
                                 {!!errors.email && (
                                   <p className="text-red-700 mt-2">
@@ -532,14 +524,11 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                         // name="colored-radio"
                                         id="orange-radio1"
                                         value="true"
-
                                         onChange={(e) => {
                                           field.onChange("true");
                                           handleSexChange(e.target.value);
                                         }}
-
                                         checked={sex === true}
-
                                         className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
                                         checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       />
@@ -578,7 +567,6 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 </div>
                               )}
                             />
-
                           </div>
                           {checkPhone == true ? (
                             <div className="w-[48%]">
@@ -604,10 +592,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.phonenumber
-                                          ? "border-[2px] border-red-900"
-                                          : "border-[1px] border-[#FFAAAF]"
-                                        }`}
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                       placeholder="Số điện thoại"
                                       value={field.value}
                                       onChange={(e) => {
@@ -615,10 +604,10 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                         const reg = /[!@#$%^&]/;
                                         field.onChange(value.replace(reg, ""));
                                       }}
-                                    // disabled={true}
+                                      // disabled={true}
 
-                                    // {...register("phonenumber")}
-                                    // onChange={onChangeInput}
+                                      // {...register("phonenumber")}
+                                      // onChange={onChangeInput}
                                     />
                                     {!!errors.phonenumber && (
                                       <p className="text-red-700 mt-2">
@@ -642,14 +631,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   },
                                   minLength: {
                                     value: 10,
-                                    message:
-                                      "Tối thiểu 10 kí tự",
+                                    message: "Tối thiểu 10 kí tự",
                                   },
                                   maxLength: {
                                     value: 11,
-                                    message:
-                                      "Nhiều nhất 11 kí tự",
-                                  }
+                                    message: "Nhiều nhất 11 kí tự",
+                                  },
                                 }}
                                 render={({ field }) => (
                                   <>
@@ -663,10 +650,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     <input
                                       className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.phonenumber
-                                          ? "border-[2px] border-red-900"
-                                          : "border-[1px] border-[#FFAAAF]"
-                                        }`}
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                       placeholder="Số điện thoại"
                                       onChange={(e) => {
                                         const value = e.target.value;
@@ -675,8 +663,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                       }}
                                       disabled={true}
                                       value={field.value}
-                                    // {...register("phonenumber")}
-                                    // onChange={onChangeInput}
+                                      // {...register("phonenumber")}
+                                      // onChange={onChangeInput}
                                     />
                                     {!!errors.phonenumber && (
                                       <p className="text-red-700 mt-2">
@@ -719,12 +707,12 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                   rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                 ${!!errors.dateOfBirth
-                                      ? "border-[2px] border-red-900"
-                                      : "border-[1px] border-[#FFAAAF]"
-                                    }`}
+                                 ${
+                                   !!errors.dateOfBirth
+                                     ? "border-[2px] border-red-900"
+                                     : "border-[1px] border-[#FFAAAF]"
+                                 }`}
                                   type="date"
-
                                   onChange={(e) => {
                                     const value = e.target.value;
                                     // const reg = /[!@#$%^&*]/;
@@ -749,17 +737,19 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               onSubmit(formData, FormImage);
                             }
                           )}
-                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
-                            ? "bg-[#aeaeae] cursor-not-allowed"
-                            : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                            }
+                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
+                            isDisabled
+                              ? "bg-[#aeaeae] cursor-not-allowed"
+                              : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                          }
                      `}
                         >
                           <button
                             disabled={isDisabled}
                             className={`text-center text-base font-bold text-[#FFFFFF]
-                    ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                              }                `}
+                    ${
+                      isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                    }                `}
                           >
                             Lưu
                           </button>
