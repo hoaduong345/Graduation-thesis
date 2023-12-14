@@ -116,7 +116,6 @@ const FogotPasswordValid = async (req, res, next) => {
 
 const ResetPasswordValid = async (req, res, next) => {
     const { oldPassword, newPassword, confirmNewPassword } = req.body;
-    console.log('222222', confirmNewPassword);
     const error = {};
     if (!oldPassword) {
         error.newPassword = 'Mật khẩu là trường bắt buộc!';

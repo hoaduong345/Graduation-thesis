@@ -1,24 +1,20 @@
-import { Products } from "./FiltersPage";
-import { Images } from "../../../../assets/TS";
 import { Link } from "react-router-dom";
+import { Images } from "../../../../assets/ts";
 import {
   formatSoldCount,
   numberFormat,
   roundedNumber,
 } from "../../../../helper/Format";
-import { Rate, Row } from "../../../../model/ProductModel";
 import { stars } from "../../../../helper/StarRating/Star";
+import { Row } from "../../../../model/ProductModel";
 type Props = {
   product: Row;
   starsnumber: number;
 };
 
-const Filter = (props: Props) => {
+export default function Filters (props: Props) {
   const { product } = props;
-  console.log(
-    "🚀 ~ file: Filter.tsx:129 ~ Filter ~ formatSoldCount(product.soldcount!):",
-    formatSoldCount(product.soldcount!)
-  );
+
 
   return (
     <Link to={`/Detailproducts/${product.id}`}>
@@ -145,4 +141,4 @@ const Filter = (props: Props) => {
   );
 };
 
-export default Filter;
+

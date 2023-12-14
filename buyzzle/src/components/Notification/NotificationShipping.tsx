@@ -1,11 +1,10 @@
 import moment from "moment";
+import { useState } from "react";
+import Check from "../../assets/TSX/Check";
 import { useNotificationShipping } from "../../hooks/Notification/NotificationContextShipping";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import { handleSeenNoti } from "./components/SeenNoti";
-import { useState } from "react";
-import { notificationControllers } from "../../controllers/NotificationController";
-import Check from "../../assets/TSX/Check";
 
 export default function NotificationShipping() {
   const { notificationShipping, handleSeenAllNoti } = useNotificationShipping();

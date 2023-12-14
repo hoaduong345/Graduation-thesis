@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../../assets/TS";
+import { Images } from "../../../../../assets/ts";
 import Map from "../../../../../assets/TSX/Map";
 import NoteOrderAdmin from "../../../../../assets/TSX/NoteOrderAdmin";
 import { orderControllers } from "../../../../../controllers/OrderControllers";
@@ -18,7 +18,7 @@ import Paymethod from "../../assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../../assets/TSX/PhoneOrderAdmin";
 import PrintOrder from "../../assets/TSX/PrintOrder";
 import { dateOrder, timeOrder } from "./OrderManagement";
-import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../../../User/orderHistoryPage/OrderHistory";
 
 export default function DetailOrderManagement() {
   const { id } = useParams();

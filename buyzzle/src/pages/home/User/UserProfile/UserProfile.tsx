@@ -1,6 +1,6 @@
-import Profile from "./Components/Profile";
-import Changepassword from "./Components/ChangePassword";
-import PaymentAddress from "./Components/PaymentAddress";
+import Profile from "./components/Profile";
+import Changepassword from "./components/ChangePassword";
+import PaymentAddress from "./components/PaymentAddress";
 import Container from "../../../../components/container/Container";
 import { useEffect, useState } from "react";
 

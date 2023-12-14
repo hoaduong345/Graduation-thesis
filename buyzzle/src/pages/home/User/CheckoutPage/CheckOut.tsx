@@ -8,7 +8,7 @@ import BlueRight from "../../../../assets/SVG/LetterPayment/BlueRight";
 import PinkMedium from "../../../../assets/SVG/LetterPayment/PinkMedium";
 import PinkMediumSmall from "../../../../assets/SVG/LetterPayment/PinkMediumSmall";
 import PinkRight from "../../../../assets/SVG/LetterPayment/PinkRight";
-import { Images } from "../../../../assets/TS";
+import { Images } from "../../../../assets/ts";
 import Location from "../../../../assets/TSX/Location";
 import Voucher from "../../../../assets/TSX/Voucher";
 import { userController } from "../../../../controllers/UserController";
@@ -17,8 +17,9 @@ import { numberFormat } from "../../../../helper/Format";
 import { CartItem } from "../../../../model/CartModel";
 import { VoucherModel } from "../../../../model/VoucherModel";
 import Container from "../../../../components/container/Container";
-import PaymentBtn from "./PaymentBtn";
+
 import { voucherControllers } from "../../../../controllers/VoucherControllers";
+import PaymentBtn from "./PaymentBtn";
 
 type FormValues = {
   name: string;

@@ -67,7 +67,6 @@ const OAuth2Controller = {
                 res.status(200).send(newUser);
             } else {
                 if(user.password != null){
-                    console.log("LOI:"+user.password);
                     return res.status(400).send("Email is invalid")
                 }
                 const checkRefreshTokenExpired = OAuth2Controller.isRefreshTokenExpired(user.refresh_token);

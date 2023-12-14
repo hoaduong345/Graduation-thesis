@@ -1,20 +1,15 @@
 import { useState } from "react";
-import { Images } from "../../assets/TS/index";
-// import { localStorage } from 'localStorage';
+import { Images } from "../../assets/ts/index";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import { jwtDecode } from "jwt-decode";
-// import LogoApple from "../../assets/PNG/lgApple.png";
-// import LogoFace from "../../assets/PNG/lgFace.png";
-// import LogoGoogle from "../../assets/PNG/lgG.png";
-import { GoogleOAuthProvider, useGoogleLogin, GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
 import "./Login.css";
-import MyCustomButton from "../../helper/Dialog/MyCustomButton";
 
 
 export type LoginFormGoogle = {

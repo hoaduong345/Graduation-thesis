@@ -26,22 +26,16 @@ export default function UserProfile() {
   const [validUrl, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [image, setImage] = useState("");
-  // const [editUser, setEditUser] = useState<FormValues>();
   const [url, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [id, setId] = useState<string>("11");
-  // const id: number | undefined = getID()!;
-  const [sex, setSex] = useState<boolean>();
 
   const {
     control,
-    handleSubmit,
-    register,
+
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: {isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
   });
@@ -51,13 +45,9 @@ export default function UserProfile() {
     const user = param.username;
     if (user != null) {
       const username = user;
-      console.log("USERNAME1: " + username);
       shipperController
         .getShipperWhereUsername(username)
         .then((res) => {
-          console.log(
-            "BRUHUUUUUUUUUU:" + JSON.stringify(res.ShippingWithImage)
-          );
           return res;
         })
         .then((res) => {
@@ -75,10 +65,7 @@ export default function UserProfile() {
           }
         })
         .catch((error) => {
-          console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
-            error
-          );
+          console.log(error);
         });
     } else {
       console.log("Chua Dang Nhap Dung");
@@ -150,12 +137,9 @@ export default function UserProfile() {
           // console.log( res.createdAt);
         })
         .catch((error) => {
-          console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
-            error
-          );
+          console.log(error)
+          
         });
-      console.log("Chua Dang Nhap Dung");
     }
   };
 

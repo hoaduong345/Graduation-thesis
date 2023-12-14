@@ -1,19 +1,20 @@
+import { IonIcon } from "@ionic/react";
 import { Accordion, AccordionBody } from "@material-tailwind/react";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ArrowNextHistory from "../../../../../assets/TSX/ArrowNextHistory";
 import Plus from "../../../../../assets/TSX/Plus";
+import Container from "../../../../../components/container/Container";
 import { categoryController } from "../../../../../controllers/CategoryController";
 import { storage } from "../../../../../firebase/Config";
 import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
 import DialogModal from "../../../../../helper/Dialog/DialogModal";
 import Loading from "../../../../../helper/Loading/Loading";
-import { toastError } from "../../../../../helper/Toast/Error";
 import { toastSuccess } from "../../../../../helper/Toast/Success";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
 import { CategoryModal } from "../../../../../model/CategoryModel";
-import Container from "../../../../../components/container/Container";
+import SitebarAdmin from "../../Sitebar/Sitebar";
 import ArrowDown from "../../assets/TSX/ArrowDown";
 import Delete from "../../assets/TSX/Delete";
 import DeleteCate from "../../assets/TSX/DeleteCate";
@@ -23,8 +24,6 @@ import PlusSquare from "../../assets/TSX/PlusSquare";
 import RemoveCate from "../../assets/TSX/RemoveCate";
 import UploadIMG from "../../assets/TSX/UploadIMG";
 import Handle from "../../assets/TSX/bacham";
-import SitebarAdmin from "../../Sitebar/Sitebar";
-import { IonIcon } from "@ionic/react";
 
 function Category() {
   const idModalCate = "category";
