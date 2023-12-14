@@ -439,6 +439,7 @@ const ProductController = {
                     attributes: true,
                     ProductImage: true,
                     fK_category: true,
+                    attributes: true,
                 },
                 where: {
                     id: productId,
