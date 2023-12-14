@@ -96,7 +96,6 @@ export default function Admin() {
   }
 
   const AddAdmin = (data: FormValues) => {
-    console.log(JSON.stringify(data.dateofbirth)); 
     data.sex = sex;
     adminController
       .AddAdmin(data)
@@ -185,7 +184,6 @@ export default function Admin() {
                 id={idAddAdmin}
                 onClose={() => closeModal(idAddAdmin)}
                 onSave={handleSubmit((data) => {
-                  console.log("DATA:"+JSON.stringify(data));
                   AddAdmin(data);
                 })}
                 title="Thêm Admin"

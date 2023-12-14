@@ -21,10 +21,7 @@ export default function useNotificationContextAdmin() {
   }, []);
   const getCountNoti = async () => {
     await notificationControllers.getAllNotificationAdmin().then((res) => {
-      console.log(
-        "🚀 ~ file: NotificationContextAdmin.tsx:24 ~ awaitnotificationControllers.getAllNotificationAdmin ~ res:",
-        res
-      );
+     
       setCountNotificationAdmin(res);
     });
   };
@@ -40,16 +37,14 @@ export default function useNotificationContextAdmin() {
         
         setNotificationAdmin(res.allNotification);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      
   };
 
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
     const socket = io("http://localhost:5000");
     socket.on("requestdelete", (requestdelete) => {
-      console.log("Received deleted order dataaaaaaaaaaaaaa:", requestdelete);
+      
       const urlTaker = requestdelete.User.UserImage;
 
       toast(
@@ -96,7 +91,7 @@ export default function useNotificationContextAdmin() {
       setDeletedOrder(requestdelete);
     });
     socket.on("newOrder", (newOrder) => {
-      console.log("NewOrderr:", newOrder);
+    
       const urlTaker = newOrder.user.UserImage;
 
       toast(
@@ -143,7 +138,7 @@ export default function useNotificationContextAdmin() {
       setDeletedOrder(newOrder);
     });
     socket.on("disconnect", () => {
-      console.log(socket.id);
+      
     });
   }, [deletedOrder]);
 
@@ -151,17 +146,11 @@ export default function useNotificationContextAdmin() {
     notificationControllers
       .seenAllNotiAdmin()
       .then((res: any) => {
-        console.log(
-          "🚀 ~ file: NotificationContextAdmin.tsx:157 ~ .then ~ res:",
-          res
-        );
+     
         setCountNotificationAdmin(res.count);
       })
       .catch((err) => {
-        console.log(
-          "🚀 ~ file: NotificationUser.tsx:24 ~ notificationControllers.seenAllNotiUser ~ err:",
-          err
-        );
+       
         return {};
       });
   };

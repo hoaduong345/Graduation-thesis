@@ -56,7 +56,6 @@ function Login() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log("checker", data);
       setIsButtonDisabled(true);
       setLoading(true);
       const response = await axios.post(API, data, {
@@ -68,7 +67,6 @@ function Login() {
       setLoading(false);
           setIsButtonDisabled(true);
       if (response.status === 200) {
-        console.log("Login successfully");
         toast.success("Đăng nhập thành công", {
           position: "top-right",
           autoClose: 5000,
@@ -79,14 +77,10 @@ function Login() {
         ) {
           const jsonString: string = JSON.stringify(response.data);
           const jsonObject = JSON.parse(jsonString);
-          // console.log("aaaaaaaaaa"+response)
-          // Bây giờ bạn có thể truy cập các giá trị trong jsonObject
-          // console.log(response);
-          // Truy cập các giá trị trong jsonObject
+   
 
           const username = jsonObject.username;
           const accessToken = jsonObject.accessToken;
-          console.log(accessToken);
           const UserData = { username };
           const Token = { accessToken };
           localStorage.setItem("idUser", JSON.stringify(jsonObject.id));
@@ -99,23 +93,18 @@ function Login() {
           console.error("Response không phải là JSON.");
         }
       } else {
-        console.log("Login Failed!");
+
         toast.error("Đăng nhập thất bại", {
           position: "top-right",
           autoClose: 5000,
         });
       }
     } catch (error) {
-      // console.log(error);
       setLoading(false);
       setIsButtonDisabled(false);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-        console.log(responseData);
-        // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData == "Sai email") {
-          //   const errorMessage = responseData.error.password;
-          console.log(`Lỗi1:1 ${responseData}`);
           toast.error("Tài khoản không tồn tại!", {
             position: "top-right",
             autoClose: 5000,
@@ -151,7 +140,6 @@ function Login() {
        
 
         const response = await axios.post(API, data)
-        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response.status)
 
         if (response.status == 200) {
           setTimeout(() => {
@@ -194,7 +182,6 @@ function Login() {
         const loginByGG = true;
         localStorage.setItem("user", (JSON.stringify(data)));
         localStorage.setItem("LoginByGG",(JSON.stringify(loginByGG)))
-        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
         setTimeout(() => {
           window.location.href = "/";
         }, 2000);
@@ -210,11 +197,10 @@ function Login() {
           name: decoded.name,
           username: (decoded.email).split('.')[0].trim(),
         }
-        console.log("🚀 ~ file: Login.tsx:138 ~ handleSuccess ~ data:", data)
         callAPI(data);
 
       } else {
-        console.log('Credential or access_token is undefined');
+        console.log('Error');
       }
     };
 

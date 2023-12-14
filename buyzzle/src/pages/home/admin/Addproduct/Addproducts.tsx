@@ -45,7 +45,7 @@ export default function Addproducts() {
       .then((res) => {
         setCategory(res.data);
       })
-      .catch((err) => console.log(err));
+      
   };
 
   const delayIMG = () => {
@@ -173,7 +173,7 @@ export default function Addproducts() {
   useEffect(() => {
     let user = secureLocalStorage.getItem("admin");
     if (user == null) {
-      // console.log("VCLLLLLLLLLLLLLLLLLll");
+     
       window.location.href = "/admin/loginadmin";
     }
   }, []);

@@ -75,11 +75,7 @@ export default function UserProfile() {
     // defaultValues: UserData1
   });
   let isDisabled = !(isValid && isDirty);
-  console.log("isDisabled: " + isValid);
-  // setIsDisable(!(isValid && isDirty));
-  // console.log("CCCCCCCCCc:" + JSON.stringify(UserData1));
-  //DCM hoa`
-  // let user = "";
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,9 +84,8 @@ export default function UserProfile() {
         if (user != null) {
           const userData = JSON.parse(user);
           const username = userData.username;
-          console.log("USERNAME: " + username);
+   
           await userController.getUserWhereUsername(username).then((res) => {
-            console.log("USER:" + JSON.stringify(res));
             if (res.dateOfBirth == null) {
               res.dateOfBirth = "dd/mm/yyyy";
             } else {
@@ -103,7 +98,6 @@ export default function UserProfile() {
             Bruh = Bruh.replace(res.email[5], "*");
             let emailDef = Bruh;
 
-            console.log("DCM cuoc doi" + JSON.stringify(res.image));
             setEmailThen(res.email);
             let Bruh2 = res.phonenumber;
             if (res.phonenumber != null) {
@@ -144,7 +138,6 @@ export default function UserProfile() {
             return res;
           });
         } else {
-          // console.log("Chua Dang Nhap Dung");
           window.location.href = "/";
         }
       } catch (error) {
@@ -181,7 +174,6 @@ export default function UserProfile() {
     const user = localStorage.getItem("user");
     if (user != null) {
       const Username = JSON.parse(user);
-      console.log("UserData1:" + JSON.stringify(data));
       reset({
         username: "" + Username?.username,
         name: "" + data?.name,
@@ -215,8 +207,6 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-      console.log("URL IMAGE: " + url);
-      // FormImage.id = parseInt(id);
       return url;
     } catch (error) {
       console.error(error);
@@ -238,7 +228,6 @@ export default function UserProfile() {
       iduser: id,
       url: url,
     };
-    console.log("IDDDDDDĐ:", urlImages.url);
     await axios
       .put(
         `${appConfigUser.apiUrl}/updateimageuser/${urlImages.iduser}`,
@@ -250,7 +239,6 @@ export default function UserProfile() {
   const API = `http://localhost:5000/buyzzle/user/userprofile/${param.username}`;
   const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
-      console.log("selectedFile:" + selectedFile);
       if (selectedFile == null && CheckImageUrl == false) {
         formData.sex = JSON.stringify(sex);
         formData.sex = JSON.parse(formData.sex);
@@ -259,18 +247,14 @@ export default function UserProfile() {
           formData.phonenumber = sdtThen;
         }
 
-        console.log("SERVER:" + JSON.stringify(formData));
         const response = await axios.put(API, formData);
-        console.log("edit thanh cong", response);
 
         if (response.status === 200) {
-          console.log("Edit successfully");
           toast.success("Cập nhật thành công", {
             position: "top-right",
             autoClose: 5000,
           });
         } else {
-          console.log("Sign-in Failed!");
           toast.warning("Sign-in failed", {
             position: "top-right",
             autoClose: 5000,
@@ -284,50 +268,41 @@ export default function UserProfile() {
           formData.phonenumber = sdtThen;
         }
 
-        console.log("SERVER:" + JSON.stringify(formData));
         const response = await axios.put(API, formData);
         FormImage.id = parseInt(id);
         if (response) {
-          console.log("UrlThen" + url);
 
           if (CheckImageUrl == false) {
             await addImages(FormImage.id, url);
             setCheckImageUrl(true);
           } else {
             if (url != "") {
-              console.log("Ao that day:" + url);
               await EditImages(FormImage.id, url);
             } else {
-              console.log("Ao that day:" + FormImage.id);
               await EditImages(FormImage.id, urlThen);
             }
           }
         }
 
-        console.log("edit thanh cong", response);
 
         if (response.status === 200) {
-          console.log("Edit successfully");
           toast.success("Cập nhật thành công", {
             position: "top-right",
             autoClose: 5000,
           });
         } else {
-          console.log("Sign-in Failed!");
           toast.warning("Sign-in failed", {
             position: "top-right",
             autoClose: 5000,
           });
         }
       }
-      // console.log("TESTING: " + formData);
 
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
         if (responseData.error) {
-          console.log(`Lỗi2: ${responseData.error}`);
           const errorMessageUsername = responseData.error.username;
           const errorMessageEmail = responseData.error.email;
           const errorMessagePhoneNumber = responseData.error.phonenumber;
@@ -359,22 +334,19 @@ export default function UserProfile() {
   const onChangeImage = (file: any) => {
     // const file = e.target.files?.[0];
     if (file) {
-      console.log(`Selected file: ` + file.name);
       setSelectedFile(file);
       setImage(file);
 
-      // console.log("isDisabled:"+isDisabled)
     } else {
       setSelectedFile(null); // Reset the selectedFile state when no file is selected
       setImage(null); // Reset the imageURL state
-      console.log("No file selected");
     }
   };
 
   return (
     <Fragment>
       {loading ? (
-        "LOADING............."
+        <></>
       ) : (
         <div>
           {validUrl ? (

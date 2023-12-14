@@ -31,7 +31,7 @@ export default function VouchersPage() {
       .userSavedVoucher(id)
       .then((_) => {
         getVoucher();  // if ((await response).status === 200) {
-        console.log("Login successfully");
+      
         toast.success("Lưu voucher thành công", {
           position: "top-right",
           autoClose: 5000,
@@ -51,36 +51,28 @@ export default function VouchersPage() {
     }
   }, []);
   const CheckLogin = async () => {
-    // const user = localStorage.getItem("user");
     if (Logined == false) {
-      // setLogined(false);
       openModal(idAddAdmin);
     } else {
-      // setLogined(true);
-      // CheckToken();
-      // CheckRefreshToken();
-      console.log("AOTHATDAY");
+      setLogined(true);
     }
   };
   const {
     control,
-    handleSubmit,
-    clearErrors,
+    handleSubmit, 
     reset,
-    register,
     formState: { errors },
   } = useForm<LoginForm>({
     mode: "all",
   });
-  const param = useParams();
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
-    console.log("LoginData:" + data);
+   
     userController.Login(data).then((res) => {
-      console.log("LoginTHanhCong:" + JSON.stringify(res.username));
+     
       const username = res.username;
       const accessToken = res.accessToken;
-      console.log(accessToken);
+     
       const UserData = { username };
       const Token = { accessToken };
       localStorage.setItem("idUser", JSON.stringify(res.id));
@@ -114,7 +106,7 @@ export default function VouchersPage() {
     if (modal) {
       modal.close();
     }
-    console.log("Data:" + JSON.stringify(data));
+   
   };
 
   return (

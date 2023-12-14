@@ -37,32 +37,22 @@ export default function FilterListproduct({
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
   const [availability, setAvailability] = useState<boolean>(false);
   const handleSliderChangePrice = (price: [number, number]) => {
-    console.log(
-      "🚀 ~ file: FilterListproduct.tsx:29 ~ handleSliderChangePrice ~ price:",
-      price
-    );
+
     setRangePriceValue(price);
     onPriceRangeChange(price);
   };
   const handleSliderChangeQuantity = (quantity: [number, number]) => {
-    console.log(
-      "🚀 ~ file: FilterListproduct.tsx:34 ~ handleSliderChangeQuantity ~ quantity:",
-      quantity
-    );
+    
     setRangeQuantityValue(quantity);
     onQuantityRangeChange(quantity);
   };
   const handleSliderChangeBoughtQuantity = (quantity: [number, number]) => {
-    console.log(
-      "🚀 ~ file: FilterListproduct.tsx:34 ~ handleSliderChangeQuantity ~ quantity:",
-      quantity
-    );
+  
     setRangePurchaseValue(quantity);
     onPurchaseRangeChange(quantity);
   };
 
   const handleRateChange = (rate: number) => {
-    console.log("Rating:", rate);
     setRating(rate);
     onRateChange(rate);
   };

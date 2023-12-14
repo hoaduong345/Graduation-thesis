@@ -76,7 +76,7 @@ function Index() {
       .then((data) => {
         setCategory(data);
       })
-      .catch((err) => console.log(err));
+     
   };
 
   const getAllProducts = (page: number) => {

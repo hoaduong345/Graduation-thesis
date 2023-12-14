@@ -35,15 +35,12 @@ export default function NotificationAdmin() {
     setNotification,
     handleSeenAllNoti,
   } = useNotificationAdmin();
-  // console.log("VCLLLLLLLLl:"+JSON.stringify(notificationAdmin));
+
   const handleClick = (id: number) => {
-    console.log("🚀 ~ file: Notification.tsx:27 ~ handleClick ~ id:", id);
+ 
     const updatedButtons = changeButton.map((btn) => {
       if (btn.id === id) {
-        console.log(
-          "🚀 ~ file: OrderManagement.tsx:91 ~ updatedButtons ~ btn.id:",
-          btn.id
-        );
+       
         return { ...btn, active: true };
       } else {
         return { ...btn, active: false };
@@ -74,11 +71,9 @@ export default function NotificationAdmin() {
       .getFilterNotification(status)
       .then((res: any) => {
         setNotification(res);
-        console.log("CHECKIMGNOT:" + JSON.stringify(res));
+       
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      
   };
 
   const handleMarkAsRead = () => {

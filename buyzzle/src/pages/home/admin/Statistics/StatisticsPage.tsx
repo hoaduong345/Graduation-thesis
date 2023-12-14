@@ -74,10 +74,7 @@ interface selectStats {
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
-  console.log(
-    "🚀 ~ file: StatisticsPage.tsx:79 ~ StatisticsPage ~ stats:",
-    stats
-  );
+
   const [filterState, setFilterState] = useState<FilterChart>({
     filterValue: {
       from: moment().startOf("date").add(-4, "d").toDate(),
@@ -226,7 +223,7 @@ export default function StatisticsPage() {
     statsControllers
       .getStats({ ...filterState, page: filterState.page! + 1 })
       .then((res) => {
-        console.log("🚀 ~ file : StatisticsPage.tsx:211 ~ .then ~ res:", res);
+       
         let arr: HotProductsInRange[] = [];
         if (stats?.hotProductsInRange?.length) {
           arr = stats?.hotProductsInRange.concat(res.hotProductsInRange);

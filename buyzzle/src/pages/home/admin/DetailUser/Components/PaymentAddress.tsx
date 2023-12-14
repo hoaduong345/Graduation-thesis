@@ -104,7 +104,7 @@ export default function PaymentAddress() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-        // console.log("data", data)
+
       } else {
         setValidUrl(false);
       }
@@ -115,13 +115,11 @@ export default function PaymentAddress() {
   const getUserData = () => {
     const user = param.username;
     if (user != null) {
-      // const userData = JSON.parse(user);
-      // const username = userData.username;
-      // console.log("USERNAME1: " + username);
+
       userController
         .getUserWhereUsername2(user)
         .then((res) => {
-          console.log("TEST " + JSON.stringify(res));
+        
           return res;
         })
         .then((res) => {
@@ -141,7 +139,7 @@ export default function PaymentAddress() {
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 

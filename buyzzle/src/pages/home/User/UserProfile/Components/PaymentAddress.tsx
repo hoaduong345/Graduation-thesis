@@ -122,11 +122,9 @@ export default function PaymentAddress() {
     if (user != null) {
       const userData = JSON.parse(user);
       const username = userData.username;
-      console.log("USERNAME1: " + username);
       userController
         .getUserWhereUsername2(username)
         .then((res) => {
-          console.log("TEST " + JSON.stringify(res));
           return res;
         })
         .then((res) => {
@@ -146,7 +144,7 @@ export default function PaymentAddress() {
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 
@@ -172,17 +170,17 @@ export default function PaymentAddress() {
 
   const onSubmit = async (formData: FormValues) => {
     try {
-      console.log("TESTING: " + formData);
+    
       const response1 = await sendToDatabase(formData);
-      console.log("edit thanh cong", response1);
+    
       if (response1.status === 200) {
-        console.log("Edit successfully");
+        
         toast.success("Cập nhật thành công", {
           position: "top-right",
           autoClose: 5000,
         });
       } else {
-        console.log("Sign-in Failed!");
+      
         toast.warning("Sign-in failed", {
           position: "top-right",
           autoClose: 5000,
@@ -193,7 +191,7 @@ export default function PaymentAddress() {
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
         if (responseData) {
-          console.log(`Lỗi2: ${responseData}`);
+  
           toast.warning(responseData, {
             position: "top-right",
             autoClose: 5000,

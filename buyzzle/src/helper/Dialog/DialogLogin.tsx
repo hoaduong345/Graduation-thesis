@@ -28,8 +28,7 @@ export default function DialogLogin(props: Props) {
       const API2 = 'http://localhost:5000/buyzzle/oauth/savecookies'
       try {
         const response = await axios.post(API, data)
-        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response.status)
-
+       
         if (response.status == 200) {
           setTimeout(() => {
             callAPI2(data);
@@ -54,11 +53,7 @@ export default function DialogLogin(props: Props) {
 
 
 
-      // const response = axios.post(API, data)
-      // console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response)
-      // setTimeout(() => {
-      //   callAPI2(data);
-      // }, 1500);
+      
       const callAPI2 = async (data: LoginFormGoogle) => {
 
         const response1 = axios.post(API2, data, {
@@ -67,7 +62,7 @@ export default function DialogLogin(props: Props) {
           },
           withCredentials: true,
         })
-        console.log("🚀 ~ file: Login.tsx:126 ~ callAPI ~ response:", response1)
+       
       }
       const pathname = window.location.pathname;
       toast.loading("Đang tải vui lòng đợi", {
@@ -96,16 +91,16 @@ export default function DialogLogin(props: Props) {
           name: decoded.name,
           username: (decoded.email).split('.')[0].trim(),
         }
-        console.log("🚀 ~ file: Login.tsx:138 ~ handleSuccess ~ data:", data)
+       
         callAPI(data);
 
       } else {
-        console.log('Credential or access_token is undefined');
+        
       }
     };
 
     const handleError = () => {
-      console.log('Login Failed');
+
       // Your custom error handling logic here
     };
 

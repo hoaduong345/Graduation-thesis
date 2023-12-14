@@ -43,7 +43,6 @@ function LoginAdmin() {
     setIsButtonDisabled(true);
       setLoading(true);
     try {
-      console.log("checker", data);
       const response = await axios.post(API, data, {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -52,7 +51,6 @@ function LoginAdmin() {
       });
 
       if (response.status === 200) {
-        console.log("Login successfully");
         toast.success("Đăng nhập thành công", {
           position: "top-right",
           autoClose: 5000,
@@ -76,7 +74,6 @@ function LoginAdmin() {
           window.location.href = "/admin/ListproductsAdmin";
         }, 2000);
       } else {
-        console.log("Login Failed!");
         toast.warning("Đăng nhập thất bại vui lòng kiểm tra lại tài khoản hoặc mật khẩu", {
           position: "top-right",
           autoClose: 5000,
@@ -87,11 +84,9 @@ function LoginAdmin() {
       setIsButtonDisabled(false);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-        console.log(responseData);
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData) {
           //   const errorMessage = responseData.error.password;
-          console.log(`Lỗi1:1 ${responseData}`);
           toast.warning("Đăng nhập thất bại vui lòng kiểm tra lại tài khoản hoặc mật khẩu", {
             position: "top-right",
             autoClose: 5000,

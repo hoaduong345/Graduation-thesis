@@ -15,10 +15,7 @@ type Props = {
 
 const Filter = (props: Props) => {
   const { product } = props;
-  console.log(
-    "🚀 ~ file: Filter.tsx:129 ~ Filter ~ formatSoldCount(product.soldcount!):",
-    formatSoldCount(product.soldcount!)
-  );
+
 
   return (
     <Link to={`/Detailproducts/${product.id}`}>

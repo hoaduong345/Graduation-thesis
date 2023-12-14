@@ -109,7 +109,7 @@ export default function LogoHome1() {
   };
 
   const removee = (id: number, idDialog: string) => {
-    console.log("xoa", id);
+
     logohome1Controller
       .remove(id)
       .then(() => {
@@ -158,7 +158,6 @@ export default function LogoHome1() {
 
   const renderImg = () => {
     if (url) {
-      console.log("🚀 ~ file: Logoes.tsx:139 ~ renderImg ~ url:", url);
       return (
         <div className="group relative">
           <img

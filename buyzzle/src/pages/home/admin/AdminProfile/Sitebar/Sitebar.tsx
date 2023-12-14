@@ -57,14 +57,7 @@ const listSitebar: SitebarUser[] = [
 const instance = axios.create({
   withCredentials: true,
 });
-// useEffect(() => {
-//   let user = secureLocalStorage.getItem("admin");
-//   if(user == null){
-//     console.log("VCLLLLLLLLLLLLLLLLLll");
-//     window.location.href = "/admin/loginAdmin";
-//   }
 
-// }, [])
 export default function Sitebar() {
   const { pathname } = useLocation();
 
@@ -72,7 +65,7 @@ export default function Sitebar() {
   async function LogOut() {
     try {
       const reponse = await instance.post(API);
-      console.log(reponse);
+     
       localStorage.removeItem("user");
       window.location.href = "/";
     } catch (error) {

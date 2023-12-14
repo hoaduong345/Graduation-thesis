@@ -58,7 +58,6 @@ export default function RatingMap(props: Props) {
   // const [AdminAvt, setAdminAvt] = useState<any>("");
   const [Username, setUsername] = useState<any>("");
   const { id: idProduct } = useParams();
-  console.log("idididid", idProduct);
 
   const {
     control,
@@ -92,7 +91,7 @@ export default function RatingMap(props: Props) {
   };
   const handleRatingClick = (rating: number) => {
     setValue("ratingValue", rating);
-    console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
+  
   };
   const handleFeedbackClick = (ratingId: number) => {
     if (isFeedbackClicked === ratingId) {
@@ -128,7 +127,7 @@ export default function RatingMap(props: Props) {
   useEffect(() => {
     let user = secureLocalStorage.getItem("admin");
     if (user == null) {
-      // console.log("VCLLLLLLLLLLLLLLLLLll");
+   
       setAdminName(null);
       setAdminAvt(null);
     } else {
@@ -150,9 +149,9 @@ export default function RatingMap(props: Props) {
             const Image = res.adminWithImage.AdminImage[0].url;
             setAdminAvt(Image);
           } else {
-            console.log("k co hinh");
+            console.log("Error");
           }
-          console.log("ADMIN DATA:" + AdminName, AdminAvt);
+   
           return res;
         });
       };
@@ -166,12 +165,12 @@ export default function RatingMap(props: Props) {
     } else {
       const userData = JSON.parse(user);
       const username = userData;
-      console.log("USERNAME: " + username);
+  
       setUsername(username);
-      console.log("NameUser:" + Username);
+    
     }
   }, []);
-  // console.log("ADMIN DATA2:"+AdminName, AdminAvt)
+
   return (
     <div>
       {props.rateAndcomment?.Rating ? (

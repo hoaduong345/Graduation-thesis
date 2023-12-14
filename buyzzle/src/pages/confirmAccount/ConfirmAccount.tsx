@@ -23,9 +23,9 @@ function ConfirmAccount() {
         setValidUrl(true);
         await axios.post(url);
 
-        // console.log("data", data)
+        
       } catch (error) {
-        console.log(error);
+       
         setValidUrl(false);
       }
     };

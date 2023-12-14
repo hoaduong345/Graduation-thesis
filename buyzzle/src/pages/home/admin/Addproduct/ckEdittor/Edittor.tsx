@@ -11,7 +11,7 @@ const Edittor = (props: Props) => {
   const editorRef = useRef<any>(null);
   const log = () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+      
     }
   };
   return (

@@ -52,7 +52,6 @@ export default function UserProfile() {
     if (user != null) {
       // const userData = JSON.parse(user);
       const username = user;
-      console.log("USERNAME1: " + username);
       userController
         .getUserWhereUsername(username)
         .then((res) => {
@@ -82,7 +81,7 @@ export default function UserProfile() {
           );
         });
     } else {
-      console.log("Chua Dang Nhap Dung");
+      console.log("Error");
     }
   };
 
