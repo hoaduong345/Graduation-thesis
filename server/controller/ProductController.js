@@ -57,7 +57,6 @@ const ProductController = {
                     image,
                 },
             });
-            console.log('🚀 ~ file: ProductController.js:56 ~ addCategory: ~ newCategory:', newCategory);
 
             res.status(200).json('Thêm danh mục thành công');
         } catch (error) {
@@ -237,8 +236,6 @@ const ProductController = {
             const { name, price, rate, discount, quantity, description, status, categoryID, subcategoriesID } =
                 req.body;
 
-            console.log('aaa', categoryID);
-            console.log('bbbbb', subcategoriesID);
             const SellingPrice = price - price * (discount / 100);
             const Pricesale = price * (discount / 100);
 
@@ -735,7 +732,6 @@ const ProductController = {
     addProductRating: async (req, res) => {
         try {
             const userId = parseInt(req.cookies.id);
-            console.log('🚀 ~ file: ProductController.js:507 ~ addProductRating: ~ userId:', userId);
             const { idproduct, ratingValue, comment } = req.body;
             const rating = await prisma.rating.create({
                 data: {

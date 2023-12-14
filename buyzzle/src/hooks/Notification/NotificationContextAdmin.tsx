@@ -1,12 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
+import { notificationControllers } from "../../controllers/NotificationController";
+import CustomToast from "../../helper/Toast/CustomToast";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import { AllNotification, NotificationModel } from "../../model/Notification";
-import { notificationControllers } from "../../controllers/NotificationController";
-import CustomToast from "../../helper/Toast/CustomToast";
-import { userController } from "../../controllers/UserController";
 import AvtDefautl from "./assets/AvtDefautl";
 
 export default function useNotificationContextAdmin() {

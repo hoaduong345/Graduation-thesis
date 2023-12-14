@@ -1,5 +1,4 @@
 import moment from "moment";
-import { DateValueType } from "react-tailwindcss-datepicker";
 
 export interface FilterChart {
   title?: string;

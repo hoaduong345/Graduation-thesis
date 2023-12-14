@@ -1,9 +1,8 @@
+import { Link } from "react-router-dom";
 import Container from "../../../../components/container/Container";
 import Back from "../assets/TSX/Back";
-import ProFile from "./Components/Profile";
-import PaymentAddress from "./Components/PaymentAddress";
 import AccountStatus from "./Components/AccountStatus";
-import { Link } from "react-router-dom";
+import ProFile from "./Components/Profile";
 
 export default function DetailShipper() {
   return (

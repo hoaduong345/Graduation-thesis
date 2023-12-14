@@ -1,15 +1,12 @@
-import ProductManager from "../../../../../assets/TSX/ProductManager";
-import User from "../../../../../assets/TSX/User";
 import HistoryBought from "../../../../../assets/TSX/HistoryBought";
-// import Cart from "../../../../../assets/TSX/Cart";
-// import Heart from "../../../../../assets/TSX/Heart";
-// import Setting from "../../../../../assets/TSX/Setting";
-import Logout from "../../../../../assets/TSX/Logout";
+import User from "../../../../../assets/TSX/User";
+
+import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Logout from "../../../../../assets/TSX/Logout";
 import Voucher from "../../../../../assets/TSX/Voucher";
-import { googleLogout } from "@react-oauth/google";
 import Cart from "../../../admin/assets/TSX/Cart";
 
 interface SitebarUser {
