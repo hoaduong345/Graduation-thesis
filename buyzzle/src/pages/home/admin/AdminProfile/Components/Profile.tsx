@@ -42,7 +42,7 @@ export default function UserProfile() {
   const [emailThen, setEmailThen] = useState<string>("");
   const [sdtThen, setSdtThen] = useState<string>("");
   const [loading, setLoading] = useState(true);
-
+  const [name, setName] = useState<string>("");
   // const [UserData1, setUserData1] = useState<UserData1>();
 
   const {
@@ -94,14 +94,14 @@ export default function UserProfile() {
             res.adminWithImage.phonenumber = phonenumberDef;
             setId(res.adminWithImage.id);
             setSex(res.adminWithImage.sex);
-          
+
             setLoading(false);
             SetDataUser(res.adminWithImage);
-
+            setName(res.adminWithImage.name);
             const UserImageArray = JSON.stringify(
               res.adminWithImage.AdminImage
             );
-           
+
             if (UserImageArray == "[]") {
               setCheckImageUrl(false);
             } else {
@@ -139,7 +139,7 @@ export default function UserProfile() {
   const SetDataUser = (data: any) => {
     const user = JSON.stringify(secureLocalStorage.getItem("admin"));
     if (user != null) {
-     
+
       reset({
         username: "" + data?.username,
         name: "" + data?.name,
@@ -172,7 +172,7 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-    
+
       return url;
     } catch (error) {
       console.error(error);
@@ -184,12 +184,12 @@ export default function UserProfile() {
       idadmin: id,
       url: url,
     };
-    
+
     await axios
-      .post(`${appConfigAdmin.apiUrl}/addimageadmin/`, urlImages).then(()=>{
+      .post(`${appConfigAdmin.apiUrl}/addimageadmin/`, urlImages).then(() => {
 
       })
-    
+
   };
 
   const EditImages = async (id: number, url: string) => {
@@ -197,7 +197,7 @@ export default function UserProfile() {
       iduser: id,
       url: url,
     };
-  
+
     await axios
       .put(
         `${appConfigAdmin.apiUrl}/updateimageadmin/${urlImages.iduser}`,
@@ -209,19 +209,19 @@ export default function UserProfile() {
   const API = `http://localhost:5000/admin/adminprofile/${param.username}`;
   const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
-     
+
       if (selectedFile == null && CheckImageUrl == false) {
         toast.error("Hãy chọn hình");
         return;
       }
-    
+
       formData.sex = JSON.parse(formData.sex);
       formData.email = emailThen;
       formData.phonenumber = sdtThen;
-    
+
       const response = await axios.put(API, formData);
       FormImage.idadmin = parseInt(id);
-    
+
       if (response) {
         if (CheckImageUrl == false) {
           await addImages(FormImage.idadmin, url);
@@ -615,8 +615,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                         {/* button */}
                         <div
                           className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
-                              ? "bg-[#aeaeae] cursor-not-allowed"
-                              : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                            ? "bg-[#aeaeae] cursor-not-allowed"
+                            : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
                             }
                      `}
                         >
@@ -665,7 +665,7 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                 <div>
                                   <div className="w-36 h-36 rounded-full flex items-center justify-center bg-red-500">
                                     <p className="text-2xl text-stone-50 text-[45px]">
-                                      {user?.substring(0, 1).toUpperCase()}
+                                      {name?.substring(0, 1).toUpperCase()}
                                     </p>
                                   </div>
                                 </div>
