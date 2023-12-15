@@ -102,9 +102,8 @@ export interface EditImage {
 export default function DetailsProduct() {
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState("");
-  const { addProduct, warning, closeModal } = useCart();
+  const { addProduct, warning, closeModal, setIdAttribute, idAttribute } = useCart();
   const idWarningQuantity = "idWarningQuantity";
-  const [idAttribute, setIdAttribute] = useState(0);
   const [quantityAttribute, setQuantityAttribute] = useState(0);
   const [indexAttribute, setIndexAttribute] = useState(0);
 
@@ -727,12 +726,11 @@ export default function DetailsProduct() {
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
    transition duration-150 bg-[#EA4B48] justify-evenly`}
                           onClick={() => {
-                            setIdAttribute(0);
                             if (isSoldOut) return;
                             if (idAttribute != 0) {
                               return addProduct(Number(id), quantity, true);
                             } else {
-                              toastWarn('Vui lòng chọn Phân loại hàng')
+                              toastWarn('Vui lòng chọn Phân loại hàng');
                             }
                           }}
                         >
