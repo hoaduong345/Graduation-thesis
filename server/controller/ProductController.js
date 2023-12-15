@@ -569,7 +569,7 @@ const ProductController = {
                 },
             });
             const top8products = await prisma.product.findMany({
-                take: 8,
+                take: 9,
                 orderBy: {
                     soldcount: 'desc',
                 },
