@@ -12,12 +12,12 @@ import { currentDate, roundedNumber } from "../../../../../helper/Format";
 import { stars } from "../../../../../helper/StarRating/Star";
 import { Rate, Ratee, Rating } from "../../../../../model/ProductModel";
 import Edit from "../../../admin/assets/TSX/Edit";
-import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
+import RemoveCate from "../../../Admin/assets/TSX/RemoveCate";
 import secureLocalStorage from "react-secure-storage";
 import { adminController } from "../../../../../controllers/AdminControllder";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 import Handle from "../../../admin/assets/TSX/bacham";
-import EyeSlide from "../../../admin/assets/TSX/EyeSlide";
+import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
 
 interface FormValues {
   id: number;
@@ -422,7 +422,7 @@ export default function RatingMap(props: Props) {
                                     {rating?.admin?.AdminImage?.length > 0 ? (
                                       <img
                                         className="w-10 h-10 rounded-full"
-                                        src={`${AdminAvt}`}
+                                        src={`${rating?.admin?.AdminImage?.[0].url}`}
                                         alt="Avtcmt"
                                       />
                                     ) : (
@@ -479,7 +479,7 @@ export default function RatingMap(props: Props) {
                                     {rating?.admin?.AdminImage?.length > 0 ? (
                                       <img
                                         className="w-10 h-10 rounded-full"
-                                        src={`${AdminAvt}`}
+                                        src={`${rating?.admin?.AdminImage?.[0].url}`}
                                         alt="Avtcmt"
                                       />
                                     ) : (
@@ -544,7 +544,7 @@ export default function RatingMap(props: Props) {
                                   <div className="flex items-center mt-1 ml-3 gap-3">
                                     {/* hinh anh */}
                                     <div className="relative ">
-                                      {rating?.admin?.AdminImage?.length > 0 ? (
+                                      {AdminAvt ? (
                                         <img
                                           className="w-10 h-10 rounded-full"
                                           src={`${AdminAvt}`}
@@ -558,10 +558,7 @@ export default function RatingMap(props: Props) {
                                           className={`w-12 h-12 border-4  rounded-full bg-red-500 pt-2.5 pb-2.5 ps-4 pe-4`}
                                         >
                                           <p className="text-1xl text-stone-50">
-                                            {AdminName.substring(
-                                              0,
-                                              1
-                                            ).toUpperCase()}
+                                            {AdminName.substring(0, 1).toUpperCase()}
                                           </p>
                                         </div>
                                       )}
@@ -696,7 +693,7 @@ export default function RatingMap(props: Props) {
                             message: "",
                           },
                         }}
-                        render={({}) => (
+                        render={({ }) => (
                           <>
                             {[1, 2, 3, 4, 5].map((rating) => (
                               <input
@@ -705,7 +702,7 @@ export default function RatingMap(props: Props) {
                                 name="rating-5"
                                 className="mask mask-star-2 bg-orange-400"
                                 onClick={() => handleRatingClick(rating)}
-                                // ref={register}
+                              // ref={register}
                               />
                             ))}
                           </>
