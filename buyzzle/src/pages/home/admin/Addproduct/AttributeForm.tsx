@@ -6,7 +6,7 @@ import {
 } from "react-hook-form";
 import MinusAttribute from "../../../../assets/TSX/MinusAttribute";
 import PlusAttribute from "../../../../assets/TSX/PlusAttribute";
-import { FormValues } from "./Addproducts";
+import { FormValues } from "../EditProduct/EditProductMap";
 
 interface Form {
   handleMinusClick: (index: number) => void;

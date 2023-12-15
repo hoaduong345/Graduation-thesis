@@ -71,7 +71,6 @@ export default function EditProductMap() {
       .remove(id)
       .then((_) => {
         getList();
-      
       })
       .catch((err) => {
         console.log(
@@ -458,7 +457,12 @@ export default function EditProductMap() {
                                 <button
                                   onClick={() => handleRemoveOnlyIMG(e.id!)}
                                 >
-                                  <RemoveIMG />
+                                  <RemoveIMG
+                                    index={0}
+                                    removeListUrl={() => {
+                                      0;
+                                    }}
+                                  />
                                 </button>
                               )}
                             </div>
@@ -486,7 +490,12 @@ export default function EditProductMap() {
                                   className="transition duration-300 ease-in-out bottom-0 left-0 right-0 top-0 opacity-0 group-hover:opacity-100 absolute"
                                   // onClick={() => console.log("an không ?")}
                                 >
-                                  <RemoveIMG />
+                                  <RemoveIMG
+                                    index={0}
+                                    removeListUrl={() => {
+                                      0;
+                                    }}
+                                  />
                                 </div>
                               </div>
                             </div>

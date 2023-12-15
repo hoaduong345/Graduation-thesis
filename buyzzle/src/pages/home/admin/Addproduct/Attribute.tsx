@@ -5,8 +5,8 @@ import {
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from "react-hook-form";
-import { FormValues } from "./Addproducts";
 import AttributeForm from "./AttributeForm";
+import { FormValues } from "../EditProduct/EditProductMap";
 
 interface AttributeProps {
   fields: FieldArrayWithId<FormValues, "attributes", "id">[];

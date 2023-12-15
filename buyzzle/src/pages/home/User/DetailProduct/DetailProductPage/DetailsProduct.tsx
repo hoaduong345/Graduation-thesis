@@ -113,7 +113,7 @@ export default function DetailsProduct() {
     perPage: 2,
   });
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState("descriptions"); // Mặc định là tab "App"
+  const [activeTab, ] = useState("descriptions"); // Mặc định là tab "App"
   const [Logined, setLogined] = useState<boolean>();
   const [category, setCategory] = useState<String>("");
   const [productName, setProductName] = useState<String>("");
@@ -129,9 +129,7 @@ export default function DetailsProduct() {
     getAllLogo();
   }, []);
 
-  const handleTabClick = (tabId: string) => {
-    setActiveTab(tabId);
-  };
+
 
   const breadcrumbItems = [
     { text: "Buyzzle", link: "/" },
@@ -232,7 +230,7 @@ export default function DetailsProduct() {
   };
   //Sửa đánh giá
   const handleEditProductRating = async (
-    id: string,
+    _id: string,
     data: Rating,
     idRating: number
   ) => {
@@ -344,9 +342,7 @@ export default function DetailsProduct() {
   const {
     control,
     handleSubmit,
-    clearErrors,
     reset,
-    register,
     formState: { errors },
   } = useForm<LoginForm>({
     mode: "all",
@@ -389,7 +385,7 @@ export default function DetailsProduct() {
       modal.close();
     }
   };
-  const saveModal = (id: string, data: LoginForm) => {
+  const saveModal = (_id: string, data: LoginForm) => {
     try {
       Login(data);
       reset({

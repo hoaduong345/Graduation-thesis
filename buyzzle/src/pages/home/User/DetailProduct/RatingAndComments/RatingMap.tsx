@@ -62,9 +62,7 @@ export default function RatingMap(props: Props) {
     control,
     handleSubmit,
     reset,
-    register,
     setValue,
-    formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
     defaultValues: {
@@ -81,7 +79,7 @@ export default function RatingMap(props: Props) {
     }
   };
 
-  const openDialog = (id: string, idRating: number, comment: string) => {
+  const openDialog = (id: string, _idRating: number, comment: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
       reset({ comment: comment });
