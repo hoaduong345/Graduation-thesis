@@ -41,7 +41,7 @@ function LoginAdmin() {
 
   const onSubmit = handleSubmit(async (data) => {
     setIsButtonDisabled(true);
-      setLoading(true);
+    setLoading(true);
     try {
       const response = await axios.post(API, data, {
         headers: {
@@ -223,7 +223,7 @@ function LoginAdmin() {
                 <div>Đăng nhập</div>
               )}
             </button>
-   
+
           </form>
         </div>
       </div>
