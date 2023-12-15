@@ -19,7 +19,6 @@ const CartController = {
             }
             const attributes = await prisma.attribute.findFirst({
                 where: {
-                    productId: productId,
                     id: atributes,
                 },
             });
