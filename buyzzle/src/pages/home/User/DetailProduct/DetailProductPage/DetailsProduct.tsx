@@ -102,9 +102,9 @@ export interface EditImage {
 export default function DetailsProduct() {
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState("");
-  const { addProduct, warning, closeModal, setIdAttribute, idAttribute } =
-    useCart();
+  const { addProduct, warning, closeModal } = useCart();
   const idWarningQuantity = "idWarningQuantity";
+  const [idAttribute, setIdAttribute] = useState(0);
   const [quantityAttribute, setQuantityAttribute] = useState(0);
   const [indexAttribute, setIndexAttribute] = useState(0);
 
@@ -129,6 +129,10 @@ export default function DetailsProduct() {
   useEffect(() => {
     getAllLogo();
   }, []);
+
+  const handleTabClick = (tabId: string) => {
+    setActiveTab(tabId);
+  };
 
   const breadcrumbItems = [
     { text: "Buyzzle", link: "/" },
@@ -372,6 +376,7 @@ export default function DetailsProduct() {
     // } catch (error) {
 
     // }
+
   };
   const openModal = (id: string) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
@@ -400,6 +405,7 @@ export default function DetailsProduct() {
     } catch (error) {
       console.log("Error:" + JSON.stringify(data));
     }
+
   };
   return (
     <>
@@ -442,11 +448,10 @@ export default function DetailsProduct() {
                       return (
                         <img
                           key={index}
-                          className={`h-[75px] w-[75px] ${
-                            selectedImageIndex === index
-                              ? "border-2 border-blue-500"
-                              : ""
-                          }`}
+                          className={`h-[75px] w-[75px] ${selectedImageIndex === index
+                            ? "border-2 border-blue-500"
+                            : ""
+                            }`}
                           src={e.url}
                           alt=""
                           onClick={() => handleImageClick(index)}
@@ -540,8 +545,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                              first?.productDetail.price! *
-                                (first?.productDetail.discount! / 100)
+                            first?.productDetail.price! *
+                            (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -579,9 +584,9 @@ export default function DetailsProduct() {
                         className="border-[2px] border-[#FFAAAF] rounded-md bg-white px-[5px] py-[3px]"
                         onClick={() => {
                           if (idAttribute != 0) {
-                            plusQuantity();
+                            plusQuantity()
                           } else {
-                            toastWarn("Vui lòng chọn Phân loại hàng");
+                            toastWarn('Vui lòng chọn Phân loại hàng')
                           }
                         }}
                       >
@@ -590,47 +595,36 @@ export default function DetailsProduct() {
                       {/* end Tăng số lượng */}
                     </div>
                     <div className="flex justify-start gap-2 text-[#7A828A]">
-                      {quantityAttribute > 0
-                        ? quantityAttribute
-                        : first?.productDetail.quantity}{" "}
-                      sản phẩm có sẵn
+                      {quantityAttribute > 0 ? quantityAttribute : first?.productDetail.quantity} sản phẩm có sẵn
                     </div>
                   </div>
                   {/* end Tăng giảm số lượng */}
                 </div>
               </div>{" "}
+
               <div className="flex flex-wrap gap-4 mt-4">
-                {first?.productDetail.attributes.map((e, index) => (
-                  <div
-                    key={e.id}
-                    onClick={() => {
-                      if (e.soluong > 0) {
-                        setIdAttribute(e.id);
-                        setQuantityAttribute(e.soluong);
-                        setIndexAttribute(index);
-                      }
-                      if (e.soluong < quantity) {
-                        setQuantity(e.soluong);
-                      }
-                    }}
-                    className={`border-[1px] py-2 rounded-md px-4
-                        ${
-                          idAttribute == e.id
-                            ? `text-[#ee4d2d] border-[#ee4d2d]`
-                            : `text-[#7A828A] border-[#e4e4e4]`
+                {
+                  first?.productDetail.attributes.map((e, index) => (
+                    <div key={e.id}
+                      onClick={() => {
+                        if (e.soluong > 0) {
+                          setIdAttribute(e.id)
+                          setQuantityAttribute(e.soluong)
+                          setIndexAttribute(index)
                         }
-                        ${
-                          e.soluong == 0
-                            ? `cursor-not-allowed bg-[#fafafa] text-[#bbbbbb]`
-                            : `cursor-pointer hover:text-[#ee4d2d] hover:border-[#ee4d2d]`
-                        }`}
-                  >
-                    <span className="text-[13px]">
-                      {e.color} - {e.size}
-                    </span>
-                  </div>
-                ))}
+                        if (e.soluong < quantity) {
+                          setQuantity(e.soluong)
+                        }
+                      }}
+                      className={`border-[1px] py-2 rounded-md px-4
+                        ${idAttribute == e.id ? `text-[#ee4d2d] border-[#ee4d2d]` : `text-[#7A828A] border-[#e4e4e4]`}
+                        ${e.soluong == 0 ? `cursor-not-allowed bg-[#fafafa] text-[#bbbbbb]` : `cursor-pointer hover:text-[#ee4d2d] hover:border-[#ee4d2d]`}`}>
+                      <span className="text-[13px]">{e.color} - {e.size}</span>
+                    </div>
+                  ))
+                }
               </div>
+
               {/* icon */}
               <div className="w-[100%] flex mt-4 px-5 items-center justify-between bg-[#F8F8F8] rounded-md py-[14px]">
                 <div className="flex gap-2">
@@ -679,9 +673,8 @@ export default function DetailsProduct() {
               {/* end icon */}
               {/* Mua ngay */}
               <div
-                className={`w-[100%] flex ${
-                  isSoldOut ? `justify-start` : `justify-end`
-                } mt-9 items-center gap-6`}
+                className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`
+                  } mt-9 items-center gap-6`}
               >
                 {/* <div>
                   <LoveProduct />
@@ -704,10 +697,10 @@ export default function DetailsProduct() {
                         <div
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
                           onClick={() =>
-                            idAttribute != 0
-                              ? !isSoldOut &&
-                                addProduct(Number(id), quantity, false)
-                              : toastWarn("Vui lòng chọn Phân loại hàng")
+                            idAttribute != 0 ?
+                              !isSoldOut &&
+                              addProduct(Number(id), quantity, false)
+                              : toastWarn('Vui lòng chọn Phân loại hàng')
                           }
                         >
                           <div className="text-center text-base font-bold text-[#4C4C4C]">
@@ -719,6 +712,7 @@ export default function DetailsProduct() {
                         <div
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly`}
                           onClick={() => openModal}
+
                         >
                           <div className="text-center text-base font-bold text-[#4C4C4C]">
                             Thêm Vào Giỏ Hàng
@@ -733,11 +727,12 @@ export default function DetailsProduct() {
                           className={`cursor-pointer flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#ff6d65]
    transition duration-150 bg-[#EA4B48] justify-evenly`}
                           onClick={() => {
+                            setIdAttribute(0);
                             if (isSoldOut) return;
                             if (idAttribute != 0) {
                               return addProduct(Number(id), quantity, true);
                             } else {
-                              toastWarn("Vui lòng chọn Phân loại hàng");
+                              toastWarn('Vui lòng chọn Phân loại hàng')
                             }
                           }}
                         >
@@ -944,7 +939,7 @@ export default function DetailsProduct() {
           </div>
           {/* end Sản phẩm của shop */}
         </body>
-      </Container>
+      </Container >
       {/* <div className="border-[1px] border-[#E0E0E0] mt-[-2px]"></div> */}
       <Container>
         {/* chi tiết sản phẩm */}
@@ -964,7 +959,7 @@ export default function DetailsProduct() {
                 dangerouslySetInnerHTML={{
                   __html: first?.productDetail?.description as any,
                 }}
-                // style={{ color: 'blue', textDecoration: 'underline' }}
+              // style={{ color: 'blue', textDecoration: 'underline' }}
               ></div>
             </div>
           </div>
@@ -1000,7 +995,7 @@ export default function DetailsProduct() {
                         handleRemoveRating={handleRemoveRating}
                       />
                     </div>
-                    {}
+                    { }
                     <div className="mt-10">
                       <ResponsivePagination
                         current={rateAndcomment.currentPage!}
@@ -1048,7 +1043,7 @@ export default function DetailsProduct() {
             </div>
           </div>
         </div>
-      </Container>
+      </Container >
       <div className="border-[2px] mt-[70px] border-[#EA4B48]"></div>
       <Container>
         <div className="container my-[60px]">
