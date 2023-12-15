@@ -78,9 +78,8 @@ export default function Header() {
       setLogined(true);
       const userData = JSON.parse(user);
       const username = userData.username;
-   
+
       userController.getUserWhereUsername(username).then((res) => {
-       
         // setEditUser(res)
         setName(res.name);
         localStorage.setItem("nameUser", JSON.stringify(res.name));
@@ -89,11 +88,10 @@ export default function Header() {
         const UserImageArray = JSON.stringify(res.UserImage);
         const urlTaker = JSON.parse(UserImageArray);
         setImg(urlTaker[0].url);
-       
+
         localStorage.setItem("avatarUser", JSON.stringify(urlTaker[0].url));
       });
     } else {
-     
       setLogined(false);
     }
   }, []);
@@ -101,7 +99,7 @@ export default function Header() {
   if (user != null) {
     username = JSON.parse(user).username;
   } else {
-    username = "Nah"
+    username = "Nah";
   }
   const href = `/userprofilepage/${username}`;
 
@@ -142,14 +140,10 @@ export default function Header() {
     }
   };
   const CheckToken = async () => {
-    userController.CheckToken().then(() => {
-
-    });
+    userController.CheckToken().then(() => {});
   };
   const CheckRefreshToken = async () => {
-    userController.CheckRefreshToken().then(() => {
-     
-    });
+    userController.CheckRefreshToken().then(() => {});
   };
   const CheckLogin = async () => {
     if (Logined == false) {
@@ -157,7 +151,6 @@ export default function Header() {
     } else {
       CheckToken();
       CheckRefreshToken();
- 
     }
   };
   const muti = () => {
@@ -184,9 +177,7 @@ export default function Header() {
       getAdmin(admin);
     } else {
       setCheckAdmin(false);
-     
     }
-
   }, []);
   function checkAdminFunc(admin: any) {
     if (admin != null) {
@@ -197,11 +188,8 @@ export default function Header() {
   }
 
   function getAdmin(adminData: any) {
-  
     setNameAdmin(adminData.name);
-
   }
-
 
   return (
     <>
@@ -282,7 +270,7 @@ export default function Header() {
                                       >
                                         <div className="text-[12px] ">
                                           {itemsSearch.name &&
-                                            itemsSearch.name.length > 14 ? (
+                                          itemsSearch.name.length > 14 ? (
                                             `${itemsSearch.name.substring(
                                               0,
                                               14
@@ -331,52 +319,55 @@ export default function Header() {
                   <a onClick={CheckLogin1}>{Logined ? <CartCount /> : <></>}</a>
 
                   <div className="items-center">
-                    {
-                      CheckAdmin == true ? (
-                        <>
-                          {/* {checkLogin ? ( */}
-                          <div className=" flex gap-2">
-                            <div className="font-medium flex items-center justify-center">
-                              <p>Xin chào Admin:   <a href="/admin/ListproductsAdmin" className="text-[#f74b4b] hover:text-[#af4949] ">{nameAdmin}</a></p>
-                            </div>
-
+                    {CheckAdmin == true ? (
+                      <>
+                        {/* {checkLogin ? ( */}
+                        <div className=" flex gap-2">
+                          <div className="font-medium flex items-center justify-center">
+                            <p>
+                              Xin chào Admin:{" "}
+                              <a
+                                href="/admin/ListproductsAdmin"
+                                className="text-[#f74b4b] hover:text-[#af4949] "
+                              >
+                                {nameAdmin}
+                              </a>
+                            </p>
                           </div>
-
-                        </>
-                      ) : (
-                        <>
-                          {checkLogin ? (
-                            <a className=" flex gap-2" href={href} onClick={muti}>
-                              <div className="font-medium flex items-center justify-center">
-                                {name}
-                              </div>
-                              {img ? (
-                                <div className="relative">
-                                  <img
-                                    className="w-10 h-10 rounded-full "
-                                    src={img}
-                                    alt=""
-                                  />
-                                </div>
-                              ) : (
-                                <div className=" rounded-full pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
-                                  <p className="text-1xl text-stone-50">
-                                    {name.substring(0, 1).toUpperCase()}
-                                  </p>
-                                </div>
-                              )}
-                            </a>
-                          ) : (
-                            <div className="flex text-[#1A1A1A] ml-[10px]">
-                              <a href="/login">ĐĂNG NHẬP</a>
-                              <div className="border-[1px] border-[#000000] mx-[20px] " />
-                              <a href="/register">ĐĂNG KÍ</a>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {checkLogin ? (
+                          <a className=" flex gap-2" href={href} onClick={muti}>
+                            <div className="font-medium flex items-center justify-center">
+                              {name}
                             </div>
-                          )}
-                        </>
-                      )
-                    }
-
+                            {img ? (
+                              <div className="relative">
+                                <img
+                                  className="w-10 h-10 rounded-full "
+                                  src={img}
+                                  alt=""
+                                />
+                              </div>
+                            ) : (
+                              <div className=" rounded-full pt-2 pb-2 ps-3.5 pe-3.5  bg-red-500">
+                                <p className="text-1xl text-stone-50">
+                                  {name.substring(0, 1).toUpperCase()}
+                                </p>
+                              </div>
+                            )}
+                          </a>
+                        ) : (
+                          <div className="flex text-[#1A1A1A] ml-[10px]">
+                            <a href="/login">ĐĂNG NHẬP</a>
+                            <div className="border-[1px] border-[#000000] mx-[20px] " />
+                            <a href="/register">ĐĂNG KÍ</a>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -393,8 +384,8 @@ export default function Header() {
                     <>
                       <Link to={`/Detailproducts/${items.id}`}>
                         <li className="hover:text-[#1F1717] text-xs">
-                          {items.name.length > 20
-                            ? `${items.name.substring(0, 20)}...`
+                          {items.name.length > 15
+                            ? `${items.name.substring(0, 15)}...`
                             : items.name}
                         </li>
                       </Link>
