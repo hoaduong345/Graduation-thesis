@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://buyzzle:123qwe@localhost:3306/buyzzle"
+  url      = env("DATABASE_URL")
 }
 
 model User {
