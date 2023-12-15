@@ -23,25 +23,25 @@ class RatingAndComment {
         return res.data;
       });
   };
-  getRatingAndComment = async (
-    id: number,
-    page?: number,
-    perPage?: number
-  ): Promise<Rate> => {
-    return await axios
-      .get(
-        `${appConfig.apiUrl}/ratingcomment/${id}?page=${page}&perPage=${perPage}`,
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        return res.data as Rate;
-      });
-  };
+  // getRatingAndComment = async (
+  //   id: number,
+  //   page?: number,
+  //   perPage?: number
+  // ): Promise<Rate> => {
+  //   return await axios
+  //     .get(
+  //       `${appConfig.apiUrl}/ratingcomment/${id}?page=${page}&perPage=${perPage}`,
+  //       {
+  //         headers: {
+  //           "Access-Control-Allow-Origin": "*",
+  //         },
+  //         withCredentials: true,
+  //       }
+  //     )
+  //     .then((res) => {
+  //       return res.data as Rate;
+  //     });
+  // };
   // http://localhost:5000/buyzzle/product/updateimagecomment/27
   EditRatingAndComment = async (id: number, data: Rating) => {
     return await axios.put(

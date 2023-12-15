@@ -10,13 +10,13 @@ import { ratingAndCommentController } from "../../../../../controllers/Rating&Co
 import DialogModal from "../../../../../helper/Dialog/DialogModal";
 import { currentDate, roundedNumber } from "../../../../../helper/Format";
 import { stars } from "../../../../../helper/StarRating/Star";
-import { Ratee, Rating } from "../../../../../model/ProductModel";
+import { Rate, Ratee, Rating } from "../../../../../model/ProductModel";
 import Edit from "../../../admin/assets/TSX/Edit";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 import secureLocalStorage from "react-secure-storage";
 import { adminController } from "../../../../../controllers/AdminControllder";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
-import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
+import EyeSlide from "../../../admin/assets/TSX/EyeSlide";
 import Handle from "../../../admin/assets/TSX/bacham";
 
 interface FormValues {
@@ -47,6 +47,7 @@ type Props = {
   handleRemoveRating: (id: number) => void;
   setRateAndcomment: React.Dispatch<React.SetStateAction<Ratee>>;
   getCommentWhereRating: (idproduct: any, rating: any) => void;
+  first: Rate | undefined;
 };
 export default function RatingMap(props: Props) {
   const [isFeedbackClicked, setIsFeedbackClicked] = useState<number | null>(1);
@@ -54,18 +55,10 @@ export default function RatingMap(props: Props) {
   const [repTextCmt, setTextRepCmt] = useState<string>("");
   const [AdminAvt, setAdminAvt] = useState<any>("");
   const [AdminName, setAdminName] = useState<any>("");
-  // const [AdminAvt, setAdminAvt] = useState<any>("");
   const [Username, setUsername] = useState<any>("");
   const { id: idProduct } = useParams();
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    register,
-    setValue,
-    formState: { errors },
-  } = useForm<FormValues>({
+  const { control, handleSubmit, reset, setValue } = useForm<FormValues>({
     mode: "all",
     defaultValues: {
       comment: "",
@@ -172,6 +165,7 @@ export default function RatingMap(props: Props) {
       {props.rateAndcomment?.Rating ? (
         props.rateAndcomment.Rating.length > 0 ? (
           props.rateAndcomment?.Rating.map((rating) => {
+            console.log("rating", rating);
             return (
               <>
                 <div
@@ -245,6 +239,10 @@ export default function RatingMap(props: Props) {
                           </p>
                         </div>
                         {/* end rating */}
+                        {/* <p className="text-[#7A828A] text-xs font-medium mt-1">
+                          Phân loại: {props.first?.productDetail.} -{" "}
+                          {e.fK_attributee?.size}
+                        </p> */}
                       </div>{" "}
                       {/* end thong tin users */}
                     </div>
