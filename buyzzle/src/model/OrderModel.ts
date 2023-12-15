@@ -64,8 +64,10 @@ export enum StatusOrder {
 }
 
 export interface UpdateQuantityModal {
-  attributeId: number;
-  soluong: number;
+  productId: number;
+  attributeId?: number;
+  soluong?: number;
+  quantity?: number;
 }
 export interface User {
   name: string;

@@ -64,7 +64,6 @@ export default function ShippingPage() {
     const selectedButton = updatedButtons.find((btn) => btn.id === id);
 
     if (selectedButton && selectedButton.id !== -1) {
-   
       setOrderAPI({ ...orderAPI, status: selectedButton.id, keyword: "" });
     } else {
       setOrderAPI({ ...orderAPI, status: null, keyword: "" });
@@ -89,14 +88,12 @@ export default function ShippingPage() {
   useEffect(() => {
     let user = secureLocalStorage.getItem("shippername");
     if (user == null) {
-     
       window.location.href = "/shipping/loginShipper";
     }
   }, []);
   const getOrder = async () => {
     await orderControllers.getOrderOfShipping(orderAPI).then((res) => {
       setOrder(res);
-    
     });
   };
 
@@ -257,16 +254,6 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                   </p>
                                 </div>
                               )}
-
-                              {/* <div className=" border-r-2 border-[#4C4C4C] mx-2"></div>
-                                             <div className="flex items-center gap-2">
-                                                <p className="text-[#4C4C4C] font-bold text-sm">
-                                                   Mã vận đơn:
-                                                </p>
-                                                <p className="text-[#EA4B48] font-bold text-sm">
-                                                   SPXR24
-                                                </p>
-                                             </div> */}
                             </div>
                           </div>
                         </div>
@@ -279,10 +266,6 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                               </p>
                             </div>
                           </div>
-                          {/* end Select box  */}
-                          {/* <div className="badge badge-xs badge-error py-3 px-5">
-                          <p className="font-bold text-xs text-white ">Mới</p>
-                        </div> */}
                         </div>
                         <div className="grid grid-cols-2 mt-4 ">
                           {e.OrderDetail.map((items) => {
@@ -310,6 +293,10 @@ shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px
                                         <span className="text-[#4C4C4C]">
                                           x{items.quantity}
                                         </span>
+                                      </p>
+                                      <p className="text-[#7A828A] text-xs font-medium mt-1">
+                                        Phân loại: {items.fK_attributee?.color}{" "}
+                                        - {items.fK_attributee?.size}
                                       </p>
                                     </div>
                                   </div>

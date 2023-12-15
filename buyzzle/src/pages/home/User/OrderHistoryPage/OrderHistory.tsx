@@ -129,6 +129,7 @@ export default function OrderHistory() {
     await orderControllers
       .getOrderOfUser(orderAPI.page!, orderAPI.status!)
       .then((res) => {
+        console.log("🚀 ~ file: OrderHistory.tsx:132 ~ .then ~ res:", res);
         setOrder(res);
       });
   };
@@ -359,6 +360,10 @@ export default function OrderHistory() {
                               </thead>
                               <tbody>
                                 {e.OrderDetail.map((element) => {
+                                  console.log(
+                                    "🚀 ~ file: OrderHistory.tsx:362 ~ {e.OrderDetail.map ~ element:",
+                                    element
+                                  );
                                   return (
                                     <>
                                       <tr className="border-b dark:border-[#E0E0E0] text-center">
@@ -370,13 +375,16 @@ export default function OrderHistory() {
                                                    "
                                             alt="imgProduct"
                                           />
-                                          {/* <QuantityHistory />
-                                                               <p className="text-[#4C4C4C] text-base font-medium max-lg:text-sm">
-                                                                  +2
-                                                               </p> */}
-                                          <p className="text-[#4C4C4C] text-base font-medium max-lg:text-sm">
-                                            {element.name}
-                                          </p>
+                                          <div>
+                                            <p className="text-[#4C4C4C] text-base font-medium max-lg:text-sm">
+                                              {element.name}
+                                            </p>
+                                            <p className="text-[#7A828A] text-xs font-medium mt-1">
+                                              Phân loại:{" "}
+                                              {element.fK_attributee?.color} -{" "}
+                                              {element.fK_attributee?.size}
+                                            </p>
+                                          </div>
                                         </td>
                                         <td className="whitespace-nowrap  px-6 py-4">
                                           {numberFormat(element.price)}

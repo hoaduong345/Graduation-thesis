@@ -106,6 +106,7 @@ const getCartItems = async (line_items, object, metadata) => {
                 price: element.price.unit_amount,
                 quantity: element.quantity,
                 total: element.price.unit_amount * element.quantity,
+                attributeID: element.atributesId,
             });
 
             if (cartItems.length === line_items?.data.length) {
@@ -130,18 +131,18 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                 let listProductQuantity = [];
                 orderItems.cartItems.map((element) => {
                     listProductQuantity.push({
-                        productId: element.productId,
-                        quantity: element.quantity,
-                    })
-                })
+                        attributeId: element.atributesId,
+                        soluong: element.quantity,
+                    });
+                });
 
                 await axios
                     .post('http://localhost:5000/buyzzle/order', { order: orderItems })
                     .then(() => {
                         orderItems.cartItems.map((e) => {
-                            return axios.post(`http://localhost:5000/buyzzle/cart/removeOnStripe/${e.productId}`, {
+                            return axios.post(`http://localhost:5000/buyzzle/cart/removeOnStripe/${e.atributesId}`, {
                                 userId: parseInt(iduser.metadata.idUser),
-                                productId: e.productId,
+                                atributesId: e.atributesId,
                             });
                         });
                     })
@@ -156,7 +157,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                             });
                         }
                     })
-                    .catch((err) => { });
+                    .catch((err) => {});
                 break;
         }
         response.json({ received: true });

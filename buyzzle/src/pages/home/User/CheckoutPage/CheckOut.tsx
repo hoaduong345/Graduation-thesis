@@ -268,7 +268,7 @@ export default function CheckOut() {
     let totalCart = 0;
     for (let i = 0; i < listLocalCart.length; i++) {
       const element = listLocalCart[i];
-      totalCart += element.quantity * element.product.sellingPrice;
+      totalCart += element.quantity! * element.product?.sellingPrice!;
     }
     return totalCart;
   };
@@ -669,12 +669,12 @@ export default function CheckOut() {
                             <div className="col-span-2 text-sm flex gap-4 items-center">
                               <img
                                 className="w-[70px] h-[70px] object-contain"
-                                src={e.product.ProductImage[0].url}
+                                src={e.product!.ProductImage[0].url}
                                 alt=""
                               />
                               <div>
                                 <p className="text-base text-[#393939] max-[870px]:text-[13px]">
-                                  {e.product.name}
+                                  {e.product!.name}
                                 </p>
                                 <p className="text-sm text-[#1A1A1A] max-[870px]:text-[13px]">
                                   SL:{" "}
@@ -683,23 +683,23 @@ export default function CheckOut() {
                                   </span>
                                 </p>
                                 <p className="text-[#7A828A] text-xs font-medium mt-2">
-                                  Phân loại: {e.atributes_fk.color} -{" "}
-                                  {e.atributes_fk.size}
+                                  Phân loại: {e.atributes_fk!.color} -{" "}
+                                  {e.atributes_fk!.size}
                                 </p>
                               </div>
                             </div>
                             <div className="col-span-1 flex gap-2 justify-around items-center">
                               <p className="font-medium text-[#7A828A] text-sm line-through max-[870px]:text-[13px]">
-                                {numberFormat(e.product.price)}
+                                {numberFormat(e.product!.price)}
                               </p>
                               <p className="font-medium text-[#1A1A1A] text-base max-[870px]:text-[13px]">
-                                {numberFormat(e.product.sellingPrice)}
+                                {numberFormat(e.product!.sellingPrice)}
                               </p>
                             </div>
                             <div className="col-span-1">
                               <p className="font-medium text-[#EA4B48] text-base text-center max-[870px]:text-[13px]">
                                 {numberFormat(
-                                  e.quantity * e.product.sellingPrice
+                                  e.quantity! * e.product!.sellingPrice
                                 )}
                               </p>
                             </div>

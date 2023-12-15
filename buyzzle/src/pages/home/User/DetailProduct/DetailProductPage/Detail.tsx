@@ -209,7 +209,7 @@ export default function Detail() {
             className="flex items-center w-[268px] rounded-md h-[58px] hover:bg-[#FFEAE9] transition duration-150 border-[#FFAAAF] border-[1px] justify-evenly cursor-pointer"
             onClick={() =>
               addCart({
-                productId: Number(id),
+                attributeId: Number(id),
                 quantity: quantity,
               })
             }
