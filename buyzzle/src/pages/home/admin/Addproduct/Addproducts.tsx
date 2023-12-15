@@ -2,7 +2,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
-import { Controller, useForm, useFieldArray } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { toast } from "react-toastify";
@@ -12,23 +12,13 @@ import { appConfig } from "../../../../configsEnv";
 import { categoryController } from "../../../../controllers/CategoryController";
 import { storage } from "../../../../firebase/Config";
 import Loading from "../../../../helper/Loading/Loading";
+import { toastError } from "../../../../helper/Toast/Error";
 import { CategoryModal } from "../../../../model/CategoryModel";
+import { FormValues } from "../EditProduct/EditProductMap";
 import Back from "../assets/TSX/Back";
 import UploadIMG from "../assets/TSX/UploadIMG";
-import { toastError } from "../../../../helper/Toast/Error";
 import Attribute from "./Attribute";
 
-export type FormValues = {
-  id: number;
-  productName: string;
-  productPrice: number;
-  productDesc: string;
-  productImage: string;
-  productDiscount: number;
-  categoryID: number;
-  subCategoryID: Number;
-  attributes: Attribute[];
-};
 export interface Attribute {
   size: string;
   color: string;
@@ -106,7 +96,7 @@ export default function Addproducts() {
     setUrl([]);
   };
   // Tạo fuction handle thêm sản phẩm.
-  const handleAddproduct = async (data: FormValues) => {
+const handleAddproduct = async (data: FormValues) => {
     if (url.length == 0) {
       toast.error("Hãy chọn hình");
       return;
@@ -116,15 +106,18 @@ export default function Addproducts() {
       return;
     }
     const _data = {
-      name: data.productName,
-      price: data.productPrice,
-      description: data.productDesc,
-      discount: data.productDiscount,
+      name: data.name,
+      price: data.price,
+      description: data.description,
+      discount: data.discount,
       categoryID: data.categoryID,
       attributes: data.attributes,
-      subcategoriesID: data.subCategoryID,
+      subcategoriesID: data.subcateId,
     };
-    console.log(_data);
+    console.log(
+      "🚀 ~ file: Addproducts.tsx:127 ~ handleAddproduct ~ _data:",
+      _data
+    );
     try {
       const response = await axios.post(
         `${appConfig.apiUrl}/addproduct`,
@@ -172,13 +165,15 @@ export default function Addproducts() {
   } = useForm<FormValues>({
     mode: "all",
     defaultValues: {
-      productName: "",
+      name: "",
       categoryID: 0,
-      subCategoryID: 0,
-      productDesc: "",
-      productImage: "",
-      productPrice: 1,
-      productDiscount: 1,
+      subcateId: 0,
+      description: "",
+      images: {
+        url: "",
+      },
+      price: 1,
+      discount: 1,
       attributes: [
         {
           size: "",
@@ -195,6 +190,7 @@ export default function Addproducts() {
       required: true,
     },
   });
+
   console.log("watch().attributes", watch().attributes);
   const isDisabled = !(isValid && isDirty);
 
@@ -217,7 +213,7 @@ export default function Addproducts() {
       window.location.href = "/admin/loginadmin";
     }
   }, []);
-  return (
+return (
     <Container>
       <div className="body-addproduct container mx-auto">
         {/* back */}
@@ -256,7 +252,7 @@ export default function Addproducts() {
                   >
                     <Controller
                       control={control}
-                      name="productName"
+                      name="name"
                       rules={{
                         required: {
                           value: true,
@@ -283,8 +279,8 @@ export default function Addproducts() {
                                                         rounded-[6px] px-[10px] py-[12px] w-[100%]
                                                         max-xl:text-sm max-lg:text-[13px]
                                             ${
-                                              !!errors.productName
-                                                ? "border-[2px] border-red-900"
+                                              !!errors.name
+? "border-[2px] border-red-900"
                                                 : "border-[1px] border-[#FFAAAF]"
                                             }`}
                             placeholder="Nhập tiêu đề sản phẩm"
@@ -295,9 +291,9 @@ export default function Addproducts() {
                               field.onChange(value.replace(reg, ""));
                             }}
                           />
-                          {!!errors.productName && (
+                          {!!errors.name && (
                             <p className="text-red-700 mt-2">
-                              {errors.productName.message}
+                              {errors.name.message}
                             </p>
                           )}
                         </>
@@ -305,7 +301,7 @@ export default function Addproducts() {
                     />
                     <Controller
                       control={control}
-                      name="productDesc"
+                      name="description"
                       rules={{
                         required: {
                           value: true,
@@ -345,7 +341,7 @@ export default function Addproducts() {
                                 {
                                   text: "Responsive - 1x1",
                                   value: "tiny-pageembed--1by1",
-                                },
+},
                               ],
 
                               plugins: [
@@ -408,7 +404,7 @@ export default function Addproducts() {
                       onClick={handleSubmit((data: any) => {
                         handleAddproduct(data);
                       })}
-                      className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
+className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
                                         ${
                                           isDisabled
                                             ? "cursor-not-allowed"
@@ -444,7 +440,7 @@ export default function Addproducts() {
                   >
                     <Controller
                       control={control}
-                      name="productImage"
+                      name="images.url"
                       render={({}) => (
                         <>
                           <div className="flex max-[1300px]:gap-3">
@@ -466,17 +462,14 @@ export default function Addproducts() {
                                     onChange={(e: any) =>
                                       loadImageFile(e.target.files)
                                     }
-                                    id="images"
+id="images"
                                     multiple
                                     className="hidden "
                                   />
                                   <UploadIMG />
                                   <div id="images" className="text-center mt-2">
                                     <p className="text-[#5D5FEF] text-center -tracking-tighter font-bold max-[1024px]:text-xs max-[768px]:text-[10px]">
-                                      Click to upload
-                                      <p className="text-[#1A1A1A] font-normal text-sm tracking-widest max-[1024px]:text-[11px] max-[768px]:text-[10px]">
-                                        or drag and drop
-                                      </p>
+                                      Tải hình ảnh lên
                                     </p>
                                   </div>
                                 </div>
@@ -525,7 +518,7 @@ export default function Addproducts() {
 
                 {/* Giá */}
                 <div className="mt-7">
-                  <span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
+<span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
                     Giá & Giảm Giá
                   </span>
                   {/* card */}
@@ -536,7 +529,7 @@ export default function Addproducts() {
                     <div className="grid grid-cols-6 gap-5">
                       <Controller
                         control={control}
-                        name="productPrice"
+                        name="price"
                         rules={{
                           required: {
                             value: true,
@@ -561,7 +554,7 @@ export default function Addproducts() {
                               <div
                                 className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                                             ${
-                                                              !!errors.productPrice
+                                                              !!errors.price
                                                                 ? "border-[1px] border-red-900"
                                                                 : "border-[1px] border-[#FFAAAF]"
                                                             }
@@ -577,14 +570,14 @@ export default function Addproducts() {
                                     const value = e.target.value;
                                     field.onChange(value.replace(reg, ""));
                                   }}
-                                />
+/>
                                 <p className="text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px]  max-lg:text-[13px]">
                                   VNĐ
                                 </p>
                               </div>
-                              {errors.productPrice && (
+                              {errors.price && (
                                 <p className="text-red-700 mt-2">
-                                  {errors.productPrice.message}
+                                  {errors.price.message}
                                 </p>
                               )}
                             </div>
@@ -593,7 +586,7 @@ export default function Addproducts() {
                       />
                       <Controller
                         control={control}
-                        name="productDiscount"
+                        name="discount"
                         rules={{
                           required: {
                             value: true,
@@ -618,7 +611,7 @@ export default function Addproducts() {
                               <div
                                 className={`flex justify-between items-center rounded-[6px] px-[15px] py-[12px]
                                                             ${
-                                                              !!errors.productDiscount
+                                                              !!errors.discount
                                                                 ? "border-[1px] border-red-900"
                                                                 : "border-[1px] border-[#FFAAAF]"
                                                             }
@@ -633,16 +626,16 @@ export default function Addproducts() {
                                   onChange={(e) => {
                                     const reg = /[a-zA-z]/g;
                                     const value = e.target.value;
-                                    field.onChange(value.replace(reg, ""));
+field.onChange(value.replace(reg, ""));
                                   }}
                                 />
                                 <p className="text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px] max-lg:text-[13px]">
                                   %
                                 </p>
                               </div>
-                              {errors.productDiscount && (
+                              {errors.discount && (
                                 <p className="text-red-700 mt-2">
-                                  {errors.productDiscount.message}
+                                  {errors.discount.message}
                                 </p>
                               )}
                             </div>
@@ -696,7 +689,7 @@ export default function Addproducts() {
                               })}
                             </select>
                           </div>
-                          {!!errors.categoryID && (
+{!!errors.categoryID && (
                             <p className="text-red-700 mt-2">
                               {errors.categoryID.message}
                             </p>
@@ -707,7 +700,7 @@ export default function Addproducts() {
 
                     <Controller
                       control={control}
-                      name="subCategoryID"
+                      name="subcateId"
                       rules={{
                         required: {
                           value: true,
@@ -723,7 +716,7 @@ export default function Addproducts() {
                           {/* Dropdown */}
                           <div className=" w-[100%] flex border-[1px] border-[#FFAAAF] rounded-[6px] items-center">
                             <select
-                              value={field.value.toString()}
+                              value={field.value!.toString()}
                               onChange={(e) => {
                                 const reg = /[]/;
                                 const value = e.target.value;
@@ -756,9 +749,9 @@ export default function Addproducts() {
                               })}
                             </select>
                           </div>
-                          {!!errors.subCategoryID && (
+                          {!!errors.subcateId && (
                             <p className="text-red-700 mt-2">
-                              {errors.subCategoryID.message}
+{errors.subcateId.message}
                             </p>
                           )}
                         </>
