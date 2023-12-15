@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Products } from "../../filterPage/FiltersPage";
+import { Products } from "../../FilterPage/FiltersPage";
 
 export default function Description() {
   const [first, setfirst] = useState<Products | undefined>(undefined);
