@@ -49,6 +49,7 @@ export default function useCartContext() {
           };
           handleChecked(true, _buynowChecked);
           navigate("/cart");
+          setIdAttribute(0)
           return;
         } else {
           if (productChecked.length > 0) {
