@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../../assets/TS";
 import Map from "../../../../../assets/TSX/Map";
 import NoteOrderAdmin from "../../../../../assets/TSX/NoteOrderAdmin";
+import Container from "../../../../../components/container/Container";
 import { orderControllers } from "../../../../../controllers/OrderControllers";
 import DialogAbortOrder from "../../../../../helper/Dialog/DialogAbortOrder";
 import { numberFormat } from "../../../../../helper/Format";
@@ -12,13 +12,12 @@ import {
   OrderModel,
   UpdateQuantityModal,
 } from "../../../../../model/OrderModel";
-import Container from "../../../../../components/container/Container";
+import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import Back from "../../assets/TSX/Back";
 import Paymethod from "../../assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../../assets/TSX/PhoneOrderAdmin";
 import PrintOrder from "../../assets/TSX/PrintOrder";
 import { dateOrder, timeOrder } from "./OrderManagement";
-import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 
 export default function DetailOrderManagement() {
   const { id } = useParams();
@@ -46,8 +45,9 @@ export default function DetailOrderManagement() {
     let listProductQuantity: UpdateQuantityModal[] = [];
     order.OrderDetail.map((element) => {
       listProductQuantity.push({
-        attributeId: element.productId!,
-        quantity: element.quantity,
+        attributeId: element.attributeID,
+        soluong: element.quantity,
+        productId: element.productId,
       });
     });
 
@@ -201,6 +201,10 @@ export default function DetailOrderManagement() {
                                     <span className="text-[#4C4C4C]">
                                       x{e.quantity}
                                     </span>
+                                  </p>
+                                  <p className="text-[#7A828A] text-xs font-medium mt-1">
+                                    Phân loại: {e.fK_attributee?.color} -{" "}
+                                    {e.fK_attributee?.size}
                                   </p>
                                 </div>
                               </div>

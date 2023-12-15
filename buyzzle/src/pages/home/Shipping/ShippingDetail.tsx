@@ -37,8 +37,8 @@ export default function ShippingDetail() {
     let listProductQuantity: UpdateQuantityModal[] = [];
     order.OrderDetail.map((element) => {
       listProductQuantity.push({
-        attributeId: element.productId!,
-        quantity: element.quantity,
+        quantity: element.quantity!,
+        productId: element.productId,
       });
     });
 
@@ -144,6 +144,10 @@ export default function ShippingDetail() {
                                     <span className="text-[#4C4C4C]">
                                       x{e.quantity}
                                     </span>
+                                  </p>
+                                  <p className="text-[#7A828A] text-xs font-medium mt-1">
+                                    Phân loại: {e.fK_attributee?.color} -{" "}
+                                    {e.fK_attributee?.size}
                                   </p>
                                 </div>
                               </div>

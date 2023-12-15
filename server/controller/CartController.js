@@ -17,21 +17,16 @@ const CartController = {
                 cart.subtotal += cart.item.price * quantity;
                 return res.status(201).json(cart);
             }
-
-            const product = await prisma.product.findFirst({
-                where: { id: productId },
-            });
             const attributes = await prisma.attribute.findFirst({
                 where: {
-                    productId: productId,
                     id: atributes,
                 },
             });
             if (!attributes) return res.status(404).send('Product không tồn tại');
-            const existingCartItem = cart.item.find((item) => item.productid === productId);
+            const existingCartItem = cart.item.find((item) => item.atributesId === atributes);
 
             if (existingCartItem) {
-                if (existingCartItem.quantity + quantity > product.quantity) {
+                if (existingCartItem.quantity + quantity > attributes.soluong) {
                     return res
                         .status(500)
                         .json(
@@ -39,7 +34,7 @@ const CartController = {
                         );
                 }
             } else {
-                if (quantity > product.quantity) {
+                if (quantity > attributes.soluong) {
                     return res
                         .status(500)
                         .json(
@@ -320,6 +315,7 @@ const CartController = {
                                     discount: true,
                                     sellingPrice: true,
                                     quantity: true,
+                                    id: true,
                                 },
                             },
                         },
@@ -380,6 +376,7 @@ const CartController = {
                                     discount: true,
                                     sellingPrice: true,
                                     quantity: true,
+                                    id: true,
                                 },
                             },
                         },
@@ -425,6 +422,7 @@ const CartController = {
                                         discount: true,
                                         sellingPrice: true,
                                         quantity: true,
+                                        id: true,
                                     },
                                 },
                             },

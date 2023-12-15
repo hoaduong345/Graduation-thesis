@@ -13,14 +13,14 @@ import { PaymentMethod } from "./CheckOut";
 
 export interface StripePayment {
   cartItems: CartItem[];
-  voucher: VoucherModel;
-  method: PaymentMethod;
-  idUser: number;
-  note: string;
-  invoice: boolean;
-  name: string;
-  address: string;
-  phoneNumber: string;
+  voucher?: VoucherModel;
+  method?: PaymentMethod;
+  idUser?: number;
+  note?: string;
+  invoice?: boolean;
+  name?: string;
+  address?: string;
+  phoneNumber?: string;
 }
 
 export default function PaymentBtn(props: StripePayment) {
@@ -47,14 +47,14 @@ export default function PaymentBtn(props: StripePayment) {
               .createPayment({
                 cartItems: cartItems,
                 method: method,
-                discount: voucher.discount,
+                discount: voucher!.discount,
                 idUser: Number(idUser),
                 note: note,
                 invoice: invoice,
                 name: name,
                 address: address,
                 phoneNumber: phoneNumber,
-                voucherId: voucher.id,
+                voucherId: voucher!.id,
               })
               .then((res) => {
                 if (res.data.url) {
@@ -70,19 +70,20 @@ export default function PaymentBtn(props: StripePayment) {
           let subtotal = 0;
 
           cartItems?.map((e) => {
-            subtotal += e.product.sellingPrice * e.quantity;
+            subtotal += e.product!.sellingPrice * e.quantity!;
             item.push({
-              productId: e.product.id,
-              name: e.product.name,
-              image: e.product.ProductImage[0].url,
-              price: e.product.sellingPrice,
-              quantity: e.quantity,
-              total: e.product.sellingPrice * e.quantity,
-              attributeID: e.atributesId,
+              productId: e.product?.id!,
+              name: e.product!.name,
+              image: e.product!.ProductImage[0].url,
+              price: e.product!.sellingPrice,
+              quantity: e.quantity!,
+              total: e.product!.sellingPrice * e.quantity!,
+              attributeID: e.atributesId!,
             });
             listProductQuantity.push({
-              attributeId: e.atributesId,
-              soluong: e.atributes_fk.soluong,
+              attributeId: e.atributesId!,
+              soluong: e.quantity!,
+              productId: e.productid!,
             });
           });
           let order = {
@@ -91,15 +92,19 @@ export default function PaymentBtn(props: StripePayment) {
             cartItems: item,
             amount_subtotal: subtotal,
             shipping: 30000,
-            discount: subtotal * (voucher.discount / 100),
+            discount: subtotal * (voucher!.discount / 100),
             amount_total:
-              subtotal - subtotal * (voucher.discount / 100) + 30000,
+              subtotal - subtotal * (voucher!.discount / 100) + 30000,
             note: note,
             invoice: invoice,
             name: name,
             address: address,
             phoneNumber: phoneNumber,
           };
+          console.log(
+            "🚀 ~ file: PaymentBtn.tsx:104 ~ handleCheckout ~ order:",
+            order
+          );
           setLoading(true);
           setTimeout(async () => {
             await orderControllers
@@ -114,8 +119,8 @@ export default function PaymentBtn(props: StripePayment) {
                 });
               })
               .then(() => {
-                if (voucher.id != 0) {
-                  voucherControllers.useVoucher(Number(idUser), voucher.id);
+                if (voucher!.id != 0) {
+                  voucherControllers.useVoucher(Number(idUser), voucher!.id);
                 }
               })
               .then(() => {

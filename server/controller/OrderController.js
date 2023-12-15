@@ -107,11 +107,14 @@ const OderController = {
                     status: sortStatus,
                 },
                 include: {
-                    OrderDetail: true,
-                    fK_attributee: {
-                        select: {
-                            color: true,
-                            size: true,
+                    OrderDetail: {
+                        include: {
+                            fK_attributee: {
+                                select: {
+                                    color: true,
+                                    size: true,
+                                },
+                            },
                         },
                     },
                 },
@@ -146,7 +149,16 @@ const OderController = {
                 skip: startIndex,
                 take: limit,
                 include: {
-                    OrderDetail: true,
+                    OrderDetail: {
+                        include: {
+                            fK_attributee: {
+                                select: {
+                                    color: true,
+                                    size: true,
+                                },
+                            },
+                        },
+                    },
                 },
                 orderBy: {
                     id: 'desc',
@@ -255,25 +267,29 @@ const OderController = {
     quantityCreateOrder: async (req, res) => {
         try {
             const data = req.body;
+            console.log('🚀 ~ file: OrderController.js:258 ~ quantityCreateOrder: ~ data:', data);
+
             await Promise.all(
                 data?.map(async (element) => {
-                    const currentProduct = await prisma.product.findUnique({
+                    const quantityReduction = parseInt(element.soluong);
+                    await prisma.attribute.update({
                         where: {
-                            id: parseInt(element.productId),
-                        },
-                        include: {
-                            attributes: true, // Bao gồm thuộc tính của sản phẩm
-                          },
-                    });
-
-                    const newQuantity = currentProduct.quantity - parseInt(element.quantity);
-
-                    await prisma.product.update({
-                        where: {
-                            id: parseInt(element.productId),
+                            id: parseInt(element.attributeId),
                         },
                         data: {
-                            quantity: newQuantity,
+                            soluong: {
+                                decrement: quantityReduction,
+                            },
+                        },
+                    });
+                    await prisma.product.update({
+                        where: {
+                            id: element.productId,
+                        },
+                        data: {
+                            quantity: {
+                                decrement: quantityReduction,
+                            },
                         },
                     });
                     if (currentProduct.attributes) {
@@ -306,20 +322,25 @@ const OderController = {
             const data = req.body;
             await Promise.all(
                 data?.map(async (element) => {
-                    const currentProduct = await prisma.product.findUnique({
+                    const quantityReduction = parseInt(element.soluong);
+                    await prisma.attribute.update({
                         where: {
-                            id: parseInt(element.productId),
-                        },
-                    });
-
-                    const newQuantity = currentProduct.quantity + parseInt(element.quantity);
-
-                    await prisma.product.update({
-                        where: {
-                            id: parseInt(element.productId),
+                            id: parseInt(element.attributeId),
                         },
                         data: {
-                            quantity: newQuantity,
+                            soluong: {
+                                increment: quantityReduction,
+                            },
+                        },
+                    });
+                    await prisma.product.update({
+                        where: {
+                            id: element.productId,
+                        },
+                        data: {
+                            quantity: {
+                                increment: quantityReduction,
+                            },
                         },
                     });
                 })
@@ -337,25 +358,20 @@ const OderController = {
 
             await Promise.all(
                 data.map(async (element) => {
-                    const currentProduct = await prisma.product.findUnique({
-                        where: {
-                            id: parseInt(element.productId),
-                        },
-                    });
-
-                    const newSoldcount = currentProduct.soldcount + parseInt(element.quantity);
+                    const newSoldcount = parseInt(element.quantity);
 
                     await prisma.product.update({
                         where: {
                             id: parseInt(element.productId),
                         },
                         data: {
-                            soldcount: newSoldcount,
+                            soldcount: {
+                                increment: newSoldcount,
+                            },
                         },
                     });
                 })
             );
-
             res.status(200).json('Cộng đã bán thành công');
         } catch (error) {
             res.status(500).json(error.message);

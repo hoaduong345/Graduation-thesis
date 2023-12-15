@@ -34,7 +34,7 @@ export default function useCartContext() {
         if (type) {
           setProductChecked([]);
           const buynowChecked = res.data.item.find(
-            (e) => e.atributes_fk.id == data.atributes
+            (e) => e.atributesId == data.atributes
           );
           const _buynowChecked: CartItem = {
             id: buynowChecked?.id!,
@@ -49,23 +49,23 @@ export default function useCartContext() {
           };
           handleChecked(true, _buynowChecked);
           navigate("/cart");
+          setIdAttribute(0)
           return;
         } else {
           if (productChecked.length > 0) {
             const isCheck = productChecked.find(
-              (item) => item.atributes_fk.id == idAttribute
+              (item) => item.atributesId == idAttribute
             );
             if (isCheck) {
               const indexProduct = productChecked.findIndex(
-                (item) => item.atributes_fk.id === data.atributes
+                (item) => item.atributesId === data.atributes
               );
               const _productChecked = [...productChecked];
-              _productChecked[indexProduct].quantity += productQuantities;
+              _productChecked[indexProduct].quantity! += productQuantities;
               setProductChecked(_productChecked);
             }
           }
         }
-
         toastSuccess("Thêm thành công");
       })
       .catch((err) => {
@@ -85,10 +85,11 @@ export default function useCartContext() {
         );
         setCarts(res.data);
         res.data.item.map((e) => {
-          if (e.quantity > e.product.quantity) {
+          if (e.quantity! > e.atributes_fk.soluong) {
             listProductQuantity.push({
-              attributeId: e.atributes_fk.id!,
-              soluong: e.atributes_fk.soluong,
+              attributeId: e.atributes_fk?.id!,
+              soluong: e.atributes_fk?.soluong!,
+              productId: e.productid!,
             });
           }
         });
@@ -119,7 +120,9 @@ export default function useCartContext() {
       await getCart();
       await updateQuantityCart().then((res) => {
         const listCheckout = res!.filter((e) =>
-          productChecked.some((ele) => ele.atributes_fk.id == e.atributes_fk.id)
+          productChecked.some(
+            (ele) => ele.atributes_fk?.id == e.atributes_fk?.id
+          )
         );
         sessionStorage.setItem("cartBuyzzle", JSON.stringify(listCheckout));
         setProductChecked(listCheckout);
@@ -149,7 +152,7 @@ export default function useCartContext() {
       closeModal(idItemCart);
       const _productChecked = [...productChecked];
       const Product = _productChecked.filter(
-        (item) => item.atributes_fk.id !== id
+        (item) => item.atributes_fk?.id !== id
       );
       setProductChecked(Product);
     });
@@ -157,7 +160,7 @@ export default function useCartContext() {
   const removeAllCart = () => {
     productChecked.length > 0 &&
       productChecked.map((e) => {
-        cartControllers.removeItemCart(e.atributesId).then(() => {
+        cartControllers.removeItemCart(e.atributesId!).then(() => {
           getCart();
           setProductChecked([]);
           closeModal(idAllCart);
@@ -165,18 +168,14 @@ export default function useCartContext() {
       });
   };
   const handleChecked = (checked: boolean, item: CartItem) => {
-    console.log(
-      "🚀 ~ file: CartContextProvider.tsx:169 ~ handleChecked ~ item:",
-      item
-    );
     if (checked) {
-      if (item.product.quantity > 0) {
+      if (item.product!.quantity > 0) {
         setProductChecked((prev) => [...prev, item]);
       }
     } else {
       let cloneProduct = [...productChecked];
       let products = cloneProduct.filter((e) => {
-        return e.atributes_fk.id !== item.atributes_fk.id;
+        return e.atributesId !== item.atributesId;
       });
       setProductChecked(products);
     }
