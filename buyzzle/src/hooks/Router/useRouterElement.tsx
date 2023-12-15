@@ -34,25 +34,26 @@ import User from "../../pages/home/admin/Management/User/User";
 import Shipper from "../../pages/home/admin/Management/Shipper/Shipper";
 import StatisticsPage from "../../pages/home/admin/Statistics/StatisticsPage";
 import Admin from "../../pages/home/admin/Management/Admin/Admin";
-import Logoes from "../../pages/home/Admin/Management/Logo/Logoes";
-import Banner from "../../pages/home/Admin/Management/Banner/Banner";
-import BannerHome from "../../pages/home/Admin/Management/Banner/BannerHome";
-import VouchersPage from "../../components/home/components/Voucher/VouchersPage";
-import LogoHome1 from "../../pages/home/Admin/Management/Logo/LogoHome1";
-import LogoDetail from "../../pages/home/Admin/Management/Logo/LogoDetail";
-import LogoHome from "../../pages/home/Admin/Management/Logo/LogoHome";
-import DieuKhoan from "../../pages/clause/Clause";
-import FiltersPage from "../../pages/home/User/FilterPage/FiltersPage";
-import DetailsProduct from "../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
-import Cart from "../../pages/home/User/CartPage/Cart";
-import OrderHistory from "../../pages/home/User/OrderHistoryPage/OrderHistory";
-import CheckOut from "../../pages/home/User/CheckoutPage/CheckOut";
-import OrderDetailPage from "../../pages/home/User/OrderDetail/OrderDetailPage";
-import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
-import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
-import RegisterShipper from "../../pages/home/Shipping/RegisterShipper/RegisterShipper";
-import LoginShipper from "../../pages/home/Shipping/LoginShipper/LoginShipper";
+
 import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
+import FiltersPage from "../../pages/home/User/filterPage/FiltersPage";
+import DieuKhoan from "../../pages/clause/Clause";
+import Cart from "../../pages/home/User/cartPage/Cart";
+import DetailsProduct from "../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
+import OrderHistory from "../../pages/home/User/orderHistoryPage/OrderHistory";
+import CheckOut from "../../pages/home/User/checkoutPage/CheckOut";
+import VouchersPage from "../../components/home/components/Voucher/VouchersPage";
+import FavoritePage from "../../pages/home/User/favoriteProducts/FavoritePage";
+import InvoicesPage from "../../pages/home/User/invoicesPage/InvoicesPage";
+import Logoes from "../../pages/home/admin/Management/Logo/Logoes";
+import LogoHome from "../../pages/home/admin/Management/Logo/LogoHome";
+import LogoHome1 from "../../pages/home/admin/Management/Logo/LogoHome1";
+import LogoDetail from "../../pages/home/admin/Management/Logo/LogoDetail";
+import Banner from "../../pages/home/admin/Management/Banner/Banner";
+import BannerHome from "../../pages/home/admin/Management/Banner/BannerHome";
+import RegisterShipper from "../../pages/home/Shipping/registerShipper/RegisterShipper";
+import LoginShipper from "../../pages/home/Shipping/loginShipper/LoginShipper";
+import OrderDetailPage from "../../pages/home/User/orderDetail/OrderDetailPage";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([

@@ -13,10 +13,10 @@ import {
 import { numberFormat } from "../../../../../helper/Format";
 import { OrderPanigation } from "../../../../../model/OrderModel";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
-import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 import SitebarAdmin from "../../Sitebar/Sitebar";
 import Calendar from "../../assets/TSX/calendar";
 import Excel from "../../assets/TSX/excel";
+import { getStatusOrder } from "../../../User/orderHistoryPage/OrderHistory";
 
 export const dateOrder = (date: Date) => {
   return moment(date).format("L");
