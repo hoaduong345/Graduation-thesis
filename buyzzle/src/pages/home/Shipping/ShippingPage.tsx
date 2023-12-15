@@ -19,7 +19,7 @@ import {
 } from "../admin/Management/Order/OrderManagement";
 import useThrottle from "@rooks/use-throttle";
 import secureLocalStorage from "react-secure-storage";
-import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../User/orderHistoryPage/OrderHistory";
 
 export default function ShippingPage() {
   const [order, setOrder] = useState<OrderPanigation>({} as OrderPanigation);

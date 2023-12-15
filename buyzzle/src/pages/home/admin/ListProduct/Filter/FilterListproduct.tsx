@@ -1,7 +1,6 @@
 import Slider from "rc-slider";
 import DeleteWhite from "../../assets/TSX/DeleteWhite";
 import {
-  RatingStar,
   SliderComponentProps,
 } from "../../../../../components/Sitebar/SitebarFilter";
 import FilterRateMap from "./FilterRateMap";

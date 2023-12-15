@@ -38,7 +38,7 @@ export default function Detail() {
         setfirst(detail.data);
       })
       .catch((error) => {
-        ("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
+        console.log(error);
       });
     useScroll();
   }, [id]);
