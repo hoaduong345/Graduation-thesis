@@ -148,7 +148,7 @@ export default function useNotificationContextAdmin() {
      
         setCountNotificationAdmin(res.count);
       })
-      .catch((err) => {
+      .catch(() => {
        
         return {};
       });

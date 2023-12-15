@@ -17,11 +17,11 @@ export type FormImage = {
   UserImage: string[];
 };
 export default function UserProfile() {
-  const [validUrl, setValidUrl] = useState(false);
+  const [, setValidUrl] = useState(false);
   const param = useParams();
 
 
-  const [id, setId] = useState<string>("11");
+  const [, setId] = useState<string>("11");
   const [sex, setSex] = useState<boolean>();
 
   const {

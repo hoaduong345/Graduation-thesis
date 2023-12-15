@@ -24,7 +24,7 @@ export default function AddCategory() {
 
           return response
         })
-        .then(data => {
+        .then(() => {
           getList()
           setCategory({ name: '', date: '', idcategory: 0 })
         })
@@ -38,7 +38,7 @@ export default function AddCategory() {
         .then(response => {
           return response
         })
-        .then(data => {
+        .then(() => {
           getList()
           setCategory({ name: '', date: '', idcategory: 0 })
         })
@@ -58,7 +58,7 @@ export default function AddCategory() {
 
           return response
         })
-        .then(data => {
+        .then(() => {
           getList()
         })
         .catch(error => {

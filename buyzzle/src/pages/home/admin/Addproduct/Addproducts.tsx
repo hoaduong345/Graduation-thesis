@@ -46,12 +46,9 @@ export default function Addproducts() {
   }, []);
 
   const getCategory = () => {
-    categoryController
-      .getAllCateAdmin()
-      .then((res) => {
-        setCategory(res.data);
-      })
-      
+    categoryController.getAllCateAdmin().then((res) => {
+      setCategory(res.data);
+    });
   };
 
   const delayIMG = () => {
@@ -127,10 +124,7 @@ export default function Addproducts() {
       attributes: data.attributes,
       subcategoriesID: data.subCategoryID,
     };
-    console.log(
-      "🚀 ~ file: Addproducts.tsx:127 ~ handleAddproduct ~ _data:",
-      _data
-    );
+    console.log(_data);
     try {
       const response = await axios.post(
         `${appConfig.apiUrl}/addproduct`,
@@ -174,7 +168,6 @@ export default function Addproducts() {
     handleSubmit,
     reset,
     watch,
-    setValue,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",

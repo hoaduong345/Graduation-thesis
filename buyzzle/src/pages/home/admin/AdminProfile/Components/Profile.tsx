@@ -26,14 +26,7 @@ export type FormImage = {
   idadmin: number;
   UserImage: string[];
 };
-type UserData1 = {
-  username: string;
-  name: string;
-  email: string;
-  sex: string;
-  phonenumber: string;
-  dateofbirth: string;
-};
+
 export default function UserProfile() {
   const [validUrl, setValidUrl] = useState<boolean>(false);
   const [CheckImageUrl, setCheckImageUrl] = useState<boolean>(false);
@@ -193,7 +186,7 @@ export default function UserProfile() {
     };
     
     await axios
-      .post(`${appConfigAdmin.apiUrl}/addimageadmin/`, urlImages).then((res)=>{
+      .post(`${appConfigAdmin.apiUrl}/addimageadmin/`, urlImages).then(()=>{
 
       })
     

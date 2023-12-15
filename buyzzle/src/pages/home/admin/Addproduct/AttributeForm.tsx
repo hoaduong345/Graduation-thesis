@@ -150,8 +150,6 @@ export default function AttributeForm(props: Form) {
                       placeholder="00.00"
                       value={field.value}
                       onChange={(e) => {
-                        const reg = /[^0-9]/g;
-                        const value = e.target.value;
                         field.onChange(e);
                       }}
                     />
