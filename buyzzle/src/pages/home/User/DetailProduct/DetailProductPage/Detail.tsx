@@ -27,7 +27,7 @@ export default function Detail() {
   const [quantity, setQuantity] = useState(1);
 
   const { id } = useParams();
-  console.log(id);
+
   useEffect(() => {
     axios
       .get(`${appConfig.apiUrl}/chitietproduct/${id}`)
@@ -38,7 +38,7 @@ export default function Detail() {
         setfirst(detail.data);
       })
       .catch((error) => {
-        console.log("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
+        ("🚀 ~ file: Detailproducts.tsx:63 ~ .then ~ error:", error);
       });
     useScroll();
   }, [id]);

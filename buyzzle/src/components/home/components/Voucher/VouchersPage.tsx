@@ -28,8 +28,8 @@ export default function VouchersPage() {
     voucherControllers
       .userSavedVoucher(id)
       .then((_) => {
-        getVoucher(); 
-        console.log("Login successfully");
+        getVoucher();  // if ((await response).status === 200) {
+      
         toast.success("Lưu voucher thành công", {
           position: "top-right",
           autoClose: 5000,
@@ -49,19 +49,15 @@ export default function VouchersPage() {
     }
   }, []);
   const CheckLogin = async () => {
-    // const user = localStorage.getItem("user");
     if (Logined == false) {
-      // setLogined(false);
       openModal(idAddAdmin);
     } else {
-      // setLogined(true);
-      // CheckToken();
-      // CheckRefreshToken();
+      setLogined(true);
     }
   };
   const {
     control,
-    handleSubmit,
+    handleSubmit, 
     reset,
     formState: { errors },
   } = useForm<LoginForm>({
@@ -69,10 +65,12 @@ export default function VouchersPage() {
   });
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
+   
     userController.Login(data).then((res) => {
+     
       const username = res.username;
       const accessToken = res.accessToken;
-      console.log(accessToken);
+     
       const UserData = { username };
       const Token = { accessToken };
       localStorage.setItem("idUser", JSON.stringify(res.id));
@@ -106,6 +104,7 @@ export default function VouchersPage() {
     if (modal) {
       modal.close();
     }
+   
   };
 
   return (

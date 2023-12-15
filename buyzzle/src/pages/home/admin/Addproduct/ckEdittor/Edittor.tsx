@@ -7,7 +7,6 @@ type Props = {
 const Edittor = (props: Props) => {
 
   const editorRef = useRef<any>(null);
-
   return (
     <>
       <Editor

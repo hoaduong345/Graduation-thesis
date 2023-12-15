@@ -42,7 +42,6 @@ export default function User() {
       })
       .then((res: any) => {
         setUsers(res);
-        console.log("Test" + JSON.stringify(res));
       });
   };
 
@@ -64,7 +63,6 @@ export default function User() {
       .deleteUser(id)
       .then((res) => {
         toast.success("Xóa thành công !");
-        console.log("res:" + res);
         getAllUserData();
       })
       .catch(() => {

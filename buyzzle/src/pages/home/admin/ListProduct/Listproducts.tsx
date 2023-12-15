@@ -147,17 +147,15 @@ export default function ListproductsAdmin() {
 
   const handleQuantityRangeChange = (quantity: [number, number]) => {
     setSliderQuantityValues(quantity);
-    console.log("Quantity Range:", quantity);
+   
   };
 
   const handlePriceRangeChange = (price: [number, number]) => {
     setSliderPriceValues(price);
-    console.log("price Range:", price);
   };
 
   const handlePurchaseRangeChange = (purchase: [number, number]) => {
     setSliderPurchaseValues(purchase);
-    console.log("price Range:", purchase);
   };
 
   const handleFillerStar = async (Rate: number) => {

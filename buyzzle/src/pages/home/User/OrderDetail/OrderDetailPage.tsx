@@ -78,11 +78,11 @@ export default function OrderDetailPage() {
   };
 
   const addImages = async (url: string, id: number) => {
-    console.log(url, id);
+
 
     await ratingAndCommentController
       .addImagesComment(url, id)
-      .then((_) => console.log("thanh cong"));
+     
   };
 
   const resetImages = () => {
@@ -133,7 +133,6 @@ export default function OrderDetailPage() {
   const handleRatingClick = (rating: number) => {
     setValue("ratingValue", rating);
     setSelectedRating(rating);
-    console.log(`Sao Sao Sao Sao Sao Sao Sao Sao : ${rating}`);
   };
 
   const [selectedRating, setSelectedRating] = useState(0);
@@ -174,7 +173,6 @@ export default function OrderDetailPage() {
         // );
         toast.success("Đánh giá thành công !");
         resetImages();
-        console.log(data);
 
         for (let i = 0; i < url.length; i++) {
           await addImages(url[i], data.id);

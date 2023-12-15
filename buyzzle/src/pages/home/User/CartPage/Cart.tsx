@@ -39,19 +39,19 @@ export default function Cart() {
 
   const CheckToken = async () => {
     userController.CheckToken().then((res) => {
-      console.log(JSON.stringify(res));
+     
     });
   };
   const CheckRefreshToken = async () => {
     userController.CheckRefreshToken().then((res) => {
-      console.log(JSON.stringify(res));
+   
     });
   };
   const muti = () => {
     CheckToken();
     handleBuyNow();
     CheckRefreshToken();
-    console.log("AOTHATDAY");
+    
   };
 
   const handleIncreaseQuantity = (data: UpdateCart) => {
