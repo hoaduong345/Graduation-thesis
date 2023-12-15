@@ -19,22 +19,17 @@ import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
 import Handle from "../../../admin/assets/TSX/bacham";
-type FormValues = {
-  id: number;
-  images: string;
-};
+
 export default function BannerHome() {
   const idModal = "logo";
   const idRemove = "removeLogo";
   const [loading, setLoading] = useState(false);
 
   const [url, setUrl] = useState<string>();
-  const [open, setOpen] = useState<number>();
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const [banner, setBanner] = useState<BannerHomeModel[]>([]);
   const [bannerToDelete, setBannerToDelete] = useState(0);
-  const [checkedCategory, setCheckedCategory] = useState<BannerHomeModel[]>([]);
+  const [, setCheckedCategory] = useState<BannerHomeModel[]>([]);
   const getAllBanner = async () => {
     await bannerhomeController.getAll().then((res: any) => {
       setBanner(res);
@@ -49,7 +44,6 @@ export default function BannerHome() {
     control,
     handleSubmit,
     reset,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm<BannerHomeModel>({

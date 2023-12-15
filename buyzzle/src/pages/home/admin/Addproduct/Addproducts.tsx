@@ -195,8 +195,6 @@ export default function Addproducts() {
       required: true,
     },
   });
-  const watchFields = watch("attributes", []);
-
   console.log("watch().attributes", watch().attributes);
   const isDisabled = !(isValid && isDirty);
 

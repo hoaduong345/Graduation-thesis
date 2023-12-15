@@ -23,11 +23,11 @@ export type FormImage = {
   UserImage: string[];
 };
 export default function UserProfile() {
-  const [validUrl, setValidUrl] = useState(false);
+  const [, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
-  const [image, setImage] = useState("");
-  const [url, setUrl] = useState<string>("");
+  const [image, ] = useState("");
+  const [, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
   const [name, setName] = useState<string>("");
 
@@ -37,11 +37,9 @@ export default function UserProfile() {
     control,
  
     reset,
-    formState: {isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
   });
-  const isDisabled = !(isValid && isDirty);
 
   const getShipperData = () => {
     const user = param.username;

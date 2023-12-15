@@ -597,7 +597,7 @@ export default function OrderDetailPage() {
                                                     //   handleRemoveOnlyIMG(e.id)
                                                     // }
                                                   >
-                                                    <RemoveIMG />
+                                                    <RemoveIMG removeListUrl={} index={}/>
                                                   </div>
                                                 </div>
                                               </div>

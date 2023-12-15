@@ -8,7 +8,6 @@ import Handle from "../../assets/TSX/bacham";
 
 import { download, generateCsv } from "export-to-csv";
 import ResponsivePagination from "react-responsive-pagination";
-import { toast } from "react-toastify";
 import {
   userController,
   userModel,
@@ -58,17 +57,7 @@ export default function User() {
     window.location.href = `detailuser/${username}`;
   }
 
-  const DeleteUser = (id: any) => {
-    userController
-      .deleteUser(id)
-      .then((res) => {
-        toast.success("Xóa thành công !");
-        getAllUserData();
-      })
-      .catch(() => {
-        toast.error("Xóa thất bại !");
-      });
-  };
+
 
   return (
     <Container>

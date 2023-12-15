@@ -97,7 +97,7 @@ export default function Admin() {
     data.sex = sex;
     adminController
       .AddAdmin(data)
-      .then((res) => {
+      .then(() => {
         toast.success("Thêm thành công !");
         reset({
           name: "",

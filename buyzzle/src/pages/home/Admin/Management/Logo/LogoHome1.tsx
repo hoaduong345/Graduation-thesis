@@ -26,12 +26,10 @@ export default function LogoHome1() {
   const [loading, setLoading] = useState(false);
 
   const [url, setUrl] = useState<string>();
-  const [open, setOpen] = useState<number>();
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const [logo, setLogo] = useState<LogoHome1Model[]>([]);
   const [logoToDelete, setLogoToDelete] = useState(0);
-  const [checkedCategory, setCheckedCategory] = useState<LogoHome1Model[]>([]);
+  const [, setCheckedCategory] = useState<LogoHome1Model[]>([]);
   const getAlllLogo = async () => {
     await logohome1Controller.getAlll().then((res: any) => {
       setLogo(res);
@@ -46,7 +44,6 @@ export default function LogoHome1() {
     control,
     handleSubmit,
     reset,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm<LogoHome1Model>({

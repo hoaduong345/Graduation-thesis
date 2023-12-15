@@ -19,20 +19,18 @@ export interface RatingStar {
   onChangeFilter?(rating: number): void;
 }
 export default function FilterListproduct({
-  valuePrice: value,
   onPriceRangeChange,
   onQuantityRangeChange,
   onPurchaseRangeChange,
   onRateChange,
 }: SliderComponentProps) {
-  const [price, setPrice] = useState(false);
-  const [purchase, setPurchase] = useState(false);
-  const [quantity, setPQuantity] = useState(false);
-  const [rating, setRating] = useState(1);
+  const [price, ] = useState(false);
+  const [purchase, ] = useState(false);
+  const [quantity, ] = useState(false);
+  const [, setRating] = useState(1);
   const [rangePriceValue, setRangePriceValue] = useState([50000, 300000]);
   const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
-  const [availability, setAvailability] = useState<boolean>(false);
   const handleSliderChangePrice = (price: [number, number]) => {
 
     setRangePriceValue(price);

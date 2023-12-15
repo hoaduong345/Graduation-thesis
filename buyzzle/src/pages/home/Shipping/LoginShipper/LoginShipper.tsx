@@ -1,16 +1,13 @@
 import { Images } from "../../../../assets/TS/index";
 
 // import { localStorage } from 'localStorage';
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { toast } from "react-toastify";
-import LogoApple from "../../../../assets/PNG/lgApple.png";
-import LogoFace from "../../../../assets/PNG/lgFace.png";
-import LogoGoogle from "../../../../assets/PNG/lgG.png";
 import { shipperController } from "../../../../controllers/ShipperController";
 import "./Login.css";
-import { useState } from "react";
 export interface FormLoginValues {
   username: string;
   password: string;
@@ -21,9 +18,7 @@ function LoginShipper() {
   const {
     control,
     handleSubmit,
-    register,
-    reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors  },
   } = useForm<FormLoginValues>({
     mode: "all",
     // defaultValues: UserData1
@@ -52,7 +47,7 @@ function LoginShipper() {
           window.location.href = "/shipping/management";
         }, 2000);
       })
-      .catch((error) => {
+      .catch(() => {
         setLoading(false);
         setIsButtonDisabled(false);
         toast.error("Đăng nhập thất bại !");

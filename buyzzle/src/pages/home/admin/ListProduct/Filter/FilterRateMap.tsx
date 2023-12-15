@@ -11,7 +11,7 @@ export default function FilterRateMap(props: RatingStar) {
           id="orange-radio"
           className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
           checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-          onChange={(e) => {
+          onChange={() => {
             // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
             props.onChangeFilter?.(props.rating);
           }}

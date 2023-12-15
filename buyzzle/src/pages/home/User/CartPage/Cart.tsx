@@ -35,7 +35,6 @@ export default function Cart() {
     handleChecked,
     setIdAttribute,
     idAttribute,
-    getCart,
   } = useCart();
 
   const CheckToken = async () => {
