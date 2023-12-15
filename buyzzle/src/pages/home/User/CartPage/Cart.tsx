@@ -71,7 +71,7 @@ export default function Cart() {
 
       if (productChecked.length > 0) {
         const indexProduct = productChecked.findIndex(
-          (item) => item.productid === data.attributeId
+          (item) => item.atributes_fk!.id === data.attributeId
         );
         const _productChecked = [...productChecked];
         _productChecked[indexProduct].quantity! -= 1;
@@ -107,12 +107,11 @@ export default function Cart() {
     let sale = 0;
     for (let i = 0; i < productChecked.length; i++) {
       const element = productChecked[i];
-      totalCart += element.quantity! * element.product!.sellingPrice;
+      totalCart += element.quantity * element.product!.sellingPrice;
       sale +=
-        element.quantity! *
+        element.quantity *
         (element.product!.price - element.product!.sellingPrice);
     }
-
     return {
       sale,
       totalCart,
