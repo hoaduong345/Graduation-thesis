@@ -2,8 +2,8 @@ module.exports = {
     apps: [
       {
         name: "vite-react-app",
-        script: "yarn",
-        args: "dev", 
+        script: "npm",
+        args: "run dev", 
         watch: true,
         ignore_watch: ["node_modules"],
         instances: 1,
