@@ -81,7 +81,6 @@ const AdminController = {
 
             return res.status(201).json(newAdmin);
         } catch (error) {
-            console.log('loi' + error);
             return res.status(500).json({ error: 'Server Error', error });
         }
     },
@@ -168,7 +167,6 @@ const AdminController = {
             });
             res.status(200).json(updateAdminResponse);
         } catch (error) {
-            console.log(error);
             res.status(500).json({ error: 'Có lỗi xảy ra khi cập nhật hồ sơ admin.', message: error.message });
         }
     },
@@ -227,7 +225,6 @@ const AdminController = {
             });
             res.status(200).json('Them hinh thanh cong');
         } catch (error) {
-            console.log(error);
             res.status(500).json(error.message);
         }
     },

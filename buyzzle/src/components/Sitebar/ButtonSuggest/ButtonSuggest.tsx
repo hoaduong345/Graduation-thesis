@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ButtonSuggest } from "../SitebarFilter";
 
 type Props = {
@@ -6,8 +6,8 @@ type Props = {
 };
 
 const ButtonSuggestt = (props: Props) => {
-  const [otherkeywords, setOtherkeywords] = useState("#F2F2F2");
-  const [textColor, setTextColor] = useState("black");
+  const [ ,setOtherkeywords] = useState("#F2F2F2");
+  const [, setTextColor] = useState("black");
 
   const Clicked = () => {
     setTextColor("#FFFFFF");

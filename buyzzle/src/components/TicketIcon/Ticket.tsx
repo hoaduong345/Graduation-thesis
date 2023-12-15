@@ -1,5 +1,4 @@
-import React from 'react'
-import "../TicketIcon/Ticket.css"
+import "../TicketIcon/Ticket.css";
 export default function Ticket() {
   return (
 <div id="tic">

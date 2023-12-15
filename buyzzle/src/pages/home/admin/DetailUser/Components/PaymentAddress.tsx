@@ -1,10 +1,8 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { userController } from "../../../../../controllers/UserController";
 import secureLocalStorage from "react-secure-storage";
+import { userController } from "../../../../../controllers/UserController";
 
 type FormValues = {
   id: number;
@@ -17,8 +15,8 @@ type FormValues = {
 export default function PaymentAddress() {
   const [validUrl, setValidUrl] = useState(false);
   const param = useParams();
-  const [selectedOption, setSelectedOption] = useState<string>("aaaaa");
-  const [id, setId] = useState<string>("11");
+  const [, setSelectedOption] = useState<string>("aaaaa");
+  const [, setId] = useState<string>("11");
 
   const provinces = [
     "Tỉnh/Thành phố, Quận/Huyện, Phường/Xã",
@@ -87,9 +85,8 @@ export default function PaymentAddress() {
 
   const {
     control,
-    register,
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
     defaultValues: {
@@ -134,7 +131,7 @@ export default function PaymentAddress() {
         })
         .catch((error) => {
           console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
+        
             error
           );
         });

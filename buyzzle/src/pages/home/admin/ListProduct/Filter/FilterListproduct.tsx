@@ -1,14 +1,11 @@
 import Slider from "rc-slider";
-import DeleteWhite from "../../assets/TSX/DeleteWhite";
-import {
-  RatingStar,
-  SliderComponentProps,
-} from "../../../../../components/Sitebar/SitebarFilter";
-import FilterRateMap from "./FilterRateMap";
 import { useState } from "react";
 import { numberFormat } from "../../../../../helper/Format";
+import FilterRateMap from "./FilterRateMap";
+import { SliderComponentProps } from "../../../../../components/Sitebar/SitebarFilter";
+import { RatingStarDetail } from "../../../User/DetailProduct/detailProductPage/DetailsProduct";
 
-const arrRating: RatingStar[] = [
+const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 5 },
   { checked: false, rating: 4 },
   { checked: false, rating: 3 },
@@ -22,20 +19,18 @@ export interface RatingStar {
   onChangeFilter?(rating: number): void;
 }
 export default function FilterListproduct({
-  valuePrice: value,
   onPriceRangeChange,
   onQuantityRangeChange,
   onPurchaseRangeChange,
   onRateChange,
 }: SliderComponentProps) {
-  const [price, setPrice] = useState(false);
-  const [purchase, setPurchase] = useState(false);
-  const [quantity, setPQuantity] = useState(false);
-  const [rating, setRating] = useState(1);
+  const [price, ] = useState(false);
+  const [purchase, ] = useState(false);
+  const [quantity, ] = useState(false);
+  const [, setRating] = useState(1);
   const [rangePriceValue, setRangePriceValue] = useState([50000, 300000]);
   const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
-  const [availability, setAvailability] = useState<boolean>(false);
   const handleSliderChangePrice = (price: [number, number]) => {
 
     setRangePriceValue(price);

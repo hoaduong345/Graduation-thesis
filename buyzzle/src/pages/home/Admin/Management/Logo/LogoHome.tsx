@@ -8,34 +8,29 @@ import Container from "../../../../../components/container/Container";
 import { logohomeController } from "../../../../../controllers/LogoHomeController";
 import { storage } from "../../../../../firebase/Config";
 import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 import Loading from "../../../../../helper/Loading/Loading";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
 import { LogoHomeModel } from "../../../../../model/LogoHomeModel";
 import { LogoModel } from "../../../../../model/LogoModel";
 import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
-import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
-import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
-import Handle from "../../../admin/assets/TSX/bacham";
 import Edit from "../../../admin/assets/TSX/Edit";
+import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
-import EmptyPage from "../../../../../helper/Empty/EmptyPage";
+import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
+import Handle from "../../../admin/assets/TSX/bacham";
 
-type FormValues = {
-  id: number;
-  images: string;
-};
+
 export default function LogoHome() {
   const idModal = "logo";
   const idRemove = "removeLogo";
   const [loading, setLoading] = useState(false);
 
   const [url, setUrl] = useState<string>();
-  const [open, setOpen] = useState<number>();
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const [logo, setLogo] = useState<LogoHomeModel[]>([]);
   const [logoToDelete, setLogoToDelete] = useState(0);
-  const [checkedCategory, setCheckedCategory] = useState<LogoHomeModel[]>([]);
+  const [, setCheckedCategory] = useState<LogoHomeModel[]>([]);
   const getAllLogo = async () => {
     await logohomeController.getAll().then((res: any) => {
       setLogo(res);
@@ -50,7 +45,6 @@ export default function LogoHome() {
     control,
     handleSubmit,
     reset,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm<LogoHomeModel>({

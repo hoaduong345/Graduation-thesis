@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
+import { notificationControllers } from "../../controllers/NotificationController";
+import CustomToast from "../../helper/Toast/CustomToast";
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import { AllNotification, NotificationModel } from "../../model/Notification";
-import { notificationControllers } from "../../controllers/NotificationController";
-import CustomToast from "../../helper/Toast/CustomToast";
 import AvtDefautl from "./assets/AvtDefautl";
 
 export default function useNotificationContextAdmin() {
@@ -20,7 +20,7 @@ export default function useNotificationContextAdmin() {
   }, []);
   const getCountNoti = async () => {
     await notificationControllers.getAllNotificationAdmin().then((res) => {
-     
+
       setCountNotificationAdmin(res);
     });
   };
@@ -33,17 +33,17 @@ export default function useNotificationContextAdmin() {
     await notificationControllers
       .getAllNotificationAdmin()
       .then((res) => {
-        
+
         setNotificationAdmin(res.allNotification);
       })
-      
+
   };
 
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
     const socket = io("http://localhost:5000");
     socket.on("requestdelete", (requestdelete) => {
-      
+
       const urlTaker = requestdelete.User.UserImage;
 
       toast(
@@ -90,7 +90,7 @@ export default function useNotificationContextAdmin() {
       setDeletedOrder(requestdelete);
     });
     socket.on("newOrder", (newOrder) => {
-    
+
       const urlTaker = newOrder.user.UserImage;
 
       toast(
@@ -137,7 +137,7 @@ export default function useNotificationContextAdmin() {
       setDeletedOrder(newOrder);
     });
     socket.on("disconnect", () => {
-      
+
     });
   }, [deletedOrder]);
 
@@ -145,11 +145,11 @@ export default function useNotificationContextAdmin() {
     notificationControllers
       .seenAllNotiAdmin()
       .then((res: any) => {
-     
+
         setCountNotificationAdmin(res.count);
       })
-      .catch((err) => {
-       
+      .catch(() => {
+
         return {};
       });
   };

@@ -1,27 +1,25 @@
+import { download, generateCsv } from "export-to-csv";
+import moment from "moment";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import ResponsivePagination from "react-responsive-pagination";
-import { ModelAdmin } from "../../../../../model/AdminModel";
+import { toast } from "react-toastify";
+import Search from "../../../../../assets/TSX/Search";
+import Container from "../../../../../components/container/Container";
 import {
   AdminModel,
   adminController,
 } from "../../../../../controllers/AdminControllder";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import Container from "../../../../../components/container/Container";
-import SitebarAdmin from "../../Sitebar/Sitebar";
-import PlusSquare from "../../assets/TSX/PlusSquare";
 import DialogAddAdmin from "../../../../../helper/Dialog/DialogAddAdmin";
-import Download from "../../assets/TSX/Download";
-import Delete from "../../assets/TSX/Delete";
-import Edit from "../../assets/TSX/Edit";
-import RemoveCate from "../../assets/TSX/RemoveCate";
-import Handle from "../../assets/TSX/bacham";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
-import useDebounce from "../../../../../useDebounceHook/useDebounce";
-import Search from "../../../../../assets/TSX/Search";
-import moment from "moment";
-import { download, generateCsv } from "export-to-csv";
 import { csvConfig } from "../../../../../helper/Export/Excel";
+import { ModelAdmin } from "../../../../../model/AdminModel";
+import useDebounce from "../../../../../useDebounceHook/useDebounce";
+import SitebarAdmin from "../../Sitebar/Sitebar";
+import Download from "../../assets/TSX/Download";
+import Edit from "../../assets/TSX/Edit";
+import PlusSquare from "../../assets/TSX/PlusSquare";
+import Handle from "../../assets/TSX/bacham";
 
 export interface admin {
   id: number;
@@ -99,7 +97,7 @@ export default function Admin() {
     data.sex = sex;
     adminController
       .AddAdmin(data)
-      .then((res) => {
+      .then(() => {
         toast.success("Thêm thành công !");
         reset({
           name: "",

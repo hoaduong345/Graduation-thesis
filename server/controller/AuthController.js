@@ -93,7 +93,6 @@ const AuthController = {
                 return res.status(200).json('Access token still expried');
             }
         } catch (error) {
-            console.log(error);
             res.status(404).send(error);
         }
     },
@@ -115,7 +114,6 @@ const AuthController = {
                 res.send('Refresh token still expried');
             }
         } catch (error) {
-            console.log(error);
             res.status(404).send(error);
         }
     },
@@ -149,119 +147,12 @@ const AuthController = {
 
             const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/${user.id}/verify/${token.token}`;
             await SendEmail(user.email, 'Verify email', url);
-            console.log('🚀 ~ file: AuthController.js    :83 ~ register: ~ url:', url);
 
-            console.log('Email URL: ' + url);
             res.status(200).send('Register Successfully, Please check Email to verify your account');
         } catch (error) {
-            console.log('error', error);
+            res.status(500).json(error);
         }
     },
-
-    // deleteregister: async (req, res) => {
-    //     try {
-    //         const registerId = parseInt(req.params.id);
-    //         const existingUser = await prisma.user.findUnique({
-    //             where: {
-    //                 id: registerId,
-    //             },
-    //             include: {
-    //                 Token: true,
-    //             },
-    //         });
-
-    //         if (!existingUser) {
-    //             return res.status(404).json('User không tồn tại');
-    //         }
-
-    //         if (existingUser.Token.length > 0) {
-    //             await prisma.token.deleteMany({
-    //                 where: {
-    //                     userid: registerId,
-    //                 },
-    //             });
-    //         }
-    //         await prisma.user.delete({
-    //             where: {
-    //                 id: registerId,
-    //             },
-    //         });
-
-    //         res.status(200).json('Xóa User thành công');
-    //     } catch (error) {
-    //         console.error(error);
-    //         res.status(500).json(error.message);
-    //     }
-    // },
-
-    // UserProfile: async (req, res) => {
-    //     try {
-    //         const userId = parseInt(req.params.username);
-
-    //         const updatedUser = {
-    //             email: req.body.email,
-    //             username: req.body.username,
-    //             name: req.body.name,
-    //             phonenumber: req.body.phonenumber,
-    //             sex: req.body.sex,
-    //             dateOfBirth: new Date(req.body.dateOfBirth),
-    //         };
-
-    //         const updatedUserResponse = await prisma.user.update({
-    //             where: {
-    //                 username: userId,
-    //             },
-    //             data: updatedUser,
-    //         });
-
-    //         res.status(200).json('Lưu hồ sơ thành công');
-    //     } catch (error) {
-    //         console.error(error);
-    //         res.status(500).json(error.message);
-    //     }
-    // },
-
-    // UpdatePassword: async (req, res) => {
-    //     try {
-    //         const userId = parseInt(req.params.id);
-    //         const oldPassword = req.body.oldPassword;
-    //         const newPassword = req.body.newPassword;
-    //         const newPasswordConfirmation = req.body.newPasswordConfirmation;
-
-    //         if (newPassword !== newPasswordConfirmation) {
-    //             return res.status(400).json('Mật khẩu mới và xác nhận mật khẩu không khớp');
-    //         }
-
-    //         const user = await prisma.user.findUnique({
-    //             where: {
-    //                 id: userId,
-    //             },
-    //         });
-
-    //         // Xác thực mật khẩu cũ
-    //         const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-
-    //         if (!isPasswordValid) {
-    //             return res.status(401).json('Mật khẩu cũ không chính xác');
-    //         }
-
-    //         // Mật khẩu cũ hợp lệ, tiến hành cập nhật mật khẩu mới
-    //         const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-
-    //         const updatePassword = await prisma.user.update({
-    //             where: {
-    //                 id: userId,
-    //             },
-    //             data: {
-    //                 password: hashedNewPassword, // Lưu mật khẩu mới đã mã hóa
-    //             },
-    //         });
-
-    //         res.status(200).json('Cập nhật mật khẩu thành công');
-    //     } catch (error) {
-    //         res.status(500).json(error.message);
-    //     }
-    // },
 
     // LOGIN
     login: async (req, res) => {
@@ -289,11 +180,8 @@ const AuthController = {
                         id: user.id,
                         token: crypto.randomBytes(32).toString('hex'),
                     });
-
                     const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
-
-                    // await SendEmail(user.email, 'Verify email', url);
-                    console.log('login: ~ url:', url);
+                    await SendEmail(user.email, 'Verify email', url);
                 }
                 return res.status(404).json('An email has sent to your email, please check that');
             }
@@ -415,14 +303,11 @@ const AuthController = {
                     },
                 });
                 const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${forgot_password_token_base64}`;
-                console.log('Generated URL:', url);
             } else {
                 const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
-                console.log('Generated URL:', url);
             }
 
             const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
-            console.log('Generated URL:', url);
             await SendEmail(user.email, 'Forgot Password', url);
 
             res.status(200).send('A Link has sent to your email');
@@ -491,9 +376,7 @@ const AuthController = {
     changePassword: async (req, res) => {
         try {
             const idUser = parseInt(req.cookies.id);
-            console.log('🚀 ~ file: AuthController.js:497 ~ changePassword: ~ idUser:', idUser);
             const refresh_token = req.cookies.refreshtoken;
-            const token = decode(refresh_token);
             const user = await prisma.user.findUnique({
                 where: {
                     id: idUser,
@@ -551,7 +434,6 @@ const AuthController = {
             res.clearCookie('refreshtoken');
             res.clearCookie('accesstoken');
             res.clearCookie('id');
-            // localStorage.clear();
             res.status(200).send('Logged out successfully');
         } catch (error) {
             res.status(500).send('Logout failed');

@@ -5,6 +5,7 @@ const OderController = {
     createOrder: async (req, res) => {
         try {
             const orderData = req.body.order;
+            console.log('🚀 ~ file: OrderController.js:8 ~ createOrder: ~ orderData:', orderData);
 
             const user = await prisma.user.findFirst({
                 where: {
@@ -48,6 +49,7 @@ const OderController = {
                     price: e.price,
                     quantity: e.quantity,
                     total: e.total,
+                    attributeID: e.attributeID,
                 };
             });
             console.log({ a });
@@ -105,8 +107,18 @@ const OderController = {
                     status: sortStatus,
                 },
                 include: {
-                    OrderDetail: true,
+                    OrderDetail: {
+                        include: {
+                            fK_attributee: {
+                                select: {
+                                    color: true,
+                                    size: true,
+                                },
+                            },
+                        },
+                    },
                 },
+
                 orderBy: {
                     id: 'desc',
                 },
@@ -137,7 +149,16 @@ const OderController = {
                 skip: startIndex,
                 take: limit,
                 include: {
-                    OrderDetail: true,
+                    OrderDetail: {
+                        include: {
+                            fK_attributee: {
+                                select: {
+                                    color: true,
+                                    size: true,
+                                },
+                            },
+                        },
+                    },
                 },
                 orderBy: {
                     id: 'desc',
@@ -164,7 +185,16 @@ const OderController = {
                     id: id,
                 },
                 include: {
-                    OrderDetail: true,
+                    OrderDetail: {
+                        include: {
+                            fK_attributee: {
+                                select: {
+                                    color: true,
+                                    size: true,
+                                },
+                            },
+                        },
+                    },
                     User: {
                         include: {
                             UserImage: {
@@ -237,22 +267,29 @@ const OderController = {
     quantityCreateOrder: async (req, res) => {
         try {
             const data = req.body;
+            console.log('🚀 ~ file: OrderController.js:258 ~ quantityCreateOrder: ~ data:', data);
+
             await Promise.all(
                 data?.map(async (element) => {
-                    const currentProduct = await prisma.product.findUnique({
+                    const quantityReduction = parseInt(element.soluong);
+                    await prisma.attribute.update({
                         where: {
-                            id: parseInt(element.productId),
-                        },
-                    });
-
-                    const newQuantity = currentProduct.quantity - parseInt(element.quantity);
-
-                    await prisma.product.update({
-                        where: {
-                            id: parseInt(element.productId),
+                            id: parseInt(element.attributeId),
                         },
                         data: {
-                            quantity: newQuantity,
+                            soluong: {
+                                decrement: quantityReduction,
+                            },
+                        },
+                    });
+                    await prisma.product.update({
+                        where: {
+                            id: element.productId,
+                        },
+                        data: {
+                            quantity: {
+                                decrement: quantityReduction,
+                            },
                         },
                     });
                 })
@@ -269,20 +306,25 @@ const OderController = {
             const data = req.body;
             await Promise.all(
                 data?.map(async (element) => {
-                    const currentProduct = await prisma.product.findUnique({
+                    const quantityReduction = parseInt(element.soluong);
+                    await prisma.attribute.update({
                         where: {
-                            id: parseInt(element.productId),
-                        },
-                    });
-
-                    const newQuantity = currentProduct.quantity + parseInt(element.quantity);
-
-                    await prisma.product.update({
-                        where: {
-                            id: parseInt(element.productId),
+                            id: parseInt(element.attributeId),
                         },
                         data: {
-                            quantity: newQuantity,
+                            soluong: {
+                                increment: quantityReduction,
+                            },
+                        },
+                    });
+                    await prisma.product.update({
+                        where: {
+                            id: element.productId,
+                        },
+                        data: {
+                            quantity: {
+                                increment: quantityReduction,
+                            },
                         },
                     });
                 })
@@ -300,25 +342,20 @@ const OderController = {
 
             await Promise.all(
                 data.map(async (element) => {
-                    const currentProduct = await prisma.product.findUnique({
-                        where: {
-                            id: parseInt(element.productId),
-                        },
-                    });
-
-                    const newSoldcount = currentProduct.soldcount + parseInt(element.quantity);
+                    const newSoldcount = parseInt(element.quantity);
 
                     await prisma.product.update({
                         where: {
                             id: parseInt(element.productId),
                         },
                         data: {
-                            soldcount: newSoldcount,
+                            soldcount: {
+                                increment: newSoldcount,
+                            },
                         },
                     });
                 })
             );
-
             res.status(200).json('Cộng đã bán thành công');
         } catch (error) {
             res.status(500).json(error.message);

@@ -23,8 +23,6 @@ export default function Cart() {
   const {
     carts,
     setCarts,
-    setIdProduct,
-    idProduct,
     productChecked,
     setProductChecked,
     handleBuyNow,
@@ -35,51 +33,47 @@ export default function Cart() {
     idItemCart,
     idAllCart,
     handleChecked,
+    setIdAttribute,
+    idAttribute,
   } = useCart();
 
   const CheckToken = async () => {
-    userController.CheckToken().then((res) => {
-     
-    });
+    userController.CheckToken().then((_) => {});
   };
   const CheckRefreshToken = async () => {
-    userController.CheckRefreshToken().then((res) => {
-   
-    });
+    userController.CheckRefreshToken().then((_) => {});
   };
   const muti = () => {
     CheckToken();
     handleBuyNow();
     CheckRefreshToken();
-    
   };
 
-  const handleIncreaseQuantity = (data: UpdateCart) => {
-    cartControllers.increaseCart(data).then((res) => {
+  const handleIncreaseQuantity = async (data: UpdateCart) => {
+    await cartControllers.increaseCart(data).then((res) => {
       setCarts(res.data);
     });
     if (productChecked.length > 0) {
       const indexProduct = productChecked.findIndex(
-        (item) => item.productid === data.productId
+        (item) => item.atributes_fk!.id === data.attributeId
       );
       const _productChecked = [...productChecked];
-      _productChecked[indexProduct].quantity += 1;
-
+      _productChecked[indexProduct].quantity! += 1;
       setProductChecked(_productChecked);
     }
   };
-  const handleDecreaseQuantity = (quantity: number, data: UpdateCart) => {
+  const handleDecreaseQuantity = async (quantity: number, data: UpdateCart) => {
     if (quantity > 1) {
-      cartControllers.decreaseCart(data).then((res) => {
+      await cartControllers.decreaseCart(data).then((res) => {
         setCarts(res.data);
       });
 
       if (productChecked.length > 0) {
         const indexProduct = productChecked.findIndex(
-          (item) => item.productid === data.productId
+          (item) => item.atributes_fk!.id === data.attributeId
         );
         const _productChecked = [...productChecked];
-        _productChecked[indexProduct].quantity -= 1;
+        _productChecked[indexProduct].quantity! -= 1;
 
         setProductChecked(_productChecked);
       } else {
@@ -91,7 +85,7 @@ export default function Cart() {
   const [plusThrottled] = useThrottle(handleIncreaseQuantity, 300);
   const [minusThrottled] = useThrottle(handleDecreaseQuantity, 300);
 
-  const cartLength = carts.item?.filter((e) => e.product.quantity > 0);
+  const cartLength = carts.item?.filter((e) => e.product!.quantity > 0);
   var checkAll: boolean =
     cartLength?.length > 0
       ? !!carts.item?.length && productChecked?.length === cartLength?.length
@@ -112,21 +106,26 @@ export default function Cart() {
     let sale = 0;
     for (let i = 0; i < productChecked.length; i++) {
       const element = productChecked[i];
-      totalCart += element.quantity * element.product.sellingPrice;
+      totalCart += element.quantity * element.product!.sellingPrice;
       sale +=
         element.quantity *
-        (element.product.price - element.product.sellingPrice);
+        (element.product!.price - element.product!.sellingPrice);
     }
-
     return {
       sale,
       totalCart,
     };
   };
   const checked = (item: CartItem) => {
-    const _check = productChecked.findIndex(
-      (el) => el.productid == item.productid
+    console.log("🚀 ~ file: Cart.tsx:122 ~ checked ~ item:", item);
+    console.log(
+      "🚀 ~ file: Cart.tsx:126 ~ checked ~ productChecked:",
+      productChecked
     );
+    const _check = productChecked.findIndex(
+      (el) => el.atributesId == item.atributes_fk.id
+    );
+
     return _check !== -1;
   };
 
@@ -213,44 +212,48 @@ export default function Cart() {
                       </div>
                       <div className="flex col-span-4 items-center">
                         <img
-                          src={e.product.ProductImage[0].url}
+                          src={e.product!.ProductImage[0].url}
                           className="w-[112px] h-[112px] object-contain"
                           alt="product"
                         />
                         <div>
                           <Link to={`/Detailproducts/${e.productid}`}>
                             <p className="text-[#1A1A1A] text-base font-medium mx-3">
-                              {e.product.name}
+                              {e.product!.name}
                             </p>
                           </Link>
                           <div className="bg-[#f9e9e9] rounded-[30px] max-w-max mx-3 mt-3">
                             <p className="text-[#EA4B48] px-[10px] py-1">
-                              Giảm {e.product.discount}%
+                              Giảm {e.product!.discount}%
                             </p>
                           </div>
+                          <p className="text-[#7A828A] text-xs font-medium mx-3 mt-3">
+                            Phân loại: {e.atributes_fk!.color} -{" "}
+                            {e.atributes_fk!.size}
+                          </p>
                         </div>
                       </div>
                       <div className="col-span-2">
                         <div className="flex gap-3 items-center justify-center">
                           <p className="text-[#7A828A] text-xs line-through leading-none	">
-                            {numberFormat(e.product.price)}
+                            {numberFormat(e.product!.price)}
                           </p>{" "}
                           <p className="text-[#EA4B48] text-xl">
-                            {numberFormat(e.product.sellingPrice)}
+                            {numberFormat(e.product!.sellingPrice)}
                           </p>
                         </div>
                       </div>
                       <div className=" flex items-center col-span-2 justify-center gap-1">
-                        {e.product.quantity > 0 ? (
+                        {e.product!.quantity > 0 ? (
                           <>
                             <div
                               className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
                               onClick={() => {
                                 minusThrottled(e.quantity, {
-                                  productId: e.productid,
+                                  attributeId: e.atributes_fk!.id,
                                   cartId: e.cartid,
                                 });
-                                setIdProduct(e.productid);
+                                setIdAttribute(e.atributes_fk!.id);
                               }}
                             >
                               <Minus />
@@ -263,15 +266,15 @@ export default function Cart() {
                             <div
                               className="border-[2px] border-[#FFAAAF] rounded-md bg-white p-2"
                               onClick={() => {
-                                e.quantity < e.product.quantity
+                                e.quantity! < e.product!.quantity
                                   ? plusThrottled({
-                                      productId: e.productid,
+                                      attributeId: e.atributes_fk!.id,
                                       cartId: e.cartid,
                                     })
                                   : toastWarn(
-                                      `Chỉ còn ${e.product.quantity} sản phẩm`
+                                      `Chỉ còn ${e.product!.quantity} sản phẩm`
                                     );
-                                setIdProduct(e.productid);
+                                setIdAttribute(e.atributes_fk!.id);
                               }}
                             >
                               <Plus />
@@ -285,14 +288,14 @@ export default function Cart() {
                       </div>
                       <div className="col-span-2 flex justify-center">
                         <p className="text-[#EA4B48] text-xl">
-                          {numberFormat(e.product.sellingPrice * e.quantity)}
+                          {numberFormat(e.product!.sellingPrice * e.quantity!)}
                         </p>
                       </div>
                       <div className="col-span-1 justify-center flex">
                         <button
                           onClick={() => {
                             openModal(idItemCart);
-                            setIdProduct(Number(e.productid));
+                            setIdAttribute(Number(e.atributes_fk!.id));
                           }}
                           className="p-3 rounded-full
                     shadow-[rgba(108,_108,_108,_0.25)_0px_0px_4px_0px]"
@@ -313,7 +316,7 @@ export default function Cart() {
               desc="sản phẩm"
               id={idItemCart}
               onClose={() => closeModal(idItemCart)}
-              onSave={() => removeItemCart(idProduct)}
+              onSave={() => removeItemCart(idAttribute)}
               title="Xóa sản phẩm này!"
             />
           </div>

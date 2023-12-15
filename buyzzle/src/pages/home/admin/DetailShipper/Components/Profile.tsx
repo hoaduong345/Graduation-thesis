@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import Container from "../../../../../components/container/Container";
-
 import { useParams } from "react-router-dom";
-
 import secureLocalStorage from "react-secure-storage";
+import Container from "../../../../../components/container/Container";
 import { shipperController } from "../../../../../controllers/ShipperController";
-
 export type FormValues = {
   username: string;
   name: string;
@@ -20,24 +17,18 @@ export type FormImage = {
   UserImage: string[];
 };
 export default function UserProfile() {
-  const [validUrl, setValidUrl] = useState(false);
-  const [CheckImageUrl, setCheckImageUrl] = useState(false);
+  const [, setValidUrl] = useState(false);
   const param = useParams();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [image, setImage] = useState("");
-  // const [editUser, setEditUser] = useState<FormValues>();
-  const [url, setUrl] = useState<string>("");
-  const [urlThen, setUrlThen] = useState<string>("");
 
-  const [id, setId] = useState<string>("11");
-  // const id: number | undefined = getID()!;
+
+  const [, setId] = useState<string>("11");
   const [sex, setSex] = useState<boolean>();
 
   const {
     control,
     register,
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors},
   } = useForm<FormValues>({
     mode: "all",
   });

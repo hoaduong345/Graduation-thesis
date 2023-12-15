@@ -28,7 +28,7 @@ export default function Logoes() {
 
   const [logo, setLogo] = useState<LogoModel[]>([]);
   const [logoToDelete, setLogoToDelete] = useState(0);
-  const [checkedCategory, setCheckedCategory] = useState<LogoModel[]>([]);
+  const [, setCheckedCategory] = useState<LogoModel[]>([]);
   const getAllLogo = async () => {
     await logoesController.getAll().then((res: any) => {
       setLogo(res);

@@ -1,4 +1,4 @@
-import { KeyboardEvent, ReactNode } from "react";
+import { ReactNode } from "react";
 import LogoCate from "../../pages/home/admin/assets/TSX/logoCateAdmin";
 
 type Props = {

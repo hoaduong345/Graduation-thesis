@@ -8,34 +8,28 @@ import Container from "../../../../../components/container/Container";
 import { logodetailController } from "../../../../../controllers/LogoDetailController";
 import { storage } from "../../../../../firebase/Config";
 import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
+import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 import Loading from "../../../../../helper/Loading/Loading";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
 import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
 import { LogoModel } from "../../../../../model/LogoModel";
 import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
-import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
-import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
-import Handle from "../../../admin/assets/TSX/bacham";
 import Edit from "../../../admin/assets/TSX/Edit";
+import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
-import EmptyPage from "../../../../../helper/Empty/EmptyPage";
+import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
+import Handle from "../../../admin/assets/TSX/bacham";
 
-type FormValues = {
-  id: number;
-  images: string;
-};
 export default function LogoDetail() {
   const idModal = "logo";
   const idRemove = "removeLogo";
   const [loading, setLoading] = useState(false);
 
   const [url, setUrl] = useState<string>();
-  const [open, setOpen] = useState<number>();
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const [logo, setLogo] = useState<LogoDetailModel[]>([]);
   const [logoToDelete, setLogoToDelete] = useState(0);
-  const [checkedCategory, setCheckedCategory] = useState<LogoDetailModel[]>([]);
+  const [, setCheckedCategory] = useState<LogoDetailModel[]>([]);
   const getAllLogo = async () => {
     await logodetailController.getAll().then((res: any) => {
       setLogo(res);
@@ -50,7 +44,6 @@ export default function LogoDetail() {
     control,
     handleSubmit,
     reset,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm<LogoDetailModel>({

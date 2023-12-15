@@ -29,6 +29,7 @@ app.post('/create-checkout-session', async (req, res) => {
                         images: [item.product.ProductImage[0].url],
                         metadata: {
                             productId: item.productid,
+                            attributeID: item.atributesId,
                         },
                     },
                     unit_amount: item.product.sellingPrice,
@@ -106,6 +107,7 @@ const getCartItems = async (line_items, object, metadata) => {
                 price: element.price.unit_amount,
                 quantity: element.quantity,
                 total: element.price.unit_amount * element.quantity,
+                attributeID: parseInt(product.metadata.attributeID),
             });
 
             if (cartItems.length === line_items?.data.length) {
@@ -127,26 +129,23 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                 const iduser = await stripe.customers.retrieve(event.data.object.customer);
                 const orderItems = await getCartItems(line_items, event.data.object, iduser.metadata);
 
-                let listProductQuantity = [];
-                orderItems.cartItems.map((element) => {
-                    listProductQuantity.push({
+                let listProductQuantity = orderItems.cartItems.map((element) => {
+                    return {
+                        attributeId: element.attributeID,
+                        soluong: element.quantity,
                         productId: element.productId,
-                        quantity: element.quantity,
-                    })
-                })
+                    }
+                });
 
                 await axios
                     .post('http://localhost:5000/buyzzle/order', { order: orderItems })
                     .then(() => {
                         orderItems.cartItems.map((e) => {
-                            return axios.post(`http://localhost:5000/buyzzle/cart/removeOnStripe/${e.productId}`, {
+                            return axios.post(`http://localhost:5000/buyzzle/cart/removeOnStripe/${e.attributeID}`, {
                                 userId: parseInt(iduser.metadata.idUser),
-                                productId: e.productId,
+                                attributeId: e.attributeID,
                             });
                         });
-                    })
-                    .then(() => {
-                        axios.post(`http://localhost:5000/buyzzle/order/quantityCreateOrder`, listProductQuantity);
                     })
                     .then(() => {
                         if (parseInt(iduser.metadata.voucherId) != 0) {
@@ -155,6 +154,9 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                                 voucherId: parseInt(iduser.metadata.voucherId),
                             });
                         }
+                    })
+                    .then(() => {
+                        axios.post(`http://localhost:5000/buyzzle/order/quantityCreateOrder`, listProductQuantity);
                     })
                     .catch((err) => { });
                 break;

@@ -6,17 +6,17 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 import LogoWeb from "../../assets/TSX/LogoWeb";
 import Search from "../../assets/TSX/Search";
 import { productController } from "../../controllers/ProductsController";
 import { userController } from "../../controllers/UserController";
 import { Top8product } from "../../model/ProductModel";
+import { Products } from "../../pages/home/User/filterPage/FiltersPage";
 import useDebounce from "../../useDebounceHook/useDebounce";
 import CartCount from "../Context/CartCount/CartCount";
 import HeaderTopUser from "../HeaderTop/HeaderTopUser";
 import Container from "../container/Container";
-import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
-import secureLocalStorage from "react-secure-storage";
 
 export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -28,7 +28,6 @@ export default function Header() {
   const [isSearch, setIsSearch] = useState(false);
   const [CheckAdmin, setCheckAdmin] = useState<boolean>();
   const [nameAdmin, setNameAdmin] = useState("");
-  const [imgAdmin, setImgAdmin] = useState("");
   const user = localStorage.getItem("user");
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
 
@@ -52,7 +51,6 @@ export default function Header() {
 
   const getSearhvalue = async () => {
     await productController.getAllProductsSearch(text).then((res: any) => {
-      
       setProductSearch(res.rows);
       settopProduct(res.top8products);
     });
@@ -144,12 +142,12 @@ export default function Header() {
     }
   };
   const CheckToken = async () => {
-    userController.CheckToken().then((res) => {
+    userController.CheckToken().then(() => {
 
     });
   };
   const CheckRefreshToken = async () => {
-    userController.CheckRefreshToken().then((res) => {
+    userController.CheckRefreshToken().then(() => {
      
     });
   };
@@ -267,7 +265,7 @@ export default function Header() {
                                       </div>
                                       <div
                                         className="text-base cursor-default p-1 pl-2  font-normal w-full"
-                                        onClick={(e) => {
+                                        onClick={() => {
                                           setShowSuggestions(false);
 
                                           navigate(

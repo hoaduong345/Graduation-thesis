@@ -8,9 +8,6 @@ import { toast } from "react-toastify";
 import * as yup from "yup";
 import bgi from "../../assets/PNG/LogoSlogan.png";
 import bg from "../../assets/PNG/NewProject.png";
-import LogoApple from "../../assets/PNG/lgApple.png";
-import LogoFace from "../../assets/PNG/lgFace.png";
-import LogoGoogle from "../../assets/PNG/lgG.png";
 import "./Resetpassword.css";
 function Resetpassword() {
   const navigate = useNavigate();

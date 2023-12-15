@@ -142,12 +142,31 @@ model Product {
   updatedAt     DateTime?              @default(now())
   categoryID    Int?
   subcateId     Int?
+  // attributeID   Int? 
   fK_category   Category?              @relation(fields: [categoryID], references: [id])
   fK_subcateLv2 subCategoriesMultiLv2? @relation(fields: [subcateId], references: [id])
+  // fK_attribute  Attribute?             @relation(fields: [attributeID], references: [id])
   OrderDetail   OrderDetail[]
   ProductImage  ProductImage[]
   cart          ItemCart[]
   Rating        Rating[]
+  attributes    Attribute[]
+}
+
+model Attribute {
+  id          Int           @id @default(autoincrement())
+  size        String?
+  color       String?
+  soluong     Int?
+  productId   Int? // Thêm trường idproduct
+  itemId      Int?
+  deletedAt   DateTime?
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @default(now())
+  products    Product?      @relation(fields: [productId], references: [id])
+  idorder     Order[]
+  idItem      ItemCart[]
+  OrderDetail OrderDetail[]
 }
 
 model Category {
@@ -173,6 +192,8 @@ model subCategoriesMultiLv2 {
   productId  Product[]
   category   Category  @relation("CategorySubcategories", fields: [categoryid], references: [id])
 
+  // SizeCategories Size[] @relation("Sizecategorieslv2")
+  // ColorCategories Color[] @relation("Colorcategorieslv2")
   @@index([name])
 }
 
@@ -187,17 +208,19 @@ model Cart {
 }
 
 model ItemCart {
-  id         Int       @id @default(autoincrement())
-  product    Product   @relation(fields: [productid], references: [id])
-  productid  Int
-  cartschema Cart      @relation(fields: [cartid], references: [id])
-  cartid     Int
-  quantity   Int?      @default(1)
-  price      Int?
-  total      Int?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @default(now())
-  deletedAt  DateTime?
+  id           Int        @id @default(autoincrement())
+  product      Product    @relation(fields: [productid], references: [id])
+  productid    Int
+  cartschema   Cart       @relation(fields: [cartid], references: [id])
+  cartid       Int
+  atributesId  Int?
+  quantity     Int?       @default(1)
+  price        Int?
+  total        Int?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime?  @default(now())
+  deletedAt    DateTime?
+  atributes_fk Attribute? @relation(fields: [atributesId], references: [id])
 }
 
 model ProductImage {
@@ -253,23 +276,27 @@ model Order {
   OrderDetail   OrderDetail[]
   User          User?          @relation(fields: [userId], references: [id])
   Notification  Notification[]
+  attributeID   Int?
+  fK_attributee Attribute?     @relation(fields: [attributeID], references: [id])
 }
 
 model OrderDetail {
-  id           Int       @id @default(autoincrement())
-  orderId      Int?
-  productId    Int?
-  name         String?
-  image        String?
-  price        Int?
-  quantity     Int?
-  total        Int?
-  ratingAt     DateTime?
-  createdAt    DateTime? @default(now())
-  updatedAt    DateTime? @default(now())
-  deletedAt    DateTime?
-  order        Order?    @relation(fields: [orderId], references: [id])
-  productOrder Product?  @relation(fields: [productId], references: [id])
+  id            Int        @id @default(autoincrement())
+  orderId       Int?
+  productId     Int?
+  name          String?
+  image         String?
+  price         Int?
+  quantity      Int?
+  total         Int?
+  ratingAt      DateTime?
+  createdAt     DateTime?  @default(now())
+  updatedAt     DateTime?  @default(now())
+  deletedAt     DateTime?
+  order         Order?     @relation(fields: [orderId], references: [id])
+  productOrder  Product?   @relation(fields: [productId], references: [id])
+  attributeID   Int?
+  fK_attributee Attribute? @relation(fields: [attributeID], references: [id])
 }
 
 model Invoice {

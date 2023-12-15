@@ -87,7 +87,7 @@ export default function SitebarFilter({
     onPriceRangeChange(price);
   };
 
-  const [rating, setRating] = useState(1);
+  const [, setRating] = useState(1);
   const handleRateChange = (rate: number) => {
     
     setRating(rate);

@@ -117,7 +117,7 @@ export default function useNotificationContextUser() {
       .then((res: any) => {
         setCountNotificationUser(res.count);
       })
-      .catch((err) => {
+      .catch(() => {
         
         return {};
       });

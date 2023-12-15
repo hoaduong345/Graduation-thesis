@@ -1,5 +1,5 @@
+import { IconButton } from "@material-tailwind/react";
 import React from 'react';
-import { Button, IconButton } from "@material-tailwind/react";
 
 interface PaginationProps {
     postPer: number;

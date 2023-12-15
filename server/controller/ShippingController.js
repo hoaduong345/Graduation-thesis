@@ -120,9 +120,17 @@ const ShippingController = {
                 skip,
                 take: pageSize,
                 include: {
-                    OrderDetail: true,
+                    OrderDetail: {
+                        include: {
+                            fK_attributee: {
+                                select: {
+                                    color: true,
+                                    size: true,
+                                },
+                            },
+                        },
+                    },
                 },
-
                 orderBy: {
                     id: 'desc',
                 },
@@ -217,7 +225,16 @@ const ShippingController = {
                 skip,
                 take: pageSize,
                 include: {
-                    OrderDetail: true,
+                    OrderDetail: {
+                        include: {
+                            fK_attributee: {
+                                select: {
+                                    color: true,
+                                    size: true,
+                                },
+                            },
+                        },
+                    },
                 },
                 orderBy: {
                     id: 'desc',
@@ -456,35 +473,35 @@ const ShippingController = {
         try {
             const userId = parseInt(req.cookies.id);
 
-            if(!userId){
-                console.log("You are not authenticate")
+            if (!userId) {
+                console.log('You are not authenticate');
             }
-                const status = {
-                    gte: 4,
-                };
-                const whereClause = {
-                    userId: userId,
-                    status: status,
-                    deleteAt: null,
-                };
-                notifi = await prisma.notification.findMany({
-                    where: whereClause,
-                    orderBy: {
-                        id: 'desc',
-                    },
-                    include: {
-                        fk_user: {
-                            select: {
-                                name: true,
-                                UserImage: {
-                                    select: {
-                                        url: true,
-                                    },
+            const status = {
+                gte: 4,
+            };
+            const whereClause = {
+                userId: userId,
+                status: status,
+                deleteAt: null,
+            };
+            notifi = await prisma.notification.findMany({
+                where: whereClause,
+                orderBy: {
+                    id: 'desc',
+                },
+                include: {
+                    fk_user: {
+                        select: {
+                            name: true,
+                            UserImage: {
+                                select: {
+                                    url: true,
                                 },
                             },
                         },
                     },
-                });
+                },
+            });
 
             const whereClauseSeen = {
                 userId: userId,

@@ -1,8 +1,4 @@
-import "./Footer.css";
 import BuyzzyFooterLogo from "../../assets/TSX/BuyzzyFooterLogo";
-import IconJCB from "../../assets/TSX/IconJCB";
-import Cham from "../../assets/TSX/Cham";
-import Express from "../../assets/TSX/Express";
 import { Images } from "../../assets/TS";
 import Container from "../container/Container";
 

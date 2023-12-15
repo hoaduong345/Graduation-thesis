@@ -19,22 +19,17 @@ import Handle from "../../../admin/assets/TSX/bacham";
 import Edit from "../../../admin/assets/TSX/Edit";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
-type FormValues = {
-  id: number;
-  images: string;
-};
+
 export default function Banner() {
   const idModal = "logo";
   const idRemove = "removeLogo";
   const [loading, setLoading] = useState(false);
 
   const [url, setUrl] = useState<string>();
-  const [open, setOpen] = useState<number>();
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const [banner, setBanner] = useState<BannerModel[]>([]);
   const [bannerToDelete, setBannerToDelete] = useState(0);
-  const [checkedCategory, setCheckedCategory] = useState<BannerModel[]>([]);
+  const [, setCheckedCategory] = useState<BannerModel[]>([]);
   const getAllBanner = async () => {
     await bannerController.getAll().then((res: any) => {
       setBanner(res);
@@ -49,7 +44,6 @@ export default function Banner() {
     control,
     handleSubmit,
     reset,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm<BannerModel>({

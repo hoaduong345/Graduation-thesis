@@ -24,11 +24,11 @@ export type FormImage = {
   UserImage: string[];
 };
 export default function UserProfile() {
-  const [validUrl, setValidUrl] = useState(false);
+  const [, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
-  const [image, setImage] = useState("");
-  const [url, setUrl] = useState<string>("");
+  const [image] = useState("");
+  const [, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [users, setUsers] = useState<UserDetail>({} as UserDetail);
@@ -117,10 +117,7 @@ export default function UserProfile() {
           });
         })
         .catch((error) => {
-          console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
-            error
-          );
+          console.log(error);
         });
       console.log("Error");
     }
@@ -179,7 +176,7 @@ export default function UserProfile() {
                   <Controller
                     control={control}
                     name="id"
-                    render={({ field }) => (
+                    render={() => (
                       <>
                         <input
                           className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]
@@ -205,7 +202,7 @@ export default function UserProfile() {
                   <Controller
                     control={control}
                     name="createdAt"
-                    render={({ field }) => (
+                    render={() => (
                       <>
                         <input
                           className="focus:outline-none text-[#333333] text-base font-medium placeholder-[#7A828A] w-[100%]

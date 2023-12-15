@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../assets/TS";
 import Map from "../../../assets/TSX/Map";
 import NoteOrderAdmin from "../../../assets/TSX/NoteOrderAdmin";
+import Container from "../../../components/container/Container";
 import { orderControllers } from "../../../controllers/OrderControllers";
 import { numberFormat } from "../../../helper/Format";
 import StepperShipping from "../../../helper/Stepper/StepperShipping";
 import { OrderModel, UpdateQuantityModal } from "../../../model/OrderModel";
-import Container from "../../../components/container/Container";
-import Back from "../admin/assets/TSX/Back";
-import Paymethod from "../admin/assets/TSX/Paymethod";
-import PhoneOrderAdmin from "../admin/assets/TSX/PhoneOrderAdmin";
 import {
   dateOrder,
   timeOrder,
 } from "../admin/Management/Order/OrderManagement";
+import Back from "../admin/assets/TSX/Back";
+import Paymethod from "../admin/assets/TSX/Paymethod";
+import PhoneOrderAdmin from "../admin/assets/TSX/PhoneOrderAdmin";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 
 export default function ShippingDetail() {
@@ -38,8 +37,8 @@ export default function ShippingDetail() {
     let listProductQuantity: UpdateQuantityModal[] = [];
     order.OrderDetail.map((element) => {
       listProductQuantity.push({
-        productId: element.productId!,
-        quantity: element.quantity,
+        quantity: element.quantity!,
+        productId: element.productId,
       });
     });
 
@@ -145,6 +144,10 @@ export default function ShippingDetail() {
                                     <span className="text-[#4C4C4C]">
                                       x{e.quantity}
                                     </span>
+                                  </p>
+                                  <p className="text-[#7A828A] text-xs font-medium mt-1">
+                                    Phân loại: {e.fK_attributee?.color} -{" "}
+                                    {e.fK_attributee?.size}
                                   </p>
                                 </div>
                               </div>

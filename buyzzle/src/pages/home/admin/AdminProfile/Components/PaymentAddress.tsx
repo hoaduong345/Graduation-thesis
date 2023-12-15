@@ -1,9 +1,9 @@
-import { ChangeEvent, Fragment, useState, useEffect } from "react";
-import Container from "../../../../../components/container/Container";
-import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { Fragment, useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import Container from "../../../../../components/container/Container";
 import { userController } from "../../../../../controllers/UserController";
 
 type FormValues = {
@@ -15,11 +15,10 @@ type FormValues = {
 };
 
 export default function PaymentAddress() {
-  const [editAddress, setAddress] = useState<FormValues>();
   const [validUrl, setValidUrl] = useState(false);
   const param = useParams();
-  const [selectedOption, setSelectedOption] = useState<string>("aaaaa");
-  const [id, setId] = useState<string>("11");
+  const [, setSelectedOption] = useState<string>("aaaaa");
+  const [, setId] = useState<string>("11");
 
   const provinces = [
     "Tỉnh/Thành phố, Quận/Huyện, Phường/Xã",

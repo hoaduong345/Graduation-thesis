@@ -23,13 +23,11 @@ export type FormImage = {
   UserImage: string[];
 };
 export default function UserProfile() {
-  const [validUrl, setValidUrl] = useState(false);
+  const [, setValidUrl] = useState(false);
   const [CheckImageUrl, setCheckImageUrl] = useState(false);
   const param = useParams();
-
-  const [image, setImage] = useState("");
-  // const [editUser, setEditUser] = useState<FormValues>();
-  const [url, setUrl] = useState<string>("");
+  const [image, ] = useState("");
+  const [, setUrl] = useState<string>("");
   const [urlThen, setUrlThen] = useState<string>("");
   const [name, setName] = useState<string>("");
 
@@ -39,11 +37,9 @@ export default function UserProfile() {
     control,
  
     reset,
-    formState: { errors, isDirty, isValid },
   } = useForm<FormValues>({
     mode: "all",
   });
-  const isDisabled = !(isValid && isDirty);
 
   const getShipperData = () => {
     const user = param.username;
@@ -71,10 +67,7 @@ export default function UserProfile() {
           }
         })
         .catch((error) => {
-          console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
-            error
-          );
+          console.log(error);
         });
     } else {
       console.log("Error");
@@ -144,10 +137,8 @@ export default function UserProfile() {
           
         })
         .catch((error) => {
-          console.log(
-            "🚀 ~ file: Detailproducts.tsx:27 ~ .then ~ error:",
-            error
-          );
+          console.log(error)
+          
         });
       console.log("Error");
     }

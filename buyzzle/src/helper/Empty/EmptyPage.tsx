@@ -6,7 +6,7 @@ interface EmptyModel {
 }
 
 export default function EmptyPage(props: EmptyModel) {
-  const { title, button } = props;
+  const { title } = props;
   return (
     <>
       <div className="text-center w-full">

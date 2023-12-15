@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import Bell from "../../assets/TSX/Bell";
 
 interface HeaderTop {

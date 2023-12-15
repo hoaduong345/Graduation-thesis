@@ -78,11 +78,7 @@ export default function OrderDetailPage() {
   };
 
   const addImages = async (url: string, id: number) => {
-
-
-    await ratingAndCommentController
-      .addImagesComment(url, id)
-     
+    await ratingAndCommentController.addImagesComment(url, id);
   };
 
   const resetImages = () => {
@@ -356,6 +352,10 @@ export default function OrderDetailPage() {
                                 x{e.quantity}
                               </span>
                             </p>
+                            <p className="text-[#7A828A] text-xs font-medium mt-1">
+                              Phân loại: {e.fK_attributee?.color} -{" "}
+                              {e.fK_attributee?.size}
+                            </p>
                           </div>
                         </div>
                         <div className="col-span-1 flex gap-2 justify-around items-center">
@@ -597,7 +597,7 @@ export default function OrderDetailPage() {
                                                     //   handleRemoveOnlyIMG(e.id)
                                                     // }
                                                   >
-                                                    <RemoveIMG />
+                                                    <RemoveIMG removeListUrl={} index={}/>
                                                   </div>
                                                 </div>
                                               </div>

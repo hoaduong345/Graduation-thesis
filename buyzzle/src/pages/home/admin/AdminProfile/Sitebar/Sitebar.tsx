@@ -1,15 +1,14 @@
-import ProductManager from "../../../../../assets/TSX/ProductManager";
-import User from "../../../../../assets/TSX/User";
-import HistoryBought from "../../../../../assets/TSX/HistoryBought";
+import axios from "axios";
+import { ReactNode } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Cart from "../../../../../assets/TSX/Cart";
 import Heart from "../../../../../assets/TSX/Heart";
-import Setting from "../../../../../assets/TSX/Setting";
+import HistoryBought from "../../../../../assets/TSX/HistoryBought";
 import Logout from "../../../../../assets/TSX/Logout";
-import axios from "axios";
-import { ReactNode, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import ProductManager from "../../../../../assets/TSX/ProductManager";
+import Setting from "../../../../../assets/TSX/Setting";
+import User from "../../../../../assets/TSX/User";
 import Voucher from "../../../../../assets/TSX/Voucher";
-import secureLocalStorage from "react-secure-storage";
 
 interface SitebarUser {
   icon: ReactNode;
@@ -64,7 +63,7 @@ export default function Sitebar() {
   const API = "http://localhost:5000/buyzzle/auth/logout";
   async function LogOut() {
     try {
-      const reponse = await instance.post(API);
+       await instance.post(API);
      
       localStorage.removeItem("user");
       window.location.href = "/";

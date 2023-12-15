@@ -1,19 +1,17 @@
-import React from "react";
-import Container from "../../../container/Container";
-import VoucherManage from "../../../../assets/TSX/VoucherManage";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import LogoVoucher from "../../../../assets/TSX/LogoVoucher";
+import VoucherManage from "../../../../assets/TSX/VoucherManage";
 import VoucherManageItem from "../../../../assets/TSX/VoucherManageItem";
+import { userController } from "../../../../controllers/UserController";
 import { voucherControllers } from "../../../../controllers/VoucherControllers";
+import DialogLogin from "../../../../helper/Dialog/DialogLogin";
 import { formatDate } from "../../../../helper/Format";
 import { toastWarn } from "../../../../helper/Toast/Warning";
 import { VoucherModel } from "../../../../model/VoucherModel";
 import { LoginForm } from "../../../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
-import { Controller, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { userController } from "../../../../controllers/UserController";
-import DialogLogin from "../../../../helper/Dialog/DialogLogin";
-import { toast } from "react-toastify";
+import Container from "../../../container/Container";
 export default function VouchersPage() {
   const [voucher, setVoucher] = useState<VoucherModel[]>([]);
   const [Logined, setLogined] = useState<boolean>();
@@ -106,7 +104,6 @@ export default function VouchersPage() {
     if (modal) {
       modal.close();
     }
-   
   };
 
   return (

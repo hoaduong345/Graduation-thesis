@@ -14,21 +14,21 @@ const firebaseConfig = {
   // messagingSenderId: "939682945824",
   // appId: "1:939682945824:web:319cfb0102d58890b95545"
 
-  // apiKey: "AIzaSyDUTTDrCAT24dmHuHK0OvOpI7-lhEMJiJ4",
-  // authDomain: "buyzzle-f8313.firebaseapp.com",
-  // databaseURL: "https://buyzzle-f8313-default-rtdb.firebaseio.com",
-  // projectId: "buyzzle-f8313",
-  // storageBucket: "buyzzle-f8313.appspot.com",
-  // messagingSenderId: "1041627352430",
-  // appId: "1:1041627352430:web:dcfa9e53c29d3a88cb857f",
-  // measurementId: "G-FJ8LP13MNT"
-  apiKey: "AIzaSyD2RavRVHO56Iw-0jefnNMGro1Gg9y8xyE",
-  authDomain: "uploadimg-d0873.firebaseapp.com",
-  projectId: "uploadimg-d0873",
-  storageBucket: "uploadimg-d0873.appspot.com",
-  messagingSenderId: "1078795630642",
-  appId: "1:1078795630642:web:b9e3e56074909140bc242b",
-  measurementId: "G-JLZWZPKM29",
+  // apiKey: "AIzaSyD2RavRVHO56Iw-0jefnNMGro1Gg9y8xyE",
+  // authDomain: "uploadimg-d0873.firebaseapp.com",
+  // projectId: "uploadimg-d0873",
+  // storageBucket: "uploadimg-d0873.appspot.com",
+  // messagingSenderId: "1078795630642",
+  // appId: "1:1078795630642:web:b9e3e56074909140bc242b",
+  // measurementId: "G-JLZWZPKM29",
+
+  apiKey: "AIzaSyCg73yqCNCIvWFRy6utbW6sqMN_s11RdnQ",
+  authDomain: "imgbuyzzle.firebaseapp.com",
+  projectId: "imgbuyzzle",
+  storageBucket: "imgbuyzzle.appspot.com",
+  messagingSenderId: "1071792430918",
+  appId: "1:1071792430918:web:8def05f877525f88fccf47",
+  measurementId: "G-ESM5WMGJ2R",
 };
 
 // Initialize Firebase

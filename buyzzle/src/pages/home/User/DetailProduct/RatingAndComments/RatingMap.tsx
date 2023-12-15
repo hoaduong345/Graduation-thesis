@@ -13,7 +13,6 @@ import { stars } from "../../../../../helper/StarRating/Star";
 import { Ratee, Rating } from "../../../../../model/ProductModel";
 import Edit from "../../../admin/assets/TSX/Edit";
 import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
-// import eyeslide from "../../../Admin/assets/TSX/EyeSlide";
 import secureLocalStorage from "react-secure-storage";
 import { adminController } from "../../../../../controllers/AdminControllder";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
@@ -91,7 +90,6 @@ export default function RatingMap(props: Props) {
   };
   const handleRatingClick = (rating: number) => {
     setValue("ratingValue", rating);
-  
   };
   const handleFeedbackClick = (ratingId: number) => {
     if (isFeedbackClicked === ratingId) {
@@ -127,7 +125,6 @@ export default function RatingMap(props: Props) {
   useEffect(() => {
     let user = secureLocalStorage.getItem("admin");
     if (user == null) {
-   
       setAdminName(null);
       setAdminAvt(null);
     } else {
@@ -151,7 +148,7 @@ export default function RatingMap(props: Props) {
           } else {
             console.log("Error");
           }
-   
+
           return res;
         });
       };
@@ -165,9 +162,8 @@ export default function RatingMap(props: Props) {
     } else {
       const userData = JSON.parse(user);
       const username = userData;
-  
+
       setUsername(username);
-    
     }
   }, []);
 

@@ -83,6 +83,7 @@ export default function useNotificationContextShippping() {
         setCountNotificationShipping(res.count);
       })
       .catch((err) => {
+       console.log( err)
        
         return {};
       });

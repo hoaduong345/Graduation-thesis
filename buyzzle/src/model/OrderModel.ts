@@ -34,9 +34,9 @@ export interface OrderModel {
   address: string;
   phoneNumber: number;
   OrderDetail: OrderItems[];
-  User:User;
-  
+  User: User;
 }
+
 export interface OrderItems {
   id?: number;
   productId: number;
@@ -46,8 +46,13 @@ export interface OrderItems {
   image: string;
   total: number;
   ratingAt?: Date;
+  attributeID: number;
+  fK_attributee?: FK_attributee;
 }
-
+export interface FK_attributee {
+  size: string;
+  color: string;
+}
 export enum StatusOrder {
   Cancel,
   Comfirm,
@@ -59,8 +64,10 @@ export enum StatusOrder {
 }
 
 export interface UpdateQuantityModal {
-  productId: number,
-  quantity: number
+  productId: number;
+  attributeId?: number;
+  soluong?: number;
+  quantity?: number;
 }
 export interface User {
   name: string;
@@ -71,5 +78,4 @@ export interface User {
 export interface UserImage {
   // name: string;
   url: string;
- 
 }
