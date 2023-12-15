@@ -16,8 +16,8 @@ import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 import secureLocalStorage from "react-secure-storage";
 import { adminController } from "../../../../../controllers/AdminControllder";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
-import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
 import Handle from "../../../admin/assets/TSX/bacham";
+import EyeSlide from "../../../admin/assets/TSX/EyeSlide";
 
 interface FormValues {
   id: number;

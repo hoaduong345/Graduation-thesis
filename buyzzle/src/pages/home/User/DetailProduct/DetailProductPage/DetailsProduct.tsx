@@ -43,8 +43,8 @@ import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
 import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
 import Cart from "../../../admin/assets/TSX/Cart";
 import SaveLink from "../../../admin/assets/TSX/SaveLink";
-import RatingMap from "../RatingAndComments/RatingMap";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
+import RatingMap from "../ratingAndComments/RatingMap";
 export interface ImgOfProduct {
   url: string;
 }

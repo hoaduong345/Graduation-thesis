@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Container from "../../../../../components/container/Container";
-import Sitebar from "../Sitebar/Sitebar";
 
 import axios from "axios";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -11,6 +10,7 @@ import { toast } from "react-toastify";
 import { appConfigUser } from "../../../../../configsEnv";
 import { userController } from "../../../../../controllers/UserController";
 import { storage } from "../../../../../firebase/Config";
+import Sitebar from "../sitebar/Sitebar";
 
 export type FormValues = {
   username: string;

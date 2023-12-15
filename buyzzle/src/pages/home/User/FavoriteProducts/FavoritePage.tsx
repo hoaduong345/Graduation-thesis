@@ -2,7 +2,7 @@ import { Images } from "../../../../assets/TS";
 import { numberFormat } from "../../../../helper/Format";
 import Container from "../../../../components/container/Container";
 
-import Sitebar from "../UserProfile/Sitebar/Sitebar";
+import Sitebar from "../UserProfile/sitebar/Sitebar";
 import Cart from "../../admin/assets/TSX/Cart";
 import Delete from "../../admin/assets/TSX/Delete";
 
