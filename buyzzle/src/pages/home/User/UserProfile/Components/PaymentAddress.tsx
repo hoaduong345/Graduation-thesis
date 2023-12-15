@@ -15,10 +15,9 @@ type FormValues = {
 };
 
 export default function PaymentAddress() {
-  const [editAddress, setAddress] = useState<FormValues>();
   const [validUrl, setValidUrl] = useState(false);
   const param = useParams();
-  const [selectedOption, setSelectedOption] = useState<string>("aaaaa");
+  const [, setSelectedOption] = useState<string>("aaaaa");
   const [id, setId] = useState<string>("11");
 
   const provinces = [

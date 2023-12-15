@@ -17,8 +17,7 @@ export default function ChangePassword() {
   const {
     control,
     handleSubmit,
-    register,
-    formState: { errors, isDirty, isValid },
+    formState: { errors },
   } = useForm<FormValues>({
     // mode: 'all',
     defaultValues: {
@@ -49,15 +48,8 @@ export default function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
-  const [formData2, setFormData2] = useState({
-    username: "",
-    password: "",
-  });
-  const [errorss, setErrors] = useState({
-    username: "",
-    password: "",
-  });
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
+
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);

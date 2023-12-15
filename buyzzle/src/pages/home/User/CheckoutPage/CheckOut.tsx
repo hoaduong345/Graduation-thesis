@@ -299,10 +299,10 @@ export default function CheckOut() {
     getUserAddress();
   }, []);
   const CheckToken = async () => {
-    userController.CheckToken().then((res) => {});
+    userController.CheckToken().then(() => {});
   };
   const CheckRefreshToken = async () => {
-    userController.CheckRefreshToken().then((res) => {});
+    userController.CheckRefreshToken().then(() => {});
   };
   const muti = () => {
     CheckToken();

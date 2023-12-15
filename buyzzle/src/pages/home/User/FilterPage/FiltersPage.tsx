@@ -268,7 +268,7 @@ export default function FiltersPage() {
               onQuantityRangeChange={() => console.log("")}
               onPriceRangeChange={(e: any) => handleSliderChange(e)}
               onRateChange={(e: any) => getProductsWhereRating(e)}
-              onPurchaseRangeChange={function (value: [number, number]): void {
+              onPurchaseRangeChange={function (_value: [number, number]): void {
                 throw new Error("Function not implemented.");
               }}
               subcate={subcate}

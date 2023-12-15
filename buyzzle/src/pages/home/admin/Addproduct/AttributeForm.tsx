@@ -6,7 +6,7 @@ import {
 } from "react-hook-form";
 import MinusAttribute from "../../../../assets/TSX/MinusAttribute";
 import PlusAttribute from "../../../../assets/TSX/PlusAttribute";
-import { FormValues } from "./Addproducts";
+import { FormValues } from "../EditProduct/EditProductMap";
 
 interface Form {
   handleMinusClick: (index: number) => void;
@@ -150,8 +150,6 @@ export default function AttributeForm(props: Form) {
                       placeholder="00.00"
                       value={field.value}
                       onChange={(e) => {
-                        const reg = /[^0-9]/g;
-                        const value = e.target.value;
                         field.onChange(e);
                       }}
                     />

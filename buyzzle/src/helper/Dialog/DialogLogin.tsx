@@ -2,7 +2,6 @@ import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { ReactNode } from "react";
-import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Images } from "../../assets/TS";
 import { LoginFormGoogle } from "../../pages/login/Login";
@@ -16,8 +15,7 @@ type Props = {
 };
 
 export default function DialogLogin(props: Props) {
-  const param = useParams();
-  const { title, id, body, onClose, onSave } = props;
+  const {  id, body, onClose, onSave } = props;
 
 
   const CustomGoogleLogin = () => {
@@ -55,7 +53,7 @@ export default function DialogLogin(props: Props) {
       
       const callAPI2 = async (data: LoginFormGoogle) => {
 
-        const response1 = axios.post(API2, data, {
+         axios.post(API2, data, {
           headers: {
             "Access-Control-Allow-Origin": "*",
           },
@@ -118,7 +116,7 @@ export default function DialogLogin(props: Props) {
     <>
       <dialog id={id} className="modal">
         <ToastContainer></ToastContainer>
-        <div className="flex flex-wrap content-center justify-center bg-gray-200 py-10 bg-white relative flex flex-col w-[1000px] p-[10px]  relative">
+        <div className="flex flex-wrap content-center justify-center bg-gray-200 py-10  relative  flex-col w-[1000px] p-[10px] ">
           <div className="flex shadow-md">
             <div className="flex flex-wrap content-center justify-center rounded-l-md bg-white">
               <div className="w-[455px] p-[20px]">

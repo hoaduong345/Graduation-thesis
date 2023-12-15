@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc --skipLibCheck && vite build --mode production",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -13,7 +13,6 @@
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@esbuild/win32-x64": "^0.19.7",
     "@heroicons/react": "2.0.18",
     "@hookform/resolvers": "^3.3.1",
     "@ionic/core": "^7.4.1",
@@ -45,7 +44,6 @@
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-hook-form": "^7.46.1",
-    "react-image-magnify": "^2.7.4",
     "react-img-hover-zoom": "^0.1.8",
     "react-img-zoom": "^0.1.0",
     "react-infinite-scroll-component": "^6.1.0",
@@ -73,7 +71,6 @@
     "@types/react-csv": "^1.1.7",
     "@types/react-dom": "^18.2.7",
     "@types/react-draft-wysiwyg": "^1.13.4",
-    "@types/react-image-magnify": "^2.7.4",
     "@types/uuid": "^9.0.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",

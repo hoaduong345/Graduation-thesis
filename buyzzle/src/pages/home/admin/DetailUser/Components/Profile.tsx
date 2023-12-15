@@ -20,16 +20,10 @@ export type FormImage = {
   UserImage: string[];
 };
 export default function UserProfile() {
-  const [validUrl, setValidUrl] = useState(false);
-  const [CheckImageUrl, setCheckImageUrl] = useState(false);
+  const [, setValidUrl] = useState(false);
   const param = useParams();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [image, setImage] = useState("");
   // const [editUser, setEditUser] = useState<FormValues>();
-  const [url, setUrl] = useState<string>("");
-  const [urlThen, setUrlThen] = useState<string>("");
-
-  const [id, setId] = useState<string>("11");
+  const [, setId] = useState<string>("11");
   // const id: number | undefined = getID()!;
   const [sex, setSex] = useState<boolean>();
 
@@ -37,7 +31,7 @@ export default function UserProfile() {
     control,
     register,
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
   });

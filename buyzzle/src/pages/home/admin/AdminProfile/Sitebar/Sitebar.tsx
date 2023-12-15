@@ -63,7 +63,7 @@ export default function Sitebar() {
   const API = "http://localhost:5000/buyzzle/auth/logout";
   async function LogOut() {
     try {
-      const reponse = await instance.post(API);
+       await instance.post(API);
      
       localStorage.removeItem("user");
       window.location.href = "/";

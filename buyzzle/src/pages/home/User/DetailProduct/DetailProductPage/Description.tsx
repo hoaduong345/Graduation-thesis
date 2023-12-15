@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Products } from "../../filterPage/FiltersPage";
 
 export default function Description() {
-  const [first, setfirst] = useState<Products | undefined>(undefined);
+  const [first, ] = useState<Products | undefined>(undefined);
 
   return (
     <div

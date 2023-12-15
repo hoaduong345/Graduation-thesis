@@ -15,7 +15,7 @@ import {
 import Back from "../admin/assets/TSX/Back";
 import Paymethod from "../admin/assets/TSX/Paymethod";
 import PhoneOrderAdmin from "../admin/assets/TSX/PhoneOrderAdmin";
-import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
+import { getStatusOrder } from "../User/orderHistoryPage/OrderHistory";
 
 export default function ShippingDetail() {
   const { id } = useParams();

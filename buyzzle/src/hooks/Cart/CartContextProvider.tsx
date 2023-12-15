@@ -79,10 +79,6 @@ export default function useCartContext() {
     await cartControllers
       .getCart()
       .then((res) => {
-        console.log(
-          "🚀 ~ file: CartContextProvider.tsx:83 ~ .then ~ res:",
-          res
-        );
         setCarts(res.data);
         res.data.item.map((e) => {
           if (e.quantity! > e.atributes_fk.soluong) {

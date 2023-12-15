@@ -162,7 +162,7 @@ function Login() {
 
       const callAPI2 = async (data: LoginFormGoogle) => {
 
-        const response1 = await axios.post(API2, data, {
+         await axios.post(API2, data, {
           headers: {
             "Access-Control-Allow-Origin": "*",
           },

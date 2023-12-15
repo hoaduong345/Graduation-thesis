@@ -26,12 +26,10 @@ export default function LogoDetail() {
   const [loading, setLoading] = useState(false);
 
   const [url, setUrl] = useState<string>();
-  const [open, setOpen] = useState<number>();
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const [logo, setLogo] = useState<LogoDetailModel[]>([]);
   const [logoToDelete, setLogoToDelete] = useState(0);
-  const [checkedCategory, setCheckedCategory] = useState<LogoDetailModel[]>([]);
+  const [, setCheckedCategory] = useState<LogoDetailModel[]>([]);
   const getAllLogo = async () => {
     await logodetailController.getAll().then((res: any) => {
       setLogo(res);
@@ -46,7 +44,6 @@ export default function LogoDetail() {
     control,
     handleSubmit,
     reset,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm<LogoDetailModel>({

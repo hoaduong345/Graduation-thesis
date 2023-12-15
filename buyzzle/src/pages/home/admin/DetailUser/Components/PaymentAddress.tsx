@@ -15,8 +15,8 @@ type FormValues = {
 export default function PaymentAddress() {
   const [validUrl, setValidUrl] = useState(false);
   const param = useParams();
-  const [selectedOption, setSelectedOption] = useState<string>("aaaaa");
-  const [id, setId] = useState<string>("11");
+  const [, setSelectedOption] = useState<string>("aaaaa");
+  const [, setId] = useState<string>("11");
 
   const provinces = [
     "Tỉnh/Thành phố, Quận/Huyện, Phường/Xã",
@@ -85,9 +85,8 @@ export default function PaymentAddress() {
 
   const {
     control,
-    register,
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
     defaultValues: {

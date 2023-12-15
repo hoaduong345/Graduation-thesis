@@ -142,12 +142,12 @@ export default function Header() {
     }
   };
   const CheckToken = async () => {
-    userController.CheckToken().then((res) => {
+    userController.CheckToken().then(() => {
 
     });
   };
   const CheckRefreshToken = async () => {
-    userController.CheckRefreshToken().then((res) => {
+    userController.CheckRefreshToken().then(() => {
      
     });
   };

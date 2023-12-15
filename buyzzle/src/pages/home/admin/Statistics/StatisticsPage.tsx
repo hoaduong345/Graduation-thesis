@@ -59,18 +59,9 @@ const optionsChartVertical = {
     },
   },
 };
-interface topProductsStats {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  revenue: number;
-}
 
-interface selectStats {
-  id: number;
-  nameTime: string;
-}
+
+
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
@@ -205,7 +196,7 @@ export default function StatisticsPage() {
 
   const handleSelectChange = (
     value: DateValueType,
-    e?: HTMLInputElement | null | undefined
+    _e?: HTMLInputElement | null | undefined
   ) => {
     const startDate = moment(value?.startDate!).toDate();
     const endDate = moment(value?.endDate!).toDate();
