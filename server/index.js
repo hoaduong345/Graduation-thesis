@@ -46,10 +46,10 @@ app.use(cookieParser());
 app.use(morgan('common'));
 
 const whitelist = [
-    'http://localhost:5173',
     'https://www.getpostman.com',
     'https://app.getpostman.com',
-    'http://localhost:5000',
+    'http://www.buyzzle.io.vn/',
+    'http://www.buyzzle.io.vn/api/',
 ];
 const corsOptions = {
     origin: (origin, callback) => {
