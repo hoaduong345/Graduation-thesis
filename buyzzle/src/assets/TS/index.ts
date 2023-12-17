@@ -14,7 +14,7 @@ export const Images = {
   banner: "/src/Assets/Images/banner.jpg",
   banner1: "/src/Assets/Images/banner1.jpg",
   bgRegisterIcon: "/src/Assets/PNG/bgRegisterIcon.png",
-  logoSlogan: "/src/Assets/PNG/logoSlogan.png",
+  logoSlogan: "/src/Assets/PNG/LogoSlogan.png",
   bgi: "/src/Assets/PNG/NewProject.png",
   check: "/src/Assets/PNG/check.png",
   logoApple: "/src/Assets/PNG/lgApple.png",
