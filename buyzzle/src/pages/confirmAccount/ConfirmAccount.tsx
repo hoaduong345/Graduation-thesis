@@ -18,7 +18,7 @@ function ConfirmAccount() {
 
   useEffect(() => {
     const verifyEmailUrl = async () => {
-      const url = `http://localhost:5000/buyzzle/auth/${param.id}/verify/${param.token}`;
+      const url = `http://www.buyzzle.io.vn/api/buyzzle/auth/${param.id}/verify/${param.token}`;
       try {
         setValidUrl(true);
         await axios.post(url);

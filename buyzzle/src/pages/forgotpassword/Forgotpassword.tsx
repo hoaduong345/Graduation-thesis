@@ -32,7 +32,7 @@ function Forgotpassword() {
     setLoading(true);
     try {
       await axios
-        .post("http://localhost:5000/buyzzle/auth/forgotpassword", data)
+        .post("http://www.buyzzle.io.vn/api/buyzzle/auth/forgotpassword", data)
         .then((_) => {
           toast.success("Kiểm tra email để xác minh tài khoản!", {
             position: "top-right",

@@ -202,7 +202,7 @@ export default function UserProfile() {
       .then((response) => "CCCCCCCCCCCC1:" + response);
   };
 
-  const API = `http://localhost:5000/admin/adminprofile/${param.username}`;
+  const API = `http://www.buyzzle.io.vn/api/admin/adminprofile/${param.username}`;
   const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
       if (selectedFile == null && CheckImageUrl == false) {

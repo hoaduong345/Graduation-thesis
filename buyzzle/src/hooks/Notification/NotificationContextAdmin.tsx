@@ -20,7 +20,6 @@ export default function useNotificationContextAdmin() {
   }, []);
   const getCountNoti = async () => {
     await notificationControllers.getAllNotificationAdmin().then((res) => {
-     
       setCountNotificationAdmin(res);
     });
   };
@@ -30,20 +29,15 @@ export default function useNotificationContextAdmin() {
     getAllNotiAdmin();
   }, []);
   const getAllNotiAdmin = async () => {
-    await notificationControllers
-      .getAllNotificationAdmin()
-      .then((res) => {
-        
-        setNotificationAdmin(res.allNotification);
-      })
-      
+    await notificationControllers.getAllNotificationAdmin().then((res) => {
+      setNotificationAdmin(res.allNotification);
+    });
   };
 
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io("http://www.buyzzle.io.vn/api");
     socket.on("requestdelete", (requestdelete) => {
-      
       const urlTaker = requestdelete.User.UserImage;
 
       toast(
@@ -90,7 +84,6 @@ export default function useNotificationContextAdmin() {
       setDeletedOrder(requestdelete);
     });
     socket.on("newOrder", (newOrder) => {
-    
       const urlTaker = newOrder.user.UserImage;
 
       toast(
@@ -136,20 +129,16 @@ export default function useNotificationContextAdmin() {
       getAllNotiAdmin();
       setDeletedOrder(newOrder);
     });
-    socket.on("disconnect", () => {
-      
-    });
+    socket.on("disconnect", () => {});
   }, [deletedOrder]);
 
   const handleSeenAllNoti = () => {
     notificationControllers
       .seenAllNotiAdmin()
       .then((res: any) => {
-     
         setCountNotificationAdmin(res.count);
       })
       .catch(() => {
-       
         return {};
       });
   };

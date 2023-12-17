@@ -102,7 +102,7 @@ export default function PaymentAddress() {
 
   const isDisabled = !(isValid && isDirty);
 
-  const API = `http://localhost:5000/buyzzle/user/paymentaddress/${param.username}`;
+  const API = `http://www.buyzzle.io.vn/api/buyzzle/user/paymentaddress/${param.username}`;
 
   useEffect(() => {
     function CheckLink() {
@@ -121,11 +121,10 @@ export default function PaymentAddress() {
     if (user != null) {
       const userData = JSON.parse(user);
       const username = userData.username;
-    
+
       userController
         .getUserWhereUsername2(username)
         .then((res) => {
-         
           return res;
         })
         .then((res) => {
@@ -164,17 +163,14 @@ export default function PaymentAddress() {
 
   const onSubmit = async (formData: FormValues) => {
     try {
-    
       const response1 = await sendToDatabase(formData);
-      
+
       if (response1.status === 200) {
-      
         toast.success("Cập nhật thành công", {
           position: "top-right",
           autoClose: 5000,
         });
       } else {
-       
         toast.warning("Sign-in failed", {
           position: "top-right",
           autoClose: 5000,
@@ -185,7 +181,6 @@ export default function PaymentAddress() {
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
         if (responseData) {
-         
           toast.warning(responseData, {
             position: "top-right",
             autoClose: 5000,

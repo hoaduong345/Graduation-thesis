@@ -21,7 +21,6 @@ export default function useNotificationContextUser() {
   }, []);
   const getCountNoti = async () => {
     await notificationControllers.getAllNotificationUser().then((res) => {
-     
       setCountNotificationUser(res);
     });
   };
@@ -31,20 +30,16 @@ export default function useNotificationContextUser() {
     getAllNotiUser();
   }, []);
   const getAllNotiUser = async () => {
-    await notificationControllers
-      .getAllNotificationUser()
-      .then((res) => {
-       
-        setNotificationUser(res.allNotification);
-      })
-     
+    await notificationControllers.getAllNotificationUser().then((res) => {
+      setNotificationUser(res.allNotification);
+    });
   };
 
   useEffect(() => {
     const idUser = localStorage.getItem("idUser");
-   
+
     if (!idUser) return;
-    const socket = io("http://localhost:5000");
+    const socket = io("http://www.buyzzle.io.vn/api");
     socket.on(`confirmCancelOrder/${idUser}`, (confirmCancelOrder) => {
       toast(
         <a href={`/orderdetail/${confirmCancelOrder.id}`}>
@@ -107,9 +102,7 @@ export default function useNotificationContextUser() {
       getAllNotiUser();
       setsocketUser(deliverysuccessfully);
     });
-    socket.on("disconnect", () => {
-     
-    });
+    socket.on("disconnect", () => {});
   }, [socketUser]);
   const handleSeenAllNoti = () => {
     notificationControllers
@@ -118,7 +111,6 @@ export default function useNotificationContextUser() {
         setCountNotificationUser(res.count);
       })
       .catch(() => {
-        
         return {};
       });
   };

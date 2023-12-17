@@ -273,7 +273,7 @@ export default function CheckOut() {
     return totalCart;
   };
 
-  const API = `http://localhost:5000/buyzzle/user/paymentaddress/${username}`;
+  const API = `http://www.buyzzle.io.vn/api/buyzzle/user/paymentaddress/${username}`;
 
   const sendToDatabase = async (formData: any) => {
     try {

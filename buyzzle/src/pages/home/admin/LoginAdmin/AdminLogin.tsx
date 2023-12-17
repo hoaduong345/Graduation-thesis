@@ -37,7 +37,7 @@ function LoginAdmin() {
     secureLocalStorage.removeItem("admin");
   }, []);
 
-  const API = "http://localhost:5000/admin/login";
+  const API = "http://www.buyzzle.io.vn/api/admin/login";
 
   const onSubmit = handleSubmit(async (data) => {
     setIsButtonDisabled(true);

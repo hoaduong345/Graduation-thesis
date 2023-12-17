@@ -30,18 +30,13 @@ export default function useNotificationContextShippping() {
     getAllNotiShipping();
   }, []);
   const getAllNotiShipping = async () => {
-    await notificationControllers
-      .getAllNotificationShipping()
-      .then((res) => {
-        
-        setNotificationShipping(res.allNotification);
-      })
-      
+    await notificationControllers.getAllNotificationShipping().then((res) => {
+      setNotificationShipping(res.allNotification);
+    });
   };
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io("http://www.buyzzle.io.vn/api");
     socket.on("setstatus", (setstatus) => {
-   
       toast(
         <a href={`/shipping/detail/${setstatus.id}`}>
           <CustomToast
@@ -72,9 +67,7 @@ export default function useNotificationContextShippping() {
       getAllNotiShipping();
       setDeletedOrder(setstatus);
     });
-    socket.on("disconnect", () => {
-      
-    });
+    socket.on("disconnect", () => {});
   }, [deletedOrder]);
   const handleSeenAllNoti = () => {
     notificationControllers
@@ -83,8 +76,8 @@ export default function useNotificationContextShippping() {
         setCountNotificationShipping(res.count);
       })
       .catch((err) => {
-       console.log( err)
-       
+        console.log(err);
+
         return {};
       });
   };

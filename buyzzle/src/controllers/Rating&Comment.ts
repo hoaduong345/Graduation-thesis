@@ -42,7 +42,7 @@ class RatingAndComment {
         return res.data as Rate;
       });
   };
-  // http://localhost:5000/buyzzle/product/updateimagecomment/27
+  // http://www.buyzzle.io.vn/api/buyzzle/product/updateimagecomment/27
   EditRatingAndComment = async (id: number, data: Rating) => {
     return await axios.put(
       `${appConfig.apiUrl}/updateratingcomment/${id}`,
