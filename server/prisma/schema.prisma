@@ -167,6 +167,7 @@ model Attribute {
   idorder     Order[]
   idItem      ItemCart[]
   OrderDetail OrderDetail[]
+  Rating      Rating[]
 }
 
 model Category {
@@ -240,20 +241,22 @@ model CommentImage {
 }
 
 model Rating {
-  id           Int            @id @default(autoincrement())
-  idproduct    Int?
-  product      Product?       @relation(fields: [idproduct], references: [id])
-  iduser       Int?
-  user         User?          @relation(fields: [iduser], references: [id])
-  adminId      Int?
-  admin        Admin?         @relation(fields: [adminId], references: [id])
-  ratingValue  Int?
-  comment      String?        @db.VarChar(2000)
-  repComment   String?        @db.VarChar(2000)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @default(now())
-  CommentImage CommentImage[]
-  deletedAt    DateTime?
+  id            Int            @id @default(autoincrement())
+  idproduct     Int?
+  product       Product?       @relation(fields: [idproduct], references: [id])
+  iduser        Int?
+  user          User?          @relation(fields: [iduser], references: [id])
+  adminId       Int?
+  admin         Admin?         @relation(fields: [adminId], references: [id])
+  ratingValue   Int?
+  comment       String?        @db.VarChar(2000)
+  repComment    String?        @db.VarChar(2000)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  CommentImage  CommentImage[]
+  deletedAt     DateTime?
+  attributeID   Int?
+  fK_attributee Attribute?     @relation(fields: [attributeID], references: [id])
 }
 
 model Order {
