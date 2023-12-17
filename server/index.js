@@ -65,7 +65,7 @@ app.use(morgan('common'));
 
 app.use(
     cors({
-        origin: ['http://www.buyzzle.io.vn/'],
+        origin: ['http://www.buyzzle.io.vn/', 'http://localhost:5000', 'http://localhost:5173'],
         credentials: true,
         exposedHeaders: ['Access-Control-Allow-Origin'],
         allowedHeaders: ['Content-Type', 'Origin', 'User-Agent', 'authorization', 'Access-Control-Allow-Origin'],
