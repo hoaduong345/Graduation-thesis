@@ -6,8 +6,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import bgi from "../../assets/PNG/LogoSlogan.png";
-import bg from "../../assets/PNG/NewProject.png";
+import { Images } from "../../Assets/TS";
 import "./Resetpassword.css";
 function Resetpassword() {
   const navigate = useNavigate();
@@ -69,12 +68,12 @@ function Resetpassword() {
       {validUrl ? (
         <div className="login-bg flex max-xl:flex-wrap">
           <div className="relative p-4 max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]">
-            <img src={bg} className="img" />
+            <img src={Images.logoSlogan} className="img" />
 
             <div className="absolute inset-0 flex justify-center items-center ">
               <Link to="/">
                 <img
-                  src={bgi}
+                  src={Images.logoSlogan}
                   alt="logo"
                   // className='logoSlogan'
                   width={"90%"}
