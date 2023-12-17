@@ -70,8 +70,8 @@ app.post('/create-checkout-session', async (req, res) => {
             invoice_creation: {
                 enabled: true,
             },
-            success_url: 'http://localhost:5173/orderhistory',
-            cancel_url: 'http://localhost:5173/cart',
+            success_url: 'www.buyzzle.io.vn/orderhistory',
+            cancel_url: 'www.buyzzle.io.vn/cart',
         });
         res.send({ url: session.url });
     } catch (error) {
@@ -83,7 +83,7 @@ const getCartItems = async (line_items, object, metadata) => {
     return new Promise((resolve, reject) => {
         let cartItems = [];
         let order = {
-            iduser: parseInt(metadata.idUser),
+iduser: parseInt(metadata.idUser),
             cartItems,
             amount_subtotal: object.amount_subtotal,
             shipping: object.total_details.amount_shipping,
@@ -134,14 +134,14 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                         attributeId: element.attributeID,
                         soluong: element.quantity,
                         productId: element.productId,
-                    }
+                    };
                 });
 
                 await axios
-                    .post('http://localhost:5000/buyzzle/order', { order: orderItems })
+                    .post('www.buyzzle.io.vn/api/buyzzle/order', { order: orderItems })
                     .then(() => {
                         orderItems.cartItems.map((e) => {
-                            return axios.post(`http://localhost:5000/buyzzle/cart/removeOnStripe/${e.attributeID}`, {
+                            return axios.post(`www.buyzzle.io.vn/api/buyzzle/cart/removeOnStripe/${e.attributeID}`, {
                                 userId: parseInt(iduser.metadata.idUser),
                                 attributeId: e.attributeID,
                             });
@@ -149,16 +149,16 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                     })
                     .then(() => {
                         if (parseInt(iduser.metadata.voucherId) != 0) {
-                            axios.post(`http://localhost:5000/buyzzle/voucher/usevoucher`, {
+                            axios.post(`www.buyzzle.io.vn/api/buyzzle/voucher/usevoucher`, {
                                 userId: parseInt(iduser.metadata.idUser),
-                                voucherId: parseInt(iduser.metadata.voucherId),
+voucherId: parseInt(iduser.metadata.voucherId),
                             });
                         }
                     })
                     .then(() => {
-                        axios.post(`http://localhost:5000/buyzzle/order/quantityCreateOrder`, listProductQuantity);
+                        axios.post(`www.buyzzle.io.vn/api/buyzzle/order/quantityCreateOrder`, listProductQuantity);
                     })
-                    .catch((err) => { });
+                    .catch((err) => {});
                 break;
         }
         response.json({ received: true });
