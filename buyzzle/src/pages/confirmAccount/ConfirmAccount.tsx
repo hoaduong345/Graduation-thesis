@@ -4,8 +4,8 @@ import { Fragment, useEffect, useState } from "react";
 import "./ConfirmAccount.css";
 
 import axios from "axios";
-// import LogoGoogle from "../../assets/PNG/lgG.png";
-// import LogoApple from "../../assets/PNG/lgApple.png";
+// import LogoGoogle from "../../Assets/PNG/lgG.png";
+// import LogoApple from "../../Assets/PNG/lgApple.png";
 import { Link, useParams } from "react-router-dom";
 
 import Container from "../../components/container/Container";

@@ -6,7 +6,7 @@ export const Images = {
   Ahamove: "/src/Assets/PNG/Logo-Ahamove.png",
   DownWithAppStore: "/src/Assets/PNG/DownWithAppStore.jpg",
   DownWithCHplay: "/src/Assets/PNG/DownWithCHplay.jpg",
-  bgFooter: "/src/assets/Images/bgFooter.jpg",
+  bgFooter: "/src/Assets/Images/bgFooter.jpg",
   Advertise: "/src/Assets/PNG/Advertise.png",
   unilever: "/src/Assets/PNG/unilever.png",
   Puma: "/src/Assets/PNG/Puma.png",

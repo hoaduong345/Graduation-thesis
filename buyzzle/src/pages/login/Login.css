@@ -1,16 +1,16 @@
 .login-bg {
-  background-image: url("../../assets/Images/bgRegister.png");
+  background-image: url("../../Assets/Images/bgRegister.png");
 }
 
 .register-bg {
-  background-image: url("../../assets/Images/bgRegister.png");
+  background-image: url("../../Assets/Images/bgRegister.png");
   /* max-height: 1083px;
       max-width: 963px;*/
 }
 
 @font-face {
   font-family: "Inter";
-  src: url("../../assets/Fonts/Inter.ttf") format("truetype");
+  src: url("../../Assets/Fonts/Inter.ttf") format("truetype");
 }
 
 .loginform-bg {

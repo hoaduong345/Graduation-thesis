@@ -6,7 +6,7 @@ import {
   AccordionPanel,
 } from "@chakra-ui/react";
 import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
+import "rc-slider/Assets/index.css";
 import { useState } from "react";
 import { Images } from "../../Assets/TS";
 import { numberFormat } from "../../helper/Format";
