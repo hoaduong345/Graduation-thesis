@@ -39,7 +39,7 @@ export default function useNotificationContextUser() {
     const idUser = localStorage.getItem("idUser");
 
     if (!idUser) return;
-    const socket = io("http://www.buyzzle.io.vn/api");
+    const socket = io("http://localhost:5000");
     socket.on(`confirmCancelOrder/${idUser}`, (confirmCancelOrder) => {
       toast(
         <a href={`/orderdetail/${confirmCancelOrder.id}`}>

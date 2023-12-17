@@ -49,7 +49,7 @@ app.use(morgan('common'));
 //     'https://www.getpostman.com',
 //     'https://app.getpostman.com',
 //     'http://www.buyzzle.io.vn/',
-//     'http://www.buyzzle.io.vn/api/',
+//     'http://localhost:5000/',
 // ];
 // const corsOptions = {
 //     origin: (origin, callback) => {

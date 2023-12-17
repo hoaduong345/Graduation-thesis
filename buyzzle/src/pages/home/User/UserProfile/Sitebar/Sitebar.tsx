@@ -43,7 +43,7 @@ const instance = axios.create({
 export default function Sitebar() {
   const { pathname } = useLocation();
 
-  const API = "http://www.buyzzle.io.vn/api/buyzzle/auth/logout";
+  const API = "http://localhost:5000/buyzzle/auth/logout";
   async function LogOut() {
     try {
       await instance.post(API);

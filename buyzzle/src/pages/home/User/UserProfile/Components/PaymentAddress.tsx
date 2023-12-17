@@ -102,7 +102,7 @@ export default function PaymentAddress() {
 
   const isDisabled = !(isValid && isDirty);
 
-  const API = `http://www.buyzzle.io.vn/api/buyzzle/user/paymentaddress/${param.username}`;
+  const API = `http://localhost:5000/buyzzle/user/paymentaddress/${param.username}`;
 
   useEffect(() => {
     function CheckLink() {

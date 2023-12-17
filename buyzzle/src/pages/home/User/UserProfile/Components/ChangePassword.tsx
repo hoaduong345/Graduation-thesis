@@ -61,7 +61,7 @@ export default function ChangePassword() {
     setShowPassword3(!showPassword3);
   };
 
-  const API2 = "http://www.buyzzle.io.vn/api/buyzzle/auth/changepassword";
+  const API2 = "http://localhost:5000/buyzzle/auth/changepassword";
   const onSubmit2 = async (formData: FormValues) => {
     try {
       const response = await instance.put(API2, formData);

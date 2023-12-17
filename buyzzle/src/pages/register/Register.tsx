@@ -34,7 +34,7 @@ function Register() {
   });
   const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const API = "http://www.buyzzle.io.vn/api/buyzzle/auth/register";
+  const API = "http://localhost:5000/buyzzle/auth/register";
   const onSubmit = handleSubmit(async (data) => {
     setIsButtonDisabled(true);
     setLoading(true);

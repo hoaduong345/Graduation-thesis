@@ -20,8 +20,8 @@ export default function DialogLogin(props: Props) {
   const CustomGoogleLogin = () => {
     const callAPI = async (data: LoginFormGoogle) => {
       localStorage.setItem("user", JSON.stringify(data));
-      const API = "http://www.buyzzle.io.vn/api/buyzzle/oauth/";
-      const API2 = "http://www.buyzzle.io.vn/api/buyzzle/oauth/savecookies";
+      const API = "http://localhost:5000/buyzzle/oauth/";
+      const API2 = "http://localhost:5000/buyzzle/oauth/savecookies";
       try {
         const response = await axios.post(API, data);
 

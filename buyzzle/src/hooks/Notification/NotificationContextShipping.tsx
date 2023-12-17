@@ -35,7 +35,7 @@ export default function useNotificationContextShippping() {
     });
   };
   useEffect(() => {
-    const socket = io("http://www.buyzzle.io.vn/api");
+    const socket = io("http://localhost:5000");
     socket.on("setstatus", (setstatus) => {
       toast(
         <a href={`/shipping/detail/${setstatus.id}`}>

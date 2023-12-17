@@ -42,7 +42,7 @@ function Resetpassword() {
 
   const onSubmit = handleSubmit(async (data) => {
     const token = params.token ?? ""; // Sử dụng chuỗi rỗng làm giá trị mặc định nếu params.token là undefined
-    const API = `http://www.buyzzle.io.vn/api/buyzzle/auth/resetpassword/${encodeURIComponent(
+    const API = `http://localhost:5000/buyzzle/auth/resetpassword/${encodeURIComponent(
       token
     )}`;
     try {

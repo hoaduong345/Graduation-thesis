@@ -21,7 +21,7 @@ export default function AddCategory() {
     if (category.idcategory != 0 && category.idcategory != undefined) {
       axios
         .put(
-          `http://www.buyzzle.io.vn/api/buyzzle/product/updatecategory/${category.idcategory}`,
+          `http://localhost:5000/buyzzle/product/updatecategory/${category.idcategory}`,
           { name: category.name }
         )
         .then((response) => {
@@ -37,7 +37,7 @@ export default function AddCategory() {
         });
     } else {
       axios
-        .post("http://www.buyzzle.io.vn/api/buyzzle/product/addcategory", {
+        .post("http://localhost:5000/buyzzle/product/addcategory", {
           name: category.name,
         })
         .then((response) => {
@@ -57,9 +57,7 @@ export default function AddCategory() {
   const remove = (id: number) => {
     if (confirm("are you remove item sure!")) {
       axios
-        .delete(
-          `http://www.buyzzle.io.vn/api/buyzzle/product/deletecategory/${id}`
-        )
+        .delete(`http://localhost:5000/buyzzle/product/deletecategory/${id}`)
         .then((response) => {
           return response;
         })
@@ -84,7 +82,7 @@ export default function AddCategory() {
   }, []);
 
   const getList = () => {
-    fetch("http://www.buyzzle.io.vn/api/buyzzle/product/allcategory")
+    fetch("http://localhost:5000/buyzzle/product/allcategory")
       .then((data) => {
         const bien = data.json();
         return bien;
