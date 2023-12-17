@@ -6,6 +6,7 @@ import "./Register.css";
 
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { userController } from "../../controllers/UserController";
 export interface FormValues {
   name: string;
   username: string;
@@ -34,71 +35,18 @@ function Register() {
   });
   const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const API = "http://www.buyzzle.io.vn/api/buyzzle/auth/register";
+
+  // const API = "http://www.buyzzle.io.vn/api/buyzzle/auth/register";
   const onSubmit = handleSubmit(async (data) => {
     setIsButtonDisabled(true);
     setLoading(true);
     try {
-      const response = await axios.post(API, data);
-      setLoading(false);
-      setIsButtonDisabled(true);
-      if (response.status === 200) {
-        // setLoading(false);
-        toast.success(
-          "Đăng ký thành công - kiểm tra email của bạn để xác minh tài khoản",
-          {
-            position: "top-right",
-            autoClose: 5000,
-          }
-        );
-        reset({});
-      } else {
-        setLoading(true);
-        toast.warning("Đăng ký thất bại!", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      }
+      userController.Register(data);
+      reset({});
     } catch (error) {
       setLoading(false);
       setIsButtonDisabled(false);
-      if (axios.isAxiosError(error) && error.response) {
-        const responseData = error.response.data;
-        if (responseData.error) {
-          const errorMessageUsername = responseData.error.username;
-          const errorMessageEmail = responseData.error.email;
-          const errorMessagePhoneNumber = responseData.error.phonenumber;
-          if (errorMessageUsername == "Tên tài khoản đã tồn tại!") {
-            toast.warning("Tên tài khoản đã tồn tại!", {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (errorMessageEmail == "Email đã tồn tại") {
-            toast.warning("Email đã tồn tại", {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (
-            errorMessagePhoneNumber == "Số điện thoại không đúng định dạng!"
-          ) {
-            toast.warning("Số điện thoại không đúng định dạng!", {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          } else if (
-            errorMessagePhoneNumber == "Số điện thoại đã được sử dụng!"
-          ) {
-            toast.warning("Số điện thoại đã được sử dụng!", {
-              position: "top-right",
-              autoClose: 5000,
-            });
-          }
-        } else {
-          console.log("Lỗi không xác định từ server");
-        }
-      } else {
-        console.error("Lỗi gửi yêu cầu không thành công", error);
-      }
+
     }
   });
 

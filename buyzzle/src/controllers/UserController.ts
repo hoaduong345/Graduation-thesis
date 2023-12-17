@@ -3,6 +3,7 @@ import axios from "axios";
 import { users } from "../pages/home/Admin/Management/User/User";
 import { LoginForm } from "../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 import { toast } from "react-toastify";
+import { FormValues } from "../pages/register/Register";
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_USER_URL || "",
 };
@@ -16,6 +17,69 @@ export interface userModel {
 }
 
 class UserController {
+  Register = async (data: FormValues) => {
+    try {
+      await axios.post(`${appConfigAuth.apiUrl}/register`, data)
+        .then((res) => {
+          if (res.status === 200) {
+            // setLoading(false);
+            toast.success(
+              "Đăng ký thành công - kiểm tra email của bạn để xác minh tài khoản",
+              {
+                position: "top-right",
+                autoClose: 5000,
+              }
+            );
+            // reset({});
+          } else {
+            // setLoading(true);
+            toast.warning("Đăng ký thất bại!", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+          return res.data;
+        });
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const responseData = error.response.data;
+        if (responseData.error) {
+          const errorMessageUsername = responseData.error.username;
+          const errorMessageEmail = responseData.error.email;
+          const errorMessagePhoneNumber = responseData.error.phonenumber;
+          if (errorMessageUsername == "Tên tài khoản đã tồn tại!") {
+            toast.warning("Tên tài khoản đã tồn tại!", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          } else if (errorMessageEmail == "Email đã tồn tại") {
+            toast.warning("Email đã tồn tại", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          } else if (
+            errorMessagePhoneNumber == "Số điện thoại không đúng định dạng!"
+          ) {
+            toast.warning("Số điện thoại không đúng định dạng!", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          } else if (
+            errorMessagePhoneNumber == "Số điện thoại đã được sử dụng!"
+          ) {
+            toast.warning("Số điện thoại đã được sử dụng!", {
+              position: "top-right",
+              autoClose: 5000,
+            });
+          }
+        } else {
+          console.log("Lỗi không xác định từ server");
+        }
+      } else {
+        console.error("Lỗi gửi yêu cầu không thành công", error);
+      }
+    }
+  }
   Login = async (data: LoginForm) => {
     try {
       return await axios
