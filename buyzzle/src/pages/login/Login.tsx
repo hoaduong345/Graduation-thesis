@@ -221,7 +221,7 @@ function Login() {
         <div className="absolute inset-0 flex justify-center items-center ">
           <Link to="/">
             <img
-              src="src/Assets/PNG/LogoSlogan.png"
+              src={Images.logoSlogan}
               alt="logo"
               width={"90%"}
               height={"90%"}
