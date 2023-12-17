@@ -634,29 +634,29 @@ export default function DetailsProduct() {
                 <div className="flex gap-2">
                   <FacebookShareButton
                     children={<FacebookIcon size={40} round={true} />}
-                    url={`http://www.buyzzle.io.vn//Detailproducts/${first?.productDetail.id}`}
+                    url={`http://www.buyzzle.io.vn/Detailproducts/${first?.productDetail.id}`}
                     about={first?.productDetail?.name}
                     hashtag={first?.productDetail?.name}
                   />
                   <WhatsappShareButton
                     children={<WhatsappIcon size={40} round={true} />}
-                    url={`http://www.buyzzle.io.vn//Detailproducts/${first?.productDetail.id}`}
+                    url={`http://www.buyzzle.io.vn/Detailproducts/${first?.productDetail.id}`}
                   />
 
                   <TwitterShareButton
                     children={<TwitterIcon size={40} round={true} />}
-                    url={`http://www.buyzzle.io.vn//Detailproducts/${first?.productDetail.id}`}
+                    url={`http://www.buyzzle.io.vn/Detailproducts/${first?.productDetail.id}`}
                   />
                   <TelegramShareButton
                     children={<TelegramIcon size={40} round={true} />}
-                    url={`http://www.buyzzle.io.vn//Detailproducts/${first?.productDetail.id}`}
+                    url={`http://www.buyzzle.io.vn/Detailproducts/${first?.productDetail.id}`}
                   />
                 </div>
                 <div
                   className="relative "
                   onClick={() =>
                     coppyLink(
-                      `http://www.buyzzle.io.vn//Detailproducts/${first?.productDetail.id}`
+                      `http://www.buyzzle.io.vn/Detailproducts/${first?.productDetail.id}`
                     )
                   }
                 >
