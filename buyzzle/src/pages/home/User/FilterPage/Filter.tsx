@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Images } from "../../../../assets/TS";
+import { Images } from "../../../../Assets/TS";
 import {
   formatSoldCount,
   numberFormat,
@@ -12,9 +12,8 @@ type Props = {
   starsnumber: number;
 };
 
-export default function Filters (props: Props) {
+export default function Filters(props: Props) {
   const { product } = props;
-
 
   return (
     <Link to={`/Detailproducts/${product.id}`}>
@@ -139,6 +138,4 @@ export default function Filters (props: Props) {
       </div>
     </Link>
   );
-};
-
-
+}

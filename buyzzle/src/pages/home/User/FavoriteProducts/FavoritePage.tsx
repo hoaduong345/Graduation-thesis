@@ -1,10 +1,10 @@
-import { Images } from "../../../../assets/TS";
+import { Images } from "../../../../Assets/TS";
 import { numberFormat } from "../../../../helper/Format";
 import Container from "../../../../components/container/Container";
 
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
-import Cart from "../../admin/assets/TSX/Cart";
-import Delete from "../../admin/assets/TSX/Delete";
+import Cart from "../../Admin/Assets/TSX/Cart";
+import Delete from "../../Admin/Assets/TSX/Delete";
 
 export default function FavoritePage() {
   return (

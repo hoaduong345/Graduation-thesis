@@ -1,6 +1,6 @@
 import axios from "axios";
-import { FormValues1 } from "../pages/home/admin/AdminProfile/Components/ChangePassword";
-import { FormValues } from "../pages/home/admin/Management/Admin/Admin";
+import { FormValues1 } from "../pages/home/Admin/AdminProfile/Components/ChangePassword";
+import { FormValues } from "../pages/home/Admin/Management/Admin/Admin";
 // import { Products } from "../pages/home/User/FilterPage/FiltersPage"
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_ADMIN_URL || "",

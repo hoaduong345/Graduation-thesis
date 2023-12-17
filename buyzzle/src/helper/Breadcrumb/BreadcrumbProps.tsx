@@ -1,5 +1,5 @@
 import React from "react";
-import ArrowRightBruh from "../../assets/TSX/ArrowRightBruh";
+import ArrowRightBruh from "../../Assets/TSX/ArrowRightBruh";
 
 interface BreadcrumbProps {
   items: { text: string; link?: string }[];

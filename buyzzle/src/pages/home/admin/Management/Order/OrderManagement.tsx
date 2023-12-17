@@ -4,7 +4,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { useNavigate } from "react-router-dom";
-import Search from "../../../../../assets/TSX/Search";
+import Search from "../../../../../Assets/TSX/Search";
 import Container from "../../../../../components/container/Container";
 import {
   orderControllers,
@@ -14,8 +14,8 @@ import { numberFormat } from "../../../../../helper/Format";
 import { OrderPanigation } from "../../../../../model/OrderModel";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import Calendar from "../../assets/TSX/calendar";
-import Excel from "../../assets/TSX/excel";
+import Calendar from "../../Assets/TSX/calendar";
+import Excel from "../../Assets/TSX/excel";
 import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
 
 export const dateOrder = (date: Date) => {

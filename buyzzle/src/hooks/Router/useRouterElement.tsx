@@ -20,20 +20,20 @@ import ShippingPage from "../../pages/home/Shipping/ShippingPage";
 import ShippingDetail from "../../pages/home/Shipping/ShippingDetail";
 import ShippingLayout from "../../layout/ShippingLayout";
 
-import Addproducts from "../../pages/home/admin/Addproduct/Addproducts";
-import AdminProfile from "../../pages/home/admin/AdminProfile/AdminProfile";
-import Editproducts from "../../pages/home/admin/EditProduct/Editproducts";
-import ListproductsAdmin from "../../pages/home/admin/ListProduct/Listproducts";
-import Category from "../../pages/home/admin/Management/Category/Category";
-import VoucherPage from "../../pages/home/admin/Management/Voucher/VoucherPage";
-import DetailUser from "../../pages/home/admin/DetailUser/DetailUser";
-import DetailShipper from "../../pages/home/admin/DetailShipper/DetailShipper";
-import OrderManagement from "../../pages/home/admin/Management/Order/OrderManagement";
-import DetailOrderManagement from "../../pages/home/admin/Management/Order/DetailOrderManagement";
-import User from "../../pages/home/admin/Management/User/User";
-import Shipper from "../../pages/home/admin/Management/Shipper/Shipper";
-import StatisticsPage from "../../pages/home/admin/Statistics/StatisticsPage";
-import Admin from "../../pages/home/admin/Management/Admin/Admin";
+import Addproducts from "../../pages/home/Admin/Addproduct/Addproducts";
+import AdminProfile from "../../pages/home/Admin/AdminProfile/AdminProfile";
+import Editproducts from "../../pages/home/Admin/EditProduct/Editproducts";
+import ListproductsAdmin from "../../pages/home/Admin/ListProduct/Listproducts";
+import Category from "../../pages/home/Admin/Management/Category/Category";
+import VoucherPage from "../../pages/home/Admin/Management/Voucher/VoucherPage";
+import DetailUser from "../../pages/home/Admin/DetailUser/DetailUser";
+import DetailShipper from "../../pages/home/Admin/DetailShipper/DetailShipper";
+import OrderManagement from "../../pages/home/Admin/Management/Order/OrderManagement";
+import DetailOrderManagement from "../../pages/home/Admin/Management/Order/DetailOrderManagement";
+import User from "../../pages/home/Admin/Management/User/User";
+import Shipper from "../../pages/home/Admin/Management/Shipper/Shipper";
+import StatisticsPage from "../../pages/home/Admin/Statistics/StatisticsPage";
+import Admin from "../../pages/home/Admin/Management/Admin/Admin";
 import Logoes from "../../pages/home/Admin/Management/Logo/Logoes";
 import Banner from "../../pages/home/Admin/Management/Banner/Banner";
 import BannerHome from "../../pages/home/Admin/Management/Banner/BannerHome";
@@ -52,7 +52,7 @@ import FavoritePage from "../../pages/home/User/FavoriteProducts/FavoritePage";
 import InvoicesPage from "../../pages/home/User/InvoicesPage/InvoicesPage";
 import RegisterShipper from "../../pages/home/Shipping/RegisterShipper/RegisterShipper";
 import LoginShipper from "../../pages/home/Shipping/LoginShipper/LoginShipper";
-import LoginAdmin from "../../pages/home/admin/LoginAdmin/AdminLogin";
+import LoginAdmin from "../../pages/home/Admin/LoginAdmin/AdminLogin";
 
 export default function useRouterEmelent() {
   const routes = useRoutes([

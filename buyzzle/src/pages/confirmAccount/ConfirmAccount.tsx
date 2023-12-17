@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-// import { Images } from "../../assets/TS/index";
+// import { Images } from "../../Assets/TS/index";
 
 import "./ConfirmAccount.css";
 
@@ -22,10 +22,7 @@ function ConfirmAccount() {
       try {
         setValidUrl(true);
         await axios.post(url);
-
-        
       } catch (error) {
-       
         setValidUrl(false);
       }
     };

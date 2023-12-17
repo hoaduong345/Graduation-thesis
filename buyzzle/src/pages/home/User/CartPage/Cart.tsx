@@ -1,8 +1,8 @@
 import useThrottle from "@rooks/use-throttle";
 import { Link, useNavigate } from "react-router-dom";
-import Buyzzle from "../../../../assets/TSX/Buyzzle";
-import Minus from "../../../../assets/TSX/Minus";
-import Plus from "../../../../assets/TSX/Plus";
+import Buyzzle from "../../../../Assets/TSX/Buyzzle";
+import Minus from "../../../../Assets/TSX/Minus";
+import Plus from "../../../../Assets/TSX/Plus";
 import Container from "../../../../components/container/Container";
 import {
   UpdateCart,
@@ -15,8 +15,8 @@ import { numberFormat } from "../../../../helper/Format";
 import { toastWarn } from "../../../../helper/Toast/Warning";
 import { useCart } from "../../../../hooks/Cart/CartContextProvider";
 import { CartItem } from "../../../../model/CartModel";
-import Back from "../../admin/assets/TSX/Back";
-import Delete from "../../admin/assets/TSX/Delete";
+import Back from "../../Admin/Assets/TSX/Back";
+import Delete from "../../Admin/Assets/TSX/Delete";
 export default function Cart() {
   const navigate = useNavigate();
 

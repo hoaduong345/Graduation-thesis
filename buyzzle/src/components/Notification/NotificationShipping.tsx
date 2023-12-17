@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useState } from "react";
-import Check from "../../assets/TSX/Check";
+import Check from "../../Assets/TSX/Check";
 import { useNotificationShipping } from "../../hooks/Notification/NotificationContextShipping";
 import BuyzzleAvt from "../../layout/asset/TSX/BuyzzleAvt";
 import NewOrder from "../../layout/asset/TSX/NewOrder";

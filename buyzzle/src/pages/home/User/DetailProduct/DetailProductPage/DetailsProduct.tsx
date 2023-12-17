@@ -14,10 +14,10 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import { toast } from "react-toastify";
-import { Images } from "../../../../../assets/TS";
-import Minus from "../../../../../assets/TSX/Minus";
-import Plus from "../../../../../assets/TSX/Plus";
-import SuccessIcon from "../../../../../assets/TSX/SuccessIcon";
+import { Images } from "../../../../../Assets/TS";
+import Minus from "../../../../../Assets/TSX/Minus";
+import Plus from "../../../../../Assets/TSX/Plus";
+import SuccessIcon from "../../../../../Assets/TSX/SuccessIcon";
 import RateDetailCMT from "../../../../../components/Sitebar/Rate/RateDetailCMT";
 import Container from "../../../../../components/container/Container";
 import { appConfig } from "../../../../../configsEnv";
@@ -41,8 +41,8 @@ import Breadcrumb from "../../../../../helper/Breadcrumb/BreadcrumbProps";
 import DialogLogin from "../../../../../helper/Dialog/DialogLogin";
 import ImageMagnifier from "../../../../../hooks/ImageMagnifier/ImageMagnifier";
 import { LogoDetailModel } from "../../../../../model/LogoDetailModel";
-import Cart from "../../../admin/assets/TSX/Cart";
-import SaveLink from "../../../admin/assets/TSX/SaveLink";
+import Cart from "../../../Admin/Assets/TSX/Cart";
+import SaveLink from "../../../Admin/Assets/TSX/SaveLink";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
 import RatingMap from "../RatingAndComments/RatingMap";
 export interface ImgOfProduct {

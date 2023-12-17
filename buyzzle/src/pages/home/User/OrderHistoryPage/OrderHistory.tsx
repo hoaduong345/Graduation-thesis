@@ -5,7 +5,7 @@ import { ReactNode, useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import ArrowNextHistory from "../../../../assets/TSX/ArrowNextHistory";
+import ArrowNextHistory from "../../../../Assets/TSX/ArrowNextHistory";
 import {
   orderControllers,
   orderModelController,
@@ -16,8 +16,8 @@ import { OrderPanigation, StatusOrder } from "../../../../model/OrderModel";
 import Container from "../../../../components/container/Container";
 
 import Sitebar from "../UserProfile/Sitebar/Sitebar";
-import { dateOrder } from "../../admin/Management/Order/OrderManagement";
-import ArrowDown from "../../admin/assets/TSX/ArrowDown";
+import { dateOrder } from "../../Admin/Management/Order/OrderManagement";
+import ArrowDown from "../../Admin/Assets/TSX/ArrowDown";
 import EmptyPage from "../../../../helper/Empty/EmptyPage";
 
 export const getStatusOrder = (status: StatusOrder) => {

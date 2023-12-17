@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../../../assets/TS";
+import { Images } from "../../../../Assets/TS";
 import "./Register.css";
 
 import { Controller, useForm } from "react-hook-form";
@@ -23,7 +23,7 @@ function RegisterShipper() {
     control,
     handleSubmit,
     register,
-    formState: { errors},
+    formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
     // defaultValues: UserData1

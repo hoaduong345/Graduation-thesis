@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Search from "../../../../../assets/TSX/Search";
+import Search from "../../../../../Assets/TSX/Search";
 import Container from "../../../../../components/container/Container";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import Download from "../../assets/TSX/Download";
-import Edit from "../../assets/TSX/Edit";
-import Handle from "../../assets/TSX/bacham";
+import Download from "../../Assets/TSX/Download";
+import Edit from "../../Assets/TSX/Edit";
+import Handle from "../../Assets/TSX/bacham";
 
 import { download, generateCsv } from "export-to-csv";
 import ResponsivePagination from "react-responsive-pagination";

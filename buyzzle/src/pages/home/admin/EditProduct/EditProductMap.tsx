@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import RemoveIMG from "../../../../assets/TSX/RemoveIMG";
+import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 import { appConfig } from "../../../../configsEnv";
 import { categoryController } from "../../../../controllers/CategoryController";
 import { imagesController } from "../../../../controllers/ImagesController";
@@ -14,7 +14,7 @@ import { storage } from "../../../../firebase/Config";
 import Loading from "../../../../helper/Loading/Loading";
 import { CategoryModal } from "../../../../model/CategoryModel";
 import Attribute from "../Addproduct/Attribute";
-import UploadIMG from "../assets/TSX/UploadIMG";
+import UploadIMG from "../Assets/TSX/UploadIMG";
 
 export type FormValues = {
   name?: string;

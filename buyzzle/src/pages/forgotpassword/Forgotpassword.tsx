@@ -1,4 +1,4 @@
-import { Images } from "../../assets/TS/index";
+import { Images } from "../../Assets/TS/index";
 
 // import "./forgotpassword.css";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -128,7 +128,10 @@ function Forgotpassword() {
               <span className="text-gray-600">
                 Bạn đã có tài khoản Buyzzle?{" "}
               </span>
-              <a href="/login" className="text-black-500 hover:underline font-bold">
+              <a
+                href="/login"
+                className="text-black-500 hover:underline font-bold"
+              >
                 Đăng nhập
               </a>
             </div>

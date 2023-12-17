@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Images } from "../../../assets/TS";
+import { Images } from "../../../Assets/TS";
 import {
   formatSoldCount,
   numberFormat,

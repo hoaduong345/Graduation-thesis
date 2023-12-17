@@ -11,12 +11,12 @@ import DialogComfirm from "../../../../../helper/Dialog/DialogComfirm";
 import Loading from "../../../../../helper/Loading/Loading";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
 import { LogoModel } from "../../../../../model/LogoModel";
-import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
-import Edit from "../../../admin/assets/TSX/Edit";
-import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
-import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
-import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
-import Handle from "../../../admin/assets/TSX/bacham";
+import SitebarAdmin from "../../../Admin/Sitebar/Sitebar";
+import Edit from "../../../Admin/Assets/TSX/Edit";
+import PlusSquare from "../../../Admin/Assets/TSX/PlusSquare";
+import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
+import UploadIMG from "../../../Admin/Assets/TSX/UploadIMG";
+import Handle from "../../../Admin/Assets/TSX/bacham";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 
 export default function Logoes() {

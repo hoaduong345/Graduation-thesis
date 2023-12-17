@@ -1,13 +1,13 @@
-import HistoryBought from "../../../../../assets/TSX/HistoryBought";
-import User from "../../../../../assets/TSX/User";
+import HistoryBought from "../../../../../Assets/TSX/HistoryBought";
+import User from "../../../../../Assets/TSX/User";
 
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Logout from "../../../../../assets/TSX/Logout";
-import Voucher from "../../../../../assets/TSX/Voucher";
-import Cart from "../../../admin/assets/TSX/Cart";
+import Logout from "../../../../../Assets/TSX/Logout";
+import Voucher from "../../../../../Assets/TSX/Voucher";
+import Cart from "../../../Admin/Assets/TSX/Cart";
 
 interface SitebarUser {
   icon: ReactNode;
@@ -68,10 +68,11 @@ export default function Sitebar() {
               <div
                 className={`w-[100%] flex justify-start items-center py-4 gap-3 transition duration-200
                         hover:rounded-[6px] cursor-pointer hover:bg-[#FFEAE9] text-[#7A828A] hover:text-[#EA4B48] pl-4
-                         ${e.pathName == pathname
-                    ? `bg-[#FFEAE9] rounded-md text-[#EA4B48]`
-                    : `bg-white text-[#7A828A]`
-                  }   `}
+                         ${
+                           e.pathName == pathname
+                             ? `bg-[#FFEAE9] rounded-md text-[#EA4B48]`
+                             : `bg-white text-[#7A828A]`
+                         }   `}
               >
                 {e.icon}
                 <span className="text-base font-normal ">{e.title}</span>

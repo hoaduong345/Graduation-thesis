@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Container from "../../../../components/container/Container";
-import Back from "../assets/TSX/Back";
+import Back from "../Assets/TSX/Back";
 import AccountStatus from "./Components/AccountStatus";
 import ProFile from "./Components/Profile";
 

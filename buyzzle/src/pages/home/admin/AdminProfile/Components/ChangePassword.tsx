@@ -1,8 +1,8 @@
 import { Fragment, useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
 import { Controller, useForm } from "react-hook-form";
-import HidePass from "../../../../../assets/TSX/HidePass";
-import ShowPass from "../../../../../assets/TSX/ShowPass";
+import HidePass from "../../../../../Assets/TSX/HidePass";
+import ShowPass from "../../../../../Assets/TSX/ShowPass";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
@@ -19,7 +19,7 @@ export default function ChangePassword() {
   const {
     control,
     handleSubmit,
-    formState: { errors},
+    formState: { errors },
   } = useForm<FormValues1>({
     // mode: 'all',
     defaultValues: {
@@ -37,7 +37,6 @@ export default function ChangePassword() {
       const user = secureLocalStorage.getItem("admin");
       if (user != null) {
         setValidUrl(true);
-       
       } else {
         setValidUrl(false);
       }
@@ -48,8 +47,6 @@ export default function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
-
-
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -68,14 +65,13 @@ export default function ChangePassword() {
       try {
         if (user != null) {
           const username = user;
-        
+
           await adminController.getAdminWhereUsername(username).then((res) => {
             setId(res.adminWithImage.id);
-           
+
             return res;
           });
         } else {
-         
         }
       } catch (error) {
         console.log("ERROR", error);
@@ -84,10 +80,8 @@ export default function ChangePassword() {
     fetchData();
   }, []);
   const onSubmit2 = async (formData: FormValues1) => {
-   
     try {
       await adminController.ChangePasswordAdmin(id1, formData).then((res) => {
-       
         if (res != null) {
           toast.success("Change successfully", {
             position: "top-right",
@@ -101,14 +95,12 @@ export default function ChangePassword() {
         }
       });
     } catch (error) {
-     
       console.error(error);
       if (axios.isAxiosError(error) && error.response) {
         const responseData = error.response.data;
-      
+
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData) {
-         
           toast.warning(responseData, {
             position: "top-right",
             autoClose: 5000,

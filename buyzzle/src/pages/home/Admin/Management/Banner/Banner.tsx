@@ -12,12 +12,12 @@ import Loading from "../../../../../helper/Loading/Loading";
 import { toastWarn } from "../../../../../helper/Toast/Warning";
 import { BannerModel } from "../../../../../model/BannerModel";
 import { LogoModel } from "../../../../../model/LogoModel";
-import SitebarAdmin from "../../../admin/Sitebar/Sitebar";
-import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
-import PlusSquare from "../../../admin/assets/TSX/PlusSquare";
-import Handle from "../../../admin/assets/TSX/bacham";
-import Edit from "../../../admin/assets/TSX/Edit";
-import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
+import SitebarAdmin from "../../../Admin/Sitebar/Sitebar";
+import UploadIMG from "../../../Admin/Assets/TSX/UploadIMG";
+import PlusSquare from "../../../Admin/Assets/TSX/PlusSquare";
+import Handle from "../../../Admin/Assets/TSX/bacham";
+import Edit from "../../../Admin/Assets/TSX/Edit";
+import RemoveCate from "../../../Admin/Assets/TSX/RemoveCate";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 
 export default function Banner() {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import Map from "../../../../../assets/TSX/Map";
-import NoteOrderAdmin from "../../../../../assets/TSX/NoteOrderAdmin";
+import Map from "../../../../../Assets/TSX/Map";
+import NoteOrderAdmin from "../../../../../Assets/TSX/NoteOrderAdmin";
 import Container from "../../../../../components/container/Container";
 import { orderControllers } from "../../../../../controllers/OrderControllers";
 import DialogAbortOrder from "../../../../../helper/Dialog/DialogAbortOrder";
@@ -13,10 +13,10 @@ import {
   UpdateQuantityModal,
 } from "../../../../../model/OrderModel";
 import { getStatusOrder } from "../../../User/OrderHistoryPage/OrderHistory";
-import Back from "../../assets/TSX/Back";
-import Paymethod from "../../assets/TSX/Paymethod";
-import PhoneOrderAdmin from "../../assets/TSX/PhoneOrderAdmin";
-import PrintOrder from "../../assets/TSX/PrintOrder";
+import Back from "../../Assets/TSX/Back";
+import Paymethod from "../../Assets/TSX/Paymethod";
+import PhoneOrderAdmin from "../../Assets/TSX/PhoneOrderAdmin";
+import PrintOrder from "../../Assets/TSX/PrintOrder";
 import { dateOrder, timeOrder } from "./OrderManagement";
 
 export default function DetailOrderManagement() {

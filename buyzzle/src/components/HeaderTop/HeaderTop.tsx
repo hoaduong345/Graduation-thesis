@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Bell from "../../assets/TSX/Bell";
+import Bell from "../../Assets/TSX/Bell";
 
 interface HeaderTop {
   noti: ReactNode;

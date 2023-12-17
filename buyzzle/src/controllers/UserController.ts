@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { Products } from "../pages/home/User/FilterPage/FiltersPage"
-import { users } from "../pages/home/admin/Management/User/User";
+import { users } from "../pages/home/Admin/Management/User/User";
 import { LoginForm } from "../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 import { toast } from "react-toastify";
 export const appConfig = {

@@ -6,7 +6,7 @@ import { useNotificationAdmin } from "../../hooks/Notification/NotificationConte
 import CancelOrder from "../../layout/asset/TSX/CancelOrder";
 import NewOrder from "../../layout/asset/TSX/NewOrder";
 import { handleSeenNoti } from "./components/SeenNoti";
-import Check from "../../assets/TSX/Check";
+import Check from "../../Assets/TSX/Check";
 
 export default function NotificationAdmin() {
   moment.locale("vi");
@@ -37,10 +37,8 @@ export default function NotificationAdmin() {
   } = useNotificationAdmin();
 
   const handleClick = (id: number) => {
- 
     const updatedButtons = changeButton.map((btn) => {
       if (btn.id === id) {
-       
         return { ...btn, active: true };
       } else {
         return { ...btn, active: false };
@@ -67,13 +65,9 @@ export default function NotificationAdmin() {
   }
   // const ImageUser = JSON.parse(localStorage.getItem("avatarUser")!);
   const getOrderFilter = async (status: number) => {
-    notificationControllers
-      .getFilterNotification(status)
-      .then((res: any) => {
-        setNotification(res);
-       
-      })
-      
+    notificationControllers.getFilterNotification(status).then((res: any) => {
+      setNotification(res);
+    });
   };
 
   const handleMarkAsRead = () => {

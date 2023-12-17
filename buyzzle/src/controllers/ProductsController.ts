@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ProductSuggest } from "../model/ProductsSuggest";
-import { FormValues } from "../pages/home/admin/EditProduct/EditProductMap";
+import { FormValues } from "../pages/home/Admin/EditProduct/EditProductMap";
 import { Products } from "../pages/home/User/FilterPage/FiltersPage";
 
 export const appConfig = {

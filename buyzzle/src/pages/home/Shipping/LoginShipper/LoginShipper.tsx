@@ -1,4 +1,4 @@
-import { Images } from "../../../../assets/TS/index";
+import { Images } from "../../../../Assets/TS/index";
 
 // import { localStorage } from 'localStorage';
 import { useState } from "react";
@@ -18,7 +18,7 @@ function LoginShipper() {
   const {
     control,
     handleSubmit,
-    formState: { errors  },
+    formState: { errors },
   } = useForm<FormLoginValues>({
     mode: "all",
     // defaultValues: UserData1
@@ -32,13 +32,12 @@ function LoginShipper() {
         setLoading(false);
         setIsButtonDisabled(true);
         toast.success("Đăng nhập thành công !");
-     
+
         // localStorage.removeItem("user");
         const jsonString: string = JSON.stringify(res);
         const jsonObject = JSON.parse(jsonString);
         const username = jsonObject.username;
-   
-       
+
         const UserData = { username };
         // const Token = {accessToken};
         secureLocalStorage.setItem("shippername", JSON.stringify(UserData));

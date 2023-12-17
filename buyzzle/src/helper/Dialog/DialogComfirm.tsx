@@ -1,6 +1,6 @@
-import CloseComfirm from "../../assets/TSX/CloseComfirm";
-import ComfirmIcon from "../../assets/TSX/ComfirmIcon";
-import DeleteComfirm from "../../pages/home/admin/assets/TSX/DeleteComfirm";
+import CloseComfirm from "../../Assets/TSX/CloseComfirm";
+import ComfirmIcon from "../../Assets/TSX/ComfirmIcon";
+import DeleteComfirm from "../../pages/home/Admin/Assets/TSX/DeleteComfirm";
 
 type Props = {
   title?: string;

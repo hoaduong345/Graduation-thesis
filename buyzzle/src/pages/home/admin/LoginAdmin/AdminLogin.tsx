@@ -10,7 +10,7 @@ import "./AdminLogin.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import * as yup from "yup";
-import { Images } from "../../../../assets/TS"
+import { Images } from "../../../../Assets/TS";
 function LoginAdmin() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ function LoginAdmin() {
 
   const onSubmit = handleSubmit(async (data) => {
     setIsButtonDisabled(true);
-      setLoading(true);
+    setLoading(true);
     try {
       const response = await axios.post(API, data, {
         headers: {
@@ -74,10 +74,13 @@ function LoginAdmin() {
           window.location.href = "/admin/ListproductsAdmin";
         }, 2000);
       } else {
-        toast.warning("Đăng nhập thất bại vui lòng kiểm tra lại tài khoản hoặc mật khẩu", {
-          position: "top-right",
-          autoClose: 5000,
-        });
+        toast.warning(
+          "Đăng nhập thất bại vui lòng kiểm tra lại tài khoản hoặc mật khẩu",
+          {
+            position: "top-right",
+            autoClose: 5000,
+          }
+        );
       }
     } catch (error) {
       setLoading(false);
@@ -87,10 +90,13 @@ function LoginAdmin() {
         // Kiểm tra xem trong dữ liệu phản hồi có thuộc tính 'error' không
         if (responseData) {
           //   const errorMessage = responseData.error.password;
-          toast.warning("Đăng nhập thất bại vui lòng kiểm tra lại tài khoản hoặc mật khẩu", {
-            position: "top-right",
-            autoClose: 5000,
-          });
+          toast.warning(
+            "Đăng nhập thất bại vui lòng kiểm tra lại tài khoản hoặc mật khẩu",
+            {
+              position: "top-right",
+              autoClose: 5000,
+            }
+          );
         } else {
           console.log("Lỗi không xác định từ server");
         }
@@ -223,7 +229,6 @@ function LoginAdmin() {
                 <div>Đăng nhập</div>
               )}
             </button>
-   
           </form>
         </div>
       </div>

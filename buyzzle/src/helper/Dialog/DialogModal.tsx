@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import LogoCate from "../../pages/home/admin/assets/TSX/logoCateAdmin";
+import LogoCate from "../../pages/home/Admin/Assets/TSX/logoCateAdmin";
 
 type Props = {
   title: ReactNode;

@@ -8,7 +8,7 @@ import {
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useState } from "react";
-import { Images } from "../../assets/TS";
+import { Images } from "../../Assets/TS";
 import { numberFormat } from "../../helper/Format";
 import { subCate } from "../../model/CategoryModel";
 import Checkbox from "./Checkbox/Checkbox";
@@ -82,18 +82,15 @@ export default function SitebarFilter({
 }: SliderComponentProps) {
   const [rangeValue, setRangeValue] = useState([5000, 300000]);
   const handleSliderChange = (price: [number, number]) => {
-   
     setRangeValue(price);
     onPriceRangeChange(price);
   };
 
   const [, setRating] = useState(1);
   const handleRateChange = (rate: number) => {
-    
     setRating(rate);
     onRateChange(rate);
   };
- 
 
   return (
     <>
@@ -167,10 +164,10 @@ export default function SitebarFilter({
                   // value={rangeValue}
                   // onChange={() => onSliderChange}
                   range
-                // onChange={(e) => {
-                //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
-                //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
-                // }}
+                  // onChange={(e) => {
+                  //   // b5. khi co duoc xong ham callBacks ben phia cha, thi ben con se truyen vao ( luu y "?." khi dung lai props.Callbacks)
+                  //   props.onChangeSlider?.(props.minPrice, props.maxPrice);
+                  // }}
                 />
                 <div className="flex mt-[20px] justify-start gap-2 ">
                   <p className="max-w-max">Giá: </p>

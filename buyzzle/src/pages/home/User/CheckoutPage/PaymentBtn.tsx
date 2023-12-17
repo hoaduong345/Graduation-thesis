@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import Buyzzle from "../../../../assets/TSX/Buyzzle";
+import Buyzzle from "../../../../Assets/TSX/Buyzzle";
 import { cartControllers } from "../../../../controllers/CartControllers";
 import { orderControllers } from "../../../../controllers/OrderControllers";
 import { paymentControllers } from "../../../../controllers/PaymentControllers";

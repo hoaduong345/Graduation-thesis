@@ -1,14 +1,14 @@
 import axios from "axios";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Cart from "../../../../../assets/TSX/Cart";
-import Heart from "../../../../../assets/TSX/Heart";
-import HistoryBought from "../../../../../assets/TSX/HistoryBought";
-import Logout from "../../../../../assets/TSX/Logout";
-import ProductManager from "../../../../../assets/TSX/ProductManager";
-import Setting from "../../../../../assets/TSX/Setting";
-import User from "../../../../../assets/TSX/User";
-import Voucher from "../../../../../assets/TSX/Voucher";
+import Cart from "../../../../../Assets/TSX/Cart";
+import Heart from "../../../../../Assets/TSX/Heart";
+import HistoryBought from "../../../../../Assets/TSX/HistoryBought";
+import Logout from "../../../../../Assets/TSX/Logout";
+import ProductManager from "../../../../../Assets/TSX/ProductManager";
+import Setting from "../../../../../Assets/TSX/Setting";
+import User from "../../../../../Assets/TSX/User";
+import Voucher from "../../../../../Assets/TSX/Voucher";
 
 interface SitebarUser {
   icon: ReactNode;

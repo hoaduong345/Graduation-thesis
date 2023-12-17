@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Images } from "../../../../assets/TS";
+import { Images } from "../../../../Assets/TS";
 import {
   currentDate,
   numberFormat,
@@ -8,8 +8,8 @@ import {
 } from "../../../../helper/Format";
 import { stars } from "../../../../helper/StarRating/Star";
 import { Products } from "../../User/FilterPage/FiltersPage";
-import Delete from "../assets/TSX/Delete";
-import Edit from "../assets/TSX/Edit";
+import Delete from "../Assets/TSX/Delete";
+import Edit from "../Assets/TSX/Edit";
 type Props = {
   products: Products;
   HandleRemove: (id: number) => void;

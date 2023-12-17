@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Images } from "../../assets/TS/index";
+import { Images } from "../../Assets/TS/index";
 import "./Register.css";
 
 import { useState } from "react";
@@ -78,12 +78,16 @@ function Register() {
               position: "top-right",
               autoClose: 5000,
             });
-          } else if(errorMessagePhoneNumber == "Số điện thoại không đúng định dạng!") {
+          } else if (
+            errorMessagePhoneNumber == "Số điện thoại không đúng định dạng!"
+          ) {
             toast.warning("Số điện thoại không đúng định dạng!", {
               position: "top-right",
               autoClose: 5000,
             });
-          }else if(errorMessagePhoneNumber == "Số điện thoại đã được sử dụng!") {
+          } else if (
+            errorMessagePhoneNumber == "Số điện thoại đã được sử dụng!"
+          ) {
             toast.warning("Số điện thoại đã được sử dụng!", {
               position: "top-right",
               autoClose: 5000,

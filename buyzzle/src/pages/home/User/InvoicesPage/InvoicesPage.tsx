@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import LogoWeb from "../../../../assets/TSX/LogoWeb";
+import LogoWeb from "../../../../Assets/TSX/LogoWeb";
 import Container from "../../../../components/container/Container";
 import { formatDateYYYY, numberFormat } from "../../../../helper/Format";
 import { useParams } from "react-router-dom";
 import { orderControllers } from "../../../../controllers/OrderControllers";
 import { OrderModel } from "../../../../model/OrderModel";
 import { useReactToPrint } from "react-to-print";
-import PrintOrder from "../../admin/assets/TSX/PrintOrder";
+import PrintOrder from "../../Admin/Assets/TSX/PrintOrder";
 
 export default function InvoicesPage() {
   const handlePrint = useReactToPrint({

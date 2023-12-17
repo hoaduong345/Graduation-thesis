@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { Link } from "react-router-dom";
 
-import Search from "../../../assets/TSX/Search";
+import Search from "../../../Assets/TSX/Search";
 import {
   orderControllers,
   orderModelController,
@@ -11,12 +11,12 @@ import { numberFormat } from "../../../helper/Format";
 import { OrderPanigation } from "../../../model/OrderModel";
 import Container from "../../../components/container/Container";
 import useDebounce from "../../../useDebounceHook/useDebounce";
-import Calendar from "../admin/assets/TSX/calendar";
-import Excel from "../admin/assets/TSX/excel";
+import Calendar from "../Admin/Assets/TSX/calendar";
+import Excel from "../Admin/Assets/TSX/excel";
 import {
   dateOrder,
   timeOrder,
-} from "../admin/Management/Order/OrderManagement";
+} from "../Admin/Management/Order/OrderManagement";
 import useThrottle from "@rooks/use-throttle";
 import secureLocalStorage from "react-secure-storage";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";

@@ -57,26 +57,26 @@ export const Images = {
   thuongHieu1: "../src/assets/PNG/thuongHieu1.png",
   hot: "../src/assets/PNG/hot.png",
   picture: "../src/assets/PNG/picture.png",
-  avatar_admin: "../../../src/pages/home/admin/assets/Images/avatar.png",
-  imageproduct: "../../../src/pages/home/admin/assets/Images/imageproduct.png",
+  avatar_admin: "../../../src/pages/home/Admin/assets/Images/avatar.png",
+  imageproduct: "../../../src/pages/home/Admin/assets/Images/imageproduct.png",
   imageproduct1:
-    "../../../src/pages/home/admin/assets/Images/imageproduct1.png",
+    "../../../src/pages/home/Admin/assets/Images/imageproduct1.png",
   imageproduct2:
-    "../../../src/pages/home/admin/assets/Images/imageproduct2.png",
+    "../../../src/pages/home/Admin/assets/Images/imageproduct2.png",
   imageproduct3:
-    "../../../src/pages/home/admin/assets/Images/imageproduct3.png",
+    "../../../src/pages/home/Admin/assets/Images/imageproduct3.png",
   imageproduct4:
-    "../../../src/pages/home/admin/assets/Images/imageproduct4.png",
+    "../../../src/pages/home/Admin/assets/Images/imageproduct4.png",
   imageproduct5:
-    "../../../src/pages/home/admin/assets/Images/imageproduct5.png",
+    "../../../src/pages/home/Admin/assets/Images/imageproduct5.png",
   imageproduct6:
-    "../../../src/pages/home/admin/assets/Images/imageproduct6.png",
-  chevron: "../../../src/pages/home/admin/assets/Images/chevron-right.png",
-  chevron1: "../../../src/pages/home/admin/assets/Images/chevron-right1.png",
+    "../../../src/pages/home/Admin/assets/Images/imageproduct6.png",
+  chevron: "../../../src/pages/home/Admin/assets/Images/chevron-right.png",
+  chevron1: "../../../src/pages/home/Admin/assets/Images/chevron-right1.png",
   Banner: "../src/assets/Images/banner.jpg",
   Banner1: "../src/assets/Images/banner1.jpg",
-  BannerQC: "../../../src/pages/home/admin/assets/Images/bannerQC.png",
-  imgProduct: "../../../src/pages/home/admin/assets/Images/imgProduct.jpg",
+  BannerQC: "../../../src/pages/home/Admin/assets/Images/bannerQC.png",
+  imgProduct: "../../../src/pages/home/Admin/assets/Images/imgProduct.jpg",
   cateAD: "../src/assets/PNG/cate.png",
   Avtcmt: "../src/assets/Images/Avtcmt.png",
   momo: "../src/assets/PNG/momo.png",

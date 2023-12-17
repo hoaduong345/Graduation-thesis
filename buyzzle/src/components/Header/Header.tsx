@@ -7,8 +7,8 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
-import LogoWeb from "../../assets/TSX/LogoWeb";
-import Search from "../../assets/TSX/Search";
+import LogoWeb from "../../Assets/TSX/LogoWeb";
+import Search from "../../Assets/TSX/Search";
 import { productController } from "../../controllers/ProductsController";
 import { userController } from "../../controllers/UserController";
 import { Top8product } from "../../model/ProductModel";

@@ -6,7 +6,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { toast } from "react-toastify";
-import RemoveIMG from "../../../../assets/TSX/RemoveIMG";
+import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 import Container from "../../../../components/container/Container";
 import { appConfig } from "../../../../configsEnv";
 import { categoryController } from "../../../../controllers/CategoryController";
@@ -15,8 +15,8 @@ import Loading from "../../../../helper/Loading/Loading";
 import { toastError } from "../../../../helper/Toast/Error";
 import { CategoryModal } from "../../../../model/CategoryModel";
 import { FormValues } from "../EditProduct/EditProductMap";
-import Back from "../assets/TSX/Back";
-import UploadIMG from "../assets/TSX/UploadIMG";
+import Back from "../Assets/TSX/Back";
+import UploadIMG from "../Assets/TSX/UploadIMG";
 import Attribute from "./Attribute";
 
 export interface Attribute {
@@ -96,7 +96,7 @@ export default function Addproducts() {
     setUrl([]);
   };
   // Tạo fuction handle thêm sản phẩm.
-const handleAddproduct = async (data: FormValues) => {
+  const handleAddproduct = async (data: FormValues) => {
     if (url.length == 0) {
       toast.error("Hãy chọn hình");
       return;
@@ -213,7 +213,7 @@ const handleAddproduct = async (data: FormValues) => {
       window.location.href = "/admin/loginadmin";
     }
   }, []);
-return (
+  return (
     <Container>
       <div className="body-addproduct container mx-auto">
         {/* back */}
@@ -280,7 +280,7 @@ return (
                                                         max-xl:text-sm max-lg:text-[13px]
                                             ${
                                               !!errors.name
-? "border-[2px] border-red-900"
+                                                ? "border-[2px] border-red-900"
                                                 : "border-[1px] border-[#FFAAAF]"
                                             }`}
                             placeholder="Nhập tiêu đề sản phẩm"
@@ -341,7 +341,7 @@ return (
                                 {
                                   text: "Responsive - 1x1",
                                   value: "tiny-pageembed--1by1",
-},
+                                },
                               ],
 
                               plugins: [
@@ -404,7 +404,7 @@ return (
                       onClick={handleSubmit((data: any) => {
                         handleAddproduct(data);
                       })}
-className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
+                      className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg:text-[13px]
                                         ${
                                           isDisabled
                                             ? "cursor-not-allowed"
@@ -462,7 +462,7 @@ className={`text-center text-base font-bold text-[#FFFFFF] max-xl:text-sm max-lg
                                     onChange={(e: any) =>
                                       loadImageFile(e.target.files)
                                     }
-id="images"
+                                    id="images"
                                     multiple
                                     className="hidden "
                                   />
@@ -518,7 +518,7 @@ id="images"
 
                 {/* Giá */}
                 <div className="mt-7">
-<span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
+                  <span className="text-[#000] text-2xl font-normal max-xl:text-xl max-lg:text-base">
                     Giá & Giảm Giá
                   </span>
                   {/* card */}
@@ -570,7 +570,7 @@ id="images"
                                     const value = e.target.value;
                                     field.onChange(value.replace(reg, ""));
                                   }}
-/>
+                                />
                                 <p className="text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px]  max-lg:text-[13px]">
                                   VNĐ
                                 </p>
@@ -626,7 +626,7 @@ id="images"
                                   onChange={(e) => {
                                     const reg = /[a-zA-z]/g;
                                     const value = e.target.value;
-field.onChange(value.replace(reg, ""));
+                                    field.onChange(value.replace(reg, ""));
                                   }}
                                 />
                                 <p className="text-[#7A828A] font-bold ml-4 cursor-default max-xl:text-[13px] max-lg:text-[13px]">
@@ -689,7 +689,7 @@ field.onChange(value.replace(reg, ""));
                               })}
                             </select>
                           </div>
-{!!errors.categoryID && (
+                          {!!errors.categoryID && (
                             <p className="text-red-700 mt-2">
                               {errors.categoryID.message}
                             </p>
@@ -751,7 +751,7 @@ field.onChange(value.replace(reg, ""));
                           </div>
                           {!!errors.subcateId && (
                             <p className="text-red-700 mt-2">
-{errors.subcateId.message}
+                              {errors.subcateId.message}
                             </p>
                           )}
                         </>

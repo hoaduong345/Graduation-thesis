@@ -1,8 +1,8 @@
 import { Fragment, useState, useEffect } from "react";
 import Container from "../../../../../components/container/Container";
 import { Controller, useForm } from "react-hook-form";
-import HidePass from "../../../../../assets/TSX/HidePass";
-import ShowPass from "../../../../../assets/TSX/ShowPass";
+import HidePass from "../../../../../Assets/TSX/HidePass";
+import ShowPass from "../../../../../Assets/TSX/ShowPass";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
@@ -48,8 +48,6 @@ export default function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
-
-
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);

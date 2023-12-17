@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ResponsivePagination from "react-responsive-pagination";
 import { toast } from "react-toastify";
-import Search from "../../../../../assets/TSX/Search";
+import Search from "../../../../../Assets/TSX/Search";
 import Container from "../../../../../components/container/Container";
 import { AdminModel } from "../../../../../controllers/AdminControllder";
 import { shipperController } from "../../../../../controllers/ShipperController";
@@ -13,10 +13,10 @@ import { csvConfig } from "../../../../../helper/Export/Excel";
 import { ModelAdmin } from "../../../../../model/AdminModel";
 import useDebounce from "../../../../../useDebounceHook/useDebounce";
 import SitebarAdmin from "../../Sitebar/Sitebar";
-import Download from "../../assets/TSX/Download";
-import Edit from "../../assets/TSX/Edit";
-import PlusSquare from "../../assets/TSX/PlusSquare";
-import Handle from "../../assets/TSX/bacham";
+import Download from "../../Assets/TSX/Download";
+import Edit from "../../Assets/TSX/Edit";
+import PlusSquare from "../../Assets/TSX/PlusSquare";
+import Handle from "../../Assets/TSX/bacham";
 
 export interface shipper {
   id: number;

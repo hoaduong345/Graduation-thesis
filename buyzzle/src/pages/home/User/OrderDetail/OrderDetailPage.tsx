@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import Location from "../../../../assets/TSX/Location";
-import RemoveIMG from "../../../../assets/TSX/RemoveIMG";
+import Location from "../../../../Assets/TSX/Location";
+import RemoveIMG from "../../../../Assets/TSX/RemoveIMG";
 import { orderControllers } from "../../../../controllers/OrderControllers";
 import { ratingAndCommentController } from "../../../../controllers/Rating&Comment";
 import { storage } from "../../../../firebase/Config";
@@ -15,8 +15,8 @@ import StepperPage from "../../../../helper/Stepper/StepperUser";
 import { OrderModel } from "../../../../model/OrderModel";
 import { Rating } from "../../../../model/ProductModel";
 import Container from "../../../../components/container/Container";
-import Back from "../../admin/assets/TSX/Back";
-import UploadIMG from "../../admin/assets/TSX/UploadIMG";
+import Back from "../../Admin/Assets/TSX/Back";
+import UploadIMG from "../../Admin/Assets/TSX/UploadIMG";
 
 export default function OrderDetailPage() {
   const { id } = useParams();
@@ -597,9 +597,12 @@ export default function OrderDetailPage() {
                                                     //   handleRemoveOnlyIMG(e.id)
                                                     // }
                                                   >
-                                                    <RemoveIMG 
-                                                    index={0}
-                                                    removeListUrl={()=>{0}}/>
+                                                    <RemoveIMG
+                                                      index={0}
+                                                      removeListUrl={() => {
+                                                        0;
+                                                      }}
+                                                    />
                                                   </div>
                                                 </div>
                                               </div>

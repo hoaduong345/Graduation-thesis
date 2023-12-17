@@ -2,7 +2,7 @@
 
 import { Link } from "react-router-dom";
 import Container from "../container/Container";
-import LogoWeb from "../../assets/TSX/LogoWeb";
+import LogoWeb from "../../Assets/TSX/LogoWeb";
 import HeaderTopAdmin from "../HeaderTop/HeaderTopAdmin";
 
 export default function HeaderAdmin() {

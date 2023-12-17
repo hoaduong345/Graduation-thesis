@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import ComfirmIcon from "../../assets/TSX/ComfirmIcon";
+import ComfirmIcon from "../../Assets/TSX/ComfirmIcon";
 
 type Props = {
   title?: string;

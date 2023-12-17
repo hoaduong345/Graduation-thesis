@@ -4,8 +4,8 @@ import {
   FieldArrayWithId,
   FieldErrors,
 } from "react-hook-form";
-import MinusAttribute from "../../../../assets/TSX/MinusAttribute";
-import PlusAttribute from "../../../../assets/TSX/PlusAttribute";
+import MinusAttribute from "../../../../Assets/TSX/MinusAttribute";
+import PlusAttribute from "../../../../Assets/TSX/PlusAttribute";
 import { FormValues } from "../EditProduct/EditProductMap";
 
 interface Form {

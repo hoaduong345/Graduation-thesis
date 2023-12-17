@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import Map from "../../../assets/TSX/Map";
-import NoteOrderAdmin from "../../../assets/TSX/NoteOrderAdmin";
+import Map from "../../../Assets/TSX/Map";
+import NoteOrderAdmin from "../../../Assets/TSX/NoteOrderAdmin";
 import Container from "../../../components/container/Container";
 import { orderControllers } from "../../../controllers/OrderControllers";
 import { numberFormat } from "../../../helper/Format";
@@ -11,10 +11,10 @@ import { OrderModel, UpdateQuantityModal } from "../../../model/OrderModel";
 import {
   dateOrder,
   timeOrder,
-} from "../admin/Management/Order/OrderManagement";
-import Back from "../admin/assets/TSX/Back";
-import Paymethod from "../admin/assets/TSX/Paymethod";
-import PhoneOrderAdmin from "../admin/assets/TSX/PhoneOrderAdmin";
+} from "../Admin/Management/Order/OrderManagement";
+import Back from "../Admin/Assets/TSX/Back";
+import Paymethod from "../Admin/Assets/TSX/Paymethod";
+import PhoneOrderAdmin from "../Admin/Assets/TSX/PhoneOrderAdmin";
 import { getStatusOrder } from "../User/OrderHistoryPage/OrderHistory";
 
 export default function ShippingDetail() {

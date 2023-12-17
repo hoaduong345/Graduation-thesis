@@ -1,4 +1,4 @@
-import Back from "../assets/TSX/Back";
+import Back from "../Assets/TSX/Back";
 import ProFile from "../DetailUser/Components/Profile";
 import PaymentAddress from "../DetailUser/Components/PaymentAddress";
 import AccountStatus from "../DetailUser/Components/AccountStatus";
