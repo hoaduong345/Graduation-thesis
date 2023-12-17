@@ -7,10 +7,9 @@ import axios from "axios";
 // import LogoGoogle from "../../assets/PNG/lgG.png";
 // import LogoApple from "../../assets/PNG/lgApple.png";
 import { Link, useParams } from "react-router-dom";
-import bgi from "../../assets/PNG/LogoSlogan.png";
-import bg from "../../assets/PNG/NewProject.png";
-import iconCheck from "../../assets/PNG/check.png";
+
 import Container from "../../components/container/Container";
+import { Images } from "../../Assets/TS";
 
 function ConfirmAccount() {
   const param = useParams();
@@ -34,17 +33,11 @@ function ConfirmAccount() {
       {validUrl ? (
         <body className="register-bg flex max-xl:flex-wrap">
           <div className="relative p-4 max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]">
-            <img src={bg} className="img" />
+            <img src={Images.logoSlogan} className="img" />
 
             <div className="absolute inset-0 flex justify-center items-center ">
               <Link to="/">
-                <img
-                  src={bgi}
-                  alt="logo"
-                  // className='logoSlogan'
-                  width={"90%"}
-                  height={"90%"}
-                />
+                <img src={Images.bgi} alt="logo" width={"90%"} height={"90%"} />
               </Link>
             </div>
           </div>
@@ -53,7 +46,7 @@ function ConfirmAccount() {
             <div className="w-[424px]">
               <div className=" flex justify-center items-center ">
                 <img
-                  src={iconCheck}
+                  src={Images.check}
                   alt="logo"
                   // className='logoSlogan'
                   width={"88px"}

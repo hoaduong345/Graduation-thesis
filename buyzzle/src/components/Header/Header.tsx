@@ -384,8 +384,8 @@ export default function Header() {
                     <>
                       <Link to={`/Detailproducts/${items.id}`}>
                         <li className="hover:text-[#1F1717] text-xs">
-                          {items.name.length > 20
-                            ? `${items.name.substring(0, 20)}...`
+                          {items.name.length > 15
+                            ? `${items.name.substring(0, 15)}...`
                             : items.name}
                         </li>
                       </Link>
