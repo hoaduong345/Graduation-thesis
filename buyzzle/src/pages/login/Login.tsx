@@ -204,7 +204,7 @@ function Login() {
           onError={handleError}
           width="400"
           size="large"
-          // type="icon"
+        // type="icon"
         />
       </div>
     );

@@ -42,6 +42,7 @@ function Register() {
     setLoading(true);
     try {
       userController.Register(data);
+      console.log(data);
       reset({});
     } catch (error) {
       setLoading(false);
