@@ -563,6 +563,7 @@ function Category() {
                         open={open === e.id}
                         className="w-full"
                         key={e.id}
+                        placeholder={""}
                       >
                         <div className="grid grid-cols-10">
                           <div className="col-span-8 grid grid-cols-8">

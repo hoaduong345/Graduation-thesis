@@ -273,7 +273,7 @@ export default function OrderHistory() {
                   order?.data?.map((e) => {
                     return (
                       <>
-                        <Accordion open={open === e.id}>
+                        <Accordion open={open === e.id} placeholder={""}>
                           <div
                             className="w-full bg-black"
                             onClick={() => handleOpen(e.id)}
