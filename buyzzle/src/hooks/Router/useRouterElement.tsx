@@ -530,7 +530,7 @@ export default function useRouterEmelent() {
       children: [
         {
           index: true,
-          element: <Navigate to={"Addproductspage"} />,
+          element: <Navigate to={"ListproductsAdmin"} />,
         },
         {
           path: "Addproductspage",
