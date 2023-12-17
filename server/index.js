@@ -45,23 +45,34 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan('common'));
 
-const whitelist = [
-    'https://www.getpostman.com',
-    'https://app.getpostman.com',
-    'http://www.buyzzle.io.vn/',
-    'http://www.buyzzle.io.vn/api/',
-];
-const corsOptions = {
-    origin: (origin, callback) => {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-};
-app.use(cors(corsOptions));
+// const whitelist = [
+//     'https://www.getpostman.com',
+//     'https://app.getpostman.com',
+//     'http://www.buyzzle.io.vn/',
+//     'http://www.buyzzle.io.vn/api/',
+// ];
+// const corsOptions = {
+//     origin: (origin, callback) => {
+//         if (whitelist.indexOf(origin) !== -1 || !origin) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+// };
+// app.use(cors(corsOptions));
+
+app.use(
+    cors({
+        origin: ['http://www.buyzzle.io.vn/'],
+        credentials: true,
+        exposedHeaders: ['Access-Control-Allow-Origin'],
+        allowedHeaders: ['Content-Type', 'Origin', 'User-Agent', 'authorization', 'Access-Control-Allow-Origin'],
+        methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+        maxAge: 86400,
+    })
+);
 
 app.use(path.join(__dirname, ''), express.static(path.join(__dirname, '')));
 app.use(express.static(path.join(__dirname, '')));
