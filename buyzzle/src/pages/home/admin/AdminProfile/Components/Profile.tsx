@@ -63,7 +63,6 @@ export default function UserProfile() {
           const username = user;
 
           await adminController.getAdminWhereUsername(username).then((res) => {
-
             if (res.adminWithImage.dateofbirth == null) {
               res.adminWithImage.dateofbirth = "dd/mm/yyyy";
             } else {
@@ -94,14 +93,14 @@ export default function UserProfile() {
             res.adminWithImage.phonenumber = phonenumberDef;
             setId(res.adminWithImage.id);
             setSex(res.adminWithImage.sex);
-          
+
             setLoading(false);
             SetDataUser(res.adminWithImage);
 
             const UserImageArray = JSON.stringify(
               res.adminWithImage.AdminImage
             );
-           
+
             if (UserImageArray == "[]") {
               setCheckImageUrl(false);
             } else {
@@ -139,7 +138,6 @@ export default function UserProfile() {
   const SetDataUser = (data: any) => {
     const user = JSON.stringify(secureLocalStorage.getItem("admin"));
     if (user != null) {
-     
       reset({
         username: "" + data?.username,
         name: "" + data?.name,
@@ -172,7 +170,7 @@ export default function UserProfile() {
 
       const url = await getDownloadURL(imageRef);
       setUrl(url);
-    
+
       return url;
     } catch (error) {
       console.error(error);
@@ -184,12 +182,10 @@ export default function UserProfile() {
       idadmin: id,
       url: url,
     };
-    
-    await axios
-      .post(`${appConfigAdmin.apiUrl}/addimageadmin/`, urlImages).then(()=>{
 
-      })
-    
+    await axios
+      .post(`${appConfigAdmin.apiUrl}/addimageadmin/`, urlImages)
+      .then(() => {});
   };
 
   const EditImages = async (id: number, url: string) => {
@@ -197,7 +193,7 @@ export default function UserProfile() {
       iduser: id,
       url: url,
     };
-  
+
     await axios
       .put(
         `${appConfigAdmin.apiUrl}/updateimageadmin/${urlImages.iduser}`,
@@ -209,19 +205,18 @@ export default function UserProfile() {
   const API = `http://localhost:5000/admin/adminprofile/${param.username}`;
   const onSubmit = async (formData: FormValues, FormImage: FormImage) => {
     try {
-     
       if (selectedFile == null && CheckImageUrl == false) {
         toast.error("Hãy chọn hình");
         return;
       }
-    
+
       formData.sex = JSON.parse(formData.sex);
       formData.email = emailThen;
       formData.phonenumber = sdtThen;
-    
+
       const response = await axios.put(API, formData);
       FormImage.idadmin = parseInt(id);
-    
+
       if (response) {
         if (CheckImageUrl == false) {
           await addImages(FormImage.idadmin, url);
@@ -234,7 +229,6 @@ export default function UserProfile() {
           }
         }
       }
-
 
       if (response.status === 200) {
         toast.success("Cập nhật thành công", {
@@ -285,7 +279,6 @@ export default function UserProfile() {
     if (file) {
       setSelectedFile(file);
       setImage(file);
-
     } else {
       setSelectedFile(null); // Reset the selectedFile state when no file is selected
       setImage(null); // Reset the imageURL state
@@ -347,10 +340,11 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                          rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                        ${!!errors.username
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                        ${
+                                          !!errors.username
+                                            ? "border-[2px] border-red-900"
+                                            : "border-[1px] border-[#FFAAAF]"
+                                        }`}
                                     disabled={true}
                                     placeholder="Tên đăng nhập"
                                     value={field.value}
@@ -398,10 +392,11 @@ export default function UserProfile() {
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
 rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.name
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                                   ${
+                                                     !!errors.name
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                     placeholder="Tên người dùng"
                                     onChange={(e) => {
                                       const value = e.target.value;
@@ -409,7 +404,7 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                       field.onChange(value.replace(reg, ""));
                                     }}
                                     value={field.value}
-                                  // {...register("name")}
+                                    // {...register("name")}
                                   />
                                   {!!errors.name && (
                                     <p className="text-red-700 mt-2">
@@ -445,10 +440,11 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                                   ${!!errors.email
-                                      ? "border-[2px] border-red-900"
-                                      : "border-[1px] border-[#FFAAAF]"
-                                    }`}
+                                                   ${
+                                                     !!errors.email
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                   placeholder="Email"
                                   onChange={(e) => {
                                     const value = e.target.value;
@@ -457,8 +453,8 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                   }}
                                   value={field.value}
                                   disabled={true}
-                                // {...register("email")}
-                                // onChange={onChangeInput}
+                                  // {...register("email")}
+                                  // onChange={onChangeInput}
                                 />
                                 {!!errors.email && (
                                   <p className="text-red-700 mt-2">
@@ -548,10 +544,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                   <input
                                     className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                                     rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${!!errors.phonenumber
-                                        ? "border-[2px] border-red-900"
-                                        : "border-[1px] border-[#FFAAAF]"
-                                      }`}
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
                                     placeholder="Số điện thoại"
                                     onChange={(e) => {
                                       const value = e.target.value;
@@ -560,8 +557,8 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                                     }}
                                     disabled={true}
                                     value={field.value}
-                                  // {...register("phonenumber")}
-                                  // onChange={onChangeInput}
+                                    // {...register("phonenumber")}
+                                    // onChange={onChangeInput}
                                   />
                                   {!!errors.phonenumber && (
                                     <p className="text-red-700 mt-2">
@@ -614,10 +611,11 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                         </div>
                         {/* button */}
                         <div
-                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${isDisabled
+                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
+                            isDisabled
                               ? "bg-[#aeaeae] cursor-not-allowed"
                               : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
-                            }
+                          }
                      `}
                         >
                           <button
@@ -628,8 +626,9 @@ checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
                               }
                             )}
                             className={`text-center text-base font-bold text-[#FFFFFF]
-                    ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                              }                `}
+                    ${
+                      isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                    }                `}
                           >
                             Lưu
                           </button>

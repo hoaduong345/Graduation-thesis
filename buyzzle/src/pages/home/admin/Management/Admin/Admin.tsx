@@ -75,7 +75,7 @@ export default function Admin() {
         } else {
           res.dateofbirth = (res[0]?.dateofbirth).substring(0, 10);
         }
-        
+
         setAdmin(res);
       });
   };

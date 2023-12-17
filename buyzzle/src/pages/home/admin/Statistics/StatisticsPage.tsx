@@ -60,9 +60,6 @@ const optionsChartVertical = {
   },
 };
 
-
-
-
 export default function StatisticsPage() {
   const [stats, setStats] = useState<Statistics>({} as Statistics);
 
@@ -214,7 +211,6 @@ export default function StatisticsPage() {
     statsControllers
       .getStats({ ...filterState, page: filterState.page! + 1 })
       .then((res) => {
-       
         let arr: HotProductsInRange[] = [];
         if (stats?.hotProductsInRange?.length) {
           arr = stats?.hotProductsInRange.concat(res.hotProductsInRange);

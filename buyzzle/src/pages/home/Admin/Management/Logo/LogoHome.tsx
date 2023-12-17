@@ -20,7 +20,6 @@ import RemoveCate from "../../../admin/assets/TSX/RemoveCate";
 import UploadIMG from "../../../admin/assets/TSX/UploadIMG";
 import Handle from "../../../admin/assets/TSX/bacham";
 
-
 export default function LogoHome() {
   const idModal = "logo";
   const idRemove = "removeLogo";
@@ -104,7 +103,6 @@ export default function LogoHome() {
   };
 
   const removee = (id: number, idDialog: string) => {
-   
     logohomeController
       .remove(id)
       .then(() => {
@@ -153,7 +151,6 @@ export default function LogoHome() {
 
   const renderImg = () => {
     if (url) {
-    
       return (
         <div className="group relative">
           <img

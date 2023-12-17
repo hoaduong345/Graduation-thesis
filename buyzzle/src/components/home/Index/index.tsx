@@ -11,9 +11,7 @@ import { productController } from "../../../controllers/ProductsController";
 import { LogoHome1Model } from "../../../model/LogoHome1Model";
 import { LogoHomeModel } from "../../../model/LogoHomeModel";
 import { MergedProducts } from "../../../model/ProductsSuggest";
-import {
-  ImgOfProduct
-} from "../../../pages/home/User/filterPage/FiltersPage";
+import { ImgOfProduct } from "../../../pages/home/User/FilterPage/FiltersPage";
 import { Cate } from "../components/Category";
 import Productss from "../components/Product";
 import VoucherHomePage from "../components/Voucher/Voucher";
@@ -73,8 +71,7 @@ function Index() {
       .then((response) => response.data)
       .then((data) => {
         setCategory(data);
-      })
-     
+      });
   };
 
   const getAllProducts = (page: number) => {

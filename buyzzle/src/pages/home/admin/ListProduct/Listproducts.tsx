@@ -146,7 +146,6 @@ export default function ListproductsAdmin() {
 
   const handleQuantityRangeChange = (quantity: [number, number]) => {
     setSliderQuantityValues(quantity);
-   
   };
 
   const handlePriceRangeChange = (price: [number, number]) => {
@@ -158,11 +157,10 @@ export default function ListproductsAdmin() {
   };
 
   const handleFillerStar = async (Rate: number) => {
-    await productController.getProductWhereRatting(Rate)
-    .then((res) => {
+    await productController.getProductWhereRatting(Rate).then((res) => {
       setProducts(res);
-    })
-  }
+    });
+  };
 
   return (
     <>

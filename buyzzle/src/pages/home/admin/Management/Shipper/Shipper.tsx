@@ -114,7 +114,6 @@ export default function Shipper() {
   const idShipper = "AddShipper";
 
   const AddShipper = async (formData: FormValues) => {
-   
     formData.sex = JSON.stringify(sex);
     formData.sex = JSON.parse(formData.sex);
     shipperController

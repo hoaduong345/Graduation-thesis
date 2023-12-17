@@ -1,7 +1,7 @@
 import axios from "axios";
-import { FormLoginValues } from "../pages/home/Shipping/loginShipper/LoginShipper";
-import { FormValues } from "../pages/home/Shipping/registerShipper/RegisterShipper";
+import { FormValues } from "../pages/home/Shipping/RegisterShipper/RegisterShipper";
 import { AdminModel } from "./AdminControllder";
+import { FormLoginValues } from "../pages/home/Shipping/LoginShipper/LoginShipper";
 export const appConfig = {
   apiUrl: import.meta.env.VITE_BACKEND_SHIPPING_WITHOUT_BUYZZLE_URL || "",
 };

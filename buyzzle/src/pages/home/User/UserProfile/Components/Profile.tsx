@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { appConfigUser } from "../../../../../configsEnv";
 import { userController } from "../../../../../controllers/UserController";
 import { storage } from "../../../../../firebase/Config";
-import Sitebar from "../sitebar/Sitebar";
+import Sitebar from "../Sitebar/Sitebar";
 
 export type FormValues = {
   username: string;

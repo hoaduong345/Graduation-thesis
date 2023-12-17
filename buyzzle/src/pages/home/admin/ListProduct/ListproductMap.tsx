@@ -7,7 +7,7 @@ import {
   roundedNumber,
 } from "../../../../helper/Format";
 import { stars } from "../../../../helper/StarRating/Star";
-import { Products } from "../../User/filterPage/FiltersPage";
+import { Products } from "../../User/FilterPage/FiltersPage";
 import Delete from "../assets/TSX/Delete";
 import Edit from "../assets/TSX/Edit";
 type Props = {

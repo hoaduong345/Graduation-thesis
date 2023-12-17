@@ -17,7 +17,7 @@ import secureLocalStorage from "react-secure-storage";
 import { adminController } from "../../../../../controllers/AdminControllder";
 import EmptyPage from "../../../../../helper/Empty/EmptyPage";
 import Handle from "../../../admin/assets/TSX/bacham";
-import EyeSlide from "../../../admin/assets/TSX/EyeSlide";
+import EyeSlide from "../../../Admin/assets/TSX/EyeSlide";
 
 interface FormValues {
   id: number;
@@ -58,12 +58,7 @@ export default function RatingMap(props: Props) {
   const [Username, setUsername] = useState<any>("");
   const { id: idProduct } = useParams();
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-  } = useForm<FormValues>({
+  const { control, handleSubmit, reset, setValue } = useForm<FormValues>({
     mode: "all",
     defaultValues: {
       comment: "",

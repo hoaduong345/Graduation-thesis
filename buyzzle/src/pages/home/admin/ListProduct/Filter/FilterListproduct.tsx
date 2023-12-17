@@ -3,7 +3,7 @@ import { useState } from "react";
 import { numberFormat } from "../../../../../helper/Format";
 import FilterRateMap from "./FilterRateMap";
 import { SliderComponentProps } from "../../../../../components/Sitebar/SitebarFilter";
-import { RatingStarDetail } from "../../../User/DetailProduct/detailProductPage/DetailsProduct";
+import { RatingStarDetail } from "../../../User/DetailProduct/DetailProductPage/DetailsProduct";
 
 const arrRating: RatingStarDetail[] = [
   { checked: false, rating: 5 },
@@ -24,25 +24,22 @@ export default function FilterListproduct({
   onPurchaseRangeChange,
   onRateChange,
 }: SliderComponentProps) {
-  const [price, ] = useState(false);
-  const [purchase, ] = useState(false);
-  const [quantity, ] = useState(false);
+  const [price] = useState(false);
+  const [purchase] = useState(false);
+  const [quantity] = useState(false);
   const [, setRating] = useState(1);
   const [rangePriceValue, setRangePriceValue] = useState([50000, 300000]);
   const [rangeQuantityValue, setRangeQuantityValue] = useState([500, 3000]);
   const [rangePurchaseValue, setRangePurchaseValue] = useState([50, 300]);
   const handleSliderChangePrice = (price: [number, number]) => {
-
     setRangePriceValue(price);
     onPriceRangeChange(price);
   };
   const handleSliderChangeQuantity = (quantity: [number, number]) => {
-    
     setRangeQuantityValue(quantity);
     onQuantityRangeChange(quantity);
   };
   const handleSliderChangeBoughtQuantity = (quantity: [number, number]) => {
-  
     setRangePurchaseValue(quantity);
     onPurchaseRangeChange(quantity);
   };
@@ -148,15 +145,17 @@ export default function FilterListproduct({
             <div className="flex mt-[20px] justify-start gap-2">
               <p
                 className={`max-w-max text-sm max-xl:text-[13px]
-                              ${purchase ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
-                  }  `}
+                              ${
+                                purchase ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
+                              }  `}
               >
                 SP:{" "}
               </p>
               <p
                 className={`font-medium max-w-max text-sm max-xl:text-[13px]
-                               ${purchase ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
-                  } `}
+                               ${
+                                 purchase ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
+                               } `}
               >
                 {rangePurchaseValue[0]} - {rangePurchaseValue[1]}
               </p>
@@ -230,15 +229,17 @@ export default function FilterListproduct({
               <div className="flex mt-[20px] justify-start gap-2 ">
                 <p
                   className={`max-w-max text-sm max-xl:text-[13px]
-                               ${quantity ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
-                    } `}
+                               ${
+                                 quantity ? `text-[#4D4D4D]` : `text-[#a5a5a5]`
+                               } `}
                 >
                   Số lượng:{" "}
                 </p>
                 <p
                   className={`font-medium max-w-max text-sm max-xl:text-[13px]
-                               ${quantity ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
-                    } `}
+                               ${
+                                 quantity ? `text-[#1A1A1A]` : `text-[#8c8c8c]`
+                               } `}
                 >
                   {rangeQuantityValue[0]} - {rangeQuantityValue[1]}
                 </p>

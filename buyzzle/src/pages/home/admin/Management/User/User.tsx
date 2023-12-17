@@ -57,8 +57,6 @@ export default function User() {
     window.location.href = `detailuser/${username}`;
   }
 
-
-
   return (
     <Container>
       <div className="grid grid-cols-5">

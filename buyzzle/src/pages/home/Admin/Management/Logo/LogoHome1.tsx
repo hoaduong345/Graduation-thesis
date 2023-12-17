@@ -103,7 +103,6 @@ export default function LogoHome1() {
   };
 
   const removee = (id: number, idDialog: string) => {
-
     logohome1Controller
       .remove(id)
       .then(() => {

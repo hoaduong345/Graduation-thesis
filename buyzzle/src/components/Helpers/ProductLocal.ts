@@ -1,8 +1,9 @@
-import { Products } from "../../pages/home/User/filterPage/FiltersPage";
+import { Products } from "../../pages/home/User/FilterPage/FiltersPage";
 
 export const getCartFromLocal = () => {
   const localProduct = localStorage.getItem("listProductsLocal");
-  const listProductLocal: Products[] = localProduct == null ? [] : JSON.parse(localProduct);
+  const listProductLocal: Products[] =
+    localProduct == null ? [] : JSON.parse(localProduct);
   return listProductLocal;
 };
 

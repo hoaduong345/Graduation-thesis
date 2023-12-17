@@ -103,7 +103,6 @@ export default function LogoDetail() {
   };
 
   const removee = (id: number, idDialog: string) => {
- 
     logodetailController
       .remove(id)
       .then(() => {
@@ -152,7 +151,6 @@ export default function LogoDetail() {
 
   const renderImg = () => {
     if (url) {
-
       return (
         <div className="group relative">
           <img

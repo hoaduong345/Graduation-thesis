@@ -10,7 +10,7 @@ import DialogLogin from "../../../../helper/Dialog/DialogLogin";
 import { formatDate } from "../../../../helper/Format";
 import { toastWarn } from "../../../../helper/Toast/Warning";
 import { VoucherModel } from "../../../../model/VoucherModel";
-import { LoginForm } from "../../../../pages/home/User/DetailProduct/detailProductPage/DetailsProduct";
+import { LoginForm } from "../../../../pages/home/User/DetailProduct/DetailProductPage/DetailsProduct";
 import Container from "../../../container/Container";
 export default function VouchersPage() {
   const [voucher, setVoucher] = useState<VoucherModel[]>([]);
@@ -28,8 +28,8 @@ export default function VouchersPage() {
     voucherControllers
       .userSavedVoucher(id)
       .then((_) => {
-        getVoucher();  // if ((await response).status === 200) {
-      
+        getVoucher(); // if ((await response).status === 200) {
+
         toast.success("Lưu voucher thành công", {
           position: "top-right",
           autoClose: 5000,
@@ -57,7 +57,7 @@ export default function VouchersPage() {
   };
   const {
     control,
-    handleSubmit, 
+    handleSubmit,
     reset,
     formState: { errors },
   } = useForm<LoginForm>({
@@ -65,12 +65,10 @@ export default function VouchersPage() {
   });
   const idAddAdmin = "AddAdmin";
   const Login = async (data: LoginForm) => {
-   
     userController.Login(data).then((res) => {
-     
       const username = res.username;
       const accessToken = res.accessToken;
-     
+
       const UserData = { username };
       const Token = { accessToken };
       localStorage.setItem("idUser", JSON.stringify(res.id));
@@ -174,9 +172,7 @@ export default function VouchersPage() {
                                 onChange={(e) => {
                                   const reg = /[!#$%^&]/;
                                   const value = e.target.value;
-                                  field.onChange(
-                                    value.replace(reg, "")
-                                  );
+                                  field.onChange(value.replace(reg, ""));
                                 }}
                                 name="email"
                               />
@@ -227,9 +223,7 @@ export default function VouchersPage() {
                                 onChange={(e) => {
                                   const reg = /[!@#$%^&]/;
                                   const value = e.target.value;
-                                  field.onChange(
-                                    value.replace(reg, "")
-                                  );
+                                  field.onChange(value.replace(reg, ""));
                                 }}
                                 name="password"
                               />
@@ -265,40 +259,41 @@ export default function VouchersPage() {
                     #{e.code}
                   </p>
                   <div
-                    className={`flex items-center ml-3 ${isSave ? `gap-2` : `gap-3`
-                      }`}
+                    className={`flex items-center ml-3 ${
+                      isSave ? `gap-2` : `gap-3`
+                    }`}
                   >
-                    {
-                      Logined == true ? (
-                        <button
-                          onClick={() => !isSave && savedVoucher(e.id)}
-                          className={`${isSave
+                    {Logined == true ? (
+                      <button
+                        onClick={() => !isSave && savedVoucher(e.id)}
+                        className={`${
+                          isSave
                             ? `cursor-not-allowed bg-white border-[1px] border-[#F7755F] text-[#F7755F] px-3`
                             : `bg-[#F7755F] text-white hover:bg-[#ec8f7f] px-3`
-                            } py-1 rounded  font-semibold text-xs`}
-                        >
-                          {isSave
-                            ? e.savedBy![0].used
-                              ? "Đã dùng"
-                              : "Đã lưu"
-                            : "Lưu"}
-                        </button>
-                      ) : (
-                        <button
-                          onClick={CheckLogin}
-                          className={`${isSave
+                        } py-1 rounded  font-semibold text-xs`}
+                      >
+                        {isSave
+                          ? e.savedBy![0].used
+                            ? "Đã dùng"
+                            : "Đã lưu"
+                          : "Lưu"}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={CheckLogin}
+                        className={`${
+                          isSave
                             ? `cursor-not-allowed bg-white border-[1px] border-[#F7755F] text-[#F7755F] px-3`
                             : `bg-[#F7755F] text-white hover:bg-[#ec8f7f] px-3`
-                            } py-1 rounded  font-semibold text-xs`}
-                        >
-                          {isSave
-                            ? e.savedBy![0].used
-                              ? "Đã dùng"
-                              : "Đã lưu"
-                            : "Lưu"}
-                        </button>
-                      )
-                    }
+                        } py-1 rounded  font-semibold text-xs`}
+                      >
+                        {isSave
+                          ? e.savedBy![0].used
+                            ? "Đã dùng"
+                            : "Đã lưu"
+                          : "Lưu"}
+                      </button>
+                    )}
                     <p className="text-xs font-medium text-[#EA4B48]">
                       {formatDate(e.startDay)} - {formatDate(e.endDay)}
                     </p>
