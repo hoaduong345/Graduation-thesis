@@ -117,11 +117,6 @@ export default function Cart() {
     };
   };
   const checked = (item: CartItem) => {
-    console.log("🚀 ~ file: Cart.tsx:122 ~ checked ~ item:", item);
-    console.log(
-      "🚀 ~ file: Cart.tsx:126 ~ checked ~ productChecked:",
-      productChecked
-    );
     const _check = productChecked.findIndex(
       (el) => el.atributesId == item.atributes_fk.id
     );

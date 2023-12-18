@@ -36,7 +36,7 @@ export default function useNotificationContextAdmin() {
 
   const [deletedOrder, setDeletedOrder] = useState(null);
   useEffect(() => {
-    const socket = io("http://www.buyzzle.io.vn/api");
+    const socket = io("http://www.buyzzle.io.vn/api/");
     socket.on("requestdelete", (requestdelete) => {
       const urlTaker = requestdelete.User.UserImage;
 
