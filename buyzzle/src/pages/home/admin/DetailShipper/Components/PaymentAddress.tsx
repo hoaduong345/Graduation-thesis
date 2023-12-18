@@ -148,7 +148,7 @@ export default function PaymentAddress() {
       <Fragment>
         {validUrl ? (
           <body className="body-filter container mx-auto">
-            <div>
+            <div className="grid grid-cols-1 gap-1">
               <div>
                 <div className="col-span-1 max-2xl:hidden"></div>
               </div>
