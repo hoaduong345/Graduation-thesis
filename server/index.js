@@ -103,9 +103,9 @@ app.use('/buyzzle/logohome1', LogoHome1Router);
 app.use('/buyzzle/logodetail', LogoDetailRouter);
 
 // Setup socket.io
-const io = new Server(httpServer, {
+const io = new Server('http://www.buyzzle.io.vn/api', {
     cors: {
-        origin: ['http://localhost:5000', 'http://localhost:5173','http://www.buyzzle.io.vn/'],
+        origin: ['http://localhost:5000', 'http://localhost:5173', 'http://www.buyzzle.io.vn/'],
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
