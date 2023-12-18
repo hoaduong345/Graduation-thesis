@@ -110,6 +110,9 @@ const io = new Server(httpServer, {
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
     },
+    path: '/socket.io',
+    transports: ['websocket', 'polling'],
+    secure: true,
     allowEIO3: true,
 });
 
