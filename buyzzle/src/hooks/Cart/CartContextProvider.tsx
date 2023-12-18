@@ -117,7 +117,7 @@ export default function useCartContext() {
       await updateQuantityCart().then((res) => {
         const listCheckout = res!.filter((e) =>
           productChecked.some(
-            (ele) => ele.atributes_fk?.id == e.atributes_fk?.id
+            (ele) => ele.atributesId == e.atributesId
           )
         );
         sessionStorage.setItem("cartBuyzzle", JSON.stringify(listCheckout));
