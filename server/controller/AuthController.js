@@ -303,12 +303,11 @@ const AuthController = {
                     },
                 });
                 const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${forgot_password_token_base64}`;
+                await SendEmail(user.email, 'Forgot Password', url);
             } else {
                 const url = `${process.env.BASE_URL}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
+                await SendEmail(user.email, 'Forgot Password', url);
             }
-
-            const url = `${process.env.BASE_URL_FORGOTPASSWORD}/buyzzle/auth/resetpassword/${user.forgotpassword_token}`;
-            await SendEmail(user.email, 'Forgot Password', url);
 
             res.status(200).send('A Link has sent to your email');
         } catch (error) {
