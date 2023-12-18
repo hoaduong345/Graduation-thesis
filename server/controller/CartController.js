@@ -12,6 +12,7 @@ const CartController = {
             const quantity = parseInt(qty || 1); // default to 1 if not provided
             const atributes = parseInt(atri);
             let cart = await CartController.findCart(userId, productId, atributes);
+            console.log("userId", userId);
             if (!cart) {
                 cart = await CartController.createCart(userId, productId, quantity, atributes);
                 cart.subtotal += cart.item.price * quantity;
