@@ -324,10 +324,8 @@ export default function UserProfile() {
               <div className="body-filter container mx-auto">
                 <div>
                   <div className="grid grid-cols-4 gap-4">
-                    <div>
-                      <div className="col-span-1 max-2xl:hidden">
-                        <Sitebar />
-                      </div>
+                    <div className="col-span-1 max-2xl:hidden">
+                      <Sitebar />
                     </div>
                     <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
                       <form
