@@ -301,7 +301,7 @@ export default function UserProfile() {
                       <SitebarAdmin />
                     </div>
 
-                    <div className="mt-20 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
+                    <div className="mt-20 col-span-3  grid grid-cols-5 gap-4">
                       <form
                         className="card py-4 px-5 col-span-3  rounded-[6px]
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"

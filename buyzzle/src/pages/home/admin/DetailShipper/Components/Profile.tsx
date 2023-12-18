@@ -20,7 +20,6 @@ export default function UserProfile() {
   const [, setValidUrl] = useState(false);
   const param = useParams();
 
-
   const [, setId] = useState<string>("11");
   const [sex, setSex] = useState<boolean>();
 
@@ -28,7 +27,7 @@ export default function UserProfile() {
     control,
     register,
     reset,
-    formState: { errors},
+    formState: { errors },
   } = useForm<FormValues>({
     mode: "all",
   });
@@ -38,7 +37,7 @@ export default function UserProfile() {
     if (user != null) {
       // const userData = JSON.parse(user);
       const username = user;
-  
+
       shipperController
         .getShipperWhereUsername(username)
         .then((res) => {
@@ -96,7 +95,7 @@ export default function UserProfile() {
       <body className="body-filter container mx-auto">
         <div>
           <div className="grid grid-cols-1 gap-1">
-            <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-1 gap-1">
+            <div className="mt-9 col-span-3  grid grid-cols-1 gap-1">
               <form
                 className="card py-4 px-5 col-span-3 rounded-[6px]
                                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
