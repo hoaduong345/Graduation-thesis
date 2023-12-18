@@ -10,13 +10,13 @@ const SendEmail = async (email, subject, text, next) => {
             port: Number(process.env.EMAIL_PORT),
             secure: Boolean(process.env.SECURE),
             auth: {
-                user: process.env.USER,
+                user: process.env.USER_EMAIL,
                 pass: process.env.PASS,
             },
         });
 
         await transporter.sendMail({
-            from: process.env.USER,
+            from: process.env.USER_EMAIL,
             to: email,
             subject: subject,
             text: text,
@@ -37,7 +37,7 @@ const SendEmail = async (email, subject, text, next) => {
             process.env.SERVICE,
             process.env.EMAIL_PORT,
             process.env.SECURE,
-            process.env.USER,
+            process.env.USER_EMAIL,
             process.env.PASS
         );
         console.error(error);
