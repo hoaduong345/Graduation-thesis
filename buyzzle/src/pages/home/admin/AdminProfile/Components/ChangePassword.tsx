@@ -120,10 +120,8 @@ export default function ChangePassword() {
         {validUrl ? (
           <body className="body-filter container mx-auto">
             <div>
-              <div>
-                <div>
+              <div className="grid grid-cols-4 gap-4">
                   <div className="col-span-1 max-2xl:hidden"></div>
-                </div>
                 <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
                   <form
                     // onSubmit={handleSubmit(onSubmit2)}
