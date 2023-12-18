@@ -22,13 +22,20 @@ const firebaseConfig = {
   // appId: "1:1078795630642:web:b9e3e56074909140bc242b",
   // measurementId: "G-JLZWZPKM29",
 
-  apiKey: "AIzaSyCg73yqCNCIvWFRy6utbW6sqMN_s11RdnQ",
-  authDomain: "imgbuyzzle.firebaseapp.com",
-  projectId: "imgbuyzzle",
-  storageBucket: "imgbuyzzle.appspot.com",
-  messagingSenderId: "1071792430918",
-  appId: "1:1071792430918:web:8def05f877525f88fccf47",
-  measurementId: "G-ESM5WMGJ2R",
+  // apiKey: "AIzaSyCg73yqCNCIvWFRy6utbW6sqMN_s11RdnQ",
+  // authDomain: "imgbuyzzle.firebaseapp.com",
+  // projectId: "imgbuyzzle",
+  // storageBucket: "imgbuyzzle.appspot.com",
+  // messagingSenderId: "1071792430918",
+  // appId: "1:1071792430918:web:8def05f877525f88fccf47",
+  // measurementId: "G-ESM5WMGJ2R",
+  apiKey: "AIzaSyBQuWF6AjrRu02lYW-deX_LAO_Z8DQ3K8M",
+  authDomain: "imagebuyzzle.firebaseapp.com",
+  projectId: "imagebuyzzle",
+  storageBucket: "imagebuyzzle.appspot.com",
+  messagingSenderId: "311115542456",
+  appId: "1:311115542456:web:72b0b2f15b9e1d354a294d",
+  measurementId: "G-5WKDVKLKSE"
 };
 
 // Initialize Firebase
