@@ -276,7 +276,7 @@ export default function FiltersPage() {
             />
           </div>
           {/* content-right-filter */}
-          <div className="content-right-filter mt-[34px] p-4 col-span-3 max-2xl:col-span-1 max-lg:mt-0 max-lg:p-0">
+          <div className="content-right-filter mt-[34px] p-4 col-span-3  max-lg:mt-0 max-lg:p-0">
             <div className="max-lg:hidden">
               {/* <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-xl:text-2xl max-lg:text-xl">
                 THƯƠNG HIỆU NỔI TIẾNG:
