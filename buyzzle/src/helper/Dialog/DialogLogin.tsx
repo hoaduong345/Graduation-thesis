@@ -110,7 +110,7 @@ export default function DialogLogin(props: Props) {
     <>
       <dialog id={id} className="modal">
         <ToastContainer></ToastContainer>
-        <div className="flex flex-wrap content-center justify-center bg-gray-200 py-10  relative  flex-col w-[1000px] p-[10px] ">
+        <div className="flex flex-wrap content-center justify-center bg-gray-200 py-10  relative  flex-col w-[1000px] p-[10px] rounded-l-md">
           <div className="flex shadow-md">
             <div className="flex flex-wrap content-center justify-center rounded-l-md bg-white">
               <div className="w-[455px] p-[20px]">

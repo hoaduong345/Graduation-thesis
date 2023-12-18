@@ -322,145 +322,35 @@ export default function UserProfile() {
           {validUrl ? (
             <Container>
               <div className="body-filter container mx-auto">
-                <div>
-                  <div>
-                    <div>
-                      <div className="col-span-1 max-2xl:hidden">
-                        <Sitebar />
-                      </div>
-                    </div>
-                    <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
-                      <form
-                        className="card py-4 px-5 col-span-3  rounded-[6px]
+                <div className="flex">
+                  <div className="col-span-1 max-2xl:hidden">
+                    <Sitebar />
+                  </div>
+                  <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-5 gap-4">
+                    <form
+                      className="card py-4 px-5 col-span-3  rounded-[6px]
                             shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                      >
-                        <span className="text-[#000] text-2xl font-normal ">
-                          Hồ sơ của tôi
-                        </span>
-                        <p className="text-[#393939] text-sm font-normal">
-                          Quản lý thông tin hồ sơ để bảo mật tài khoản
-                        </p>
-                        <div className="flex w-[100%] mt-4 justify-between">
-                          <div className="w-[48%]">
-                            <Controller
-                              control={control}
-                              name="username"
-                              rules={{
-                                required: {
-                                  value: true,
-                                  message:
-                                    "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                                },
-                                minLength: {
-                                  value: 6,
-                                  message: "Tên sản phẩm phải lớn hơn 6 ký tự",
-                                },
-                              }}
-                              render={({ field }) => (
-                                <>
-                                  <label
-                                    htmlFor="name"
-                                    className="text-[#4C4C4C] text-sm font-medium"
-                                  >
-                                    Tên đăng nhập
-                                  </label>
-                                  {/* input addNameProducts */}
-                                  <input
-                                    className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                        ${
-                                          !!errors.username
-                                            ? "border-[2px] border-red-900"
-                                            : "border-[1px] border-[#FFAAAF]"
-                                        }`}
-                                    disabled={true}
-                                    placeholder="Tên đăng nhập"
-                                    value={field.value}
-                                    onChange={(e) => {
-                                      const value = e.target.value;
-                                      const reg = /[!@#$%^&*]/;
-                                      field.onChange(value.replace(reg, ""));
-                                    }}
-                                  />
-                                  {!!errors.username && (
-                                    <p className="text-red-700 mt-2">
-                                      {errors.username.message}
-                                    </p>
-                                  )}
-                                </>
-                              )}
-                            />
-                            {/* end input addNameProducts */}
-                          </div>
-                          <div className="w-[48%]">
-                            <Controller
-                              control={control}
-                              name="name"
-                              rules={{
-                                required: {
-                                  value: true,
-                                  message:
-                                    "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                                },
-                                minLength: {
-                                  value: 6,
-                                  message:
-                                    "Tên người dùng phải lớn hơn 6 ký tự",
-                                },
-                                maxLength: {
-                                  value: 25,
-                                  message:
-                                    "Tên người dùng phải bé hơn 25 ký tự",
-                                },
-                              }}
-                              render={({ field }) => (
-                                <>
-                                  <label
-                                    htmlFor="name"
-                                    className="text-[#4C4C4C] text-sm font-medium"
-                                  >
-                                    Tên người dùng
-                                  </label>
-                                  {/* input addNameProducts */}
-                                  <input
-                                    className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${
-                                                     !!errors.name
-                                                       ? "border-[2px] border-red-900"
-                                                       : "border-[1px] border-[#FFAAAF]"
-                                                   }`}
-                                    placeholder="Tên người dùng"
-                                    value={field.value}
-                                    onChange={(e) => {
-                                      const value = e.target.value;
-                                      const reg = /[!@#$%^&*]/;
-                                      field.onChange(value.replace(reg, ""));
-                                      // field.onChange
-                                    }}
-
-                                    // {...register("name")}
-                                  />
-                                  {!!errors.name && (
-                                    <p className="text-red-700 mt-2">
-                                      {errors.name.message}
-                                    </p>
-                                  )}
-                                </>
-                              )}
-                            />
-                            {/* end input addNameProducts */}
-                          </div>
-                        </div>
-                        <div className="w-[100%] mt-4">
+                    >
+                      <span className="text-[#000] text-2xl font-normal ">
+                        Hồ sơ của tôi
+                      </span>
+                      <p className="text-[#393939] text-sm font-normal">
+                        Quản lý thông tin hồ sơ để bảo mật tài khoản
+                      </p>
+                      <div className="flex w-[100%] mt-4 justify-between">
+                        <div className="w-[48%]">
                           <Controller
                             control={control}
-                            name="email"
+                            name="username"
                             rules={{
                               required: {
                                 value: true,
                                 message:
                                   "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                              },
+                              minLength: {
+                                value: 6,
+                                message: "Tên sản phẩm phải lớn hơn 6 ký tự",
                               },
                             }}
                             render={({ field }) => (
@@ -469,31 +359,29 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                                   htmlFor="name"
                                   className="text-[#4C4C4C] text-sm font-medium"
                                 >
-                                  Email
+                                  Tên đăng nhập
                                 </label>
                                 {/* input addNameProducts */}
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                                    rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
-                                                   ${
-                                                     !!errors.email
-                                                       ? "border-[2px] border-red-900"
-                                                       : "border-[1px] border-[#FFAAAF]"
-                                                   }`}
-                                  placeholder="Email"
+                                         rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                        ${
+                                          !!errors.username
+                                            ? "border-[2px] border-red-900"
+                                            : "border-[1px] border-[#FFAAAF]"
+                                        }`}
+                                  disabled={true}
+                                  placeholder="Tên đăng nhập"
+                                  value={field.value}
                                   onChange={(e) => {
                                     const value = e.target.value;
-                                    const reg = /[!#$%^&]/;
+                                    const reg = /[!@#$%^&*]/;
                                     field.onChange(value.replace(reg, ""));
                                   }}
-                                  value={field.value}
-                                  disabled={true}
-                                  // {...register("email")}
-                                  // onChange={onChangeInput}
                                 />
-                                {!!errors.email && (
+                                {!!errors.username && (
                                   <p className="text-red-700 mt-2">
-                                    {errors.email.message}
+                                    {errors.username.message}
                                   </p>
                                 )}
                               </>
@@ -501,332 +389,438 @@ rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
                           />
                           {/* end input addNameProducts */}
                         </div>
-                        <div className="w-[100%] mt-4 flex justify-between">
-                          <div className="w-[48%]">
-                            <label
-                              htmlFor="name"
-                              className="text-[#4C4C4C] text-sm font-medium"
-                            >
-                              Giới tính
-                            </label>
-                            <Controller
-                              control={control}
-                              name="sex"
-                              render={({ field }) => (
-                                <div className="flex w-[100%] mt-6">
-                                  <div className="flex items-center w-[33%] gap-1">
-                                    <div>
-                                      <h3>Nam</h3>
-                                    </div>
-                                    <div className="flex items-center justify-start ">
-                                      <input
-                                        type="radio"
-                                        // name="colored-radio"
-                                        id="orange-radio1"
-                                        value="true"
-                                        onChange={(e) => {
-                                          field.onChange("true");
-                                          handleSexChange(e.target.value);
-                                        }}
-                                        checked={sex === true}
-                                        className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
-                                        checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                      />
-                                      <div
-                                        className="h-6 w-6 absolute rounded-full pointer-events-none
-                                        peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                      />
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center w-[33%] gap-1">
-                                    <div>
-                                      <h3>Nữ</h3>
-                                    </div>
-                                    <div className="flex items-center justify-start ">
-                                      <input
-                                        type="radio"
-                                        // name="colored-radio"
-                                        id="orange-radio2"
-                                        value="false"
-                                        // {...register("sex")}
-
-                                        checked={sex === false}
-                                        onChange={(e) => {
-                                          field.onChange("true");
-                                          handleSexChange(e.target.value);
-                                        }}
-                                        className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full
-checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
-                                      />
-                                      <div
-                                        className="h-6 w-6 absolute rounded-full pointer-events-none
-                                        peer-checked:border-[#EA4B48] peer-checked:border-2"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            />
-                          </div>
-                          {checkPhone == true ? (
-                            <div className="w-[48%]">
-                              <Controller
-                                control={control}
-                                name="phonenumber"
-                                rules={{
-                                  required: {
-                                    value: true,
-                                    message:
-                                      "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                                  },
-                                }}
-                                render={({ field }) => (
-                                  <>
-                                    <label
-                                      htmlFor="name"
-                                      className="text-[#4C4C4C] text-sm font-medium"
-                                    >
-                                      Số điện thoại
-                                    </label>
-                                    {/* input addNameProducts */}
-                                    <input
-                                      className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                                    rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${
-                                                     !!errors.phonenumber
-                                                       ? "border-[2px] border-red-900"
-                                                       : "border-[1px] border-[#FFAAAF]"
-                                                   }`}
-                                      placeholder="Số điện thoại"
-                                      value={field.value}
-                                      onChange={(e) => {
-                                        const value = e.target.value;
-                                        const reg = /[!@#$%^&]/;
-                                        field.onChange(value.replace(reg, ""));
-                                      }}
-                                      // disabled={true}
-
-                                      // {...register("phonenumber")}
-                                      // onChange={onChangeInput}
-                                    />
-                                    {!!errors.phonenumber && (
-                                      <p className="text-red-700 mt-2">
-                                        {errors.phonenumber.message}
-                                      </p>
-                                    )}
-                                  </>
-                                )}
-                              />
-                            </div>
-                          ) : (
-                            <div className="w-[48%]">
-                              <Controller
-                                control={control}
-                                name="phonenumber"
-                                rules={{
-                                  required: {
-                                    value: true,
-                                    message:
-                                      "Bạn phải nhập thông tin cho trường dữ liệu này!",
-                                  },
-                                  minLength: {
-                                    value: 10,
-                                    message: "Tối thiểu 10 kí tự",
-                                  },
-                                  maxLength: {
-                                    value: 11,
-                                    message: "Nhiều nhất 11 kí tự",
-                                  },
-                                }}
-                                render={({ field }) => (
-                                  <>
-                                    <label
-                                      htmlFor="name"
-                                      className="text-[#4C4C4C] text-sm font-medium"
-                                    >
-                                      Số điện thoại
-                                    </label>
-                                    {/* input addNameProducts */}
-                                    <input
-                                      className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
-                                                    rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
-                                                   ${
-                                                     !!errors.phonenumber
-                                                       ? "border-[2px] border-red-900"
-                                                       : "border-[1px] border-[#FFAAAF]"
-                                                   }`}
-                                      placeholder="Số điện thoại"
-                                      onChange={(e) => {
-                                        const value = e.target.value;
-                                        const reg = /[!@#$%^&]/;
-                                        field.onChange(value.replace(reg, ""));
-                                      }}
-                                      disabled={true}
-                                      value={field.value}
-                                      // {...register("phonenumber")}
-                                      // onChange={onChangeInput}
-                                    />
-                                    {!!errors.phonenumber && (
-                                      <p className="text-red-700 mt-2">
-                                        {errors.phonenumber.message}
-                                      </p>
-                                    )}
-                                  </>
-                                )}
-                              />
-                            </div>
-                          )}
-                        </div>
-                        <div className="w-[100%] mt-4">
+                        <div className="w-[48%]">
                           <Controller
                             control={control}
-                            name="dateOfBirth"
+                            name="name"
                             rules={{
                               required: {
                                 value: true,
                                 message:
                                   "Bạn phải nhập thông tin cho trường dữ liệu này!",
                               },
-                              validate: (date: string) => {
-                                const valid = moment(date).isAfter(
-                                  moment().subtract(1, "days").toDate()
-                                );
-                                return valid == true
-                                  ? "Thời gian không hợp lệ"
-                                  : undefined;
+                              minLength: {
+                                value: 6,
+                                message: "Tên người dùng phải lớn hơn 6 ký tự",
+                              },
+                              maxLength: {
+                                value: 25,
+                                message: "Tên người dùng phải bé hơn 25 ký tự",
                               },
                             }}
                             render={({ field }) => (
-                              <div>
+                              <>
                                 <label
                                   htmlFor="name"
                                   className="text-[#4C4C4C] text-sm font-medium"
                                 >
-                                  Ngày sinh
+                                  Tên người dùng
                                 </label>
+                                {/* input addNameProducts */}
                                 <input
                                   className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                   ${
+                                                     !!errors.name
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
+                                  placeholder="Tên người dùng"
+                                  value={field.value}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    const reg = /[!@#$%^&*]/;
+                                    field.onChange(value.replace(reg, ""));
+                                    // field.onChange
+                                  }}
+
+                                  // {...register("name")}
+                                />
+                                {!!errors.name && (
+                                  <p className="text-red-700 mt-2">
+                                    {errors.name.message}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          />
+                          {/* end input addNameProducts */}
+                        </div>
+                      </div>
+                      <div className="w-[100%] mt-4">
+                        <Controller
+                          control={control}
+                          name="email"
+                          rules={{
+                            required: {
+                              value: true,
+                              message:
+                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                            },
+                          }}
+                          render={({ field }) => (
+                            <>
+                              <label
+                                htmlFor="name"
+                                className="text-[#4C4C4C] text-sm font-medium"
+                              >
+                                Email
+                              </label>
+                              {/* input addNameProducts */}
+                              <input
+                                className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                    rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
+                                                   ${
+                                                     !!errors.email
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
+                                placeholder="Email"
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  const reg = /[!#$%^&]/;
+                                  field.onChange(value.replace(reg, ""));
+                                }}
+                                value={field.value}
+                                disabled={true}
+                                // {...register("email")}
+                                // onChange={onChangeInput}
+                              />
+                              {!!errors.email && (
+                                <p className="text-red-700 mt-2">
+                                  {errors.email.message}
+                                </p>
+                              )}
+                            </>
+                          )}
+                        />
+                        {/* end input addNameProducts */}
+                      </div>
+                      <div className="w-[100%] mt-4 flex justify-between">
+                        <div className="w-[48%]">
+                          <label
+                            htmlFor="name"
+                            className="text-[#4C4C4C] text-sm font-medium"
+                          >
+                            Giới tính
+                          </label>
+                          <Controller
+                            control={control}
+                            name="sex"
+                            render={({ field }) => (
+                              <div className="flex w-[100%] mt-6">
+                                <div className="flex items-center w-[33%] gap-1">
+                                  <div>
+                                    <h3>Nam</h3>
+                                  </div>
+                                  <div className="flex items-center justify-start ">
+                                    <input
+                                      type="radio"
+                                      // name="colored-radio"
+                                      id="orange-radio1"
+                                      value="true"
+                                      onChange={(e) => {
+                                        field.onChange("true");
+                                        handleSexChange(e.target.value);
+                                      }}
+                                      checked={sex === true}
+                                      className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full 
+                                        checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
+                                    />
+                                    <div
+                                      className="h-6 w-6 absolute rounded-full pointer-events-none
+                                        peer-checked:border-[#EA4B48] peer-checked:border-2"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="flex items-center w-[33%] gap-1">
+                                  <div>
+                                    <h3>Nữ</h3>
+                                  </div>
+                                  <div className="flex items-center justify-start ">
+                                    <input
+                                      type="radio"
+                                      // name="colored-radio"
+                                      id="orange-radio2"
+                                      value="false"
+                                      // {...register("sex")}
+
+                                      checked={sex === false}
+                                      onChange={(e) => {
+                                        field.onChange("true");
+                                        handleSexChange(e.target.value);
+                                      }}
+                                      className="appearance-none h-6 w-6 border border-[#CCCCCC] rounded-full
+checked:bg-[#EA4B48] checked:scale-75 transition-all duration-200 peer "
+                                    />
+                                    <div
+                                      className="h-6 w-6 absolute rounded-full pointer-events-none
+                                        peer-checked:border-[#EA4B48] peer-checked:border-2"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          />
+                        </div>
+                        {checkPhone == true ? (
+                          <div className="w-[48%]">
+                            <Controller
+                              control={control}
+                              name="phonenumber"
+                              rules={{
+                                required: {
+                                  value: true,
+                                  message:
+                                    "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                                },
+                              }}
+                              render={({ field }) => (
+                                <>
+                                  <label
+                                    htmlFor="name"
+                                    className="text-[#4C4C4C] text-sm font-medium"
+                                  >
+                                    Số điện thoại
+                                  </label>
+                                  {/* input addNameProducts */}
+                                  <input
+                                    className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                    rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
+                                    placeholder="Số điện thoại"
+                                    value={field.value}
+                                    onChange={(e) => {
+                                      const value = e.target.value;
+                                      const reg = /[!@#$%^&]/;
+                                      field.onChange(value.replace(reg, ""));
+                                    }}
+                                    // disabled={true}
+
+                                    // {...register("phonenumber")}
+                                    // onChange={onChangeInput}
+                                  />
+                                  {!!errors.phonenumber && (
+                                    <p className="text-red-700 mt-2">
+                                      {errors.phonenumber.message}
+                                    </p>
+                                  )}
+                                </>
+                              )}
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-[48%]">
+                            <Controller
+                              control={control}
+                              name="phonenumber"
+                              rules={{
+                                required: {
+                                  value: true,
+                                  message:
+                                    "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                                },
+                                minLength: {
+                                  value: 10,
+                                  message: "Tối thiểu 10 kí tự",
+                                },
+                                maxLength: {
+                                  value: 11,
+                                  message: "Nhiều nhất 11 kí tự",
+                                },
+                              }}
+                              render={({ field }) => (
+                                <>
+                                  <label
+                                    htmlFor="name"
+                                    className="text-[#4C4C4C] text-sm font-medium"
+                                  >
+                                    Số điện thoại
+                                  </label>
+                                  {/* input addNameProducts */}
+                                  <input
+                                    className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
+                                                    rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2
+                                                   ${
+                                                     !!errors.phonenumber
+                                                       ? "border-[2px] border-red-900"
+                                                       : "border-[1px] border-[#FFAAAF]"
+                                                   }`}
+                                    placeholder="Số điện thoại"
+                                    onChange={(e) => {
+                                      const value = e.target.value;
+                                      const reg = /[!@#$%^&]/;
+                                      field.onChange(value.replace(reg, ""));
+                                    }}
+                                    disabled={true}
+                                    value={field.value}
+                                    // {...register("phonenumber")}
+                                    // onChange={onChangeInput}
+                                  />
+                                  {!!errors.phonenumber && (
+                                    <p className="text-red-700 mt-2">
+                                      {errors.phonenumber.message}
+                                    </p>
+                                  )}
+                                </>
+                              )}
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className="w-[100%] mt-4">
+                        <Controller
+                          control={control}
+                          name="dateOfBirth"
+                          rules={{
+                            required: {
+                              value: true,
+                              message:
+                                "Bạn phải nhập thông tin cho trường dữ liệu này!",
+                            },
+                            validate: (date: string) => {
+                              const valid = moment(date).isAfter(
+                                moment().subtract(1, "days").toDate()
+                              );
+                              return valid == true
+                                ? "Thời gian không hợp lệ"
+                                : undefined;
+                            },
+                          }}
+                          render={({ field }) => (
+                            <div>
+                              <label
+                                htmlFor="name"
+                                className="text-[#4C4C4C] text-sm font-medium"
+                              >
+                                Ngày sinh
+                              </label>
+                              <input
+                                className={`focus:outline-none text-[#333333] text-base placeholder-[#7A828A]
                                   rounded-[6px] px-[10px] py-[12px] w-[100%] mt-2 
                                  ${
                                    !!errors.dateOfBirth
                                      ? "border-[2px] border-red-900"
                                      : "border-[1px] border-[#FFAAAF]"
                                  }`}
-                                  type="date"
-                                  onChange={(e) => {
-                                    const value = e.target.value;
-                                    // const reg = /[!@#$%^&*]/;
-                                    field.onChange(value);
-                                    // field.onChange(e.target.value);
-                                  }}
-                                  value={field.value}
-                                />
-                                {!!errors.dateOfBirth && (
-                                  <p className="text-red-700 mt-2">
-                                    {errors.dateOfBirth.message}
-                                  </p>
-                                )}
-                              </div>
-                            )}
-                          />
-                        </div>
-                        {/* button */}
-                        <div
-                          onClick={handleSubmit(
-                            (formData: any, FormImage: any) => {
-                              onSubmit(formData, FormImage);
-                            }
+                                type="date"
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  // const reg = /[!@#$%^&*]/;
+                                  field.onChange(value);
+                                  // field.onChange(e.target.value);
+                                }}
+                                value={field.value}
+                              />
+                              {!!errors.dateOfBirth && (
+                                <p className="text-red-700 mt-2">
+                                  {errors.dateOfBirth.message}
+                                </p>
+                              )}
+                            </div>
                           )}
-                          className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
-                            isDisabled
-                              ? "bg-[#aeaeae] cursor-not-allowed"
-                              : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                        />
+                      </div>
+                      {/* button */}
+                      <div
+                        onClick={handleSubmit(
+                          (formData: any, FormImage: any) => {
+                            onSubmit(formData, FormImage);
                           }
+                        )}
+                        className={`flex w-[122.164px] rounded-md h-[32px] transition duration-150 justify-evenly bg-[#EA4B48] mt-5 ${
+                          isDisabled
+                            ? "bg-[#aeaeae] cursor-not-allowed"
+                            : "bg-[#EA4B48] hover:bg-[#ff6d65] cursor-pointer"
+                        }
                      `}
-                        >
-                          <button
-                            disabled={isDisabled}
-                            className={`text-center text-base font-bold text-[#FFFFFF]
+                      >
+                        <button
+                          disabled={isDisabled}
+                          className={`text-center text-base font-bold text-[#FFFFFF]
                     ${
                       isDisabled ? "cursor-not-allowed" : "cursor-pointer"
                     }                `}
-                          >
-                            Lưu
-                          </button>
-                        </div>
-                      </form>
+                        >
+                          Lưu
+                        </button>
+                      </div>
+                    </form>
 
-                      {/* Form */}
+                    {/* Form */}
 
-                      <div
-                        className="card py-4 px-5 col-span-2 rounded-[6px]
+                    <div
+                      className="card py-4 px-5 col-span-2 rounded-[6px]
                     shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
-                      >
-                        <div className=" flex flex-col items-center my-auto">
-                          {selectedFile ? (
-                            <>
-                              <img
-                                className="w-40 h-40 rounded-full object-cover"
-                                src={url!}
-                                alt="Rounded avatar"
-                              />
-                            </>
-                          ) : (
-                            <>
-                              {CheckImageUrl ? (
-                                <>
-                                  <img
-                                    src={urlThen!}
-                                    alt="Rounded avatar"
-                                    className="w-40 h-40 rounded-full object-cover"
-                                  />
-                                </>
-                              ) : (
-                                <div>
-                                  <div className="w-36 h-36 rounded-full flex items-center justify-center bg-red-500">
-                                    <p className="text-2xl text-stone-50 text-[45px]">
-                                      {name?.substring(0, 1).toUpperCase()}
-                                    </p>
-                                  </div>
+                    >
+                      <div className=" flex flex-col items-center my-auto">
+                        {selectedFile ? (
+                          <>
+                            <img
+                              className="w-40 h-40 rounded-full object-cover"
+                              src={url!}
+                              alt="Rounded avatar"
+                            />
+                          </>
+                        ) : (
+                          <>
+                            {CheckImageUrl ? (
+                              <>
+                                <img
+                                  src={urlThen!}
+                                  alt="Rounded avatar"
+                                  className="w-40 h-40 rounded-full object-cover"
+                                />
+                              </>
+                            ) : (
+                              <div>
+                                <div className="w-36 h-36 rounded-full flex items-center justify-center bg-red-500">
+                                  <p className="text-2xl text-stone-50 text-[45px]">
+                                    {name?.substring(0, 1).toUpperCase()}
+                                  </p>
                                 </div>
-                              )}
-                            </>
-                          )}
-                          {/* button */}
-                          <label htmlFor="images">
-                            <div
-                              className="flex items-center w-[141px] rounded-md h-[32px]
+                              </div>
+                            )}
+                          </>
+                        )}
+                        {/* button */}
+                        <label htmlFor="images">
+                          <div
+                            className="flex items-center w-[141px] rounded-md h-[32px]
                              hover:bg-[#FFEAE9] transition duration-150 border-[#EA4B48]
                               border-[1px] justify-evenly cursor-pointer mt-5"
-                              onClick={() => {
-                                if (!!selectedFile) {
-                                  console.log("Confirm");
-                                }
-                              }}
-                            >
-                              <Controller
-                                control={control}
-                                name="image"
-                                render={({ field }) => (
-                                  <input
-                                    type="file"
-                                    onChange={(e) => {
-                                      // const value = ;
-                                      onChangeImage(e.target.files?.[0]);
-                                      field.onChange(e.target.files?.[0].name);
-                                    }}
-                                    id="images"
-                                    multiple
-                                    className="hidden"
-                                  />
-                                )}
-                              />
-                              <div className="text-center text-sm font-bold text-[#1A1A1A] ">
-                                Thay đổi ảnh
-                              </div>
+                            onClick={() => {
+                              if (!!selectedFile) {
+                                console.log("Confirm");
+                              }
+                            }}
+                          >
+                            <Controller
+                              control={control}
+                              name="image"
+                              render={({ field }) => (
+                                <input
+                                  type="file"
+                                  onChange={(e) => {
+                                    // const value = ;
+                                    onChangeImage(e.target.files?.[0]);
+                                    field.onChange(e.target.files?.[0].name);
+                                  }}
+                                  id="images"
+                                  multiple
+                                  className="hidden"
+                                />
+                              )}
+                            />
+                            <div className="text-center text-sm font-bold text-[#1A1A1A] ">
+                              Thay đổi ảnh
                             </div>
-                          </label>
-                        </div>
+                          </div>
+                        </label>
                       </div>
                     </div>
                   </div>
