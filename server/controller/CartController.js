@@ -66,10 +66,11 @@ const CartController = {
         const product = await prisma.product.findFirst({
             where: { id: productId },
         });
+        console.log('-----userId-----');
+        console.log(JSON.stringify(product), userId);
         return prisma.cart.create({
             data: {
                 userId,
-
                 subtotal: product.sellingPrice * quantity,
                 item: {
                     create: {
