@@ -67,15 +67,18 @@ function Resetpassword() {
     <Fragment>
       {validUrl ? (
         <div className="login-bg flex max-xl:flex-wrap">
-          <div className="relative p-4 max-w-[872px] max-xl:mx-auto max-xl:mb-[20px]">
-            <img src={Images.logoSlogan} className="img" />
-
+          <div className="h-1083px w-963px p-4 relative">
+            <img
+              src={Images.bgRegisterIcon}
+              alt="bgRegisterIcon"
+              width={"924px"}
+              height={"1083px"}
+            />
             <div className="absolute inset-0 flex justify-center items-center ">
               <Link to="/">
                 <img
                   src={Images.logoSlogan}
                   alt="logo"
-                  // className='logoSlogan'
                   width={"90%"}
                   height={"90%"}
                 />
