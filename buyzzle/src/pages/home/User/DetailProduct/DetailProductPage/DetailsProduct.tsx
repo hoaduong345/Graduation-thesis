@@ -399,6 +399,8 @@ export default function DetailsProduct() {
       console.log("Error:" + JSON.stringify(data));
     }
   };
+
+  console.log('first?.productDetail.quantity', first?.productDetail.quantity)
   return (
     <>
       <Container>
@@ -440,11 +442,10 @@ export default function DetailsProduct() {
                       return (
                         <img
                           key={index}
-                          className={`h-[75px] w-[75px] ${
-                            selectedImageIndex === index
-                              ? "border-2 border-blue-500"
-                              : ""
-                          }`}
+                          className={`h-[75px] w-[75px] ${selectedImageIndex === index
+                            ? "border-2 border-blue-500"
+                            : ""
+                            }`}
                           src={e.url}
                           alt=""
                           onClick={() => handleImageClick(index)}
@@ -538,8 +539,8 @@ export default function DetailsProduct() {
                         <p className="text-[36px] text-[#EA4B48] font-medium ">
                           {numberFormat(
                             first?.productDetail.price! -
-                              first?.productDetail.price! *
-                                (first?.productDetail.discount! / 100)
+                            first?.productDetail.price! *
+                            (first?.productDetail.discount! / 100)
                           )}
                         </p>
                         <p className="text-sm font-normal ml-3 text-[#7A828A] line-through">
@@ -612,16 +613,14 @@ export default function DetailsProduct() {
                       }
                     }}
                     className={`border-[1px] py-2 rounded-md px-4
-                        ${
-                          idAttribute == e.id
-                            ? `text-[#ee4d2d] border-[#ee4d2d]`
-                            : `text-[#7A828A] border-[#e4e4e4]`
-                        }
-                        ${
-                          e.soluong == 0
-                            ? `cursor-not-allowed bg-[#fafafa] text-[#bbbbbb]`
-                            : `cursor-pointer hover:text-[#ee4d2d] hover:border-[#ee4d2d]`
-                        }`}
+                        ${idAttribute == e.id
+                        ? `text-[#ee4d2d] border-[#ee4d2d]`
+                        : `text-[#7A828A] border-[#e4e4e4]`
+                      }
+                        ${e.soluong == 0
+                        ? `cursor-not-allowed bg-[#fafafa] text-[#bbbbbb]`
+                        : `cursor-pointer hover:text-[#ee4d2d] hover:border-[#ee4d2d]`
+                      }`}
                   >
                     <span className="text-[13px]">
                       {e.color} - {e.size}
@@ -672,9 +671,8 @@ export default function DetailsProduct() {
               {/* end icon */}
               {/* Mua ngay */}
               <div
-                className={`w-[100%] flex ${
-                  isSoldOut ? `justify-start` : `justify-end`
-                } mt-9 items-center gap-6`}
+                className={`w-[100%] flex ${isSoldOut ? `justify-start` : `justify-end`
+                  } mt-9 items-center gap-6`}
               >
                 {/* <div>
                   <LoveProduct />
@@ -699,7 +697,7 @@ export default function DetailsProduct() {
                           onClick={() =>
                             idAttribute != 0
                               ? !isSoldOut &&
-                                addProduct(Number(id), quantity, false)
+                              addProduct(Number(id), quantity, false)
                               : toastWarn("Vui lòng chọn Phân loại hàng")
                           }
                         >
@@ -957,7 +955,7 @@ export default function DetailsProduct() {
                 dangerouslySetInnerHTML={{
                   __html: first?.productDetail?.description as any,
                 }}
-                // style={{ color: 'blue', textDecoration: 'underline' }}
+              // style={{ color: 'blue', textDecoration: 'underline' }}
               ></div>
             </div>
           </div>
@@ -986,6 +984,9 @@ export default function DetailsProduct() {
                   <div className="col-span-2 ">
                     <div>
                       <RatingMap
+                        image={first?.productDetail.ProductImage[0].url!}
+                        name={first?.productDetail.name!}
+                        quantity={first?.productDetail.quantity!}
                         getCommentWhereRating={getCommentWhereRating}
                         setRateAndcomment={setRateAndcomment}
                         handleEditProductRating={handleEditProductRating}
@@ -993,7 +994,7 @@ export default function DetailsProduct() {
                         handleRemoveRating={handleRemoveRating}
                       />
                     </div>
-                    {}
+                    { }
                     <div className="mt-10">
                       <ResponsivePagination
                         current={rateAndcomment.currentPage!}

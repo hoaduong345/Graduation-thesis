@@ -47,8 +47,12 @@ type Props = {
   handleRemoveRating: (id: number) => void;
   setRateAndcomment: React.Dispatch<React.SetStateAction<Ratee>>;
   getCommentWhereRating: (idproduct: any, rating: any) => void;
+  image: string;
+  name: string;
+  quantity: number;
 };
 export default function RatingMap(props: Props) {
+
   const [isFeedbackClicked, setIsFeedbackClicked] = useState<number | null>(1);
   const [idRating, setidRating] = useState<number>(0);
   const [repTextCmt, setTextRepCmt] = useState<string>("");
@@ -58,7 +62,7 @@ export default function RatingMap(props: Props) {
   const [Username, setUsername] = useState<any>("");
   const { id: idProduct } = useParams();
 
-  const { control, handleSubmit, reset, setValue } = useForm<FormValues>({
+  const { control, handleSubmit, reset, setValue, watch } = useForm<FormValues>({
     mode: "all",
     defaultValues: {
       comment: "",
@@ -74,10 +78,10 @@ export default function RatingMap(props: Props) {
     }
   };
 
-  const openDialog = (id: string, _idRating: number, comment: string) => {
+  const openDialog = (id: string, _idRating: number, comment: string, ratingValue: number) => {
     const modal = document.getElementById(id) as HTMLDialogElement | null;
     if (modal) {
-      reset({ comment: comment });
+      reset({ comment: comment, ratingValue: ratingValue });
       modal.showModal();
     }
   };
@@ -159,6 +163,8 @@ export default function RatingMap(props: Props) {
       setUsername(username);
     }
   }, []);
+
+
 
   return (
     <div>
@@ -264,7 +270,8 @@ export default function RatingMap(props: Props) {
                                     openDialog(
                                       idDialogRating,
                                       rating.id,
-                                      rating.comment
+                                      rating.comment,
+                                      rating.ratingValue
                                     );
                                     setidRating(rating.id);
                                   }}
@@ -659,20 +666,19 @@ export default function RatingMap(props: Props) {
         title="Đánh Giá Sản Phẩm"
         body={
           <>
-            <div className="grid grid-cols-2 w-[800px]">
+            <div className="grid grid-cols-2 w-[800px] mb-3">
               <div className="flex col-span-1 items-start gap-3">
                 <div>
                   <img
-                    src={Images.imageproduct5}
+                    className="w-20 h-20 rounded-md"
+                    src={props.image}
                     alt="imageproduct5"
-                    className="mb-5"
                   />
                 </div>
                 <div className="flex-col flex">
                   <p className="text-[#393939] text-base font-semibold">
-                    Máy tính để bàn
+                    {props.name}
                   </p>
-                  <p className="text-[#393939] text-sm font-normal">SL: x2</p>
                 </div>
               </div>
               <div>
@@ -691,16 +697,15 @@ export default function RatingMap(props: Props) {
                             message: "",
                           },
                         }}
-                        render={({}) => (
+                        render={({ }) => (
                           <>
                             {[1, 2, 3, 4, 5].map((rating) => (
                               <input
-                                key={rating}
                                 type="radio"
                                 name="rating-5"
                                 className="mask mask-star-2 bg-orange-400"
                                 onClick={() => handleRatingClick(rating)}
-                                // ref={register}
+                              // ref={register}
                               />
                             ))}
                           </>
