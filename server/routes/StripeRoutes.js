@@ -70,20 +70,19 @@ app.post('/create-checkout-session', async (req, res) => {
             invoice_creation: {
                 enabled: true,
             },
-            success_url: 'www.buyzzle.io.vn/orderhistory',
-            cancel_url: 'www.buyzzle.io.vn/cart',
+            success_url: 'http://www.buyzzle.io.vn/orderhistory',
+            cancel_url: 'http://www.buyzzle.io.vn/cart',
         });
         res.send({ url: session.url });
     } catch (error) {
         console.log('Cannot check-out', error);
     }
 });
-
 const getCartItems = async (line_items, object, metadata) => {
     return new Promise((resolve, reject) => {
         let cartItems = [];
         let order = {
-iduser: parseInt(metadata.idUser),
+            iduser: parseInt(metadata.idUser),
             cartItems,
             amount_subtotal: object.amount_subtotal,
             shipping: object.total_details.amount_shipping,
@@ -138,25 +137,31 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (reques
                 });
 
                 await axios
-                    .post('www.buyzzle.io.vn/api/buyzzle/order', { order: orderItems })
+                    .post('http://www.buyzzle.io.vn/api/buyzzle/order', { order: orderItems })
                     .then(() => {
                         orderItems.cartItems.map((e) => {
-                            return axios.post(`www.buyzzle.io.vn/api/buyzzle/cart/removeOnStripe/${e.attributeID}`, {
-                                userId: parseInt(iduser.metadata.idUser),
-                                attributeId: e.attributeID,
-                            });
+                            return axios.post(
+                                `http://www.buyzzle.io.vn/api/buyzzle/cart/removeOnStripe/${e.attributeID}`,
+                                {
+                                    userId: parseInt(iduser.metadata.idUser),
+                                    attributeId: e.attributeID,
+                                }
+                            );
                         });
                     })
                     .then(() => {
                         if (parseInt(iduser.metadata.voucherId) != 0) {
-                            axios.post(`www.buyzzle.io.vn/api/buyzzle/voucher/usevoucher`, {
+                            axios.post(`http://www.buyzzle.io.vn/api/buyzzle/voucher/usevoucher`, {
                                 userId: parseInt(iduser.metadata.idUser),
-voucherId: parseInt(iduser.metadata.voucherId),
+                                voucherId: parseInt(iduser.metadata.voucherId),
                             });
                         }
                     })
                     .then(() => {
-                        axios.post(`www.buyzzle.io.vn/api/buyzzle/order/quantityCreateOrder`, listProductQuantity);
+                        axios.post(
+                            `http://www.buyzzle.io.vn/api/buyzzle/order/quantityCreateOrder`,
+                            listProductQuantity
+                        );
                     })
                     .catch((err) => {});
                 break;
