@@ -314,7 +314,7 @@ export default function CheckOut() {
       <Container>
         <div className="body-filter container mx-auto">
           <div className="grid grid-cols-5 gap-6">
-            <div className="mt-9 col-span-5 max-2xl:col-span-5">
+            <div className="mt-9 col-span-5 ">
               <h1 className="text-[32px] font-bold mb-4 max-lg:text-[28px] max-[870px]:text-2xl max-[769px]:text-xl">
                 Xác Nhận Thanh Toán
               </h1>

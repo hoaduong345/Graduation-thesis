@@ -12,10 +12,10 @@ export default function FavoritePage() {
       <Container>
         <div className="body-filter container mx-auto">
           <div className="grid grid-cols-4 gap-6">
-            <div className="col-span-1 max-2xl:hidden">
+            <div className="col-span-1 ">
               <Sitebar />
             </div>
-            <div className="col-span-3 max-2xl:col-span-5 flex flex-col gap-6">
+            <div className="col-span-3  flex flex-col gap-6">
               <div
                 className="bg-white py-7 mt-[40px] rounded-md items-center
                 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]

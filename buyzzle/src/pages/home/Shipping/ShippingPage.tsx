@@ -110,7 +110,7 @@ export default function ShippingPage() {
   return (
     <Container>
       <div className="grid grid-cols-5 pb-10">
-        <div className="content-right-filter mt-[34px] col-span-5 max-2xl:col-span-5 ">
+        <div className="content-right-filter mt-[34px] col-span-5  ">
           {/* h2 */}
           <div>
             <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">

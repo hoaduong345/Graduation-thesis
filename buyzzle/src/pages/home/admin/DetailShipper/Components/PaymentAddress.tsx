@@ -115,7 +115,6 @@ export default function PaymentAddress() {
       shipperController
         .getShipperWhereUsername(username)
         .then((res) => {
-         
           return res;
         })
         .then((res) => {
@@ -150,7 +149,7 @@ export default function PaymentAddress() {
           <body className="body-filter container mx-auto">
             <div className="grid grid-cols-1 gap-1">
               <div>
-                <div className="col-span-1 max-2xl:hidden"></div>
+                <div className="col-span-1 "></div>
               </div>
               <div className="mt-9 col-span-3 max-2xl:col-span-1 grid grid-cols-2 gap-4">
                 <form className="card py-4 px-5 rounded-[6px] col-span-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">

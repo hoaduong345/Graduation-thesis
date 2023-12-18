@@ -261,7 +261,7 @@ export default function FiltersPage() {
     <Container>
       <body className="body-filter container mx-auto">
         <div className="grid grid-cols-4 max-2xl:grid-cols-1">
-          <div className="col-span-1 max-2xl:hidden">
+          <div className="col-span-1 ">
             <SitebarFilter
               nameCate={nameCateValue?.toString()}
               valuePrice={sliderValues}

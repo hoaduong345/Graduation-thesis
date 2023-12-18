@@ -154,11 +154,11 @@ export default function OrderManagement() {
               <SitebarAdmin />
             </div>
           </dialog>
-          <div className="max-2xl:hidden">
+          <div className="">
             <SitebarAdmin />
           </div>
         </div>
-        <div className="content-right-filter col-span-4 max-2xl:col-span-5 ">
+        <div className="content-right-filter col-span-4  ">
           {/* h2 */}
           <div>
             <h2 className="txt-filter font-bold text-[#1A1A1A] text-3xl max-2xl:text-2xl">

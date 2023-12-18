@@ -193,7 +193,7 @@ export default function OrderDetailPage() {
       <div className="body-filter">
         <div className="grid grid-cols-9 mt-10 shadow gap-6 ">
           <div className="col-span-1"></div>
-          <div className="col-span-7 max-2xl:col-span-5">
+          <div className="col-span-7 ">
             <div className="back p-12 h-[57px] ">
               <div className="flex gap-3 items-center">
                 <Link to={"/orderhistory"}>

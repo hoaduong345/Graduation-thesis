@@ -24,10 +24,10 @@ export default function VoucherUserPage() {
       <Container>
         <div className="body-filter container mx-auto">
           <div className="grid grid-cols-4 gap-6">
-            <div className="col-span-1 max-2xl:hidden">
+            <div className="col-span-1 ">
               <Sitebar />
             </div>
-            <div className="mt-9 col-span-3 max-2xl:col-span-5">
+            <div className="mt-9 col-span-3 ">
               <h1 className="text-[32px] font-bold mb-4 max-lg:text-[28px] max-[870px]:text-2xl max-[769px]:text-xl">
                 Voucher
               </h1>

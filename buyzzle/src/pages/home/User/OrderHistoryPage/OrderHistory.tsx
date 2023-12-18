@@ -219,12 +219,12 @@ export default function OrderHistory() {
               <Sitebar />
             </div>
           </dialog>
-          <div className="max-2xl:hidden">
+          <div className="">
             <Sitebar />
           </div>
         </div>
         {/* Table history order */}
-        <div className="flex-col mt-9 col-span-3 max-2xl:col-span-5">
+        <div className="flex-col mt-9 col-span-3 ">
           <h1 className="text-[32px] font-bold mb-4 max-lg:text-[28px] max-[870px]:text-2xl max-[769px]:text-xl">
             Danh Sách Đơn Hàng
           </h1>

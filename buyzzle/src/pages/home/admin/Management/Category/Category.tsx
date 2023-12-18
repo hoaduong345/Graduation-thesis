@@ -341,10 +341,10 @@ function Category() {
               <SitebarAdmin />
             </div>
           </dialog>
-          <div className="col-span-1 max-2xl:hidden">
+          <div className="col-span-1 ">
             <SitebarAdmin />
           </div>
-          <div className="content-right-filter col-span-4 flex flex-col gap-4 max-2xl:col-span-5">
+          <div className="content-right-filter col-span-4 flex flex-col gap-4 ">
             <div>
               <h2
                 className="txt-filter font-bold text-[#1A1A1A] text-3xl

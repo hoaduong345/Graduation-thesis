@@ -58,7 +58,7 @@ export default function ShippingDetail() {
     <>
       <Container>
         <div className="grid grid-cols-5 pb-10">
-          <div className="content-right-filter mt-[34px] col-span-5 max-2xl:col-span-5 ">
+          <div className="content-right-filter mt-[34px] col-span-5  ">
             <div className="flex justify-between">
               <div className="flex gap-5 items-center text-center">
                 <Link to={"/shipping/management"}>
