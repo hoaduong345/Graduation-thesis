@@ -3,17 +3,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const SendEmail = async (email, subject, text, next) => {
-    console.log('----SendEmail----');
-    console.log(email, JSON.stringify(subject), text);
-    console.log('---ENV---');
-    console.log(
-        process.env.HOST,
-        process.env.SERVICE,
-        process.env.EMAIL_PORT,
-        process.env.SECURE,
-        process.env.USER,
-        process.env.PASS
-    );
     try {
         const transporter = nodemailer.createTransport({
             host: process.env.HOST,
@@ -40,6 +29,17 @@ const SendEmail = async (email, subject, text, next) => {
         }
     } catch (error) {
         console.log('Email not sent');
+        console.log('----SendEmail----');
+        console.log(email, JSON.stringify(subject), text);
+        console.log('---ENV---');
+        console.log(
+            process.env.HOST,
+            process.env.SERVICE,
+            process.env.EMAIL_PORT,
+            process.env.SECURE,
+            process.env.USER,
+            process.env.PASS
+        );
         console.error(error);
         if (next) {
             next(error);
